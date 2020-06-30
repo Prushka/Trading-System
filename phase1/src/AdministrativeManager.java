@@ -1,5 +1,3 @@
-package src;
-
 public class AdministrativeManager {
 
     private AdministrativeUser[] administrativeUsers;

@@ -19,6 +19,10 @@ public class OptionNode extends Node implements Skippable {
     }
 
     public void display() {
+
+    }
+
+    protected void displaySafe() {
         LOGGER.log(Level.INFO, getTranslatable(), getId());
     }
 

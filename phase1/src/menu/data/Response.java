@@ -1,32 +1,38 @@
 package menu.data;
 
-import menu.node.ErrorNode;
-import menu.node.base.Node;
-
 public class Response {
 
-    private Node nextNode;
+    private final boolean success;
 
-    private ErrorNode errorNode;
+    private final Object[] paras;
 
-    public Response() {
+    private final String translatable;
+
+    public boolean getSuccess() {
+        return success;
     }
 
-    public Node getNextNode() {
-        return nextNode;
+    public Object[] getParas() {
+        return paras;
     }
 
-    public ErrorNode getErrorNode() {
-        return errorNode;
+    public String getTranslatable() {
+        return translatable;
     }
 
-    public Response nextNode(Node nextNode) {
-        this.nextNode = nextNode;
-        return this;
+    public Response(boolean success, String translatable, Object... paras) {
+        this.success = success;
+        this.translatable = translatable;
+        this.paras = paras;
     }
 
-    public Response errorNode(ErrorNode errorNode) {
-        this.errorNode = errorNode;
-        return this;
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder("Response: ");
+        builder.append("success: ").append(success).append(",").append(" translatable: ").append(translatable);
+        for (Object para : paras) {
+            builder.append(", ").append(para);
+        }
+        return builder.toString();
     }
 }

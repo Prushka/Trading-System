@@ -6,6 +6,7 @@ import menu.node.*;
 import menu.data.NodeRequest;
 import menu.node.base.Inputable;
 import menu.node.base.Node;
+import menu.node.base.Skippable;
 
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
@@ -33,8 +34,12 @@ public class Menu {
     }
 
     public void setCurrentNode(Node nextNode) {
-        LOGGER.log(Level.FINE, "debug.switch.node", new Object[]{currentNode, nextNode.toString()});
+        LOGGER.log(Level.FINE, "debug.switch.node", new Object[]{currentNode, nextNode});
         this.currentNode = nextNode;
+        if(currentNode instanceof Skippable){
+            currentNode.display();
+            setCurrentNode(currentNode.getChild());
+        }
     }
 
     private final MasterOptionNode masterOptionNode;

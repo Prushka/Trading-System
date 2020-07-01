@@ -1,10 +1,10 @@
 package menu.node.base;
 
-import menu.node.ErrorNode;
+import menu.node.ResponseNode;
 
 import java.util.Optional;
 
 public interface Valitable {
 
-    Optional<ErrorNode> validate();
+    Optional<ResponseNode> validate();
 }

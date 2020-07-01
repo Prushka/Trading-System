@@ -9,12 +9,12 @@ import java.util.Optional;
 
 public class InputNode extends RequestableNode implements Valitable {
 
-    private final ErrorNode errorNode;
-    private final Validator validator;
+    private ResponseNode validateNode;
+    private Validator validator;
 
-    public InputNode(String translatable, String key, ErrorNode errorNode, Validator validator) {
+    public InputNode(String translatable, String key, ResponseNode validateNode, Validator validator) {
         super(translatable, key);
-        this.errorNode = errorNode;
+        this.validateNode = validateNode;
         this.validator = validator;
     }
 
@@ -22,19 +22,23 @@ public class InputNode extends RequestableNode implements Valitable {
         this(translatable, key, null, null);
     }
 
-    public Optional<ErrorNode> validate() {
+    public InputNode validateNode(ResponseNode responseNode, Validator validator){
+        this.validateNode = responseNode;
+        this.validator = validator;
+        return this;
+    }
+
+    public Optional<ResponseNode> validate() {
         if (validator == null || validator.validate(getValue())) {
-            System.out.println("validated");
             return Optional.empty();
         } else {
-            System.out.println("invalid");
-            return Optional.of(errorNode);
+            return Optional.of(validateNode);
         }
     }
 
     public Node parseInput(String input) {
         this.value = input;
-        Optional<ErrorNode> error = validate();
+        Optional<ResponseNode> error = validate();
         if(error.isPresent()){
             return error.get();
         }

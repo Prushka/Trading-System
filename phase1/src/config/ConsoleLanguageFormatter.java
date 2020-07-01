@@ -37,6 +37,7 @@ public class ConsoleLanguageFormatter extends Formatter {
     }
 
     public String formatColor(String message) {
+        message = "{BLACK}" + message; // Todo: Logger is red by default in idea
         for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
             message = message.replace(entry.getKey(), entry.getValue());
         }
@@ -45,6 +46,13 @@ public class ConsoleLanguageFormatter extends Formatter {
 
     @Override
     public String format(LogRecord record) {
-        return formatColor(lang.getMessage(record.getMessage(), record.getParameters())) + ansiColor.get("{RESET}") + "\n";
+        String prefix = "";
+        switch (record.getLevel().toString()) {
+            case "FINE":
+            case "FINER":
+            case "FINEST":
+                prefix = ansiColor.get("{BLACK}") + "[DEBUG] ";
+        }
+        return prefix + formatColor(lang.getMessage(record.getMessage(), record.getParameters())) + ansiColor.get("{RESET}") + "\n";
     }
 }

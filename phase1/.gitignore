@@ -2,3 +2,5 @@
 *.iml
 target
 out
+config
+data

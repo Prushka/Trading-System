@@ -1,27 +1,28 @@
 package menu.node.base;
 
+import config.ConsoleLanguageFormatter;
+import config.property.LanguageProperties;
+
+import java.io.IOException;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Logger;
+
 public abstract class Node {
+
+    protected static Logger LOGGER;
+
+    private static void setLogger(LanguageProperties lang) {
+        LOGGER = Logger.getLogger(Node.class.getName());
+        LOGGER.setUseParentHandlers(false);
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setFormatter(new ConsoleLanguageFormatter(lang));
+        LOGGER.addHandler(handler);
+    }
 
     private Node child;
 
     public Node getChild() {
         return child;
-    }
-
-    private Node parent;
-
-    private String translatable;
-
-    public String getTranslatable() {
-        return translatable;
-    }
-
-    public void display() {
-        System.out.println(translatable);
-    }
-
-    public Node(String translatable) {
-        this.translatable = translatable;
     }
 
     public Node setChild(Node node) {
@@ -30,14 +31,33 @@ public abstract class Node {
         return node;
     }
 
+    private Node parent;
+
+    public Node getParent() {
+        return parent;
+    }
+
     public Node setParent(Node node) {
         this.parent = node;
         node.child = this;
         return node;
     }
 
-    public Node getParent() {
-        return parent;
+    private final String translatable;
+
+    public String getTranslatable() {
+        return translatable;
+    }
+
+    public void display() {
+        LOGGER.info(translatable);
+    }
+
+    public Node(String translatable) {
+        this.translatable = translatable;
+        if (LOGGER == null) {
+            setLogger(new LanguageProperties());
+        }
     }
 
     public String getIdentifier() {

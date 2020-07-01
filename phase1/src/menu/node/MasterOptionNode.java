@@ -20,11 +20,6 @@ public class MasterOptionNode extends Node implements Inputable {
         return this;
     }
 
-
-    //public <T extends Node> T peerNode(T node) {
-    //    this.peers.add(node);
-    //    return node;
-    //}
     public MasterOptionNode addChild(OptionNode node) {
         children.add(node);
         return this;
@@ -67,7 +62,7 @@ public class MasterOptionNode extends Node implements Inputable {
         if (!node.isPresent()) {
             return new ErrorNode("invalid.option").setParent(this);
         }
-        return node.get().getChild(); // should option node directly link to an input node
+        return node.get();
     }
 
     @Override

@@ -1,19 +1,28 @@
 package menu.node;
 
 import menu.data.NodeRequest;
+import menu.node.base.RequestHandler;
 import menu.node.base.Node;
 import menu.node.base.RequestableNode;
+import menu.node.base.Validator;
 
 import java.util.Optional;
 
 public class SubmitNode extends InputNode {
 
+    private RequestHandler handler;
 
-    public SubmitNode(String translatable, String key) {
+    public SubmitNode(String translatable, String key, RequestHandler handler) {
         super(translatable, key);
+        this.handler = handler;
     }
 
-    public NodeRequest submit() { // construct request
+    public SubmitNode(String translatable, String key, ErrorNode errorNode, Validator validator, RequestHandler handler) {
+        super(translatable, key, errorNode, validator);
+        this.handler = handler;
+    }
+
+    public NodeRequest getRequest() { // construct request
         return constructRequest(this, new NodeRequest());
     }
 
@@ -27,8 +36,12 @@ public class SubmitNode extends InputNode {
     }
 
     @Override
-    public Node parseInput(String input){
-        return null;
+    public Node parseInput(String input) {
+        Optional<ErrorNode> error = validate();
+        if (error.isPresent()) {
+            return error.get();
+        }
+        return handler.handle(getRequest());
     }
 
 

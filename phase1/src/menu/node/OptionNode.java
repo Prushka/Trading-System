@@ -1,8 +1,11 @@
 package menu.node;
 
 import menu.node.base.Node;
+import menu.node.base.Skippable;
 
-public class OptionNode extends Node {
+import java.util.logging.Level;
+
+public class OptionNode extends Node implements Skippable {
 
     private final int id;
 
@@ -16,7 +19,7 @@ public class OptionNode extends Node {
     }
 
     public void display() {
-        System.out.println("[" + id + "] " + getTranslatable());
+        LOGGER.log(Level.INFO, getTranslatable(), getId());
     }
 
 }

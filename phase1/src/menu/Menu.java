@@ -1,11 +1,30 @@
 package menu;
 
+import config.ConsoleLanguageFormatter;
+import config.property.LanguageProperties;
 import menu.node.*;
 import menu.data.NodeRequest;
 import menu.node.base.Inputable;
 import menu.node.base.Node;
 
+import java.io.IOException;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Menu {
+
+    protected static Logger LOGGER;
+
+    private static void setLogger(LanguageProperties lang) {
+        LOGGER = Logger.getLogger(Menu.class.getName());
+        LOGGER.setUseParentHandlers(false);
+        LOGGER.setLevel(Level.FINEST);
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.FINEST);
+        handler.setFormatter(new ConsoleLanguageFormatter(lang));
+        LOGGER.addHandler(handler);
+    }
 
     private Node currentNode;
 
@@ -14,7 +33,7 @@ public class Menu {
     }
 
     public void setCurrentNode(Node nextNode) {
-        System.out.println("Current node switched from " + currentNode + " to " + nextNode);
+        LOGGER.log(Level.FINE, "debug.switch.node", new Object[]{currentNode, nextNode.toString()});
         this.currentNode = nextNode;
     }
 
@@ -28,26 +47,10 @@ public class Menu {
 
     // ErrorNode invalidOption = new ErrorNode("invalid.option");
 
-
-    public static void main(String[] args) { // test
-
-        OptionNode registerNode = new OptionNode(1, "register");
-        OptionNode loginAccountNode = new OptionNode(2, "login");
-
-        MasterOptionNode accountMasterNode = new MasterOptionNode("account.master.node").addChild(loginAccountNode).addChild(registerNode).sort();
-
-        InputNode loginInputNode = new InputNode("username", "username", new ErrorNode("invalid.username"), input -> input.length() > 5);
-        InputNode passwordInputNode = new InputNode("password", "password");
-
-        registerNode.setChild(loginInputNode).setChild(passwordInputNode);
-        loginAccountNode.setChild(loginInputNode).setChild(passwordInputNode);
-
-        Menu menu = new Menu(accountMasterNode);
-        ConsoleSystem console = new ConsoleSystem();
-        console.run(menu);
-    }
-
     public Menu(MasterOptionNode node) {
+        if (LOGGER == null) {
+            setLogger(new LanguageProperties());
+        }
         this.masterOptionNode = node;
         this.currentNode = node;
     }

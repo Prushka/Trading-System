@@ -51,11 +51,13 @@ public class User {
         this.password = password;
     }
 
-
-
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "{" +
+                "userName='" + userName + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

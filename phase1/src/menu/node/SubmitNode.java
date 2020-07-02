@@ -1,33 +1,24 @@
 package menu.node;
 
-import menu.data.NodeRequest;
+import menu.data.Request;
 import menu.data.Response;
 import menu.node.base.RequestHandler;
-import menu.node.base.Node;
-import menu.node.base.RequestableNode;
-import menu.node.base.Validator;
 
 import java.util.Optional;
 
 public class SubmitNode extends InputNode {
 
     private final RequestHandler handler;
-    private ResponseNode resultNode;
+    private final Node failedResultNode;
 
-    private Node failed;
-
-    public SubmitNode(String translatable, String key, RequestHandler handler, Node failed) {
-        this(translatable, key, null, null, handler, failed);
+    public SubmitNode(Builder builder){
+        super(builder);
+        handler = builder.handler;
+        failedResultNode = builder.failedResultNode;
     }
 
-    public SubmitNode(String translatable, String key, ResponseNode validateNode, Validator validator, RequestHandler handler, Node failed) {
-        super(translatable, key, validateNode, validator);
-        this.handler = handler;
-        this.failed = failed;
-    }
-
-    public NodeRequest getRequest() {
-        NodeRequest request = new NodeRequest();
+    public Request getRequest() {
+        Request request = new Request();
         Node curr = this;
         while (curr instanceof RequestableNode) {
             request.put(((RequestableNode)curr).getKey(), ((RequestableNode)curr).getValue());
@@ -47,16 +38,48 @@ public class SubmitNode extends InputNode {
     }
 
     public Node parseResponse(Response response) {
-        System.out.println(response);
-        ResponseNode responseNode = new ResponseNode(response);
+        ResponseNode responseNode = new ResponseNode.Builder(response).build();
         //responseNode.setParent(this);
         if (response.getSuccess()) {
             responseNode.setChild(getChild());
         } else {
-            responseNode.setChild(failed);
+            responseNode.setChild(failedResultNode);
         }
         return responseNode;
     }
 
+    public static class Builder extends AbstractInputNodeBuilder<Builder> {
 
+        private RequestHandler handler;
+        private Node failedResultNode;
+
+        public Builder(String translatable) {
+            super(translatable);
+        }
+
+        @Override
+        protected Builder getThis() {
+            return this;
+        }
+
+        public Builder handler(RequestHandler handler){
+            this.handler = handler;
+            return getThis();
+        }
+
+        public Builder submitSuccessNext(Node node){
+            child(node);
+            return getThis();
+        }
+
+        public Builder submitFailNext(ResponseNode node) {
+            failedResultNode = node;
+            return getThis();
+        }
+
+        @Override
+        public SubmitNode build() {
+            return new SubmitNode(this);
+        }
+    }
 }

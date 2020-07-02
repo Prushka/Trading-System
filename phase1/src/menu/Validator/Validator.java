@@ -1,4 +1,4 @@
-package menu.node.base;
+package menu.Validator;
 
 public interface Validator {
 

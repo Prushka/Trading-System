@@ -1,28 +1,24 @@
 package menu.node;
 
 import menu.node.base.Inputable;
-import menu.node.base.Node;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class MasterOptionNode extends Node implements Inputable {
 
-    private final List<OptionNode> children = new ArrayList<>();
+    private final List<OptionNode> children;
 
-    public MasterOptionNode(String translatable) {
-        super(translatable);
+    public MasterOptionNode(Builder builder) {
+        super(builder);
+        children = builder.children;
+        sort();
     }
 
-    public MasterOptionNode sort() {
+    public void sort() {
         children.sort(new OptionNodeComparator());
-        return this;
-    }
-
-    public MasterOptionNode addChild(OptionNode node) {
-        children.add(node);
-        return this;
     }
 
     public Optional<OptionNode> getChild(int id) {
@@ -60,7 +56,7 @@ public class MasterOptionNode extends Node implements Inputable {
     public Node parseInput(String input) {
         Optional<OptionNode> node = getChild(input);
         if (!node.isPresent()) {
-            return new ResponseNode("invalid.option").setParent(this);
+            return new ResponseNode.Builder("invalid.option").build();
         }
         return node.get();
     }
@@ -72,4 +68,33 @@ public class MasterOptionNode extends Node implements Inputable {
         }
     }
 
+    public static class Builder extends NodeBuilder<Builder> {
+
+        private final List<OptionNode> children = new ArrayList<>();
+
+        public Builder(String translatable) {
+            super(translatable);
+        }
+
+        @Override
+        protected Builder getThis() {
+            return this;
+        }
+
+        @Override
+        public MasterOptionNode build() {
+            return new MasterOptionNode(this);
+        }
+
+
+        public Builder addChild(OptionNode... node) {
+            children.addAll(Arrays.asList(node));
+            return this;
+        }
+
+        public Builder addChild(int id, String translatable) {
+            this.addChild(new OptionNode.Builder(translatable).id(id).build());
+            return this;
+        }
+    }
 }

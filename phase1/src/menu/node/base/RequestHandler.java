@@ -1,8 +1,8 @@
 package menu.node.base;
 
-import menu.data.NodeRequest;
+import menu.data.Request;
 import menu.data.Response;
 
 public interface RequestHandler {
-    Response handle(NodeRequest request);
+    Response handle(Request request);
 }

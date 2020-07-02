@@ -1,48 +1,89 @@
 package menu.node;
 
-import menu.node.base.Validator;
-import menu.node.base.Node;
-import menu.node.base.RequestableNode;
-import menu.node.base.Valitable;
+import menu.Validator.Validator;
+import menu.node.base.*;
 
 import java.util.Optional;
 
 public class InputNode extends RequestableNode implements Valitable {
 
-    private ResponseNode validateNode;
-    private Validator validator;
+    private final ResponseNode validateFailResponseNode;
+    private final Validator validator;
 
-    public InputNode(String translatable, String key, ResponseNode validateNode, Validator validator) {
-        super(translatable, key);
-        this.validateNode = validateNode;
-        this.validator = validator;
-    }
-
-    public InputNode(String translatable, String key) { // error node and validator must be passed in together
-        this(translatable, key, null, null);
-    }
-
-    public InputNode validateNode(ResponseNode responseNode, Validator validator){
-        this.validateNode = responseNode;
-        this.validator = validator;
-        return this;
+    public InputNode(AbstractInputNodeBuilder<?> builder) {
+        super(builder);
+        this.validateFailResponseNode = builder.validateFailResponseNode;
+        this.validator = builder.validator;
+        if (builder.validateFailNextNode == null) {
+            validateFailResponseNode.setChild(this);
+        }else{
+            validateFailResponseNode.setChild(builder.validateFailNextNode);
+        }
     }
 
     public Optional<ResponseNode> validate() {
-        if (validator == null || validator.validate(getValue())) {
+        if (validator == null || validator.validate(getValue())) { // pass
             return Optional.empty();
-        } else {
-            return Optional.of(validateNode);
+        } else { // fail
+            return Optional.of(validateFailResponseNode);
         }
     }
 
     public Node parseInput(String input) {
         this.value = input;
         Optional<ResponseNode> error = validate();
-        if(error.isPresent()){
+        if (error.isPresent()) {
             return error.get();
         }
         return getChild();
+    }
+
+    // TODO: Multiple Validator & Response Node pairs
+    protected abstract static class AbstractInputNodeBuilder<T extends AbstractInputNodeBuilder<T>> extends RequestableNodeBuilder<T> {
+
+        private ResponseNode validateFailResponseNode;
+        private Node validateFailNextNode;
+        private Validator validator;
+
+        public AbstractInputNodeBuilder(String translatable) {
+            super(translatable);
+        }
+
+        public T validator(Validator validator) {
+            this.validator = validator;
+            return getThis();
+        }
+
+        public T validateSuccessNext(Node node) {
+            child(node);
+            return getThis();
+        }
+
+        public T validateFailResponse(ResponseNode node) {
+            validateFailResponseNode = node;
+            return getThis();
+        }
+
+        public T validateFailNext(Node node) {
+            validateFailNextNode = node;
+            return getThis();
+        }
+    }
+
+    public static class Builder extends AbstractInputNodeBuilder<Builder> {
+        public Builder(String translatable) {
+            super(translatable);
+        }
+
+        @Override
+        protected Builder getThis() {
+            return this;
+        }
+
+        @Override
+        public InputNode build() {
+            return new InputNode(this);
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package menu.node;
 
-import menu.Validator.Validator;
+import menu.validator.Validator;
 import menu.node.base.*;
 
 import java.util.Optional;

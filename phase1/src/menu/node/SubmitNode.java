@@ -2,7 +2,7 @@ package menu.node;
 
 import menu.data.Request;
 import menu.data.Response;
-import menu.node.base.RequestHandler;
+import menu.handler.RequestHandler;
 
 import java.util.Optional;
 

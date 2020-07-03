@@ -1,5 +1,7 @@
-.idea
 *.iml
+*.ser
+*.csv
+.idea
 target
 out
 config

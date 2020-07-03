@@ -1,4 +1,4 @@
-package menu.Validator;
+package menu.validator;
 
 public interface Validator {
 

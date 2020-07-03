@@ -16,7 +16,7 @@ public abstract class Property {
         try {
             saveDefault();
             properties.load(new FileInputStream(getFile()));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -33,5 +33,13 @@ public abstract class Property {
             }
             Files.copy(inputStream, getFile().toPath());
         }
+    }
+
+    public String get(String key, String defaultValue) {
+        return properties.getProperty(key, defaultValue);
+    }
+
+    public String get(String key) {
+        return properties.getProperty(key);
     }
 }

@@ -1,6 +1,6 @@
-import menu.ConsoleSystem;
+import system.ConsoleSystem;
 import menu.Menu;
-import menu.Validator.EmailValidator;
+import menu.validator.EmailValidator;
 import menu.data.Request;
 import menu.data.Response;
 import menu.node.*;
@@ -15,7 +15,12 @@ public class Main {
         public Response parseRequestFail(Request request) {
             return new Response(false, "register.fail", request.get("username"), request.get("password"));
         }
+
+        // public Response getTickets() {
+        //     return new Response(false, "register.fail", request.get("username"), request.get("password"));
+        // }
     }
+
 
     public static void main(String[] args) { // TODO: Maybe a builder is not that useful...
 

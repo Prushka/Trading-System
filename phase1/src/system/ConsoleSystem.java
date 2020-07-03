@@ -1,4 +1,4 @@
-package menu;
+package system;
 
 import menu.Menu;
 

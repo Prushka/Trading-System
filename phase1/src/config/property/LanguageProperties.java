@@ -10,13 +10,9 @@ import java.util.logging.Logger;
 
 public class LanguageProperties extends Property {
 
-    public LanguageProperties() {
-    }
-
     public String getMessage(String key, Object... paras) {
-        String res = getProperties().getProperty(key);
-        if (res == null) return key;
-        return String.format(res, paras);
+        String value = get(key, key);
+        return String.format(value, paras);
     }
 
     @Override

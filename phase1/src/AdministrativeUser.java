@@ -1,3 +1,5 @@
+package src;
+
 public class AdministrativeUser extends User{
 
     private String userName;
@@ -18,7 +20,7 @@ public class AdministrativeUser extends User{
     }
 
 
-    public String getName() {
+    public String getUserName() {
         return userName;
     }
 

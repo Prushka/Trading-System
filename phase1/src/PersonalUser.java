@@ -1,3 +1,5 @@
+package src;
+
 import java.awt.image.AreaAveragingScaleFilter;
 import java.lang.reflect.Array;
 import java.util.*;

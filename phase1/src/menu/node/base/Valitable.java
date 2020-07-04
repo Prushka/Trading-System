@@ -7,4 +7,5 @@ import java.util.Optional;
 public interface Valitable {
 
     Optional<ResponseNode> validate();
+
 }

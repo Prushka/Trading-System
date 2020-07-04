@@ -1,5 +1,7 @@
 package menu.validator;
 
+import menu.node.ResponseNode;
+
 import java.util.regex.Pattern;
 
 public class EmailValidator implements Validator {

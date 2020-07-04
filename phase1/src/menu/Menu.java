@@ -15,17 +15,30 @@ public class Menu {
 
     protected static Logger LOGGER;
 
-    private static void setLogger(LanguageProperties lang) {
+    static {
         LOGGER = Logger.getLogger(Menu.class.getName());
         LOGGER.setUseParentHandlers(false);
         LOGGER.setLevel(Level.FINEST);
         ConsoleHandler handler = new ConsoleHandler();
         handler.setLevel(Level.FINEST);
-        handler.setFormatter(new ConsoleLanguageFormatter(lang));
+        handler.setFormatter(new ConsoleLanguageFormatter(new LanguageProperties()));
         LOGGER.addHandler(handler);
     }
 
     private Node currentNode;
+
+    public Menu(MasterOptionNode node) {
+        this.currentNode = node;
+    }
+
+    public void parseInput(String input) {
+        if (currentNode instanceof Inputable) {
+            Node nextNode = ((Inputable) currentNode).parseInput(input);
+            setCurrentNode(nextNode);
+        } else {
+            LOGGER.log(Level.SEVERE, "node does not accept input");
+        }
+    }
 
     public Node getCurrentNode() {
         return currentNode;
@@ -37,24 +50,6 @@ public class Menu {
         if (currentNode instanceof Skippable) {
             currentNode.display();
             setCurrentNode(currentNode.getChild());
-        }
-    }
-
-    // ErrorNode invalidOption = new ErrorNode("invalid.option");
-
-    public Menu(MasterOptionNode node) {
-        if (LOGGER == null) {
-            setLogger(new LanguageProperties());
-        }
-        this.currentNode = node;
-    }
-
-    public void parseInput(String input) {
-        if (currentNode instanceof Inputable) {
-            Node nextNode = ((Inputable) currentNode).parseInput(input);
-            setCurrentNode(nextNode);
-        } else {
-            LOGGER.log(Level.SEVERE, "node does not accept input");
         }
     }
 }

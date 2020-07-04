@@ -24,8 +24,12 @@ public class ConsoleSystem {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Something went wrong");
+            e.printStackTrace();
+        } catch (NullPointerException e){
+            System.err.println("There's no node next!");
         }
 
     }
+
+
 }

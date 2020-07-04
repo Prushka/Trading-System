@@ -1,30 +1,13 @@
 package repository;
 
-import notification.support.Ticket;
+import admin.Ticket;
 
+import java.beans.IntrospectionException;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class SerializableRepository<T extends Serializable> implements Repository<T> {
-
-    public static void main(String[] args) {
-        Repository<Ticket> ticketRepo =
-                new CSVRepository<>("a.csv",Ticket::new);
-        // Ticket ticket = new Ticket("123", Ticket.Category.ACCOUNT);
-        // ticketRepo.add(ticket);
-
-        // ticketRepo.save();
-        System.out.println(ticketRepo.get(0).getCategory());
-        //repository.add(ticket);
-        //repository.save();
-
-        //System.out.println(ticketRepo.get(0).get("content"));
-
-        //Ticket ticket = new Ticket();
-        //ticket.setContent("aha");
-        //ticketRepository.addTicket(ticket);
-        //ticketRepository.save();
-    }
 
     private List<T> data;
 
@@ -33,10 +16,14 @@ public class SerializableRepository<T extends Serializable> implements Repositor
     public SerializableRepository(String path) {
         data = new ArrayList<>();
         this.path = path;
+        read();
     }
 
     @SuppressWarnings("unchecked")
-    public void read(){
+    public void read(){ // this one is in interface, maybe also need to be private
+        if(!new File(path).exists()){
+            return;
+        }
         try {
             InputStream file = new FileInputStream(path);
             InputStream buffer = new BufferedInputStream(file);
@@ -70,5 +57,10 @@ public class SerializableRepository<T extends Serializable> implements Repositor
 
     public T get(int id) {
         return data.get(id);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new RepositoryIterator<>(data);
     }
 }

@@ -1,38 +1,61 @@
 package menu.data;
 
+import java.util.*;
+
 public class Response {
 
     private final boolean success;
 
-    private final Object[] paras;
+    private final List<TranslatablePair> translatablePairs = new ArrayList<>();
 
-    private final String translatable;
+    Response(Builder builder) {
+        this.success = builder.success;
+        this.translatablePairs.addAll(builder.translatablePairs);
+    }
 
     public boolean getSuccess() {
         return success;
     }
 
-    public Object[] getParas() {
-        return paras;
-    }
-
-    public String getTranslatable() {
-        return translatable;
-    }
-
-    public Response(boolean success, String translatable, Object... paras) {
-        this.success = success;
-        this.translatable = translatable;
-        this.paras = paras;
+    public List<TranslatablePair> getTranslatablePairs() {
+        return translatablePairs;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("Response: ");
-        builder.append("success: ").append(success).append(",").append(" translatable: ").append(translatable);
-        for (Object para : paras) {
-            builder.append(", ").append(para);
-        }
-        return builder.toString();
+        return "Response: " + "success: " + success + "," + " translatable: " + translatablePairs.toString();
     }
+
+    public static class Builder {
+
+        private boolean success;
+
+        private final List<TranslatablePair> translatablePairs;
+
+        public Builder() {
+            this.translatablePairs = new ArrayList<>();
+        }
+
+        public Builder success(boolean success) {
+            this.success = success;
+            return this;
+        }
+
+        public Builder translatable(String translatable) {
+            this.translatable(translatable, new Object[0]);
+            return this;
+        }
+
+        public Builder translatable(String translatable, Object... paras) {
+            this.translatablePairs.add(new TranslatablePair(translatable, paras));
+            return this;
+        }
+
+        public Response build() {
+            return new Response(this);
+        }
+
+    }
+
+
 }

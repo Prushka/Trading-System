@@ -9,9 +9,10 @@ import java.util.Optional;
 public class SubmitNode extends InputNode {
 
     private final RequestHandler handler;
+
     private final Node failedResultNode;
 
-    public SubmitNode(Builder builder){
+    SubmitNode(Builder builder) {
         super(builder);
         handler = builder.handler;
         failedResultNode = builder.failedResultNode;
@@ -21,23 +22,21 @@ public class SubmitNode extends InputNode {
         Request request = new Request();
         Node curr = this;
         while (curr instanceof RequestableNode) {
-            request.put(((RequestableNode)curr).getKey(), ((RequestableNode)curr).getValue());
+            request.put(((RequestableNode) curr).getKey(), ((RequestableNode) curr).getValue());
             curr = curr.getParent();
         }
+        request.setTimeStamp();
         return request;
     }
 
     @Override
-    public Node parseInput(String input) { // decouple
-        this.value = input;
-        Optional<ResponseNode> error = validate();
-        if (error.isPresent()) {
-            return error.get();
-        }
+    public Node parseInput(String input) {
+        Node superParse = super.parseInput(input);
+        if (superParse instanceof ResponseNode) return superParse;
         return parseResponse(handler.handle(getRequest()));
     }
 
-    public Node parseResponse(Response response) {
+    private Node parseResponse(Response response) {
         ResponseNode responseNode = new ResponseNode.Builder(response).build();
         //responseNode.setParent(this);
         if (response.getSuccess()) {
@@ -62,12 +61,12 @@ public class SubmitNode extends InputNode {
             return this;
         }
 
-        public Builder handler(RequestHandler handler){
+        public Builder submitHandler(RequestHandler handler) {
             this.handler = handler;
             return getThis();
         }
 
-        public Builder submitSuccessNext(Node node){
+        public Builder submitSuccessNext(Node node) {
             child(node);
             return getThis();
         }
@@ -81,5 +80,7 @@ public class SubmitNode extends InputNode {
         public SubmitNode build() {
             return new SubmitNode(this);
         }
+
     }
+
 }

@@ -11,32 +11,10 @@ public class MasterOptionNode extends Node implements Inputable {
 
     private final List<OptionNode> children;
 
-    public MasterOptionNode(Builder builder) {
+    MasterOptionNode(Builder builder) {
         super(builder);
         children = builder.children;
         sort();
-    }
-
-    public void sort() {
-        children.sort(new OptionNodeComparator());
-    }
-
-    public Optional<OptionNode> getChild(int id) {
-        id -= 1;
-        if (id >= children.size()) {
-            return Optional.empty();
-        } else {
-            return Optional.ofNullable(children.get(id));
-        }
-    }
-
-    public Optional<OptionNode> getChild(String input) {
-        Optional<Integer> id = isOptionValid(input);
-        if (id.isPresent()) {
-            return getChild(id.get());
-        } else {
-            return Optional.empty();
-        }
     }
 
     private Optional<Integer> isOptionValid(String input) {
@@ -68,6 +46,28 @@ public class MasterOptionNode extends Node implements Inputable {
         }
     }
 
+    public void sort() {
+        children.sort(new OptionNodeComparator());
+    }
+
+    private Optional<OptionNode> getChild(int id) {
+        id -= 1;
+        if (id >= children.size()) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(children.get(id));
+        }
+    }
+
+    private Optional<OptionNode> getChild(String input) {
+        Optional<Integer> id = isOptionValid(input);
+        if (id.isPresent()) {
+            return getChild(id.get());
+        } else {
+            return Optional.empty();
+        }
+    }
+
     public static class Builder extends NodeBuilder<Builder> {
 
         private final List<OptionNode> children = new ArrayList<>();
@@ -96,5 +96,7 @@ public class MasterOptionNode extends Node implements Inputable {
             this.addChild(new OptionNode.Builder(translatable).id(id).build());
             return this;
         }
+
     }
+
 }

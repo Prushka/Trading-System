@@ -2,7 +2,7 @@ package repository;
 
 import java.util.List;
 
-public interface Repository<T> {
+public interface Repository<T> extends Iterable<T> {
 
     void save();
     void read();

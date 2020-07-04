@@ -4,7 +4,9 @@ package menu.node;
 import menu.node.base.Inputable;
 
 public abstract class RequestableNode extends Node implements Inputable {
+
     protected final String key;
+
     protected String value;
 
     public RequestableNode(RequestableNodeBuilder<?> builder) {
@@ -33,5 +35,7 @@ public abstract class RequestableNode extends Node implements Inputable {
             this.key = key;
             return getThis();
         }
+
     }
+
 }

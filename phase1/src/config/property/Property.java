@@ -8,10 +8,6 @@ public abstract class Property {
 
     private final Properties properties = new Properties();
 
-    public Properties getProperties() {
-        return properties;
-    }
-
     public Property() {
         try {
             saveDefault();
@@ -35,11 +31,23 @@ public abstract class Property {
         }
     }
 
+    public void save() {
+        try {
+            properties.store(new FileOutputStream(getFile()), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String get(String key, String defaultValue) {
         return properties.getProperty(key, defaultValue);
     }
 
     public String get(String key) {
         return properties.getProperty(key);
+    }
+
+    public void set(String key, String value) {
+        properties.setProperty(key, value);
     }
 }

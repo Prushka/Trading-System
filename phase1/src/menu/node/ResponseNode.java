@@ -1,15 +1,17 @@
 package menu.node;
 
 import menu.data.Response;
+import menu.data.TranslatablePair;
 import menu.node.base.Skippable;
 
+import java.util.Map;
 import java.util.logging.Level;
 
 public class ResponseNode extends Node implements Skippable {
 
     private final Response response;
 
-    public ResponseNode(Builder builder) {
+    ResponseNode(Builder builder) {
         super(builder);
         this.response = builder.response;
     }
@@ -24,11 +26,12 @@ public class ResponseNode extends Node implements Skippable {
 
 
     public void display() {
-        if (response == null || response.getParas() == null || response.getParas().length == 0) {
+        if (response == null || response.getTranslatablePairs() == null || response.getTranslatablePairs().size() == 0) {
             LOGGER.log(Level.INFO, getTranslatable());
-
         } else {
-            LOGGER.log(Level.INFO, getTranslatable(), response.getParas());
+            for (TranslatablePair pair:response.getTranslatablePairs()) {
+                LOGGER.log(Level.INFO, pair.getTranslatable(), pair.getParas());
+            }
         }
     }
 
@@ -41,7 +44,7 @@ public class ResponseNode extends Node implements Skippable {
         }
 
         public Builder(Response response) {
-            super(response.getTranslatable());
+            super("general.response.node");
             this.response = response;
         }
 
@@ -59,5 +62,7 @@ public class ResponseNode extends Node implements Skippable {
         public ResponseNode build() {
             return new ResponseNode(this);
         }
+
     }
+
 }

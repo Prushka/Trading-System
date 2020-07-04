@@ -1,4 +1,4 @@
-package notification;
+package admin;
 
 public class NotificationCheck {
 }

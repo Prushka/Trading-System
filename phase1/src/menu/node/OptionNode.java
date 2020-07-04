@@ -8,17 +8,18 @@ public class OptionNode extends Node implements Skippable {
 
     private final int id;
 
-    public int getId() {
-        return id;
-    }
-
-    public OptionNode(Builder builder) {
+    OptionNode(Builder builder) {
         super(builder);
         this.id = builder.id;
     }
 
+    @Override
     public void display() {
 
+    }
+
+    public int getId() {
+        return id;
     }
 
     protected void displaySafe() {
@@ -47,5 +48,7 @@ public class OptionNode extends Node implements Skippable {
         public OptionNode build() {
             return new OptionNode(this);
         }
+
     }
+
 }

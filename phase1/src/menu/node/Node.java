@@ -10,8 +10,7 @@ public abstract class Node {
 
     protected static Logger LOGGER;
 
-    private static void setLogger() { // TODO: where should this go
-        if(LOGGER!=null) return;
+    static {
         LOGGER = Logger.getLogger(Node.class.getName());
         LOGGER.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
@@ -20,6 +19,19 @@ public abstract class Node {
     }
 
     private Node child;
+
+    private Node parent;
+
+    private final String translatable;
+
+    public Node(NodeBuilder<?> builder) {
+        this.translatable = builder.translatable;
+        setChild(builder.child);
+    }
+
+    public void display() {
+        LOGGER.info(translatable);
+    }
 
     public Node getChild() {
         return child;
@@ -33,27 +45,13 @@ public abstract class Node {
         return node;
     }
 
-    private Node parent;
-
     // There should be no setParent()
     public Node getParent() {
         return parent;
     }
 
-    private final String translatable;
-
     public String getTranslatable() {
         return translatable;
-    }
-
-    public void display() {
-        LOGGER.info(translatable);
-    }
-
-    public Node(NodeBuilder<?> builder) {
-        this.translatable = builder.translatable;
-        setChild(builder.child);
-        setLogger();
     }
 
     public String getIdentifier() {
@@ -94,6 +92,7 @@ public abstract class Node {
         }
 
         public abstract Node build();
+
     }
 
 }

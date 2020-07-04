@@ -1,13 +1,14 @@
 package admin;
 
 import menu.data.Request;
-import repository.Mappable;
+import repository.EntityMappable;
+import repository.UniqueId;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class Ticket implements Serializable, Mappable {
+public class Ticket implements Serializable, EntityMappable, UniqueId {
 
     private Category category;
 
@@ -20,6 +21,8 @@ public class Ticket implements Serializable, Mappable {
     private String content;
 
     private long timeStamp;
+
+    private long uid; // it's a list to be serialized. maybe uid = index?
 
     public Ticket(String content, Category category) {
         this.content = content;
@@ -37,13 +40,14 @@ public class Ticket implements Serializable, Mappable {
                 priority.toString());
     }
 
-    public Ticket(Request request) { // order doesn't matter
+    public Ticket(Request request, int uid) { // order doesn't matter
         this.submitterEmail = request.get("user.email");
         this.content = request.get("content");
         this.category = Category.getById(Integer.parseInt(request.get("category")));
         this.state = State.PENDING_ALLOCATION;
         this.timeStamp = request.getTimeStamp();
         this.priority = Priority.getById(Integer.parseInt(request.get("priority")));
+        this.uid = uid;
     }
 
     public Ticket(List<String> data) { // order matters TODO: decouple
@@ -93,6 +97,7 @@ public class Ticket implements Serializable, Mappable {
         PENDING_ALLOCATION, FEEDBACK, SOLVED, CLOSED
     }
 
+
     public Category getCategory() {
         return category;
     }
@@ -109,4 +114,29 @@ public class Ticket implements Serializable, Mappable {
         this.content = content;
     }
 
+    public void setUid(long uid) {
+        this.uid = uid;
+    }
+
+    public long getUid() {
+        return uid;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj instanceof Ticket) {
+            Ticket other = (Ticket) obj;
+            return this.content.equals(other.content);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return content.hashCode();
+    }
 }

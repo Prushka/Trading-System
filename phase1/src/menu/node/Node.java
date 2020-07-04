@@ -82,6 +82,7 @@ public abstract class Node {
         }
 
         public T child(Node child) {
+            this.child = child;
             return getThis();
         }
 

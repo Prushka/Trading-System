@@ -1,10 +1,11 @@
 package menu.node;
 
+import menu.node.base.Dumb;
 import menu.node.base.Skippable;
 
 import java.util.logging.Level;
 
-public class OptionNode extends Node implements Skippable {
+public class OptionNode extends Node implements Skippable, Dumb {
 
     private final int id;
 
@@ -15,15 +16,11 @@ public class OptionNode extends Node implements Skippable {
 
     @Override
     public void display() {
-
+        LOGGER.log(Level.INFO, getTranslatable(), getId());
     }
 
     public int getId() {
         return id;
-    }
-
-    protected void displaySafe() {
-        LOGGER.log(Level.INFO, getTranslatable(), getId());
     }
 
     public static class Builder extends NodeBuilder<Builder> {

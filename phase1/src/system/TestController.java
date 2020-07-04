@@ -7,8 +7,8 @@ import menu.data.Request;
 import menu.data.Response;
 import menu.node.*;
 import menu.validator.EmailValidator;
-import menu.validator.Validator;
 import repository.Repository;
+import repository.RepositoryIterator;
 import repository.SerializableRepository;
 
 public class TestController {
@@ -62,7 +62,7 @@ public class TestController {
                 .addChild(registerOptionNode, loginOptionNode, ticketTest).build();
 
         InputNode emailInput = new InputNode.Builder("input.email")
-                .validator(new EmailValidator(),new ResponseNode("invalid.email"))
+                .validator(new EmailValidator(), new ResponseNode("invalid.email"))
                 .build();
 
         InputNode userNameInput = new InputNode.Builder("input.username").build();
@@ -78,11 +78,7 @@ public class TestController {
     }
 
     public Response getTicketResponse(Request request) {
-        Response.Builder builder = new Response.Builder();
-        for (Ticket t : ticketManager.getTicketsByCategory(Ticket.Category.valueOf(request.get("input.ticket.category")))) {
-            builder.translatable("submit.ticket.category",0, t.getCategory(), t.getContent());
-        }
-        return builder.build();
+        return ticketManager.getTicketsByCategory(Ticket.Category.valueOf(request.get("input.ticket.category")));
     }
 
     public void shutdown() {

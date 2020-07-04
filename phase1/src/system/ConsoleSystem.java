@@ -14,13 +14,13 @@ public class ConsoleSystem {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         try {
-            menu.getCurrentNode().display();
+            menu.display();
             String input = "";
             while (!input.equals("exit")) {
                 input = br.readLine();
                 if (!input.equals("exit")) {
                     menu.parseInput(input);
-                    menu.getCurrentNode().display();
+                    menu.display();
                 }
             }
         } catch (IOException e) {

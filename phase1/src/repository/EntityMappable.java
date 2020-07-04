@@ -2,7 +2,7 @@ package repository;
 
 import java.util.List;
 
-public interface Mappable {
+public interface EntityMappable {
 
     // List<String> getHeader();
 

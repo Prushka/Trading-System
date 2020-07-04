@@ -3,6 +3,7 @@ package menu;
 import config.ConsoleLanguageFormatter;
 import config.property.LanguageProperties;
 import menu.node.*;
+import menu.node.base.Dumb;
 import menu.node.base.Inputable;
 import menu.node.Node;
 import menu.node.base.Skippable;
@@ -33,22 +34,23 @@ public class Menu {
 
     public void parseInput(String input) {
         if (currentNode instanceof Inputable) {
-            Node nextNode = ((Inputable) currentNode).parseInput(input);
-            setCurrentNode(nextNode);
+            setCurrentNode(((Inputable) currentNode).parseInput(input));
         } else {
-            LOGGER.log(Level.SEVERE, "node does not accept input");
+            LOGGER.log(Level.SEVERE, "node does not accept input, something went really wrong");
         }
     }
 
-    public Node getCurrentNode() {
-        return currentNode;
+    public void display() {
+        if (!(currentNode instanceof Dumb)) {
+            currentNode.display();
+        }
     }
 
-    public void setCurrentNode(Node nextNode) {
+    private void setCurrentNode(Node nextNode) {
         LOGGER.log(Level.FINE, "debug.switch.node", new Object[]{currentNode, nextNode});
         this.currentNode = nextNode;
         if (currentNode instanceof Skippable) {
-            currentNode.display();
+            display();
             setCurrentNode(currentNode.getChild());
         }
     }

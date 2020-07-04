@@ -1,6 +1,6 @@
 package menu.node;
 
-import menu.data.RequestKeyProcessor;
+import menu.data.InputProcessor;
 import menu.validator.Validator;
 import menu.node.base.*;
 
@@ -14,7 +14,7 @@ public class InputNode extends RequestableNode implements Valitable {
 
     private final String defaultValue;
 
-    private final RequestKeyProcessor processor;
+    private final InputProcessor processor;
 
     InputNode(AbstractInputNodeBuilder<?> builder) {
         super(builder);
@@ -66,13 +66,13 @@ public class InputNode extends RequestableNode implements Valitable {
 
         private String defaultValue;
 
-        private RequestKeyProcessor processor;
+        private InputProcessor processor;
 
         public AbstractInputNodeBuilder(String translatable) {
             super(translatable);
         }
 
-        public T inputProcessor(RequestKeyProcessor processor) {
+        public T inputProcessor(InputProcessor processor) {
             this.processor = processor;
             return getThis();
         }

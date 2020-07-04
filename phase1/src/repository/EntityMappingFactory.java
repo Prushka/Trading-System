@@ -2,7 +2,7 @@ package repository;
 
 import java.util.List;
 
-public interface MappingFactory<T> {
+public interface EntityMappingFactory<T> {
 
     T get(List<String> data);
 }

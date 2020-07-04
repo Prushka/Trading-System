@@ -7,12 +7,7 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class CSVRepository<T extends Mappable> implements Repository<T> {
-
-    /**
-     * The list where entities are held.
-     */
-    private final List<T> data;
+public class CSVRepository<T extends EntityMappable & UniqueId> extends RepositoryBase<T> {
 
     /**
      * The path of this file
@@ -23,7 +18,7 @@ public class CSVRepository<T extends Mappable> implements Repository<T> {
      * The factory that is used to instantiate a mappable object.
      * It's a constructor reference of that object.
      */
-    private final MappingFactory<T> factory;
+    private final EntityMappingFactory<T> factory;
 
     /**
      * Construct a CSVRepository for saving and reading csv files with
@@ -32,7 +27,7 @@ public class CSVRepository<T extends Mappable> implements Repository<T> {
      * @param path the file path
      * @param factory the constructor reference for the mappable object
      */
-    public CSVRepository(String path, MappingFactory<T> factory) {
+    public CSVRepository(String path, EntityMappingFactory<T> factory) {
         data = new ArrayList<>();
         this.path = path;
         this.factory = factory;
@@ -88,18 +83,5 @@ public class CSVRepository<T extends Mappable> implements Repository<T> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void add(T data) {
-        this.data.add(data);
-    }
-
-    public T get(int id) {
-        return data.get(id);
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        return new RepositoryIterator<>(data);
     }
 }

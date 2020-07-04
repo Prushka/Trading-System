@@ -34,7 +34,7 @@ public class MasterOptionNode extends Node implements Inputable {
     public Node parseInput(String input) {
         Optional<OptionNode> node = getChild(input);
         if (!node.isPresent()) {
-            return new ResponseNode.Builder("invalid.option").build();
+            return new ResponseNode.Builder("invalid.option").child(this).build();
         }
         return node.get();
     }
@@ -42,7 +42,7 @@ public class MasterOptionNode extends Node implements Inputable {
     @Override
     public void display() {
         for (OptionNode child : children) {
-            child.displaySafe();
+            child.display();
         }
     }
 

@@ -1,15 +1,13 @@
 package repository;
 
-import admin.Ticket;
+import menu.data.Response;
 
-import java.beans.IntrospectionException;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.function.Predicate;
 
-public class SerializableRepository<T extends Serializable> implements Repository<T> {
-
-    private List<T> data;
+public class SerializableRepository<T extends Serializable & UniqueId> extends RepositoryBase<T> {
+    // should we have a unique id on every entity?
 
     private final String path;
 
@@ -20,8 +18,8 @@ public class SerializableRepository<T extends Serializable> implements Repositor
     }
 
     @SuppressWarnings("unchecked")
-    public void read(){ // this one is in interface, maybe also need to be private
-        if(!new File(path).exists()){
+    public void read() { // this one is in interface, maybe also need to be private
+        if (!new File(path).exists()) {
             return;
         }
         try {
@@ -37,7 +35,7 @@ public class SerializableRepository<T extends Serializable> implements Repositor
     }
 
 
-    public void save(){
+    public void save() {
         try {
             OutputStream file = new FileOutputStream(path);
             OutputStream buffer = new BufferedOutputStream(file);
@@ -49,18 +47,5 @@ public class SerializableRepository<T extends Serializable> implements Repositor
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void add(T data) {
-        this.data.add(data);
-    }
-
-    public T get(int id) {
-        return data.get(id);
-    }
-
-    @Override
-    public Iterator<T> iterator() {
-        return new RepositoryIterator<>(data);
     }
 }

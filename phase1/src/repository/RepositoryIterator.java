@@ -6,19 +6,29 @@ import java.util.NoSuchElementException;
 
 public class RepositoryIterator<T> implements Iterator<T> {
 
-    // lecture code, need to better implement
+    // lecture code
 
     private final List<T> data;
     private int current;
+    private final Filter<T> filter;
 
-    public RepositoryIterator(List<T> data) {
+    public RepositoryIterator(List<T> data, Filter<T> filter) {
         this.data = data;
         this.current = 0;
+        this.filter = filter;
     }
 
     @Override
     public boolean hasNext() {
-        return current < data.size();
+        if (current < data.size()) {
+            if (!filter.match(data.get(current))) {
+                current++;
+                return hasNext();
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

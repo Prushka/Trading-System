@@ -34,6 +34,18 @@ public class PersonalUser extends User {
         traderFrequency = new HashMap<>();
     }
 
+    public PersonalUser (String userName, String email, String password) {
+        super(userName, email, password);
+        wishlist = new ArrayList<>();
+        inventory = new ArrayList<>();
+        trades = new ArrayList<>();
+        isFrozen = false;
+        lendCount = 0;
+        borrowCount = 0;
+        numTransactions = 0;
+        traderFrequency = new HashMap<>();
+    }
+
     public List<Object> getWishlist() {
         return wishlist;
     }

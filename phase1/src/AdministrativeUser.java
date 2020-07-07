@@ -1,3 +1,5 @@
+package src;
+
 public class AdministrativeUser extends User{
 
     private String userName;

@@ -8,18 +8,20 @@ public class AdministrativeManager {
     private static List<AdministrativeUser> administrators = new ArrayList<>();
     //private List<Notification> notifications ;
     private static int transactionLimit = 100; //what is the init limit?
-    private int lendBeforeBorrow = 1;
+    private static int lendBeforeBorrow = 1;
 
-    public AdministrativeManager(AdministrativeUser administrativeUser){
-        //what does the constractor do???
-        if (this.administrators.contains(administrativeUser) == false) {
-            if (administrativeUser.getIsHead() == true) {
-                this.administrators.add(administrativeUser);
-            }
-        }//else //throw expectaion?
-
+    public AdministrativeManager(){
     }
 
+    public void createadministrator(String username, String email, String password, boolean isHead){
+        AdministrativeUser admin = new AdministrativeUser(username, email, password, isHead);
+        administrators.add(admin);
+    }
+
+    public void createadministrator(String username, String email, String telephone, String password, boolean isHead){
+        AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
+        administrators.add(admin);
+    }
 
     public boolean verifyLogin(String username, String password){
         for (AdministrativeUser admin: administrators){
@@ -30,20 +32,18 @@ public class AdministrativeManager {
         return false;  //maybe throw expectation?? or return string to say wrong username or wrong password
     }
 
-    public boolean addSubAdmin(AdministrativeUser head, String username, String email, String password, boolean isHead){
+    public boolean addSubAdmin(AdministrativeUser head, String username, String email, String password){
         if (head.getIsHead()){
-            AdministrativeUser sub = new AdministrativeUser(username, email, password, false);
-            administrators.add(sub);
+            createadministrator(username, email, password, false);
             return true;
         } else{
             return false;
         }
     }
 
-    public boolean addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password, boolean isHead){
+    public boolean addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
         if (head.getIsHead()){
-            AdministrativeUser sub = new AdministrativeUser(username, email, telephone, password, false);
-            administrators.add(sub);
+            createadministrator(username, email, telephone, password, false);
             return true;
         } else{
             return false;
@@ -51,7 +51,7 @@ public class AdministrativeManager {
     }
 
     public int getTransactionLimit(){
-        return this.transactionLimit;
+        return transactionLimit;
     }
 
     public void setTransactionLimit(int limit){
@@ -59,7 +59,7 @@ public class AdministrativeManager {
     }
 
     public int getLendBeforeBorrow(){
-        return this.lendBeforeBorrow;
+        return lendBeforeBorrow;
     }
 
     public void setLendBeforeBorrow(int limit){
@@ -74,12 +74,14 @@ public class AdministrativeManager {
         user.setIsFrozen(false);
     }
 
-    public boolean removeItem(PersonalUser user, Object item){      //TODO:replace object with item
+    public boolean removeItem(PersonalUser user, Item item){
         return (user.getInventory()).remove(item);
     }
 
-    public boolean addItem(PersonalUser user, Object item){      //TODO:replace object with item
+    public boolean addItem(PersonalUser user, Item item){
         (user.getInventory()).add(item);
         return true;
     }
+
+    //TODO: method of creating notification and add them to notification list or repo
 }

@@ -1,4 +1,4 @@
-public class AdministrativeUser extends User{
+public class AdministrativeUser extends src.User{
 
     private String userName;
     private String email;

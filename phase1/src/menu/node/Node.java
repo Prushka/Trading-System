@@ -45,6 +45,10 @@ public abstract class Node {
         return node;
     }
 
+    public Node parseInput(String input){
+        return null;
+    }
+
     // There should be no setParent()
     public Node getParent() {
         return parent;
@@ -70,7 +74,6 @@ public abstract class Node {
         identifier.append("}");
         return identifier.toString();
     }
-
 
     protected abstract static class NodeBuilder<T extends NodeBuilder<T>> { // tada
 

@@ -3,12 +3,13 @@ package repository;
 import repository.map.EntityMappable;
 import repository.map.EntityMappingFactory;
 
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class CSVRepository<T extends EntityMappable & UniqueId> extends RepositoryBase<T> {
 
@@ -32,14 +33,6 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
         this.factory = factory;
         if (file.exists()) {
             readSafe();
-        }
-    }
-
-    private void bean(T data) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
-        for (PropertyDescriptor descriptor : Introspector.getBeanInfo(
-                data.getClass(), Object.class)
-                .getPropertyDescriptors()) {
-            System.out.println(descriptor.getReadMethod().invoke(data));
         }
     }
 

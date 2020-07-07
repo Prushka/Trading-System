@@ -5,11 +5,11 @@ import admin.TicketManager;
 import menu.Menu;
 import menu.data.Request;
 import menu.data.Response;
+import menu.handler.RequestHandler;
 import menu.node.*;
 import menu.validator.EmailValidator;
 import repository.CSVRepository;
 import repository.Repository;
-import repository.SerializableRepository;
 
 public class TestController {
 
@@ -69,8 +69,20 @@ public class TestController {
 
         InputNode userNameInput = new InputNode.Builder("input.username").build();
 
+        SubmitNode submitNode = new SubmitNode.Builder("submit.user")
+                .submitHandler(new RequestHandler() {
+                    @Override
+                    public Response handle(Request request) {
 
-        registerOptionNode.setChild(emailInput).setChild(userNameInput);
+                        return getTicketResponse(request); // this is just an example
+                        // the Request has a map of key (from Input Nodes) -> user input value
+                        // pass this Request from here to other controller / use case methods
+                        // the Response object is expected to be returned
+                        // Response has a list of TranslatablePairs
+                    }
+                }).build();
+
+        registerOptionNode.setChild(emailInput).setChild(userNameInput).setChild(submitNode);
 
         ticketTest.setChild(ticketSubmit);
 

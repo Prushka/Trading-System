@@ -1,13 +1,11 @@
 package menu.node;
 
-import menu.node.base.Inputable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class MasterOptionNode extends Node implements Inputable {
+public class MasterOptionNode extends Node {
 
     private final List<OptionNode> children;
 
@@ -42,7 +40,7 @@ public class MasterOptionNode extends Node implements Inputable {
     @Override
     public void display() {
         for (OptionNode child : children) {
-            child.display();
+            child.displaySafe();
         }
     }
 

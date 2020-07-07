@@ -2,12 +2,10 @@ package menu.node;
 
 import menu.data.Response;
 import menu.data.TranslatablePair;
-import menu.node.base.Skippable;
 
-import java.util.Map;
 import java.util.logging.Level;
 
-public class ResponseNode extends Node implements Skippable {
+public class ResponseNode extends Node {
 
     private final Response response;
 

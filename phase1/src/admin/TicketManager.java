@@ -13,7 +13,6 @@ public class TicketManager {
 
     public Response getTicketsByCategory(Ticket.Category category) {
 
-        //TODO: Base Interface for Iterator
         return repository.filterResponse(entity -> entity.getCategory() == category,
                 (entity, builder) -> builder.translatable("submit.ticket.category",
                         entity.getUid(), entity.getCategory(), entity.getContent()));

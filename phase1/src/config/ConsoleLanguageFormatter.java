@@ -37,7 +37,7 @@ public class ConsoleLanguageFormatter extends Formatter {
     }
 
     public String formatColor(String message) {
-        message = "{BLACK}" + message; // Todo: Logger is red by default in idea
+        message = "{BLACK}" + message;
         for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
             message = message.replace(entry.getKey(), entry.getValue());
         }

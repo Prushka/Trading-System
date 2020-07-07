@@ -7,8 +7,8 @@ import menu.data.Request;
 import menu.data.Response;
 import menu.node.*;
 import menu.validator.EmailValidator;
+import repository.CSVRepository;
 import repository.Repository;
-import repository.RepositoryIterator;
 import repository.SerializableRepository;
 
 public class TestController {
@@ -18,16 +18,16 @@ public class TestController {
 
     public TestController() {
         ticketRepository =
-                new SerializableRepository<>("a.ser");
-        Ticket ticket = new Ticket("123", Ticket.Category.ACCOUNT);
-        Ticket ticket1 = new Ticket("234", Ticket.Category.TRADE);
-        Ticket ticket2 = new Ticket("345", Ticket.Category.BOOK);
-        Ticket ticket3 = new Ticket("456", Ticket.Category.ACCOUNT);
+                new CSVRepository<>("data/a.csv", Ticket::new);
+        Ticket ticket = new Ticket("123", Ticket.Category.ACCOUNT, System.currentTimeMillis() / 1000);
+        Ticket ticket1 = new Ticket("234", Ticket.Category.TRADE, System.currentTimeMillis() / 1000);
+        Ticket ticket2 = new Ticket("345", Ticket.Category.BOOK, System.currentTimeMillis() / 1000);
+        Ticket ticket3 = new Ticket("456", Ticket.Category.ACCOUNT, System.currentTimeMillis() / 1000);
         ticketRepository.add(ticket);
         ticketRepository.add(ticket1);
         ticketRepository.add(ticket2);
         ticketRepository.add(ticket3);
-        // ticketRepository.add(ticket);
+        ticketRepository.add(ticket);
 
         // ticketRepository.save();
         //System.out.println(ticketRepository.get(0).getCategory());
@@ -47,14 +47,16 @@ public class TestController {
         OptionNode loginOptionNode = new OptionNode.Builder("option.login").id(2).build();
 
         OptionNode ticketTest = new OptionNode.Builder("option.ticket").id(3).build();
-        SubmitNode ticketSubmit = new SubmitNode.Builder("input.ticket.category").validator(input -> {
-            try {
-                Ticket.Category.valueOf(input.toUpperCase());
-                return true;
-            } catch (IllegalArgumentException e) {
-                return false;
-            }
-        }, new ResponseNode("invalid.ticket.category"))
+        SubmitNode ticketSubmit = new SubmitNode.Builder("input.ticket.category")
+                .validator(input -> input.length() > 3, new ResponseNode("invalid.ticket.length"))
+                .validator(input -> {
+                    try {
+                        Ticket.Category.valueOf(input.toUpperCase());
+                        return true;
+                    } catch (IllegalArgumentException e) {
+                        return false;
+                    }
+                }, new ResponseNode("invalid.ticket.category"))
                 .inputProcessor(String::toUpperCase)
                 .submitHandler(this::getTicketResponse).build();
 

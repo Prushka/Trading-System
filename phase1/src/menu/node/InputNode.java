@@ -1,42 +1,41 @@
 package menu.node;
 
-import menu.data.InputProcessor;
+import menu.data.InputPreProcessor;
 import menu.validator.Validator;
 import menu.node.base.*;
+import menu.validator.ValidatorPair;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class InputNode extends RequestableNode implements Valitable {
 
-    private final ResponseNode validateFailResponseNode;
-
-    private final Validator validator;
+    private final List<ValidatorPair> validatorPairs;
 
     private final String defaultValue;
 
-    private final InputProcessor processor;
+    private final InputPreProcessor processor;
 
     InputNode(AbstractInputNodeBuilder<?> builder) {
         super(builder);
-        this.validateFailResponseNode = builder.validateFailResponseNode;
-        this.validator = builder.validator;
+        this.validatorPairs = builder.validatorPairs;
         this.defaultValue = builder.defaultValue;
         this.processor = builder.processor;
-        if (validator != null) {
-            if (builder.validateFailNextNode == null) {
-                validateFailResponseNode.setChild(this);
-            } else {
-                validateFailResponseNode.setChild(builder.validateFailNextNode);
-            }
+        for (ValidatorPair validatorPair : validatorPairs) {
+            validatorPair.setFailResponseNextNodeIfNull(this);
         }
     }
 
-    public Optional<ResponseNode> validate() { // making this private will need to remove the valitable interface
-        if (validator == null || validator.validate(getValue())) { // pass
-            return Optional.empty();
-        } else { // fail
-            return Optional.of(validateFailResponseNode);
+    public Optional<ResponseNode> validate() {
+        if (validatorPairs != null) {
+            for (ValidatorPair validatorPair : validatorPairs) {
+                if (!validatorPair.validate(value)) {
+                    return Optional.of(validatorPair.getFailResponseNode());
+                }
+            }
         }
+        return Optional.empty();
     }
 
     @Override
@@ -55,24 +54,20 @@ public class InputNode extends RequestableNode implements Valitable {
         return getChild();
     }
 
-    // TODO: Multiple Validator & Response Node pairs
     protected abstract static class AbstractInputNodeBuilder<T extends AbstractInputNodeBuilder<T>> extends RequestableNodeBuilder<T> {
 
-        private ResponseNode validateFailResponseNode; // the response node
-
-        private Node validateFailNextNode; // the node after response, set to input node itself if null
-
-        private Validator validator;
+        private final List<ValidatorPair> validatorPairs;
 
         private String defaultValue;
 
-        private InputProcessor processor;
+        private InputPreProcessor processor;
 
         public AbstractInputNodeBuilder(String translatable) {
             super(translatable);
+            validatorPairs = new ArrayList<>();
         }
 
-        public T inputProcessor(InputProcessor processor) {
+        public T inputProcessor(InputPreProcessor processor) {
             this.processor = processor;
             return getThis();
         }
@@ -82,21 +77,17 @@ public class InputNode extends RequestableNode implements Valitable {
             return getThis();
         }
 
-        public T validator(Validator validator, ResponseNode validateFailResponseNode) {
-            this.validator = validator;
-            this.validateFailResponseNode = validateFailResponseNode;
+        public T validator(Validator validator, ResponseNode validateFailResponseNode) { // fail next node = this
+            return validator(validator, validateFailResponseNode, null);
+        }
+
+        public T validator(Validator validator, ResponseNode validateFailResponseNode, Node validateFailNextNode) {
+            this.validatorPairs.add(new ValidatorPair(validator, validateFailResponseNode, validateFailNextNode));
             return getThis();
         }
 
         public T validateSuccessNext(Node node) { // the same as child node
             child(node);
-            return getThis();
-        }
-
-        // Validate fail response node is now part of validator
-
-        public T validateFailNext(Node node) {
-            validateFailNextNode = node;
             return getThis();
         }
 

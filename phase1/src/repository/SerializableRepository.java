@@ -1,30 +1,24 @@
 package repository;
 
-import menu.data.Response;
-
 import java.io.*;
 import java.util.*;
-import java.util.function.Predicate;
 
 public class SerializableRepository<T extends Serializable & UniqueId> extends RepositoryBase<T> {
     // should we have a unique id on every entity?
 
-    private final String path;
-
     public SerializableRepository(String path) {
+        super(path);
         data = new ArrayList<>();
-        this.path = path;
-        read();
+        if(file.exists()){
+            readSafe();
+        }
     }
 
     @SuppressWarnings("unchecked")
-    public void read() { // this one is in interface, maybe also need to be private
-        if (!new File(path).exists()) {
-            return;
-        }
+    protected void readSafe() {
         try {
-            InputStream file = new FileInputStream(path);
-            InputStream buffer = new BufferedInputStream(file);
+            InputStream inputStream = new FileInputStream(file.getPath());
+            InputStream buffer = new BufferedInputStream(inputStream);
             ObjectInput input = new ObjectInputStream(buffer);
 
             data = (List<T>) input.readObject();
@@ -34,11 +28,10 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
         }
     }
 
-
-    public void save() {
+    protected void saveSafe() {
         try {
-            OutputStream file = new FileOutputStream(path);
-            OutputStream buffer = new BufferedOutputStream(file);
+            OutputStream outputStream = new FileOutputStream(file.getPath());
+            OutputStream buffer = new BufferedOutputStream(outputStream);
             ObjectOutput output = new ObjectOutputStream(buffer);
 
             // serialize the

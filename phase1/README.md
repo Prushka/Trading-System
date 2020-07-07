@@ -1,3 +1,8 @@
+Before Running:
+-------------
+1. Mark src as Source Root
+2. Mark resources as Resources Root
+
 Reference:
 -------------
 * __[Ansi Color](https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println)__

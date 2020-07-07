@@ -9,14 +9,10 @@ import java.util.*;
 
 public class CSVRepository<T extends EntityMappable & UniqueId> extends RepositoryBase<T> {
 
-    /**
-     * The path of this file
-     */
-    private final String path;
 
     /**
      * The factory that is used to instantiate a mappable object.
-     * It's a constructor reference of that object.
+     * It's a constructor reference of that class.
      */
     private final EntityMappingFactory<T> factory;
 
@@ -24,38 +20,41 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
      * Construct a CSVRepository for saving and reading csv files with
      * the factory for instantiating mappable objects.
      *
-     * @param path the file path
+     * @param path    the file path
      * @param factory the constructor reference for the mappable object
      */
     public CSVRepository(String path, EntityMappingFactory<T> factory) {
+        super(path);
         data = new ArrayList<>();
-        this.path = path;
         this.factory = factory;
-        read();
+        if (file.exists()) {
+            readSafe();
+        }
     }
 
     private void bean(T data) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
-        for(PropertyDescriptor descriptor:Introspector.getBeanInfo(
+        for (PropertyDescriptor descriptor : Introspector.getBeanInfo(
                 data.getClass(), Object.class)
-                .getPropertyDescriptors()){
+                .getPropertyDescriptors()) {
             System.out.println(descriptor.getReadMethod().invoke(data));
         }
     }
 
     /**
-     * Read the file with {@link #path} into the {@link #data}.
+     * Read the file with {@link #file} into the {@link #data}.
      * It will use the {@link #factory} to instantiate the specific objects.
      */
     @Override
-    public void read() {
+    protected void readSafe() {
         // FileInputStream can be used for reading raw bytes, like an image.
         Scanner scanner = null;
         try {
-            scanner = new Scanner(new FileInputStream(path));
+            scanner = new Scanner(new FileInputStream(file.getPath()));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         assert scanner != null;
+        scanner.nextLine(); // skip header
         // String[] headers = scanner.nextLine().split(",");
         String[] record;
         while (scanner.hasNextLine()) {
@@ -66,17 +65,18 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
     }
 
     /**
-     * Save {@link #data} to {@link #path}.
+     * Save {@link #data} to {@link #file}.
      */
-    public void save() {
+    protected void saveSafe() {
         try {
-            FileWriter writer = new FileWriter(path);
+            FileWriter writer = new FileWriter(file,false);
             // List<String> header = supplier.get().getHeader();
 
             // writer.append(String.join(",",header));
             // Iterator<Map<String,String>> iterator = dataBase.iterator();
+            writer.append(get(0).toCSVHeader());
             for (T single : data) {
-                writer.append(String.join(",", single.toList()));
+                writer.append(single.toCSVString()).append("\n");
             }
             writer.flush();
             writer.close();

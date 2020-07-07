@@ -4,7 +4,8 @@ import java.util.List;
 
 public interface EntityMappable {
 
-    // List<String> getHeader();
+    String toCSVString();
 
-    List<String> toList();
+    String toCSVHeader();
+
 }

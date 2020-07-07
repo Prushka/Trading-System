@@ -4,8 +4,6 @@ import menu.data.Request;
 import menu.data.Response;
 import menu.handler.RequestHandler;
 
-import java.util.Optional;
-
 public class SubmitNode extends InputNode {
 
     private final RequestHandler handler;

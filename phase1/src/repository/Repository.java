@@ -7,9 +7,9 @@ import java.util.Iterator;
 public interface Repository<T extends UniqueId> {
 
     void save();
-    void read();
 
     void add(T entity);
+
     T get(int id);
 
     Iterator<T> iterator(Filter<T> filter);

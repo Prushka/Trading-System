@@ -1,4 +1,4 @@
-package repository;
+package repository.map;
 
 import java.util.List;
 

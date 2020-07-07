@@ -1,0 +1,5 @@
+category(Category),content(String),priority(Priority),state(State),submitterEmail(String),timeStamp(Long),uid(Long)
+ACCOUNT,123,null,null,null,1594112809,0
+TRADE,234,null,null,null,1594112809,1
+BOOK,345,null,null,null,1594112809,2
+ACCOUNT,456,null,null,null,1594112809,3

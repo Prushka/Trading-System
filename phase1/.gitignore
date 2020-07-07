@@ -1,6 +1,4 @@
 *.iml
-*.ser
-*.csv
 .idea
 target
 out

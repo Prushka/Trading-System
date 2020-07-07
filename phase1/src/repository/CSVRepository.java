@@ -1,5 +1,8 @@
 package repository;
 
+import repository.map.EntityMappable;
+import repository.map.EntityMappingFactory;
+
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;

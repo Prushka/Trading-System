@@ -4,6 +4,8 @@ import menu.data.Request;
 import menu.data.Response;
 import menu.handler.RequestHandler;
 
+import java.util.Optional;
+
 public class SubmitNode extends InputNode {
 
     private final RequestHandler handler;
@@ -16,7 +18,7 @@ public class SubmitNode extends InputNode {
         failedResultNode = builder.failedResultNode;
     }
 
-    public Request getRequest() {
+    private Request getRequest() {
         Request request = new Request();
         Node curr = this;
         while (curr instanceof RequestableNode) {
@@ -29,9 +31,9 @@ public class SubmitNode extends InputNode {
 
     @Override
     public Node parseInput(String input) {
-        Node superParse = super.parseInput(input);
-        if (superParse instanceof ResponseNode) return superParse;
-        return parseResponse(handler.handle(getRequest()));
+        inputPreProcessing(input);
+        Optional<Node> validateResult = validate();
+        return validateResult.orElseGet(() -> parseResponse(handler.handle(getRequest())));
     }
 
     private Node parseResponse(Response response) {

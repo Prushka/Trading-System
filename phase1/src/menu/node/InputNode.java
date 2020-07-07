@@ -2,14 +2,13 @@ package menu.node;
 
 import menu.data.InputPreProcessor;
 import menu.validator.Validator;
-import menu.node.base.*;
 import menu.validator.ValidatorPair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class InputNode extends RequestableNode implements Valitable {
+public class InputNode extends RequestableNode {
 
     private final List<ValidatorPair> validatorPairs;
 
@@ -27,31 +26,32 @@ public class InputNode extends RequestableNode implements Valitable {
         }
     }
 
-    public Optional<ResponseNode> validate() {
+    protected Optional<Node> validate() {
         if (validatorPairs != null) {
             for (ValidatorPair validatorPair : validatorPairs) {
                 if (!validatorPair.validate(value)) {
-                    return Optional.of(validatorPair.getFailResponseNode());
+                    validatorPair.getFailResponseNode().display();
+                    return Optional.of(validatorPair.getFailResponseNextNode());
                 }
             }
         }
         return Optional.empty();
     }
 
-    @Override
-    public Node parseInput(String input) {
+    protected void inputPreProcessing(String input){
         this.value = input;
-        if (processor != null) {
-            this.value = processor.process(value);
-        }
-        Optional<ResponseNode> error = validate();
-        if (error.isPresent()) {
-            return error.get();
-        }
         if (input == null || input.length() == 0) {
             this.value = defaultValue;
         }
-        return getChild();
+        if (processor != null) {
+            this.value = processor.process(value);
+        }
+    }
+
+    public Node parseInput(String input) {
+        inputPreProcessing(input);
+        Optional<Node> validateResult = validate();
+        return validateResult.orElseGet(this::getChild);
     }
 
     protected abstract static class AbstractInputNodeBuilder<T extends AbstractInputNodeBuilder<T>> extends RequestableNodeBuilder<T> {

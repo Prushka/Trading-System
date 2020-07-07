@@ -56,6 +56,7 @@ public abstract class MappableBase {
     }
 
     private List<Field> getSortedFields(){
+        // The order of fields: https://stackoverflow.com/questions/1097807/java-reflection-is-the-order-of-class-fields-and-methods-standardized
         List<Field> fields = Arrays.asList(this.getClass().getDeclaredFields());
         fields.sort(new FieldComparator());
         return fields;

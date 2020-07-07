@@ -3,7 +3,6 @@ package repository;
 import menu.data.Response;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,8 +38,13 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
     protected abstract void saveSafe();
 
     @Override
+    public boolean ifExists(T entity){
+        return data.contains(entity);
+    }
+
+    @Override
     public void add(T entity) {
-        if (data.contains(entity)) {
+        if (ifExists(entity)) {
             return;
         }
         entity.setUid(data.size());

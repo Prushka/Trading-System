@@ -1,9 +1,7 @@
 package menu.node;
 
 
-import menu.node.base.Inputable;
-
-public abstract class RequestableNode extends Node implements Inputable {
+public abstract class RequestableNode extends Node {
 
     protected final String key;
 

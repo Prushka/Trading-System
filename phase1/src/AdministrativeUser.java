@@ -1,4 +1,6 @@
-public class AdministrativeUser extends src.User{
+package src;
+
+public class AdministrativeUser extends User{
 
     private String userName;
     private String email;

@@ -1,6 +1,9 @@
+package src;
+import java.awt.image.AreaAveragingScaleFilter;
+import java.lang.reflect.Array;
 import java.util.*;
 
-public class PersonalUser extends src.User {
+public class PersonalUser extends User {
 
     private List<Object> wishlist;       //TODO: replace Object with item when item is available
     private List<Object> inventory;

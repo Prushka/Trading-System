@@ -48,4 +48,7 @@ public class Menu {
         this.currentNode = nextNode;
     }
 
+    public void displayInitial() {
+        LOGGER.log(Level.INFO,"init.tip");
+    }
 }

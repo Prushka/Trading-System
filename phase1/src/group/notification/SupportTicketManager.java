@@ -20,7 +20,7 @@ public class SupportTicketManager {
     }
 
     private Response ticketRepresentation(String translatable, SupportTicket supportTicket) {
-        return new Response.Builder().success(true).
+        return new Response.Builder(true).
                 translatable(translatable,
                         new Date(supportTicket.getTimeStamp()), supportTicket.getContent(), supportTicket.getCategory(), supportTicket.getPriority(), supportTicket.getState())
                 .build();
@@ -29,7 +29,7 @@ public class SupportTicketManager {
     public Response addTicket(Request request) {
         SupportTicket supportTicket = new SupportTicket(request);
         if (repository.ifExists(supportTicket)) {
-            return new Response.Builder().success(false).translatable("exists.ticket").build();
+            return new Response.Builder(false).translatable("exists.ticket").build();
         } else {
             repository.add(supportTicket);
             return ticketRepresentation("success.ticket", supportTicket);

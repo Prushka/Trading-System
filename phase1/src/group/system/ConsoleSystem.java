@@ -11,7 +11,7 @@ public class ConsoleSystem {
     public void run(Menu menu) { // lecture code
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
+        menu.displayInitial();
         try {
             String input = "";
             while (!input.equalsIgnoreCase("exit")) {

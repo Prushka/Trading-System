@@ -110,7 +110,7 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
      * @return the Response object
      */
     private Response mapIterator(Iterator<T> iterator, ResponseMapper<T> mapper) {
-        Response.Builder builder = new Response.Builder();
+        Response.Builder builder = new Response.Builder(true);
         while (iterator.hasNext()) {
             mapper.map(iterator.next(), builder);
         }

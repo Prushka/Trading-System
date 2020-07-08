@@ -28,6 +28,33 @@ public class ConsoleLanguageFormatter extends Formatter {
         put("{PURPLE_BACKGROUND}", "\u001B[45m");
         put("{CYAN_BACKGROUND}", "\u001B[46m");
         put("{WHITE_BACKGROUND}", "\u001B[47m");
+
+        put("{BLACK_BOLD}", "\033[1;30m");
+        put("{RED_BOLD}", "\033[1;31m");
+        put("{GREEN_BOLD}", "\033[1;32m");
+        put("{YELLOW_BOLD}", "\033[1;33m");
+        put("{BLUE_BOLD}", "\033[1;34m");
+        put("{PURPLE_BOLD}", "\033[1;35m");
+        put("{CYAN_BOLD}", "\033[1;36m");
+        put("{WHITE_BOLD}", "\033[1;37m");
+
+        put("{BLACK_UNDERLINED}", "\033[4;30m");
+        put("{RED_UNDERLINED}", "\033[4;31m");
+        put("{GREEN_UNDERLINED}", "\033[4;32m");
+        put("{YELLOW_UNDERLINED}", "\033[4;33m");
+        put("{BLUE_UNDERLINED}", "\033[4;34m");
+        put("{PURPLE_UNDERLINED}", "\033[4;35m");
+        put("{CYAN_UNDERLINED}", "\033[4;36m");
+        put("{WHITE_UNDERLINED}", "\033[4;37m");
+
+        put("{BLACK_BRIGHT}", "\033[0;90m");
+        put("{RED_BRIGHT}", "\033[0;91m");
+        put("{GREEN_BRIGHT}", "\033[0;92m");
+        put("{YELLOW_BRIGHT}", "\033[0;93m");
+        put("{BLUE_BRIGHT}", "\033[0;94m");
+        put("{PURPLE_BRIGHT}", "\033[0;95m");
+        put("{CYAN_BRIGHT}", "\033[0;96m");
+        put("{WHITE_BRIGHT}", "\033[0;97m");
     }};
 
     private final LanguageProperties lang;

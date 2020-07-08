@@ -59,7 +59,8 @@ public class Response {
 
         private final List<TranslatablePair> translatablePairs;
 
-        public Builder() {
+        public Builder(boolean success) {
+            this.success = success;
             this.translatablePairs = new ArrayList<>();
         }
 

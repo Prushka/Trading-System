@@ -1,0 +1,77 @@
+package group.repository;
+
+import group.menu.data.Response;
+
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+
+public abstract class RepositoryBase<T extends UniqueId> implements Repository<T> {
+
+    List<T> data;
+
+    /**
+     * The path of this file
+     */
+    File file;
+
+
+    public RepositoryBase(String path) {
+        this.file = new File(path);
+        mkdirs();
+    }
+
+    abstract void readSafe();
+
+    private void mkdirs() {
+        if (!file.exists()) {
+            boolean mkdir = new File(file.getParent()).mkdirs();
+        }
+    }
+
+    public void save() {
+        if (data != null && data.size() > 0) {
+            saveSafe();
+        }
+    }
+
+    abstract void saveSafe();
+
+    @Override
+    public boolean ifExists(T entity){
+        return data.contains(entity);
+    }
+
+    @Override
+    public void add(T entity) {
+        if (ifExists(entity)) {
+            return;
+        }
+        entity.setUid(data.size());
+        data.add(entity);
+    }
+
+    @Override
+    public T get(int id) {
+        return data.get(id);
+    }
+
+    @Override
+    public Iterator<T> iterator(Filter<T> filter) {
+        return new RepositoryIterator<>(data, filter);
+    }
+
+    private Response mapIterator(Iterator<T> iterator, ResponseMapper<T> mapper) {
+        Response.Builder builder = new Response.Builder();
+        while (iterator.hasNext()) {
+            mapper.map(iterator.next(), builder);
+        }
+        return builder.build();
+    }
+
+    @Override
+    public Response filterResponse(Filter<T> filter, ResponseMapper<T> mapper) {
+        return mapIterator(iterator(filter), mapper);
+    }
+
+}

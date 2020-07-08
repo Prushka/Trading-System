@@ -5,6 +5,9 @@ import group.menu.node.*;
 import group.menu.processor.InputPreProcessor;
 import group.menu.validator.Validator;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +20,7 @@ public class MenuFactory {
 
         private final Map<Node, String> masterPlaceHolder = new HashMap<>();
 
-        private final Map<String, InputNode> inputNodePool = new HashMap<>();
+        //private final Map<String, InputNode> inputNodePool = new HashMap<>();
 
         private Node currentNode;
 
@@ -32,7 +35,7 @@ public class MenuFactory {
             String translatable = getTranslatable("input", key);
             InputNode inputNode = new InputNode.Builder(translatable, key)
                     .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
-            inputNodePool.put(translatable, inputNode);
+            //inputNodePool.put(translatable, inputNode);
             currentNode.setChild(inputNode);
             currentNode = inputNode;
             return this;
@@ -51,10 +54,10 @@ public class MenuFactory {
         }
 
         public OptionNodeFactory submit(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
-            String translatable = getTranslatable("input", key);
+            String translatable = getTranslatable("submit", key);
             SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler)
                     .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
-            inputNodePool.put(translatable, submitNode);
+            //inputNodePool.put(translatable, submitNode);
             currentNode.setChild(submitNode);
             currentNode = submitNode;
             return this;
@@ -78,11 +81,11 @@ public class MenuFactory {
         }
 
         private String getTranslatable(String nodeType, String addon) {
-            String clazzSimple = clazz.getSimpleName().toLowerCase();
+            String clazzSimple = clazz.getSimpleName().replaceAll("([A-Z])",".$1").toLowerCase();
             if (addon.length() > 0) {
-                return String.format("%s.%s.%s.%s", nodeType, type, clazzSimple, addon);
+                return String.format("%s.%s%s.%s", nodeType, type, clazzSimple, addon);
             }
-            return String.format("%s.%s.%s", nodeType, type, clazzSimple);
+            return String.format("%s.%s%s", nodeType, type, clazzSimple);
         }
     }
 
@@ -133,6 +136,25 @@ public class MenuFactory {
             for (Map.Entry<Node, String> entry : factory.masterPlaceHolder.entrySet()) {
                 entry.getKey().setChild(masters.get(entry.getValue()));
             }
+        }
+    }
+
+    public void generateLanguage(String language) { // properties is not in order thus a file writer is used, maybe we can extend Properties class
+
+        PrintWriter writer;
+        try {
+            writer = new PrintWriter(new File("resources/" + language + ".properties"));
+            for (OptionNodeFactory factory : optionNodePool.values()) {
+                OptionNodeIterator iterator = new OptionNodeIterator(factory.optionNode);
+                while (iterator.hasNext()) {
+                    Node node = iterator.next();
+                    writer.println(node.getTranslatable() + "=undefined");
+                }
+            }
+            writer.flush();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

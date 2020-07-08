@@ -21,8 +21,8 @@ public class SubmitNode extends InputNode {
     private Request getRequest() {
         Request request = new Request();
         Node curr = this;
-        while (curr instanceof RequestableNode) {
-            request.put(((RequestableNode) curr).getKey(), ((RequestableNode) curr).getValue());
+        while (curr.acceptInput()) {
+            request.put(curr.getKey(), curr.getValue());
             curr = curr.getParent();
         }
         request.setTimeStamp();

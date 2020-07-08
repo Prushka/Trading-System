@@ -5,8 +5,8 @@ import group.repository.map.EntityMappingFactory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -73,10 +73,10 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
      */
     void saveSafe() {
         try {
-            FileWriter writer = new FileWriter(file,false);
+            PrintWriter writer = new PrintWriter(file);
             writer.append(get(0).toCSVHeader());
             for (T single : data) {
-                writer.append(single.toCSVString()).append("\n");
+                writer.println(single.toCSVString());
             }
             writer.flush();
             writer.close();

@@ -18,7 +18,7 @@ public class MasterOptionNode extends Node {
         }
     }
 
-    public MasterOptionNode(String translatable, OptionNode... optionNodes){
+    public MasterOptionNode(String translatable, OptionNode... optionNodes) {
         this(new MasterOptionNode.Builder(translatable).addChild(optionNodes));
     }
 

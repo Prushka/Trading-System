@@ -28,7 +28,7 @@ public class SupportTicketManager {
 
     public Response addTicket(Request request) {
         SupportTicket supportTicket = new SupportTicket(request);
-            repository.add(supportTicket);
-            return ticketRepresentation("success.ticket", supportTicket);
+        repository.add(supportTicket);
+        return ticketRepresentation("success.ticket", supportTicket);
     }
 }

@@ -12,6 +12,11 @@ public abstract class RequestableNode extends Node {
         this.key = builder.key;
     }
 
+    @Override
+    boolean acceptInput() {
+        return true;
+    }
+
     public String getKey() {
         return key;
     }

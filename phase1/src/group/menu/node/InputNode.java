@@ -37,11 +37,6 @@ public class InputNode extends RequestableNode {
         return Optional.empty();
     }
 
-    @Override
-    boolean acceptInput() {
-        return true;
-    }
-
     void inputPreProcessing(String input) {
         this.value = input;
         if (input == null || input.length() == 0) {

@@ -30,7 +30,11 @@ public class MenuConstructor {
         menu = new Menu(entryNode);
 
         ConsoleSystem console = new ConsoleSystem();
+
+        menuFactory.generateLanguage("eng");
+
         console.run(getMenu());
+        controller.shutdown();
     }
 
     public Menu getMenu() {

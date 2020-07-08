@@ -101,6 +101,18 @@ public class SupportTicket extends MappableBase implements Serializable, EntityM
         return uid;
     }
 
+    public Long getTimeStamp() {
+        return timeStamp;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

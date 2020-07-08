@@ -5,14 +5,31 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The implementation of converting fields to CSV record. Has a constructor
+ * that takes in CSV record using reflection.
+ *
+ * @author Dan Lyu
+ * @author "instantiating an enum using reflection"
+ *
+ * @see EntityMappable
+ * @see <a href="https://stackoverflow.com/questions/3735927/java-instantiating-an-enum-using-reflection">Instantiating an enum using reflection</a>
+ * @see <a href="https://stackoverflow.com/questions/10638826/java-reflection-impact-of-setaccessibletrue">Impact of setAccessible(true)</a>
+ */
 public abstract class MappableBase {
 
-    public MappableBase() {
+    /**
+     * The empty constructor used to make sure that extending
+     * this class will have no impact on constructors of subclasses.
+     */
+    public MappableBase() {}
 
-    }
-
-    // is it necessary to put this part into use case?
-
+    /**
+     * This constructor will construct the object itself using
+     * fields and their corresponding String representation
+     *
+     * @param data the CSV record split into list
+     */
     public MappableBase(List<String> data) {
         int id = 0;
         for (Field field : getSortedFields()) {
@@ -46,6 +63,11 @@ public abstract class MappableBase {
         }
     }
 
+    /**
+     * Returns the field name and type in order.
+     *
+     * @return the Header String record for this entity
+     */
     public String toCSVHeader() {
         StringBuilder value = new StringBuilder();
         getSortedFields().forEach(field -> value.append(field.getName()).append("(")
@@ -55,13 +77,21 @@ public abstract class MappableBase {
         return value.toString();
     }
 
+    /**
+     * @return the sorted fields of the current object
+     *
+     * @see <a href="https://stackoverflow.com/questions/1097807/java-reflection-is-the-order-of-class-fields-and-methods-standardized">Field Order in Reflection</a>
+     * @see FieldComparator
+     */
     private List<Field> getSortedFields() {
-        // The order of fields: https://stackoverflow.com/questions/1097807/java-reflection-is-the-order-of-class-fields-and-methods-standardized
         List<Field> fields = Arrays.asList(this.getClass().getDeclaredFields());
         fields.sort(new FieldComparator());
         return fields;
     }
 
+    /**
+     * @return the String record representation of all fields in current class
+     */
     public String toCSVString() {
         StringBuilder value = new StringBuilder();
         for (Field field : getSortedFields()) {

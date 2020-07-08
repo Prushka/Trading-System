@@ -51,8 +51,9 @@ public class SubmitNode extends InputNode {
         private RequestHandler handler;
         private Node failedResultNode;
 
-        public Builder(String translatable, String key) {
+        public Builder(String translatable, String key, RequestHandler requestHandler) {
             super(translatable, key);
+            handler = requestHandler;
         }
 
         @Override

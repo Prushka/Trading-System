@@ -1,28 +1,28 @@
 package group.config.property;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
 
 public abstract class Property {
 
-    private final Properties properties = new Properties();
+    final Properties properties = new Properties();
 
-    public Property() {
-        try {
-            saveDefault();
-            properties.load(new FileInputStream(getFile()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public Property() {}
+
+    abstract File getFile();
+
+    InputStream getResource(){
+        return getClass().getClassLoader().getResourceAsStream(getFile().getName());
     }
-
-    public abstract File getFile();
 
     public void saveDefault() throws IOException {
         if (!getFile().exists()) {
             System.out.println("file: " + getFile() + " not exist");
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(getFile().getName());
+            InputStream inputStream = getResource();
             assert inputStream != null;
             if (getFile().getParent() != null) {
                 boolean success = new File(getFile().getParent()).mkdirs();

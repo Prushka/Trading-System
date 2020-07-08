@@ -11,8 +11,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * The CSV Repository Implementation for storing and reading the list of entities
+ *
+ * @param <T> The entity this Repository deals with
+ *
+ * @author Dan Lyu
+ * @author lecture code, Logging project
+ * @see Repository
+ * @see RepositoryBase
+ */
 public class CSVRepository<T extends EntityMappable & UniqueId> extends RepositoryBase<T> {
-
 
     /**
      * The factory that is used to instantiate a mappable object.
@@ -37,7 +46,7 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
     }
 
     /**
-     * Read the file with {@link #file} into the {@link #data}.
+     * Read the file with {@link #file} into {@link #data}.
      * It will use the {@link #factory} to instantiate the specific objects.
      */
     @Override

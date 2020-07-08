@@ -4,9 +4,23 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Serialization Implementation for storing and reading the list of entities
+ *
+ * @param <T> The entity this Repository deals with
+ *
+ * @author Dan Lyu
+ * @author lecture code, Logging project
+ * @see Repository
+ * @see RepositoryBase
+ */
 public class SerializableRepository<T extends Serializable & UniqueId> extends RepositoryBase<T> {
-    // should we have a unique id on every entity?
 
+    /**
+     * Construct a CSVRepository for saving and reading .ser files
+     *
+     * @param path the file path
+     */
     public SerializableRepository(String path) {
         super(path);
         data = new ArrayList<>();
@@ -15,6 +29,9 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
         }
     }
 
+    /**
+     * Read the file with {@link #file} into {@link #data}.
+     */
     @SuppressWarnings("unchecked")
     void readSafe() {
         try {
@@ -29,6 +46,9 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
         }
     }
 
+    /**
+     * Save {@link #data} to {@link #file}.
+     */
     void saveSafe() {
         try {
             OutputStream outputStream = new FileOutputStream(file.getPath());

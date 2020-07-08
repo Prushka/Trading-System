@@ -11,6 +11,10 @@ public class OptionNode extends Node {
         this.id = builder.id;
     }
 
+    public OptionNode(String translatable,int id) {
+        this(new Builder(translatable).id(id));
+    }
+
     @Override
     public void display(){
 

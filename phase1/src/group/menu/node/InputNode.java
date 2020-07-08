@@ -1,6 +1,6 @@
 package group.menu.node;
 
-import group.menu.data.InputPreProcessor;
+import group.menu.processor.InputPreProcessor;
 import group.menu.validator.Validator;
 import group.menu.validator.ValidatorPair;
 

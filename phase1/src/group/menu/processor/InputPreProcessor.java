@@ -1,4 +1,4 @@
-package group.menu.data;
+package group.menu.processor;
 
 /**
  * Use this in lambda or implement a concrete class.<br>
@@ -7,6 +7,8 @@ package group.menu.data;
  *
  * @author Dan Lyu
  */
+
+@FunctionalInterface
 public interface InputPreProcessor {
 
     String process(String input);

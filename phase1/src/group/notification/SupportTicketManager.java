@@ -16,7 +16,7 @@ public class SupportTicketManager {
 
     public Response getTicketsByCategory(SupportTicket.Category category) {
         return repository.filterResponse(entity -> entity.getCategory() == category,
-                (entity, builder) -> builder.response(ticketRepresentation("submit.ticket.category",entity)));
+                (entity, builder) -> builder.response(ticketRepresentation("submit.ticket.category", entity)));
     }
 
     private Response ticketRepresentation(String translatable, SupportTicket supportTicket) {
@@ -28,11 +28,7 @@ public class SupportTicketManager {
 
     public Response addTicket(Request request) {
         SupportTicket supportTicket = new SupportTicket(request);
-        if (repository.ifExists(supportTicket)) {
-            return new Response.Builder(false).translatable("exists.ticket").build();
-        } else {
             repository.add(supportTicket);
             return ticketRepresentation("success.ticket", supportTicket);
-        }
     }
 }

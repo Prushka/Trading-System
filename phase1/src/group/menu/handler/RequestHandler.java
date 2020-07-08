@@ -10,6 +10,8 @@ import group.menu.data.Response;
  *
  * @author Dan Lyu
  */
+
+@FunctionalInterface
 public interface RequestHandler {
 
     /**

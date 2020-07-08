@@ -10,7 +10,7 @@ import java.util.List;
  * that takes in CSV record using reflection.
  *
  * @author Dan Lyu
- * @author "instantiating an enum using reflection"
+ * @author "instantiating an enum using reflection" by Bozho
  *
  * @see EntityMappable
  * @see <a href="https://stackoverflow.com/questions/3735927/java-instantiating-an-enum-using-reflection">Instantiating an enum using reflection</a>

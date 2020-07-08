@@ -6,6 +6,8 @@ package group.menu.validator;
  *
  * @author Dan Lyu
  */
+
+@FunctionalInterface
 public interface Validator {
 
     /**

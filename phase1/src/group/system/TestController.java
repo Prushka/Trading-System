@@ -17,8 +17,6 @@ public class TestController {
                 new CSVRepository<>("data/support_ticket.csv", SupportTicket::new);
         supportTicketManager = new SupportTicketManager(ticketRepository);
         MenuConstructor menu = new MenuConstructor(this);
-        ConsoleSystem console = new ConsoleSystem();
-        console.run(menu.getMenu());
     }
 
     public Response addTicket(Request request) {
@@ -27,6 +25,10 @@ public class TestController {
 
     public Response getTicketsByCategory(Request request) {
         return supportTicketManager.getTicketsByCategory(SupportTicket.Category.valueOf(request.get("category")));
+    }
+
+    public boolean ifTicketContentNotExist(String input) {
+        return !ticketRepository.ifExists(entity -> input.equalsIgnoreCase(entity.getContent()));
     }
 
     public void shutdown() {

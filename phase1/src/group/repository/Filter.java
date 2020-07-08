@@ -8,6 +8,8 @@ package group.repository;
  *
  * @author Dan Lyu
  */
+
+@FunctionalInterface
 public interface Filter<T> {
 
     /**

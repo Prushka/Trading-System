@@ -72,6 +72,12 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
         return data.contains(entity);
     }
 
+    @Override
+    public boolean ifExists(Filter<T> filter){
+        Iterator<T> iterator = iterator(filter);
+        return iterator.hasNext();
+    }
+
     /**
      * @param entity an entity to be added
      */

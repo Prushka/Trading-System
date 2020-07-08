@@ -1,13 +1,10 @@
 package group.system;
 
 import group.menu.Menu;
-import group.menu.data.Request;
-import group.menu.data.Response;
-import group.menu.handler.RequestHandler;
-import group.menu.node.InputNode;
+import group.menu.MenuFactory;
+import group.menu.MenuFactory.OperationType;
+import group.menu.MenuFactory.ValidatingType;
 import group.menu.node.MasterOptionNode;
-import group.menu.node.OptionNode;
-import group.menu.node.SubmitNode;
 import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
 
@@ -15,38 +12,25 @@ public class MenuConstructor {
 
     private final Menu menu;
 
-    public MenuConstructor(TestController controller){
-        OptionNode supportTicketCreationNode = new OptionNode("option.support.ticket.add", 1);
-        OptionNode supportTicketLookupNode = new OptionNode("option.support.ticket.lookup", 2);
+    public MenuConstructor(TestController controller) {
+        MenuFactory menuFactory = new MenuFactory();
+        menuFactory.option(SupportTicket.class, OperationType.add, 1)
+                .input("content", controller::ifTicketContentNotExist, ValidatingType.exists)
+                .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
+                .input("priority", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .submit("confirm", controller::addTicket)
+                .master("master.support.ticket");
 
-        MasterOptionNode masterOptionNode = new MasterOptionNode("master.option.ticket",
-                supportTicketCreationNode, supportTicketLookupNode);
+        menuFactory.option(SupportTicket.class, OperationType.query, 2)
+                .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
+                .master("master.support.ticket");
 
-        InputNode inputTicketContent = new InputNode.Builder("input.ticket.content", "content").build();
-        InputNode inputTicketCategory = new InputNode.Builder("input.ticket.category", "category")
-                .validator(new EnumValidator<>(SupportTicket.Category.class), "invalid.ticket.category")
-                .inputProcessor(String::toUpperCase)
-                .build();
+        MasterOptionNode entryNode = menuFactory.construct("master.support.ticket");
+        menuFactory.constructFinal();
+        menu = new Menu(entryNode);
 
-        SubmitNode inputTicketPriority = new SubmitNode.Builder("input.ticket.priority",
-                "priority", controller::addTicket)
-                .validator(new EnumValidator<>(SupportTicket.Priority.class), "invalid.ticket.priority")
-                .inputProcessor(String::toUpperCase).build();
-
-        SubmitNode inputTicketCategoryLookup = new SubmitNode.Builder("input.ticket.category.lookup", "category"
-                , new RequestHandler() {
-            @Override
-            public Response handle(Request request) {
-                return controller.getTicketsByCategory(request); // this is the same as controller::getTicketsByCategory
-            }
-        })
-                .validator(new EnumValidator<>(SupportTicket.Category.class), "invalid.ticket.category")
-                .inputProcessor(String::toUpperCase).build();
-
-        supportTicketCreationNode.setChild(inputTicketContent).setChild(inputTicketCategory).setChild(inputTicketPriority);
-        supportTicketLookupNode.setChild(inputTicketCategoryLookup);
-
-        menu = new Menu(masterOptionNode);
+        ConsoleSystem console = new ConsoleSystem();
+        console.run(getMenu());
     }
 
     public Menu getMenu() {

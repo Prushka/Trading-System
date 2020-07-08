@@ -11,6 +11,8 @@ import group.menu.data.Response;
  * @author Dan Lyu
  * @see RepositoryBase#filterResponse(Filter, ResponseMapper)
  */
+
+@FunctionalInterface
 public interface ResponseMapper<T> {
 
     /**

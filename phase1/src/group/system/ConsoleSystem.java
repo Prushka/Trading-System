@@ -23,6 +23,7 @@ public class ConsoleSystem {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NullPointerException e){
+            e.printStackTrace();
             System.err.println("There's no node next!");
         }
 

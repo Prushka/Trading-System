@@ -44,8 +44,8 @@ public class Trade{
 
     // Getters
     public int getTradeID(){ return tradeID;}
-    public User getUser1(){ return user1;}
-    public User getUser2(){ return user2;}
+    public PersonalUser getUser1(){ return user1;}
+    public PersonalUser getUser2(){ return user2;}
     public int getUser1Edits(){ return user1Edits;}
     public int getUser2Edits(){ return user2Edits;}
     public boolean getUser1Confirms(){ return user1Confirms;}
@@ -66,7 +66,7 @@ public class Trade{
     public void unconfirmUser2(){ user2Confirms = false;}
     public void openTrade(){ isClosed = false;}
     public void closeTrade(){ isClosed = true;}
-    public void setDate(Timestamp new_dateAndTime){ dateAndTime = new_dateAndTime;}
+    public void setDateAndTime(Timestamp new_dateAndTime){ dateAndTime = new_dateAndTime;}
     public void setLocation(String new_location){ location = new_location;}
 
     /**

@@ -38,6 +38,8 @@ public interface Repository<T extends UniqueId> {
 
     boolean ifExists(Filter<T> filter);
 
+    boolean ifExists(int id);
+
     T getFirst(Filter<T> filter);
 
     /**

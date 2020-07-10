@@ -5,7 +5,6 @@ import group.menu.data.Response;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * The implementation of list related operations in {@link Repository}.
@@ -125,11 +124,13 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
      */
     private Response mapIterator(Iterator<T> iterator, ResponseMapper<T> mapper) {
         Response.Builder builder = new Response.Builder(true);
-        // while (iterator.hasNext()) {
-        //     mapper.map(iterator.next(), builder);
-        // }
         iterator.forEachRemaining(t -> mapper.map(t, builder));
         return builder.build();
+    }
+
+    @Override
+    public boolean ifExists(int id) {
+        return id < data.size();
     }
 
     /**

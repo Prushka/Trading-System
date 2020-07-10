@@ -10,10 +10,11 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class Trade extends MappableBase implements EntityMappable, UniqueId {
+    // to use SerializationRepository: public class Trade implements Serializable {
 
-    // final will not work if the entity wants to use CSV Repository
+    // TODO: final will not work if the entity uses CSV Repository. you also have to use objects for all fields (Int, Boolean). primitives won't work
 
-    // it doesn't effect serializationRepository
+    // SerializationRepository doesn't have restrictions on these
 
     // Trading Details
     private int tradeID;

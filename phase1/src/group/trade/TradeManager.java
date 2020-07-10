@@ -2,6 +2,7 @@ package group.trade;
 
 import group.config.property.TradeProperties;
 import group.item.Item;
+import group.menu.data.Response;
 import group.repository.CSVRepository;
 import group.repository.Repository;
 import group.user.PersonalUser;
@@ -20,16 +21,37 @@ public class TradeManager{
 
     public TradeManager(TradeProperties tradeProperties){
         // Default Values
+        // Properties:
         tradeProperties.set("editLimit","1");
-        tradeProperties.set("editLimit","1");
+        int editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
+
+        // Repository
         Repository<Trade> tradeRepository = new CSVRepository<>("data/trade.csv", Trade::new);
+        // Repository<Trade> tradeRepositorySerialization = new SerializableRepository<>("data/trade.ser");
 
+        // Get from Repository
         Trade getSomeTrade = tradeRepository.getFirst(entity -> entity.getItem1() == null);
-
         Iterator<Trade> getAnIterator = tradeRepository.iterator(entity -> entity.getItem1() == null);
+        Iterator<Trade> getAnIterator2 = tradeRepository.iterator(entity -> {
+            if(entity.getUser1Confirms()){
 
+            }else if(entity.getUser2Confirms()){
+
+            }
+            return false;
+        });
         Trade getSomeTradeByUID = tradeRepository.get(10);
 
+        // If entity exists in Repository
+        boolean ifSomeTradeExists = tradeRepository.ifExists(entity -> entity.getDateAndTime()==null);
+        boolean ifSomeTradeExists2 = tradeRepository.ifExists(4);
+        // boolean ifSomeTradeExists3 = tradeRepository.ifExists(new Trade()); Implement the equals() and hashCode() in Trade to use this one
+
+        //Map Response
+        Response response = tradeRepository.filterResponse(entity -> entity.getDateAndTime() == null,
+                (entity, builder) -> builder.translatable("some.identifier.in.language.properties",entity.getUser1().toString(),entity.getUser2().toString()));
+        // if you have this in language.properties: some.identifier.in.language.properties=user1: %s, user2: %s
+        // this will return a Response object that has all matched trades with the translatable: user1: %s, user2: %s
     }
 
     public void setEditLimit(int editLimit) { this.editLimit = editLimit;}

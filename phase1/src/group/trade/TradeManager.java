@@ -95,7 +95,7 @@ public class TradeManager{
         }
     }
 
-    public String editLocation(int tradeID, PersonalUser editing_user, String location){
+    public void editLocation(int tradeID, PersonalUser editing_user, String location){
         // If entity exists in Repository
         if (tradeRepository.ifExists(tradeID)) {
             // Get Trade from Repository
@@ -106,24 +106,22 @@ public class TradeManager{
                 curr_trade.increaseUser1Edits();
                 curr_trade.confirmUser1();
                 curr_trade.unconfirmUser2();
-                return "Successful edit!";
+                // "Successful edit!";
             } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser2Confirms() &&
                     curr_trade.getUser2Edits() < editLimit) {
                 curr_trade.setLocation(location);
                 curr_trade.increaseUser2Edits();
                 curr_trade.unconfirmUser1();
                 curr_trade.confirmUser2();
-                return "Successful edit!";
+                // "Successful edit!";
             } else if (curr_trade.getUser1Edits() == editLimit && curr_trade.getUser2Edits() == editLimit) {
                 // remove from repository...
-                return "Too many edit attempts, this trade is cancelled.";
-            } else {
-                return editing_user.getName() + " cannot edit.";
+                // "Too many edit attempts, this trade is cancelled.";
             }
         }
     }
 
-    public String confirmTrade(int tradeID, PersonalUser editing_user){
+    public void confirmTrade(int tradeID, PersonalUser editing_user){
         // If entity exists in Repository
         if (tradeRepository.ifExists(tradeID)) {
             // Get Trade from Repository
@@ -134,25 +132,22 @@ public class TradeManager{
                 curr_trade.confirmUser2();
             } else if (!(curr_trade.getUser1().toString().equals(editing_user.toString()) &&
                     curr_trade.getUser2().toString().equals(editing_user.toString()))) {
-                return editing_user.getName() + " does not belong to this trade.";
+               // editing_user.getName() + " does not belong to this trade.";
             }
 
             if (curr_trade.getUser1Confirms() && curr_trade.getUser2Confirms()) {
                 curr_trade.openTrade();
                 curr_trade.unconfirmUser1();
                 curr_trade.unconfirmUser2();
-                return "This trade is now confirmed.";
+                //"This trade is now confirmed.";
             } else {
-                return "Awaiting other confirmation";
+                //"Awaiting other confirmation";
             }
         }
     }
 
     public String confirmTradeComplete(int tradeID, PersonalUser editing_user){
-        // If entity exists in Repository
-        if (tradeRepository.ifExists(tradeID)){
-            // Get Trade from Repository
-            Trade curr_trade = tradeRepository.get(tradeID);
+
         if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){
             curr_trade.confirmUser1();
         } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){

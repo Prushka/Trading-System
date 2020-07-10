@@ -4,7 +4,6 @@ import group.item.Item;
 import group.repository.UniqueId;
 import group.repository.map.EntityMappable;
 import group.repository.map.MappableBase;
-import group.user.PersonalUser;
 import java.sql.Timestamp;
 import java.util.List;
 

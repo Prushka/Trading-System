@@ -1,4 +1,4 @@
-package src.group;
+package group;
 
 import java.util.ArrayList;
 import java.util.List;

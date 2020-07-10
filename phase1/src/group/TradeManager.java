@@ -9,6 +9,8 @@ public class TradeManager{
     private int numOfTrades;
     // private CSVRepository storage;
 
+    Trade curr_trade;
+
     public TradeManager(){
         // Default Values
         editLimit = 3;
@@ -31,7 +33,6 @@ public class TradeManager{
     }
 
     public String editDateAndTime(int tradeID, PersonalUser editing_user, Timestamp dateAndTime){
-        Trade curr_trade;
         if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms() &&
                 curr_trade.getUser1Edits() < editLimit){
             curr_trade.setDateAndTime(dateAndTime);
@@ -55,7 +56,6 @@ public class TradeManager{
     }
 
     public String editLocation(int tradeID, PersonalUser editing_user, String location){
-        Trade curr_trade;
         if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms() &&
                 curr_trade.getUser1Edits() < editLimit){
             curr_trade.setLocation(location);
@@ -79,7 +79,6 @@ public class TradeManager{
     }
 
     public String confirmTrade(int tradeID, PersonalUser editing_user){
-        Trade curr_trade;
         if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){
             curr_trade.confirmUser1();
         } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){
@@ -100,7 +99,6 @@ public class TradeManager{
     }
 
     public String confirmTradeComplete(int tradeID, PersonalUser editing_user){
-        Trade curr_trade;
         if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){
             curr_trade.confirmUser1();
         } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){

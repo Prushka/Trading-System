@@ -94,7 +94,7 @@ public class MenuFactory {
     }
 
     public enum ValidatingType {
-        invalid, exists
+        invalid, exists, notexist
     }
 
 

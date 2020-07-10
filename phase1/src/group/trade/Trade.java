@@ -5,7 +5,6 @@ import group.repository.UniqueId;
 import group.repository.map.EntityMappable;
 import group.repository.map.MappableBase;
 import group.user.PersonalUser;
-
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -17,21 +16,22 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     // SerializationRepository doesn't have restrictions on these
 
     // Trading Details
-    private int tradeID;
+    private Long tradeID;
     private PersonalUser user1;
     private PersonalUser user2;
-    private int user1Edits;
-    private int user2Edits;
-    private boolean user1Confirms;
-    private boolean user2Confirms;
+    private Integer user1Edits;
+    private Integer user2Edits;
+    private Boolean user1Confirms;
+    private Boolean user2Confirms;
 
     // Item Details
     private Item item1;
     private Item item2;
-    private boolean isPermanent;
-    private boolean isClosed;
+    private Boolean isPermanent;
+    private Boolean isClosed;
 
     // Meeting Details
+    // Use date
     private Timestamp dateAndTime;
     private String location;
 
@@ -40,7 +40,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     }
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
-    public Trade(int tradeID, PersonalUser user1, PersonalUser user2, Item item1, Item item2, boolean isPermanent,
+    public Trade(long tradeID, PersonalUser user1, PersonalUser user2, Item item1, Item item2, boolean isPermanent,
             Timestamp dateAndTime, String location){
         this.tradeID = tradeID;
         this.user1 = user1;
@@ -60,7 +60,8 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     }
 
     // Getters
-    public int getTradeID(){ return tradeID;}
+    @Override
+    public long getUid() { return this.tradeID;}
     public PersonalUser getUser1(){ return user1;}
     public PersonalUser getUser2(){ return user2;}
     public int getUser1Edits(){ return user1Edits;}
@@ -75,6 +76,8 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public String getLocation(){ return location;}
 
     // Setters
+    @Override
+    public void setUid(long new_uid) { this.tradeID = new_uid;}
     public void increaseUser1Edits(){ user1Edits++;}
     public void increaseUser2Edits(){ user2Edits++;}
     public void confirmUser1(){ user1Confirms = true;}
@@ -103,15 +106,5 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
             return user1.getName() + " trades with " + user2.getName() + " at " + this.location + " on " +
                     this.dateAndTime;
         }
-    }
-
-    @Override
-    public void setUid(long value) {
-        // TODO
-    }
-
-    @Override
-    public long getUid() {
-        return 0;
     }
 }

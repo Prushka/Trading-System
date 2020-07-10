@@ -1,4 +1,4 @@
-package src.group;
+package group;
 
 public class AdministrativeUser extends User{
 

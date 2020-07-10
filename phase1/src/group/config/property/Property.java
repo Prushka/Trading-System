@@ -11,11 +11,12 @@ public abstract class Property {
 
     final Properties properties = new Properties();
 
-    public Property() {}
+    public Property() {
+    }
 
     abstract File getFile();
 
-    InputStream getResource(){
+    InputStream getResource() {
         return getClass().getClassLoader().getResourceAsStream(getFile().getName());
     }
 
@@ -45,6 +46,14 @@ public abstract class Property {
 
     public String get(String key) {
         return properties.getProperty(key);
+    }
+
+    public int getInt(String key) {
+        return Integer.parseInt(properties.getProperty(key));
+    }
+
+    public int getInt(String key, int defaultValue) {
+        return Integer.parseInt(properties.getProperty(key, String.valueOf(defaultValue)));
     }
 
     public void set(String key, String value) {

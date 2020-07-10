@@ -26,7 +26,7 @@ public class InputNode extends RequestableNode {
         }
     }
 
-    Optional<Node> validate() {
+    public Optional<Node> validate() {
         if (validatorPairs != null) {
             for (ValidatorPair validatorPair : validatorPairs) {
                 if (!validatorPair.validate(value)) {

@@ -17,8 +17,8 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
 
     // Trading Details
     private Long tradeID;
-    private PersonalUser user1;
-    private PersonalUser user2;
+    private Long user1;
+    private Long user2;
     private Integer user1Edits;
     private Integer user2Edits;
     private Boolean user1Confirms;
@@ -35,12 +35,13 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     private Timestamp dateAndTime;
     private String location;
 
+    // Needed to implement Mappable Base
     public Trade(List<String> record){
         super(record);
     }
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
-    public Trade(long tradeID, PersonalUser user1, PersonalUser user2, Item item1, Item item2, boolean isPermanent,
+    public Trade(long tradeID, long user1, long user2, Item item1, Item item2, boolean isPermanent,
             Timestamp dateAndTime, String location){
         this.tradeID = tradeID;
         this.user1 = user1;
@@ -62,8 +63,8 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     // Getters
     @Override
     public long getUid() { return this.tradeID;}
-    public PersonalUser getUser1(){ return user1;}
-    public PersonalUser getUser2(){ return user2;}
+    public long getUser1(){ return user1;}
+    public long getUser2(){ return user2;}
     public int getUser1Edits(){ return user1Edits;}
     public int getUser2Edits(){ return user2Edits;}
     public boolean getUser1Confirms(){ return user1Confirms;}
@@ -97,13 +98,13 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
         if (item1 == null && item2 == null){
             return "This is an invalid trade.";
         } else if (item1 == null){
-            return user1.getName() + " lends to " + user2.getName() + " at " + this.location + " on " +
+            return "UserID: " + user1 + " lends to UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         } else if (item2 == null){
-            return user1.getName() + " borrows from " + user2.getName() + " at " + this.location + " on " +
+            return "UserID: " + user1 + " borrows from UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         } else {
-            return user1.getName() + " trades with " + user2.getName() + " at " + this.location + " on " +
+            return "UserID: " + user1 + " trades with UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         }
     }

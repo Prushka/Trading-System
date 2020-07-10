@@ -98,6 +98,12 @@ public abstract class MappableBase {
                 .collect(Collectors.toList());
     }
 
+    public String toNullString() {
+        StringBuilder sb = new StringBuilder();
+        getSortedFields().forEach(field -> sb.append(","));
+        return sb.toString();
+    }
+
     /**
      * @return the String record representation of all fields in current class
      */

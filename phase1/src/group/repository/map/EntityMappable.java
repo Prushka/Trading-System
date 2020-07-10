@@ -24,4 +24,6 @@ public interface EntityMappable {
      */
     String toCSVHeader();
 
+    String toNullString();
+
 }

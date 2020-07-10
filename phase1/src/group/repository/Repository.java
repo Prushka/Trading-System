@@ -42,6 +42,12 @@ public interface Repository<T extends UniqueId> {
 
     T getFirst(Filter<T> filter);
 
+    void remove(T entity);
+
+    void remove(int id);
+
+    int getId(T entity);
+
     /**
      * @param filter the filter used to match the result
      * @return the iterator that will use the filter object

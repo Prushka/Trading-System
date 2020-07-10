@@ -15,7 +15,6 @@ import java.util.Scanner;
  * The CSV Repository Implementation for storing and reading the list of entities
  *
  * @param <T> The entity this Repository deals with
- *
  * @author Dan Lyu
  * @author lecture code, Logging project
  * @see Repository
@@ -62,20 +61,45 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
         scanner.nextLine(); // skip header
         String[] record;
         while (scanner.hasNextLine()) {
-            record = scanner.nextLine().split(",");
+            String recordString = scanner.nextLine();
+            String testString = recordString.replaceAll("[, ]", "");
+            if (testString.length() == 0) {
+                data.add(null);
+                continue;
+            }
+            record = recordString.split(",");
             data.add(factory.get(Arrays.asList(record)));
         }
         scanner.close();
     }
 
+    @Override
+    public void save() {
+        if (data != null && data.size() > 0) {
+            T entityNotNull = null;
+            for (T single : data) {
+                if (single != null) {
+                    entityNotNull = single;
+                    break;
+                }
+            }
+            if (entityNotNull != null) {
+                saveSafe(entityNotNull);
+            }
+        }
+    }
+
     /**
      * Save {@link #data} to {@link #file}.
      */
-    void saveSafe() {
+    void saveSafe(T entityNotNull) {
         try {
             PrintWriter writer = new PrintWriter(file);
-            writer.append(get(0).toCSVHeader());
+            writer.append(entityNotNull.toCSVHeader());
             for (T single : data) {
+                if (data == null) {
+                    writer.println(entityNotNull.toNullString());
+                }
                 writer.println(single.toCSVString());
             }
             writer.flush();

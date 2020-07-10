@@ -62,4 +62,13 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
             e.printStackTrace();
         }
     }
+
+    /**
+     * The save method to be used by other classes
+     */
+    public void save() {
+        if (data != null && data.size() > 0) {
+            saveSafe();
+        }
+    }
 }

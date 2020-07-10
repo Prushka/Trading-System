@@ -47,11 +47,17 @@ public class TradeManager{
         boolean ifSomeTradeExists2 = tradeRepository.ifExists(4);
         // boolean ifSomeTradeExists3 = tradeRepository.ifExists(new Trade()); Implement the equals() and hashCode() in Trade to use this one
 
-        //Map Response
+        // Map Response
         Response response = tradeRepository.filterResponse(entity -> entity.getDateAndTime() == null,
                 (entity, builder) -> builder.translatable("some.identifier.in.language.properties",entity.getUser1().toString(),entity.getUser2().toString()));
         // if you have this in language.properties: some.identifier.in.language.properties=user1: %s, user2: %s
         // this will return a Response object that has all matched trades with the translatable: user1: %s, user2: %s
+
+        // Remove
+        tradeRepository.remove(getSomeTrade);
+
+        // Get Id
+        tradeRepository.getId(getSomeTrade);
     }
 
     public void setEditLimit(int editLimit) { this.editLimit = editLimit;}

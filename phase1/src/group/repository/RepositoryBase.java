@@ -48,21 +48,6 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
     }
 
     /**
-     * The save method to be used by other classes
-     */
-    public void save() {
-        if (data != null && data.size() > 0) {
-            saveSafe();
-        }
-    }
-
-    /**
-     * A package protected save method, to be implemented by subclasses.<br>
-     * This method handles with the real saving operation
-     */
-    abstract void saveSafe();
-
-    /**
      * @param entity the entity to be checked
      * @return if the entity exists
      */
@@ -104,6 +89,21 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
             return iterator(filter).next();
         }
         return null;
+    }
+
+    @Override
+    public int getId(T entity) {
+        return data.indexOf(entity);
+    }
+
+    @Override
+    public void remove(T entity) {
+        data.set(getId(entity), null);
+    }
+
+    @Override
+    public void remove(int id) {
+        data.set(id, null);
     }
 
     /**

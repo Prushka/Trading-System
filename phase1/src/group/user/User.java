@@ -27,21 +27,17 @@ public class User extends MappableBase implements EntityMappable, UniqueId {
      * @param password the password this user set to
      */
     public User(String userName, String email, String telephone, String password){
-        List<String> user = new ArrayList<String>();
-        user.add(userName);
-        user.add(email);
-        user.add(telephone);
-        user.add(password);
+        this.userName = userName;
+        this.email = email;
+        this.telephone = telephone;
+        this.password = password;
     }
 
-    //public {
-         //this.userName = userName;
-         //this.email = email;
-         //this.telephone = telephone;
-         //this.password = password;
-     //}
-
-
+    public User(String userName, String email, String password){
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+    }
 
     public String getName() {
         return userName;
@@ -87,3 +83,4 @@ public class User extends MappableBase implements EntityMappable, UniqueId {
         return this.uid;
     }
 }
+

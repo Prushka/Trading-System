@@ -1,4 +1,4 @@
-package group;
+package src.group;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 public class AdministrativeManager {
 
     private static final List<AdministrativeUser> administrators = new ArrayList<>();
-    //private List<Notification> notifications ;
+    private static List<PersonalUser> frozennotifications ;
     private static int transactionLimit = 100; //what is the init limit?
     private static int lendBeforeBorrow = 1;
 
@@ -81,6 +81,17 @@ public class AdministrativeManager {
     public boolean addItem(PersonalUser user, Item item){
         (user.getInventory()).add(item);
         return true;
+    }
+
+    public void createFrozenNotification(PersonalUser user){
+        frozennotifications.add(user);
+    }
+
+    public void freezeListUser(){
+        for (PersonalUser p : frozennotifications){
+            freezeUser(p);
+            frozennotifications.remove(p);
+        }
     }
 
     //TODO: method of creating notification and add them to notification list or repo

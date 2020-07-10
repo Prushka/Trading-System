@@ -3,7 +3,9 @@ package group.repository.map;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The implementation of converting fields to CSV record. Has a constructor
@@ -11,7 +13,6 @@ import java.util.List;
  *
  * @author Dan Lyu
  * @author "instantiating an enum using reflection" by Bozho
- *
  * @see EntityMappable
  * @see <a href="https://stackoverflow.com/questions/3735927/java-instantiating-an-enum-using-reflection">Instantiating an enum using reflection</a>
  * @see <a href="https://stackoverflow.com/questions/10638826/java-reflection-impact-of-setaccessibletrue">Impact of setAccessible(true)</a>
@@ -22,7 +23,8 @@ public abstract class MappableBase {
      * The empty constructor used to make sure that extending
      * this class will have no impact on constructors of subclasses.
      */
-    public MappableBase() {}
+    public MappableBase() {
+    }
 
     /**
      * This constructor will construct the object itself using
@@ -54,6 +56,8 @@ public abstract class MappableBase {
                     obj = Float.parseFloat(representation);
                 } else if (String.class.isAssignableFrom(field.getType())) {
                     obj = representation;
+                } else if (Date.class.isAssignableFrom(field.getType())) {
+                    obj = new Date(Long.parseLong(representation));
                 }
                 field.set(this, obj);
             } catch (IllegalAccessException e) {
@@ -77,16 +81,21 @@ public abstract class MappableBase {
         return value.toString();
     }
 
+    private boolean isFieldTransient(Field field) {
+        return Modifier.isTransient(field.getModifiers());
+    }
+
     /**
      * @return the sorted fields of the current object
-     *
      * @see <a href="https://stackoverflow.com/questions/1097807/java-reflection-is-the-order-of-class-fields-and-methods-standardized">Field Order in Reflection</a>
      * @see FieldComparator
      */
     private List<Field> getSortedFields() {
-        List<Field> fields = Arrays.asList(this.getClass().getDeclaredFields());
-        fields.sort(new FieldComparator());
-        return fields;
+        return Arrays
+                .stream(this.getClass().getDeclaredFields())
+                .filter(this::isFieldTransient)
+                .sorted(new FieldComparator())
+                .collect(Collectors.toList());
     }
 
     /**
@@ -96,19 +105,18 @@ public abstract class MappableBase {
         StringBuilder value = new StringBuilder();
         for (Field field : getSortedFields()) {
             try {
-                if (!Modifier.isTransient(field.getModifiers())) {
-
-                    field.setAccessible(true); // how this makes private members accessible???
-                    Object obj = field.get(this);
-                    if (obj == null) {
-                        value.append("null");
-                    } else if (obj instanceof Enum) {
-                        value.append(((Enum<?>) obj).name());
-                    } else {
-                        value.append(obj.toString());
-                    }
-                    value.append(",");
+                field.setAccessible(true); // how this makes private members accessible???
+                Object obj = field.get(this);
+                if (obj == null) {
+                    value.append("null");
+                } else if (obj instanceof Enum) {
+                    value.append(((Enum<?>) obj).name());
+                } else if (obj instanceof Date) {
+                    value.append(((Date) obj).getTime());
+                } else {
+                    value.append(obj.toString());
                 }
+                value.append(",");
             } catch (IllegalAccessException | NullPointerException e) {
                 //TODO: implement better error handling
                 value.append("null");

@@ -23,7 +23,7 @@ public class TradeManager{
         // Default Values
         // Properties:
         tradeProperties.set("editLimit","1");
-        int editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
+        int editLimit = tradeProperties.getInt("editLimit");
 
         // Repository
         Repository<Trade> tradeRepository = new CSVRepository<>("data/trade.csv", Trade::new);

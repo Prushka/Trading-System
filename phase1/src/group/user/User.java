@@ -1,12 +1,13 @@
 package group.user;
 
+import group.repository.UniqueId;
 import group.repository.map.MappableBase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class User extends MappableBase {
+public class User extends MappableBase implements UniqueId {
 
     private String userName;
     private String email;
@@ -24,7 +25,12 @@ public class User extends MappableBase {
 
 
     public User(String userName, String email, String telephone, String password){
-        super(new ArrayList<String>(userName, email, telephone, password);
+        List<String> user = new ArrayList<String>();
+        user.add(userName);
+        user.add(email);
+        user.add(telephone);
+        user.add(password);
+        super (user);
     }
 
     //public {
@@ -68,5 +74,15 @@ public class User extends MappableBase {
                 ", telephone='" + telephone + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public void setUid(long value) {
+
+    }
+
+    @Override
+    public long getUid() {
+        return 0;
     }
 }

@@ -1,9 +1,15 @@
 package group.user;
 
-public class User {
+import group.repository.map.MappableBase;
 
-    private final String userName;
-    private final String email;
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class User extends MappableBase {
+
+    private String userName;
+    private String email;
     private String telephone;
     private String password;
 
@@ -15,18 +21,19 @@ public class User {
      * @param telephone the telephone number of this person
      * @param password the password this user set to
      */
-     public User(String userName, String email, String telephone, String password) {
-         this.userName = userName;
-         this.email = email;
-         this.telephone = telephone;
-         this.password = password;
-     }
 
-     public User(String userName, String email, String password) {
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
+
+    public User(String userName, String email, String telephone, String password){
+        super(new ArrayList<String>(userName, email, telephone, password);
     }
+
+    //public {
+         //this.userName = userName;
+         //this.email = email;
+         //this.telephone = telephone;
+         //this.password = password;
+     //}
+
 
 
     public String getName() {

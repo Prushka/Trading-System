@@ -1,6 +1,13 @@
-package group;
+package group.trade;
+
+import group.config.property.TradeProperties;
+import group.item.Item;
+import group.repository.CSVRepository;
+import group.repository.Repository;
+import group.user.PersonalUser;
 
 import java.sql.Timestamp;
+import java.util.Iterator;
 
 // Reduce repeat code
 public class TradeManager{
@@ -11,11 +18,18 @@ public class TradeManager{
 
     Trade curr_trade;
 
-    public TradeManager(){
+    public TradeManager(TradeProperties tradeProperties){
         // Default Values
-        editLimit = 3;
-        numOfTrades = 1;
-        // storage = new CSVRepository("data/a.csv", Ticket::new);
+        tradeProperties.set("editLimit","1");
+        tradeProperties.set("editLimit","1");
+        Repository<Trade> tradeRepository = new CSVRepository<>("data/trade.csv", Trade::new);
+
+        Trade getSomeTrade = tradeRepository.getFirst(entity -> entity.getItem1() == null);
+
+        Iterator<Trade> getAnIterator = tradeRepository.iterator(entity -> entity.getItem1() == null);
+
+        Trade getSomeTradeByUID = tradeRepository.get(10);
+
     }
 
     public void setEditLimit(int editLimit) { this.editLimit = editLimit;}

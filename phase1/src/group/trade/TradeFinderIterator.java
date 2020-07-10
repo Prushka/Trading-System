@@ -1,4 +1,4 @@
-package group;
+package group.trade;
 
 import java.util.Iterator;
 

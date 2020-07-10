@@ -31,7 +31,7 @@ public class MenuConstructor {
 
         ConsoleSystem console = new ConsoleSystem();
 
-        menuFactory.generateLanguage("eng");
+        // menuFactory.generateLanguage("eng");
 
         console.run(getMenu());
         controller.shutdown();

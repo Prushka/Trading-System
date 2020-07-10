@@ -2,7 +2,6 @@ package group.menu.node;
 
 import group.config.ConsoleLanguageFormatter;
 import group.config.property.LanguageProperties;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
@@ -68,12 +67,12 @@ public abstract class Node {
         return node;
     }
 
-    public String getKey(){
-        throw new NotImplementedException();
+    public String getKey() {
+        return null;
     }
 
-    public String getValue(){
-        throw new NotImplementedException();
+    public String getValue() {
+        return null;
     }
 
     public Node parseInput(String input) {

@@ -16,9 +16,9 @@ public class Menu {
     static {
         LOGGER = Logger.getLogger(Menu.class.getName());
         LOGGER.setUseParentHandlers(false);
-        LOGGER.setLevel(Level.FINEST);
+        LOGGER.setLevel(Level.INFO);
         ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(Level.FINEST);
+        handler.setLevel(Level.INFO);
         handler.setFormatter(new ConsoleLanguageFormatter(new LanguageProperties()));
         LOGGER.addHandler(handler);
     }

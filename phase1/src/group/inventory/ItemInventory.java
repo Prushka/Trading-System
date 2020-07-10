@@ -1,4 +1,6 @@
-package group;
+package group.inventory;
+
+import group.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;

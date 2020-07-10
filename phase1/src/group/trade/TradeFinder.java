@@ -1,4 +1,4 @@
-package group;
+package group.trade;
 
 public class TradeFinder {
     public static void main(String[] args) {

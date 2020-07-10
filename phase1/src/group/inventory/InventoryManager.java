@@ -1,4 +1,6 @@
-package group;
+package group.inventory;
+
+import group.item.Item;
 
 public class InventoryManager {
     private static final ItemInventory allItems = new ItemInventory();

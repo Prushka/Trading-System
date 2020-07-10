@@ -1,4 +1,4 @@
-package group;
+package group.item;
 
 public class Item {
 

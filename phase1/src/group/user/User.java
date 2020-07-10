@@ -1,18 +1,22 @@
 package group.user;
 
 import group.repository.UniqueId;
+import group.repository.map.EntityMappable;
 import group.repository.map.MappableBase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class User extends MappableBase implements UniqueId {
+public class User extends MappableBase implements EntityMappable, UniqueId {
 
+    private long uid;
     private String userName;
     private String email;
     private String telephone;
     private String password;
+
+    public User(List<String> record){super(record);}
 
     /**
      * Creates a new User with userName, email, telephone and given password.
@@ -22,15 +26,12 @@ public class User extends MappableBase implements UniqueId {
      * @param telephone the telephone number of this person
      * @param password the password this user set to
      */
-
-
     public User(String userName, String email, String telephone, String password){
         List<String> user = new ArrayList<String>();
         user.add(userName);
         user.add(email);
         user.add(telephone);
         user.add(password);
-        super (user);
     }
 
     //public {
@@ -77,12 +78,12 @@ public class User extends MappableBase implements UniqueId {
     }
 
     @Override
-    public void setUid(long value) {
-
+    public void setUid(long new_uid) {
+        this.uid = new_uid;
     }
 
     @Override
     public long getUid() {
-        return 0;
+        return this.uid;
     }
 }

@@ -5,31 +5,33 @@ import group.item.Item;
 import group.menu.data.Response;
 import group.repository.CSVRepository;
 import group.repository.Repository;
+import group.user.User;
 import group.user.PersonalUser;
-
 import java.sql.Timestamp;
 import java.util.Iterator;
 
-// Reduce repeat code
 public class TradeManager{
-    private int editLimit;
-    private int timeLimit; // the number of months until a user has to reverse the temporary trade
     private int numOfTrades;
-    // private CSVRepository storage;
+    private int editLimit;
+    private int borrowTimeLimit; // the number of months until a user has to reverse the temporary trade
+    private Repository<Trade> tradeRepository;
+    private Repository<PersonalUser> userRepository;
 
-    Trade curr_trade;
+    private Trade curr_trade;
 
     public TradeManager(TradeProperties tradeProperties){
-        // Default Values
-        // Properties:
-        tradeProperties.set("editLimit","1");
-        int editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
+        // Default Values for trade information stored in tradeProperties:
+        tradeProperties.set("editLimit","3");
+        tradeProperties.set("borrowTimeLimit", "1");
+        editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
+        borrowTimeLimit = Integer.parseInt(tradeProperties.get("editLimit"));
 
-        // Repository
-        Repository<Trade> tradeRepository = new CSVRepository<>("data/trade.csv", Trade::new);
+        // Repository -- should be taken as a parameter from TradeSystem? Controller
         // Repository<Trade> tradeRepositorySerialization = new SerializableRepository<>("data/trade.ser");
+        Repository<Trade> tradeRepository = new CSVRepository<>("data/trade.csv", Trade::new);
+        Repository<Trade> userRepository = new CSVRepository<>("data/trade.csv", PersonalUser::new);
 
-        // Get from Repository
+        // Get from Repository -- use for only one record
         Trade getSomeTrade = tradeRepository.getFirst(entity -> entity.getItem1() == null);
         Iterator<Trade> getAnIterator = tradeRepository.iterator(entity -> entity.getItem1() == null);
         Iterator<Trade> getAnIterator2 = tradeRepository.iterator(entity -> {
@@ -54,87 +56,103 @@ public class TradeManager{
         // this will return a Response object that has all matched trades with the translatable: user1: %s, user2: %s
     }
 
-    public void setEditLimit(int editLimit) { this.editLimit = editLimit;}
-    public void setTimeLimit(int timeLimit) { this.timeLimit = timeLimit;}
-
-    public void createTrade(PersonalUser user1, PersonalUser user2, Item item1, Item item2, boolean isPermanent,
+    public void createTrade(int user1, int user2, Item item1, Item item2, boolean isPermanent,
                             Timestamp dateAndTime, String location){
         // Check if the items are in the user's inventory
-        if ((item1 == null || user1.getInventory().contains(item1)) && (item2 == null ||
-                user2.getInventory().contains(item2)) ) {
-            Trade new_trade = new Trade(numOfTrades, user1, user2, item1, item2, isPermanent, dateAndTime, location);
-            numOfTrades++;
-            // storage.add(new_trade);
+        if (userRepository.ifExists(user1) && userRepository.ifExists(user2)){
+            // Get Trade from Repository
+            PersonalUser trader1 = userRepository.get(user1);
+            PersonalUser trader2 = userRepository.get(user2);
+            if ((item1 == null || trader1.getInventory().contains(item1)) && (item2 == null ||
+                    trader2.getInventory().contains(item2)) ) {
+                Trade new_trade = new Trade(numOfTrades, user1, user2, item1, item2, isPermanent, dateAndTime, location);
+                numOfTrades++;
+                tradeRepository.add(new_trade);
+            }
         }
     }
 
-    public String editDateAndTime(int tradeID, PersonalUser editing_user, Timestamp dateAndTime){
-        if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms() &&
-                curr_trade.getUser1Edits() < editLimit){
-            curr_trade.setDateAndTime(dateAndTime);
-            curr_trade.increaseUser1Edits();
-            curr_trade.confirmUser1();
-            curr_trade.unconfirmUser2();
-            return "Successful edit!";
-        } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser2Confirms() &&
-                curr_trade.getUser2Edits() < editLimit){
-            curr_trade.setDateAndTime(dateAndTime);
-            curr_trade.increaseUser2Edits();
-            curr_trade.unconfirmUser1();
-            curr_trade.confirmUser2();
-            return "Successful edit!";
-        } else if (curr_trade.getUser1Edits() == editLimit && curr_trade.getUser2Edits() == editLimit){
-            // remove from repository...
-            return "Too many edit attempts, this trade is cancelled.";
-        } else {
-            return editing_user.getName() + " cannot edit this trade!";
+    public void editDateAndTime(int tradeID, Long editing_user, Timestamp dateAndTime){
+        // If entity exists in Repository
+        if (tradeRepository.ifExists(tradeID)){
+            // Get Trade from Repository
+            Trade curr_trade = tradeRepository.get(tradeID);
+            if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms() &&
+                    curr_trade.getUser1Edits() < editLimit){
+                curr_trade.setDateAndTime(dateAndTime);
+                curr_trade.increaseUser1Edits();
+                curr_trade.confirmUser1();
+                curr_trade.unconfirmUser2();
+            } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser2Confirms() &&
+                    curr_trade.getUser2Edits() < editLimit){
+                curr_trade.setDateAndTime(dateAndTime);
+                curr_trade.increaseUser2Edits();
+                curr_trade.unconfirmUser1();
+                curr_trade.confirmUser2();
+            } else if (curr_trade.getUser1Edits() == editLimit && curr_trade.getUser2Edits() == editLimit) {
+                // remove from repository
+            }
         }
     }
 
     public String editLocation(int tradeID, PersonalUser editing_user, String location){
-        if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms() &&
-                curr_trade.getUser1Edits() < editLimit){
-            curr_trade.setLocation(location);
-            curr_trade.increaseUser1Edits();
-            curr_trade.confirmUser1();
-            curr_trade.unconfirmUser2();
-            return "Successful edit!";
-        } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser2Confirms() &&
-                curr_trade.getUser2Edits() < editLimit){
-            curr_trade.setLocation(location);
-            curr_trade.increaseUser2Edits();
-            curr_trade.unconfirmUser1();
-            curr_trade.confirmUser2();
-            return "Successful edit!";
-        } else if (curr_trade.getUser1Edits() == editLimit && curr_trade.getUser2Edits() == editLimit){
-            // remove from repository...
-            return "Too many edit attempts, this trade is cancelled.";
-        } else {
-            return editing_user.getName() + " cannot edit.";
+        // If entity exists in Repository
+        if (tradeRepository.ifExists(tradeID)) {
+            // Get Trade from Repository
+            Trade curr_trade = tradeRepository.get(tradeID);
+            if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms() &&
+                    curr_trade.getUser1Edits() < editLimit) {
+                curr_trade.setLocation(location);
+                curr_trade.increaseUser1Edits();
+                curr_trade.confirmUser1();
+                curr_trade.unconfirmUser2();
+                return "Successful edit!";
+            } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser2Confirms() &&
+                    curr_trade.getUser2Edits() < editLimit) {
+                curr_trade.setLocation(location);
+                curr_trade.increaseUser2Edits();
+                curr_trade.unconfirmUser1();
+                curr_trade.confirmUser2();
+                return "Successful edit!";
+            } else if (curr_trade.getUser1Edits() == editLimit && curr_trade.getUser2Edits() == editLimit) {
+                // remove from repository...
+                return "Too many edit attempts, this trade is cancelled.";
+            } else {
+                return editing_user.getName() + " cannot edit.";
+            }
         }
     }
 
     public String confirmTrade(int tradeID, PersonalUser editing_user){
-        if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){
-            curr_trade.confirmUser1();
-        } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){
-            curr_trade.confirmUser2();
-        } else if (!(curr_trade.getUser1().toString().equals(editing_user.toString()) &&
-                curr_trade.getUser2().toString().equals(editing_user.toString()))){
-            return editing_user.getName() + " does not belong to this trade.";
-        }
+        // If entity exists in Repository
+        if (tradeRepository.ifExists(tradeID)) {
+            // Get Trade from Repository
+            Trade curr_trade = tradeRepository.get(tradeID);
+            if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()) {
+                curr_trade.confirmUser1();
+            } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()) {
+                curr_trade.confirmUser2();
+            } else if (!(curr_trade.getUser1().toString().equals(editing_user.toString()) &&
+                    curr_trade.getUser2().toString().equals(editing_user.toString()))) {
+                return editing_user.getName() + " does not belong to this trade.";
+            }
 
-        if (curr_trade.getUser1Confirms() && curr_trade.getUser2Confirms()){
-            curr_trade.openTrade();
-            curr_trade.unconfirmUser1();
-            curr_trade.unconfirmUser2();
-            return "This trade is now confirmed.";
-        } else {
-            return "Awaiting other confirmation";
+            if (curr_trade.getUser1Confirms() && curr_trade.getUser2Confirms()) {
+                curr_trade.openTrade();
+                curr_trade.unconfirmUser1();
+                curr_trade.unconfirmUser2();
+                return "This trade is now confirmed.";
+            } else {
+                return "Awaiting other confirmation";
+            }
         }
     }
 
     public String confirmTradeComplete(int tradeID, PersonalUser editing_user){
+        // If entity exists in Repository
+        if (tradeRepository.ifExists(tradeID)){
+            // Get Trade from Repository
+            Trade curr_trade = tradeRepository.get(tradeID);
         if (curr_trade.getUser1().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){
             curr_trade.confirmUser1();
         } else if (curr_trade.getUser2().toString().equals(editing_user.toString()) && !curr_trade.getUser1Confirms()){
@@ -175,7 +193,7 @@ public class TradeManager{
         } else {
             return "Awaiting other confirmation";
         }
-    }
+        }
 
 }
 

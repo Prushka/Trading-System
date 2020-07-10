@@ -5,15 +5,15 @@ import group.item.Item;
 import group.menu.data.Response;
 import group.repository.CSVRepository;
 import group.repository.Repository;
-import group.user.User;
 import group.user.PersonalUser;
+
 import java.sql.Timestamp;
 import java.util.Iterator;
 
 public class TradeManager{
     private int numOfTrades;
-    private int editLimit;
-    private int borrowTimeLimit; // the number of months until a user has to reverse the temporary trade
+    private final int editLimit;
+    private final int borrowTimeLimit; // the number of months until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
     private Repository<PersonalUser> userRepository;
 
@@ -30,6 +30,20 @@ public class TradeManager{
         // Repository<Trade> tradeRepositorySerialization = new SerializableRepository<>("data/trade.ser");
         Repository<Trade> tradeRepository = new CSVRepository<>("data/trade.csv", Trade::new);
         Repository<Trade> userRepository = new CSVRepository<>("data/trade.csv", PersonalUser::new);
+
+        // PersonalUser::new refers to this constructor:
+        // public User(List<String> record){super(record);}
+
+        // if this constructor does not exist in your entity, it will throw an error
+
+        // flow:
+        // CSVRepository takes in this constructor reference as a field. And when reading from csv file, this constructor will be called to create corresponding objects.
+        // The constructor is a standard list of strings since that's how csv columns work
+
+        // CSVRepository is only dependent on EntityMappable not MappableBase
+        // So it is optional to extend MappableBase (though I would recommend you do that). MappableBase is just a reflection implementation of EntityMappable
+        // If you don't extend MappableBase just make sure you implement EntityMappable and all methods needed including the constructor that's mentioned above,
+        // this will get rid of all restrictions that are basically caused by reflection. (You will need to put your fields into String manually and put them back in the constructor)
 
         // Get from Repository -- use for only one record
         Trade getSomeTrade = tradeRepository.getFirst(entity -> entity.getItem1() == null);

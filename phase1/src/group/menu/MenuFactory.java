@@ -20,8 +20,6 @@ public class MenuFactory {
 
         private final Map<Node, String> masterPlaceHolder = new HashMap<>();
 
-        //private final Map<String, InputNode> inputNodePool = new HashMap<>();
-
         private Node currentNode;
 
         public OptionNodeFactory(Class<?> clazz, OperationType type, int id, String addon) {
@@ -35,7 +33,6 @@ public class MenuFactory {
             String translatable = getTranslatable("input", key);
             InputNode inputNode = new InputNode.Builder(translatable, key)
                     .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
-            //inputNodePool.put(translatable, inputNode);
             currentNode.setChild(inputNode);
             currentNode = inputNode;
             return this;
@@ -57,7 +54,6 @@ public class MenuFactory {
             String translatable = getTranslatable("submit", key);
             SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler)
                     .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
-            //inputNodePool.put(translatable, submitNode);
             currentNode.setChild(submitNode);
             currentNode = submitNode;
             return this;

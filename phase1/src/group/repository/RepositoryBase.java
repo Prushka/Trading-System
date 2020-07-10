@@ -5,12 +5,12 @@ import group.menu.data.Response;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * The implementation of list related operations in {@link Repository}.
  *
  * @param <T> The entity this RepositoryBase handles with
- *
  * @author Dan Lyu
  */
 public abstract class RepositoryBase<T extends UniqueId> implements Repository<T> {
@@ -68,12 +68,12 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
      * @return if the entity exists
      */
     @Override
-    public boolean ifExists(T entity){
+    public boolean ifExists(T entity) {
         return data.contains(entity);
     }
 
     @Override
-    public boolean ifExists(Filter<T> filter){
+    public boolean ifExists(Filter<T> filter) {
         Iterator<T> iterator = iterator(filter);
         return iterator.hasNext();
     }
@@ -99,6 +99,14 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
         return data.get(id);
     }
 
+    @Override
+    public T getFirst(Filter<T> filter) {
+        if (iterator(filter).hasNext()) {
+            return iterator(filter).next();
+        }
+        return null;
+    }
+
     /**
      * @param filter the filter used to match the result
      * @return the iterator that will use the filter object
@@ -112,14 +120,15 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
      * The helper class used by {@link #filterResponse(Filter, ResponseMapper)}
      *
      * @param iterator the iterator that will use the filter object
-     * @param mapper A {@link ResponseMapper} used to directly map the records in iterator to a Response Object
+     * @param mapper   A {@link ResponseMapper} used to directly map the records in iterator to a Response Object
      * @return the Response object
      */
     private Response mapIterator(Iterator<T> iterator, ResponseMapper<T> mapper) {
         Response.Builder builder = new Response.Builder(true);
-        while (iterator.hasNext()) {
-            mapper.map(iterator.next(), builder);
-        }
+        // while (iterator.hasNext()) {
+        //     mapper.map(iterator.next(), builder);
+        // }
+        iterator.forEachRemaining(t -> mapper.map(t, builder));
         return builder.build();
     }
 

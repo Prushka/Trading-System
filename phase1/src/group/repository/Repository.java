@@ -36,8 +36,9 @@ public interface Repository<T extends UniqueId> {
      */
     boolean ifExists(T entity);
 
-
     boolean ifExists(Filter<T> filter);
+
+    T getFirst(Filter<T> filter);
 
     /**
      * @param filter the filter used to match the result

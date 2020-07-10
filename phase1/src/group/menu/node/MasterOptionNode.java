@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class MasterOptionNode extends Node {
+public class MasterOptionNode extends RequestableNode {
 
     private final List<OptionNode> children;
 
@@ -41,6 +41,7 @@ public class MasterOptionNode extends Node {
         if (!node.isPresent()) {
             return new ResponseNode.Builder("invalid.option").child(this).build();
         }
+        value = input;
         return node.get();
     }
 
@@ -78,12 +79,12 @@ public class MasterOptionNode extends Node {
         }
     }
 
-    public static class Builder extends NodeBuilder<Builder> {
+    public static class Builder extends RequestableNodeBuilder<Builder> {
 
         private final List<OptionNode> children = new ArrayList<>();
 
         public Builder(String translatable) {
-            super(translatable);
+            super(translatable, translatable);
         }
 
         @Override

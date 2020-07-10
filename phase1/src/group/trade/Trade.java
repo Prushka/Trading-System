@@ -1,26 +1,42 @@
-package group;
+package group.trade;
+
+import group.item.Item;
+import group.repository.UniqueId;
+import group.repository.map.EntityMappable;
+import group.repository.map.MappableBase;
+import group.user.PersonalUser;
 
 import java.sql.Timestamp;
+import java.util.List;
 
-public class Trade{
+public class Trade extends MappableBase implements EntityMappable, UniqueId {
+
+    // final will not work if the entity wants to use CSV Repository
+
+    // it doesn't effect serializationRepository
+
     // Trading Details
-    private final int tradeID;
-    private final PersonalUser user1;
-    private final PersonalUser user2;
+    private int tradeID;
+    private PersonalUser user1;
+    private PersonalUser user2;
     private int user1Edits;
     private int user2Edits;
     private boolean user1Confirms;
     private boolean user2Confirms;
 
     // Item Details
-    private final Item item1;
-    private final Item item2;
-    private final boolean isPermanent;
+    private Item item1;
+    private Item item2;
+    private boolean isPermanent;
     private boolean isClosed;
 
     // Meeting Details
     private Timestamp dateAndTime;
     private String location;
+
+    public Trade(List<String> record){
+        super(record);
+    }
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
     public Trade(int tradeID, PersonalUser user1, PersonalUser user2, Item item1, Item item2, boolean isPermanent,
@@ -86,5 +102,15 @@ public class Trade{
             return user1.getName() + " trades with " + user2.getName() + " at " + this.location + " on " +
                     this.dateAndTime;
         }
+    }
+
+    @Override
+    public void setUid(long value) {
+        // TODO
+    }
+
+    @Override
+    public long getUid() {
+        return 0;
     }
 }

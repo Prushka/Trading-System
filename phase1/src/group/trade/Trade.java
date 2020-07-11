@@ -4,13 +4,13 @@ import group.item.Item;
 import group.repository.UniqueId;
 import group.repository.map.EntityMappable;
 import group.repository.map.MappableBase;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public class Trade extends MappableBase implements EntityMappable, UniqueId {
     // to use SerializationRepository: public class Trade implements Serializable {
 
-    // TODO: final will not work if the entity uses CSV Repository. you also have to use objects for all fields (Int, Boolean). primitives won't work
+    // TODO: you also have to use objects for all fields (Int, Boolean). primitives won't work
 
     // SerializationRepository doesn't have restrictions on these
 
@@ -31,7 +31,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
 
     // Meeting Details
     // Use date
-    private Timestamp dateAndTime;
+    private Date dateAndTime;
     private String location;
 
     // Needed to implement Mappable Base
@@ -41,7 +41,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
     public Trade(long tradeID, long user1, long user2, Item item1, Item item2, boolean isPermanent,
-            Timestamp dateAndTime, String location){
+            Date dateAndTime, String location){
         this.tradeID = tradeID;
         this.user1 = user1;
         this.user2 = user2;
@@ -72,7 +72,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public Item getItem2(){ return item2;}
     public boolean getIsPermanent(){ return isPermanent;}
     public boolean getIsClosed(){ return isClosed;}
-    public Timestamp getDateAndTime(){ return dateAndTime;}
+    public Date getDateAndTime(){ return dateAndTime;}
     public String getLocation(){ return location;}
 
     // Setters
@@ -86,7 +86,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public void unconfirmUser2(){ user2Confirms = false;}
     public void openTrade(){ isClosed = false;}
     public void closeTrade(){ isClosed = true;}
-    public void setDateAndTime(Timestamp new_dateAndTime){ dateAndTime = new_dateAndTime;}
+    public void setDateAndTime(Date new_dateAndTime){ dateAndTime = new_dateAndTime;}
     public void setLocation(String new_location){ location = new_location;}
 
     /**

@@ -1,10 +1,9 @@
 package group.user;
 
 import group.repository.UniqueId;
-import group.repository.map.EntityMappable;
-import group.repository.map.MappableBase;
+import group.repository.reflection.EntityMappable;
+import group.repository.reflection.MappableBase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

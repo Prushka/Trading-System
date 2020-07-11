@@ -2,10 +2,10 @@ package group.trade;
 
 import group.item.Item;
 import group.repository.UniqueId;
-import group.repository.map.EntityMappable;
-import group.repository.map.MappableBase;
+import group.repository.reflection.EntityMappable;
+import group.repository.reflection.MappableBase;
+
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class Trade extends MappableBase implements EntityMappable, UniqueId {

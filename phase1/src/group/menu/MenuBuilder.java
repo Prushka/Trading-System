@@ -13,25 +13,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MenuFactory {
+public class MenuBuilder {
 
-    public static class OptionNodeFactory {
+    public static class OptionNodeBuilder {
         private final Class<?> clazz;
         private final OperationType type;
         private final OptionNode optionNode;
-
-        private final Map<SubmitNode, List<String>> masterPlaceHolder = new HashMap<>();
-
         private Node currentNode;
+        private SubmitNodeBuilder submitNodeBuilder;
 
-        public OptionNodeFactory(Class<?> clazz, OperationType type, int id, String addon) {
+        public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, String addon) {
             this.clazz = clazz;
             this.type = type;
             optionNode = new OptionNode(getTranslatable("option", addon), id);
             currentNode = optionNode;
         }
 
-        public OptionNodeFactory input(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType) {
+        public OptionNodeBuilder input(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType) {
             String translatable = getTranslatable("input", key);
             InputNode inputNode = new InputNode.Builder(translatable, key)
                     .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
@@ -40,49 +38,33 @@ public class MenuFactory {
             return this;
         }
 
-        public OptionNodeFactory input(String key, Validator validator, ValidatingType validatingType) {
+        public OptionNodeBuilder input(String key, Validator validator, ValidatingType validatingType) {
             return this.input(key, null, validator, validatingType);
         }
 
-        public OptionNodeFactory input(String key, Validator validator) {
+        public OptionNodeBuilder input(String key, Validator validator) {
             return this.input(key, null, validator, ValidatingType.invalid);
         }
 
-        public OptionNodeFactory input(String key) {
+        public OptionNodeBuilder input(String key) {
             return this.input(key, null, null, ValidatingType.invalid);
         }
 
-        public OptionNodeFactory submit(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
-            String translatable = getTranslatable("submit", key);
-            SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler)
-                    .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
-            currentNode.setChild(submitNode);
-            currentNode = submitNode;
-            return this;
+        public SubmitNodeBuilder submit(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
+            submitNodeBuilder = new SubmitNodeBuilder(key, processor, validator, validatingType, requestHandler);
+            return submitNodeBuilder;
         }
 
-        public OptionNodeFactory submit(String key, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
+        public SubmitNodeBuilder submit(String key, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
             return this.submit(key, null, validator, validatingType, requestHandler);
         }
 
-        public OptionNodeFactory submit(String key, Validator validator, RequestHandler requestHandler) {
+        public SubmitNodeBuilder submit(String key, Validator validator, RequestHandler requestHandler) {
             return this.submit(key, validator, ValidatingType.invalid, requestHandler);
         }
 
-        public OptionNodeFactory submit(String key, RequestHandler requestHandler) {
+        public SubmitNodeBuilder submit(String key, RequestHandler requestHandler) {
             return this.submit(key, null, requestHandler);
-        }
-
-        public OptionNodeFactory master(String masterIdentifier) { // the current node here has to be a submit node, otherwise we may need another SubmitNodeFactory as a step here
-            masterPlaceHolder.put((SubmitNode) currentNode, new ArrayList<String>() {{
-                add(masterIdentifier);
-            }});
-            return this;
-        }
-
-        public OptionNodeFactory flexibleMaster(String masterIdentifier) {
-            masterPlaceHolder.get(currentNode).add(masterIdentifier);
-            return this;
         }
 
         private String getTranslatable(String nodeType, String addon) {
@@ -92,7 +74,35 @@ public class MenuFactory {
             }
             return String.format("%s.%s%s", nodeType, type, clazzSimple);
         }
+
+        public class SubmitNodeBuilder {
+
+            private final List<String> flexibleMasterPlaceHolder = new ArrayList<>();
+
+            private final SubmitNode submitNode;
+
+            private String masterPlaceHolder;
+
+            public SubmitNodeBuilder(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
+                String translatable = getTranslatable("submit", key);
+                SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler)
+                        .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
+                currentNode.setChild(submitNode);
+                this.submitNode = submitNode;
+            }
+
+            public SubmitNodeBuilder master(String masterIdentifier) {
+                masterPlaceHolder = masterIdentifier;
+                return this;
+            }
+
+            public SubmitNodeBuilder flexibleMaster(String masterIdentifier) {
+                flexibleMasterPlaceHolder.add(masterIdentifier);
+                return this;
+            }
+        }
     }
+
 
     public enum OperationType {
         edit, add, query, remove, verification
@@ -107,21 +117,21 @@ public class MenuFactory {
     }
 
 
-    private final Map<String, OptionNodeFactory> optionNodePoolCache = new HashMap<>();
+    private final Map<String, OptionNodeBuilder> optionNodePoolCache = new HashMap<>();
 
-    private final Map<String, OptionNodeFactory> optionNodePool = new HashMap<>();
+    private final Map<String, OptionNodeBuilder> optionNodePool = new HashMap<>();
 
     private final Map<String, MasterOptionNode> masters = new HashMap<>();
 
     private MasterOptionNode entryNode;
 
-    public OptionNodeFactory option(Class<?> clazz, OperationType type, int id, String addon) {
-        OptionNodeFactory factory = new OptionNodeFactory(clazz, type, id, addon);
-        optionNodePoolCache.put(factory.optionNode.getTranslatable(), factory);
-        return factory;
+    public OptionNodeBuilder option(Class<?> clazz, OperationType type, int id, String addon) {
+        OptionNodeBuilder optionNodeBuilder = new OptionNodeBuilder(clazz, type, id, addon);
+        optionNodePoolCache.put(optionNodeBuilder.optionNode.getTranslatable(), optionNodeBuilder);
+        return optionNodeBuilder;
     }
 
-    public OptionNodeFactory option(Class<?> clazz, OperationType type, int id) {
+    public OptionNodeBuilder option(Class<?> clazz, OperationType type, int id) {
         return this.option(clazz, type, id, "");
     }
 
@@ -132,7 +142,7 @@ public class MenuFactory {
 
     public MasterOptionNode construct(String masterNodeIdentifier, boolean isEntryNode) {
         MasterOptionNode.Builder masterBuilder = new MasterOptionNode.Builder(masterNodeIdentifier);
-        for (OptionNodeFactory factory : optionNodePoolCache.values()) {
+        for (OptionNodeBuilder factory : optionNodePoolCache.values()) {
             masterBuilder.addChild(factory.optionNode);
         }
         optionNodePool.putAll(optionNodePoolCache);
@@ -144,12 +154,11 @@ public class MenuFactory {
     }
 
     public MasterOptionNode constructFinal() {
-        for (OptionNodeFactory factory : optionNodePool.values()) {
-            for (Map.Entry<SubmitNode, List<String>> entry : factory.masterPlaceHolder.entrySet()) {
-                entry.getKey().setChild(masters.get(entry.getValue().get(0)));
-                for (String identifier : entry.getValue()) {
-                    entry.getKey().fillMasterPool(masters.get(identifier));
-                }
+        for (OptionNodeBuilder optionNodeBuilder : optionNodePool.values()) {
+            SubmitNode submitNode = optionNodeBuilder.submitNodeBuilder.submitNode;
+            submitNode.setChild(masters.get(optionNodeBuilder.submitNodeBuilder.masterPlaceHolder));
+            for (String flexibleMaster : optionNodeBuilder.submitNodeBuilder.flexibleMasterPlaceHolder) {
+                submitNode.fillMasterPool(masters.get(flexibleMaster));
             }
         }
         return entryNode;
@@ -160,7 +169,7 @@ public class MenuFactory {
         PrintWriter writer;
         try {
             writer = new PrintWriter(new File("resources/" + language + ".properties"));
-            for (OptionNodeFactory factory : optionNodePool.values()) {
+            for (OptionNodeBuilder factory : optionNodePool.values()) {
                 OptionNodeIterator iterator = new OptionNodeIterator(factory.optionNode);
                 while (iterator.hasNext()) {
                     Node node = iterator.next();

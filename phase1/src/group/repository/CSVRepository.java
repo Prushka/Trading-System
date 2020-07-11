@@ -1,7 +1,7 @@
 package group.repository;
 
-import group.repository.map.EntityMappable;
-import group.repository.map.EntityMappingFactory;
+import group.repository.reflection.EntityMappable;
+import group.repository.reflection.EntityMappingFactory;
 import group.system.SaveHook;
 
 import java.io.FileInputStream;

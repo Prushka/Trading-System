@@ -1,9 +1,9 @@
 package group.system;
 
 import group.menu.Menu;
-import group.menu.MenuFactory;
-import group.menu.MenuFactory.OperationType;
-import group.menu.MenuFactory.ValidatingType;
+import group.menu.MenuBuilder;
+import group.menu.MenuBuilder.OperationType;
+import group.menu.MenuBuilder.ValidatingType;
 import group.menu.processor.PasswordEncrypt;
 import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
@@ -14,31 +14,31 @@ import java.util.List;
 
 public class MenuConstructor {
 
-    private final MenuFactory menuFactory;
+    private final MenuBuilder menuBuilder;
 
     private final List<Shutdownable> shutdowns;
 
     public MenuConstructor() {
-        menuFactory = new MenuFactory();
+        menuBuilder = new MenuBuilder();
         shutdowns = new ArrayList<>();
     }
 
     public void user(UserController controller) {
         // user login / register example
-        menuFactory.option(User.class, OperationType.add, 1)
+        menuBuilder.option(User.class, OperationType.add, 1)
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .input("email")
                 .submit("confirm", controller::loginUser);
 
-        menuFactory.option(User.class, OperationType.verification, 2)
+        menuBuilder.option(User.class, OperationType.verification, 2)
                 .input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .input("password", password -> password.length() > 8, ValidatingType.invalid)
                 .submit("confirm", controller::registerUser);
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuFactory.construct("master.account"); // this one should be the root, but many things are unimplemented
+        menuBuilder.construct("master.account"); // this one should be the root, but many things are unimplemented
         // You have to call construct before creating a new master option node.
 
         /* Menu Structure:
@@ -66,23 +66,23 @@ public class MenuConstructor {
     }
 
     public void supportTicket(SupportTicketController controller) {
-        menuFactory.option(SupportTicket.class, OperationType.add, 1)
+        menuBuilder.option(SupportTicket.class, OperationType.add, 1)
                 .input("content", controller::ifTicketContentNotExist, ValidatingType.exists)
                 .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
                 .input("priority", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
                 .submit("confirm", controller::addTicket)
                 .master("master.support.ticket");
 
-        menuFactory.option(SupportTicket.class, OperationType.query, 2)
+        menuBuilder.option(SupportTicket.class, OperationType.query, 2)
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
                 .master("master.support.ticket");
 
-        menuFactory.construct("master.support.ticket",true);
+        menuBuilder.construct("master.support.ticket", true);
     }
 
     public void runMenu() {
         ConsoleSystem console = new ConsoleSystem();
-        console.run(new Menu(menuFactory.constructFinal())); // the construct final will put all place holders to nodes
+        console.run(new Menu(menuBuilder.constructFinal())); // the construct final will put all place holders to nodes
         shutdown();
     }
 

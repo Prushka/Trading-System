@@ -1,4 +1,4 @@
-package group.repository.map;
+package group.repository.reflection;
 
 import java.util.List;
 

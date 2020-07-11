@@ -1,4 +1,4 @@
-package group.repository.map;
+package group.repository.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

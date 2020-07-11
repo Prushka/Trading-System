@@ -4,6 +4,7 @@ import group.item.Item;
 import group.repository.UniqueId;
 import group.repository.map.EntityMappable;
 import group.repository.map.MappableBase;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     private Integer user2Edits;
     private Boolean user1Confirms;
     private Boolean user2Confirms;
+    private Long prevMeeting = null;
 
     // Item Details
     private Item item1;
@@ -32,7 +34,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
 
     // Meeting Details
     // Use date
-    private Date dateAndTime;
+    private Calendar dateAndTime;
     private String location;
 
     // Needed to implement Mappable Base
@@ -42,7 +44,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
     public Trade(long tradeID, long user1, long user2, Item item1, Item item2, boolean isPermanent,
-            Date dateAndTime, String location){
+            Calendar dateAndTime, String location){
         this.tradeID = tradeID;
         this.user1 = user1;
         this.user2 = user2;
@@ -73,8 +75,9 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public Item getItem2(){ return item2;}
     public boolean getIsPermanent(){ return isPermanent;}
     public boolean getIsClosed(){ return isClosed;}
-    public Date getDateAndTime(){ return dateAndTime;}
+    public Calendar getDateAndTime(){ return dateAndTime;}
     public String getLocation(){ return location;}
+    public Long getPrevMeeting(){ return prevMeeting;}
 
     // Setters
     @Override
@@ -87,8 +90,9 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public void unconfirmUser2(){ user2Confirms = false;}
     public void openTrade(){ isClosed = false;}
     public void closeTrade(){ isClosed = true;}
-    public void setDateAndTime(Date new_dateAndTime){ dateAndTime = new_dateAndTime;}
+    public void setDateAndTime(Calendar new_dateAndTime){ dateAndTime = new_dateAndTime;}
     public void setLocation(String new_location){ location = new_location;}
+    public void setPrevMeeting(Long prev){ prevMeeting = prev;}
 
     /**
      * @return A description of this trade.

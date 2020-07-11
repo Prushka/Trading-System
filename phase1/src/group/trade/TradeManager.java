@@ -7,6 +7,7 @@ import group.repository.CSVRepository;
 import group.repository.Repository;
 import group.user.PersonalUser;
 import group.user.User;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -81,8 +82,8 @@ public class TradeManager{
     }
 
     // Come up with solution to the casting problem
-    public void createTrade(long user1, long user2, Item item1, Item item2, boolean isPermanent,
-                            Date dateAndTime, String location){
+    public Trade createTrade(long user1, long user2, Item item1, Item item2, boolean isPermanent,
+                            Calendar dateAndTime, String location){
         // Get User from Repository and check if the items are in their inventory
         if (userRepository.ifExists((int) user1) && userRepository.ifExists((int) user2)){
             User trader1 = userRepository.get((int) user1);
@@ -93,11 +94,13 @@ public class TradeManager{
                         location);
                 numOfTrades++;
                 tradeRepository.add(new_trade);
+                return new_trade;
             }
         }
+        return null;
     }
 
-    public void editDateAndTime(int tradeID, int editing_user, Date dateAndTime){
+    public void editDateAndTime(int tradeID, int editing_user, Calendar dateAndTime){
         // Get trade from Repository
         if (tradeRepository.ifExists(tradeID)){
             Trade curr_trade = tradeRepository.get(tradeID);
@@ -158,6 +161,11 @@ public class TradeManager{
                 curr_trade.openTrade();
                 curr_trade.unconfirmUser1();
                 curr_trade.unconfirmUser2();
+                long old_meeting =  curr_trade.getPrevMeeting();
+                if (tradeRepository.ifExists((int) old_meeting)){
+                    Trade old_trade = tradeRepository.get((int) old_meeting);
+                    old_trade.closeTrade();
+                }
             }
         }
     }
@@ -191,13 +199,12 @@ public class TradeManager{
                     curr_trade.closeTrade();
                 } else {
                     // how to keep this open while they confirm this next trade
-                    Date new_DateAndTime = (Date) curr_trade.getDateAndTime().clone();
-
-                    // change
-                    new_DateAndTime.setMonth(curr_trade.getDateAndTime().getMonth() + 1);
-                    createTrade(curr_trade.getUser1(), curr_trade.getUser1(), curr_trade.getItem1(),
-                            curr_trade.getItem2(), curr_trade.getIsPermanent(), new_DateAndTime,
+                    Calendar new_DateAndTime = curr_trade.getDateAndTime();
+                    new_DateAndTime.set(new_DateAndTime.MONTH, borrowTimeLimit); // need to change
+                    Trade second_meeting = createTrade(curr_trade.getUser1(), curr_trade.getUser1(),
+                            curr_trade.getItem1(), curr_trade.getItem2(), true, new_DateAndTime,
                             curr_trade.getLocation());
+                    curr_trade.setPrevMeeting((long) tradeRepository.getId(second_meeting));
                 }
             }
         }

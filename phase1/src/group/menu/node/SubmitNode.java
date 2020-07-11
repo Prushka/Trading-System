@@ -4,6 +4,8 @@ import group.menu.data.Request;
 import group.menu.data.Response;
 import group.menu.handler.RequestHandler;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class SubmitNode extends InputNode {
@@ -12,10 +14,13 @@ public class SubmitNode extends InputNode {
 
     private final Node failedResultNode;
 
+    private final Map<String, MasterOptionNode> flexibleMasterPool;
+
     SubmitNode(Builder builder) {
         super(builder);
         handler = builder.handler;
         failedResultNode = builder.failedResultNode;
+        flexibleMasterPool = builder.flexibleMasterPool;
     }
 
     private Request getRequest() {
@@ -29,6 +34,10 @@ public class SubmitNode extends InputNode {
         return request;
     }
 
+    public void fillMasterPool(MasterOptionNode master) {
+        flexibleMasterPool.put(master.getTranslatable(), master);
+    }
+
     @Override
     public Node parseInput(String input) {
         inputPreProcessing(input);
@@ -38,7 +47,9 @@ public class SubmitNode extends InputNode {
 
     private Node parseResponse(Response response) {
         ResponseNode responseNode = new ResponseNode.Builder(response).build();
-        if (response.getSuccess()) {
+        if (response.getFlexibleMasterIdentifier() != null) {
+            responseNode.setChild(flexibleMasterPool.get(response.getFlexibleMasterIdentifier()));
+        } else if (response.getSuccess()) {
             responseNode.setChild(getChild());
         } else {
             responseNode.setChild(failedResultNode);
@@ -50,6 +61,7 @@ public class SubmitNode extends InputNode {
 
         private RequestHandler handler;
         private Node failedResultNode;
+        private final Map<String, MasterOptionNode> flexibleMasterPool = new HashMap<>();
 
         public Builder(String translatable, String key, RequestHandler requestHandler) {
             super(translatable, key);
@@ -58,6 +70,11 @@ public class SubmitNode extends InputNode {
 
         @Override
         Builder getThis() {
+            return this;
+        }
+
+        public Builder master(MasterOptionNode node) {
+            this.flexibleMasterPool.put(node.getTranslatable(), node);
             return this;
         }
 

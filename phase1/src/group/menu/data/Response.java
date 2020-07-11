@@ -20,12 +20,15 @@ public class Response {
      */
     private final List<TranslatablePair> translatablePairs = new ArrayList<>();
 
+    private final String flexibleMasterIdentifier;
+
     /**
      * @param builder the {@link Response.Builder} used to build this Response
      */
     Response(Builder builder) {
         this.success = builder.success;
         this.translatablePairs.addAll(builder.translatablePairs);
+        this.flexibleMasterIdentifier = builder.master;
     }
 
     /**
@@ -40,6 +43,10 @@ public class Response {
      */
     public List<TranslatablePair> getTranslatablePairs() {
         return translatablePairs;
+    }
+
+    public String getFlexibleMasterIdentifier() {
+        return flexibleMasterIdentifier;
     }
 
     /**
@@ -59,9 +66,16 @@ public class Response {
 
         private final List<TranslatablePair> translatablePairs;
 
+        private String master;
+
         public Builder(boolean success) {
             this.success = success;
             this.translatablePairs = new ArrayList<>();
+        }
+
+        public Builder masterIdentifier(String identifier) {
+            master = identifier;
+            return this;
         }
 
         /**
@@ -84,7 +98,7 @@ public class Response {
 
         /**
          * @param translatable A translatable String to be added into translatable Pairs
-         * @param paras paras to be formatted into the translatable String
+         * @param paras        paras to be formatted into the translatable String
          * @return the builder itself
          */
         public Builder translatable(String translatable, Object... paras) {

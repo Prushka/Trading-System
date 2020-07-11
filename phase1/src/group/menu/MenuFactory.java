@@ -8,7 +8,9 @@ import group.menu.validator.Validator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MenuFactory {
@@ -18,7 +20,7 @@ public class MenuFactory {
         private final OperationType type;
         private final OptionNode optionNode;
 
-        private final Map<Node, String> masterPlaceHolder = new HashMap<>();
+        private final Map<SubmitNode, List<String>> masterPlaceHolder = new HashMap<>();
 
         private Node currentNode;
 
@@ -71,13 +73,20 @@ public class MenuFactory {
             return this.submit(key, null, requestHandler);
         }
 
-        public OptionNodeFactory master(String masterIdentifier) {
-            masterPlaceHolder.put(currentNode, masterIdentifier);
+        public OptionNodeFactory master(String masterIdentifier) { // the current node here has to be a submit node, otherwise we may need another SubmitNodeFactory as a step here
+            masterPlaceHolder.put((SubmitNode) currentNode, new ArrayList<String>() {{
+                add(masterIdentifier);
+            }});
+            return this;
+        }
+
+        public OptionNodeFactory flexibleMaster(String masterIdentifier) {
+            masterPlaceHolder.get(currentNode).add(masterIdentifier);
             return this;
         }
 
         private String getTranslatable(String nodeType, String addon) {
-            String clazzSimple = clazz.getSimpleName().replaceAll("([A-Z])",".$1").toLowerCase();
+            String clazzSimple = clazz.getSimpleName().replaceAll("([A-Z])", ".$1").toLowerCase();
             if (addon.length() > 0) {
                 return String.format("%s.%s%s.%s", nodeType, type, clazzSimple, addon);
             }
@@ -117,7 +126,7 @@ public class MenuFactory {
     }
 
     public MasterOptionNode construct(String masterNodeIdentifier) {
-        return this.construct(masterNodeIdentifier,false);
+        return this.construct(masterNodeIdentifier, false);
     }
 
 
@@ -129,15 +138,18 @@ public class MenuFactory {
         optionNodePool.putAll(optionNodePoolCache);
         optionNodePoolCache.clear();
         MasterOptionNode master = masterBuilder.build();
-        if(isEntryNode) entryNode = master;
+        if (isEntryNode) entryNode = master;
         masters.put(masterNodeIdentifier, master);
         return master;
     }
 
     public MasterOptionNode constructFinal() {
         for (OptionNodeFactory factory : optionNodePool.values()) {
-            for (Map.Entry<Node, String> entry : factory.masterPlaceHolder.entrySet()) {
-                entry.getKey().setChild(masters.get(entry.getValue()));
+            for (Map.Entry<SubmitNode, List<String>> entry : factory.masterPlaceHolder.entrySet()) {
+                entry.getKey().setChild(masters.get(entry.getValue().get(0)));
+                for (String identifier : entry.getValue()) {
+                    entry.getKey().fillMasterPool(masters.get(identifier));
+                }
             }
         }
         return entryNode;

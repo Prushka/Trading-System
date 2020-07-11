@@ -90,8 +90,8 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public void unconfirmUser2(){ user2Confirms = false;}
     public void openTrade(){ isClosed = false;}
     public void closeTrade(){ isClosed = true;}
-    public void setDateAndTime(Calendar new_dateAndTime){ dateAndTime = new_dateAndTime;}
-    public void setLocation(String new_location){ location = new_location;}
+    public void setDateAndTime(Calendar newDateAndTime){ dateAndTime = newDateAndTime;}
+    public void setLocation(String newLocation){ location = newLocation;}
     public void setPrevMeeting(Long prev){ prevMeeting = prev;}
 
     /**

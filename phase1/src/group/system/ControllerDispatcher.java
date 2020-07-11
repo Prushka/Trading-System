@@ -16,12 +16,11 @@ public class ControllerDispatcher implements Shutdownable {
     SupportTicketController supportTicketController;
     UserController userController;
 
-    MenuConstructor menuConstructor;
+    final MenuConstructor menuConstructor = new MenuConstructor();
 
-    private SaveHook saveHook;
+    private final SaveHook saveHook = new SaveHook();
 
     public ControllerDispatcher() {
-        menuConstructor = new MenuConstructor();
         menuConstructor.shutdownHook(this);
         createRepositories();
         dispatchController();
@@ -34,7 +33,6 @@ public class ControllerDispatcher implements Shutdownable {
     }
 
     public void createRepositories() {
-        saveHook = new SaveHook();
         ticketRepository = new CSVRepository<>("data/support_ticket.csv", SupportTicket::new, saveHook);
         personalUserRepository = new CSVRepository<>("data/personal_user.csv", PersonalUser::new, saveHook);
         adminUserRepository = new CSVRepository<>("data/admin_user.csv", AdministrativeUser::new, saveHook);

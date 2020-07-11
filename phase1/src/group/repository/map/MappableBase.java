@@ -81,8 +81,8 @@ public abstract class MappableBase {
         return value.toString();
     }
 
-    private boolean isFieldTransient(Field field) {
-        return Modifier.isTransient(field.getModifiers());
+    private boolean ifFieldNotTransient(Field field) {
+        return !Modifier.isTransient(field.getModifiers());
     }
 
     /**
@@ -93,7 +93,7 @@ public abstract class MappableBase {
     private List<Field> getSortedFields() {
         return Arrays
                 .stream(this.getClass().getDeclaredFields())
-                .filter(this::isFieldTransient)
+                .filter(this::ifFieldNotTransient)
                 .sorted(new FieldComparator())
                 .collect(Collectors.toList());
     }

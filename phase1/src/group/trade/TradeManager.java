@@ -22,9 +22,10 @@ public class TradeManager {
         tradeProperties.set("borrowTimeLimit", "1");
         editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
         borrowTimeLimit = Integer.parseInt(tradeProperties.get("editLimit"));
+        this.tradeRepository = tradeRepository;
+        this.userRepository = userRepository;
 
         /*
-        // Repository -- should be taken as a parameter from TradeSystem? Controller
         Repository<Trade> tradeRepositorySerialization = new SerializableRepository<>("data/trade.ser");
 
         // PersonalUser::new refers to this constructor:
@@ -207,7 +208,7 @@ public class TradeManager {
             currTrade.closeTrade();
         } else {
             Calendar newDateAndTime = currTrade.getDateAndTime();
-            newDateAndTime.set(Calendar.MONTH, borrowTimeLimit); // TODO: need to change
+            newDateAndTime.set(Calendar.MONTH, borrowTimeLimit); // TODO: need to change, mappable base
             Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
                     currTrade.getItem1(), currTrade.getItem2(), true, newDateAndTime,
                     currTrade.getLocation());

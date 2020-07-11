@@ -4,14 +4,14 @@ import java.util.*;
 
 public class PersonalUser extends User {
 
-    private final List<Object> wishlist;       //TODO: replace Object with item when item is available
-    private final List<Object> inventory;
-    private final List<Object> trades;
+    private List<Object> wishlist;       //TODO: replace Object with item when item is available
+    private List<Object> inventory;
+    private List<Object> trades;
     private boolean isFrozen;
     private int lendCount;
     private int borrowCount;
     private int numTransactions;
-    private final Map<String, Integer> traderFrequency;
+    private Map<String, Integer> traderFrequency;
 
     /**
      * Creates a PersonalUser with the given userName, email, telephone, password
@@ -45,6 +45,8 @@ public class PersonalUser extends User {
         numTransactions = 0;
         traderFrequency = new HashMap<>();
     }
+
+    public PersonalUser(List<String> record){super(record);}
 
     public List<Object> getWishlist() {
         return wishlist;

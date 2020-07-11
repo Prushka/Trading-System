@@ -33,12 +33,6 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
     }
 
     /**
-     * a package protected read method, to be implemented by subclasses.<br>
-     * This method handles with the real reading operation
-     */
-    abstract void readSafe();
-
-    /**
      * make this file's parent directories
      */
     private void mkdirs() {

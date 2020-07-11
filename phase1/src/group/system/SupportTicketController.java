@@ -7,16 +7,16 @@ import group.notification.SupportTicketManager;
 import group.repository.CSVRepository;
 import group.repository.Repository;
 
-public class TestController {
+public class SupportTicketController implements Shutdown {
 
     private final SupportTicketManager supportTicketManager;
     private final Repository<SupportTicket> ticketRepository;
 
-    public TestController() {
+    public SupportTicketController(MenuConstructor menuConstructor) {
         ticketRepository =
                 new CSVRepository<>("data/support_ticket.csv", SupportTicket::new);
         supportTicketManager = new SupportTicketManager(ticketRepository);
-        MenuConstructor menu = new MenuConstructor(this);
+        menuConstructor.supportTicket(this);
     }
 
     public Response addTicket(Request request) {

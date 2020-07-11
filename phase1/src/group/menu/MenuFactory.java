@@ -104,6 +104,7 @@ public class MenuFactory {
 
     private final Map<String, MasterOptionNode> masters = new HashMap<>();
 
+    private MasterOptionNode entryNode;
 
     public OptionNodeFactory option(Class<?> clazz, OperationType type, int id, String addon) {
         OptionNodeFactory factory = new OptionNodeFactory(clazz, type, id, addon);
@@ -116,6 +117,11 @@ public class MenuFactory {
     }
 
     public MasterOptionNode construct(String masterNodeIdentifier) {
+        return this.construct(masterNodeIdentifier,false);
+    }
+
+
+    public MasterOptionNode construct(String masterNodeIdentifier, boolean isEntryNode) {
         MasterOptionNode.Builder masterBuilder = new MasterOptionNode.Builder(masterNodeIdentifier);
         for (OptionNodeFactory factory : optionNodePoolCache.values()) {
             masterBuilder.addChild(factory.optionNode);
@@ -123,16 +129,18 @@ public class MenuFactory {
         optionNodePool.putAll(optionNodePoolCache);
         optionNodePoolCache.clear();
         MasterOptionNode master = masterBuilder.build();
+        if(isEntryNode) entryNode = master;
         masters.put(masterNodeIdentifier, master);
         return master;
     }
 
-    public void constructFinal() {
+    public MasterOptionNode constructFinal() {
         for (OptionNodeFactory factory : optionNodePool.values()) {
             for (Map.Entry<Node, String> entry : factory.masterPlaceHolder.entrySet()) {
                 entry.getKey().setChild(masters.get(entry.getValue()));
             }
         }
+        return entryNode;
     }
 
     public void generateLanguage(String language) { // properties is not in order thus a file writer is used, maybe we can extend Properties class

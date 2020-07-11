@@ -48,7 +48,6 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
      * Read the file with {@link #file} into {@link #data}.
      * It will use the {@link #factory} to instantiate the specific objects.
      */
-    @Override
     void readSafe() {
         // FileInputStream can be used for reading raw bytes, like an image.
         Scanner scanner = null;

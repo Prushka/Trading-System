@@ -10,24 +10,31 @@ import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
 import group.user.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MenuConstructor {
 
-    private final Menu menu;
+    private final MenuFactory menuFactory;
 
-    // I will finish java doc on menu part later, there might be changes
-    public MenuConstructor(TestController controller) {
-        MenuFactory menuFactory = new MenuFactory();
+    private final List<Shutdown> shutdowns;
 
+    public MenuConstructor() {
+        menuFactory = new MenuFactory();
+        shutdowns = new ArrayList<>();
+    }
+
+    public void user(UserController controller) {
         // user login / register example
         menuFactory.option(User.class, OperationType.add, 1)
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("password",new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
+                .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .input("email")
                 .submit("confirm", null); // replace null with a method in controller that takes in this Request and returns a Response
 
         menuFactory.option(User.class, OperationType.verification, 2)
-                .input("email", null , ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .input("password", password -> password.length() > 8, ValidatingType.invalid)
                 .submit("confirm", null); // replace null with a method in controller that takes in this Request and returns Response
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
@@ -57,8 +64,10 @@ public class MenuConstructor {
         You can generate the language.properties by calling menuFactory.generateLanguage("language"); if you are using menu factory.
         This will put all identifiers in the properties file with undefined value
          */
+    }
 
-
+    public void supportTicket(SupportTicketController controller) {
+        addShutDown(controller);
         menuFactory.option(SupportTicket.class, OperationType.add, 1)
                 .input("content", controller::ifTicketContentNotExist, ValidatingType.exists)
                 .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
@@ -71,16 +80,20 @@ public class MenuConstructor {
                 .master("master.support.ticket");
 
         MasterOptionNode entryNode = menuFactory.construct("master.support.ticket");
-        menuFactory.constructFinal(); // the construct final will put all place holders to nodes
-        menu = new Menu(entryNode);
+    }
 
+    public void buildMenu() {
         ConsoleSystem console = new ConsoleSystem();
-
-        console.run(getMenu());
-        controller.shutdown();
+        console.run(new Menu(menuFactory.constructFinal())); // the construct final will put all place holders to nodes
+        shutdown();
     }
 
-    public Menu getMenu() {
-        return menu;
+    private void addShutDown(Shutdown shutdown) {
+        this.shutdowns.add(shutdown);
     }
+
+    private void shutdown() {
+        shutdowns.forEach(Shutdown::shutdown);
+    }
+
 }

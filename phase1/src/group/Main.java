@@ -1,11 +1,11 @@
 package group;
 
-import group.system.TestController;
+import group.system.ControllerDispatcher;
 
 public class Main {
 
     public static void main(String[] args) {
-        TestController testController = new TestController();
+        ControllerDispatcher controllerDispatcher = new ControllerDispatcher();
     }
 
 }

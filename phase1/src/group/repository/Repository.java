@@ -1,24 +1,10 @@
 package group.repository;
 
 import group.menu.data.Response;
-import group.system.Savable;
 
 import java.util.Iterator;
 
-/**
- * <p>The interface of a Repository Implementation.</p>
- * List related operations can be found in {@link RepositoryBase}
- *
- * @param <T> The entity type it handles with
- *
- * @author Dan Lyu
- */
-public interface Repository<T extends UniqueId> extends Savable {
-
-    /**
-     * Save operation to save the data it handles with to a file
-     */
-    void save();
+public interface Repository<T extends UniqueId> {
 
     /**
      * @param entity an entity to be added

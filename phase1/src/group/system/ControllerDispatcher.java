@@ -2,16 +2,17 @@ package group.system;
 
 import group.notification.SupportTicket;
 import group.repository.CSVRepository;
+import group.repository.RepositorySavable;
 import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 
 public class ControllerDispatcher implements Shutdownable {
 
-    CSVRepository<SupportTicket> ticketRepository;
-    CSVRepository<PersonalUser> personalUserRepository;
-    CSVRepository<AdministrativeUser> adminUserRepository;
-    CSVRepository<Trade> tradeRepository;
+    RepositorySavable<SupportTicket> ticketRepository;
+    RepositorySavable<PersonalUser> personalUserRepository;
+    RepositorySavable<AdministrativeUser> adminUserRepository;
+    RepositorySavable<Trade> tradeRepository;
 
     SupportTicketController supportTicketController;
     UserController userController;
@@ -24,7 +25,7 @@ public class ControllerDispatcher implements Shutdownable {
         menuConstructor.shutdownHook(this);
         createRepositories();
         dispatchController();
-        menuConstructor.buildMenu();
+        menuConstructor.runMenu();
     }
 
     public void dispatchController() {

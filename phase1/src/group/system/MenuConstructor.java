@@ -30,12 +30,12 @@ public class MenuConstructor {
                 .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .input("email")
-                .submit("confirm", null); // replace null with a method in controller that takes in this Request and returns a Response
+                .submit("confirm", controller::loginUser);
 
         menuFactory.option(User.class, OperationType.verification, 2)
                 .input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .input("password", password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", null); // replace null with a method in controller that takes in this Request and returns Response
+                .submit("confirm", controller::registerUser);
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
         menuFactory.construct("master.account"); // this one should be the root, but many things are unimplemented
@@ -80,7 +80,7 @@ public class MenuConstructor {
         menuFactory.construct("master.support.ticket",true);
     }
 
-    public void buildMenu() {
+    public void runMenu() {
         ConsoleSystem console = new ConsoleSystem();
         console.run(new Menu(menuFactory.constructFinal())); // the construct final will put all place holders to nodes
         shutdown();

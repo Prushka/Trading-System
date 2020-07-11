@@ -8,12 +8,12 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * The implementation of list related operations in {@link Repository}.
+ * The implementation of list related operations in {@link RepositorySavable}.
  *
  * @param <T> The entity this RepositoryBase handles with
  * @author Dan Lyu
  */
-public abstract class RepositoryBase<T extends UniqueId> implements Repository<T> {
+public abstract class RepositoryBase<T extends UniqueId> implements RepositorySavable<T> {
 
     /**
      * The list that holds the entities

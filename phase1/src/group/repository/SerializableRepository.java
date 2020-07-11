@@ -12,7 +12,7 @@ import java.util.List;
  * @param <T> The entity this Repository deals with
  * @author Dan Lyu
  * @author lecture code, Logging project
- * @see Repository
+ * @see RepositorySavable
  * @see RepositoryBase
  */
 public class SerializableRepository<T extends Serializable & UniqueId> extends RepositoryBase<T> {

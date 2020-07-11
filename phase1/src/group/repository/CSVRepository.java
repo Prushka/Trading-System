@@ -18,7 +18,7 @@ import java.util.Scanner;
  * @param <T> The entity this Repository deals with
  * @author Dan Lyu
  * @author lecture code, Logging project
- * @see Repository
+ * @see RepositorySavable
  * @see RepositoryBase
  */
 public class CSVRepository<T extends EntityMappable & UniqueId> extends RepositoryBase<T> {

@@ -11,6 +11,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     // to use SerializationRepository: public class Trade implements Serializable {
 
     // TODO: you also have to use objects for all fields (Int, Boolean). primitives won't work
+    // TODO: Loosen dependency on Item
 
     // SerializationRepository doesn't have restrictions on these
 

@@ -35,6 +35,10 @@ public interface Repository<T extends UniqueId> {
 
     int getId(T entity);
 
+    int size();
+
+    int size(Filter<T> filter);
+
     /**
      * @param filter the filter used to match the result
      * @return the iterator that will use the filter object

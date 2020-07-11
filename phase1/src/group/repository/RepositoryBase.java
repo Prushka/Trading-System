@@ -139,4 +139,19 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
         return mapIterator(iterator(filter), mapper);
     }
 
+    @Override
+    public int size() {
+        return data.size();
+    }
+
+    @Override
+    public int size(Filter<T> filter) {
+        Iterator<T> iterator = iterator(filter);
+        int i = 0;
+        while (iterator.hasNext()) {
+            i++;
+            iterator.next();
+        }
+        return i;
+    }
 }

@@ -18,8 +18,6 @@ public class TradeManager{
     private Repository<Trade> tradeRepository;
     private Repository<User> userRepository;
 
-    private Trade curr_trade;
-
     public TradeManager(TradeProperties tradeProperties){
         // Default Values for trade information stored in tradeProperties:
         tradeProperties.set("editLimit","3");
@@ -172,8 +170,9 @@ public class TradeManager{
 
     // More casting problems
     public void confirmTradeComplete(int tradeID, int editing_user) {
-        if (userRepository.ifExists(editing_user)) {
+        if (userRepository.ifExists(editing_user) && tradeRepository.ifExists(tradeID)) {
             PersonalUser curr_user = (PersonalUser) userRepository.get(editing_user);
+            Trade curr_trade = tradeRepository.get(tradeID);
             // Confirm specific user
             if (curr_trade.getUser1() == editing_user && !curr_trade.getUser1Confirms()) {
                 curr_trade.confirmUser1();

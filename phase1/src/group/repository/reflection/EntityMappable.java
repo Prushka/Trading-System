@@ -1,4 +1,4 @@
-package group.repository.map;
+package group.repository.reflection;
 
 /**
  * Implement this interface to allow the entity to be used in the {@link group.repository.CSVRepository}
@@ -23,5 +23,7 @@ public interface EntityMappable {
      * @return the header record String of the current entity
      */
     String toCSVHeader();
+
+    String toNullString();
 
 }

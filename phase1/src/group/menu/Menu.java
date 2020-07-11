@@ -2,6 +2,7 @@ package group.menu;
 
 import group.config.ConsoleLanguageFormatter;
 import group.config.property.LanguageProperties;
+import group.menu.node.InputNode;
 import group.menu.node.MasterOptionNode;
 import group.menu.node.Node;
 
@@ -30,10 +31,28 @@ public class Menu {
         display();
     }
 
+    private void goBack() {
+        setCurrentNode(currentNode.traceBack());
+    }
+
+    private void goToNext() {
+        // TODO: this part is ughhh
+        // These restrictions only apply if the user goes back to a node that he/she already inputs something and wants to get back to the next node without actually inputting anything in that previous node
+        // kind of rare. Implement this in a polymorphism way may need to add fields and methods to all node classes. I don't know!
+        if (currentNode.getChild() != null && currentNode instanceof InputNode && currentNode.getChild() instanceof InputNode) {
+            if (currentNode.getValue() != null && currentNode.getValue().length() > 0 && !((InputNode) currentNode).validate().isPresent()) {
+                LOGGER.log(Level.INFO,"current.value.tip");
+                setCurrentNode(currentNode.getChild());
+            }
+        }
+    }
+
     public void parseInput(String input) {
         if (input.equalsIgnoreCase("back")) {
-            setCurrentNode(currentNode.traceBack());
-        }else {
+            goBack();
+        } else if (input.equalsIgnoreCase("next")) {
+            goToNext();
+        } else {
             setCurrentNode(currentNode.parseInput(input).traceForward());
         }
         display();
@@ -49,6 +68,6 @@ public class Menu {
     }
 
     public void displayInitial() {
-        LOGGER.log(Level.INFO,"init.tip");
+        LOGGER.log(Level.INFO, "init.tip");
     }
 }

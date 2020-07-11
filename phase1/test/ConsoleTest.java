@@ -1,5 +1,4 @@
-
-import org.junit.*;
+import org.junit.Test;
 
 import java.util.logging.Logger;
 
@@ -9,7 +8,6 @@ public class ConsoleTest {
 
     @Test
     public void menuTest(){
-
     }
 
 

@@ -1,19 +1,19 @@
 package group.repository;
 
 import group.menu.data.Response;
+import group.system.SaveHook;
 
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
- * The implementation of list related operations in {@link Repository}.
+ * The implementation of list related operations in {@link RepositorySavable}.
  *
  * @param <T> The entity this RepositoryBase handles with
  * @author Dan Lyu
  */
-public abstract class RepositoryBase<T extends UniqueId> implements Repository<T> {
+public abstract class RepositoryBase<T extends UniqueId> implements RepositorySavable<T> {
 
     /**
      * The list that holds the entities
@@ -28,16 +28,11 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
     /**
      * @param path the path to the file
      */
-    public RepositoryBase(String path) {
+    public RepositoryBase(String path, SaveHook saveHook) {
         this.file = new File(path);
+        saveHook.addSavable(this);
         mkdirs();
     }
-
-    /**
-     * a package protected read method, to be implemented by subclasses.<br>
-     * This method handles with the real reading operation
-     */
-    abstract void readSafe();
 
     /**
      * make this file's parent directories
@@ -47,21 +42,6 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
             boolean mkdir = new File(file.getParent()).mkdirs();
         }
     }
-
-    /**
-     * The save method to be used by other classes
-     */
-    public void save() {
-        if (data != null && data.size() > 0) {
-            saveSafe();
-        }
-    }
-
-    /**
-     * A package protected save method, to be implemented by subclasses.<br>
-     * This method handles with the real saving operation
-     */
-    abstract void saveSafe();
 
     /**
      * @param entity the entity to be checked
@@ -107,6 +87,21 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
         return null;
     }
 
+    @Override
+    public int getId(T entity) {
+        return data.indexOf(entity);
+    }
+
+    @Override
+    public void remove(T entity) {
+        data.set(getId(entity), null);
+    }
+
+    @Override
+    public void remove(int id) {
+        data.set(id, null);
+    }
+
     /**
      * @param filter the filter used to match the result
      * @return the iterator that will use the filter object
@@ -125,11 +120,13 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
      */
     private Response mapIterator(Iterator<T> iterator, ResponseMapper<T> mapper) {
         Response.Builder builder = new Response.Builder(true);
-        // while (iterator.hasNext()) {
-        //     mapper.map(iterator.next(), builder);
-        // }
         iterator.forEachRemaining(t -> mapper.map(t, builder));
         return builder.build();
+    }
+
+    @Override
+    public boolean ifExists(int id) {
+        return id < data.size();
     }
 
     /**
@@ -142,4 +139,19 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
         return mapIterator(iterator(filter), mapper);
     }
 
+    @Override
+    public int size() {
+        return data.size();
+    }
+
+    @Override
+    public int size(Filter<T> filter) {
+        Iterator<T> iterator = iterator(filter);
+        int i = 0;
+        while (iterator.hasNext()) {
+            i++;
+            iterator.next();
+        }
+        return i;
+    }
 }

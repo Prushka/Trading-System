@@ -91,7 +91,7 @@ public abstract class Node {
         return translatable;
     }
 
-    public String getIdentifier() {
+    private String getIdentifier() {
         return getClass().getSimpleName() + " " + getTranslatable();
     }
 

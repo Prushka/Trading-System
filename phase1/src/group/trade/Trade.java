@@ -2,45 +2,49 @@ package group.trade;
 
 import group.item.Item;
 import group.repository.UniqueId;
-import group.repository.map.EntityMappable;
-import group.repository.map.MappableBase;
-import group.user.PersonalUser;
+import group.repository.reflection.EntityMappable;
+import group.repository.reflection.MappableBase;
 
-import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.List;
 
 public class Trade extends MappableBase implements EntityMappable, UniqueId {
+    // to use SerializationRepository: public class Trade implements Serializable {
 
-    // final will not work if the entity wants to use CSV Repository
+    // TODO: you also have to use objects for all fields (Int, Boolean). primitives won't work
+    // TODO: Loosen dependency on Item
 
-    // it doesn't effect serializationRepository
+    // SerializationRepository doesn't have restrictions on these
 
     // Trading Details
-    private int tradeID;
-    private PersonalUser user1;
-    private PersonalUser user2;
-    private int user1Edits;
-    private int user2Edits;
-    private boolean user1Confirms;
-    private boolean user2Confirms;
+    private Long tradeID;
+    private Long user1;
+    private Long user2;
+    private Integer user1Edits;
+    private Integer user2Edits;
+    private Boolean user1Confirms;
+    private Boolean user2Confirms;
+    private Long prevMeeting = null;
 
     // Item Details
     private Item item1;
     private Item item2;
-    private boolean isPermanent;
-    private boolean isClosed;
+    private Boolean isPermanent;
+    private Boolean isClosed;
 
     // Meeting Details
-    private Timestamp dateAndTime;
+    // Use date
+    private Calendar dateAndTime;
     private String location;
 
+    // Needed to implement Mappable Base
     public Trade(List<String> record){
         super(record);
     }
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
-    public Trade(int tradeID, PersonalUser user1, PersonalUser user2, Item item1, Item item2, boolean isPermanent,
-            Timestamp dateAndTime, String location){
+    public Trade(long tradeID, long user1, long user2, Item item1, Item item2, boolean isPermanent,
+            Calendar dateAndTime, String location){
         this.tradeID = tradeID;
         this.user1 = user1;
         this.user2 = user2;
@@ -59,9 +63,10 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     }
 
     // Getters
-    public int getTradeID(){ return tradeID;}
-    public PersonalUser getUser1(){ return user1;}
-    public PersonalUser getUser2(){ return user2;}
+    @Override
+    public long getUid() { return this.tradeID;}
+    public long getUser1(){ return user1;}
+    public long getUser2(){ return user2;}
     public int getUser1Edits(){ return user1Edits;}
     public int getUser2Edits(){ return user2Edits;}
     public boolean getUser1Confirms(){ return user1Confirms;}
@@ -70,10 +75,13 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public Item getItem2(){ return item2;}
     public boolean getIsPermanent(){ return isPermanent;}
     public boolean getIsClosed(){ return isClosed;}
-    public Timestamp getDateAndTime(){ return dateAndTime;}
+    public Calendar getDateAndTime(){ return dateAndTime;}
     public String getLocation(){ return location;}
+    public Long getPrevMeeting(){ return prevMeeting;}
 
     // Setters
+    @Override
+    public void setUid(long new_uid) { this.tradeID = new_uid;}
     public void increaseUser1Edits(){ user1Edits++;}
     public void increaseUser2Edits(){ user2Edits++;}
     public void confirmUser1(){ user1Confirms = true;}
@@ -82,8 +90,9 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public void unconfirmUser2(){ user2Confirms = false;}
     public void openTrade(){ isClosed = false;}
     public void closeTrade(){ isClosed = true;}
-    public void setDateAndTime(Timestamp new_dateAndTime){ dateAndTime = new_dateAndTime;}
-    public void setLocation(String new_location){ location = new_location;}
+    public void setDateAndTime(Calendar newDateAndTime){ dateAndTime = newDateAndTime;}
+    public void setLocation(String newLocation){ location = newLocation;}
+    public void setPrevMeeting(Long prev){ prevMeeting = prev;}
 
     /**
      * @return A description of this trade.
@@ -93,24 +102,14 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
         if (item1 == null && item2 == null){
             return "This is an invalid trade.";
         } else if (item1 == null){
-            return user1.getName() + " lends to " + user2.getName() + " at " + this.location + " on " +
+            return "UserID: " + user1 + " lends to UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         } else if (item2 == null){
-            return user1.getName() + " borrows from " + user2.getName() + " at " + this.location + " on " +
+            return "UserID: " + user1 + " borrows from UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         } else {
-            return user1.getName() + " trades with " + user2.getName() + " at " + this.location + " on " +
+            return "UserID: " + user1 + " trades with UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         }
-    }
-
-    @Override
-    public void setUid(long value) {
-        // TODO
-    }
-
-    @Override
-    public long getUid() {
-        return 0;
     }
 }

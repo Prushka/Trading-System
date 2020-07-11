@@ -2,8 +2,8 @@ package group.notification;
 
 import group.menu.data.Request;
 import group.repository.UniqueId;
-import group.repository.map.EntityMappable;
-import group.repository.map.MappableBase;
+import group.repository.reflection.EntityMappable;
+import group.repository.reflection.MappableBase;
 
 import java.io.Serializable;
 import java.util.List;

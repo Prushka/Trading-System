@@ -1,7 +1,8 @@
 package group.repository;
 
-import group.repository.map.EntityMappable;
-import group.repository.map.EntityMappingFactory;
+import group.repository.reflection.EntityMappable;
+import group.repository.reflection.EntityMappingFactory;
+import group.system.SaveHook;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,10 +16,9 @@ import java.util.Scanner;
  * The CSV Repository Implementation for storing and reading the list of entities
  *
  * @param <T> The entity this Repository deals with
- *
  * @author Dan Lyu
  * @author lecture code, Logging project
- * @see Repository
+ * @see RepositorySavable
  * @see RepositoryBase
  */
 public class CSVRepository<T extends EntityMappable & UniqueId> extends RepositoryBase<T> {
@@ -36,8 +36,8 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
      * @param path    the file path
      * @param factory the constructor reference for the mappable object
      */
-    public CSVRepository(String path, EntityMappingFactory<T> factory) {
-        super(path);
+    public CSVRepository(String path, EntityMappingFactory<T> factory, SaveHook saveHook) {
+        super(path, saveHook);
         data = new ArrayList<>();
         this.factory = factory;
         if (file.exists()) {
@@ -49,7 +49,6 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
      * Read the file with {@link #file} into {@link #data}.
      * It will use the {@link #factory} to instantiate the specific objects.
      */
-    @Override
     void readSafe() {
         // FileInputStream can be used for reading raw bytes, like an image.
         Scanner scanner = null;
@@ -62,20 +61,45 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
         scanner.nextLine(); // skip header
         String[] record;
         while (scanner.hasNextLine()) {
-            record = scanner.nextLine().split(",");
+            String recordString = scanner.nextLine();
+            String testString = recordString.replaceAll("[, ]", "");
+            if (testString.length() == 0) {
+                data.add(null);
+                continue;
+            }
+            record = recordString.split(",");
             data.add(factory.get(Arrays.asList(record)));
         }
         scanner.close();
     }
 
+    @Override
+    public void save() {
+        if (data != null && data.size() > 0) {
+            T entityNotNull = null;
+            for (T single : data) {
+                if (single != null) {
+                    entityNotNull = single;
+                    break;
+                }
+            }
+            if (entityNotNull != null) {
+                saveSafe(entityNotNull);
+            }
+        }
+    }
+
     /**
      * Save {@link #data} to {@link #file}.
      */
-    void saveSafe() {
+    void saveSafe(T entityNotNull) {
         try {
             PrintWriter writer = new PrintWriter(file);
-            writer.append(get(0).toCSVHeader());
+            writer.append(entityNotNull.toCSVHeader());
             for (T single : data) {
+                if (data == null) {
+                    writer.println(entityNotNull.toNullString());
+                }
                 writer.println(single.toCSVString());
             }
             writer.flush();

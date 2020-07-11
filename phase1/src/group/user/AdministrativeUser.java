@@ -1,6 +1,8 @@
 package group.user;
 
-public class AdministrativeUser extends User{
+import java.util.List;
+
+public class AdministrativeUser extends User {
 
     private String userName;
     private String email;
@@ -19,6 +21,7 @@ public class AdministrativeUser extends User{
         this.isHead = isHead;
     }
 
+    public AdministrativeUser(List<String> record){super(record);}
 
     public String getUserName() {
         return userName;
@@ -44,16 +47,13 @@ public class AdministrativeUser extends User{
         this.password = password;
     }
 
-    public boolean getIsHead(){
+    public boolean getIsHead() {
         return this.isHead;
     }
 
-    public void setIsHead(boolean isHead){
+    public void setIsHead(boolean isHead) {
         this.isHead = isHead;
     }
-
-
-
 
 
 }

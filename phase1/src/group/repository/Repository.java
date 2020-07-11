@@ -4,20 +4,7 @@ import group.menu.data.Response;
 
 import java.util.Iterator;
 
-/**
- * <p>The interface of a Repository Implementation.</p>
- * List related operations can be found in {@link RepositoryBase}
- *
- * @param <T> The entity type it handles with
- *
- * @author Dan Lyu
- */
 public interface Repository<T extends UniqueId> {
-
-    /**
-     * Save operation to save the data it handles with to a file
-     */
-    void save();
 
     /**
      * @param entity an entity to be added
@@ -38,7 +25,19 @@ public interface Repository<T extends UniqueId> {
 
     boolean ifExists(Filter<T> filter);
 
+    boolean ifExists(int id);
+
     T getFirst(Filter<T> filter);
+
+    void remove(T entity);
+
+    void remove(int id);
+
+    int getId(T entity);
+
+    int size();
+
+    int size(Filter<T> filter);
 
     /**
      * @param filter the filter used to match the result

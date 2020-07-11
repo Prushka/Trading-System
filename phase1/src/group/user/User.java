@@ -1,11 +1,21 @@
 package group.user;
 
-public class User {
+import group.repository.UniqueId;
+import group.repository.reflection.EntityMappable;
+import group.repository.reflection.MappableBase;
 
-    private final String userName;
-    private final String email;
+import java.util.List;
+
+
+public class User extends MappableBase implements EntityMappable, UniqueId {
+
+    private long uid;
+    private String userName;
+    private String email;
     private String telephone;
     private String password;
+
+    public User(List<String> record){super(record);}
 
     /**
      * Creates a new User with userName, email, telephone and given password.
@@ -15,19 +25,18 @@ public class User {
      * @param telephone the telephone number of this person
      * @param password the password this user set to
      */
-     public User(String userName, String email, String telephone, String password) {
-         this.userName = userName;
-         this.email = email;
-         this.telephone = telephone;
-         this.password = password;
-     }
+    public User(String userName, String email, String telephone, String password){
+        this.userName = userName;
+        this.email = email;
+        this.telephone = telephone;
+        this.password = password;
+    }
 
-     public User(String userName, String email, String password) {
+    public User(String userName, String email, String password){
         this.userName = userName;
         this.email = email;
         this.password = password;
     }
-
 
     public String getName() {
         return userName;
@@ -62,4 +71,15 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    @Override
+    public void setUid(long new_uid) {
+        this.uid = new_uid;
+    }
+
+    @Override
+    public long getUid() {
+        return this.uid;
+    }
 }
+

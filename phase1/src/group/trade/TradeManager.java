@@ -66,9 +66,10 @@ public class TradeManager{
         boolean ifSomeTradeExists2 = tradeRepository.ifExists(4);
         // boolean ifSomeTradeExists3 = tradeRepository.ifExists(new Trade()); Implement the equals() and hashCode() in Trade to use this one
 
-        // Map Response
+        // TODO: Map Response
         // Response response = tradeRepository.filterResponse(entity -> entity.getDateAndTime() == null,
-        //        (entity, builder) -> builder.translatable("some.identifier.in.language.properties",entity.getUser1().toString(),entity.getUser2().toString()));
+        //        (entity, builder) -> builder.translatable("some.identifier.in.language.properties",
+        //        entity.getUser1().toString(),entity.getUser2().toString()));
         // if you have this in language.properties: some.identifier.in.language.properties=user1: %s, user2: %s
         // this will return a Response object that has all matched trades with the translatable: user1: %s, user2: %s
 
@@ -168,7 +169,7 @@ public class TradeManager{
         }
     }
 
-    // More casting problems
+    // More casting problems & shorten code
     public void confirmTradeComplete(int tradeID, int editing_user) {
         if (userRepository.ifExists(editing_user) && tradeRepository.ifExists(tradeID)) {
             PersonalUser curr_user = (PersonalUser) userRepository.get(editing_user);
@@ -176,38 +177,45 @@ public class TradeManager{
             // Confirm specific user
             if (curr_trade.getUser1() == editing_user && !curr_trade.getUser1Confirms()) {
                 curr_trade.confirmUser1();
+                PersonalUser other_user = (PersonalUser) userRepository.get((int) curr_trade.getUser2());
+                if (curr_trade.getUser1Confirms() && curr_trade.getUser2Confirms()) {
+                    makeTrades(curr_user, other_user, curr_trade);
+                }
             } else if (curr_trade.getUser2() == editing_user && !curr_trade.getUser1Confirms()) {
                 curr_trade.confirmUser2();
-            }
-
-            // Remove from wishlist and inventory
-            if (curr_trade.getUser1Confirms() && curr_trade.getUser2Confirms()) {
-                if (curr_trade.getIsPermanent()) {
-                    if (curr_trade.getItem1() == null && curr_trade.getItem2() != null) {
-                        curr_user.setBorrowCount(curr_user.getBorrowCount() + 1);
-                        curr_user.setLendCount(curr_user.getLendCount() + 1);
-                    } else if (curr_trade.getItem2() == null && curr_trade.getItem1() != null) {
-                        curr_user.setBorrowCount(curr_user.getBorrowCount() + 1);
-                        curr_user.setLendCount(curr_user.getLendCount() + 1);
-                    } else {
-                        curr_user.setBorrowCount(curr_user.getBorrowCount() + 1);
-                        curr_user.setLendCount(curr_user.getLendCount() + 1);
-                        curr_user.setLendCount(curr_user.getLendCount() + 1);
-                        curr_user.setBorrowCount(curr_user.getBorrowCount() + 1);
-                    }
-                    curr_trade.closeTrade();
-                } else {
-                    // how to keep this open while they confirm this next trade
-                    Calendar new_DateAndTime = curr_trade.getDateAndTime();
-                    new_DateAndTime.set(new_DateAndTime.MONTH, borrowTimeLimit); // need to change
-                    Trade second_meeting = createTrade(curr_trade.getUser1(), curr_trade.getUser1(),
-                            curr_trade.getItem1(), curr_trade.getItem2(), true, new_DateAndTime,
-                            curr_trade.getLocation());
-                    curr_trade.setPrevMeeting((long) tradeRepository.getId(second_meeting));
+                PersonalUser other_user = (PersonalUser) userRepository.get((int) curr_trade.getUser1());
+                if (curr_trade.getUser1Confirms() && curr_trade.getUser2Confirms()) {
+                    makeTrades(curr_user, other_user, curr_trade);
                 }
             }
         }
     }
 
+    // TODO: Remove from wishlist and inventory
+    private void makeTrades(PersonalUser curr_user, PersonalUser other_user, Trade curr_trade){
+        if (curr_trade.getIsPermanent()) {
+            if (curr_trade.getItem1() == null && curr_trade.getItem2() != null) {
+                curr_user.setBorrowCount(curr_user.getBorrowCount() + 1);
+                other_user.setLendCount(curr_user.getLendCount() + 1);
+            } else if (curr_trade.getItem2() == null && curr_trade.getItem1() != null) {
+                other_user.setBorrowCount(curr_user.getBorrowCount() + 1);
+                curr_user.setLendCount(curr_user.getLendCount() + 1);
+            } else {
+                curr_user.setBorrowCount(curr_user.getBorrowCount() + 1);
+                curr_user.setLendCount(curr_user.getLendCount() + 1);
+                other_user.setLendCount(curr_user.getLendCount() + 1);
+                other_user.setBorrowCount(curr_user.getBorrowCount() + 1);
+            }
+            curr_trade.closeTrade();
+        } else {
+            Calendar new_DateAndTime = curr_trade.getDateAndTime();
+            new_DateAndTime.set(new_DateAndTime.MONTH, borrowTimeLimit); // TODO: need to change
+            Trade second_meeting = createTrade(curr_trade.getUser1(), curr_trade.getUser1(),
+                    curr_trade.getItem1(), curr_trade.getItem2(), true, new_DateAndTime,
+                    curr_trade.getLocation());
+            curr_trade.setPrevMeeting((long) tradeRepository.getId(second_meeting));
+        }
+    }
 }
+
 

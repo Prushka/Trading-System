@@ -2,7 +2,7 @@ package group.trade;
 
 import group.config.property.TradeProperties;
 import group.item.Item;
-import group.repository.RepositorySavable;
+import group.repository.Repository;
 import group.user.PersonalUser;
 import group.user.User;
 
@@ -13,10 +13,10 @@ public class TradeManager {
     private int numOfTrades;
     private final int editLimit;
     private final int borrowTimeLimit; // the number of months until a user has to reverse the temporary trade
-    private RepositorySavable<Trade> tradeRepository;
-    private RepositorySavable<User> userRepository;
+    private Repository<Trade> tradeRepository;
+    private Repository<User> userRepository;
 
-    public TradeManager(RepositorySavable<Trade> tradeRepository, RepositorySavable<User> userRepository, TradeProperties tradeProperties) {
+    public TradeManager(Repository<Trade> tradeRepository, Repository<User> userRepository, TradeProperties tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
         tradeProperties.set("editLimit", "3");
         tradeProperties.set("borrowTimeLimit", "1");

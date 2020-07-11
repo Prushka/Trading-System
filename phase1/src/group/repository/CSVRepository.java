@@ -2,6 +2,7 @@ package group.repository;
 
 import group.repository.map.EntityMappable;
 import group.repository.map.EntityMappingFactory;
+import group.system.SaveHook;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,8 +36,8 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
      * @param path    the file path
      * @param factory the constructor reference for the mappable object
      */
-    public CSVRepository(String path, EntityMappingFactory<T> factory) {
-        super(path);
+    public CSVRepository(String path, EntityMappingFactory<T> factory, SaveHook saveHook) {
+        super(path, saveHook);
         data = new ArrayList<>();
         this.factory = factory;
         if (file.exists()) {

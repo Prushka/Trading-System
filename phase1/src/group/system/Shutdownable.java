@@ -1,5 +1,5 @@
 package group.system;
 
-public interface Shutdown {
+public interface Shutdownable {
     void shutdown();
 }

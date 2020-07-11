@@ -1,6 +1,7 @@
 package group.repository;
 
 import group.menu.data.Response;
+import group.system.Savable;
 
 import java.util.Iterator;
 
@@ -12,7 +13,7 @@ import java.util.Iterator;
  *
  * @author Dan Lyu
  */
-public interface Repository<T extends UniqueId> {
+public interface Repository<T extends UniqueId> extends Savable {
 
     /**
      * Save operation to save the data it handles with to a file

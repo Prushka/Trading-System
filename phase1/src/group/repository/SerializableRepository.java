@@ -1,5 +1,7 @@
 package group.repository;
 
+import group.system.SaveHook;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +10,6 @@ import java.util.List;
  * The Serialization Implementation for storing and reading the list of entities
  *
  * @param <T> The entity this Repository deals with
- *
  * @author Dan Lyu
  * @author lecture code, Logging project
  * @see Repository
@@ -21,10 +22,10 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
      *
      * @param path the file path
      */
-    public SerializableRepository(String path) {
-        super(path);
+    public SerializableRepository(String path, SaveHook saveHook) {
+        super(path, saveHook);
         data = new ArrayList<>();
-        if(file.exists()){
+        if (file.exists()) {
             readSafe();
         }
     }

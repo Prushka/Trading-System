@@ -4,19 +4,18 @@ import group.menu.data.Request;
 import group.menu.data.Response;
 import group.notification.SupportTicket;
 import group.notification.SupportTicketManager;
-import group.repository.CSVRepository;
 import group.repository.Repository;
 
-public class SupportTicketController implements Shutdown {
+public class SupportTicketController {
 
     private final SupportTicketManager supportTicketManager;
+
     private final Repository<SupportTicket> ticketRepository;
 
-    public SupportTicketController(MenuConstructor menuConstructor) {
-        ticketRepository =
-                new CSVRepository<>("data/support_ticket.csv", SupportTicket::new);
+    public SupportTicketController(ControllerDispatcher dispatcher) {
+        ticketRepository = dispatcher.ticketRepository;
         supportTicketManager = new SupportTicketManager(ticketRepository);
-        menuConstructor.supportTicket(this);
+        dispatcher.menuConstructor.supportTicket(this);
     }
 
     public Response addTicket(Request request) {
@@ -31,7 +30,4 @@ public class SupportTicketController implements Shutdown {
         return !ticketRepository.ifExists(entity -> input.equalsIgnoreCase(entity.getContent()));
     }
 
-    public void shutdown() {
-        ticketRepository.save();
-    }
 }

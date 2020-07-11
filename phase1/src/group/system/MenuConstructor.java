@@ -4,7 +4,6 @@ import group.menu.Menu;
 import group.menu.MenuFactory;
 import group.menu.MenuFactory.OperationType;
 import group.menu.MenuFactory.ValidatingType;
-import group.menu.node.MasterOptionNode;
 import group.menu.processor.PasswordEncrypt;
 import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
@@ -17,7 +16,7 @@ public class MenuConstructor {
 
     private final MenuFactory menuFactory;
 
-    private final List<Shutdown> shutdowns;
+    private final List<Shutdownable> shutdowns;
 
     public MenuConstructor() {
         menuFactory = new MenuFactory();
@@ -67,7 +66,6 @@ public class MenuConstructor {
     }
 
     public void supportTicket(SupportTicketController controller) {
-        addShutDown(controller);
         menuFactory.option(SupportTicket.class, OperationType.add, 1)
                 .input("content", controller::ifTicketContentNotExist, ValidatingType.exists)
                 .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
@@ -79,7 +77,7 @@ public class MenuConstructor {
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
                 .master("master.support.ticket");
 
-        MasterOptionNode entryNode = menuFactory.construct("master.support.ticket");
+        menuFactory.construct("master.support.ticket",true);
     }
 
     public void buildMenu() {
@@ -88,12 +86,12 @@ public class MenuConstructor {
         shutdown();
     }
 
-    private void addShutDown(Shutdown shutdown) {
-        this.shutdowns.add(shutdown);
+    public void shutdownHook(Shutdownable shutdownable) {
+        this.shutdowns.add(shutdownable);
     }
 
     private void shutdown() {
-        shutdowns.forEach(Shutdown::shutdown);
+        shutdowns.forEach(Shutdownable::shutdown);
     }
 
 }

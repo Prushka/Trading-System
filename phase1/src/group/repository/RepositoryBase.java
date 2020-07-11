@@ -1,6 +1,7 @@
 package group.repository;
 
 import group.menu.data.Response;
+import group.system.SaveHook;
 
 import java.io.File;
 import java.util.Iterator;
@@ -27,8 +28,9 @@ public abstract class RepositoryBase<T extends UniqueId> implements Repository<T
     /**
      * @param path the path to the file
      */
-    public RepositoryBase(String path) {
+    public RepositoryBase(String path, SaveHook saveHook) {
         this.file = new File(path);
+        saveHook.addSavable(this);
         mkdirs();
     }
 

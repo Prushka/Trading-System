@@ -13,6 +13,8 @@ package group.repository;
 public interface Filter<T> {
 
     /**
+     * Returns <code>true</code> if the entity matches the properties defined.
+     *
      * @param entity the entity to be checked
      * @return <code>true</code> if certain properties of this entity meets the condition
      */

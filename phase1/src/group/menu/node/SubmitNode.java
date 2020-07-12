@@ -9,24 +9,52 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * A node that generates Request using parent Nodes, accepts input and will generate a ResponseNode after parsing Request.
+ *
+ * @author Dan Lyu
+ * @see InputNode
+ */
 public class SubmitNode extends InputNode {
 
+    /**
+     * The injected handler used to parse Request and expect Response
+     */
     private final RequestHandler handler;
 
+    /**
+     * The Node used when the Response returned by {@link #handler} doesn't represent a successful state
+     */
     private final Node failedResultNode;
 
-    private final Map<String, MasterOptionNode> flexibleMasterPool;
+    /**
+     * The map of {@link MasterOptionNode} to find a corresponding Node to the {@link Response#getFlexibleMasterIdentifier()}
+     * when a Response want the node to navigate to another {@link MasterOptionNode}
+     */
+    private final Map<String, MasterOptionNode> flexibleMasterPool = new HashMap<>();
 
+    /**
+     * The global persistent request object to be injected
+     */
     private final PersistentRequest persistentRequest;
 
+    /**
+     * Constructs a SubmitNode from a {@link SubmitNode.Builder}
+     *
+     * @param builder the {@link SubmitNode.Builder}
+     */
     SubmitNode(Builder builder) {
         super(builder);
         handler = builder.handler;
         failedResultNode = builder.failedResultNode;
-        flexibleMasterPool = builder.flexibleMasterPool;
         persistentRequest = builder.persistentRequest;
     }
 
+    /**
+     * A helper method used to grab keys and values from parent nodes who accept input into a Request object.
+     *
+     * @return the Request generated from previous nodes and current node
+     */
     private Request getRequest() {
         Request request = new Request();
         Node curr = this;
@@ -39,10 +67,13 @@ public class SubmitNode extends InputNode {
         return request;
     }
 
-    public void fillMasterPool(MasterOptionNode master) {
-        flexibleMasterPool.put(master.getTranslatable(), master);
-    }
-
+    /**
+     * Returns a Response node from {@link InputNode#validate()} if the validation fails.<p>
+     * Returns a Response Node generated from the Response if validation succeeds.<p>
+     *
+     * @param input user input
+     * @return the node to navigate to after parsing user input
+     */
     @Override
     public Node parseInput(String input) {
         inputPreProcessing(input);
@@ -50,6 +81,14 @@ public class SubmitNode extends InputNode {
         return validateResult.orElseGet(() -> parseResponse(handler.handle(getRequest())));
     }
 
+    /**
+     * Returns a Response Node generated from Response object
+     * A helper method used to parse Response and generate Response Node that contains information.
+     * If {@link Response#getFlexibleMasterIdentifier()} is not null, returns a Response Node who's child is {@link MasterOptionNode} that corresponds to the identifier.
+     *
+     * @param response the Response returned from the {@link #handler}
+     * @return the node to navigate to after parsing user input
+     */
     private Node parseResponse(Response response) {
         ResponseNode responseNode = new ResponseNode.Builder(response).build();
         if (response.getFlexibleMasterIdentifier() != null) {
@@ -65,11 +104,35 @@ public class SubmitNode extends InputNode {
         return responseNode;
     }
 
+    /**
+     * Add a MasterOptionNode into current SubmitNode in case this MasterOptionNode will be used by a Response object to navigate to.
+     *
+     * @param master the {@link MasterOptionNode}
+     */
+    public void fillMasterPool(MasterOptionNode master) {
+        flexibleMasterPool.put(master.getTranslatable(), master);
+    }
+
+    /**
+     * The builder used to build a SubmitNode.
+     *
+     * @author Dan Lyu
+     */
     public static class Builder extends AbstractInputNodeBuilder<Builder> {
 
-        private RequestHandler handler;
+        /**
+         * The injected handler used to parse Request and expect Response
+         */
+        private final RequestHandler handler;
+
+        /**
+         * The Node used when the Response returned by {@link #handler} doesn't represent a successful state
+         */
         private Node failedResultNode;
-        private final Map<String, MasterOptionNode> flexibleMasterPool = new HashMap<>();
+
+        /**
+         * The global persistent request object to be injected
+         */
         private final PersistentRequest persistentRequest;
 
         public Builder(String translatable, String key, RequestHandler handler, PersistentRequest persistentRequest) {
@@ -78,31 +141,39 @@ public class SubmitNode extends InputNode {
             this.persistentRequest = persistentRequest;
         }
 
+        /**
+         * @return the builder itself
+         */
         @Override
         Builder getThis() {
             return this;
         }
 
-        public Builder master(MasterOptionNode node) {
-            this.flexibleMasterPool.put(node.getTranslatable(), node);
-            return this;
-        }
-
-        public Builder submitHandler(RequestHandler handler) {
-            this.handler = handler;
-            return getThis();
-        }
-
+        /**
+         * Works the same as setting the node as the child.
+         *
+         * @param node the node to navigate to when submission passes
+         * @return the builder itself
+         */
         public Builder submitSuccessNext(Node node) {
             child(node);
             return getThis();
         }
 
+        /**
+         * @param node the node to navigate to when submission fails
+         * @return the builder itself
+         */
         public Builder submitFailNext(ResponseNode node) {
             failedResultNode = node;
             return getThis();
         }
 
+        /**
+         * Builds a SubmitNode
+         *
+         * @return the built SubmitNode
+         */
         @Override
         public SubmitNode build() {
             return new SubmitNode(this);

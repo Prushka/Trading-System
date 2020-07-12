@@ -1,7 +1,9 @@
 package group.repository.reflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -12,8 +14,8 @@ import java.util.stream.Collectors;
  * Contains a constructor that takes in a CSV representation String.<p>
  * Subclasses are required to have a sub-constructor corresponding to <code>MappableBase(List data)</code><p>
  * This reflection implementation has limits on certain classes.<p>
- * Use only non-final Long, Integer, Float, Double, Boolean, String, Date and Enum fields in the entity class if you extend this class.<p>
- * To allow more flexibility, implement {@link CSVMappable} directly in the entity class.
+ * Use only non-final Long, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
+ * To allow more more flexibility, implement {@link CSVMappable} directly in the entity class.
  *
  * @author Dan Lyu
  * @author Bozho - "instantiating an enum using reflection"
@@ -62,13 +64,26 @@ public abstract class MappableBase {
                     obj = representation;
                 } else if (Date.class.isAssignableFrom(field.getType())) {
                     obj = new Date(Long.parseLong(representation));
+                } else if (CSVMappable.class.isAssignableFrom(field.getType())) { // aha
+                    List<String> childRepresentation = new ArrayList<>();
+                    for (Field ignored : getSortedFields(field.getType())) {
+                        childRepresentation.add(data.get(id));
+                        id += 1;
+                    }
+                    obj = field.getType().getDeclaredConstructor(List.class).newInstance(childRepresentation);
+                    id -= 1;
                 }
+                // TODO: map List / Map that are also instances of CSVMappable (Maybe it's better to get a library for this in phase 2)
                 field.set(this, obj);
-            } catch (IllegalAccessException e) {
+            } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
                 e.printStackTrace();
             }
             id++;
         }
+    }
+
+    public String toCSVHeader() {
+        return toCSVHeader(this.getClass(), false);
     }
 
     /**
@@ -76,12 +91,18 @@ public abstract class MappableBase {
      *
      * @return the String representation of current class's non-transient fields
      */
-    public String toCSVHeader() {
+    public String toCSVHeader(Class<?> clazz, Boolean prefix) {
         StringBuilder value = new StringBuilder();
-        getSortedFields().forEach(field -> value.append(field.getName()).append("(")
-                .append(field.getType().getSimpleName()).append(")").append(","));
+        for (Field field : getSortedFields(clazz)) {
+            if (CSVMappable.class.isAssignableFrom(field.getType())) {
+                value.append(toCSVHeader(field.getType(), true)).append(",");
+            } else {
+                if (prefix) value.append(clazz.getSimpleName()).append(".");
+                value.append(field.getName()).append("(")
+                        .append(field.getType().getSimpleName()).append(")").append(",");
+            }
+        }
         value.setLength(value.length() - 1);
-        value.append("\n");
         return value.toString();
     }
 
@@ -98,12 +119,16 @@ public abstract class MappableBase {
      * @see <a href="https://stackoverflow.com/questions/1097807/java-reflection-is-the-order-of-class-fields-and-methods-standardized">Field Order in Reflection</a>
      * @see FieldComparator
      */
-    private List<Field> getSortedFields() {
+    private List<Field> getSortedFields(Class<?> clazz) {
         return Arrays
-                .stream(this.getClass().getDeclaredFields())
+                .stream(clazz.getDeclaredFields())
                 .filter(this::ifFieldNotTransient)
                 .sorted(new FieldComparator())
                 .collect(Collectors.toList());
+    }
+
+    private List<Field> getSortedFields() {
+        return getSortedFields(this.getClass());
     }
 
     /**
@@ -132,6 +157,8 @@ public abstract class MappableBase {
                     value.append(((Enum<?>) obj).name());
                 } else if (obj instanceof Date) {
                     value.append(((Date) obj).getTime());
+                } else if (obj instanceof CSVMappable) {
+                    value.append(((CSVMappable) obj).toCSVString());
                 } else {
                     value.append(obj.toString());
                 }

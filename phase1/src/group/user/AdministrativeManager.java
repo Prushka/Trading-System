@@ -10,13 +10,14 @@ import java.util.List;
 public class AdministrativeManager {
 
 
-    private static List<AdministrativeUser> administrators = new ArrayList<>();
-    private static Repository<PersonalUser> personalUserRepository;
+    private Repository<AdministrativeUser> administrators;
+    private Repository<PersonalUser> personalUserRepository;
     private Iterator<PersonalUser> freezelist;
-    private static int transactionLimit = 100; //what is the init limit?
-    private static int lendBeforeBorrow = 1;
+    private int transactionLimit = 100; //what is the init limit?
+    private int lendBeforeBorrow = 1;
 
-    public AdministrativeManager(){
+    public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository){
+        this.administrators = administrativeUserRepository;
     }
 
     public void createadministrator(String username, String email, String password, boolean isHead){
@@ -29,14 +30,13 @@ public class AdministrativeManager {
         administrators.add(admin);
     }
 
-    public boolean verifyLogin(String username, String password){
-        for (AdministrativeUser admin: administrators){
-            if (admin.getUserName().equals(username) && admin.getPassword().equals(password)){
-                return true;
-            }
-        }
-        return false;  //maybe throw expectation?? or return string to say wrong username or wrong password
-    }
+    //public boolean verifyLogin(String username, String password){ //TODO fix
+        //for (AdministrativeUser admin: administrators)
+            //if (admin.getUserName().equals(username) && admin.getPassword().equals(password)) {
+                //return true;
+            //}
+        //return false;  //maybe throw expectation?? or return string to say wrong username or wrong password
+    //}
 
     public boolean addSubAdmin(AdministrativeUser head, String username, String email, String password){
         if (head.getIsHead()){
@@ -105,6 +105,12 @@ public class AdministrativeManager {
         }
 
     }
+
+    //public void exampleOfFilter() {
+        //Iterator<PersonalUser> usersToBeFrozen = personalUserRepository.iterator(PersonalUser::getShouldBeFreezed);
+        //Iterator<PersonalUser> usersToBeFrozen2 = personalUserRepository.iterator(personalUser -> personalUser.getLendCount() < personalUser.getBorrowCount()); // they are the same
+        // this iterator has all PersonalUsers that need to be frozen
+    //}
 
 
         //public void findFreezeUser() {

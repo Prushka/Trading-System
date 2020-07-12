@@ -1,5 +1,7 @@
 package group.config.property;
 
+import group.system.Savable;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,19 +9,24 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.Properties;
 
-public abstract class Property {
+/**
+ * The Property class that wraps a Properties object.
+ * It saves the Property from resources root to a destination file on need.
+ *
+ * @author Dan Lyu
+ */
+public abstract class Property implements Savable {
 
+    /**
+     * The java native Properties
+     */
     final Properties properties = new Properties();
 
-    public Property() {
-    }
-
-    abstract File getFile();
-
-    InputStream getResource() {
-        return getClass().getClassLoader().getResourceAsStream(getFile().getName());
-    }
-
+    /**
+     * Saves the file from resources root the a destination file.
+     *
+     * @throws IOException if the file is not successfully saved from resources root to the destination file
+     */
     public void saveDefault() throws IOException {
         if (!getFile().exists()) {
             System.out.println("file: " + getFile() + " not exist");
@@ -32,6 +39,9 @@ public abstract class Property {
         }
     }
 
+    /**
+     * Saves the in memory properties to the destination file.
+     */
     public void save() {
         try {
             properties.store(new FileOutputStream(getFile()), null);
@@ -40,23 +50,58 @@ public abstract class Property {
         }
     }
 
+    /**
+     * @return the InputStream from the file in the resources root
+     */
+    InputStream getResource() {
+        return getClass().getClassLoader().getResourceAsStream(getFile().getName());
+    }
+
+    /**
+     * @param key          the key to lookup
+     * @param defaultValue the default value if the value is missing
+     * @return the value in String
+     */
     public String get(String key, String defaultValue) {
         return properties.getProperty(key, defaultValue);
     }
 
+    /**
+     * @param key the key to lookup
+     * @return the value in String
+     */
     public String get(String key) {
         return properties.getProperty(key);
     }
 
+    /**
+     * @param key the key to lookup
+     * @return the value in int
+     */
     public int getInt(String key) {
         return Integer.parseInt(properties.getProperty(key));
     }
 
+    /**
+     * @param key          the key to lookup
+     * @param defaultValue the default value if the value is missing
+     * @return the value in Int
+     */
     public int getInt(String key, int defaultValue) {
         return Integer.parseInt(properties.getProperty(key, String.valueOf(defaultValue)));
     }
 
+    /**
+     * @param key   the key to save the value to
+     * @param value the value
+     */
     public void set(String key, String value) {
         properties.setProperty(key, value);
     }
+
+    /**
+     * @return the file of this property
+     */
+    abstract File getFile();
+
 }

@@ -1,5 +1,6 @@
 package group.system;
 
+import group.config.property.TradeProperties;
 import group.notification.SupportTicket;
 import group.repository.CSVRepository;
 import group.repository.RepositorySavable;
@@ -16,6 +17,8 @@ public class ControllerDispatcher implements Shutdownable {
 
     SupportTicketController supportTicketController;
     UserController userController;
+
+    TradeProperties tradeProperties = new TradeProperties();
 
     final MenuConstructor menuConstructor = new MenuConstructor();
 

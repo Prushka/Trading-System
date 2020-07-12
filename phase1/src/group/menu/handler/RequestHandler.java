@@ -4,8 +4,7 @@ import group.menu.data.Request;
 import group.menu.data.Response;
 
 /**
- * Use this in lambda or implement a concrete class.<br>
- * It is used to parse the Request to a Response in {@link group.menu.node.SubmitNode}.<br>
+ * The functional interface to parse the Request to a Response in {@link group.menu.node.SubmitNode}.<p>
  * SubmitNode will use this when user submit successfully after the validation of user input.
  *
  * @author Dan Lyu

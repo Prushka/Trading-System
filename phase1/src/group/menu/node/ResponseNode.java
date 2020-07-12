@@ -5,6 +5,11 @@ import group.menu.data.TranslatablePair;
 
 import java.util.logging.Level;
 
+/**
+ * A node that contains only information
+ *
+ * @author Dan Lyu
+ */
 public class ResponseNode extends Node {
 
     private final Response response;

@@ -1,18 +1,20 @@
 package group.menu.validator;
 
 /**
- * Use this in lambda or implement a concrete class.<br>
- * It is used to validate user input in {@link group.menu.node.InputNode}.<br>
+ * The functional interface used to validate an input String.<p>
+ * Use this in lambda or implement a concrete class.<p>
+ * It is used to validate user input in {@link group.menu.node.InputNode}.<p>
  *
  * @author Dan Lyu
+ * @see group.menu.node.InputNode
  */
 
 @FunctionalInterface
 public interface Validator {
 
     /**
-     * @param input user input
-     * @return if the user input is valid
+     * @param input String input
+     * @return if the String input is valid
      */
     boolean validate(String input);
 

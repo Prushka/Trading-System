@@ -2,50 +2,35 @@ package group.trade;
 
 import group.config.property.TradeProperties;
 import group.item.Item;
+import group.menu.data.Request;
 import group.repository.Repository;
+import group.repository.reflection.CSVMappable;
+import group.repository.reflection.MappableBase;
 import group.user.PersonalUser;
-import group.user.User;
+import group.menu.data.Response;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 public class TradeManager {
-    private int numOfTrades;
-    private final int editLimit;
-    private final int borrowTimeLimit; // the number of months until a user has to reverse the temporary trade
+    private final Integer editLimit;
+    private final Integer timeLimit; // the number of months until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
-    private Repository<User> userRepository;
+    private Repository<PersonalUser> userRepository;
 
-    public TradeManager(Repository<Trade> tradeRepository, Repository<User> userRepository, TradeProperties tradeProperties) {
+    public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
+            tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
         tradeProperties.set("editLimit", "3");
         tradeProperties.set("borrowTimeLimit", "1");
         editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
-        borrowTimeLimit = Integer.parseInt(tradeProperties.get("editLimit"));
+        timeLimit = Integer.parseInt(tradeProperties.get("editLimit"));
         this.tradeRepository = tradeRepository;
         this.userRepository = userRepository;
 
         /*
-        Repository<Trade> tradeRepositorySerialization = new SerializableRepository<>("data/trade.ser");
-
-        // PersonalUser::new refers to this constructor:
-        public User(List<String> record){super(record);}
-
-        // if this constructor does not exist in your entity, it will throw an error
-
-        // flow:
-        // CSVRepository takes in this constructor reference as a field. And when reading from csv file,
-        // this constructor will be called to create corresponding objects.
-        // The constructor is a standard list of strings since that's how csv columns work
-
-        // CSVRepository is only dependent on EntityMappable not MappableBase
-        // So it is optional to extend MappableBase (though I would recommend you do that).
-        // MappableBase is just a reflection implementation of EntityMappable
-        // If you don't extend MappableBase just make sure you implement EntityMappable and all methods needed including
-        // the constructor that's mentioned above,
-        // this will get rid of all restrictions that are basically caused by reflection. (You will need to put your
-        // fields into String manually and put them back in the constructor)
-
         // Get from Repository -- use for only one record
         Trade getSomeTrade = tradeRepository.getFirst(entity -> entity.getItem1() == null);
         Iterator<Trade> getAnIterator = tradeRepository.iterator(entity -> entity.getItem1() == null);
@@ -64,7 +49,7 @@ public class TradeManager {
         boolean ifSomeTradeExists2 = tradeRepository.ifExists(4);
         boolean ifSomeTradeExists3 = tradeRepository.ifExists(new Trade()); Implement the equals() and hashCode() in Trade to use this one
 
-        // TODO: Map Response
+        // TODO: Response
         Response response = tradeRepository.filterResponse(entity -> entity.getDateAndTime() == null,
         (entity, builder) -> builder.translatable("some.identifier.in.language.properties",
         entity.getUser1().toString(),entity.getUser2().toString()));
@@ -80,17 +65,16 @@ public class TradeManager {
     }
 
     // Come up with solution to the casting problem
-    public Trade createTrade(long user1, long user2, Item item1, Item item2, boolean isPermanent,
-                             Calendar dateAndTime, String location) {
+    public Trade createTrade(long user1, long user2, Item item1, Item item2, Boolean isPermanent,
+                             Date dateAndTime, String location) {
         // Get User from Repository and check if the items are in their inventory
-        if (userRepository.ifExists((int) user1) && userRepository.ifExists((int) user2)) {
-            User trader1 = userRepository.get((int) user1);
-            User trader2 = userRepository.get((int) user2);
-            if ((item1 == null || ((PersonalUser) trader1).getInventory().contains(item1)) && (item2 == null ||
-                    ((PersonalUser) trader2).getInventory().contains(item2))) {
-                Trade newTrade = new Trade(numOfTrades, user1, user2, item1, item2, isPermanent, dateAndTime,
-                        location);
-                numOfTrades++;
+        if (userRepository.ifExists((int) user1) && userRepository.ifExists(user2)) {
+            PersonalUser trader1 = userRepository.get(user1);
+            PersonalUser trader2 = userRepository.get(user2);
+            if ((item1 == null || trader1.getInventory().contains(item1)) && (item2 == null ||
+                    trader2.getInventory().contains(item2))) {
+                Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent,
+                        dateAndTime, location);
                 tradeRepository.add(newTrade);
                 return newTrade;
             }
@@ -98,7 +82,7 @@ public class TradeManager {
         return null;
     }
 
-    public void editDateAndTime(int tradeID, int editingUser, Calendar dateAndTime) {
+    public void editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
         // Get trade from Repository
         if (tradeRepository.ifExists(tradeID)) {
             Trade currTrade = tradeRepository.get(tradeID);
@@ -160,8 +144,8 @@ public class TradeManager {
                 currTrade.unconfirmUser1();
                 currTrade.unconfirmUser2();
                 long oldMeeting = currTrade.getPrevMeeting();
-                if (tradeRepository.ifExists((int) oldMeeting)) {
-                    Trade oldTrade = tradeRepository.get((int) oldMeeting);
+                if (tradeRepository.ifExists(oldMeeting)) {
+                    Trade oldTrade = tradeRepository.get(oldMeeting);
                     oldTrade.closeTrade();
                 }
             }
@@ -171,18 +155,18 @@ public class TradeManager {
     // More casting problems & shorten code
     public void confirmTradeComplete(int tradeID, int editingUser) {
         if (userRepository.ifExists(editingUser) && tradeRepository.ifExists(tradeID)) {
-            PersonalUser currUser = (PersonalUser) userRepository.get(editingUser);
+            PersonalUser currUser = userRepository.get(editingUser);
             Trade currTrade = tradeRepository.get(tradeID);
             // Confirm specific user
             if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms()) {
                 currTrade.confirmUser1();
-                PersonalUser otherUser = (PersonalUser) userRepository.get((int) currTrade.getUser2());
+                PersonalUser otherUser = userRepository.get(currTrade.getUser2());
                 if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
                     makeTrades(currUser, otherUser, currTrade);
                 }
             } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms()) {
                 currTrade.confirmUser2();
-                PersonalUser otherUser = (PersonalUser) userRepository.get((int) currTrade.getUser1());
+                PersonalUser otherUser = userRepository.get(currTrade.getUser1());
                 if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
                     makeTrades(currUser, otherUser, currTrade);
                 }
@@ -190,31 +174,42 @@ public class TradeManager {
         }
     }
 
-    // TODO: Remove from wishlist and inventory
+    // Weird system -- they can trade other people's items
     private void makeTrades(PersonalUser currUser, PersonalUser otherUser, Trade currTrade) {
         if (currTrade.getIsPermanent()) {
             if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
                 currUser.setBorrowCount(currUser.getBorrowCount() + 1);
+                currUser.removeFromWishList(currTrade.getItem2());
+                currUser.addToInventory(currTrade.getItem2());
                 otherUser.setLendCount(currUser.getLendCount() + 1);
+                otherUser.removeFromInventory(currTrade.getItem2());
             } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
                 otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
+                otherUser.removeFromWishList(currTrade.getItem1());
+                otherUser.addToInventory(currTrade.getItem2());
                 currUser.setLendCount(currUser.getLendCount() + 1);
+                currUser.removeFromInventory(currTrade.getItem1());
             } else {
                 currUser.setBorrowCount(currUser.getBorrowCount() + 1);
                 currUser.setLendCount(currUser.getLendCount() + 1);
+                currUser.removeFromWishList(currTrade.getItem2());
+                currUser.removeFromInventory(currTrade.getItem1());
+                currUser.addToInventory(currTrade.getItem2());
                 otherUser.setLendCount(currUser.getLendCount() + 1);
                 otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
+                otherUser.removeFromWishList(currTrade.getItem1());
+                otherUser.removeFromInventory(currTrade.getItem2());
+                otherUser.addToInventory(currTrade.getItem1());
             }
             currTrade.closeTrade();
         } else {
-            Calendar newDateAndTime = currTrade.getDateAndTime();
-            newDateAndTime.set(Calendar.MONTH, borrowTimeLimit); // TODO: need to change, mappable base
+            Date newDateAndTime = currTrade.getDateAndTime();
+            // newDateAndTime.set(Calendar.MONTH, timeLimit); // TODO: need to change
             Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
-                    currTrade.getItem1(), currTrade.getItem2(), true, newDateAndTime,
+                    currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
                     currTrade.getLocation());
-            currTrade.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
+            secondMeeting.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
         }
     }
 }
-
 

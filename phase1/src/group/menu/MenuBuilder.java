@@ -1,5 +1,6 @@
 package group.menu;
 
+import group.menu.data.PersistentRequest;
 import group.menu.handler.RequestHandler;
 import group.menu.node.*;
 import group.menu.processor.InputPreProcessor;
@@ -13,9 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author DanLyu
+ */
 public class MenuBuilder {
 
-    public static class OptionNodeBuilder {
+    public class OptionNodeBuilder {
         private final Class<?> clazz;
         private final OperationType type;
         private final OptionNode optionNode;
@@ -85,7 +89,7 @@ public class MenuBuilder {
 
             public SubmitNodeBuilder(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
                 String translatable = getTranslatable("submit", key);
-                SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler)
+                SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler, persistentRequest)
                         .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
                 currentNode.setChild(submitNode);
                 this.submitNode = submitNode;
@@ -103,6 +107,7 @@ public class MenuBuilder {
         }
     }
 
+    final PersistentRequest persistentRequest = new PersistentRequest();
 
     public enum OperationType {
         edit, add, query, remove, verification

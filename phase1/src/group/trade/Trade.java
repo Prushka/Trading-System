@@ -1,14 +1,16 @@
 package group.trade;
 
 import group.item.Item;
+import group.menu.data.Request;
 import group.repository.UniqueId;
-import group.repository.reflection.EntityMappable;
+import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 
+import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 
-public class Trade extends MappableBase implements EntityMappable, UniqueId {
+public class Trade extends MappableBase implements CSVMappable, UniqueId {
     // to use SerializationRepository: public class Trade implements Serializable {
 
     // TODO: you also have to use objects for all fields (Int, Boolean). primitives won't work
@@ -27,14 +29,14 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     private Long prevMeeting = null;
 
     // Item Details
-    private Item item1;
-    private Item item2;
+    private transient Item item1;
+    private transient Item item2;
     private Boolean isPermanent;
     private Boolean isClosed;
 
     // Meeting Details
     // Use date
-    private Calendar dateAndTime;
+    private Date dateAndTime;
     private String location;
 
     // Needed to implement Mappable Base
@@ -43,16 +45,15 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     }
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
-    public Trade(long tradeID, long user1, long user2, Item item1, Item item2, boolean isPermanent,
-            Calendar dateAndTime, String location){
-        this.tradeID = tradeID;
-        this.user1 = user1;
-        this.user2 = user2;
-        this.item1 = item1;
-        this.item2 = item2;
+    public Trade(Long user1, Long user2, Item item1, Item item2, Boolean isPermanent, Date dateAndTime,
+                 String location){
+        this.user1 =  user1;
+        this.user2 =  user2;
+        this.item1 =  item1;
+        this.item2 =  item2;
         this.isPermanent = isPermanent;
         this.dateAndTime = dateAndTime;
-        this.location = location;
+        this.location =  location;
 
         // Default Values
         this.user1Edits = 0;
@@ -75,7 +76,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public Item getItem2(){ return item2;}
     public boolean getIsPermanent(){ return isPermanent;}
     public boolean getIsClosed(){ return isClosed;}
-    public Calendar getDateAndTime(){ return dateAndTime;}
+    public Date getDateAndTime(){ return dateAndTime;}
     public String getLocation(){ return location;}
     public Long getPrevMeeting(){ return prevMeeting;}
 
@@ -90,7 +91,7 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     public void unconfirmUser2(){ user2Confirms = false;}
     public void openTrade(){ isClosed = false;}
     public void closeTrade(){ isClosed = true;}
-    public void setDateAndTime(Calendar newDateAndTime){ dateAndTime = newDateAndTime;}
+    public void setDateAndTime(Date newDateAndTime){ dateAndTime = newDateAndTime;}
     public void setLocation(String newLocation){ location = newLocation;}
     public void setPrevMeeting(Long prev){ prevMeeting = prev;}
 

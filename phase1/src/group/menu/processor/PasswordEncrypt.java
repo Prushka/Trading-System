@@ -3,8 +3,9 @@ package group.menu.processor;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-//https://stackoverflow.com/questions/6592010/encrypt-and-decrypt-a-password-in-java
-
+// https://stackoverflow.com/questions/6592010/encrypt-and-decrypt-a-password-in-java
+// TODO: either implement this or remove it, md5 approach may not be correct
+@Deprecated
 public class PasswordEncrypt implements InputPreProcessor {
     @Override
     public String process(String input) {

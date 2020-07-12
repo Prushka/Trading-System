@@ -1,12 +1,13 @@
 package group.user;
 
 import java.util.*;
+import group.item.Item;
 
 public class PersonalUser extends User {
 
-    private List<Object> wishlist;       //TODO: replace Object with item when item is available
-    private List<Object> inventory;
-    private List<Object> trades;
+    private List<Item> wishlist;       //TODO: replace Object with item when item is available
+    private List<Item> inventory;
+    private List<Item> trades;
     private boolean isFrozen;
     private int lendCount;
     private int borrowCount;
@@ -48,15 +49,21 @@ public class PersonalUser extends User {
 
     public PersonalUser(List<String> record){super(record);}
 
-    public List<Object> getWishlist() {
+    public List<Item> getWishlist() {
         return wishlist;
     }
 
-    public List<Object> getInventory() {
+    public void removeFromWishList(Item oldItem){ wishlist.remove(oldItem);}
+
+    public List<Item> getInventory() {
         return inventory;
     }
 
-    public List<Object> getTrades() {
+    public void addToInventory(Item newItem){ inventory.add(newItem);}
+
+    public void removeFromInventory(Item oldItem){ inventory.remove(oldItem);}
+
+    public List<Item> getTrades() {
         return trades;
     }
 

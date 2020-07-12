@@ -1,14 +1,13 @@
 package group.menu.data;
 
-import group.menu.node.InputNode;
-
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * The Request object that has a map of
- * {@link InputNode#getKey()} -> user input ({@link InputNode#getValue()}).<br>
- *
+ * {@link group.menu.node.RequestableNode#getKey()} -> user input ({@link group.menu.node.RequestableNode#getValue()}).<p>
+ * <p>
  * The Request is constructed automatically in {@link group.menu.node.SubmitNode}
  *
  * @author Dan Lyu
@@ -16,7 +15,7 @@ import java.util.Map;
 public class Request {
 
     /**
-     * The Request Map has holds the key and value in order.
+     * The Request Map to hold the key and value in order
      */
     Map<String, String> requestMap = new LinkedHashMap<>();
 
@@ -25,10 +24,10 @@ public class Request {
      */
     private long timeStamp;
 
-    // TODO: Attach current user information if exists one
+    private PersistentRequest persistentRequest;
 
     /**
-     * @param key the key
+     * @param key   the key
      * @param value the user input
      * @return this Request object itself
      */
@@ -46,14 +45,64 @@ public class Request {
     }
 
     /**
-     * @return {@link #timeStamp}
+     * @param key the key to lookup
+     * @return the value in Long
+     */
+    public Long getLong(String key) {
+        return Long.valueOf(get(key));
+    }
+
+    /**
+     * @param key the key to lookup
+     * @return the value in Int
+     */
+    public Integer getInt(String key) {
+        return Integer.valueOf(get(key));
+    }
+
+    /**
+     * @param key the key to lookup
+     * @return the value in Boolean
+     */
+    public Boolean getBoolean(String key) {
+        return Boolean.valueOf(get(key));
+    }
+
+    /**
+     * @param key the key to lookup
+     * @return the value in Double
+     */
+    public Double getDouble(String key) {
+        return Double.valueOf(get(key));
+    }
+
+    /**
+     * @param key the key to lookup
+     * @return the value in Float
+     */
+    public Float getFloat(String key) {
+        return Float.valueOf(get(key));
+    }
+
+    /**
+     * Use only when the value is in standard timestamp (ms) format
+     *
+     * @param key the key to lookup
+     * @return the value in Date
+     */
+    public Date getDate(String key) {
+        return new Date(getLong(key));
+    }
+
+    /**
+     * @return the timestamp the Request is made
      */
     public long getTimeStamp() {
         return timeStamp;
     }
 
     /**
-     * set the {@link #timeStamp} to be the current time
+     * Sets the {@link #timeStamp} to be the current time
      */
     public void setTimeStamp() {
         this.timeStamp = System.currentTimeMillis();
@@ -67,4 +116,10 @@ public class Request {
         return "Request: " + requestMap.toString();
     }
 
+    /**
+     * @param persistentRequest add the global PersistentRequest object to the current Request
+     */
+    public void setPersistentRequest(PersistentRequest persistentRequest) {
+        this.persistentRequest = persistentRequest;
+    }
 }

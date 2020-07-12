@@ -8,9 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * The implementation of list related operations in {@link RepositorySavable}.
+ * The implementation of list related operations in {@link Repository}.
  *
- * @param <T> The entity this RepositoryBase handles with
+ * @param <T> The entity type to be used
  * @author Dan Lyu
  */
 public abstract class RepositoryBase<T extends UniqueId> implements RepositorySavable<T> {
@@ -21,12 +21,13 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
     List<T> data;
 
     /**
-     * The file object this Repository reads and saves
+     * The file object this Repository reads to and saves from
      */
     File file;
 
     /**
-     * @param path the path to the file
+     * @param path     the path to the file
+     * @param saveHook the repository will be saved by a saveHook
      */
     public RepositoryBase(String path, SaveHook saveHook) {
         this.file = new File(path);
@@ -79,6 +80,15 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
         return data.get(id);
     }
 
+    /**
+     * @param id the unique id of this entity
+     * @return the entity
+     */
+    @Override
+    public T get(Long id) {
+        return get(id.intValue());
+    }
+
     @Override
     public T getFirst(Filter<T> filter) {
         if (iterator(filter).hasNext()) {
@@ -124,9 +134,22 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
         return builder.build();
     }
 
+    /**
+     * @param id the unique id as int to be found
+     * @return <code>true</code> if the entity with id exists
+     */
     @Override
     public boolean ifExists(int id) {
         return id < data.size();
+    }
+
+    /**
+     * @param id the unique id as Long to be found
+     * @return <code>true</code> if the entity with id exists
+     */
+    @Override
+    public boolean ifExists(Long id) {
+        return ifExists(id.intValue());
     }
 
     /**

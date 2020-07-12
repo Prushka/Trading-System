@@ -1,6 +1,6 @@
 package group.repository;
 
-import group.repository.reflection.EntityMappable;
+import group.repository.reflection.CSVMappable;
 import group.repository.reflection.EntityMappingFactory;
 import group.system.SaveHook;
 
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * The CSV Repository Implementation for storing and reading the list of entities
+ * The CSV implementation of storing and reading the list of entities to and from CSV files.
  *
  * @param <T> The entity this Repository deals with
  * @author Dan Lyu
@@ -21,35 +21,34 @@ import java.util.Scanner;
  * @see RepositorySavable
  * @see RepositoryBase
  */
-public class CSVRepository<T extends EntityMappable & UniqueId> extends RepositoryBase<T> {
+public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryBase<T> {
 
     /**
-     * The factory that is used to instantiate a mappable object.
-     * It's a constructor reference of that class.
+     * The factory used to instantiate a mappable object.
      */
     private final EntityMappingFactory<T> factory;
 
     /**
-     * Construct a CSVRepository for saving and reading csv files with
-     * the factory for instantiating mappable objects.
+     * Constructs a CSVRepository for saving and reading csv files.
      *
-     * @param path    the file path
-     * @param factory the constructor reference for the mappable object
+     * @param path     the file path
+     * @param factory  the constructor reference for the mappable object
+     * @param saveHook the repository will be saved by a saveHook
      */
     public CSVRepository(String path, EntityMappingFactory<T> factory, SaveHook saveHook) {
         super(path, saveHook);
         data = new ArrayList<>();
         this.factory = factory;
         if (file.exists()) {
-            readSafe();
+            readUnsafe();
         }
     }
 
     /**
-     * Read the file with {@link #file} into {@link #data}.
-     * It will use the {@link #factory} to instantiate the specific objects.
+     * Reads the file. Doesn't check null or if file exists.
+     * Uses {@link #factory} to instantiate specific objects.
      */
-    void readSafe() {
+    private void readUnsafe() {
         // FileInputStream can be used for reading raw bytes, like an image.
         Scanner scanner = null;
         try {
@@ -73,6 +72,9 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
         scanner.close();
     }
 
+    /**
+     * Saves the {@link #data} to the file, uses {@link #saveUnsafe} internally
+     */
     @Override
     public void save() {
         if (data != null && data.size() > 0) {
@@ -84,15 +86,15 @@ public class CSVRepository<T extends EntityMappable & UniqueId> extends Reposito
                 }
             }
             if (entityNotNull != null) {
-                saveSafe(entityNotNull);
+                saveUnsafe(entityNotNull);
             }
         }
     }
 
     /**
-     * Save {@link #data} to {@link #file}.
+     * Saves {@link #data} to {@link #file} in CSV format.
      */
-    void saveSafe(T entityNotNull) {
+    private void saveUnsafe(T entityNotNull) {
         try {
             PrintWriter writer = new PrintWriter(file);
             writer.append(entityNotNull.toCSVHeader());

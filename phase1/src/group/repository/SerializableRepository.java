@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The Serialization Implementation for storing and reading the list of entities
+ * The Serialization implementation of storing and reading the list of entities to and from ser files.
  *
- * @param <T> The entity this Repository deals with
+ * @param <T> the entity type to be used
  * @author Dan Lyu
  * @author lecture code, Logging project
  * @see RepositorySavable
@@ -18,7 +18,7 @@ import java.util.List;
 public class SerializableRepository<T extends Serializable & UniqueId> extends RepositoryBase<T> {
 
     /**
-     * Construct a CSVRepository for saving and reading .ser files
+     * Constructs a Serialization Repository for saving and reading .ser files
      *
      * @param path the file path
      */
@@ -26,15 +26,16 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
         super(path, saveHook);
         data = new ArrayList<>();
         if (file.exists()) {
-            readSafe();
+            readUnsafe();
         }
     }
 
     /**
-     * Read the file with {@link #file} into {@link #data}.
+     * Reads the file. Doesn't check null or if file exists.
+     * Reads the file from {@link #file}.
      */
     @SuppressWarnings("unchecked")
-    void readSafe() {
+    private void readUnsafe() {
         try {
             InputStream inputStream = new FileInputStream(file.getPath());
             InputStream buffer = new BufferedInputStream(inputStream);
@@ -48,9 +49,18 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
     }
 
     /**
-     * Save {@link #data} to {@link #file}.
+     * Saves the {@link #data} to the file, uses {@link #saveUnsafe} internally
      */
-    void saveSafe() {
+    public void save() {
+        if (data != null && data.size() > 0) {
+            saveUnsafe();
+        }
+    }
+
+    /**
+     * Saves {@link #data} to {@link #file} in serialization format.
+     */
+    private void saveUnsafe() {
         try {
             OutputStream outputStream = new FileOutputStream(file.getPath());
             OutputStream buffer = new BufferedOutputStream(outputStream);
@@ -64,12 +74,4 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
         }
     }
 
-    /**
-     * The save method to be used by other classes
-     */
-    public void save() {
-        if (data != null && data.size() > 0) {
-            saveSafe();
-        }
-    }
 }

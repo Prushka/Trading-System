@@ -1,13 +1,13 @@
 package group.user;
 
 import group.repository.UniqueId;
-import group.repository.reflection.EntityMappable;
+import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 
 import java.util.List;
 
 
-public class User extends MappableBase implements EntityMappable, UniqueId {
+public class User extends MappableBase implements CSVMappable, UniqueId {
 
     private long uid;
     private String userName;
@@ -15,17 +15,19 @@ public class User extends MappableBase implements EntityMappable, UniqueId {
     private String telephone;
     private String password;
 
-    public User(List<String> record){super(record);}
+    public User(List<String> record) {
+        super(record);
+    }
 
     /**
      * Creates a new User with userName, email, telephone and given password.
      *
-     * @param userName the username of this Person.
-     * @param email the email this Person.
+     * @param userName  the username of this Person.
+     * @param email     the email this Person.
      * @param telephone the telephone number of this person
-     * @param password the password this user set to
+     * @param password  the password this user set to
      */
-    public User(String userName, String email, String telephone, String password){
+    public User(String userName, String email, String telephone, String password) {
         this.userName = userName;
         this.email = email;
         this.telephone = telephone;

@@ -1,7 +1,7 @@
 package group.repository;
 
 /**
- * Implement this interface if you want to use the entity in Repository.
+ * The interface to define the entity to have a unique id.
  *
  * @author Dan Lyu
  */

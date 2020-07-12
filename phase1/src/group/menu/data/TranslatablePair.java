@@ -1,7 +1,7 @@
 package group.menu.data;
 
 /**
- * A pair of translatable String and parameters to be formatted
+ * A pair of translatable identifier and parameters to be formatted
  *
  * @author Dan Lyu
  */
@@ -18,23 +18,23 @@ public class TranslatablePair {
     private final Object[] paras;
 
     /**
-     * @param translatable The String identifier
-     * @param paras The parameters that will be taken in when formatting the {@link #translatable}
+     * @param translatable the String identifier
+     * @param paras        parameters that will be taken in when formatting the {@link #translatable}
      */
-    public TranslatablePair(String translatable, Object[] paras){
+    public TranslatablePair(String translatable, Object[] paras) {
         this.translatable = translatable;
         this.paras = paras;
     }
 
     /**
-     * @return {@link #translatable}
+     * @return the translatable identifier
      */
     public String getTranslatable() {
         return translatable;
     }
 
     /**
-     * @return {@link #paras}
+     * @return parameters to be used to format translatable identifier
      */
     public Object[] getParas() {
         return paras;

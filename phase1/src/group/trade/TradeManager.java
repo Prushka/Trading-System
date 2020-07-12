@@ -65,19 +65,19 @@ public class TradeManager {
     }
 
     // Come up with solution to the casting problem
-    public Trade createTrade(long user1, long user2, Item item1, Item item2, Boolean isPermanent,
+    public Trade createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
                              Date dateAndTime, String location) {
         // Get User from Repository and check if the items are in their inventory
-        if (userRepository.ifExists((int) user1) && userRepository.ifExists(user2)) {
+        if (userRepository.ifExists(user1) && userRepository.ifExists(user2)) {
             PersonalUser trader1 = userRepository.get(user1);
             PersonalUser trader2 = userRepository.get(user2);
-            if ((item1 == null || trader1.getInventory().contains(item1)) && (item2 == null ||
-                    trader2.getInventory().contains(item2))) {
+            //if ((item1.equals(null) || trader1.getInventory().contains(item1)) && (item2.equals(null) ||
+              //      trader2.getInventory().contains(item2))) {
                 Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent,
                         dateAndTime, location);
                 tradeRepository.add(newTrade);
                 return newTrade;
-            }
+            //}
         }
         return null;
     }
@@ -180,13 +180,13 @@ public class TradeManager {
             if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
                 currUser.setBorrowCount(currUser.getBorrowCount() + 1);
                 currUser.removeFromWishList(currTrade.getItem2());
-                currUser.addToInventory(currTrade.getItem2());
+                // currUser.addToInventory(currTrade.getItem2());
                 otherUser.setLendCount(currUser.getLendCount() + 1);
                 otherUser.removeFromInventory(currTrade.getItem2());
             } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
                 otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
                 otherUser.removeFromWishList(currTrade.getItem1());
-                otherUser.addToInventory(currTrade.getItem2());
+                // otherUser.addToInventory(currTrade.getItem2());
                 currUser.setLendCount(currUser.getLendCount() + 1);
                 currUser.removeFromInventory(currTrade.getItem1());
             } else {
@@ -194,12 +194,12 @@ public class TradeManager {
                 currUser.setLendCount(currUser.getLendCount() + 1);
                 currUser.removeFromWishList(currTrade.getItem2());
                 currUser.removeFromInventory(currTrade.getItem1());
-                currUser.addToInventory(currTrade.getItem2());
+                // currUser.addToInventory(currTrade.getItem2());
                 otherUser.setLendCount(currUser.getLendCount() + 1);
                 otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
                 otherUser.removeFromWishList(currTrade.getItem1());
                 otherUser.removeFromInventory(currTrade.getItem2());
-                otherUser.addToInventory(currTrade.getItem1());
+                // otherUser.addToInventory(currTrade.getItem1());
             }
             currTrade.closeTrade();
         } else {

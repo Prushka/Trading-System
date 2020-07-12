@@ -1,7 +1,8 @@
 package group.user;
 
-import java.util.*;
 import group.item.Item;
+
+import java.util.*;
 
 public class PersonalUser extends User {
 
@@ -53,15 +54,30 @@ public class PersonalUser extends User {
         return wishlist;
     }
 
-    public void removeFromWishList(Item oldItem){ wishlist.remove(oldItem);}
+    public void removeFromWishList(Long oldItem){
+        Item removeItem = null;
+        for (Item item: wishlist){
+            if (item.getUid() == oldItem){
+                removeItem = item;
+            }
+        }
+        wishlist.remove(removeItem);}
 
     public List<Item> getInventory() {
         return inventory;
     }
 
-    public void addToInventory(Item newItem){ inventory.add(newItem);}
+    // public void addToInventory(Item newItem){ inventory.add(newItem);}
 
-    public void removeFromInventory(Item oldItem){ inventory.remove(oldItem);}
+    public void removeFromInventory(Long oldItem){
+        Item removeItem = null;
+        for (Item item: inventory){
+            if (item.getUid() == oldItem){
+                removeItem = item;
+            }
+        }
+        inventory.remove(removeItem);
+    }
 
     public List<Item> getTrades() {
         return trades;
@@ -89,6 +105,10 @@ public class PersonalUser extends User {
 
     public void setBorrowCount(int borrowCount) {
         this.borrowCount = borrowCount;
+    }
+
+    public boolean getShouldBeFreezed(){
+        return lendCount < borrowCount;
     }
 
     public int getNumTransactions() {

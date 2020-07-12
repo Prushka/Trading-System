@@ -48,6 +48,10 @@ public class InputNode extends RequestableNode {
     }
 
     /**
+     * Validates user input in the {@link #value} using {@link #validatorPairs}.
+     * The first encountered error ResponseNode in the pair will be returned.
+     * If no validators are available or all validations are passed, it returns an empty optional object.
+     *
      * @return <code>true</code> if user input passes validation or there's no available validators
      */
     public Optional<Node> validate() {
@@ -62,7 +66,7 @@ public class InputNode extends RequestableNode {
     }
 
     /**
-     * Preprocesses user input. The processed result will become the {@link #value}
+     * Preprocesses user input using {@link #processor}. The processed result will become the {@link #value}
      *
      * @param input user input
      */
@@ -152,9 +156,8 @@ public class InputNode extends RequestableNode {
         }
 
         /**
-         * Puts the validator and failed ResponseNode into the Builder.
-         * The validateFailNextNode will be the InputNode itself using this method.<p>
-         * Which means user will repeat the same input until the validation passes.
+         * Puts the validator and failed ResponseNode into the Builder.<p>
+         * The validateFailNextNode will be the InputNode itself using this method and users will repeat the same input until the validation passes.<p>
          *
          * @param validator                the validator used to validate user input
          * @param validateFailResponseNode the failed Response Node
@@ -178,7 +181,7 @@ public class InputNode extends RequestableNode {
         }
 
         /**
-         * Works the same as setting the node as the child
+         * Works the same as setting the node as the child.
          *
          * @param node the node to navigate to when validation passes
          * @return the builder itself

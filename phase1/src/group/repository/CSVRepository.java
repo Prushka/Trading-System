@@ -97,7 +97,7 @@ public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryB
     private void saveUnsafe(T entityNotNull) {
         try {
             PrintWriter writer = new PrintWriter(file);
-            writer.append(entityNotNull.toCSVHeader());
+            writer.println(entityNotNull.toCSVHeader());
             for (T single : data) {
                 if (data == null) {
                     writer.println(entityNotNull.toNullString());

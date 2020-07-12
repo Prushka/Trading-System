@@ -1,13 +1,32 @@
 package group.user;
+
+import group.repository.Filter;
+import group.repository.Repository;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PersonalUserManager {
     private static final List<PersonalUser> personalusers = new ArrayList<>();
     private static AdministrativeManager am;
+    private final Repository<PersonalUser> personalUserRepository;
 
-    public PersonalUserManager() {
+    public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
         //instantiate AdminManager
+        this.personalUserRepository = personalUserRepository;
+    }
+
+    public void exampleOfFilter() {
+        Iterator<PersonalUser> usersToBeFrozen = personalUserRepository.iterator(PersonalUser::getShouldBeFreezed);
+        Iterator<PersonalUser> usersToBeFrozen2 = personalUserRepository.iterator(personalUser -> personalUser.getLendCount() < personalUser.getBorrowCount());
+        Iterator<PersonalUser> usersToBeFrozen3 = personalUserRepository.iterator(new Filter<PersonalUser>() {
+            @Override
+            public boolean match(PersonalUser personalUser) {
+                return personalUser.getLendCount() < personalUser.getBorrowCount();
+            }
+        }); // usersToBeFrozen / usersToBeFrozen2 / usersToBeFrozen3 work the same here
+        // this iterator has all PersonalUsers that need to be frozen
     }
 
     public boolean verify(String username, String password) {

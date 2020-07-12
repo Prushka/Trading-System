@@ -2,6 +2,7 @@ package group.trade;
 
 import group.config.property.TradeProperties;
 import group.item.Item;
+import group.menu.data.Request;
 import group.repository.Repository;
 import group.repository.reflection.EntityMappable;
 import group.repository.reflection.MappableBase;
@@ -9,6 +10,7 @@ import group.user.PersonalUser;
 import group.menu.data.Response;
 
 import java.util.Calendar;
+import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -85,16 +87,18 @@ public class TradeManager extends MappableBase implements EntityMappable {
     }
 
     // Come up with solution to the casting problem
-    public Trade createTrade(long user1, long user2, Item item1, Item item2, boolean isPermanent,
-                             Calendar dateAndTime, String location) {
+    public Trade createTrade(Request request) {
+        Integer user1 = Integer.valueOf(request.get("tradeInitiator"));
+        Integer user2 = Integer.valueOf(request.get("tradeRespondent"));
+        Item item1 = Item.valueOf(request.get("item1"));
+        Item item2 = Item.valueOf(request.get("item2"));
         // Get User from Repository and check if the items are in their inventory
-        if (userRepository.ifExists((int) user1) && userRepository.ifExists((int) user2)) {
-            PersonalUser trader1 = userRepository.get((int) user1);
-            PersonalUser trader2 = userRepository.get((int) user2);
+        if (userRepository.ifExists(user1) && userRepository.ifExists(user2)) {
+            PersonalUser trader1 = userRepository.get((user1));
+            PersonalUser trader2 = userRepository.get((user2));
             if ((item1 == null || trader1.getInventory().contains(item1)) && (item2 == null ||
                     trader2.getInventory().contains(item2))) {
-                Trade newTrade = new Trade(numOfTrades, user1, user2, item1, item2, isPermanent, dateAndTime,
-                        location);
+                Trade newTrade = new Trade(request);
                 numOfTrades++;
                 tradeRepository.add(newTrade);
                 return newTrade;
@@ -103,7 +107,11 @@ public class TradeManager extends MappableBase implements EntityMappable {
         return null;
     }
 
-    public void editDateAndTime(int tradeID, int editingUser, Calendar dateAndTime) {
+    public void editDateAndTime(Request request) {
+        Integer tradeID = Integer.valueOf(request.get("tradeID"));
+        Integer editingUser = Integer.valueOf(request.get("editingUser"));
+        Date dateAndTime = Date.valueOf(request.get("dateAndTime"));
+
         // Get trade from Repository
         if (tradeRepository.ifExists(tradeID)) {
             Trade currTrade = tradeRepository.get(tradeID);
@@ -125,7 +133,11 @@ public class TradeManager extends MappableBase implements EntityMappable {
         }
     }
 
-    public void editLocation(int tradeID, int editingUser, String location) {
+    public void editLocation(Request request) {
+        Integer tradeID = Integer.valueOf(request.get("tradeID"));
+        Integer editingUser = Integer.valueOf(request.get("editingUser"));
+        String location = request.get("location");
+
         // Get Trade from Repository
         if (tradeRepository.ifExists(tradeID)) {
             Trade currTrade = tradeRepository.get(tradeID);
@@ -147,7 +159,10 @@ public class TradeManager extends MappableBase implements EntityMappable {
         }
     }
 
-    public void confirmTrade(int tradeID, int editingUser) {
+    public void confirmTrade(Request request) {
+        Integer tradeID = Integer.valueOf(request.get("tradeID"));
+        Integer editingUser = Integer.valueOf(request.get("editingUser"));
+
         // Get Trade from Repository
         if (tradeRepository.ifExists(tradeID)) {
             Trade currTrade = tradeRepository.get(tradeID);
@@ -174,7 +189,10 @@ public class TradeManager extends MappableBase implements EntityMappable {
     }
 
     // More casting problems & shorten code
-    public void confirmTradeComplete(int tradeID, int editingUser) {
+    public void confirmTradeComplete(Request request) {
+        Integer tradeID = Integer.valueOf(request.get("tradeID"));
+        Integer editingUser = Integer.valueOf(request.get("editingUser"));
+
         if (userRepository.ifExists(editingUser) && tradeRepository.ifExists(tradeID)) {
             PersonalUser currUser = userRepository.get(editingUser);
             Trade currTrade = tradeRepository.get(tradeID);
@@ -224,11 +242,13 @@ public class TradeManager extends MappableBase implements EntityMappable {
             }
             currTrade.closeTrade();
         } else {
-            Calendar newDateAndTime = currTrade.getDateAndTime();
-            newDateAndTime.set(Calendar.MONTH, timeLimit); // TODO: need to change
-            Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
-                    currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
-                    currTrade.getLocation());
+            Date newDateAndTime = currTrade.getDateAndTime();
+            // newDateAndTime.set(Calendar.MONTH, timeLimit); // TODO: need to change
+
+            // TODO make a request with currTrade.getUser1(), currTrade.getUser1(),
+            //                    currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
+            //                    currTrade.getLocation()
+            Trade secondMeeting = createTrade(new Request());
             currTrade.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
         }
     }

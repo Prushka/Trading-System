@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Saves a bunch of savable objects on request
+ *
  * @author Dan Lyu
  */
 public class SaveHook {

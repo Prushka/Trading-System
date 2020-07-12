@@ -1,5 +1,6 @@
 package group.menu.node;
 
+import group.menu.data.PersistentRequest;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.menu.handler.RequestHandler;
@@ -16,11 +17,14 @@ public class SubmitNode extends InputNode {
 
     private final Map<String, MasterOptionNode> flexibleMasterPool;
 
+    private final PersistentRequest persistentRequest;
+
     SubmitNode(Builder builder) {
         super(builder);
         handler = builder.handler;
         failedResultNode = builder.failedResultNode;
         flexibleMasterPool = builder.flexibleMasterPool;
+        persistentRequest = builder.persistentRequest;
     }
 
     private Request getRequest() {
@@ -31,6 +35,7 @@ public class SubmitNode extends InputNode {
             curr = curr.getParent();
         }
         request.setTimeStamp();
+        request.setPersistentRequest(persistentRequest);
         return request;
     }
 
@@ -49,8 +54,14 @@ public class SubmitNode extends InputNode {
         ResponseNode responseNode = new ResponseNode.Builder(response).build();
         if (response.getFlexibleMasterIdentifier() != null) {
             responseNode.setChild(flexibleMasterPool.get(response.getFlexibleMasterIdentifier()));
-        } else if (response.getSuccess()) {
+        } else if (response.success()) {
             responseNode.setChild(getChild());
+            switch (response.getResponseType()) {
+                case LOGIN:
+                case REGISTER:
+                    persistentRequest.addCachedRequest("login", getRequest());
+                    break;
+            }
         } else {
             responseNode.setChild(failedResultNode);
         }
@@ -62,10 +73,12 @@ public class SubmitNode extends InputNode {
         private RequestHandler handler;
         private Node failedResultNode;
         private final Map<String, MasterOptionNode> flexibleMasterPool = new HashMap<>();
+        private final PersistentRequest persistentRequest;
 
-        public Builder(String translatable, String key, RequestHandler requestHandler) {
+        public Builder(String translatable, String key, RequestHandler handler, PersistentRequest persistentRequest) {
             super(translatable, key);
-            handler = requestHandler;
+            this.handler = handler;
+            this.persistentRequest = persistentRequest;
         }
 
         @Override

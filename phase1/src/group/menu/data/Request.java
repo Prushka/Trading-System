@@ -28,8 +28,10 @@ public class Request {
 
     // TODO: Attach current user information if exists one
 
+    private PersistentRequest persistentRequest;
+
     /**
-     * @param key the key
+     * @param key   the key
      * @param value the user input
      * @return this Request object itself
      */
@@ -92,4 +94,7 @@ public class Request {
         return "Request: " + requestMap.toString();
     }
 
+    public void setPersistentRequest(PersistentRequest persistentRequest) {
+        this.persistentRequest = persistentRequest;
+    }
 }

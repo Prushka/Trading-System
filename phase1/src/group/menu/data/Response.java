@@ -10,10 +10,16 @@ import java.util.List;
  */
 public class Response {
 
+    public enum ResponseType {
+        LOGIN, REGISTER, UNKNOWN
+    }
+
     /**
      * if the Request is successfully made
      */
     private final boolean success;
+
+    private final ResponseType responseType;
 
     /**
      * A list of pairs of translatable Strings and parameters
@@ -29,12 +35,13 @@ public class Response {
         this.success = builder.success;
         this.translatablePairs.addAll(builder.translatablePairs);
         this.flexibleMasterIdentifier = builder.master;
+        this.responseType = builder.responseType;
     }
 
     /**
      * @return {@link #success}
      */
-    public boolean getSuccess() {
+    public boolean success() {
         return success;
     }
 
@@ -47,6 +54,10 @@ public class Response {
 
     public String getFlexibleMasterIdentifier() {
         return flexibleMasterIdentifier;
+    }
+
+    public ResponseType getResponseType() {
+        return responseType;
     }
 
     /**
@@ -68,9 +79,16 @@ public class Response {
 
         private String master;
 
+        private ResponseType responseType = ResponseType.UNKNOWN;
+
         public Builder(boolean success) {
             this.success = success;
             this.translatablePairs = new ArrayList<>();
+        }
+
+        public Builder responseType(ResponseType responseType) {
+            this.responseType = responseType;
+            return this;
         }
 
         public Builder masterIdentifier(String identifier) {

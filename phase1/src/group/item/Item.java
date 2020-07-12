@@ -35,4 +35,8 @@ public class Item {
     public void setDescription(String newdescription){
         description = newdescription;
     }
+
+    public String toString(){
+        return this.name + ": " + this.description + "\n Owned By: " + this.ownerusernsme;
+    }
 }

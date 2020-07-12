@@ -16,6 +16,8 @@ public class ControllerDispatcher implements Shutdownable {
 
     SupportTicketController supportTicketController;
     UserController userController;
+    // TODO: remove grace code
+    TestTradeController testTradeController;
 
     final MenuConstructor menuConstructor = new MenuConstructor();
 
@@ -31,6 +33,8 @@ public class ControllerDispatcher implements Shutdownable {
     public void dispatchController() {
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
+        // TODO: remove grace code
+        testTradeController = new TestTradeController(this);
     }
 
     public void createRepositories() {

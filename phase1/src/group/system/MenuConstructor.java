@@ -7,6 +7,7 @@ import group.menu.MenuBuilder.ValidatingType;
 import group.menu.processor.PasswordEncrypt;
 import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
+import group.trade.Trade;
 import group.user.User;
 
 import java.util.ArrayList;
@@ -75,6 +76,35 @@ public class MenuConstructor {
 
         menuBuilder.option(SupportTicket.class, OperationType.query, 2)
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
+                .master("master.support.ticket");
+
+        menuBuilder.construct("master.support.ticket", true);
+    }
+
+    // TODO: remove grace code
+    public void supportTrade(TestTradeController controller){
+        menuBuilder.option(Trade.class, OperationType.add, 3)
+                .input("Respondent", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("Lending Item", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
+                .input("Borrowing Item", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .input("Permanency", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .input("Date", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .input("Location", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .submit("confirm", controller::addTrade)
+                .master("master.support.ticket");
+
+        menuBuilder.option(Trade.class, OperationType.edit, 4)
+                .submit("category", String::toUpperCase, new EnumValidator<>(Trade.Category.class),
+                        ValidatingType.invalid, controller::testEditDateAndTime)
+                .input("New Date/ Time", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .submit("confirm", controller::testEditDateAndTime)
+                .master("master.support.ticket");
+
+        menuBuilder.option(Trade.class, OperationType.edit, 5)
+                .submit("category", String::toUpperCase, new EnumValidator<>(Trade.Category.class),
+                        ValidatingType.invalid, controller::testEditLocation)
+                .input("New Location", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .submit("confirm", controller::addTrade)
                 .master("master.support.ticket");
 
         menuBuilder.construct("master.support.ticket", true);

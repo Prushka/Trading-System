@@ -1,22 +1,15 @@
 package group.trade;
 
-import group.item.Item;
-import group.menu.data.Request;
 import group.repository.UniqueId;
 import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 
 import java.util.Date;
-import java.util.Calendar;
 import java.util.List;
 
 public class Trade extends MappableBase implements CSVMappable, UniqueId {
     // to use SerializationRepository: public class Trade implements Serializable {
-
-    // TODO: you also have to use objects for all fields (Int, Boolean). primitives won't work
-    // TODO: Loosen dependency on Item
-
-    // SerializationRepository doesn't have restrictions on these
+    // SerializationRepository doesn't have restrictions on primitives
 
     // Trading Details
     private Long tradeID;

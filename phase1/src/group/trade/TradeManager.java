@@ -5,6 +5,7 @@ import group.item.Item;
 import group.repository.Repository;
 import group.user.PersonalUser;
 import group.user.User;
+import group.menu.data.Response;
 
 import java.util.Calendar;
 import java.util.Iterator;
@@ -14,9 +15,10 @@ public class TradeManager {
     private final int editLimit;
     private final int borrowTimeLimit; // the number of months until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
-    private Repository<User> userRepository;
+    private Repository<PersonalUser> userRepository;
 
-    public TradeManager(Repository<Trade> tradeRepository, Repository<User> userRepository, TradeProperties tradeProperties) {
+    public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
+            tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
         tradeProperties.set("editLimit", "3");
         tradeProperties.set("borrowTimeLimit", "1");
@@ -84,10 +86,10 @@ public class TradeManager {
                              Calendar dateAndTime, String location) {
         // Get User from Repository and check if the items are in their inventory
         if (userRepository.ifExists((int) user1) && userRepository.ifExists((int) user2)) {
-            User trader1 = userRepository.get((int) user1);
-            User trader2 = userRepository.get((int) user2);
-            if ((item1 == null || ((PersonalUser) trader1).getInventory().contains(item1)) && (item2 == null ||
-                    ((PersonalUser) trader2).getInventory().contains(item2))) {
+            PersonalUser trader1 = userRepository.get((int) user1);
+            PersonalUser trader2 = userRepository.get((int) user2);
+            if ((item1 == null || trader1.getInventory().contains(item1)) && (item2 == null ||
+                    trader2.getInventory().contains(item2))) {
                 Trade newTrade = new Trade(numOfTrades, user1, user2, item1, item2, isPermanent, dateAndTime,
                         location);
                 numOfTrades++;
@@ -118,6 +120,11 @@ public class TradeManager {
                 currTrade.confirmUser2();
             }
         }
+        Response response = tradeRepository.filterResponse(entity -> entity.getDateAndTime() == null,
+                (entity, builder) -> builder.translatable("some.identifier.in.language.properties",
+                        entity.getUser1(),entity.getUser2()));
+        // if you have this in language.properties: some.identifier.in.language.properties=user1: %s, user2: %s
+        // this will return a Response object that has all matched trades with the translatable: user1: %s, user2: %s
     }
 
     public void editLocation(int tradeID, int editingUser, String location) {
@@ -171,18 +178,18 @@ public class TradeManager {
     // More casting problems & shorten code
     public void confirmTradeComplete(int tradeID, int editingUser) {
         if (userRepository.ifExists(editingUser) && tradeRepository.ifExists(tradeID)) {
-            PersonalUser currUser = (PersonalUser) userRepository.get(editingUser);
+            PersonalUser currUser = userRepository.get(editingUser);
             Trade currTrade = tradeRepository.get(tradeID);
             // Confirm specific user
             if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms()) {
                 currTrade.confirmUser1();
-                PersonalUser otherUser = (PersonalUser) userRepository.get((int) currTrade.getUser2());
+                PersonalUser otherUser = userRepository.get((int) currTrade.getUser2());
                 if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
                     makeTrades(currUser, otherUser, currTrade);
                 }
             } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms()) {
                 currTrade.confirmUser2();
-                PersonalUser otherUser = (PersonalUser) userRepository.get((int) currTrade.getUser1());
+                PersonalUser otherUser = userRepository.get((int) currTrade.getUser1());
                 if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
                     makeTrades(currUser, otherUser, currTrade);
                 }

@@ -14,13 +14,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class TradeManager extends MappableBase implements CSVMappable {
-    private Integer editLimit; // final?
-    private Integer timeLimit; // the number of months until a user has to reverse the temporary trade
+public class TradeManager {
+    private final Integer editLimit;
+    private final Integer timeLimit; // the number of months until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
     private Repository<PersonalUser> userRepository;
 
-    public TradeManager(List<String> record){ super(record); }
     public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
             tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
@@ -69,9 +68,9 @@ public class TradeManager extends MappableBase implements CSVMappable {
     public Trade createTrade(long user1, long user2, Item item1, Item item2, Boolean isPermanent,
                              Date dateAndTime, String location) {
         // Get User from Repository and check if the items are in their inventory
-        if (userRepository.ifExists((int) user1) && userRepository.ifExists((int) user2)) {
-            PersonalUser trader1 = userRepository.get((int) user1);
-            PersonalUser trader2 = userRepository.get((int) user2);
+        if (userRepository.ifExists((int) user1) && userRepository.ifExists(user2)) {
+            PersonalUser trader1 = userRepository.get(user1);
+            PersonalUser trader2 = userRepository.get(user2);
             if ((item1 == null || trader1.getInventory().contains(item1)) && (item2 == null ||
                     trader2.getInventory().contains(item2))) {
                 Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent,
@@ -145,8 +144,8 @@ public class TradeManager extends MappableBase implements CSVMappable {
                 currTrade.unconfirmUser1();
                 currTrade.unconfirmUser2();
                 long oldMeeting = currTrade.getPrevMeeting();
-                if (tradeRepository.ifExists((int) oldMeeting)) {
-                    Trade oldTrade = tradeRepository.get((int) oldMeeting);
+                if (tradeRepository.ifExists(oldMeeting)) {
+                    Trade oldTrade = tradeRepository.get(oldMeeting);
                     oldTrade.closeTrade();
                 }
             }
@@ -161,13 +160,13 @@ public class TradeManager extends MappableBase implements CSVMappable {
             // Confirm specific user
             if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms()) {
                 currTrade.confirmUser1();
-                PersonalUser otherUser = userRepository.get((int) currTrade.getUser2());
+                PersonalUser otherUser = userRepository.get(currTrade.getUser2());
                 if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
                     makeTrades(currUser, otherUser, currTrade);
                 }
             } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms()) {
                 currTrade.confirmUser2();
-                PersonalUser otherUser = userRepository.get((int) currTrade.getUser1());
+                PersonalUser otherUser = userRepository.get(currTrade.getUser1());
                 if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
                     makeTrades(currUser, otherUser, currTrade);
                 }

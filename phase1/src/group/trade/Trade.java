@@ -6,7 +6,7 @@ import group.repository.UniqueId;
 import group.repository.reflection.EntityMappable;
 import group.repository.reflection.MappableBase;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,9 +45,8 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     }
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
-    public Trade(Long tradeID, Long user1, Long user2, Item item1, Item item2, Boolean isPermanent, Date dateAndTime,
+    public Trade(Long user1, Long user2, Item item1, Item item2, Boolean isPermanent, Date dateAndTime,
                  String location){
-        this.tradeID =  tradeID;
         this.user1 =  user1;
         this.user2 =  user2;
         this.item1 =  item1;

@@ -3,26 +3,30 @@ package group.trade;
 import group.config.property.TradeProperties;
 import group.item.Item;
 import group.repository.Repository;
+import group.repository.reflection.EntityMappable;
+import group.repository.reflection.MappableBase;
 import group.user.PersonalUser;
 import group.menu.data.Response;
 
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 
-public class TradeManager {
-    private int numOfTrades;
-    private final int editLimit;
-    private final int borrowTimeLimit; // the number of months until a user has to reverse the temporary trade
+public class TradeManager extends MappableBase implements EntityMappable {
+    private Integer numOfTrades;
+    private Integer editLimit; // final?
+    private Integer timeLimit; // the number of months until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
     private Repository<PersonalUser> userRepository;
 
+    public TradeManager(List<String> record){ super(record); }
     public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
             tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
         tradeProperties.set("editLimit", "3");
         tradeProperties.set("borrowTimeLimit", "1");
         editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
-        borrowTimeLimit = Integer.parseInt(tradeProperties.get("editLimit"));
+        timeLimit = Integer.parseInt(tradeProperties.get("editLimit"));
         this.tradeRepository = tradeRepository;
         this.userRepository = userRepository;
 
@@ -32,7 +36,6 @@ public class TradeManager {
 
         // PersonalUser::new refers to this constructor:
         public User(List<String> record){super(record);}
-
         // if this constructor does not exist in your entity, it will throw an error
 
         // flow:
@@ -66,7 +69,7 @@ public class TradeManager {
         boolean ifSomeTradeExists2 = tradeRepository.ifExists(4);
         boolean ifSomeTradeExists3 = tradeRepository.ifExists(new Trade()); Implement the equals() and hashCode() in Trade to use this one
 
-        // TODO: Map Response
+        // TODO: Request and Response
         Response response = tradeRepository.filterResponse(entity -> entity.getDateAndTime() == null,
         (entity, builder) -> builder.translatable("some.identifier.in.language.properties",
         entity.getUser1().toString(),entity.getUser2().toString()));
@@ -120,11 +123,6 @@ public class TradeManager {
                 currTrade.confirmUser2();
             }
         }
-        Response response = tradeRepository.filterResponse(entity -> entity.getDateAndTime() == null,
-                (entity, builder) -> builder.translatable("some.identifier.in.language.properties",
-                        entity.getUser1(),entity.getUser2()));
-        // if you have this in language.properties: some.identifier.in.language.properties=user1: %s, user2: %s
-        // this will return a Response object that has all matched trades with the translatable: user1: %s, user2: %s
     }
 
     public void editLocation(int tradeID, int editingUser, String location) {
@@ -227,7 +225,7 @@ public class TradeManager {
             currTrade.closeTrade();
         } else {
             Calendar newDateAndTime = currTrade.getDateAndTime();
-            newDateAndTime.set(Calendar.MONTH, borrowTimeLimit); // TODO: need to change
+            newDateAndTime.set(Calendar.MONTH, timeLimit); // TODO: need to change
             Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
                     currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
                     currTrade.getLocation());

@@ -2,9 +2,11 @@ package group.user;
 
 import java.util.*;
 import group.item.Item;
+import group.repository.Filter;
 
 public class PersonalUser extends User {
 
+    public static Filter<PersonalUser> getShouldBeFreezed;//how to implement filter lendCount < borrowCount;
     private List<Item> wishlist;       //TODO: replace Object with item when item is available
     private List<Item> inventory;
     private List<Item> trades;
@@ -89,6 +91,10 @@ public class PersonalUser extends User {
 
     public void setBorrowCount(int borrowCount) {
         this.borrowCount = borrowCount;
+    }
+
+    public boolean getShouldBeFreezed(){
+        return lendCount < borrowCount;
     }
 
     public int getNumTransactions() {

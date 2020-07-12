@@ -2,6 +2,7 @@ package group.menu.data;
 
 import group.menu.node.InputNode;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -43,6 +44,30 @@ public class Request {
      */
     public String get(String key) {
         return requestMap.get(key);
+    }
+
+    public Long getLong(String key) {
+        return Long.valueOf(get(key));
+    }
+
+    public Integer getInt(String key) {
+        return Integer.valueOf(get(key));
+    }
+
+    public Boolean getBoolean(String key) {
+        return Boolean.valueOf(get(key));
+    }
+
+    public Double getDouble(String key) {
+        return Double.valueOf(get(key));
+    }
+
+    public Float getFloat(String key) {
+        return Float.valueOf(get(key));
+    }
+
+    public Date getDate(String key) { // only use standard timestamp to ms here
+        return new Date(getLong(key));
     }
 
     /**

@@ -15,7 +15,7 @@ import group.menu.node.ResponseNode;
 public class ValidatorPair {
 
     /**
-     * The validator
+     * The validator used to validate user input
      */
     private final Validator validator;
 
@@ -25,8 +25,8 @@ public class ValidatorPair {
     private final ResponseNode failResponseNode;
 
     /**
-     * @param validator            {@link #validator}
-     * @param failResponseNode     {@link #failResponseNode}
+     * @param validator            The validator used to validate user input
+     * @param failResponseNode     The response node to be used if the validation didn't pass
      * @param failResponseNextNode the node after the failResponseNode to ask the user to repeat his/her input
      */
     public ValidatorPair(Validator validator, ResponseNode failResponseNode, Node failResponseNextNode) {
@@ -36,6 +36,7 @@ public class ValidatorPair {
     }
 
     /**
+     * Sets the failed response node's child
      * If the failResponseNextNode is not set when constructing the {@link #failResponseNode}.<p>
      * The input node itself will be set to be the next node
      *
@@ -49,7 +50,7 @@ public class ValidatorPair {
 
     /**
      * @param value user input
-     * @return if user input passes the validation
+     * @return <code>true</code> if user input passes the validation
      */
     public boolean validate(String value) {
         if(validator == null) return true;

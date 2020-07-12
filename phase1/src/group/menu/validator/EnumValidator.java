@@ -1,5 +1,11 @@
 package group.menu.validator;
 
+/**
+ * The class used to validate if a String is a valid enum of certain class.
+ *
+ * @param <T> the enum class type
+ * @author Dan Lyu
+ */
 public class EnumValidator<T extends Enum<T>> implements Validator {
 
     private final Class<T> clazz;

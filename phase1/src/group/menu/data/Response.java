@@ -11,10 +11,15 @@ import java.util.List;
 public class Response {
 
     /**
-     * if the Request is successfully made
+     * <code>true</code> if the Request is successfully made
      */
     private final boolean success;
 
+    /**
+     * The persistent Request key.
+     * If <code>success == true</code> and this key is not null,
+     * the corresponding Request will be persistent.
+     */
     private final String persistentKey;
 
     /**
@@ -22,6 +27,10 @@ public class Response {
      */
     private final List<TranslatablePair> translatablePairs = new ArrayList<>();
 
+    /**
+     * The master node identifier.
+     * If this is not null, the corresponding {@link group.menu.node.MasterOptionNode} will be prompted.
+     */
     private final String flexibleMasterIdentifier;
 
     /**
@@ -35,23 +44,29 @@ public class Response {
     }
 
     /**
-     * @return {@link #success}
+     * @return <code>true</code> if the Response represents a successful Response
      */
     public boolean success() {
         return success;
     }
 
     /**
-     * @return {@link #translatablePairs}
+     * @return the list of translatable pairs
      */
     public List<TranslatablePair> getTranslatablePairs() {
         return translatablePairs;
     }
 
+    /**
+     * @return the master node identifier
+     */
     public String getFlexibleMasterIdentifier() {
         return flexibleMasterIdentifier;
     }
 
+    /**
+     * @return the persistent key for the corresponding Request
+     */
     public String getPersistentKey() {
         return persistentKey;
     }
@@ -77,16 +92,27 @@ public class Response {
 
         private String persistentKey;
 
+        /**
+         * @param success if the Request succeeds
+         */
         public Builder(boolean success) {
             this.success = success;
             this.translatablePairs = new ArrayList<>();
         }
 
+        /**
+         * @param persistentKey the persistent key for the Request object
+         * @return the builder itself
+         */
         public Builder responseType(String persistentKey) {
             this.persistentKey = persistentKey;
             return this;
         }
 
+        /**
+         * @param identifier the identifier for a flexible {@link group.menu.node.MasterOptionNode}
+         * @return the builder itself
+         */
         public Builder masterIdentifier(String identifier) {
             master = identifier;
             return this;
@@ -132,6 +158,8 @@ public class Response {
         }
 
         /**
+         * Builds the Response object
+         *
          * @return the Response object
          */
         public Response build() {
@@ -139,6 +167,5 @@ public class Response {
         }
 
     }
-
 
 }

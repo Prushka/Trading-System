@@ -80,6 +80,15 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
         return data.get(id);
     }
 
+    /**
+     * @param id the unique id of this entity
+     * @return the entity
+     */
+    @Override
+    public T get(Long id) {
+        return get(id.intValue());
+    }
+
     @Override
     public T getFirst(Filter<T> filter) {
         if (iterator(filter).hasNext()) {
@@ -125,9 +134,22 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
         return builder.build();
     }
 
+    /**
+     * @param id the unique id as int to be found
+     * @return <code>true</code> if the entity with id exists
+     */
     @Override
     public boolean ifExists(int id) {
         return id < data.size();
+    }
+
+    /**
+     * @param id the unique id as Long to be found
+     * @return <code>true</code> if the entity with id exists
+     */
+    @Override
+    public boolean ifExists(Long id) {
+        return ifExists(id.intValue());
     }
 
     /**

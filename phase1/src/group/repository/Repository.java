@@ -12,6 +12,7 @@ import java.util.Iterator;
  * @param <T> the entity type to be used
  * @author Dan Lyu
  */
+// TODO: fix the long / int unique id problem
 public interface Repository<T extends UniqueId> {
 
     /**
@@ -20,10 +21,20 @@ public interface Repository<T extends UniqueId> {
     void add(T entity);
 
     /**
+     * Gets the entity by unique id. List doesn't allow long size.
+     * The long unique id decision was made as a convention earlier.
+     * The implementation may change in the future.
+     *
      * @param id the unique id of this entity
      * @return the entity
      */
     T get(int id);
+
+    /**
+     * @param id the unique id of this entity
+     * @return the entity
+     */
+    T get(Long id);
 
     /**
      * @param entity the entity to be checked
@@ -42,6 +53,15 @@ public interface Repository<T extends UniqueId> {
      * @return <code>true</code> if the entity with id exists
      */
     boolean ifExists(int id);
+
+    /**
+     * The long unique id decision was made as a convention earlier.
+     * The implementation may change in the future.
+     *
+     * @param id the unique id to be found
+     * @return <code>true</code> if the entity with id exists
+     */
+    boolean ifExists(Long id);
 
     /**
      * @param filter the filter to be used to match results

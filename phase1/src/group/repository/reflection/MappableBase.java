@@ -82,14 +82,19 @@ public abstract class MappableBase {
         }
     }
 
+    /**
+     * @return the String representation of current class's non-transient fields
+     */
     public String toCSVHeader() {
         return toCSVHeader(this.getClass(), false);
     }
 
     /**
-     * Returns the field name and type in alphabetic order.
+     * Returns the representation of the class's field name and type in alphabetic order.
      *
-     * @return the String representation of current class's non-transient fields
+     * @param clazz  the class to exam for fields
+     * @param prefix the prefix of the header element
+     * @return the String representation of the class's non-transient fields
      */
     public String toCSVHeader(Class<?> clazz, Boolean prefix) {
         StringBuilder value = new StringBuilder();
@@ -115,7 +120,8 @@ public abstract class MappableBase {
     }
 
     /**
-     * @return the sorted and non-transient fields of the current object
+     * @param clazz the class to exam for fields
+     * @return the sorted and non-transient fields of the class
      * @see <a href="https://stackoverflow.com/questions/1097807/java-reflection-is-the-order-of-class-fields-and-methods-standardized">Field Order in Reflection</a>
      * @see FieldComparator
      */
@@ -127,6 +133,9 @@ public abstract class MappableBase {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @return the sorted and non-transient fields of the current class
+     */
     private List<Field> getSortedFields() {
         return getSortedFields(this.getClass());
     }

@@ -3,7 +3,7 @@ package group.trade;
 import group.config.property.TradeProperties;
 import group.item.Item;
 import group.menu.data.Request;
-import group.repository.Repository;
+import group.repository.RepositorySavable;
 import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 import group.user.PersonalUser;
@@ -17,10 +17,10 @@ import java.util.List;
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit; // the number of months until a user has to reverse the temporary trade
-    private Repository<Trade> tradeRepository;
-    private Repository<PersonalUser> userRepository;
+    private RepositorySavable<Trade> tradeRepository;
+    private RepositorySavable<PersonalUser> userRepository;
 
-    public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
+    public TradeManager(RepositorySavable<Trade> tradeRepository, RepositorySavable<PersonalUser> userRepository, TradeProperties
             tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
         tradeProperties.set("editLimit", "3");

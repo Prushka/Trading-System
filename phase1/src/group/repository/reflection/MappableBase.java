@@ -3,6 +3,7 @@ package group.repository.reflection;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,9 +20,11 @@ import java.util.stream.Collectors;
  *
  * @author Dan Lyu
  * @author Bozho - "instantiating an enum using reflection"
+ * @author BalusC - "Get generic type of java.util.List"
  * @see CSVMappable
  * @see <a href="https://stackoverflow.com/questions/3735927/java-instantiating-an-enum-using-reflection">Instantiating an enum using reflection</a>
  * @see <a href="https://stackoverflow.com/questions/10638826/java-reflection-impact-of-setaccessibletrue">Impact of setAccessible(true)</a>
+ * @see <a href="https://stackoverflow.com/questions/1942644/get-generic-type-of-java-util-list">Get generic type of java.util.List</a>
  */
 public abstract class MappableBase {
 
@@ -51,15 +54,15 @@ public abstract class MappableBase {
                 } else if (field.getType().isEnum()) {
                     obj = Enum.valueOf((Class<Enum>) field.getType(), representation);
                 } else if (Integer.class.isAssignableFrom(field.getType())) {
-                    obj = Integer.parseInt(representation);
+                    obj = Integer.valueOf(representation);
                 } else if (Long.class.isAssignableFrom(field.getType())) {
-                    obj = Long.parseLong(representation);
+                    obj = Long.valueOf(representation);
                 } else if (Boolean.class.isAssignableFrom(field.getType())) {
-                    obj = Boolean.parseBoolean(representation);
+                    obj = Boolean.valueOf(representation);
                 } else if (Double.class.isAssignableFrom(field.getType())) {
-                    obj = Double.parseDouble(representation);
+                    obj = Double.valueOf(representation);
                 } else if (Float.class.isAssignableFrom(field.getType())) {
-                    obj = Float.parseFloat(representation);
+                    obj = Float.valueOf(representation);
                 } else if (String.class.isAssignableFrom(field.getType())) {
                     obj = representation;
                 } else if (Date.class.isAssignableFrom(field.getType())) {
@@ -72,14 +75,25 @@ public abstract class MappableBase {
                     }
                     obj = field.getType().getDeclaredConstructor(List.class).newInstance(childRepresentation);
                     id -= 1;
+                } else if (List.class.isAssignableFrom(field.getType())) {
+                    obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
                 }
-                // TODO: map List / Map that are also instances of CSVMappable (Maybe it's better to get a library for this in phase 2)
                 field.set(this, obj);
             } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
                 e.printStackTrace();
             }
             id++;
         }
+    }
+
+    private <T> List<T> stringToList(Class<T> fieldListGenericClass, String representation) {
+        List<T> list = new ArrayList<>();
+        for (String element : representation.split(";")) {
+            if (Integer.class.isAssignableFrom(fieldListGenericClass)) {
+                list.add((T) Integer.valueOf(element));
+            }
+        }
+        return list;
     }
 
     /**
@@ -168,6 +182,8 @@ public abstract class MappableBase {
                     value.append(((Date) obj).getTime());
                 } else if (obj instanceof CSVMappable) {
                     value.append(((CSVMappable) obj).toCSVString());
+                } else if (obj instanceof List) {
+                    ((List) obj).forEach(o -> value.append(o.toString()).append(";"));
                 } else {
                     value.append(obj.toString());
                 }

@@ -3,6 +3,9 @@ package group.system;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Dan Lyu
+ */
 public class SaveHook {
 
     private final List<Savable> savables = new ArrayList<>();

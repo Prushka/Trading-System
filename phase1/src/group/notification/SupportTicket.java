@@ -24,7 +24,6 @@ public class SupportTicket extends MappableBase implements Serializable, CSVMapp
 
     private Long uid; // it's a list to be serialized. maybe uid = index?
 
-
     public SupportTicket(List<String> data) {
         super(data);
     }

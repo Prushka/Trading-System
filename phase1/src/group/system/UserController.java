@@ -2,14 +2,14 @@ package group.system;
 
 import group.menu.data.Request;
 import group.menu.data.Response;
-import group.repository.RepositorySavable;
+import group.repository.Repository;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 
 public class UserController {
 
-    RepositorySavable<PersonalUser> personalRepo;
-    RepositorySavable<AdministrativeUser> adminRepo;
+    Repository<PersonalUser> personalRepo;
+    Repository<AdministrativeUser> adminRepo;
 
     public UserController(ControllerDispatcher dispatcher) {
         dispatcher.menuConstructor.user(this);

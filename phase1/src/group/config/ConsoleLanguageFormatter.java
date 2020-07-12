@@ -7,8 +7,18 @@ import java.util.Map;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
+/**
+ * The formatter used to log information using LanguageProperties and ansiColor.
+ *
+ * @author Dan Lyu
+ * @author shakram02 - print color in console
+ * @see <a href="https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println">print color in console</a>
+ */
 public class ConsoleLanguageFormatter extends Formatter {
 
+    /**
+     * The map of String identifier to AnsiColor
+     */
     private final Map<String, String> ansiColor = new HashMap<String, String>() {{
         put("{RESET}", "\u001B[0m");
         put("{BLACK}", "\u001B[30m");
@@ -57,12 +67,24 @@ public class ConsoleLanguageFormatter extends Formatter {
         put("{WHITE_BRIGHT}", "\033[0;97m");
     }};
 
+    /**
+     * Language Properties that predefines the identifier to the text
+     */
     private final LanguageProperties lang;
 
+    /**
+     * @param lang Language Properties that predefines the identifier to the text
+     */
     public ConsoleLanguageFormatter(LanguageProperties lang) {
         this.lang = lang;
     }
 
+    /**
+     * Applies ansi color
+     *
+     * @param message the raw message to format
+     * @return the formatted message
+     */
     public String formatColor(String message) {
         message = "{BLACK}" + message;
         for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
@@ -71,6 +93,10 @@ public class ConsoleLanguageFormatter extends Formatter {
         return message;
     }
 
+    /**
+     * @param record the record to log
+     * @return the formatted String after applying language, parameters and ansiColor
+     */
     @Override
     public String format(LogRecord record) {
         String prefix = "";

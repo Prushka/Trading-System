@@ -1,5 +1,9 @@
 package group.item;
 
+import group.notification.SupportTicket;
+
+import java.util.Objects;
+
 public class Item {
 
     private String ownerusernsme;
@@ -36,7 +40,16 @@ public class Item {
         description = newdescription;
     }
 
-    public String toString(){
-        return this.name + ": " + this.description + "\n Owned By: " + this.ownerusernsme;
+    @Override
+    public boolean equals(Object other){
+        if (other instanceof Item) {
+            Item otherItem = (Item) other;
+            return this.name.equals(otherItem.name) && this.description.equals(otherItem.description) &&
+                    this.ownerusernsme.equals(otherItem.ownerusernsme);
+        }
+        return false;
     }
+
+    @Override
+    public int hashCode(){ return name.hashCode() + description.hashCode() + ownerusernsme.hashCode(); }
 }

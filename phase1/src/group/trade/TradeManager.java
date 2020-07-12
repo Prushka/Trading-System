@@ -4,7 +4,6 @@ import group.config.property.TradeProperties;
 import group.item.Item;
 import group.repository.Repository;
 import group.user.PersonalUser;
-import group.user.User;
 import group.menu.data.Response;
 
 import java.util.Calendar;
@@ -28,6 +27,7 @@ public class TradeManager {
         this.userRepository = userRepository;
 
         /*
+        Dan Notes:
         Repository<Trade> tradeRepositorySerialization = new SerializableRepository<>("data/trade.ser");
 
         // PersonalUser::new refers to this constructor:
@@ -197,31 +197,42 @@ public class TradeManager {
         }
     }
 
-    // TODO: Remove from wishlist and inventory
+    // Weird system -- they can trade other people's items
     private void makeTrades(PersonalUser currUser, PersonalUser otherUser, Trade currTrade) {
         if (currTrade.getIsPermanent()) {
             if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
                 currUser.setBorrowCount(currUser.getBorrowCount() + 1);
+                currUser.removeFromWishList(currTrade.getItem2());
+                currUser.addToInventory(currTrade.getItem2());
                 otherUser.setLendCount(currUser.getLendCount() + 1);
+                otherUser.removeFromInventory(currTrade.getItem2());
             } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
                 otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
+                otherUser.removeFromWishList(currTrade.getItem1());
+                otherUser.addToInventory(currTrade.getItem2());
                 currUser.setLendCount(currUser.getLendCount() + 1);
+                currUser.removeFromInventory(currTrade.getItem1());
             } else {
                 currUser.setBorrowCount(currUser.getBorrowCount() + 1);
                 currUser.setLendCount(currUser.getLendCount() + 1);
+                currUser.removeFromWishList(currTrade.getItem2());
+                currUser.removeFromInventory(currTrade.getItem1());
+                currUser.addToInventory(currTrade.getItem2());
                 otherUser.setLendCount(currUser.getLendCount() + 1);
                 otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
+                otherUser.removeFromWishList(currTrade.getItem1());
+                otherUser.removeFromInventory(currTrade.getItem2());
+                otherUser.addToInventory(currTrade.getItem1());
             }
             currTrade.closeTrade();
         } else {
             Calendar newDateAndTime = currTrade.getDateAndTime();
-            newDateAndTime.set(Calendar.MONTH, borrowTimeLimit); // TODO: need to change, mappable base
+            newDateAndTime.set(Calendar.MONTH, borrowTimeLimit); // TODO: need to change
             Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
-                    currTrade.getItem1(), currTrade.getItem2(), true, newDateAndTime,
+                    currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
                     currTrade.getLocation());
             currTrade.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
         }
     }
 }
-
 

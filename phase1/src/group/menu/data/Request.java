@@ -8,8 +8,8 @@ import java.util.Map;
 
 /**
  * The Request object that has a map of
- * {@link InputNode#getKey()} -> user input ({@link InputNode#getValue()}).<br>
- *
+ * {@link InputNode#getKey()} -> user input ({@link InputNode#getValue()}).<p>
+ * <p>
  * The Request is constructed automatically in {@link group.menu.node.SubmitNode}
  *
  * @author Dan Lyu

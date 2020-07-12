@@ -5,9 +5,9 @@ import group.menu.node.Node;
 import group.menu.node.ResponseNode;
 
 /**
- * The pair of validator and ResponseNode.<br>
- * If user input passes the {@link #validator}, the {@link #failResponseNode} won't be used.<br>
- * If it didn't, the {@link #failResponseNode} will be the place where failed result is stored.<br>
+ * The pair of validator and ResponseNode.<p>
+ * If user input passes the {@link #validator}, the {@link #failResponseNode} won't be used.<p>
+ * If it didn't, the {@link #failResponseNode} will be the place where failed result is stored.<p>
  *
  * @author Dan Lyu
  * @see ResponseNode
@@ -36,7 +36,7 @@ public class ValidatorPair {
     }
 
     /**
-     * If the failResponseNextNode is not set when constructing the {@link #failResponseNode}.<br>
+     * If the failResponseNextNode is not set when constructing the {@link #failResponseNode}.<p>
      * The input node itself will be set to be the next node
      *
      * @param inputNode the input node

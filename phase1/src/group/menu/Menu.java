@@ -10,8 +10,18 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The entry of nodes.<p>
+ * The intended exposed methods to be used to operate nodes.<p>
+ * Contains operations to navigate menu levels, display and parse input
+ *
+ * @author Dan Lyu
+ */
 public class Menu {
 
+    /**
+     * The
+     */
     static Logger LOGGER; // consider using instance variable
 
     static {
@@ -36,9 +46,8 @@ public class Menu {
     }
 
     private void goToNext() {
-        // TODO: this part is ughhh
         // These restrictions only apply if the user goes back to a node that he/she already inputs something and wants to get back to the next node without actually inputting anything in that previous node
-        // kind of rare. Implement this in a polymorphism way may need to add fields and methods to all node classes. I don't know!
+        // Implement this in a polymorphism way may need to add fields and methods to all node classes. I don't know!
         if (currentNode.getChild() != null && currentNode instanceof InputNode && currentNode.getChild() instanceof InputNode) {
             if (currentNode.getValue() != null && currentNode.getValue().length() > 0 && !((InputNode) currentNode).validate().isPresent()) {
                 LOGGER.log(Level.INFO,"current.value.tip");

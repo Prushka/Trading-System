@@ -8,12 +8,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The implementation of converting fields to CSV record. Has a constructor
- * that takes in CSV record using reflection.
+ * The reflection implementation of {@link CSVMappable}.<p>
+ * Contains a constructor that takes in a CSV representation String.<p>
+ * Subclasses are required to have a sub-constructor corresponding to <code>MappableBase(List data)</code><p>
+ * This reflection implementation has limits on certain classes.<p>
+ * Use only non-final Long, Integer, Float, Double, Boolean, String, Date and Enum fields in the entity class if you extend this class.<p>
+ * To allow more flexibility, implement {@link CSVMappable} directly in the entity class.
  *
  * @author Dan Lyu
- * @author "instantiating an enum using reflection" by Bozho
- * @see EntityMappable
+ * @author Bozho - "instantiating an enum using reflection"
+ * @see CSVMappable
  * @see <a href="https://stackoverflow.com/questions/3735927/java-instantiating-an-enum-using-reflection">Instantiating an enum using reflection</a>
  * @see <a href="https://stackoverflow.com/questions/10638826/java-reflection-impact-of-setaccessibletrue">Impact of setAccessible(true)</a>
  */
@@ -27,10 +31,10 @@ public abstract class MappableBase {
     }
 
     /**
-     * This constructor will construct the object itself using
-     * fields and their corresponding String representation
+     * Constructs the object itself using
+     * fields and their corresponding String representation.
      *
-     * @param data the CSV record split into list
+     * @param data the CSV representation String List
      */
     public MappableBase(List<String> data) {
         int id = 0;
@@ -68,9 +72,9 @@ public abstract class MappableBase {
     }
 
     /**
-     * Returns the field name and type in order.
+     * Returns the field name and type in alphabetic order.
      *
-     * @return the Header String record for this entity
+     * @return the String representation of current class's non-transient fields
      */
     public String toCSVHeader() {
         StringBuilder value = new StringBuilder();
@@ -81,12 +85,16 @@ public abstract class MappableBase {
         return value.toString();
     }
 
+    /**
+     * @param field the field to be checked
+     * @return <code>true</code> if the field is not transient
+     */
     private boolean ifFieldNotTransient(Field field) {
         return !Modifier.isTransient(field.getModifiers());
     }
 
     /**
-     * @return the sorted fields of the current object
+     * @return the sorted and non-transient fields of the current object
      * @see <a href="https://stackoverflow.com/questions/1097807/java-reflection-is-the-order-of-class-fields-and-methods-standardized">Field Order in Reflection</a>
      * @see FieldComparator
      */
@@ -98,6 +106,9 @@ public abstract class MappableBase {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @return the String representation of current class's field's empty values, contains only commas
+     */
     public String toNullString() {
         StringBuilder sb = new StringBuilder();
         getSortedFields().forEach(field -> sb.append(","));
@@ -105,13 +116,15 @@ public abstract class MappableBase {
     }
 
     /**
-     * @return the String record representation of all fields in current class
+     * Returns the String representation in alphabetic order of field's names
+     *
+     * @return the String representation of non-transient fields's values in current class
      */
     public String toCSVString() {
         StringBuilder value = new StringBuilder();
         for (Field field : getSortedFields()) {
             try {
-                field.setAccessible(true); // how this makes private members accessible???
+                field.setAccessible(true);
                 Object obj = field.get(this);
                 if (obj == null) {
                     value.append("null");

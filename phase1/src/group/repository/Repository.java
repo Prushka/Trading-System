@@ -4,10 +4,18 @@ import group.menu.data.Response;
 
 import java.util.Iterator;
 
+/**
+ * The interface to be used in use case methods.<p>
+ * Contains only list related methods for the Repository.<p>
+ * The interface doesn't contain any file related operations.
+ *
+ * @param <T> the entity type to be used
+ * @author Dan Lyu
+ */
 public interface Repository<T extends UniqueId> {
 
     /**
-     * @param entity an entity to be added
+     * @param entity the entity to be added
      */
     void add(T entity);
 
@@ -19,29 +27,58 @@ public interface Repository<T extends UniqueId> {
 
     /**
      * @param entity the entity to be checked
-     * @return if this entity exists in this Repository
+     * @return <code>true</code> if this entity exists in this Repository
      */
     boolean ifExists(T entity);
 
+    /**
+     * @param filter the filter to be used to match results
+     * @return <code>true</code> if the entity that matches the filter exists
+     */
     boolean ifExists(Filter<T> filter);
 
+    /**
+     * @param id the unique id to be found
+     * @return <code>true</code> if the entity with id exists
+     */
     boolean ifExists(int id);
 
+    /**
+     * @param filter the filter to be used to match results
+     * @return the first matched entity
+     */
     T getFirst(Filter<T> filter);
 
+    /**
+     * @param entity the entity to be removed
+     */
     void remove(T entity);
 
+    /**
+     * @param id the unique id of the entity to be removed
+     */
     void remove(int id);
 
+    /**
+     * @param entity the entity who's unique id is unclear
+     * @return the unique id
+     */
     int getId(T entity);
 
+    /**
+     * @return the size of the Repository
+     */
     int size();
 
+    /**
+     * @param filter the filter to be used to match results
+     * @return the size of matched elements
+     */
     int size(Filter<T> filter);
 
     /**
-     * @param filter the filter used to match the result
-     * @return the iterator that will use the filter object
+     * @param filter the filter to be used to match results
+     * @return the iterator that iterates over matched entities
      */
     Iterator<T> iterator(Filter<T> filter);
 

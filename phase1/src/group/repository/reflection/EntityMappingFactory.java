@@ -3,11 +3,11 @@ package group.repository.reflection;
 import java.util.List;
 
 /**
- * The constructor reference used to take in List<String> representation
- * and construct the entity itself.
+ * The functional interface used to take in <code>List<String></code> representation
+ * and construct the entity itself.<p>
+ * Used as a constructor reference.
  *
- * @param <T> The entity that needs to be mapped
- *
+ * @param <T> The entity to be mapped
  * @author Dan Lyu
  */
 
@@ -15,9 +15,9 @@ import java.util.List;
 public interface EntityMappingFactory<T> {
 
     /**
-     * It will use the constructor reference of the entity
+     * Constructs the entity.
      *
-     * @param data the CSV record
+     * @param data the CSV representation List
      * @return the entity object
      */
     T get(List<String> data);

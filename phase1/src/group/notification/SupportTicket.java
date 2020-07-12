@@ -2,19 +2,19 @@ package group.notification;
 
 import group.menu.data.Request;
 import group.repository.UniqueId;
-import group.repository.reflection.EntityMappable;
+import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class SupportTicket extends MappableBase implements Serializable, EntityMappable, UniqueId {
+public class SupportTicket extends MappableBase implements Serializable, CSVMappable, UniqueId {
 
     private Category category;
 
     private Priority priority;
 
-    private State state; 
+    private State state;
 
     private String submitterEmail;
 

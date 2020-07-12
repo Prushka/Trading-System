@@ -8,9 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * The implementation of list related operations in {@link RepositorySavable}.
+ * The implementation of list related operations in {@link Repository}.
  *
- * @param <T> The entity this RepositoryBase handles with
+ * @param <T> The entity type to be used
  * @author Dan Lyu
  */
 public abstract class RepositoryBase<T extends UniqueId> implements RepositorySavable<T> {
@@ -21,12 +21,13 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
     List<T> data;
 
     /**
-     * The file object this Repository reads and saves
+     * The file object this Repository reads to and saves from
      */
     File file;
 
     /**
-     * @param path the path to the file
+     * @param path     the path to the file
+     * @param saveHook the repository will be saved by a saveHook
      */
     public RepositoryBase(String path, SaveHook saveHook) {
         this.file = new File(path);

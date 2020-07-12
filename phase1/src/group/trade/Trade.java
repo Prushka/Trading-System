@@ -3,14 +3,13 @@ package group.trade;
 import group.item.Item;
 import group.menu.data.Request;
 import group.repository.UniqueId;
-import group.repository.reflection.EntityMappable;
+import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 
 import java.sql.Date;
-import java.util.Calendar;
 import java.util.List;
 
-public class Trade extends MappableBase implements EntityMappable, UniqueId {
+public class Trade extends MappableBase implements CSVMappable, UniqueId {
     // to use SerializationRepository: public class Trade implements Serializable {
 
     // TODO: you also have to use objects for all fields (Int, Boolean). primitives won't work

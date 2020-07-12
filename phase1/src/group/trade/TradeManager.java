@@ -4,24 +4,24 @@ import group.config.property.TradeProperties;
 import group.item.Item;
 import group.menu.data.Request;
 import group.repository.Repository;
-import group.repository.reflection.EntityMappable;
+import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 import group.user.PersonalUser;
-import group.menu.data.Response;
 
-import java.util.Calendar;
 import java.sql.Date;
-import java.util.Iterator;
 import java.util.List;
 
-public class TradeManager extends MappableBase implements EntityMappable {
+public class TradeManager extends MappableBase implements CSVMappable {
     private Integer numOfTrades;
     private Integer editLimit; // final?
     private Integer timeLimit; // the number of months until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
     private Repository<PersonalUser> userRepository;
 
-    public TradeManager(List<String> record){ super(record); }
+    public TradeManager(List<String> record) {
+        super(record);
+    }
+
     public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
             tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
@@ -33,26 +33,6 @@ public class TradeManager extends MappableBase implements EntityMappable {
         this.userRepository = userRepository;
 
         /*
-        Dan Notes:
-        Repository<Trade> tradeRepositorySerialization = new SerializableRepository<>("data/trade.ser");
-
-        // PersonalUser::new refers to this constructor:
-        public User(List<String> record){super(record);}
-        // if this constructor does not exist in your entity, it will throw an error
-
-        // flow:
-        // CSVRepository takes in this constructor reference as a field. And when reading from csv file,
-        // this constructor will be called to create corresponding objects.
-        // The constructor is a standard list of strings since that's how csv columns work
-
-        // CSVRepository is only dependent on EntityMappable not MappableBase
-        // So it is optional to extend MappableBase (though I would recommend you do that).
-        // MappableBase is just a reflection implementation of EntityMappable
-        // If you don't extend MappableBase just make sure you implement EntityMappable and all methods needed including
-        // the constructor that's mentioned above,
-        // this will get rid of all restrictions that are basically caused by reflection. (You will need to put your
-        // fields into String manually and put them back in the constructor)
-
         // Get from Repository -- use for only one record
         Trade getSomeTrade = tradeRepository.getFirst(entity -> entity.getItem1() == null);
         Iterator<Trade> getAnIterator = tradeRepository.iterator(entity -> entity.getItem1() == null);

@@ -3,11 +3,10 @@ package group.repository;
 import group.menu.data.Response;
 
 /**
+ * The functional interface used to map the entity properties to a Response object
  * Use this in lambda or implement a concrete class.
- * It is used to map the entity properties to a Response object
  *
  * @param <T> the entity this ResponseMapper deals with
- *
  * @author Dan Lyu
  * @see RepositoryBase#filterResponse(Filter, ResponseMapper)
  */

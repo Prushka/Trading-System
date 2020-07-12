@@ -1,7 +1,8 @@
 package group.user;
 
-import java.util.*;
 import group.item.Item;
+
+import java.util.*;
 
 public class PersonalUser extends User {
 
@@ -104,6 +105,10 @@ public class PersonalUser extends User {
 
     public void setBorrowCount(int borrowCount) {
         this.borrowCount = borrowCount;
+    }
+
+    public boolean getShouldBeFreezed(){
+        return lendCount < borrowCount;
     }
 
     public int getNumTransactions() {

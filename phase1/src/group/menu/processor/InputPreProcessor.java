@@ -7,6 +7,7 @@ package group.menu.processor;
  * on the use input String.
  *
  * @author Dan Lyu
+ * @see group.menu.node.InputNode
  */
 
 @FunctionalInterface

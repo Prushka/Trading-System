@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 /**
  * The basic menu node that provides node related operations.
- * Contains child and parent and has the ability to trace
+ * Contains child, parent and has the ability to trace.
  *
  * @author Dan Lyu
  */

@@ -1,14 +1,18 @@
 package group.user;
 
 import group.item.Item;
+import group.repository.Repository;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AdministrativeManager {
 
-    private static final List<AdministrativeUser> administrators = new ArrayList<>();
-    private static List<PersonalUser> frozennotifications ;
+
+    private static List<AdministrativeUser> administrators = new ArrayList<>();
+    private static Repository<PersonalUser> personalUserRepository;
+    private Iterator<PersonalUser> freezelist;
     private static int transactionLimit = 100; //what is the init limit?
     private static int lendBeforeBorrow = 1;
 
@@ -85,16 +89,26 @@ public class AdministrativeManager {
         return true;
     }
 
-    public void createFrozenNotification(PersonalUser user){
-        frozennotifications.add(user);
+    //public void confirmAddItem()
+
+    //public void createFrozenNotification(PersonalUser user){
+        //frozennotifications.add(user);
+    //}
+
+    public void getListUserShouldBeFreezed(){
+        freezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezed);
     }
 
-    public void freezeListUser(){
-        for (PersonalUser p : frozennotifications){
-            freezeUser(p);
-            frozennotifications.remove(p);
+    public void confirmFreezeUser() {
+        while (freezelist.hasNext()){
+            freezeUser(freezelist.next());
         }
+
     }
+
+
+        //public void findFreezeUser() {
+        //r}
 
     //TODO: method of creating notification and add them to notification list or repo
 }

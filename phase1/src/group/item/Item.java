@@ -1,11 +1,13 @@
 package group.item;
 
 import group.notification.SupportTicket;
+import group.repository.UniqueId;
 
 import java.util.Objects;
 
-public class Item {
+public class Item implements UniqueId {
 
+    private Long uid;
     private String ownerUsername;
     private String name;
     private String description;
@@ -39,6 +41,13 @@ public class Item {
     public void setDescription(String newDescription){
         description = newDescription;
     }
+
+    @Override
+    public long getUid() { return this.uid;}
+
+    @Override
+    public void setUid(long new_uid) { this.uid = new_uid;}
+
 
     @Override
     public String toString(){

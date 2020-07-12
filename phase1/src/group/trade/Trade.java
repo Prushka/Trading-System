@@ -29,8 +29,8 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     private Long prevMeeting = null;
 
     // Item Details
-    private transient Item item1;
-    private transient Item item2;
+    private Long item1;
+    private Long item2;
     private Boolean isPermanent;
     private Boolean isClosed;
 
@@ -45,7 +45,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     }
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
-    public Trade(Long user1, Long user2, Item item1, Item item2, Boolean isPermanent, Date dateAndTime,
+    public Trade(Long user1, Long user2, Long item1, Long item2, Boolean isPermanent, Date dateAndTime,
                  String location){
         this.user1 =  user1;
         this.user2 =  user2;
@@ -72,8 +72,8 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     public int getUser2Edits(){ return user2Edits;}
     public boolean getUser1Confirms(){ return user1Confirms;}
     public boolean getUser2Confirms(){ return user2Confirms;}
-    public Item getItem1(){ return item1;}
-    public Item getItem2(){ return item2;}
+    public Long getItem1(){ return item1;}
+    public Long getItem2(){ return item2;}
     public boolean getIsPermanent(){ return isPermanent;}
     public boolean getIsClosed(){ return isClosed;}
     public Date getDateAndTime(){ return dateAndTime;}

@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
  * @see <a href="https://stackoverflow.com/questions/10638826/java-reflection-impact-of-setaccessibletrue">Impact of setAccessible(true)</a>
  * @see <a href="https://stackoverflow.com/questions/1942644/get-generic-type-of-java-util-list">Get generic type of java.util.List</a>
  */
+
+@SuppressWarnings("unchecked")
 public abstract class MappableBase {
 
     /**
@@ -70,7 +72,6 @@ public abstract class MappableBase {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private Object getObjectFrom(Class<?> fieldTypeClass, String representation) {
         Object obj;
         if (representation.equals("null")) {
@@ -97,7 +98,6 @@ public abstract class MappableBase {
         return obj;
     }
 
-    @SuppressWarnings("unchecked")
     private <T> List<T> stringToList(Class<T> fieldListGenericClass, String representation) {
         List<T> list = new ArrayList<>();
         for (String element : representation.split(";")) {
@@ -193,7 +193,7 @@ public abstract class MappableBase {
                 } else if (obj instanceof CSVMappable) {
                     value.append(((CSVMappable) obj).toCSVString());
                 } else if (obj instanceof List) {
-                    ((List) obj).forEach(o -> value.append(o.toString()).append(";"));
+                    ((List<?>) obj).forEach(o -> value.append(o.toString()).append(";"));
                 } else {
                     value.append(obj.toString());
                 }

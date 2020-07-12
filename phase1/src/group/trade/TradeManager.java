@@ -3,6 +3,7 @@ package group.trade;
 import group.config.property.TradeProperties;
 import group.item.Item;
 import group.menu.data.Request;
+import group.notification.SupportTicket;
 import group.repository.Repository;
 import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class TradeManager {
     private final Integer editLimit;
-    private final Integer timeLimit; // the number of months until a user has to reverse the temporary trade
+    private final Integer timeLimit; // the number of miliseconds until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
     private Repository<PersonalUser> userRepository;
 
@@ -64,25 +65,25 @@ public class TradeManager {
          */
     }
 
-    // Come up with solution to the casting problem
-    public Trade createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
+    public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
                              Date dateAndTime, String location) {
         // Get User from Repository and check if the items are in their inventory
         if (userRepository.ifExists(user1) && userRepository.ifExists(user2)) {
             PersonalUser trader1 = userRepository.get(user1);
             PersonalUser trader2 = userRepository.get(user2);
+            // TODO: move conditions to controller? or fix here
             //if ((item1.equals(null) || trader1.getInventory().contains(item1)) && (item2.equals(null) ||
               //      trader2.getInventory().contains(item2))) {
                 Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent,
                         dateAndTime, location);
                 tradeRepository.add(newTrade);
-                return newTrade;
+                return tradeRepresentation("submit.ticket.category", newTrade);
             //}
         }
         return null;
     }
 
-    public void editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
+    public Response editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
         // Get trade from Repository
         if (tradeRepository.ifExists(tradeID)) {
             Trade currTrade = tradeRepository.get(tradeID);
@@ -101,10 +102,12 @@ public class TradeManager {
                 currTrade.unconfirmUser1();
                 currTrade.confirmUser2();
             }
+            return tradeRepresentation("submit.ticket.category", currTrade);
         }
+        return null;
     }
 
-    public void editLocation(int tradeID, int editingUser, String location) {
+    public Response editLocation(int tradeID, int editingUser, String location) {
         // Get Trade from Repository
         if (tradeRepository.ifExists(tradeID)) {
             Trade currTrade = tradeRepository.get(tradeID);
@@ -123,7 +126,9 @@ public class TradeManager {
                 currTrade.unconfirmUser1();
                 currTrade.confirmUser2();
             }
+            return tradeRepresentation("submit.ticket.category", currTrade);
         }
+        return null;
     }
 
     public void confirmTrade(int tradeID, int editingUser) {
@@ -152,7 +157,6 @@ public class TradeManager {
         }
     }
 
-    // More casting problems & shorten code
     public void confirmTradeComplete(int tradeID, int editingUser) {
         if (userRepository.ifExists(editingUser) && tradeRepository.ifExists(tradeID)) {
             PersonalUser currUser = userRepository.get(editingUser);
@@ -174,7 +178,7 @@ public class TradeManager {
         }
     }
 
-    // Weird system -- they can trade other people's items
+    // TODO: Add to other people's inventory... Weird system -- they can trade other people's items
     private void makeTrades(PersonalUser currUser, PersonalUser otherUser, Trade currTrade) {
         if (currTrade.getIsPermanent()) {
             if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
@@ -204,12 +208,18 @@ public class TradeManager {
             currTrade.closeTrade();
         } else {
             Date newDateAndTime = currTrade.getDateAndTime();
-            // newDateAndTime.set(Calendar.MONTH, timeLimit); // TODO: need to change
-            Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
-                    currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
-                    currTrade.getLocation());
-            secondMeeting.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
+            // newDateAndTime.set(Calendar.MONTH, timeLimit); // TODO: set new dates and new meetings
+            //Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
+            //        currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
+            //        currTrade.getLocation());
+            //secondMeeting.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
         }
+    }
+
+    private Response tradeRepresentation(String translatable, Trade trade) {
+        return new Response.Builder(true).
+                translatable(translatable, trade.toString())
+                .build();
     }
 }
 

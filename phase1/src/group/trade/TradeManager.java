@@ -10,12 +10,11 @@ import group.user.PersonalUser;
 import group.menu.data.Response;
 
 import java.util.Calendar;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 public class TradeManager extends MappableBase implements EntityMappable {
-    private Long numOfTrades = Long.valueOf(1);
     private Integer editLimit; // final?
     private Integer timeLimit; // the number of months until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
@@ -87,7 +86,7 @@ public class TradeManager extends MappableBase implements EntityMappable {
     }
 
     // Come up with solution to the casting problem
-    public void createTrade(long user1, long user2, Item item1, Item item2, Boolean isPermanent,
+    public Trade createTrade(long user1, long user2, Item item1, Item item2, Boolean isPermanent,
                              Date dateAndTime, String location) {
         // Get User from Repository and check if the items are in their inventory
         if (userRepository.ifExists((int) user1) && userRepository.ifExists((int) user2)) {
@@ -95,12 +94,13 @@ public class TradeManager extends MappableBase implements EntityMappable {
             PersonalUser trader2 = userRepository.get((int) user2);
             if ((item1 == null || trader1.getInventory().contains(item1)) && (item2 == null ||
                     trader2.getInventory().contains(item2))) {
-                Trade newTrade = new Trade(numOfTrades, user1, user2, item1, item2, isPermanent,
+                Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent,
                         dateAndTime, location);
-                numOfTrades++;
                 tradeRepository.add(newTrade);
+                return newTrade;
             }
         }
+        return null;
     }
 
     public void editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
@@ -226,10 +226,9 @@ public class TradeManager extends MappableBase implements EntityMappable {
         } else {
             Date newDateAndTime = currTrade.getDateAndTime();
             // newDateAndTime.set(Calendar.MONTH, timeLimit); // TODO: need to change
-            createTrade(currTrade.getUser1(), currTrade.getUser1(),
+            Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
                     currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
                     currTrade.getLocation());
-            Trade secondMeeting = tradeRepository.get(Math.toIntExact(numOfTrades));
             secondMeeting.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
         }
     }

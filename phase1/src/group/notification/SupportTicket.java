@@ -6,7 +6,6 @@ import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SupportTicket extends MappableBase implements Serializable, CSVMappable, UniqueId {
@@ -24,18 +23,6 @@ public class SupportTicket extends MappableBase implements Serializable, CSVMapp
     private Long timeStamp; // they are nullable
 
     private Long uid; // it's a list to be serialized. maybe uid = index?
-
-    private final List<String> testList = new ArrayList<String>() {{
-        add("test");
-        add("test2");
-        add("test3");
-    }};
-
-    private final List<Long> testList2 = new ArrayList<Long>() {{
-        add(0L);
-        add(200L);
-        add(399L);
-    }};
 
     public SupportTicket(List<String> data) {
         super(data);

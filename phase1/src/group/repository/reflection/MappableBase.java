@@ -46,28 +46,10 @@ public abstract class MappableBase {
         for (Field field : getSortedFields()) {
             field.setAccessible(true);
             String representation = data.get(id);
-            Object obj = null; // declaring within the smallest scope. https://stackoverflow.com/questions/8803674/declaring-variables-inside-or-outside-of-a-loop
+            Object obj; // declaring within the smallest scope. https://stackoverflow.com/questions/8803674/declaring-variables-inside-or-outside-of-a-loop
             try {
                 // what's the difference between == and isAssignedFrom() and isAssignableFrom() from the class?
-                if (representation.equals("null")) {
-                    obj = null;
-                } else if (field.getType().isEnum()) {
-                    obj = Enum.valueOf((Class<Enum>) field.getType(), representation);
-                } else if (Integer.class.isAssignableFrom(field.getType())) {
-                    obj = Integer.valueOf(representation);
-                } else if (Long.class.isAssignableFrom(field.getType())) {
-                    obj = Long.valueOf(representation);
-                } else if (Boolean.class.isAssignableFrom(field.getType())) {
-                    obj = Boolean.valueOf(representation);
-                } else if (Double.class.isAssignableFrom(field.getType())) {
-                    obj = Double.valueOf(representation);
-                } else if (Float.class.isAssignableFrom(field.getType())) {
-                    obj = Float.valueOf(representation);
-                } else if (String.class.isAssignableFrom(field.getType())) {
-                    obj = representation;
-                } else if (Date.class.isAssignableFrom(field.getType())) {
-                    obj = new Date(Long.parseLong(representation));
-                } else if (CSVMappable.class.isAssignableFrom(field.getType())) { // aha
+                if (CSVMappable.class.isAssignableFrom(field.getType())) { // aha
                     List<String> childRepresentation = new ArrayList<>();
                     for (Field ignored : getSortedFields(field.getType())) {
                         childRepresentation.add(data.get(id));
@@ -77,21 +59,49 @@ public abstract class MappableBase {
                     id -= 1;
                 } else if (List.class.isAssignableFrom(field.getType())) {
                     obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
+                } else {
+                    obj = getObjectFrom(field.getType(), representation);
                 }
                 field.set(this, obj);
+                id++;
             } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
                 e.printStackTrace();
             }
-            id++;
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private Object getObjectFrom(Class<?> fieldTypeClass, String representation) {
+        Object obj;
+        if (representation.equals("null")) {
+            obj = null; // this is necessary since classes below can be null
+        } else if (fieldTypeClass.isEnum()) {
+            obj = Enum.valueOf((Class<Enum>) fieldTypeClass, representation);
+        } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Integer.valueOf(representation);
+        } else if (Long.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Long.valueOf(representation);
+        } else if (Boolean.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Boolean.valueOf(representation);
+        } else if (Double.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Double.valueOf(representation);
+        } else if (Float.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Float.valueOf(representation);
+        } else if (String.class.isAssignableFrom(fieldTypeClass)) {
+            obj = representation;
+        } else if (Date.class.isAssignableFrom(fieldTypeClass)) {
+            obj = new Date(Long.parseLong(representation));
+        } else {
+            obj = null;
+        }
+        return obj;
+    }
+
+    @SuppressWarnings("unchecked")
     private <T> List<T> stringToList(Class<T> fieldListGenericClass, String representation) {
         List<T> list = new ArrayList<>();
         for (String element : representation.split(";")) {
-            if (Integer.class.isAssignableFrom(fieldListGenericClass)) {
-                list.add((T) Integer.valueOf(element));
-            }
+            list.add((T) getObjectFrom(fieldListGenericClass, element));
         }
         return list;
     }

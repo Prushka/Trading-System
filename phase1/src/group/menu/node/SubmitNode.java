@@ -56,11 +56,8 @@ public class SubmitNode extends InputNode {
             responseNode.setChild(flexibleMasterPool.get(response.getFlexibleMasterIdentifier()));
         } else if (response.success()) {
             responseNode.setChild(getChild());
-            switch (response.getResponseType()) {
-                case LOGIN:
-                case REGISTER:
-                    persistentRequest.addCachedRequest("login", getRequest());
-                    break;
+            if (response.getPersistentKey() != null) {
+                persistentRequest.addCachedRequest(response.getPersistentKey(), getRequest());
             }
         } else {
             responseNode.setChild(failedResultNode);

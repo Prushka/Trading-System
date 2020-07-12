@@ -27,8 +27,8 @@ public class Trade extends MappableBase implements EntityMappable, UniqueId {
     private Long prevMeeting = null;
 
     // Item Details
-    private Item item1;
-    private Item item2;
+    private transient Item item1;
+    private transient Item item2;
     private Boolean isPermanent;
     private Boolean isClosed;
 

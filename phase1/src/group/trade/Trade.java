@@ -8,9 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Trade extends MappableBase implements CSVMappable, UniqueId {
-    // to use SerializationRepository: public class Trade implements Serializable {
-    // SerializationRepository doesn't have restrictions on primitives
-
     // Trading Details
     private Long tradeID;
     private Long user1;

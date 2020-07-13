@@ -15,6 +15,7 @@ import group.user.User;
 
 import java.util.Date;
 
+// Takes Requests from a User and turns it into information that can be used by TradeManager
 public class TestTradeController {
     private final TradeManager tradeManager;
     private final Repository<Trade> tradeRepository;

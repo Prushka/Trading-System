@@ -1,5 +1,8 @@
 package group.menu.validator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GeneralValidator implements Validator {
 
     private final int minLengthInclusive;
@@ -7,7 +10,9 @@ public class GeneralValidator implements Validator {
     private final boolean csvInjectionDetection;
     private final InputType inputType;
 
-    enum InputType {
+    private final List<Validator> validators = new ArrayList<>();
+
+    public enum InputType {
         String, Number
     }
 
@@ -17,8 +22,27 @@ public class GeneralValidator implements Validator {
         this.csvInjectionDetection = csvInjectionDetection;
     }
 
+    public GeneralValidator addValidator(Validator validator) {
+        validators.add(validator);
+        return this;
+    }
+
     @Override
     public boolean validate(String input) {
-        return input.length() >= minLengthInclusive && input.matches(".*[;,].*");
+        boolean result = input.length() >= minLengthInclusive;
+        if (csvInjectionDetection) {
+            result = result && input.matches(".*[;,].*");
+        }
+        switch (inputType) {
+            case String:
+                break;
+            case Number:
+                // TODO: what's the regex
+                break;
+        }
+        for (Validator validator : validators) {
+            result = result && validator.validate(input);
+        }
+        return result;
     }
 }

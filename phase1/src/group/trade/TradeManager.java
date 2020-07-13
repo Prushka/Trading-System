@@ -7,7 +7,7 @@ import group.menu.data.Response;
 
 import java.util.Date;
 
-// TODO: add validating existing in menu constructor/ filter response, better prompt for date, fix confirming problem
+// TODO: prompt for date, fix confirming problem
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
@@ -46,20 +46,19 @@ public class TradeManager {
      */
     public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
                              Date dateAndTime, String location, Long prevMeeting) {
-        // TODO: Move conditions to controller or fix them here
         // TODO: Uncomment conditions & remove prompts for ID when user's are implemented in the controller
-        // Get User from Repository
-        // if (userRepository.ifExists(user1) && userRepository.ifExists(user2)) {
-            //PersonalUser trader1 = userRepository.get(user1);
-            //PersonalUser trader2 = userRepository.get(user2);
-            // Check if items are in their inventories
-            //if ((item1.equals(null) || trader1.getInventory().contains(item1)) && (item2.equals(null) ||
-              //      trader2.getInventory().contains(item2))) {
-                Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent,
-                        dateAndTime, location, prevMeeting);
-                tradeRepository.add(newTrade);
-                return tradeRepresentation(newTrade);
-            //}
+        // Get users from Repository
+        // PersonalUser trader1 = userRepository.get(user1);
+        // PersonalUser trader2 = userRepository.get(user2);
+
+        // Check if items are in their inventories
+        //if ((item1.equals(null) || trader1.getInventory().contains(item1)) && (item2.equals(null) ||
+        //      trader2.getInventory().contains(item2))) {
+        Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent, dateAndTime, location, prevMeeting);
+        tradeRepository.add(newTrade);
+        // trader1.addToTrades(newTrade.getUid());
+        // trader2.addToTrades(newTrade.getUid());
+        return tradeRepresentation(newTrade);
         //}
         //return new Response.Builder(false).translatable("failed.create.trade").build();
     }
@@ -90,10 +89,11 @@ public class TradeManager {
     public Response editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
         // Get trade from Repository
         Trade currTrade = tradeRepository.get(tradeID);
-        // Only unconfirmed parties can edit and users automatically confirm to their edit
-        if (currTrade.getUser1Edits() == editLimit && currTrade.getUser2Edits() == editLimit) {
-            tradeRepository.remove(currTrade);
-            return new Response.Builder(false).translatable("failed.cancel.trade").build();
+
+        // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
+        if ((currTrade.getUser1() == editingUser || currTrade.getUser2() == editingUser) && currTrade.getUser1Edits() ==
+                editLimit && currTrade.getUser2Edits() == editLimit) {
+            return cancelTrades(currTrade);
         } else if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getUser1Edits() <
                 editLimit) {
             currTrade.setDateAndTime(dateAndTime);
@@ -122,9 +122,9 @@ public class TradeManager {
         Trade currTrade = tradeRepository.get(tradeID);
 
         // Only unconfirmed parties can edit and users automatically confirm to their edit
-        if (currTrade.getUser1Edits() == editLimit && currTrade.getUser2Edits() == editLimit) {
-            tradeRepository.remove(currTrade);
-            return new Response.Builder(false).translatable("failed.cancel.trade").build();
+        if ((currTrade.getUser1() == editingUser || currTrade.getUser2() == editingUser) && currTrade.getUser1Edits() ==
+                editLimit && currTrade.getUser2Edits() == editLimit) {
+            return cancelTrades(currTrade);
         } else if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getUser1Edits() <
                 editLimit) {
             currTrade.setLocation(location);
@@ -186,35 +186,30 @@ public class TradeManager {
      */
     public Response confirmTradeComplete(int tradeID, int editingUser) {
         // Get Trade from Repository
-        if (userRepository.ifExists(editingUser) && tradeRepository.ifExists(tradeID)) {
-            PersonalUser currUser = userRepository.get(editingUser);
-            Trade currTrade = tradeRepository.get(tradeID);
+        Trade currTrade = tradeRepository.get(tradeID);
 
-            // Confirm specific user
-            if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms()) {
-                currTrade.confirmUser1();
-            } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms()) {
-                currTrade.confirmUser2();
-            }
-
-            // If both users confirm, make the trade
-            if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
-                makeTrades(currTrade);
-                if (currTrade.getIsPermanent()) {
-                    currTrade.closeTrade();
-                } else {
-                    scheduleTradeBack(currTrade);
-                }
-                return new Response.Builder(true).translatable("success.confirm.trade.complete").build();
-            } else {
-                return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
-            }
+        // Confirm specific user
+        if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms()) {
+            currTrade.confirmUser1();
+        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms()) {
+            currTrade.confirmUser2();
         }
-        return new Response.Builder(false).translatable("failed.confirm.trade").build();
+
+        // If both users confirm, make the trade
+        if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
+            makeTrades(currTrade);
+            if (currTrade.getIsPermanent()) {
+                currTrade.closeTrade();
+            } else {
+                scheduleTradeBack(currTrade);
+            }
+            return new Response.Builder(true).translatable("success.confirm.trade.complete").build();
+        } else {
+            return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
+        }
     }
 
     /**
-     * TODO: Add to other people's inventory -- need item repo?
      * Makes trades between users
      * @param currTrade The trade object
      */
@@ -227,7 +222,7 @@ public class TradeManager {
             otherUser.setLendCount(initUser.getLendCount() + 1);
             otherUser.removeFromInventory(currTrade.getItem2());
             if (currTrade.getIsPermanent()) {
-                // currUser.addToInventory(currTrade.getItem2());
+                initUser.addToInventory(currTrade.getItem2());
             }
         } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
             otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
@@ -235,7 +230,7 @@ public class TradeManager {
             initUser.setLendCount(initUser.getLendCount() + 1);
             initUser.removeFromInventory(currTrade.getItem1());
             if (currTrade.getIsPermanent()) {
-                // otherUser.addToInventory(currTrade.getItem2());
+                otherUser.addToInventory(currTrade.getItem2());
             }
         } else {
             initUser.setBorrowCount(initUser.getBorrowCount() + 1);
@@ -247,10 +242,24 @@ public class TradeManager {
             otherUser.removeFromWishList(currTrade.getItem1());
             otherUser.removeFromInventory(currTrade.getItem2());
             if (currTrade.getIsPermanent()) {
-                // currUser.addToInventory(currTrade.getItem2());
-                // otherUser.addToInventory(currTrade.getItem1());
+                initUser.addToInventory(currTrade.getItem2());
+                otherUser.addToInventory(currTrade.getItem1());
             }
         }
+    }
+
+    /**
+     * Cancels a trade
+     * @param currTrade A trade object
+     * @return A response object that describes the cancellation of this trade
+     */
+    private Response cancelTrades(Trade currTrade) {
+        PersonalUser trader1 = userRepository.get(currTrade.getUser1());
+        PersonalUser trader2 = userRepository.get(currTrade.getUser1());
+        trader1.removeFromTrade(currTrade.getUid());
+        trader2.removeFromTrade(currTrade.getUid());
+        tradeRepository.remove(currTrade);
+        return new Response.Builder(false).translatable("failed.cancel.trade").build();
     }
 
     /**

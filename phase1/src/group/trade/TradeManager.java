@@ -228,10 +228,11 @@ public class TradeManager {
             makeTrades(currTrade);
             if (currTrade.getIsPermanent()) {
                 currTrade.closeTrade();
+                return new Response.Builder(true).translatable("success.confirm.trade.complete.perm").build();
             } else {
                 scheduleTradeBack(currTrade);
+                return new Response.Builder(true).translatable("success.confirm.trade.complete.temp").build();
             }
-            return new Response.Builder(true).translatable("success.confirm.trade.complete").build();
         } else {
             return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
         }

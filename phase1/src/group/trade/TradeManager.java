@@ -7,7 +7,8 @@ import group.menu.data.Response;
 
 import java.util.Date;
 
-// TODO: prompt for date, fix confirming problem
+// TODO: prompt for date, fix confirming problem, change responses
+// index out of bounds on menu, trade ID 0 works when not created.
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
@@ -106,6 +107,8 @@ public class TradeManager {
             currTrade.increaseUser2Edits();
             currTrade.unconfirmUser1();
             currTrade.confirmUser2();
+        } else {
+            return new Response.Builder(false).translatable("failed.edit.trade").build();
         }
         return tradeRepresentation(currTrade);
     }
@@ -137,14 +140,16 @@ public class TradeManager {
             currTrade.increaseUser2Edits();
             currTrade.unconfirmUser1();
             currTrade.confirmUser2();
+        } else {
+            return new Response.Builder(false).translatable("failed.edit.trade").build();
         }
         return tradeRepresentation(currTrade);
     }
 
     /**
      * Confirm a trade will take place
-     * @param tradeID The trade ID of the trade to be edited
-     * @param editingUser The user ID of who wishes to edit this trade
+     * @param tradeID The trade ID of the trade to be confirmed
+     * @param editingUser The user ID of who wishes to confirm to this trade
      * @return A response object that details the success or failure of this action
      */
     public Response confirmTrade(int tradeID, int editingUser) {
@@ -154,11 +159,22 @@ public class TradeManager {
         // Confirm specific user
         if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
             currTrade.confirmUser1();
-        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
+        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && currTrade.getIsClosed()) {
             currTrade.confirmUser2();
         } else {
             return new Response.Builder(false).translatable("failed.confirm.trade").build();
         }
+        return openTrade(tradeID);
+    }
+
+    /**
+     * Opens a trade
+     * @param tradeID he trade ID of the trade to be opened
+     * @return A response that details the state of confirming the trade meeting
+     */
+    private Response openTrade(int tradeID){
+        // Get trade from repository
+        Trade currTrade = tradeRepository.get(tradeID);
 
         // Open trade if both users confirm
         if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
@@ -167,9 +183,8 @@ public class TradeManager {
             currTrade.unconfirmUser2();
 
             // Close first meeting if this is a second meeting to trade back
-            long oldMeeting = currTrade.getPrevMeeting();
-            if (tradeRepository.ifExists(oldMeeting)) {
-                Trade oldTrade = tradeRepository.get(oldMeeting);
+            if (currTrade.getPrevMeeting() != null && tradeRepository.ifExists(currTrade.getPrevMeeting())) {
+                Trade oldTrade = tradeRepository.get(currTrade.getPrevMeeting());
                 oldTrade.closeTrade();
             }
             return new Response.Builder(true).translatable("success.confirm.trade.open").build();
@@ -180,8 +195,8 @@ public class TradeManager {
 
     /**
      * Confirm that a trade has occurred
-     * @param tradeID The trade ID of the trade to be edited
-     * @param editingUser The user ID of who wishes to edit this trade
+     * @param tradeID The trade ID of the trade to be confirmed
+     * @param editingUser The user ID of who wishes to confirmed this trade
      * @return A response object that details the success or failure of this action
      */
     public Response confirmTradeComplete(int tradeID, int editingUser) {
@@ -189,21 +204,35 @@ public class TradeManager {
         Trade currTrade = tradeRepository.get(tradeID);
 
         // Confirm specific user
-        if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms()) {
+        if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && !currTrade.getIsClosed()) {
             currTrade.confirmUser1();
-        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms()) {
+        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && !currTrade.getIsClosed()) {
             currTrade.confirmUser2();
+        } else {
+            return new Response.Builder(false).translatable("failed.confirm.trade").build();
         }
+        return completeTrade(tradeID);
+    }
+
+    /**
+     * Completes a trade by closing it or scheduling another meeting.
+     * @param tradeID he trade ID of the trade to be completed
+     * @return A response that details the state of confirming the trade meeting
+     */
+    private Response completeTrade(int tradeID) {
+        // Get trade from repository
+        Trade currTrade = tradeRepository.get(tradeID);
 
         // If both users confirm, make the trade
         if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
             makeTrades(currTrade);
             if (currTrade.getIsPermanent()) {
                 currTrade.closeTrade();
+                return new Response.Builder(true).translatable("success.confirm.trade.complete.perm").build();
             } else {
                 scheduleTradeBack(currTrade);
+                return new Response.Builder(true).translatable("success.confirm.trade.complete.temp").build();
             }
-            return new Response.Builder(true).translatable("success.confirm.trade.complete").build();
         } else {
             return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
         }

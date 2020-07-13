@@ -48,18 +48,14 @@ public class TestTradeController {
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         Date dateAndTime = request.getDate("dateAndTime");
-        Response response = tradeManager.editDateAndTime(tradeID, editingUser, dateAndTime);
-        response.setNextMasterNodeIdentifier("master.support.trade");
-        return response;
+        return tradeManager.editDateAndTime(tradeID, editingUser, dateAndTime);
     }
 
     public Response testEditLocation(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         String location = request.get("location");
-        Response response = tradeManager.editLocation(tradeID, editingUser, location);
-        response.setNextMasterNodeIdentifier("master.support.trade");
-        return response;
+        return tradeManager.editLocation(tradeID, editingUser, location);
     }
 
     public void testConfirmTrade(Request request){
@@ -72,14 +68,6 @@ public class TestTradeController {
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         tradeManager.confirmTrade(tradeID, editingUser);
-    }
-
-    public Response testing(Request request){
-        Response response = new Response.Builder(true).
-                translatable("input.add.trade.initiator", "hello")
-                .build();
-        response.setNextMasterNodeIdentifier("master.support.trade");
-        return response;
     }
 
     public boolean ifTradeNotExist(String input) {

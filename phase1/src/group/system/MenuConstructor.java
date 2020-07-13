@@ -100,7 +100,7 @@ public class MenuConstructor {
                 .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
                 .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, null, ValidatingType.invalid)
-                .submit("confirm", controller::testing)
+                .submit("confirm", controller::testEditDateAndTime)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 3, "Location")

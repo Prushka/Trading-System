@@ -68,9 +68,9 @@ public class TradeManager {
     public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
                              Date dateAndTime, String location) {
         // Get User from Repository and check if the items are in their inventory
-        if (userRepository.ifExists(user1) && userRepository.ifExists(user2)) {
-            PersonalUser trader1 = userRepository.get(user1);
-            PersonalUser trader2 = userRepository.get(user2);
+        // if (userRepository.ifExists(user1) && userRepository.ifExists(user2)) {
+            //PersonalUser trader1 = userRepository.get(user1);
+            //PersonalUser trader2 = userRepository.get(user2);
             // TODO: move conditions to controller? or fix here
             //if ((item1.equals(null) || trader1.getInventory().contains(item1)) && (item2.equals(null) ||
               //      trader2.getInventory().contains(item2))) {
@@ -79,8 +79,8 @@ public class TradeManager {
                 tradeRepository.add(newTrade);
                 return tradeRepresentation("submit.trade.represent", newTrade);
             //}
-        }
-        return null;
+        //}
+        //return null;
     }
 
     public Response editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
@@ -104,7 +104,7 @@ public class TradeManager {
             }
             return tradeRepresentation("submit.trade.represent", currTrade);
         }
-        return null;
+        return new Response.Builder(false).translatable("failed.edit.trade").build();
     }
 
     public Response editLocation(int tradeID, int editingUser, String location) {
@@ -128,7 +128,7 @@ public class TradeManager {
             }
             return tradeRepresentation("submit.trade.represent", currTrade);
         }
-        return null;
+        return new Response.Builder(false).translatable("failed.edit.trade").build();
     }
 
     public void confirmTrade(int tradeID, int editingUser) {
@@ -218,7 +218,8 @@ public class TradeManager {
 
     private Response tradeRepresentation(String translatable, Trade trade) {
         return new Response.Builder(true).
-                translatable(translatable, trade.toString())
+                translatable(translatable, trade.getUid(), trade.getUser1(), trade.getUser2(), trade.getIsPermanent(),
+                        trade.getDateAndTime(), trade.getLocation())
                 .build();
     }
 }

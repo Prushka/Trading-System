@@ -25,9 +25,9 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
     }
 
-    private Response adminUserRepresentation(String translatable, User user) {
+    private Response adminUserRepresentation(String translatable, AdministrativeUser admin) {
         return new Response.Builder(true).
-                translatable(translatable, user.getName(), user.getEmail(), user.getPassword())
+                translatable(translatable, admin.getName(), admin.getEmail(), admin.getPassword(), admin.getIsHead())
                 .build();
     }
 

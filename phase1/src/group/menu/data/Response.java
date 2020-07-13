@@ -31,7 +31,7 @@ public class Response {
      * The master node identifier.
      * If this is not null, the corresponding {@link group.menu.node.MasterOptionNode} will be prompted.
      */
-    private final String flexibleMasterIdentifier;
+    private String nextMasterNodeIdentifier;
 
     /**
      * @param builder the {@link Response.Builder} used to build this Response
@@ -39,7 +39,7 @@ public class Response {
     Response(Builder builder) {
         this.success = builder.success;
         this.translatablePairs.addAll(builder.translatablePairs);
-        this.flexibleMasterIdentifier = builder.master;
+        this.nextMasterNodeIdentifier = builder.master;
         this.persistentKey = builder.persistentKey;
     }
 
@@ -60,8 +60,15 @@ public class Response {
     /**
      * @return the master node identifier
      */
-    public String getFlexibleMasterIdentifier() {
-        return flexibleMasterIdentifier;
+    public String getNextMasterNodeIdentifier() {
+        return nextMasterNodeIdentifier;
+    }
+
+    /**
+     * @param identifier the next master node's identifier to be set when the Response is successful
+     */
+    public void setNextMasterNodeIdentifier(String identifier) {
+        nextMasterNodeIdentifier = identifier;
     }
 
     /**

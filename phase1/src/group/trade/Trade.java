@@ -8,9 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 public class Trade extends MappableBase implements CSVMappable, UniqueId {
-    // to use SerializationRepository: public class Trade implements Serializable {
-    // SerializationRepository doesn't have restrictions on primitives
-
     // Trading Details
     private Long tradeID;
     private Long user1;
@@ -19,7 +16,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     private Integer user2Edits;
     private Boolean user1Confirms;
     private Boolean user2Confirms;
-    private Long prevMeeting = null;
+    private Long prevMeeting;
 
     // Item Details
     private Long item1;
@@ -28,7 +25,6 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     private Boolean isClosed;
 
     // Meeting Details
-    // Use date
     private Date dateAndTime;
     private String location;
 
@@ -39,7 +35,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
 
     // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
     public Trade(Long user1, Long user2, Long item1, Long item2, Boolean isPermanent, Date dateAndTime,
-                 String location){
+                 String location, Long prevMeeting){
         this.user1 =  user1;
         this.user2 =  user2;
         this.item1 =  item1;
@@ -47,6 +43,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
         this.isPermanent = isPermanent;
         this.dateAndTime = dateAndTime;
         this.location =  location;
+        this.prevMeeting = prevMeeting;
 
         // Default Values
         this.user1Edits = 0;
@@ -86,7 +83,6 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     public void closeTrade(){ isClosed = true;}
     public void setDateAndTime(Date newDateAndTime){ dateAndTime = newDateAndTime;}
     public void setLocation(String newLocation){ location = newLocation;}
-    public void setPrevMeeting(Long prev){ prevMeeting = prev;}
 
     /**
      * @return A description of this trade.

@@ -8,6 +8,7 @@ import group.menu.processor.PasswordEncrypt;
 import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
 import group.trade.Trade;
+import group.user.AdministrativeUser;
 import group.user.User;
 
 import java.util.ArrayList;
@@ -26,23 +27,25 @@ public class MenuConstructor {
 
     public void user(UserController controller) {
         // user login / register example
-        menuBuilder.option(User.class, OperationType.add, 1)
+        menuBuilder.option(User.class, OperationType.verification, 1)
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .input("password", password -> password.length() > 8, ValidatingType.invalid)
+                .submit("confirm", controller::registerUser)
+                .master("master.account");
+
+        menuBuilder.option(User.class, OperationType.add, 2)
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .input("email")
                 .submit("confirm", controller::loginUser)
                 .master("master.account");
-
-
-        menuBuilder.option(User.class, OperationType.verification, 2)
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
-                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
-                .input("password", password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::registerUser)
-                .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
-        //menuBuilder.option(User.class, OperationType.add, 3)
+
+        //menuBuilder.option(AdministrativeUser.class, OperationType.add, 3,"addSunadmin")
+               // .input()
+
         menuBuilder.construct("master.account"); // this one should be the root, but many things are unimplemented
         // You have to call construct before creating a new master option node.
 

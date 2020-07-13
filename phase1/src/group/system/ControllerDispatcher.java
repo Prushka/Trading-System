@@ -17,7 +17,8 @@ public class ControllerDispatcher implements Shutdownable {
 
     SupportTicketController supportTicketController;
     UserController userController;
-    // TODO: change grace code
+
+    // remove this grace code when actual controller comes it
     TestTradeController testTradeController;
 
     TradeProperties tradeProperties;
@@ -37,7 +38,8 @@ public class ControllerDispatcher implements Shutdownable {
     public void dispatchController() {
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
-        // TODO: change grace code
+
+        // remove this grace code when actual controller comes it
         testTradeController = new TestTradeController(this);
     }
 

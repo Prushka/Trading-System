@@ -81,7 +81,7 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.ticket", true);
     }
 
-    // TODO: change grace code
+    // change this grace code when the actually controller comes in
     public void supportTrade(TestTradeController controller){
         menuBuilder.option(Trade.class, OperationType.add, 3)
                 .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
@@ -95,11 +95,13 @@ public class MenuConstructor {
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 4)
+                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
                 .input("New Date/ Time", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::testEditDateAndTime)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 5)
+                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
                 .input("New Location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
                 .master("master.support.trade");

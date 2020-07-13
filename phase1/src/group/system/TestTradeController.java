@@ -39,21 +39,27 @@ public class TestTradeController {
         Boolean isPermanent = request.getBoolean("isPermanent");
         Date dateAndTime = request.getDate("dateAndTime");
         String location =  request.get("location");
-        return tradeManager.createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location);
+        Response response = tradeManager.createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location);
+        response.setNextMasterNodeIdentifier("master.support.trade");
+        return response;
     }
 
     public Response testEditDateAndTime(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         Date dateAndTime = request.getDate("dateAndTime");
-        return tradeManager.editDateAndTime(tradeID, editingUser, dateAndTime);
+        Response response = tradeManager.editDateAndTime(tradeID, editingUser, dateAndTime);
+        response.setNextMasterNodeIdentifier("master.support.trade");
+        return response;
     }
 
     public Response testEditLocation(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         String location = request.get("location");
-        return tradeManager.editLocation(tradeID, editingUser, location);
+        Response response = tradeManager.editLocation(tradeID, editingUser, location);
+        response.setNextMasterNodeIdentifier("master.support.trade");
+        return response;
     }
 
     public void testConfirmTrade(Request request){
@@ -69,9 +75,11 @@ public class TestTradeController {
     }
 
     public Response testing(Request request){
-        return new Response.Builder(true).
+        Response response = new Response.Builder(true).
                 translatable("input.add.trade.initiator", "hello")
                 .build();
+        response.setNextMasterNodeIdentifier("master.support.trade");
+        return response;
     }
 
     public boolean ifTradeNotExist(String input) {

@@ -17,7 +17,7 @@ public class ControllerDispatcher implements Shutdownable {
 
     SupportTicketController supportTicketController;
     UserController userController;
-    // TODO: remove grace code
+    // TODO: change grace code
     TestTradeController testTradeController;
 
     TradeProperties tradeProperties;
@@ -37,7 +37,7 @@ public class ControllerDispatcher implements Shutdownable {
     public void dispatchController() {
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
-        // TODO: remove grace code
+        // TODO: change grace code
         testTradeController = new TestTradeController(this);
     }
 
@@ -49,7 +49,7 @@ public class ControllerDispatcher implements Shutdownable {
     }
 
     public void createProperties() {
-        TradeProperties tradeProperties = new TradeProperties(saveHook);
+        tradeProperties = new TradeProperties(saveHook);
     }
 
     public void shutdown() {

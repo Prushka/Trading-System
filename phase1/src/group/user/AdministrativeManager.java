@@ -16,6 +16,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
     private Iterator<PersonalUser> needToFreezelist;
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
+    private AdministrativeUser currAdmin;
 
     public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
                                  Repository<PersonalUser> personalUserRepository){
@@ -40,6 +41,9 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
          if (administrators.ifExists(
                  AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
                          && AdministrativeUser.getPassword().equals(password))){
+              currAdmin = administrators.getFirst(
+                      AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
+                      && AdministrativeUser.getPassword().equals(password));
              return new Response.Builder(true).translatable("success.login.user").build();
          }
          return new Response.Builder(false).translatable("failed.login.user").build();
@@ -55,13 +59,16 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         }
     }
 
-    public boolean addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
+    public Response addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
         if (head.getIsHead()){
             createadministrator(username, email, telephone, password, false);
-            return true;
+            return new Response.Builder(true).translatable("success.add.subadmin").build();
         } else{
-            return false;
+            return new Response.Builder(false).translatable("failed.add.subadmin").build();
         }
+    }
+    public AdministrativeUser getCurrAdmin(){
+        return currAdmin;
     }
 
     public int getTransactionLimit(){

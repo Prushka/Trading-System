@@ -81,10 +81,11 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.ticket", true);
     }
 
-    // TODO: remove grace code
+    // TODO: change grace code
     public void supportTrade(TestTradeController controller){
         menuBuilder.option(Trade.class, OperationType.add, 3)
-                .input("Respondent", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("Respondent", String::toUpperCase, null, ValidatingType.invalid)
                 .input("Lending Item", String::toUpperCase, null, ValidatingType.invalid)
                 .input("Borrowing Item", String::toUpperCase, null, ValidatingType.invalid)
                 .input("Permanency", String::toUpperCase, null, ValidatingType.invalid)
@@ -103,7 +104,7 @@ public class MenuConstructor {
                 .submit("confirm", controller::addTrade)
                 .master("master.support.trade");
 
-        menuBuilder.construct("master.support.trade", true);
+        menuBuilder.construct("master.support.trade", false);
     }
 
     public void runMenu() {

@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+// Remove prompts for user ID?, should be given because dont want to alter other people's accounts
+// TODO: add validating existing in menu constructor/ filter response, better prompt for date, fix confirming problem
 public class TradeManager {
     private final Integer editLimit; // how many edits each user has
     private final Integer timeLimit; // days until a user has to reverse the temporary trade
@@ -118,10 +120,12 @@ public class TradeManager {
             Trade currTrade = tradeRepository.get(tradeID);
 
             // Confirm specific user
-            if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms()) {
+            if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
                 currTrade.confirmUser1();
-            } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms()) {
+            } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
                 currTrade.confirmUser2();
+            } else {
+                return new Response.Builder(false).translatable("failed.confirm.trade").build();
             }
 
             // Open trade if both users confirm
@@ -137,8 +141,9 @@ public class TradeManager {
                     oldTrade.closeTrade();
                 }
                 return new Response.Builder(true).translatable("success.confirm.trade.open").build();
+            } else {
+                return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
             }
-            return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
         }
         return new Response.Builder(false).translatable("failed.confirm.trade").build();
     }
@@ -174,7 +179,7 @@ public class TradeManager {
         return new Response.Builder(false).translatable("failed.confirm.trade").build();
     }
 
-    // TODO: Add to other people's inventory
+    // TODO: Add to other people's inventory -- need item repo?
     private void makeTrades(PersonalUser currUser, PersonalUser otherUser, Trade currTrade) {
         if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
             currUser.setBorrowCount(currUser.getBorrowCount() + 1);

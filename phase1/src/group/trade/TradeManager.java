@@ -33,7 +33,7 @@ public class TradeManager {
     }
 
     public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
-                             Date dateAndTime, String location) {
+                             Date dateAndTime, String location, Long prevMeeting) {
         // TODO: Move conditions to controller or fix them here
         // TODO: Uncomment conditions when user's are implemented in the controller
         // Get User from Repository
@@ -44,12 +44,18 @@ public class TradeManager {
             //if ((item1.equals(null) || trader1.getInventory().contains(item1)) && (item2.equals(null) ||
               //      trader2.getInventory().contains(item2))) {
                 Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent,
-                        dateAndTime, location);
+                        dateAndTime, location, prevMeeting);
                 tradeRepository.add(newTrade);
-                return tradeRepresentation("submit.trade.represent", newTrade);
+                return tradeRepresentation(newTrade);
             //}
         //}
         //return new Response.Builder(false).translatable("failed.create.trade").build();
+    }
+
+    // Overloaded constructor to differentiate first and second meetings
+    public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
+                                Date dateAndTime, String location){
+        return createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location, null);
     }
 
     public Response editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
@@ -74,7 +80,7 @@ public class TradeManager {
                 currTrade.unconfirmUser1();
                 currTrade.confirmUser2();
             }
-            return tradeRepresentation("submit.trade.represent", currTrade);
+            return tradeRepresentation(currTrade);
         }
         return new Response.Builder(false).translatable("failed.edit.trade").build();
     }
@@ -101,7 +107,7 @@ public class TradeManager {
                 currTrade.unconfirmUser1();
                 currTrade.confirmUser2();
             }
-            return tradeRepresentation("submit.trade.represent", currTrade);
+            return tradeRepresentation(currTrade);
         }
         return new Response.Builder(false).translatable("failed.edit.trade").build();
     }
@@ -168,7 +174,7 @@ public class TradeManager {
         return new Response.Builder(false).translatable("failed.confirm.trade").build();
     }
 
-    // TODO: Add to other people's inventory... Weird system -- they can trade other people's items
+    // TODO: Add to other people's inventory
     private void makeTrades(PersonalUser currUser, PersonalUser otherUser, Trade currTrade) {
         if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
             currUser.setBorrowCount(currUser.getBorrowCount() + 1);
@@ -202,26 +208,23 @@ public class TradeManager {
         }
     }
 
-    // TODO: How do second meetings work? -- set new dates and new meetings
+    // TODO: set new dates
     private void scheduleTradeBack(Trade currTrade) {
         Date newDateAndTime = currTrade.getDateAndTime();
         // newDateAndTime.set(Calendar.MONTH, timeLimit);
-        //Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
-        //        currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
-        //        currTrade.getLocation());
-        //secondMeeting.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
+        createTrade(currTrade.getUser1(), currTrade.getUser1(), currTrade.getItem2(), currTrade.getItem1(),
+                true, newDateAndTime, currTrade.getLocation(), currTrade.getUid());
     }
 
 
     /**
-     * @param translatable A string used in language.properties
      * @param trade A trade to be converted
      * @return A response object that corresponds with a string representation of a Trade
      */
-    private Response tradeRepresentation(String translatable, Trade trade) {
+    private Response tradeRepresentation(Trade trade) {
         return new Response.Builder(true).
-                translatable(translatable, trade.getUid(), trade.getUser1(), trade.getUser2(), trade.getIsPermanent(),
-                        trade.getDateAndTime(), trade.getLocation())
+                translatable("submit.trade.represent", trade.getUid(), trade.getUser1(), trade.getUser2(),
+                        trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation())
                 .build();
     }
 }

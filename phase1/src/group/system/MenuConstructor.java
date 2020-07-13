@@ -88,7 +88,7 @@ public class MenuConstructor {
     public void supportTrade(TestTradeController controller){
         // grace notes: keys correspond to request keys, .master calls the next set of nodes
         menuBuilder.option(Trade.class, OperationType.add, 1)
-                .input("initiator", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("initiator", String::toUpperCase, null,  ValidatingType.exists)
                 .input("respondent", String::toUpperCase, null, ValidatingType.invalid)
                 .input("lendingItem", String::toUpperCase, null, ValidatingType.invalid)
                 .input("borrowingItem", String::toUpperCase, null, ValidatingType.invalid)
@@ -99,27 +99,27 @@ public class MenuConstructor {
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 2, "Date/Time")
-                .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("tradeID", null, controller::ifTradeExist, ValidatingType.exists)
                 .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingDateAndTime)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 3, "Location")
-                .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("tradeID", null, controller::ifTradeExist, ValidatingType.exists)
                 .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingLocation)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.verification, 4, "Open")
-                .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("tradeID", null, controller::ifTradeExist, ValidatingType.exists)
                 .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeOpen)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.verification, 5, "Complete")
-                .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("tradeID", null, controller::ifTradeExist, ValidatingType.exists)
                 .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeComplete)
                 .master("master.support.trade");

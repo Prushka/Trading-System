@@ -1,21 +1,12 @@
 package group.trade;
 
 import group.config.property.TradeProperties;
-import group.item.Item;
-import group.menu.data.Request;
-import group.notification.SupportTicket;
 import group.repository.Repository;
-import group.repository.reflection.CSVMappable;
-import group.repository.reflection.MappableBase;
 import group.user.PersonalUser;
 import group.menu.data.Response;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 
-// Remove prompts for user ID?, should be given because dont want to alter other people's accounts
 // TODO: add validating existing in menu constructor/ filter response, better prompt for date, fix confirming problem
 public class TradeManager {
     private final Integer editLimit; // how many edits each user has
@@ -37,7 +28,7 @@ public class TradeManager {
     public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
                              Date dateAndTime, String location, Long prevMeeting) {
         // TODO: Move conditions to controller or fix them here
-        // TODO: Uncomment conditions when user's are implemented in the controller
+        // TODO: Uncomment conditions & remove prompts for ID when user's are implemented in the controller
         // Get User from Repository
         // if (userRepository.ifExists(user1) && userRepository.ifExists(user2)) {
             //PersonalUser trader1 = userRepository.get(user1);
@@ -62,90 +53,80 @@ public class TradeManager {
 
     public Response editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
         // Get trade from Repository
-        if (tradeRepository.ifExists(tradeID)) {
-            Trade currTrade = tradeRepository.get(tradeID);
-
-            // Only unconfirmed parties can edit and users automatically confirm to their edit
-            if (currTrade.getUser1Edits() == editLimit && currTrade.getUser2Edits() == editLimit) {
-                tradeRepository.remove(currTrade);
-                return new Response.Builder(false).translatable("failed.cancel.trade").build();
-            } else if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() &&
-                    currTrade.getUser1Edits() < editLimit) {
-                currTrade.setDateAndTime(dateAndTime);
-                currTrade.increaseUser1Edits();
-                currTrade.confirmUser1();
-                currTrade.unconfirmUser2();
-            } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() &&
-                    currTrade.getUser2Edits() < editLimit) {
-                currTrade.setDateAndTime(dateAndTime);
-                currTrade.increaseUser2Edits();
-                currTrade.unconfirmUser1();
-                currTrade.confirmUser2();
-            }
-            return tradeRepresentation(currTrade);
+        Trade currTrade = tradeRepository.get(tradeID);
+        // Only unconfirmed parties can edit and users automatically confirm to their edit
+        if (currTrade.getUser1Edits() == editLimit && currTrade.getUser2Edits() == editLimit) {
+            tradeRepository.remove(currTrade);
+            return new Response.Builder(false).translatable("failed.cancel.trade").build();
+        } else if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getUser1Edits() <
+                editLimit) {
+            currTrade.setDateAndTime(dateAndTime);
+            currTrade.increaseUser1Edits();
+            currTrade.confirmUser1();
+            currTrade.unconfirmUser2();
+        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && currTrade.getUser2Edits() <
+                editLimit) {
+            currTrade.setDateAndTime(dateAndTime);
+            currTrade.increaseUser2Edits();
+            currTrade.unconfirmUser1();
+            currTrade.confirmUser2();
         }
-        return new Response.Builder(false).translatable("failed.edit.trade").build();
+        return tradeRepresentation(currTrade);
     }
 
     public Response editLocation(int tradeID, int editingUser, String location) {
         // Get Trade from Repository
-        if (tradeRepository.ifExists(tradeID)) {
-            Trade currTrade = tradeRepository.get(tradeID);
+        Trade currTrade = tradeRepository.get(tradeID);
 
-            // Only unconfirmed parties can edit and users automatically confirm to their edit
-            if (currTrade.getUser1Edits() == editLimit && currTrade.getUser2Edits() == editLimit) {
-                tradeRepository.remove(currTrade);
-                return new Response.Builder(false).translatable("failed.cancel.trade").build();
-            } else if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() &&
-                    currTrade.getUser1Edits() < editLimit) {
-                currTrade.setLocation(location);
-                currTrade.increaseUser1Edits();
-                currTrade.confirmUser1();
-                currTrade.unconfirmUser2();
-            } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() &&
-                    currTrade.getUser2Edits() < editLimit) {
-                currTrade.setLocation(location);
-                currTrade.increaseUser2Edits();
-                currTrade.unconfirmUser1();
-                currTrade.confirmUser2();
-            }
-            return tradeRepresentation(currTrade);
+        // Only unconfirmed parties can edit and users automatically confirm to their edit
+        if (currTrade.getUser1Edits() == editLimit && currTrade.getUser2Edits() == editLimit) {
+            tradeRepository.remove(currTrade);
+            return new Response.Builder(false).translatable("failed.cancel.trade").build();
+        } else if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getUser1Edits() <
+                editLimit) {
+            currTrade.setLocation(location);
+            currTrade.increaseUser1Edits();
+            currTrade.confirmUser1();
+            currTrade.unconfirmUser2();
+        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && currTrade.getUser2Edits() <
+                editLimit) {
+            currTrade.setLocation(location);
+            currTrade.increaseUser2Edits();
+            currTrade.unconfirmUser1();
+            currTrade.confirmUser2();
         }
-        return new Response.Builder(false).translatable("failed.edit.trade").build();
+        return tradeRepresentation(currTrade);
     }
 
     public Response confirmTrade(int tradeID, int editingUser) {
         // Get Trade from Repository
-        if (tradeRepository.ifExists(tradeID)) {
-            Trade currTrade = tradeRepository.get(tradeID);
+        Trade currTrade = tradeRepository.get(tradeID);
 
-            // Confirm specific user
-            if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
-                currTrade.confirmUser1();
-            } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
-                currTrade.confirmUser2();
-            } else {
-                return new Response.Builder(false).translatable("failed.confirm.trade").build();
-            }
-
-            // Open trade if both users confirm
-            if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
-                currTrade.openTrade();
-                currTrade.unconfirmUser1();
-                currTrade.unconfirmUser2();
-
-                // Close first meeting if this is a second meeting to trade back
-                long oldMeeting = currTrade.getPrevMeeting();
-                if (tradeRepository.ifExists(oldMeeting)) {
-                    Trade oldTrade = tradeRepository.get(oldMeeting);
-                    oldTrade.closeTrade();
-                }
-                return new Response.Builder(true).translatable("success.confirm.trade.open").build();
-            } else {
-                return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
-            }
+        // Confirm specific user
+        if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
+            currTrade.confirmUser1();
+        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
+            currTrade.confirmUser2();
+        } else {
+            return new Response.Builder(false).translatable("failed.confirm.trade").build();
         }
-        return new Response.Builder(false).translatable("failed.confirm.trade").build();
+
+        // Open trade if both users confirm
+        if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
+            currTrade.openTrade();
+            currTrade.unconfirmUser1();
+            currTrade.unconfirmUser2();
+
+            // Close first meeting if this is a second meeting to trade back
+            long oldMeeting = currTrade.getPrevMeeting();
+            if (tradeRepository.ifExists(oldMeeting)) {
+                Trade oldTrade = tradeRepository.get(oldMeeting);
+                oldTrade.closeTrade();
+            }
+            return new Response.Builder(true).translatable("success.confirm.trade.open").build();
+        } else {
+            return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
+        }
     }
 
     public Response confirmTradeComplete(int tradeID, int editingUser) {

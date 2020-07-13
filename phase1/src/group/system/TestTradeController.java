@@ -3,15 +3,10 @@ package group.system;
 import group.config.property.TradeProperties;
 import group.menu.data.Request;
 import group.menu.data.Response;
-import group.notification.SupportTicket;
-import group.notification.SupportTicketManager;
 import group.repository.Repository;
-import group.repository.RepositorySavable;
-import group.system.ControllerDispatcher;
 import group.trade.Trade;
 import group.trade.TradeManager;
 import group.user.PersonalUser;
-import group.user.User;
 
 import java.util.Date;
 
@@ -65,10 +60,10 @@ public class TestTradeController {
     public Response confirmingTradeComplete(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
-        return tradeManager.confirmTrade(tradeID, editingUser);
+        return tradeManager.confirmTradeComplete(tradeID, editingUser);
     }
 
-    public boolean ifTradeNotExist(String input) {
-        return !tradeRepository.ifExists(entity -> input.equalsIgnoreCase(entity.toString()));
+    public boolean ifTradeExist(String input) {
+        return tradeRepository.ifExists(Long.valueOf(input));
     }
 }

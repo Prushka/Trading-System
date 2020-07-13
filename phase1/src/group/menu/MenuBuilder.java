@@ -9,10 +9,7 @@ import group.menu.validator.Validator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author DanLyu
@@ -85,8 +82,6 @@ public class MenuBuilder {
 
             private final SubmitNode submitNode;
 
-            private String masterPlaceHolder;
-
             public SubmitNodeBuilder(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
                 String translatable = getTranslatable("submit", key);
                 SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler, persistentRequest)
@@ -95,13 +90,8 @@ public class MenuBuilder {
                 this.submitNode = submitNode;
             }
 
-            public SubmitNodeBuilder master(String masterIdentifier) {
-                masterPlaceHolder = masterIdentifier;
-                return this;
-            }
-
-            public SubmitNodeBuilder flexibleMaster(String masterIdentifier) {
-                flexibleMasterPlaceHolder.add(masterIdentifier);
+            public SubmitNodeBuilder master(String... masterIdentifier) {
+                flexibleMasterPlaceHolder.addAll(Arrays.asList(masterIdentifier));
                 return this;
             }
         }
@@ -160,10 +150,12 @@ public class MenuBuilder {
 
     public MasterOptionNode constructFinal() {
         for (OptionNodeBuilder optionNodeBuilder : optionNodePool.values()) {
+            List<String> placeHolders = optionNodeBuilder.submitNodeBuilder.flexibleMasterPlaceHolder;
+            if (placeHolders.size() == 0) continue;
             SubmitNode submitNode = optionNodeBuilder.submitNodeBuilder.submitNode;
-            submitNode.setChild(masters.get(optionNodeBuilder.submitNodeBuilder.masterPlaceHolder));
-            for (String flexibleMaster : optionNodeBuilder.submitNodeBuilder.flexibleMasterPlaceHolder) {
-                submitNode.fillMasterPool(masters.get(flexibleMaster));
+            // submitNode.setChild(masters.get(placeHolders.get(0)));
+            for (String placeHolder : placeHolders) {
+                submitNode.fillMasterPool(masters.get(placeHolder));
             }
         }
         return entryNode;

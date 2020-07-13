@@ -85,29 +85,25 @@ public class MenuConstructor {
     public void supportTrade(TestTradeController controller){
         menuBuilder.option(Trade.class, OperationType.add, 3)
                 .input("Respondent", controller::ifTradeNotExist, ValidatingType.exists)
-                .input("Lending Item", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
-                .input("Borrowing Item", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
-                .input("Permanency", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
-                .input("Date", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
-                .input("Location", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .input("Lending Item", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Borrowing Item", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Permanency", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Date", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
-                .master("master.support.ticket");
+                .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 4)
-                .submit("category", String::toUpperCase, new EnumValidator<>(Trade.Category.class),
-                        ValidatingType.invalid, controller::testEditDateAndTime)
-                .input("New Date/ Time", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .input("New Date/ Time", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::testEditDateAndTime)
-                .master("master.support.ticket");
+                .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 5)
-                .submit("category", String::toUpperCase, new EnumValidator<>(Trade.Category.class),
-                        ValidatingType.invalid, controller::testEditLocation)
-                .input("New Location", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .input("New Location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
-                .master("master.support.ticket");
+                .master("master.support.trade");
 
-        menuBuilder.construct("master.support.ticket", true);
+        menuBuilder.construct("master.support.trade", true);
     }
 
     public void runMenu() {

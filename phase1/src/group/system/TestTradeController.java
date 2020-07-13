@@ -5,6 +5,7 @@ import group.menu.data.Request;
 import group.menu.data.Response;
 import group.notification.SupportTicket;
 import group.notification.SupportTicketManager;
+import group.repository.Repository;
 import group.repository.RepositorySavable;
 import group.system.ControllerDispatcher;
 import group.trade.Trade;
@@ -16,14 +17,16 @@ import java.util.Date;
 
 public class TestTradeController {
     private final TradeManager tradeManager;
-    private final RepositorySavable<Trade> tradeRepository;
-    private final RepositorySavable<PersonalUser> personalUserRepository;
+    private final Repository<Trade> tradeRepository;
+    private final Repository<PersonalUser> personalUserRepository;
+    private final TradeProperties tradeProperties;
 
 
     public TestTradeController(ControllerDispatcher dispatcher){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
-        tradeManager = new TradeManager(tradeRepository, personalUserRepository, new TradeProperties());
+        tradeProperties = dispatcher.tradeProperties;
+        tradeManager = new TradeManager(tradeRepository, personalUserRepository, tradeProperties);
         dispatcher.menuConstructor.supportTrade(this);
     }
 

@@ -77,7 +77,7 @@ public class TradeManager {
                 Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent,
                         dateAndTime, location);
                 tradeRepository.add(newTrade);
-                return tradeRepresentation("submit.ticket.category", newTrade);
+                return tradeRepresentation("submit.trade.represent", newTrade);
             //}
         }
         return null;
@@ -102,7 +102,7 @@ public class TradeManager {
                 currTrade.unconfirmUser1();
                 currTrade.confirmUser2();
             }
-            return tradeRepresentation("submit.ticket.category", currTrade);
+            return tradeRepresentation("submit.trade.represent", currTrade);
         }
         return null;
     }
@@ -126,7 +126,7 @@ public class TradeManager {
                 currTrade.unconfirmUser1();
                 currTrade.confirmUser2();
             }
-            return tradeRepresentation("submit.ticket.category", currTrade);
+            return tradeRepresentation("submit.trade.represent", currTrade);
         }
         return null;
     }

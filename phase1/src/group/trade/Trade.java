@@ -33,7 +33,17 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
         super(record);
     }
 
-    // If either item1 or item2 is null then it is a one-way trade or else it is a two-way trade
+    /**
+     * Describes a one-way or two-way trade
+     * @param user1 The user ID of the trade initiator
+     * @param user2 The user ID of the trade respondent
+     * @param item1 The item ID of the item that the initiator wishes to lend
+     * @param item2 The item ID of the item that the initiator wishes to borrow
+     * @param isPermanent True iff this trade is permanent
+     * @param dateAndTime When this trade occurs
+     * @param location Where this trade occurs
+     * @param prevMeeting The previous trade meeting
+     */
     public Trade(Long user1, Long user2, Long item1, Long item2, Boolean isPermanent, Date dateAndTime,
                  String location, Long prevMeeting){
         this.user1 =  user1;

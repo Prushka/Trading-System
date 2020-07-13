@@ -9,10 +9,7 @@ import group.menu.validator.Validator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author DanLyu
@@ -93,8 +90,8 @@ public class MenuBuilder {
                 this.submitNode = submitNode;
             }
 
-            public SubmitNodeBuilder master(String masterIdentifier) {
-                flexibleMasterPlaceHolder.add(masterIdentifier);
+            public SubmitNodeBuilder master(String... masterIdentifier) {
+                flexibleMasterPlaceHolder.addAll(Arrays.asList(masterIdentifier));
                 return this;
             }
         }
@@ -157,8 +154,8 @@ public class MenuBuilder {
             if (placeHolders.size() == 0) continue;
             SubmitNode submitNode = optionNodeBuilder.submitNodeBuilder.submitNode;
             // submitNode.setChild(masters.get(placeHolders.get(0)));
-            for (String flexibleMaster : placeHolders) {
-                submitNode.fillMasterPool(masters.get(flexibleMaster));
+            for (String placeHolder : placeHolders) {
+                submitNode.fillMasterPool(masters.get(placeHolder));
             }
         }
         return entryNode;

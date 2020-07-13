@@ -28,7 +28,7 @@ public class SubmitNode extends InputNode {
     private final Node failedResultNode;
 
     /**
-     * The map of {@link MasterOptionNode} to find a corresponding Node to the {@link Response#getFlexibleMasterIdentifier()}
+     * The map of {@link MasterOptionNode} to find a corresponding Node to the {@link Response#getNextMasterNodeIdentifier()}
      * when a Response want the node to navigate to another {@link MasterOptionNode}
      */
     private final Map<String, MasterOptionNode> flexibleMasterPool = new HashMap<>();
@@ -84,15 +84,15 @@ public class SubmitNode extends InputNode {
     /**
      * Returns a Response Node generated from Response object
      * A helper method used to parse Response and generate Response Node that contains information.
-     * If {@link Response#getFlexibleMasterIdentifier()} is not null, returns a Response Node who's child is {@link MasterOptionNode} that corresponds to the identifier.
+     * If {@link Response#getNextMasterNodeIdentifier()} is not null, returns a Response Node who's child is {@link MasterOptionNode} that corresponds to the identifier.
      *
      * @param response the Response returned from the {@link #handler}
      * @return the node to navigate to after parsing user input
      */
     private Node parseResponse(Response response) {
         ResponseNode responseNode = new ResponseNode.Builder(response).build();
-        if (response.getFlexibleMasterIdentifier() != null) {
-            responseNode.setChild(flexibleMasterPool.get(response.getFlexibleMasterIdentifier()));
+        if (response.getNextMasterNodeIdentifier() != null) {
+            responseNode.setChild(flexibleMasterPool.get(response.getNextMasterNodeIdentifier()));
         } else if (response.success()) {
             responseNode.setChild(getChild());
             if (response.getPersistentKey() != null) {

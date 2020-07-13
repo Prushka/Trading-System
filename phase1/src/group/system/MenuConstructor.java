@@ -78,7 +78,8 @@ public class MenuConstructor {
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
                 .master("master.support.ticket");
 
-        menuBuilder.construct("master.support.ticket", true);
+        // TODO: Change back to true
+        menuBuilder.construct("master.support.ticket", false);
     }
 
     // change this grace code when the actually controller comes in
@@ -86,27 +87,27 @@ public class MenuConstructor {
         menuBuilder.option(Trade.class, OperationType.add, 3)
                 .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
                 .input("Respondent", String::toUpperCase, null, ValidatingType.invalid)
-                .input("Lending Item", String::toUpperCase, null, ValidatingType.invalid)
-                .input("Borrowing Item", String::toUpperCase, null, ValidatingType.invalid)
+                .input("LendingItem", String::toUpperCase, null, ValidatingType.invalid)
+                .input("BorrowingItem", String::toUpperCase, null, ValidatingType.invalid)
                 .input("Permanency", String::toUpperCase, null, ValidatingType.invalid)
-                .input("Date", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Date/Time", String::toUpperCase, null, ValidatingType.invalid)
                 .input("Location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
                 .master("master.support.trade");
 
-        menuBuilder.option(Trade.class, OperationType.edit, 4)
+        menuBuilder.option(Trade.class, OperationType.edit, 4, "Date/Time")
                 .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
-                .input("New Date/ Time", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Date/Time", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::testEditDateAndTime)
                 .master("master.support.trade");
 
-        menuBuilder.option(Trade.class, OperationType.edit, 5)
+        menuBuilder.option(Trade.class, OperationType.edit, 5, "Location")
                 .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
-                .input("New Location", String::toUpperCase, null, ValidatingType.invalid)
-                .submit("confirm", controller::addTrade)
+                .input("Location", String::toUpperCase, null, ValidatingType.invalid)
+                .submit("confirm", controller::testEditLocation)
                 .master("master.support.trade");
 
-        menuBuilder.construct("master.support.trade", false);
+        menuBuilder.construct("master.support.trade", true);
     }
 
     public void runMenu() {

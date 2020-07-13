@@ -107,7 +107,7 @@ public class PersonalUser extends User {
         this.borrowCount = borrowCount;
     }
 
-    public boolean getShouldBeFreezed(){
+    public boolean getShouldBeFreezedUser(){
         return lendCount < borrowCount;
     }
 

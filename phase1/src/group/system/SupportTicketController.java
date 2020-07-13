@@ -4,13 +4,13 @@ import group.menu.data.Request;
 import group.menu.data.Response;
 import group.notification.SupportTicket;
 import group.notification.SupportTicketManager;
-import group.repository.RepositorySavable;
+import group.repository.Repository;
 
 public class SupportTicketController {
 
     private final SupportTicketManager supportTicketManager;
 
-    private final RepositorySavable<SupportTicket> ticketRepository;
+    private final Repository<SupportTicket> ticketRepository;
 
     public SupportTicketController(ControllerDispatcher dispatcher) {
         ticketRepository = dispatcher.ticketRepository;

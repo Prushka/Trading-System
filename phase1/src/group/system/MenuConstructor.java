@@ -7,6 +7,7 @@ import group.menu.MenuBuilder.ValidatingType;
 import group.menu.processor.PasswordEncrypt;
 import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
+import group.trade.Trade;
 import group.user.User;
 
 import java.util.ArrayList;
@@ -78,6 +79,34 @@ public class MenuConstructor {
                 .master("master.support.ticket");
 
         menuBuilder.construct("master.support.ticket", true);
+    }
+
+    // change this grace code when the actually controller comes in
+    public void supportTrade(TestTradeController controller){
+        menuBuilder.option(Trade.class, OperationType.add, 3)
+                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("Respondent", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Lending Item", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Borrowing Item", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Permanency", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Date", String::toUpperCase, null, ValidatingType.invalid)
+                .input("Location", String::toUpperCase, null, ValidatingType.invalid)
+                .submit("confirm", controller::addTrade)
+                .master("master.support.trade");
+
+        menuBuilder.option(Trade.class, OperationType.edit, 4)
+                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("New Date/ Time", String::toUpperCase, null, ValidatingType.invalid)
+                .submit("confirm", controller::testEditDateAndTime)
+                .master("master.support.trade");
+
+        menuBuilder.option(Trade.class, OperationType.edit, 5)
+                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("New Location", String::toUpperCase, null, ValidatingType.invalid)
+                .submit("confirm", controller::addTrade)
+                .master("master.support.trade");
+
+        menuBuilder.construct("master.support.trade", false);
     }
 
     public void runMenu() {

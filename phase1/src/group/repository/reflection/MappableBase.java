@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Contains a constructor that takes in a CSV representation String.<p>
  * Subclasses are required to have a sub-constructor corresponding to <code>MappableBase(List data)</code><p>
  * This reflection implementation has limits on certain classes.<p>
- * Use only non-final Long, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
+ * Use only non-final List, Long, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
  * To allow more more flexibility, implement {@link CSVMappable} directly in the entity class.
  *
  * @author Dan Lyu
@@ -72,6 +72,11 @@ public abstract class MappableBase {
         }
     }
 
+    /**
+     * @param fieldTypeClass the field type
+     * @param representation the String representation
+     * @return the object of the field type
+     */
     private Object getObjectFrom(Class<?> fieldTypeClass, String representation) {
         Object obj;
         if (representation.equals("null")) {
@@ -98,6 +103,12 @@ public abstract class MappableBase {
         return obj;
     }
 
+    /**
+     * @param fieldListGenericClass the field type of the elements in the List
+     * @param representation        the String representation
+     * @param <T>                   the generic type to be used in the list
+     * @return the List<T> generated from the String representation
+     */
     private <T> List<T> stringToList(Class<T> fieldListGenericClass, String representation) {
         List<T> list = new ArrayList<>();
         for (String element : representation.split(";")) {

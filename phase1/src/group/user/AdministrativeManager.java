@@ -7,17 +7,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AdministrativeManager {
+public class AdministrativeManager { //TODO where to find request of unfreeze user and request of adding book
 
 
     private Repository<AdministrativeUser> administrators;
     private Repository<PersonalUser> personalUserRepository;
-    private Iterator<PersonalUser> freezelist;
+    private Iterator<PersonalUser> needToFreezelist;
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
 
-    public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository){
+    public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
+                                 Repository<PersonalUser> personalUserRepository){
         this.administrators = administrativeUserRepository;
+        this.personalUserRepository = personalUserRepository;
+        needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
     }
 
     public void createadministrator(String username, String email, String password, boolean isHead){
@@ -30,13 +33,12 @@ public class AdministrativeManager {
         administrators.add(admin);
     }
 
-    //public boolean verifyLogin(String username, String password){ //TODO fix
-        //for (AdministrativeUser admin: administrators)
-            //if (admin.getUserName().equals(username) && admin.getPassword().equals(password)) {
-                //return true;
-            //}
-        //return false;  //maybe throw expectation?? or return string to say wrong username or wrong password
-    //}
+    public boolean verifyLogin(String username, String password){
+         return administrators.ifExists(
+                 AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
+                         && AdministrativeUser.getPassword().equals(password));
+    }  //if FALSE maybe throw expectation?? or return string to say wrong username or wrong password
+
 
     public boolean addSubAdmin(AdministrativeUser head, String username, String email, String password){
         if (head.getIsHead()){
@@ -64,12 +66,16 @@ public class AdministrativeManager {
         transactionLimit = limit;
     }
 
-    public int getLendBeforeBorrow(){
+    public int getLendBeforeBorrowLimit(){
         return lendBeforeBorrow;
     }
 
-    public void setLendBeforeBorrow(int limit){
+    public void setLendBeforeBorrowLimit(int limit){
         lendBeforeBorrow = limit;
+    }
+
+    public Iterator<PersonalUser>getListUserShouldBeFreezed(){
+        return needToFreezelist;
     }
 
     public void freezeUser(PersonalUser user){
@@ -84,24 +90,18 @@ public class AdministrativeManager {
         return (user.getInventory()).remove(item);
     }
 
-    public boolean addItem(PersonalUser user, Item item){
+    public boolean confirmAddItem(PersonalUser user, Item item){ //TODO where do admin get the request of adding item
         (user.getInventory()).add(item);
         return true;
     }
 
-    //public void confirmAddItem()
-
-    //public void createFrozenNotification(PersonalUser user){
-        //frozennotifications.add(user);
-    //}
-
-    public void getListUserShouldBeFreezed(){
-        freezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezed);
+    public void confirmFreezeUser(PersonalUser user) {
+        freezeUser(user);
     }
 
-    public void confirmFreezeUser() {
-        while (freezelist.hasNext()){
-            freezeUser(freezelist.next());
+    public void confirmFreezeAllUser(){
+        while (needToFreezelist.hasNext()){
+            freezeUser(needToFreezelist.next());
         }
 
     }
@@ -116,5 +116,5 @@ public class AdministrativeManager {
         //public void findFreezeUser() {
         //r}
 
-    //TODO: method of creating notification and add them to notification list or repo
+
 }

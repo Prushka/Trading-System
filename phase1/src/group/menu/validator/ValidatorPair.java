@@ -53,7 +53,7 @@ public class ValidatorPair {
      * @return <code>true</code> if user input passes the validation
      */
     public boolean validate(String value) {
-        if(validator == null) return true;
+        if (validator == null) return true;
         return validator.validate(value);
     }
 

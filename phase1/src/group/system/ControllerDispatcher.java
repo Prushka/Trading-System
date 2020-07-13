@@ -1,21 +1,27 @@
 package group.system;
 
+import group.config.property.TradeProperties;
 import group.notification.SupportTicket;
 import group.repository.CSVRepository;
-import group.repository.RepositorySavable;
+import group.repository.Repository;
 import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 
 public class ControllerDispatcher implements Shutdownable {
 
-    RepositorySavable<SupportTicket> ticketRepository;
-    RepositorySavable<PersonalUser> personalUserRepository;
-    RepositorySavable<AdministrativeUser> adminUserRepository;
-    RepositorySavable<Trade> tradeRepository;
+    Repository<SupportTicket> ticketRepository;
+    Repository<PersonalUser> personalUserRepository;
+    Repository<AdministrativeUser> adminUserRepository;
+    Repository<Trade> tradeRepository;
 
     SupportTicketController supportTicketController;
     UserController userController;
+
+    // remove this grace code when actual controller comes it
+    TestTradeController testTradeController;
+
+    TradeProperties tradeProperties;
 
     final MenuConstructor menuConstructor = new MenuConstructor();
 
@@ -23,6 +29,7 @@ public class ControllerDispatcher implements Shutdownable {
 
     public ControllerDispatcher() {
         menuConstructor.shutdownHook(this);
+        createProperties();
         createRepositories();
         dispatchController();
         menuConstructor.runMenu();
@@ -31,6 +38,9 @@ public class ControllerDispatcher implements Shutdownable {
     public void dispatchController() {
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
+
+        // remove this grace code when actual controller comes it
+        testTradeController = new TestTradeController(this);
     }
 
     public void createRepositories() {
@@ -38,6 +48,10 @@ public class ControllerDispatcher implements Shutdownable {
         personalUserRepository = new CSVRepository<>("data/personal_user.csv", PersonalUser::new, saveHook);
         adminUserRepository = new CSVRepository<>("data/admin_user.csv", AdministrativeUser::new, saveHook);
         tradeRepository = new CSVRepository<>("data/trade.csv", Trade::new, saveHook);
+    }
+
+    public void createProperties() {
+        tradeProperties = new TradeProperties(saveHook);
     }
 
     public void shutdown() {

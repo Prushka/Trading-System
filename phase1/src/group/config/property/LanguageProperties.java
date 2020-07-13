@@ -3,23 +3,41 @@ package group.config.property;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The Language Property. The language.properties file will not be saved from resources to config by default.
+ * File language.properties is predefined in the resources root.
+ *
+ * @author Dan Lyu
+ */
 public class LanguageProperties extends Property {
 
-    public String getMessage(String key, Object... paras) {
-        String value = get(key, key);
-        return String.format(value, paras);
-    }
-
-    @Override
-    File getFile() {
-        return new File("config/language.properties");
-    }
-
-    public LanguageProperties(){
+    /**
+     * Constructs a LanguageProperties
+     */
+    public LanguageProperties() {
         try {
             properties.load(getResource());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * @param key   the identifier
+     * @param paras the parameters to be formatted into identifier
+     * @return the language text
+     */
+    public String getMessage(String key, Object... paras) {
+        String value = get(key, key);
+        return String.format(value, paras);
+    }
+
+    /**
+     * @return language.properties
+     */
+    @Override
+    File getFile() {
+        return new File("language.properties");
+    }
+
 }

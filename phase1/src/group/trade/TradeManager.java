@@ -17,7 +17,7 @@ import java.util.List;
 
 public class TradeManager {
     private final Integer editLimit; // how many edits each user has
-    private final Integer timeLimit; // milliseconds until a user has to reverse the temporary trade
+    private final Integer timeLimit; // days until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
     private Repository<PersonalUser> userRepository;
 
@@ -25,7 +25,7 @@ public class TradeManager {
             tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
         tradeProperties.set("editLimit", "3");
-        tradeProperties.set("timeLimit", "2628002880");
+        tradeProperties.set("timeLimit", "30");
         editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
         timeLimit = Integer.parseInt(tradeProperties.get("timeLimit"));
         this.tradeRepository = tradeRepository;
@@ -209,7 +209,7 @@ public class TradeManager {
     }
 
     private void scheduleTradeBack(Trade currTrade) {
-        long increaseTime = currTrade.getDateAndTime().getTime() + timeLimit;
+        long increaseTime = currTrade.getDateAndTime().getTime() + (timeLimit * 86400000);
         Date newDateAndTime = new Date(increaseTime);
         createTrade(currTrade.getUser1(), currTrade.getUser1(), currTrade.getItem2(), currTrade.getItem1(),
                 true, newDateAndTime, currTrade.getLocation(), currTrade.getUid());

@@ -32,10 +32,10 @@ public class TestTradeController {
 
     // return response
     public Response addTrade(Request request) {
-        Long user1 =  request.getLong("tradeInitiator");
-        Long user2 =  request.getLong("tradeRespondent");
-        Long item1 =  request.getLong("item1");
-        Long item2 =  request.getLong("item2");
+        Long user1 =  request.getLong("initiator");
+        Long user2 =  request.getLong("respondent");
+        Long item1 =  request.getLong("lendingItem");
+        Long item2 =  request.getLong("borrowingItem");
         Boolean isPermanent = request.getBoolean("isPermanent");
         Date dateAndTime = request.getDate("dateAndTime");
         String location =  request.get("location");
@@ -66,6 +66,12 @@ public class TestTradeController {
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         tradeManager.confirmTrade(tradeID, editingUser);
+    }
+
+    public Response testing(Request request){
+        return new Response.Builder(true).
+                translatable("input.add.trade.initiator", "hello")
+                .build();
     }
 
     public boolean ifTradeNotExist(String input) {

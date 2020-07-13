@@ -84,26 +84,29 @@ public class MenuConstructor {
 
     // change this grace code when the actually controller comes in
     public void supportTrade(TestTradeController controller){
-        menuBuilder.option(Trade.class, OperationType.add, 3)
-                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
-                .input("Respondent", String::toUpperCase, null, ValidatingType.invalid)
-                .input("LendingItem", String::toUpperCase, null, ValidatingType.invalid)
-                .input("BorrowingItem", String::toUpperCase, null, ValidatingType.invalid)
-                .input("Permanency", String::toUpperCase, null, ValidatingType.invalid)
-                .input("Date/Time", String::toUpperCase, null, ValidatingType.invalid)
-                .input("Location", String::toUpperCase, null, ValidatingType.invalid)
+        // grace notes: keys correspond to request keys, .master calls the next set of nodes
+        menuBuilder.option(Trade.class, OperationType.add, 1)
+                .input("initiator", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("respondent", String::toUpperCase, null, ValidatingType.invalid)
+                .input("lendingItem", String::toUpperCase, null, ValidatingType.invalid)
+                .input("borrowingItem", String::toUpperCase, null, ValidatingType.invalid)
+                .input("isPermanent", String::toUpperCase, null, ValidatingType.invalid)
+                .input("dateAndTime", String::toUpperCase, null, ValidatingType.invalid)
+                .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
                 .master("master.support.trade");
 
-        menuBuilder.option(Trade.class, OperationType.edit, 4, "Date/Time")
-                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
-                .input("Date/Time", String::toUpperCase, null, ValidatingType.invalid)
-                .submit("confirm", controller::testEditDateAndTime)
+        menuBuilder.option(Trade.class, OperationType.edit, 2, "Date/Time")
+                .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
+                .input("dateAndTime", String::toUpperCase, null, ValidatingType.invalid)
+                .submit("confirm", controller::testing)
                 .master("master.support.trade");
 
-        menuBuilder.option(Trade.class, OperationType.edit, 5, "Location")
-                .input("Initiator", controller::ifTradeNotExist, ValidatingType.exists)
-                .input("Location", String::toUpperCase, null, ValidatingType.invalid)
+        menuBuilder.option(Trade.class, OperationType.edit, 3, "Location")
+                .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
+                .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::testEditLocation)
                 .master("master.support.trade");
 

@@ -155,6 +155,11 @@ public class TradeManager {
                 PersonalUser otherUser = userRepository.get(currTrade.getUser1());
                 if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
                     makeTrades(currUser, otherUser, currTrade);
+                    if (currTrade.getIsPermanent()) {
+                        currTrade.closeTrade();
+                    } else {
+                        scheduleTradeBack(currTrade);
+                    }
                 }
                 return new Response.Builder(true).translatable("success.confirm.trade.complete").build();
             }
@@ -165,40 +170,46 @@ public class TradeManager {
 
     // TODO: Add to other people's inventory... Weird system -- they can trade other people's items
     private void makeTrades(PersonalUser currUser, PersonalUser otherUser, Trade currTrade) {
-        if (currTrade.getIsPermanent()) {
-            if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
-                currUser.setBorrowCount(currUser.getBorrowCount() + 1);
-                currUser.removeFromWishList(currTrade.getItem2());
+        if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
+            currUser.setBorrowCount(currUser.getBorrowCount() + 1);
+            currUser.removeFromWishList(currTrade.getItem2());
+            otherUser.setLendCount(currUser.getLendCount() + 1);
+            otherUser.removeFromInventory(currTrade.getItem2());
+            if (currTrade.getIsPermanent()) {
                 // currUser.addToInventory(currTrade.getItem2());
-                otherUser.setLendCount(currUser.getLendCount() + 1);
-                otherUser.removeFromInventory(currTrade.getItem2());
-            } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
-                otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
-                otherUser.removeFromWishList(currTrade.getItem1());
+            }
+        } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
+            otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
+            otherUser.removeFromWishList(currTrade.getItem1());
+            currUser.setLendCount(currUser.getLendCount() + 1);
+            currUser.removeFromInventory(currTrade.getItem1());
+            if (currTrade.getIsPermanent()) {
                 // otherUser.addToInventory(currTrade.getItem2());
-                currUser.setLendCount(currUser.getLendCount() + 1);
-                currUser.removeFromInventory(currTrade.getItem1());
-            } else {
-                currUser.setBorrowCount(currUser.getBorrowCount() + 1);
-                currUser.setLendCount(currUser.getLendCount() + 1);
-                currUser.removeFromWishList(currTrade.getItem2());
-                currUser.removeFromInventory(currTrade.getItem1());
+            }
+        } else {
+            currUser.setBorrowCount(currUser.getBorrowCount() + 1);
+            currUser.setLendCount(currUser.getLendCount() + 1);
+            currUser.removeFromWishList(currTrade.getItem2());
+            currUser.removeFromInventory(currTrade.getItem1());
+            otherUser.setLendCount(currUser.getLendCount() + 1);
+            otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
+            otherUser.removeFromWishList(currTrade.getItem1());
+            otherUser.removeFromInventory(currTrade.getItem2());
+            if (currTrade.getIsPermanent()) {
                 // currUser.addToInventory(currTrade.getItem2());
-                otherUser.setLendCount(currUser.getLendCount() + 1);
-                otherUser.setBorrowCount(currUser.getBorrowCount() + 1);
-                otherUser.removeFromWishList(currTrade.getItem1());
-                otherUser.removeFromInventory(currTrade.getItem2());
                 // otherUser.addToInventory(currTrade.getItem1());
             }
-            currTrade.closeTrade();
-        } else {
-            Date newDateAndTime = currTrade.getDateAndTime();
-            // newDateAndTime.set(Calendar.MONTH, timeLimit); // TODO: set new dates and new meetings
-            //Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
-            //        currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
-            //        currTrade.getLocation());
-            //secondMeeting.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
         }
+    }
+
+    // TODO: How do second meetings work? -- set new dates and new meetings
+    private void scheduleTradeBack(Trade currTrade) {
+        Date newDateAndTime = currTrade.getDateAndTime();
+        // newDateAndTime.set(Calendar.MONTH, timeLimit);
+        //Trade secondMeeting = createTrade(currTrade.getUser1(), currTrade.getUser1(),
+        //        currTrade.getItem2(), currTrade.getItem1(), true, newDateAndTime,
+        //        currTrade.getLocation());
+        //secondMeeting.setPrevMeeting((long) tradeRepository.getId(secondMeeting));
     }
 
 

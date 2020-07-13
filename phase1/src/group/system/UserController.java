@@ -21,12 +21,17 @@ public class UserController {
         dispatcher.menuConstructor.user(this);
     }
 
-    public Response loginAdmin(String username, String password) {
-        return administrativeManager.verifyLogin(username, password);
+    public Response loginAdmin(Request request) {
+        return administrativeManager.verifyLogin(request.get("username"), // not sure if this way of using Request is correct
+                                                 request.get("password"));
     }
 
-    public Response registerUser(String username, String email, String password, boolean isHead) {
-        return administrativeManager.createAdministrator(username, email, password, isHead);
+    public Response registerAdmin(Request request) {
+        return administrativeManager.createAdministrator(request.get("username"),
+                                                         request.get("email"),
+                                                         request.get("password"),
+                                                        (request.getBoolean("isHead")));
     }
 
+    // working on the rest
 }

@@ -9,6 +9,7 @@ import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
 import group.trade.Trade;
 import group.user.User;
+import group.trade.Trade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +32,12 @@ public class MenuConstructor {
                 .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .input("email")
-                .submit("confirm", controller::loginUser);
+                .submit("confirm", controller::registerAdmin);
 
         menuBuilder.option(User.class, OperationType.verification, 2)
                 .input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .input("password", password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::registerUser);
+                .submit("confirm", controller::loginAdmin);
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
         menuBuilder.construct("master.account"); // this one should be the root, but many things are unimplemented
@@ -65,6 +66,7 @@ public class MenuConstructor {
         This will put all identifiers in the properties file with undefined value
          */
     }
+
 
     public void supportTicket(SupportTicketController controller) {
         menuBuilder.option(SupportTicket.class, OperationType.add, 1)

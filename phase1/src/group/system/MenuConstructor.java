@@ -100,14 +100,26 @@ public class MenuConstructor {
                 .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
                 .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, null, ValidatingType.invalid)
-                .submit("confirm", controller::testEditDateAndTime)
+                .submit("confirm", controller::editMeetingDateAndTime)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 3, "Location")
                 .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
                 .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
-                .submit("confirm", controller::testEditLocation)
+                .submit("confirm", controller::editMeetingLocation)
+                .master("master.support.trade");
+
+        menuBuilder.option(Trade.class, OperationType.verification, 4, "Open")
+                .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
+                .submit("confirm", controller::confirmingTradeOpen)
+                .master("master.support.trade");
+
+        menuBuilder.option(Trade.class, OperationType.verification, 5, "Complete")
+                .input("tradeID", controller::ifTradeNotExist, ValidatingType.exists)
+                .input("editingUser", String::toUpperCase, null, ValidatingType.invalid)
+                .submit("confirm", controller::confirmingTradeComplete)
                 .master("master.support.trade");
 
         menuBuilder.construct("master.support.trade", true);

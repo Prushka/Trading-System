@@ -30,7 +30,6 @@ public class TestTradeController {
         dispatcher.menuConstructor.supportTrade(this);
     }
 
-    // return response
     public Response addTrade(Request request) {
         Long user1 =  request.getLong("initiator");
         Long user2 =  request.getLong("respondent");
@@ -39,35 +38,33 @@ public class TestTradeController {
         Boolean isPermanent = request.getBoolean("isPermanent");
         Date dateAndTime = request.getDate("dateAndTime");
         String location =  request.get("location");
-        Response response = tradeManager.createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location);
-        response.setNextMasterNodeIdentifier("master.support.trade");
-        return response;
+        return tradeManager.createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location);
     }
 
-    public Response testEditDateAndTime(Request request){
+    public Response editMeetingDateAndTime(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         Date dateAndTime = request.getDate("dateAndTime");
         return tradeManager.editDateAndTime(tradeID, editingUser, dateAndTime);
     }
 
-    public Response testEditLocation(Request request){
+    public Response editMeetingLocation(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         String location = request.get("location");
         return tradeManager.editLocation(tradeID, editingUser, location);
     }
 
-    public void testConfirmTrade(Request request){
+    public Response confirmingTradeOpen(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
-        tradeManager.confirmTrade(tradeID, editingUser);
+        return tradeManager.confirmTrade(tradeID, editingUser);
     }
 
-    public void testConfirmComplete(Request request){
+    public Response confirmingTradeComplete(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
-        tradeManager.confirmTrade(tradeID, editingUser);
+        return tradeManager.confirmTrade(tradeID, editingUser);
     }
 
     public boolean ifTradeNotExist(String input) {

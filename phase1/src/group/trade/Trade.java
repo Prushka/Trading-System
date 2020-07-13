@@ -28,7 +28,6 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     private Boolean isClosed;
 
     // Meeting Details
-    // Use date
     private Date dateAndTime;
     private String location;
 

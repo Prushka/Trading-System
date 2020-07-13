@@ -16,8 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TradeManager {
-    private final Integer editLimit;
-    private final Integer timeLimit; // the number of miliseconds until a user has to reverse the temporary trade
+    private final Integer editLimit; // how many edits each user has
+    private final Integer timeLimit; // time until a user has to reverse the temporary trade
     private Repository<Trade> tradeRepository;
     private Repository<PersonalUser> userRepository;
 
@@ -32,6 +32,7 @@ public class TradeManager {
         this.userRepository = userRepository;
 
         /*
+        Dan Comments:
         // Get from Repository -- use for only one record
         Trade getSomeTrade = tradeRepository.getFirst(entity -> entity.getItem1() == null);
         Iterator<Trade> getAnIterator = tradeRepository.iterator(entity -> entity.getItem1() == null);
@@ -50,7 +51,6 @@ public class TradeManager {
         boolean ifSomeTradeExists2 = tradeRepository.ifExists(4);
         boolean ifSomeTradeExists3 = tradeRepository.ifExists(new Trade()); Implement the equals() and hashCode() in Trade to use this one
 
-        // TODO: Response
         Response response = tradeRepository.filterResponse(entity -> entity.getDateAndTime() == null,
         (entity, builder) -> builder.translatable("some.identifier.in.language.properties",
         entity.getUser1().toString(),entity.getUser2().toString()));
@@ -131,7 +131,7 @@ public class TradeManager {
         return new Response.Builder(false).translatable("failed.edit.trade").build();
     }
 
-    public void confirmTrade(int tradeID, int editingUser) {
+    public Response confirmTrade(int tradeID, int editingUser) {
         // Get Trade from Repository
         if (tradeRepository.ifExists(tradeID)) {
             Trade currTrade = tradeRepository.get(tradeID);
@@ -154,10 +154,13 @@ public class TradeManager {
                     oldTrade.closeTrade();
                 }
             }
+            return new Response.Builder(false).translatable("failed.edit.trade").build();
         }
+        return new Response.Builder(false).translatable("failed.edit.trade").build();
+
     }
 
-    public void confirmTradeComplete(int tradeID, int editingUser) {
+    public Response confirmTradeComplete(int tradeID, int editingUser) {
         if (userRepository.ifExists(editingUser) && tradeRepository.ifExists(tradeID)) {
             PersonalUser currUser = userRepository.get(editingUser);
             Trade currTrade = tradeRepository.get(tradeID);
@@ -175,7 +178,9 @@ public class TradeManager {
                     makeTrades(currUser, otherUser, currTrade);
                 }
             }
+            return new Response.Builder(false).translatable("failed.edit.trade").build();
         }
+        return new Response.Builder(false).translatable("failed.edit.trade").build();
     }
 
     // TODO: Add to other people's inventory... Weird system -- they can trade other people's items

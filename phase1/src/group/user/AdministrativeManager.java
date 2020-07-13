@@ -1,6 +1,7 @@
 package group.user;
 
 import group.item.Item;
+import group.menu.data.Response;
 import group.repository.Repository;
 
 import java.util.ArrayList;
@@ -23,20 +24,24 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
     }
 
-    public void createadministrator(String username, String email, String password, boolean isHead){
+    public Response createadministrator(String username, String email, String password, boolean isHead){
         AdministrativeUser admin = new AdministrativeUser(username, email, password, isHead);
         administrators.add(admin);
+        return new Response.Builder(false).translatable("create.new.user").build();
     }
 
-    public void createadministrator(String username, String email, String telephone, String password, boolean isHead){
-        AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
-        administrators.add(admin);
-    }
+    //public Response createadministrator(String username, String email, String telephone, String password, boolean isHead){
+        //AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
+        //administrators.add(admin);
+        //return new Response.Builder(false).translatable("create.new.user").build();
+    //}
 
-    public boolean verifyLogin(String username, String password){
-         return administrators.ifExists(
+    public Response verifyLogin(String username, String password){
+         if (administrators.ifExists(
                  AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
-                         && AdministrativeUser.getPassword().equals(password));
+                         && AdministrativeUser.getPassword().equals(password)) == false)
+             return new Response.Builder(false).translatable("failed.login.user").build();
+         return new Response.Builder(true).translatable("success.login.user").build();
     }  //if FALSE maybe throw expectation?? or return string to say wrong username or wrong password
 
 

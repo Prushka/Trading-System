@@ -31,14 +31,18 @@ public class MenuConstructor {
                 .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .input("email")
-                .submit("confirm", controller::loginUser);
+                .submit("confirm", controller::loginUser)
+                .master("master.account");
+
 
         menuBuilder.option(User.class, OperationType.verification, 2)
-                .input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .input("password", password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::registerUser);
+                .submit("confirm", controller::registerUser)
+                .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
-
+        //menuBuilder.option(User.class, OperationType.add, 3)
         menuBuilder.construct("master.account"); // this one should be the root, but many things are unimplemented
         // You have to call construct before creating a new master option node.
 

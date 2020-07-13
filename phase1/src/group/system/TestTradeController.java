@@ -10,7 +10,6 @@ import group.user.PersonalUser;
 
 import java.util.Date;
 
-// Takes Requests from a User and turns it into information that can be used by TradeManager
 public class TestTradeController {
     private final TradeManager tradeManager;
     private final Repository<Trade> tradeRepository;
@@ -18,6 +17,10 @@ public class TestTradeController {
     private final TradeProperties tradeProperties;
 
 
+    /**
+     * Takes Requests from a User and turns it into information that can be used by TradeManager
+     * @param dispatcher
+     */
     public TestTradeController(ControllerDispatcher dispatcher){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
@@ -65,5 +68,10 @@ public class TestTradeController {
 
     public boolean ifTradeExist(String input) {
         return tradeRepository.ifExists(Long.valueOf(input));
+    }
+
+    public boolean ifUserExist(String input) {
+        // check user part of specific trade
+        return personalUserRepository.ifExists(Long.valueOf(input));
     }
 }

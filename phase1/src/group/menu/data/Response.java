@@ -31,7 +31,7 @@ public class Response {
      * The master node identifier.
      * If this is not null, the corresponding {@link group.menu.node.MasterOptionNode} will be prompted.
      */
-    private final String flexibleMasterIdentifier;
+    private String flexibleMasterIdentifier;
 
     /**
      * @param builder the {@link Response.Builder} used to build this Response
@@ -62,6 +62,13 @@ public class Response {
      */
     public String getFlexibleMasterIdentifier() {
         return flexibleMasterIdentifier;
+    }
+
+    /**
+     * @param identifier the flexible master node's identifier to be set
+     */
+    public void setFlexibleMasterIdentifier(String identifier) {
+        flexibleMasterIdentifier = identifier;
     }
 
     /**

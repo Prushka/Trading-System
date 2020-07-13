@@ -85,8 +85,6 @@ public class MenuBuilder {
 
             private final SubmitNode submitNode;
 
-            private String masterPlaceHolder;
-
             public SubmitNodeBuilder(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
                 String translatable = getTranslatable("submit", key);
                 SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler, persistentRequest)
@@ -96,11 +94,6 @@ public class MenuBuilder {
             }
 
             public SubmitNodeBuilder master(String masterIdentifier) {
-                masterPlaceHolder = masterIdentifier;
-                return this;
-            }
-
-            public SubmitNodeBuilder flexibleMaster(String masterIdentifier) {
                 flexibleMasterPlaceHolder.add(masterIdentifier);
                 return this;
             }
@@ -160,9 +153,11 @@ public class MenuBuilder {
 
     public MasterOptionNode constructFinal() {
         for (OptionNodeBuilder optionNodeBuilder : optionNodePool.values()) {
+            List<String> placeHolders = optionNodeBuilder.submitNodeBuilder.flexibleMasterPlaceHolder;
+            if (placeHolders.size() == 0) continue;
             SubmitNode submitNode = optionNodeBuilder.submitNodeBuilder.submitNode;
-            submitNode.setChild(masters.get(optionNodeBuilder.submitNodeBuilder.masterPlaceHolder));
-            for (String flexibleMaster : optionNodeBuilder.submitNodeBuilder.flexibleMasterPlaceHolder) {
+            // submitNode.setChild(masters.get(placeHolders.get(0)));
+            for (String flexibleMaster : placeHolders) {
                 submitNode.fillMasterPool(masters.get(flexibleMaster));
             }
         }

@@ -19,7 +19,7 @@ public class TestTradeController {
 
     /**
      * Takes Requests from a User and turns it into information that can be used by TradeManager
-     * @param dispatcher
+     * @param dispatcher The controller dispatcher
      */
     public TestTradeController(ControllerDispatcher dispatcher){
         tradeRepository = dispatcher.tradeRepository;
@@ -71,7 +71,6 @@ public class TestTradeController {
     }
 
     public boolean ifUserExist(String input) {
-        // check user part of specific trade
         return personalUserRepository.ifExists(Long.valueOf(input));
     }
 }

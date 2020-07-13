@@ -3,7 +3,6 @@ package group.user;
 import group.item.Item;
 import group.menu.data.Response;
 import group.repository.Repository;
-import group.trade.Trade;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,53 +24,43 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
     }
 
-    private Response adminUserRepresentation(String translatable, AdministrativeUser admin) {
-        return new Response.Builder(true).
-                translatable(translatable, admin.getName(), admin.getEmail(), admin.getPassword(), admin.getIsHead())
-                .build();
-    }
-
-    public Response createAdministrator(String username, String email, String password, boolean isHead){
+    public Response createadministrator(String username, String email, String password, boolean isHead){
         AdministrativeUser admin = new AdministrativeUser(username, email, password, isHead);
         administrators.add(admin);
-        return adminUserRepresentation("filler", this.findAdmin(username)); // filler needs to be established in language.properties? I'm not sure if this is to be hardcoded or
-                                                                                        // if generateLanguage does this somehow?
+        return new Response.Builder(true).translatable("success.create.new").build();
     }
 
-    public void createAdministrator(String username, String email, String telephone, String password, boolean isHead){
+    public Response createadministrator(String username, String email, String telephone, String password, boolean isHead){
         AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
         administrators.add(admin);
-        // return adminUserRepresentation("filler", this.findAdmin(username)); // not sure why we have two constructors
+        return new Response.Builder(true).translatable("success.create.new").build();
     }
 
-    public Response verifyLogin(String username, String password) { // changed return type to response, this allows interaction with controller
-        if(administrators.ifExists(
+    public Response verifyLogin(String username, String password){
+         if (administrators.ifExists(
                  AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
-                         && AdministrativeUser.getPassword().equals(password))) {
-            return adminUserRepresentation("filler", this.findAdmin(username));
-            }
-        //if FALSE maybe throw expectation?? or return string to say wrong username or wrong password
-        return null; //^
+                         && AdministrativeUser.getPassword().equals(password))){
+             return new Response.Builder(true).translatable("success.login.user").build();
+         }
+         return new Response.Builder(false).translatable("failed.login.user").build();
     }
 
-    public Response addSubAdmin(AdministrativeUser head, String username, String email, String password){ // changed return type to response, this allows interaction with controller
+
+    public Response addSubAdmin(AdministrativeUser head, String username, String email, String password){
         if (head.getIsHead()){
-            createAdministrator(username, email, password, false);
-            return adminUserRepresentation("filler", this.findAdmin(username));
+            createadministrator(username, email, password, false);
+            return new Response.Builder(true).translatable("success.add.subadmin").build();
         } else{
-            //return false;
-            return null;
+            return new Response.Builder(false).translatable("failed.add.subadmin").build();
         }
     }
 
     public boolean addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
         if (head.getIsHead()){
-            createAdministrator(username, email, telephone, password, false);
+            createadministrator(username, email, telephone, password, false);
             return true;
-            // return adminUserRepresentation("filler", this.findAdmin(username));
         } else{
             return false;
-            // return null;
         }
     }
 
@@ -103,12 +92,12 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         user.setIsFrozen(false);
     }
 
-    public boolean removeItem(PersonalUser user, Item item){
+    public boolean removeUserItem(PersonalUser user, Long item){
         return (user.getInventory()).remove(item);
     }
 
-    public boolean confirmAddItem(PersonalUser user, Item item){ //TODO where do admin get the request of adding item
-        (user.getInventory()).add(item);
+    public boolean confirmAddItem(PersonalUser user, Long item){ //TODO where do admin get the request of adding item
+        user.addToInventory(item);
         return true;
     }
 
@@ -121,14 +110,6 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
             freezeUser(needToFreezelist.next());
         }
 
-    }
-
-    public AdministrativeUser findAdmin(String username) {
-        /* for (AdministrativeUser i : administrators) { // is there a current way to iterate over Repository without filter? if not i implement it?
-            if (username.equals(i.getUserName())) return i;
-        }
-         */
-        return null;
     }
 
     //public void exampleOfFilter() {

@@ -6,9 +6,9 @@ import java.util.*;
 
 public class PersonalUser extends User {
 
-    private List<Item> wishlist;       //TODO: replace Object with item when item is available
-    private List<Item> inventory;
-    private List<Item> trades;
+    private List<Long> wishlist;
+    private List<Long> inventory;
+    private List<Long> trades;
     private boolean isFrozen;
     private int lendCount;
     private int borrowCount;
@@ -48,80 +48,45 @@ public class PersonalUser extends User {
         traderFrequency = new HashMap<>();
     }
 
-    public PersonalUser(List<String> record){super(record);}
+    public PersonalUser(List<String> record){ super(record); }
 
-    public List<Item> getWishlist() {
-        return wishlist;
-    }
+    public List<Long> getWishlist() { return wishlist; }
 
-    public void removeFromWishList(Long oldItem){
-        Item removeItem = null;
-        for (Item item: wishlist){
-            if (item.getUid() == oldItem){
-                removeItem = item;
-            }
-        }
-        wishlist.remove(removeItem);}
+    public void addToWishList(Long newItem){ wishlist.add(newItem); }
 
-    public List<Item> getInventory() {
-        return inventory;
-    }
+    public void removeFromWishList(Long oldItem){ wishlist.remove(oldItem); }
 
-    // public void addToInventory(Item newItem){ inventory.add(newItem);}
+    public List<Long> getInventory() { return inventory; }
 
-    public void removeFromInventory(Long oldItem){
-        Item removeItem = null;
-        for (Item item: inventory){
-            if (item.getUid() == oldItem){
-                removeItem = item;
-            }
-        }
-        inventory.remove(removeItem);
-    }
+    public void addToInventory(Long newItem){ inventory.add(newItem);}
 
-    public List<Item> getTrades() {
-        return trades;
-    }
+    public void removeFromInventory(Long oldItem){ inventory.remove(oldItem); }
 
-    public boolean getIsFrozen() {
-        return isFrozen;
-    }
+    public List<Long> getTrades() { return trades; }
 
-    public void setIsFrozen (boolean isFrozen) {
-        this.isFrozen = isFrozen;
-    }
+    public void addToTrades(Long newItem){ trades.add(newItem);}
 
-    public int getLendCount() {
-        return lendCount;
-    }
+    public void removeFromTrade(Long oldItem){ trades.remove(oldItem); }
 
-    public void setLendCount(int lendCount) {
-        this.lendCount = lendCount;
-    }
+    public boolean getIsFrozen() { return isFrozen; }
 
-    public int getBorrowCount() {
-        return borrowCount;
-    }
+    public void setIsFrozen (boolean isFrozen) { this.isFrozen = isFrozen; }
 
-    public void setBorrowCount(int borrowCount) {
-        this.borrowCount = borrowCount;
-    }
+    public int getLendCount() { return lendCount; }
 
-    public boolean getShouldBeFreezedUser(){
-        return lendCount < borrowCount;
-    }
+    public void setLendCount(int lendCount) { this.lendCount = lendCount; }
 
-    public int getNumTransactions() {
-        return numTransactions;
-    }
+    public int getBorrowCount() { return borrowCount; }
 
-    public void setNumTransactions(int numTransactions) {
-        this.numTransactions = numTransactions;
-    }
+    public void setBorrowCount(int borrowCount) { this.borrowCount = borrowCount; }
 
-    public Map<String, Integer> getTraderFrequency() {
-        return traderFrequency;
-    }
+    public boolean getShouldBeFreezedUser(){ return lendCount < borrowCount; }
+
+    public int getNumTransactions() { return numTransactions; }
+
+    public void setNumTransactions(int numTransactions) { this.numTransactions = numTransactions; }
+
+    public Map<String, Integer> getTraderFrequency() { return traderFrequency; }
 
     /**
      * returns the usernames of the top three most frequent traders for this user as a map.

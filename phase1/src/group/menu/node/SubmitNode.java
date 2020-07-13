@@ -5,7 +5,7 @@ import group.menu.data.Request;
 import group.menu.data.Response;
 import group.menu.handler.RequestHandler;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,9 +29,10 @@ public class SubmitNode extends InputNode {
 
     /**
      * The map of {@link MasterOptionNode} to find a corresponding Node to the {@link Response#getNextMasterNodeIdentifier()}
-     * when a Response want the node to navigate to another {@link MasterOptionNode}
+     * when a Response want the node to navigate to another {@link MasterOptionNode}. If a node is not specified and the SubmitNode has a
+     * null child, the first element in the pool will be used.
      */
-    private final Map<String, MasterOptionNode> flexibleMasterPool = new HashMap<>();
+    private final Map<String, MasterOptionNode> flexibleMasterPool = new LinkedHashMap<>();
 
     /**
      * The global persistent request object to be injected
@@ -100,6 +101,9 @@ public class SubmitNode extends InputNode {
             }
         } else {
             responseNode.setChild(failedResultNode);
+        }
+        if (responseNode.getChild() == null) { // the next master node identifier doesn't exist in Response object, use the default one
+            responseNode.setChild(flexibleMasterPool.entrySet().iterator().next().getValue());
         }
         return responseNode;
     }

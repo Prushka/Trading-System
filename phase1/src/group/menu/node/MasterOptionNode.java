@@ -106,7 +106,7 @@ public class MasterOptionNode extends RequestableNode {
      */
     private Optional<OptionNode> getChild(int id) {
         id -= 1;
-        if (id >= children.size()) {
+        if (id >= children.size() || id <= -1) {
             return Optional.empty();
         } else {
             return Optional.ofNullable(children.get(id));

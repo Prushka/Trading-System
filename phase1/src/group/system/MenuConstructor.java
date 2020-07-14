@@ -22,18 +22,15 @@ import java.util.List;
  * ( >🌮
  */
 
-/*
-menuBuilder.option(SupportTicket.class, OperationType.query, 2)
-        .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
-        .succeeded("master.support.ticket").failed("master.account").master("master.support.trade","some.other.master");
- */
-
-// FIXME: this is the new format to handle success and failure in Response object
+// FIXME: this is the new format to handle success and failure in Response object:
+//   menuBuilder.option(SupportTicket.class, OperationType.query, 2)
+//       .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
+//       .succeeded("master.support.ticket").failed("master.account").master("master.support.trade","some.other.master");
 //  NOTICE what will happen:
 //  When Response success == true, the "master.support.ticket" will be the next menu
 //  When Response success == false, the "master.account" will be the next menu
 //  When you define "master.support.trade" in your response object, "master.support.trade" will be next. To use custom masters, they have to be put in here
-//  In other words: if there's no *.master("master.support.trade"), you can't set it in Response as next node
+//  In other words: if there's no method call: .master("master.support.trade"), you can't set it in Response as next node
 
 public class MenuConstructor {
 

@@ -380,7 +380,7 @@ public class MenuBuilder {
     }
 
     /**
-     * Generate all language identifier from the entire menu into a properties file with "undefined" placeholders.<p>
+     * Generates all language identifier from the entire menu into a properties file with "undefined" placeholders.<p>
      * Only invoke this method in developing environment.
      *
      * @param language the language properties file name

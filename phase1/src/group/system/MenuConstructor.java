@@ -55,7 +55,7 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
-                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
+                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .submit("confirm", controller::registerUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
@@ -96,7 +96,7 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
-                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
+                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .submit("confirm", controller::registerAdminUser)
                 .master("master.account");

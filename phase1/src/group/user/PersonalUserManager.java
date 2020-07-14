@@ -50,6 +50,10 @@ public class PersonalUserManager {
     }
 
     public Response createPersonalUser(String userName, String email, String telephone, String password) {
+        if (personalUserRepository.ifExists(
+                PersonalUser -> PersonalUser.getUserName().equals(userName))){
+            return new Response.Builder(false).translatable("failed.create.new").build();
+        }
         PersonalUser p = new PersonalUser(userName, email, telephone, password);
         personalUserRepository.add(p);
         return new Response.Builder(true).translatable("success.create.new").build();

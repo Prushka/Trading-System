@@ -21,6 +21,20 @@ import java.util.List;
  * (●_●)
  * ( >🌮
  */
+
+/*
+menuBuilder.option(SupportTicket.class, OperationType.query, 2)
+        .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
+        .succeeded("master.support.ticket").failed("master.account").master("master.support.trade","some.other.master");
+ */
+
+// FIXME: this is the new format to handle success and failure in Response object
+//  NOTICE what will happen:
+//  When Response success == true, the "master.support.ticket" will be the next menu
+//  When Response success == false, the "master.account" will be the next menu
+//  When you define "master.support.trade" in your response object, "master.support.trade" will be next. To use custom masters, they have to be put in here
+//  In other words: if there's no *.master("master.support.trade"), you can't set it in Response as next node
+
 public class MenuConstructor {
 
     private final MenuBuilder menuBuilder;
@@ -51,12 +65,7 @@ public class MenuConstructor {
                 .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account", false); // this one should be the root, but many things are unimplemented
-        // You have to call construct before creating a new master option node.
-
-        /* Language & Text:
-        If you create nodes directly, you have to pass identifiers manually as parameters. You also need to read about all builders.
-         */
+        menuBuilder.construct("master.account", true);
     }
 
     public void AdminUser(UserController controller) {
@@ -82,11 +91,6 @@ public class MenuConstructor {
         menuBuilder.option(SupportTicket.class, OperationType.query, 2)
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
                 .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
-
-        // NOTICE what will happen:
-        // when Response success == true, the "master.support.ticket" will be the next menu
-        // when Response success == false, the "master.account" will be the next menu
-        // when you define "master.support.trade" in your response object, "master.support.trade" will be next
 
         menuBuilder.construct("master.support.ticket", true);
     }

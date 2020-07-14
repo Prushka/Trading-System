@@ -1,8 +1,7 @@
 package group.menu;
 
-import group.config.ConsoleColorFormatter;
 import group.config.FileHandlerFactory;
-import group.config.property.LanguageProperties;
+import group.config.LoggerFactory;
 import group.menu.node.InputNode;
 import group.menu.node.MasterOptionNode;
 import group.menu.node.Node;
@@ -21,20 +20,11 @@ import java.util.logging.Logger;
 public class Menu {
 
     /**
-     * The logger to log information from the Menu
+     * The logger to log information from the Menu,
+     * instantiated using a single instance {@link java.util.logging.FileHandler} from {@link FileHandlerFactory} with Level.ALL
+     * and a {@link ConsoleHandler} with Level.INFO
      */
-    static final Logger LOGGER; // consider using instance variable
-
-    static {
-        LOGGER = Logger.getLogger(Menu.class.getName());
-        LOGGER.setUseParentHandlers(false);
-        LOGGER.setLevel(Level.ALL);
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(Level.INFO);
-        handler.setFormatter(new ConsoleColorFormatter(new LanguageProperties()));
-        LOGGER.addHandler(handler);
-        LOGGER.addHandler(new FileHandlerFactory().getFileHandler());
-    }
+    static final Logger LOGGER = new LoggerFactory(Menu.class).getConfiguredLogger();
 
     /**
      * The current menu node where the user is at

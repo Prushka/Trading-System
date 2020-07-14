@@ -37,7 +37,6 @@ public class FileHandlerFactory {
 
     public FileHandler getFileHandler() {
         if (fileHandler == null) {
-
             try {
                 mkdirs();
                 fileHandler = new FileHandler("log/" + getDate() + "-%u.log");

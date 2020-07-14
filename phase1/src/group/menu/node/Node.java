@@ -1,11 +1,8 @@
 package group.menu.node;
 
-import group.config.ConsoleColorFormatter;
-import group.config.FileHandlerFactory;
-import group.config.property.LanguageProperties;
+import group.config.LoggerFactory;
+import group.menu.Menu;
 
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -19,18 +16,7 @@ public abstract class Node {
     /**
      * The logger to log information from the Node
      */
-    static final Logger LOGGER;
-
-    static {
-        LOGGER = Logger.getLogger(Node.class.getName());
-        LOGGER.setUseParentHandlers(false);
-        LOGGER.setLevel(Level.ALL);
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(Level.INFO);
-        handler.setFormatter(new ConsoleColorFormatter(new LanguageProperties()));
-        LOGGER.addHandler(new FileHandlerFactory().getFileHandler());
-        LOGGER.addHandler(handler);
-    }
+    static final Logger LOGGER = new LoggerFactory(Menu.class).getConfiguredLogger();
 
     /**
      * The child node

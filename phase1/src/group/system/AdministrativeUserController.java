@@ -50,9 +50,52 @@ public class AdministrativeUserController {
         return administrativeManager.addSubAdmin(currAdmin, username, email, telephone, password);
     }
 
-    public Iterator<PersonalUser> freezeUser(Request request){
+    public Iterator<PersonalUser> getfreezeUserlist(Request request){
         return administrativeManager.getListUserShouldBeFreezed();
     }
+
+    public PersonalUser findUser(Request request){
+        String username = request.get("username");
+        return administrativeManager.findUser(username);
+    }
+
+    public Response confirmFreezeUser(Request request){
+        String username = request.get("username");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.confirmFreezeUser(user);
+
+    }
+
+    public Response confirmFreezeAllUser(Request request){
+        return administrativeManager.confirmFreezeAllUser();
+
+    }
+
+    public Response confirmUnFreezeUser(Request request){
+        String username = request.get("username");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.confirmUnfreezeUser(user);
+    }
+
+    public Response confirmUnFreezeAllUser(Request request){
+        return administrativeManager.confirmUnfreezeAllUser();
+
+    }
+
+    public Response confirmAddItemRequest(Request request){
+        String username = request.get("username");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.confirmAddItem(user);
+    }
+
+    public Response confirmAddAllItemRequest(Request request){
+        return administrativeManager.confirmAddAllItemRequest();
+    }
+
+
+
+
+
 
 
 

@@ -106,20 +106,20 @@ public class AdministrativeManager {
         return userRequestToUnfreeze;
     }
 
-    public Response confirmToUnfreezeUser(PersonalUser user){
+    public Response confirmUnfreezeUser(PersonalUser user){
         unfreezeUser(user);
         return new Response.Builder(true).translatable("success.confirm.unfreeze").build();
     }
 
-    public Response confirmToUnfreezeAllUser(){
+    public Response confirmUnfreezeAllUser(){
         while (userRequestToUnfreeze.hasNext()){
             unfreezeUser(userRequestToUnfreeze.next());
         }
         return new Response.Builder(true).translatable("success.confirm.unfreezeAll").build();
     }
 
-    public Response confirmFreezeCurrUser() {
-        freezeUser(currPersonalUser);
+    public Response confirmFreezeUser(PersonalUser user) {
+        freezeUser(user);
         return new Response.Builder(true).translatable("success.confirm.freeze").build();
     }
 
@@ -147,10 +147,16 @@ public class AdministrativeManager {
         lendBeforeBorrow = limit;
     }
 
+    public PersonalUser findUser(String username) {
+        return personalUserRepository.getFirst(
+                PersonalUser -> PersonalUser.getUserName().equals(username));
+    }
 
+    public AdministrativeUser findAdminUser(String username) {
+        return administrators.getFirst(
+                AdministrativeUser -> AdministrativeUser.getUserName().equals(username));
+    }
 
-        //public void findFreezeUser() {
-        //r}
 
 
 }

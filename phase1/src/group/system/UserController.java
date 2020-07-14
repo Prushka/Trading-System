@@ -38,6 +38,11 @@ public class UserController {
         return personalUserManager.createPersonalUser(username, email, telephone, password);
     }
 
+    public Response removeItemFromInventory(Request request){
+        Long item = request.getLong("itemname");
+        return personalUserManager.removeItemFromInventory(currUser, item);
+    }
+
     public Response RequestAddNewItem(Request request){
         String item = request.get("item");
         String description = request.get("description");
@@ -49,15 +54,6 @@ public class UserController {
     }
 
 
-    //public Response addSubAdmin(Request request){
-       // AdministrativeUser curradmin = administrativeManager.getCurrAdmin();
-        //String username = request.get("username");
-       // String email = request.get("email");
-        //String telephone = request.get("telephone");
-        //String password = request.get("password");
-        //boolean isHead = request.getBoolean("isHead");
-        //return administrativeManager.addSubAdmin(curradmin, username, email, telephone, password);
-    //}
 
 
 }

@@ -1,12 +1,10 @@
 package group.menu.node;
 
 import group.config.ConsoleColorFormatter;
-import group.config.FileFormatter;
+import group.config.FileHandlerFactory;
 import group.config.property.LanguageProperties;
 
-import java.io.IOException;
 import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 /**
@@ -27,13 +25,7 @@ public abstract class Node {
         LOGGER.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
         handler.setFormatter(new ConsoleColorFormatter(new LanguageProperties()));
-        try {
-            FileHandler fileHandler = new FileHandler("node.log");
-            LOGGER.addHandler(fileHandler);
-            fileHandler.setFormatter(new FileFormatter(new LanguageProperties()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        LOGGER.addHandler(new FileHandlerFactory().getFileHandler());
         LOGGER.addHandler(handler);
 
     }

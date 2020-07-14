@@ -1,6 +1,7 @@
 package group.menu;
 
 import group.config.ConsoleColorFormatter;
+import group.config.FileHandlerFactory;
 import group.config.property.LanguageProperties;
 import group.menu.node.InputNode;
 import group.menu.node.MasterOptionNode;
@@ -32,6 +33,7 @@ public class Menu {
         handler.setLevel(Level.FINEST);
         handler.setFormatter(new ConsoleColorFormatter(new LanguageProperties()));
         LOGGER.addHandler(handler);
+        LOGGER.addHandler(new FileHandlerFactory().getFileHandler());
     }
 
     /**

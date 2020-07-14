@@ -204,10 +204,23 @@ public class MenuBuilder {
          */
         public class SubmitNodeBuilder {
 
+            /**
+             * The MasterOptionNodePool used for this SubmitNode, will have all placeholders and be fed by the actual MasterOptionNodes
+             */
             private final MasterOptionNodePool masterOptionNodePool;
 
+            /**
+             * The SubmitNode this SubmitNodeBuilder is building
+             */
             private final SubmitNode submitNode;
 
+            /**
+             * @param key            the key of the input value
+             * @param processor      the processor used to pre-process user input
+             * @param validator      the validator used to validate user input
+             * @param validatingType the validating type to use if the validation fails
+             * @param requestHandler the handler to parse request and expect response
+             */
             public SubmitNodeBuilder(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
                 String translatable = getTranslatable("submit", key);
                 SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler, persistentRequest)
@@ -217,16 +230,38 @@ public class MenuBuilder {
                 masterOptionNodePool = new MasterOptionNodePool();
             }
 
+            /**
+             * Adds a placeholder to the pool. This method will have no impact on the succeeded and failed nodes.<p>
+             * The node will be in the available pool for this SubmitNode so that a {@link group.menu.data.Response}
+             * object can be used to prompt user a specified MasterOptionNode.
+             *
+             * @param masterIdentifiers the MasterOptionNode's identifier placeholders
+             * @return the SubmitNodeBuilder itself
+             */
             public SubmitNodeBuilder master(String... masterIdentifiers) {
                 masterOptionNodePool.addPlaceholder(masterIdentifiers);
                 return this;
             }
 
+            /**
+             * Adds a MasterOptionNode's identifier placeholder as the node to be navigated when the {@link group.menu.data.Response} succeeded.
+             * The placeholder will be replaced to be an actual MasterOptionNode in {@link MenuBuilder#constructFinal}
+             *
+             * @param masterIdentifier the master identifier placeholder
+             * @return the SubmitNodeBuilder itself
+             */
             public SubmitNodeBuilder succeeded(String masterIdentifier) {
                 masterOptionNodePool.setSucceededPlaceHolder(masterIdentifier);
                 return this;
             }
 
+            /**
+             * Adds a MasterOptionNode's identifier placeholder as the node to be navigated when the {@link group.menu.data.Response} failed.
+             * The placeholder will be replaced to be an actual MasterOptionNode in {@link MenuBuilder#constructFinal}
+             *
+             * @param masterIdentifier the master identifier placeholder
+             * @return the SubmitNodeBuilder itself
+             */
             public SubmitNodeBuilder failed(String masterIdentifier) {
                 masterOptionNodePool.setFailedPlaceHolder(masterIdentifier);
                 return this;
@@ -240,41 +275,84 @@ public class MenuBuilder {
      */
     final PersistentRequest persistentRequest = new PersistentRequest();
 
+    /**
+     * The operation types this option stands for, used only as an identifier for language
+     */
     public enum OperationType {
         edit, add, query, remove, verification
     }
 
-    public enum OperationPermission {
-        normal, administrator
-    }
-
+    /**
+     * The validating types if the validation didn't pass, used only as an identifier for language
+     */
     public enum ValidatingType {
         invalid, exists, notexist
     }
 
+    /**
+     * The place where option nodes reside before {@link #construct}
+     */
     private final Map<String, OptionNodeBuilder> optionNodePoolCache = new HashMap<>();
 
+    /**
+     * The place where all option node reside
+     */
     private final Map<String, OptionNodeBuilder> optionNodePool = new HashMap<>();
 
+    /**
+     * The place where all MasterOptionNode reside, will be used to replace placeholders
+     */
     private final Map<String, MasterOptionNode> masters = new HashMap<>();
 
+    /**
+     * The entry node for the entire menu
+     */
     private MasterOptionNode entryNode;
 
+    /**
+     * Returns the OptionNodeBuilder step for this builder with all parameters.
+     *
+     * @param clazz The class this option node operates on, only to be used as an identifier
+     * @param type  the type of the operation
+     * @param id    the id of this option
+     * @param addon the addon String to be used in the language identifier
+     * @return an {@link OptionNodeBuilder} with all parameters
+     */
     public OptionNodeBuilder option(Class<?> clazz, OperationType type, int id, String addon) {
         OptionNodeBuilder optionNodeBuilder = new OptionNodeBuilder(clazz, type, id, addon);
         optionNodePoolCache.put(optionNodeBuilder.optionNode.getTranslatable(), optionNodeBuilder);
         return optionNodeBuilder;
     }
 
+    /**
+     * Overloads {@link #option(Class, OperationType, int, String)} with no addon.
+     *
+     * @param clazz The class this option node operates on, only to be used as an identifier
+     * @param type  the type of the operation
+     * @param id    the id of this option
+     * @return an {@link OptionNodeBuilder} with no addon
+     */
     public OptionNodeBuilder option(Class<?> clazz, OperationType type, int id) {
         return this.option(clazz, type, id, "");
     }
 
+    /**
+     * Overloads {@link #construct(String, boolean)} and the MasterOptionNode being built is not the entry node.
+     *
+     * @param masterNodeIdentifier the MasterOptionNode's identifier, the actual MasterOptionNode will manage all current OptionNodes in {@link #optionNodePoolCache}
+     * @return the MasterOptionNode built
+     */
     public MasterOptionNode construct(String masterNodeIdentifier) {
         return this.construct(masterNodeIdentifier, false);
     }
 
-
+    /**
+     * Returns a built MasterOptionNode from all OptionNodes in {@link #optionNodePoolCache}.
+     *
+     * @param masterNodeIdentifier the MasterOptionNode's identifier, the actual MasterOptionNode will manage all current OptionNodes in {@link #optionNodePoolCache}
+     * @param isEntryNode          <code>true</code> of the MasterOptionNode being built is the entry node
+     * @return the MasterOptionNode built
+     */
     public MasterOptionNode construct(String masterNodeIdentifier, boolean isEntryNode) {
         MasterOptionNode.Builder masterBuilder = new MasterOptionNode.Builder(masterNodeIdentifier);
         for (OptionNodeBuilder factory : optionNodePoolCache.values()) {
@@ -288,6 +366,11 @@ public class MenuBuilder {
         return master;
     }
 
+    /**
+     * Replaces all MasterOptionNodes' placeholders with MasterOptionNodes in {@link MasterOptionNodePool}.
+     *
+     * @return The entry node for the entire menu
+     */
     public MasterOptionNode constructFinal() {
         for (OptionNodeBuilder optionNodeBuilder : optionNodePool.values()) {
             optionNodeBuilder.submitNodeBuilder.masterOptionNodePool.feedMe(masters);
@@ -296,7 +379,12 @@ public class MenuBuilder {
         return entryNode;
     }
 
-    // only use this in test / dev
+    /**
+     * Generate all language identifier from the entire menu into a properties file with "undefined" placeholders.<p>
+     * Only invoke this method in developing environment.
+     *
+     * @param language the language properties file name
+     */
     public void generateLanguage(String language) { // properties is not in order thus a file writer is used, maybe we can extend Properties class
         PrintWriter writer;
         try {

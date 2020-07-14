@@ -10,7 +10,7 @@ import java.util.*;
 public class PersonalUserManager {
     //private static AdministrativeManager am;
     private final Repository<PersonalUser> personalUserRepository;
-    private PersonalUser currPersonalUser;
+    private PersonalUser currPersonalUser = null;
 
 
     public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {

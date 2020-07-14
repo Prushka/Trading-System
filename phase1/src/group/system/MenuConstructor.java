@@ -135,7 +135,7 @@ public class MenuConstructor {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 7, "confirmAddItem")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .submit("confirm", controller::confirmAddItemRequest)
+                .submit("item", controller::confirmAddItemRequest)
                 .master("master.adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 8, "confirmAddItemAUser")

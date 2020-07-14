@@ -50,7 +50,7 @@ public class AdministrativeUserController {
         return administrativeManager.addSubAdmin(currAdmin, username, email, telephone, password);
     }
 
-    public Iterator<PersonalUser> getfreezeUserlist(Request request){
+    public Response getfreezeUserlist(Request request){
         return administrativeManager.getListUserShouldBeFreezed();
     }
 

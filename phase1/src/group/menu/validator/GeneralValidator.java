@@ -21,6 +21,8 @@ public class GeneralValidator implements Validator {
 
     private final List<Validator> validators = new ArrayList<>();
 
+    private final List<String> regexList = new ArrayList<>();
+
     public enum InputType {
         String, Number
     }
@@ -34,6 +36,11 @@ public class GeneralValidator implements Validator {
 
     public GeneralValidator addValidator(Validator validator) {
         validators.add(validator);
+        return this;
+    }
+
+    public GeneralValidator addRegex(String regex) {
+        regexList.add(regex);
         return this;
     }
 
@@ -52,6 +59,9 @@ public class GeneralValidator implements Validator {
         }
         for (Validator validator : validators) {
             result = result && validator.validate(input);
+        }
+        for (String regex : regexList) {
+            result = result && input.matches(regex);
         }
         return result;
     }

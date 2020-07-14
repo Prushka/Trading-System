@@ -47,11 +47,6 @@ public class PersonalUserManager {
         return false;
     }
 
-    public void createPersonalUser(String userName, String email, String password) {
-        PersonalUser p = new PersonalUser(userName, email, password);
-        personalusers.add(p);
-    }
-
     public void createPersonalUser(String userName, String email, String telephone, String password) {
         PersonalUser p = new PersonalUser(userName, email, telephone, password);
         personalusers.add(p);

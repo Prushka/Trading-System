@@ -25,12 +25,6 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
     }
 
-    public Response createadministrator(String username, String email, String password, boolean isHead){
-        AdministrativeUser admin = new AdministrativeUser(username, email, password, isHead);
-        administrators.add(admin);
-        return new Response.Builder(true).translatable("success.create.new").build();
-    }
-
     public Response createadministrator(String username, String email, String telephone, String password, boolean isHead){
         AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
         administrators.add(admin);
@@ -47,16 +41,6 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
              return new Response.Builder(true).translatable("success.login.user").build();
          }
          return new Response.Builder(false).translatable("failed.login.user").build();
-    }
-
-
-    public Response addSubAdmin(AdministrativeUser head, String username, String email, String password){
-        if (head.getIsHead()){
-            createadministrator(username, email, password, false);
-            return new Response.Builder(true).translatable("success.add.subadmin").build();
-        } else{
-            return new Response.Builder(false).translatable("failed.add.subadmin").build();
-        }
     }
 
     public Response addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){

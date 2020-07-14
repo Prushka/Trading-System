@@ -135,7 +135,7 @@ public class MenuConstructor {
                         ValidatingType.invalid)
                 .input("lendingItem", null, null, ValidatingType.invalid)
                 .input("borrowingItem", null, null, ValidatingType.invalid)
-                .input("isPermanent", String::toLowerCase, null, ValidatingType.invalid)
+                .input("isPermanent", String::toLowerCase, controller::isBool, ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)

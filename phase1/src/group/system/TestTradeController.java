@@ -26,11 +26,20 @@ public class TestTradeController {
     }
 
     public Response addTrade(Request request) {
+        Long item1;
+        Long item2;
         Long user1 =  request.getLong("initiator");
         Long user2 =  request.getLong("respondent");
-        Long item1 =  request.getLong("lendingItem");
-        Long item2 =  request.getLong("borrowingItem");
-        Boolean isPermanent = request.getBoolean("isPermanent");
+        if (request.get("lendingItem").equals("null")){
+            item1 = null;
+        } else {
+            item1 = request.getLong("lendingItem");
+        }
+        if (request.get("borrowingItem").equals("null")){
+            item2 = null;
+        } else {
+            item2 = request.getLong("lendingItem");
+        }        Boolean isPermanent = request.getBoolean("isPermanent");
         String[] data = request.get("dateAndTime").split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
@@ -64,6 +73,11 @@ public class TestTradeController {
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
         return tradeManager.confirmTradeComplete(tradeID, editingUser);
+    }
+
+    // This has to exist somewhere?
+    public boolean isBool(String input){
+       return (input.equals("true") || input.equals("false"));
     }
 
 }

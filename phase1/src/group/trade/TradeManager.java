@@ -7,8 +7,6 @@ import group.menu.data.Response;
 
 import java.time.LocalDateTime;
 
-// TODO: item skip
-// Glitch List: Trade ID 0 works even when this trade, pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
@@ -45,21 +43,15 @@ public class TradeManager {
      */
     public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
                                 LocalDateTime dateAndTime, String location, Long prevMeeting) {
-        // TODO: Uncomment conditions & remove prompts for ID when user's are implemented in the controller
         // Get users from Repository
-        // PersonalUser trader1 = userRepository.get(user1);
-        // PersonalUser trader2 = userRepository.get(user2);
+        PersonalUser trader1 = userRepository.get(user1);
+        PersonalUser trader2 = userRepository.get(user2);
 
-        // Check if items are in their inventories
-        //if ((item1.equals(null) || trader1.getInventory().contains(item1)) && (item2.equals(null) ||
-        //      trader2.getInventory().contains(item2))) {
         Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent, dateAndTime, location, prevMeeting);
         tradeRepository.add(newTrade);
-        // trader1.addToTrades(newTrade.getUid());
-        // trader2.addToTrades(newTrade.getUid());
+        trader1.addToTrades(newTrade.getUid());
+        trader2.addToTrades(newTrade.getUid());
         return tradeRepresentation(newTrade);
-        //}
-        //return new Response.Builder(false).translatable("failed.create.trade").build();
     }
 
     /**

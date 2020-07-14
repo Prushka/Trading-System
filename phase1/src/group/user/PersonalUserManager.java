@@ -1,5 +1,6 @@
 package group.user;
 
+import group.item.Item;
 import group.menu.data.Response;
 import group.repository.Filter;
 import group.repository.Repository;
@@ -9,6 +10,7 @@ import java.util.*;
 public class PersonalUserManager {
     //private static AdministrativeManager am;
     private final Repository<PersonalUser> personalUserRepository;
+    private PersonalUser currPersonalUser;
 
 
     public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
@@ -30,15 +32,21 @@ public class PersonalUserManager {
     }
 
     public Response verifyLogin(String username, String password){
-        if (personalUserRepository.ifExists(
-                PersonalUser -> PersonalUser.getUserName().equals(username)
-                        && PersonalUser.getPassword().equals(password))){
-            //currPersonalUser = personalUser.getFirst(
-                    //AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
-                            //&& AdministrativeUser.getPassword().equals(password));
+        if (currPersonalUser != null){
             return new Response.Builder(true).translatable("success.login.user").build();
         }
         return new Response.Builder(false).translatable("failed.login.user").build();
+    }
+
+    public PersonalUser getCurrPersonalUser(String username, String password) {
+        if (personalUserRepository.ifExists(
+                PersonalUser -> PersonalUser.getUserName().equals(username)
+                        && PersonalUser.getPassword().equals(password))) {
+            currPersonalUser = personalUserRepository.getFirst(
+                    PersonalUser -> PersonalUser.getUserName().equals(username)
+                            && PersonalUser.getPassword().equals(password));
+        }
+        return currPersonalUser;
     }
 
     public Response createPersonalUser(String userName, String email, String telephone, String password) {
@@ -65,6 +73,11 @@ public class PersonalUserManager {
     public Response UnfreezeRequest(PersonalUser user){
         user.setRequestToUnfreeze(true);
         return new Response.Builder(true).translatable("success.request.unfreeze").build();
+    }
+
+    public Response createNewItemAndRequestAdd(PersonalUser owner, String item, String description){
+        Item newitem = new Item(owner, item, description);
+        return requestToAddItemToInventory(owner, newitem.getUid());
     }
 
 

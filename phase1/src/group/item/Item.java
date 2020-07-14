@@ -2,24 +2,25 @@ package group.item;
 
 import group.notification.SupportTicket;
 import group.repository.UniqueId;
+import group.user.PersonalUser;
 
 import java.util.Objects;
 
 public class Item implements UniqueId {
 
     private Long uid;
-    private String ownerUsername;
+    private PersonalUser owner;
     private String name;
     private String description;
 
-    public Item(String owner, String name, String description){
-        this.ownerUsername = owner;
+    public Item(PersonalUser owner, String name, String description){
+        this.owner = owner;
         this.name = name;
         this.description = description;
     }
 
-    public String getOwnerName(){
-        return this.ownerUsername;
+    public PersonalUser getOwner(){
+        return this.owner;
     }
 
     public String getItemName(){
@@ -30,8 +31,8 @@ public class Item implements UniqueId {
         return description;
     }
 
-    public void setOwnerUsername(String owner){
-        this.ownerUsername = owner;
+    public void setOwnerUsername(PersonalUser owner){
+        this.owner = owner;
     }
 
     public void setItemName(String newName){
@@ -51,18 +52,18 @@ public class Item implements UniqueId {
 
     @Override
     public String toString(){
-        return name + ": " + description + "\n Owned by: " + ownerUsername;
+        return name + ": " + description + "\n Owned by: " + owner.getUserName();
     }
     @Override
     public boolean equals(Object other){
         if (other instanceof Item) {
             Item otherItem = (Item) other;
             return this.name.equals(otherItem.name) && this.description.equals(otherItem.description) &&
-                    this.ownerUsername.equals(otherItem.ownerUsername);
+                    this.owner.equals(otherItem.owner);
         }
         return false;
     }
 
     @Override
-    public int hashCode(){ return name.hashCode() + description.hashCode() + ownerUsername.hashCode(); }
+    public int hashCode(){ return name.hashCode() + description.hashCode() + owner.getUserName().hashCode(); }
 }

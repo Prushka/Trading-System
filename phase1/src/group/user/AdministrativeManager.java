@@ -6,7 +6,7 @@ import group.repository.Repository;
 
 import java.util.*;
 
-public class AdministrativeManager { //TODO where to find request of unfreeze user and request of adding book
+public class AdministrativeManager {
 
 
     private Repository<AdministrativeUser> administrators;
@@ -81,7 +81,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         return (user.getInventory()).remove(item);
     }
 
-    public Response confirmAddItem(PersonalUser user) { //TODO where do admin get the request of adding item
+    public Response confirmAddItem(PersonalUser user) {
         for (Long item : user.getAddToInventoryRequest()) {
             user.addToInventory(item);
             user.getAddToInventoryRequest().remove(item);

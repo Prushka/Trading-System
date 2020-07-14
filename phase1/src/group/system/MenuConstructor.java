@@ -65,6 +65,21 @@ public class MenuConstructor {
         menuBuilder.construct("master.account", true);
     }
 
+    public void userRequest(UserController controller){
+
+        menuBuilder.option(User.class, OperationType.add, 1)
+                .input("item",null, null, ValidatingType.invalid)
+                .input("description", null, null, ValidatingType.invalid)
+                .submit("unfreeze", controller::RequestAddNewItem)
+                .master("master.account");
+
+
+        menuBuilder.option(User.class, OperationType.add, 2)
+                .submit("unfreeze", controller::RequestUnfreeze)
+                .master("master.account");
+
+    }
+
     public void AdminUser(UserController controller) {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "addSunadmin")
@@ -84,7 +99,7 @@ public class MenuConstructor {
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .input("password", password -> password.length() > 8, ValidatingType.invalid)
                 .submit("confirm", controller::loginAdminUser)
-                .master("master.adminaccount");
+                .master("master.adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "addSunadmin")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
@@ -92,9 +107,9 @@ public class MenuConstructor {
                 .input("telephone", null, null, ValidatingType.notexist)
                 .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid)
                 .submit("confirm", controller::addSubAdmin)
-                .master("master.adminaccount");
+                .master("master.adminAccount");
 
-        menuBuilder.construct("master.adminaccount", true);
+        menuBuilder.construct("master.adminAccount", true);
     }
 
 

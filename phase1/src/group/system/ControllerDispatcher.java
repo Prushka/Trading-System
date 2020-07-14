@@ -19,7 +19,7 @@ public class ControllerDispatcher implements Shutdownable {
     UserController userController;
 
     // remove this grace code when actual controller comes in
-    TestTradeController testTradeController;
+    TradeController testTradeController;
 
     TradeProperties tradeProperties;
 
@@ -40,7 +40,7 @@ public class ControllerDispatcher implements Shutdownable {
         userController = new UserController(this);
 
         // remove this grace code when actual controller comes in
-        testTradeController = new TestTradeController(this);
+        testTradeController = new TradeController(this);
     }
 
     public void createRepositories() {

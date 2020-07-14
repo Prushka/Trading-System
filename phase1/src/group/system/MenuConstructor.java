@@ -173,7 +173,7 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.ticket", false);
     }
 
-    public void supportTrade(TestTradeController controller){
+    public void supportTrade(TradeController controller){
         // grace notes: keys correspond to request keys, .master calls the next set of nodes
         menuBuilder.option(Trade.class, OperationType.add, 1)
                 .input("initiator", null, new RepositoryIdValidator(controller.personalUserRepository),

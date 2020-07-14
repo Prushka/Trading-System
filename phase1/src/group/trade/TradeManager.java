@@ -5,9 +5,9 @@ import group.repository.Repository;
 import group.user.PersonalUser;
 import group.menu.data.Response;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-// Glitches : index out of bounds on menu does not prompt invalid option, trade ID 0 works when not created.
+// TODO: item skip
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
@@ -43,7 +43,7 @@ public class TradeManager {
      * @return A response object of the representation of the trade or a description of why creation failed
      */
     public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
-                             Date dateAndTime, String location, Long prevMeeting) {
+                                LocalDateTime dateAndTime, String location, Long prevMeeting) {
         // TODO: Uncomment conditions & remove prompts for ID when user's are implemented in the controller
         // Get users from Repository
         // PersonalUser trader1 = userRepository.get(user1);
@@ -73,7 +73,7 @@ public class TradeManager {
      * @return A response object of the representation of the trade or a description of why creation failed
      */
     public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
-                                Date dateAndTime, String location){
+                                LocalDateTime dateAndTime, String location){
         return createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location, null);
     }
 
@@ -84,7 +84,7 @@ public class TradeManager {
      * @param dateAndTime The new date and time that this trade will take place
      * @return A response object of the representation of the new trade or a description of why creation failed
      */
-    public Response editDateAndTime(int tradeID, int editingUser, Date dateAndTime) {
+    public Response editDateAndTime(int tradeID, int editingUser, LocalDateTime dateAndTime) {
         // Get trade from Repository
         Trade currTrade = tradeRepository.get(tradeID);
 
@@ -293,8 +293,7 @@ public class TradeManager {
      * @param currTrade The first trade meeting
      */
     private void scheduleTradeBack(Trade currTrade) {
-        long increaseTime = currTrade.getDateAndTime().getTime() + (timeLimit * 86400000);
-        Date newDateAndTime = new Date(increaseTime);
+        LocalDateTime newDateAndTime = currTrade.getDateAndTime().plusMonths(timeLimit);
         createTrade(currTrade.getUser1(), currTrade.getUser1(), currTrade.getItem2(), currTrade.getItem1(),
                 true, newDateAndTime, currTrade.getLocation(), currTrade.getUid());
     }

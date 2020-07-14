@@ -140,7 +140,7 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
      */
     @Override
     public boolean ifExists(int id) {
-        return id < data.size();
+        return id >= 0 && id < data.size();
     }
 
     /**

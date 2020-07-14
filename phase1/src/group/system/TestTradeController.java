@@ -8,7 +8,7 @@ import group.trade.Trade;
 import group.trade.TradeManager;
 import group.user.PersonalUser;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class TestTradeController {
     private final TradeManager tradeManager;
@@ -35,7 +35,9 @@ public class TestTradeController {
         Long item1 =  request.getLong("lendingItem");
         Long item2 =  request.getLong("borrowingItem");
         Boolean isPermanent = request.getBoolean("isPermanent");
-        Date dateAndTime = request.getDate("dateAndTime");
+        String[] data = request.get("dateAndTime").split("-");
+        LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
+                Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
         String location =  request.get("location");
         return tradeManager.createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location);
     }
@@ -43,7 +45,9 @@ public class TestTradeController {
     public Response editMeetingDateAndTime(Request request){
         Integer tradeID = request.getInt("tradeID");
         Integer editingUser = request.getInt("editingUser");
-        Date dateAndTime = request.getDate("dateAndTime");
+        String[] data = request.get("dateAndTime").split("-");
+        LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
+                Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
         return tradeManager.editDateAndTime(tradeID, editingUser, dateAndTime);
     }
 

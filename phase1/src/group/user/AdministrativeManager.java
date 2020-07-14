@@ -30,6 +30,10 @@ public class AdministrativeManager {
     }
 
     public Response createAdministrator(String username, String email, String telephone, String password, boolean isHead){
+        if (personalUserRepository.ifExists(
+                PersonalUser -> PersonalUser.getUserName().equals(username))){
+            return new Response.Builder(false).translatable("failed.create.new").build();
+        }
         AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
         administrators.add(admin);
         return new Response.Builder(true).translatable("success.create.new").build();

@@ -61,7 +61,6 @@ public class MenuConstructor {
                 .succeeded("master.account").failed("master.account").master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-
         menuBuilder.construct("master.account", true);
     }
 
@@ -71,16 +70,20 @@ public class MenuConstructor {
                 .input("item",null, null, ValidatingType.invalid)
                 .input("description", null, null, ValidatingType.invalid)
                 .submit("unfreeze", controller::RequestAddNewItem)
+                .succeeded("master.support.trade").failed("master.account").master("master.account");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "removeItem")
+                .submit("confirm", controller::removeItemFromInventory)
                 .master("master.account");
 
-        menuBuilder.option(User.class, OperationType.add, 2, "requestUnfreeze")
+        menuBuilder.option(User.class, OperationType.add, 3, "requestUnfreeze")
                 .submit("unfreeze", controller::RequestUnfreeze)
                 .master("master.account");
 
+        menuBuilder.construct("master.account.access", false);
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "removeItem")
-                .submit("confirm", controller::removeItemFromInventory)
-                .master("master.account");
+
+
     }
 
 
@@ -154,7 +157,7 @@ public class MenuConstructor {
                 .submit("item", controller::removeItemInUserInventory)
                 .master("master.adminAccount");
 
-        menuBuilder.construct("master.adminAccount", true);
+        menuBuilder.construct("master.adminAccount", false);
     }
 
 

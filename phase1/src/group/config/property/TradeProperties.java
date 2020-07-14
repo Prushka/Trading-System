@@ -5,7 +5,7 @@ import group.system.SaveHook;
 import java.io.File;
 
 /**
- * The Trade Property. The trade.properties file will be saved from resources to config by default.<p>
+ * The class for all trade properties. The trade.properties file will be saved from resources to config by default.<p>
  * File trade.properties is predefined in the resources root.<p>
  *
  * @author Dan Lyu

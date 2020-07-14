@@ -161,6 +161,7 @@ public class SubmitNode extends InputNode {
          * @param node the node to navigate to when submission passes
          * @return the builder itself
          */
+        @Deprecated
         public Builder submitSuccessNext(Node node) {
             child(node);
             return getThis();
@@ -170,6 +171,7 @@ public class SubmitNode extends InputNode {
          * @param node the node to navigate to when submission fails
          * @return the builder itself
          */
+        @Deprecated
         public Builder submitFailNext(ResponseNode node) {
             failedResultNode = node;
             return getThis();

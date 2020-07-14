@@ -2,7 +2,7 @@ package group.menu.processor;
 
 /**
  * The functional interface to apply operations on a String.<p>
- * Use this in lambda or implement a concrete class.<p>
+ * Use this in lambda, anonymous inner class or implement a concrete class.<p>
  * This will be used by {@link group.menu.node.InputNode} to apply certain format
  * on the use input String.
  *

@@ -24,6 +24,9 @@ public class Request {
      */
     private long timeStamp;
 
+    /**
+     * The global persistent request object to be injected
+     */
     private PersistentRequest persistentRequest;
 
     /**

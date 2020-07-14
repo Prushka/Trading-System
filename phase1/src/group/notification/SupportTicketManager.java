@@ -15,9 +15,8 @@ public class SupportTicketManager {
     }
 
     public Response getTicketsByCategory(SupportTicket.Category category) {
-        Response response = repository.filterResponse(entity -> entity.getCategory() == category,
+        return repository.filterResponse(entity -> entity.getCategory() == category,
                 (entity, builder) -> builder.response(ticketRepresentation("submit.ticket.category", entity)));
-        return response;
     }
 
     private Response ticketRepresentation(String translatable, SupportTicket supportTicket) {

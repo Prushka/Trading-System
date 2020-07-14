@@ -4,7 +4,7 @@ import group.menu.data.Response;
 
 /**
  * The functional interface used to map the entity properties to a Response object
- * Use this in lambda or implement a concrete class.
+ * Use this in lambda, anonymous inner class or implement a concrete class.
  *
  * @param <T> the entity this ResponseMapper deals with
  * @author Dan Lyu

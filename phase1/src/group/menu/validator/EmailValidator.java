@@ -9,14 +9,18 @@ import java.util.regex.Pattern;
  */
 public class EmailValidator implements Validator {
 
-    public boolean validate(String request) {
+    /**
+     * @param input String input
+     * @return <code>true</code> if the input is in valid email format
+     */
+    public boolean validate(String input) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
                 "[a-zA-Z0-9_+&*-]+)*@" +
                 "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
                 "A-Z]{2,7}$";
 
         Pattern pat = Pattern.compile(emailRegex);
-        return pat.matcher(request).matches();
+        return pat.matcher(input).matches();
     }
 
 }

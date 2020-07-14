@@ -3,7 +3,9 @@ package group.menu.node;
 import group.config.ConsoleLanguageFormatter;
 import group.config.property.LanguageProperties;
 
+import java.io.IOException;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 /**
@@ -24,7 +26,14 @@ public abstract class Node {
         LOGGER.setUseParentHandlers(false);
         ConsoleHandler handler = new ConsoleHandler();
         handler.setFormatter(new ConsoleLanguageFormatter(new LanguageProperties()));
+        try {
+            FileHandler fileHandler = new FileHandler("node.log");
+            LOGGER.addHandler(fileHandler);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         LOGGER.addHandler(handler);
+
     }
 
     /**

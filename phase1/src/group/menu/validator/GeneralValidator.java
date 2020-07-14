@@ -13,20 +13,49 @@ import java.util.List;
  */
 public class GeneralValidator implements Validator {
 
+    /**
+     * The minimum length allowed (inclusive) for the input String
+     */
     private final int minLengthInclusive;
+
+    /**
+     * The maximum length allowed (inclusive) for the input String
+     */
     private final int maxLengthInclusive;
 
+    /**
+     * <code>true</code> if injection characters are allowed
+     */
     private final boolean csvInjectionDetection;
+
+    /**
+     * The input type to check
+     */
     private final InputType inputType;
 
+    /**
+     * A list of validators as sub validators. This General Validator will also use this list of Validators to validate the input
+     */
     private final List<Validator> validators = new ArrayList<>();
 
+    /**
+     * A list of regex used to validate the input
+     */
     private final List<String> regexList = new ArrayList<>();
 
+    /**
+     * The intended input type the input String should be using
+     */
     public enum InputType {
         String, Number
     }
 
+    /**
+     * @param inputType             The input type to check
+     * @param minLengthInclusive    The minimum length allowed (inclusive) for the input String
+     * @param maxLengthInclusive    The maximum length allowed (inclusive) for the input String
+     * @param csvInjectionDetection <code>true</code> if injection characters are allowed
+     */
     public GeneralValidator(InputType inputType, int minLengthInclusive, int maxLengthInclusive, boolean csvInjectionDetection) {
         this.inputType = inputType;
         this.minLengthInclusive = minLengthInclusive;
@@ -34,16 +63,28 @@ public class GeneralValidator implements Validator {
         this.csvInjectionDetection = csvInjectionDetection;
     }
 
+    /**
+     * @param validator the validator to be used together with this one
+     * @return this GeneralValidator itself
+     */
     public GeneralValidator addValidator(Validator validator) {
         validators.add(validator);
         return this;
     }
 
+    /**
+     * @param regex the regular expression to be used together with this GeneralValidator
+     * @return this GeneralValidator itself
+     */
     public GeneralValidator addRegex(String regex) {
         regexList.add(regex);
         return this;
     }
 
+    /**
+     * @param input String input
+     * @return <code>true</code> if the input passes {@link #minLengthInclusive}, {@link #maxLengthInclusive}, {@link #regexList}, {@link #validators} and {@link #csvInjectionDetection}
+     */
     @Override
     public boolean validate(String input) {
         boolean result = input.length() >= minLengthInclusive && input.length() <= maxLengthInclusive;

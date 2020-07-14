@@ -24,7 +24,7 @@ import java.util.Scanner;
 public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryBase<T> {
 
     /**
-     * The factory used to instantiate a mappable object.
+     * The factory used to instantiate a mappable object using fixed parameter <code>List</code>.
      */
     private final EntityMappingFactory<T> factory;
 

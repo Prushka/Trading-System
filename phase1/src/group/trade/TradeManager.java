@@ -7,7 +7,7 @@ import group.menu.data.Response;
 
 import java.time.LocalDateTime;
 
-// Glitches : index out of bounds on menu does not prompt invalid option, trade ID 0 works when not created.
+// TODO: item skip
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;

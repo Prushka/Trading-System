@@ -4,8 +4,8 @@ import group.repository.UniqueId;
 import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.time.LocalDateTime;
 
 public class Trade extends MappableBase implements CSVMappable, UniqueId {
     // Trading Details
@@ -25,7 +25,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     private Boolean isClosed;
 
     // Meeting Details
-    private Date dateAndTime;
+    private LocalDateTime dateAndTime;
     private String location;
 
     // Needed to implement Mappable Base
@@ -44,7 +44,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
      * @param location Where this trade occurs
      * @param prevMeeting The previous trade meeting
      */
-    public Trade(Long user1, Long user2, Long item1, Long item2, Boolean isPermanent, Date dateAndTime,
+    public Trade(Long user1, Long user2, Long item1, Long item2, Boolean isPermanent, LocalDateTime dateAndTime,
                  String location, Long prevMeeting){
         this.user1 =  user1;
         this.user2 =  user2;
@@ -76,7 +76,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     public Long getItem2(){ return item2;}
     public boolean getIsPermanent(){ return isPermanent;}
     public boolean getIsClosed(){ return isClosed;}
-    public Date getDateAndTime(){ return dateAndTime;}
+    public LocalDateTime getDateAndTime(){ return dateAndTime;}
     public String getLocation(){ return location;}
     public Long getPrevMeeting(){ return prevMeeting;}
 
@@ -91,7 +91,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     public void unconfirmUser2(){ user2Confirms = false;}
     public void openTrade(){ isClosed = false;}
     public void closeTrade(){ isClosed = true;}
-    public void setDateAndTime(Date newDateAndTime){ dateAndTime = newDateAndTime;}
+    public void setDateAndTime(LocalDateTime newDateAndTime){ dateAndTime = newDateAndTime;}
     public void setLocation(String newLocation){ location = newLocation;}
 
     /**

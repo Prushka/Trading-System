@@ -7,6 +7,8 @@ import java.util.logging.LogRecord;
 
 /**
  * The formatter used to log information using LanguageProperties and ansiColor.
+ * The stacktrace won't be logged, instead a record with only message will be logged in a WARNING or SEVERE situation.
+ * The stacktrace is handled in {@link FileFormatter}
  *
  * @author Dan Lyu
  * @author shakram02 - <a href="https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println">print color in console</a>
@@ -21,10 +23,10 @@ class ConsoleColorFormatter extends LanguageFormatter {
     }
 
     /**
-     * Applies ansi color
+     * Applies ansi color to all color identifiers
      *
-     * @param message the raw message to format
-     * @return the formatted message
+     * @param message the raw message to be format
+     * @return the formatted message with color texts to their ansi color representations
      */
     private String applyColor(String message) {
         message = "{BLACK}" + message;
@@ -35,6 +37,8 @@ class ConsoleColorFormatter extends LanguageFormatter {
     }
 
     /**
+     * Returns a String with Language, colors, parameters applied and have an extra message in a WARNING or SEVERE situation.
+     *
      * @param record the record to log
      * @return the formatted String after applying language, parameters and ansiColor
      */

@@ -6,6 +6,14 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class helps the instantiation of multiple loggers that have the same configuration.<p>
+ * The class is compulsory to construct this class.<p>
+ * A default logger can be created using {@link #getConfiguredLogger}.<p>
+ * This default logger will have a FileLogger with ALL level and a ConsoleLogger with INFO level.
+ *
+ * @author Dan Lyu
+ */
 public class LoggerFactory {
 
     private final Class<?> clazz;

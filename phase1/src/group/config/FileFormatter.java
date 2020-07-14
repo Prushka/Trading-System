@@ -13,7 +13,8 @@ import java.util.logging.LogRecord;
 /**
  * The formatter used to log information using LanguageProperties into log Files.<p>
  * The logged record has following format:<p>
- * yyyy-MM-dd HH:mm:ss [ClassSimpleName] [LEVEL] (left padding) - message
+ * yyyy-MM-dd HH:mm:ss [ClassSimpleName] [LEVEL] (left padding) - message<p>
+ * The logged record will show stacktrace.
  *
  * @author Dan Lyu
  * @author print stacktrace from {@link LogRecord#getThrown()} - from {@link java.util.logging.SimpleFormatter}
@@ -27,7 +28,6 @@ class FileFormatter extends LanguageFormatter {
      */
     FileFormatter(LanguageProperties lang) {
         super(lang);
-
         dateTimeFormatter =
                 DateTimeFormatter
                         .ofPattern("yyyy-MM-dd HH:mm:ss ")
@@ -35,6 +35,12 @@ class FileFormatter extends LanguageFormatter {
     }
 
 
+    /**
+     * Removes color identifiers
+     *
+     * @param message the raw message to be format
+     * @return the formatted message with all color texts removed
+     */
     private String removeColor(String message) {
         for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
             message = message.replace(entry.getKey(), "");
@@ -42,6 +48,9 @@ class FileFormatter extends LanguageFormatter {
         return message;
     }
 
+    /**
+     * @return The formatted date String in Zone UTC-04:00 and with pattern yyyy-MM-dd HH:mm:ss
+     */
     private String getDate() {
         return dateTimeFormatter.format(Instant.now());
     }

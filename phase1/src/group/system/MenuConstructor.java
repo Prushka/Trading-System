@@ -49,7 +49,7 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid )
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", controller::loginUser)
-                .master("master.account");
+                .succeeded("master.support.trade").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 2)
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
@@ -58,7 +58,7 @@ public class MenuConstructor {
                 .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .submit("confirm", controller::registerUser)
-                .master("master.account");
+                .succeeded("master.support.trade").failed("master.account").master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
         menuBuilder.construct("master.account", true);
@@ -139,7 +139,7 @@ public class MenuConstructor {
                 .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
-                .master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 2, "Date/Time")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
@@ -148,7 +148,7 @@ public class MenuConstructor {
                         ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingDateAndTime)
-                .master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 3, "Location")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
@@ -157,7 +157,7 @@ public class MenuConstructor {
                         ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingLocation)
-                .master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.verification, 4, "Open")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
@@ -165,7 +165,7 @@ public class MenuConstructor {
                 .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeOpen)
-                .master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.verification, 5, "Complete")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
@@ -173,7 +173,7 @@ public class MenuConstructor {
                 .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeComplete)
-                .master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
 
         menuBuilder.construct("master.support.trade", false);
     }

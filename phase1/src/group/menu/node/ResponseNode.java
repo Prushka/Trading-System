@@ -6,7 +6,8 @@ import group.menu.data.TranslatablePair;
 import java.util.logging.Level;
 
 /**
- * A node that contains only response information and does not accept input.
+ * A node that contains only response information.<p>
+ * This node doesn't accept input but displays on its own.
  *
  * @author Dan Lyu
  */

@@ -7,7 +7,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
 /**
- * The basic menu node that provides node related operations.
+ * The basic menu node that provides node related operations.<p>
  * Contains child, parent and has the ability to trace.
  *
  * @author Dan Lyu

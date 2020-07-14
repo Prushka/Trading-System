@@ -73,14 +73,13 @@ public class MenuConstructor {
                 .submit("unfreeze", controller::RequestAddNewItem)
                 .master("master.account");
 
-
         menuBuilder.option(User.class, OperationType.add, 2, "requestUnfreeze")
                 .submit("unfreeze", controller::RequestUnfreeze)
                 .master("master.account");
 
-        menuBuilder.option(User.class, OperationType.remove, 3)
-                .input("itemname",null, null, ValidatingType.invalid)
-                .submit("", controller::removeItemFromInventory)
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "removeItem")
+                .submit("confirm", controller::removeItemFromInventory)
                 .master("master.account");
     }
 
@@ -113,9 +112,13 @@ public class MenuConstructor {
                 .submit("confirm", controller::addSubAdmin)
                 .master("master.adminAccount");
 
-        //menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "finduser")
-                //.submit("username", name -> name.length() > 3, ValidatingType.invalid, controller::findUser)
-                //.master("master.adminAccount");
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "findUser")
+                .submit("username", name -> name.length() > 3, ValidatingType.invalid, controller::findUserForAdmin)
+                .master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "findUser")
+                .submit("confirm", name -> name.length() > 3, ValidatingType.invalid, controller::getFreezeUserList)
+                .master("master.adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "confirmFreezeUser")
                 .submit("username", controller::confirmFreezeUser)
@@ -146,9 +149,13 @@ public class MenuConstructor {
                 .submit("confirm", controller::confirmAddAllItemRequest)
                 .master("master.adminAccount");
 
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 10, "removeItem")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .submit("item", controller::removeItemInUserInventory)
+                .master("master.adminAccount");
+
         menuBuilder.construct("master.adminAccount", true);
     }
-
 
 
     public void supportTicket(SupportTicketController controller) {

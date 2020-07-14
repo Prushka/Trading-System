@@ -21,8 +21,6 @@ public class UserController {
         dispatcher.menuConstructor.user(this);
     }
 
-    // Lucy comment: for now it is only for admin, will discuss how to put in personal
-    // or separate personal and admin controller
     public Response loginUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");

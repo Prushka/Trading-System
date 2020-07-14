@@ -91,8 +91,9 @@ public class AdministrativeManager {
         user.setRequestToUnfreeze(false);
     }
 
-    public boolean removeUserItem(PersonalUser user, Long item){
-        return (user.getInventory()).remove(item);
+    public Response removeUserItem(PersonalUser user, Long item){
+        user.getInventory().remove(item);
+        return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
 
@@ -164,7 +165,6 @@ public class AdministrativeManager {
             return personalUserRepository.getFirst(
                     PersonalUser -> PersonalUser.getUserName().equals(username));
     }
-
 
     public Response findUserForAdmin (String username) {
         if (personalUserRepository.ifExists(

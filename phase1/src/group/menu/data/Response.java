@@ -20,7 +20,7 @@ public class Response {
      * If <code>success == true</code> and this key is not null,
      * the corresponding Request will be persistent.
      */
-    private final String persistentKey;
+    private String persistentKey;
 
     /**
      * A list of pairs of translatable Strings and parameters
@@ -72,10 +72,17 @@ public class Response {
     }
 
     /**
-     * @return the persistent key for the corresponding Request
+     * @return the persistent key for the corresponding Request to allow it to be persistent
      */
     public String getPersistentKey() {
         return persistentKey;
+    }
+
+    /**
+     * @param key the persistent key for the corresponding Request to allow it to be persistent
+     */
+    public void setPersistentKey(String key) {
+        this.persistentKey = key;
     }
 
     /**

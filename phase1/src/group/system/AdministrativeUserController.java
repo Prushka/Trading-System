@@ -82,19 +82,22 @@ public class AdministrativeUserController {
 
     }
 
-    public Response confirmAddItemRequest(Request request){
+    public Response confirmAddAllItemRequestForAUser(Request request){
         String username = request.get("username");
         PersonalUser user = administrativeManager.findUser(username);
-        return administrativeManager.confirmAddItem(user);
+        return administrativeManager.confirmAddAllItemRequestForAUser(user);
     }
 
     public Response confirmAddAllItemRequest(Request request){
         return administrativeManager.confirmAddAllItemRequest();
     }
 
-
-
-
+    public Response confirmAddItemRequest(Request request){
+        String username = request.get("username");
+        Long item = request.getLong("item");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.confirmAddItemRequest(user, item);
+    }
 
 
 

@@ -84,7 +84,7 @@ public class AdministrativeManager {
         return (user.getInventory()).remove(item);
     }
 
-    public Response confirmAddItem(PersonalUser user) {
+    public Response confirmAddAllItemRequestForAUser(PersonalUser user) {
         for (Long item : user.getAddToInventoryRequest()) {
             user.addToInventory(item);
             user.getAddToInventoryRequest().remove(item);
@@ -92,12 +92,15 @@ public class AdministrativeManager {
         return new Response.Builder(true).translatable("success.confirm.AddItem").build();
     }
 
+    public Response confirmAddItemRequest(PersonalUser user, long item) {
+        user.addToInventory(item);
+        user.getAddToInventoryRequest().remove(item);
+        return new Response.Builder(true).translatable("success.confirm.AddItem").build();
+    }
+
     public Response confirmAddAllItemRequest(){
         while (needToConfirmAddItem.hasNext()){
-            PersonalUser curruser = needToConfirmAddItem.next();
-            for (Long item : curruser.getAddToInventoryRequest()){
-                confirmAddItem(curruser);
-            }
+            confirmAddAllItemRequestForAUser(needToConfirmAddItem.next());
         }
         return new Response.Builder(true).translatable("success.confirm.allAddItem").build();
     }

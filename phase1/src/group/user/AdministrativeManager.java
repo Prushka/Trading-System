@@ -4,9 +4,7 @@ import group.item.Item;
 import group.menu.data.Response;
 import group.repository.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class AdministrativeManager { //TODO where to find request of unfreeze user and request of adding book
 
@@ -18,12 +16,17 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
     private int lendBeforeBorrow = 1;
     private AdministrativeUser currAdmin;
     private PersonalUser currPersonalUser;
+    private Iterator<PersonalUser> needToConfirmAddItem;
+    private Iterator<PersonalUser> userRequestToUnfreeze;
+
 
     public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
                                  Repository<PersonalUser> personalUserRepository){
         this.administrators = administrativeUserRepository;
         this.personalUserRepository = personalUserRepository;
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
+        needToConfirmAddItem = personalUserRepository.iterator(PersonalUser::getAddToInventoryRequestIsNotEmpty);
+        userRequestToUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);
     }
 
     public Response createAdministrator(String username, String email, String telephone, String password, boolean isHead){
@@ -57,6 +60,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
     }
 
     public PersonalUser getCurrPersonalUser(){
+        currPersonalUser = needToFreezelist.next();
         return currPersonalUser;
     }
 
@@ -70,15 +74,42 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
 
     public void unfreezeUser(PersonalUser user){
         user.setIsFrozen(false);
+        user.setRequestToUnfreeze(false);
     }
 
     public boolean removeUserItem(PersonalUser user, Long item){
         return (user.getInventory()).remove(item);
     }
 
-    public boolean confirmAddItem(PersonalUser user, Long item){ //TODO where do admin get the request of adding item
-        user.addToInventory(item);
+    public boolean confirmAddItem(PersonalUser user) { //TODO where do admin get the request of adding item
+        for (Long item : user.getAddToInventoryRequest()) {
+            user.addToInventory(item);
+            user.getAddToInventoryRequest().remove(item);
+        }
         return true;
+    }
+
+    public void confirmAddAllitemRequest(){
+        while (needToConfirmAddItem.hasNext()){
+            PersonalUser curruser = needToConfirmAddItem.next();
+            for (Long item : curruser.getAddToInventoryRequest()){
+                confirmAddItem(curruser);
+            }
+        }
+    }
+
+    public Iterator<PersonalUser> getUserRequestToUnfreeze(){
+        return userRequestToUnfreeze;
+    }
+
+    public void confirmToUnfreezeUser(PersonalUser user){
+        unfreezeUser(user);
+    }
+
+    public void confirmToUnfreezeAllUser(){
+        while (userRequestToUnfreeze.hasNext()){
+            unfreezeUser(userRequestToUnfreeze.next());
+        }
     }
 
     public void confirmFreezeCurrUser() {

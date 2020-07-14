@@ -3,10 +3,7 @@ package group.system;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.repository.Repository;
-import group.user.AdministrativeManager;
-import group.user.AdministrativeUser;
-import group.user.PersonalUser;
-import group.user.PersonalUserManager;
+import group.user.*;
 
 import java.util.Iterator;
 
@@ -15,6 +12,7 @@ public class UserController {
     private final Repository<PersonalUser> personalRepo;
     private final Repository<AdministrativeUser> adminRepo;
     private final PersonalUserManager personalUserManager;
+    //private final Repository<AddItemRequest> requestRepository;
 
     public UserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;

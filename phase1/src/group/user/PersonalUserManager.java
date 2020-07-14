@@ -4,18 +4,17 @@ import group.menu.data.Response;
 import group.repository.Filter;
 import group.repository.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class PersonalUserManager {
-    private static AdministrativeManager am;
+    //private static AdministrativeManager am;
     private final Repository<PersonalUser> personalUserRepository;
-    //private PersonalUser
+
 
     public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
         //instantiate AdminManager
         this.personalUserRepository = personalUserRepository;
+
     }
 
     public void exampleOfFilter() {
@@ -58,9 +57,9 @@ public class PersonalUserManager {
         return false;
     }
 
-    public void addItemRequest(PersonalUser user, Long item){
-        //TODO implement
-    }
+    //public void addItemRequest(PersonalUser user, Long item){
+        //user.getAddItemRequest().add(item);
+    //}
 
     public void addUnfreezeRequest(PersonalUser user){
         //TODO implement repo or list??

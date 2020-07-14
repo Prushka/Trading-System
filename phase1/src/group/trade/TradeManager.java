@@ -7,13 +7,12 @@ import group.menu.data.Response;
 
 import java.util.Date;
 
-// TODO: prompt for date, fix confirming problem, change responses
-// index out of bounds on menu, trade ID 0 works when not created.
+// Glitches : index out of bounds on menu does not prompt invalid option, trade ID 0 works when not created.
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
-    private Repository<Trade> tradeRepository;
-    private Repository<PersonalUser> userRepository;
+    private final Repository<Trade> tradeRepository;
+    private final Repository<PersonalUser> userRepository;
 
     /**
      * Creates, confirms and edits trades
@@ -25,8 +24,6 @@ public class TradeManager {
     public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
             tradeProperties) {
         // Default Values for trade information stored in tradeProperties:
-        tradeProperties.set("editLimit", "3");
-        tradeProperties.set("timeLimit", "30");
         editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
         timeLimit = Integer.parseInt(tradeProperties.get("timeLimit"));
         this.tradeRepository = tradeRepository;

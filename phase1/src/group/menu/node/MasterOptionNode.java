@@ -48,12 +48,11 @@ public class MasterOptionNode extends RequestableNode {
      */
     private Optional<Integer> isOptionValid(String input) {
         int id;
-        try {
-            id = Integer.parseInt(input);
-        } catch (NumberFormatException | NullPointerException e) {
+        if (!input.matches("\\d+")) {
             return Optional.empty();
         }
-        if (input.length() == 0 || !getChild(id).isPresent()) {
+        id = Integer.parseInt(input);
+        if (!getChild(id).isPresent()) {
             return Optional.empty();
         }
         return Optional.of(id);
@@ -74,7 +73,7 @@ public class MasterOptionNode extends RequestableNode {
     }
 
     /**
-     * Displays the option node
+     * Displays the option nodes
      */
     @Override
     public void display() {

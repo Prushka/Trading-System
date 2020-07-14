@@ -8,8 +8,8 @@ import group.menu.processor.PasswordEncrypt;
 import group.menu.validator.EnumValidator;
 import group.notification.SupportTicket;
 import group.trade.Trade;
+import group.user.AdministrativeUser;
 import group.user.User;
-import group.trade.Trade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,20 +27,24 @@ public class MenuConstructor {
 
     public void user(UserController controller) {
         // user login / register example
-        menuBuilder.option(User.class, OperationType.add, 1)
+        menuBuilder.option(User.class, OperationType.verification, 1)
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .input("password", password -> password.length() > 8, ValidatingType.invalid)
+                .submit("confirm", controller::loginUser)
+                .master("master.account");
+
+        menuBuilder.option(User.class, OperationType.add, 2)
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .input("email",null,null,ValidatingType.invalid)
+                .input("telephone",null,null,ValidatingType.invalid)
                 .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
-                .input("email")
-                .submit("confirm", controller::registerAdmin);
-
-        menuBuilder.option(User.class, OperationType.verification, 2)
-                .input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
-                .input("password", password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::loginAdmin);
+                .submit("confirm", controller::registerUser)
+                .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account"); // this one should be the root, but many things are unimplemented
+        menuBuilder.construct("master.account",true); // this one should be the root, but many things are unimplemented
         // You have to call construct before creating a new master option node.
 
         /* Menu Structure:
@@ -67,6 +71,17 @@ public class MenuConstructor {
          */
     }
 
+    public void AdminUser(UserController controller) {
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3,"addSunadmin")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .input("email",null,null,ValidatingType.invalid)
+                .input("telephone",null,null,ValidatingType.notexist)
+                .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid)
+                .submit("confirm", controller::addSubAdmin)
+                .master("master.account");
+
+    }
 
     public void supportTicket(SupportTicketController controller) {
         menuBuilder.option(SupportTicket.class, OperationType.add, 1)
@@ -124,7 +139,7 @@ public class MenuConstructor {
                 .submit("confirm", controller::confirmingTradeComplete)
                 .master("master.support.trade");
 
-        menuBuilder.construct("master.support.trade", true);
+        menuBuilder.construct("master.support.trade", false);
     }
 
     public void runMenu() {

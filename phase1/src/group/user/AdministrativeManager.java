@@ -16,18 +16,13 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
     private Iterator<PersonalUser> needToFreezelist;
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
+    private AdministrativeUser currAdmin;
 
     public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
                                  Repository<PersonalUser> personalUserRepository){
         this.administrators = administrativeUserRepository;
         this.personalUserRepository = personalUserRepository;
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
-    }
-
-    public Response createadministrator(String username, String email, String password, boolean isHead){
-        AdministrativeUser admin = new AdministrativeUser(username, email, password, isHead);
-        administrators.add(admin);
-        return new Response.Builder(true).translatable("success.create.new").build();
     }
 
     public Response createadministrator(String username, String email, String telephone, String password, boolean isHead){
@@ -40,47 +35,27 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
          if (administrators.ifExists(
                  AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
                          && AdministrativeUser.getPassword().equals(password))){
+              currAdmin = administrators.getFirst(
+                      AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
+                      && AdministrativeUser.getPassword().equals(password));
              return new Response.Builder(true).translatable("success.login.user").build();
          }
          return new Response.Builder(false).translatable("failed.login.user").build();
     }
 
-
-    public Response addSubAdmin(AdministrativeUser head, String username, String email, String password){
+    public Response addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
         if (head.getIsHead()){
-            createadministrator(username, email, password, false);
+            createadministrator(username, email, telephone, password, false);
             return new Response.Builder(true).translatable("success.add.subadmin").build();
         } else{
             return new Response.Builder(false).translatable("failed.add.subadmin").build();
         }
     }
-
-    public boolean addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
-        if (head.getIsHead()){
-            createadministrator(username, email, telephone, password, false);
-            return true;
-        } else{
-            return false;
-        }
+    public AdministrativeUser getCurrAdmin(){
+        return currAdmin;
     }
 
-    public int getTransactionLimit(){
-        return transactionLimit;
-    }
-
-    public void setTransactionLimit(int limit){
-        transactionLimit = limit;
-    }
-
-    public int getLendBeforeBorrowLimit(){
-        return lendBeforeBorrow;
-    }
-
-    public void setLendBeforeBorrowLimit(int limit){
-        lendBeforeBorrow = limit;
-    }
-
-    public Iterator<PersonalUser>getListUserShouldBeFreezed(){
+    public Iterator<PersonalUser> getListUserShouldBeFreezed(){
         return needToFreezelist;
     }
 
@@ -110,6 +85,22 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
             freezeUser(needToFreezelist.next());
         }
 
+    }
+
+    public int getTransactionLimit(){
+        return transactionLimit;
+    }
+
+    public void setTransactionLimit(int limit){
+        transactionLimit = limit;
+    }
+
+    public int getLendBeforeBorrowLimit(){
+        return lendBeforeBorrow;
+    }
+
+    public void setLendBeforeBorrowLimit(int limit){
+        lendBeforeBorrow = limit;
     }
 
     //public void exampleOfFilter() {

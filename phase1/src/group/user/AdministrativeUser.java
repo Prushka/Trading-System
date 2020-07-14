@@ -16,10 +16,6 @@ public class AdministrativeUser extends User {
     }
 
 
-    public AdministrativeUser(String userName, String email, String password, boolean isHead) {
-        super(userName, email, password);
-        this.isHead = isHead;
-    }
 
     public AdministrativeUser(List<String> record){super(record);}
 

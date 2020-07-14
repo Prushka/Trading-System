@@ -7,11 +7,12 @@ import group.user.AdministrativeManager;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 
+import java.util.Iterator;
+
 public class UserController {
 
-    Repository<PersonalUser> personalRepo;
-    Repository<AdministrativeUser> adminRepo;
-
+    private final Repository<PersonalUser> personalRepo;
+    private final Repository<AdministrativeUser> adminRepo;
     private final AdministrativeManager administrativeManager;
 
     public UserController(ControllerDispatcher dispatcher) {
@@ -21,17 +22,35 @@ public class UserController {
         dispatcher.menuConstructor.user(this);
     }
 
-    public Response loginAdmin(Request request) {
-        return administrativeManager.verifyLogin(request.get("username"), // not sure if this way of using Request is correct
-                                                 request.get("password"));
+    // Lucy comment: for now it is only for admin, will discuss how to put in personal
+    // or separate personal and admin controller
+    public Response loginUser(Request request) {
+        String username = request.get("username");
+        String password = request.get("password");
+        return administrativeManager.verifyLogin(username, password);
     }
 
-    public Response registerAdmin(Request request) {
-        return administrativeManager.createAdministrator(request.get("username"),
-                                                         request.get("email"),
-                                                         request.get("password"),
-                                                        (request.getBoolean("isHead")));
+    public Response registerUser(Request request) {
+        String username = request.get("username");
+        String email = request.get("email");
+        String telephone = request.get("telephone");
+        String password = request.get("password");
+        boolean isHead = request.getBoolean("isHead");
+        return administrativeManager.createadministrator(username, email, telephone, password, isHead);
     }
 
-    // working on the rest
+    public Response addSubAdmin(Request request){
+        AdministrativeUser curradmin = administrativeManager.getCurrAdmin();
+        String username = request.get("username");
+        String email = request.get("email");
+        String telephone = request.get("telephone");
+        String password = request.get("password");
+        //boolean isHead = request.getBoolean("isHead");
+        return administrativeManager.addSubAdmin(curradmin, username, email, telephone, password);
+    }
+
+    public Iterator<PersonalUser> freezeUser(Request request){
+        return administrativeManager.getListUserShouldBeFreezed();
+    }
+
 }

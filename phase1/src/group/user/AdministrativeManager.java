@@ -55,23 +55,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         return currAdmin;
     }
 
-    public int getTransactionLimit(){
-        return transactionLimit;
-    }
-
-    public void setTransactionLimit(int limit){
-        transactionLimit = limit;
-    }
-
-    public int getLendBeforeBorrowLimit(){
-        return lendBeforeBorrow;
-    }
-
-    public void setLendBeforeBorrowLimit(int limit){
-        lendBeforeBorrow = limit;
-    }
-
-    public Iterator<PersonalUser>getListUserShouldBeFreezed(){
+    public Iterator<PersonalUser> getListUserShouldBeFreezed(){
         return needToFreezelist;
     }
 
@@ -101,6 +85,22 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
             freezeUser(needToFreezelist.next());
         }
 
+    }
+
+    public int getTransactionLimit(){
+        return transactionLimit;
+    }
+
+    public void setTransactionLimit(int limit){
+        transactionLimit = limit;
+    }
+
+    public int getLendBeforeBorrowLimit(){
+        return lendBeforeBorrow;
+    }
+
+    public void setLendBeforeBorrowLimit(int limit){
+        lendBeforeBorrow = limit;
     }
 
     //public void exampleOfFilter() {

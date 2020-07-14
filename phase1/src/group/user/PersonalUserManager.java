@@ -38,7 +38,7 @@ public class PersonalUserManager {
         return false;
     }
 
-    public boolean notifyAdmin(String input, PersonalUser p) {
+    public boolean notifyAdmin(String input, PersonalUser p) { //TODO send the request to admin
         if (input.equalsIgnoreCase("add")) {
             //add a request to add item to the main inventory to the notification list.
         } else if (input.equalsIgnoreCase("unfreeze")) {

@@ -32,7 +32,7 @@ public class PersonalUserManager {
     }
 
     public Response verifyLogin(String username, String password){
-        if (currPersonalUser != null){
+        if (getCurrPersonalUser(username, password) != null){
             return new Response.Builder(true).translatable("success.login.user").build();
         }
         return new Response.Builder(false).translatable("failed.login.user").build();

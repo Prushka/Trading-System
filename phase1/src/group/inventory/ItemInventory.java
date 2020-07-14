@@ -5,6 +5,7 @@ import group.item.Item;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
 public class ItemInventory {
     private List<Item> allItems;
 
@@ -24,3 +25,4 @@ public class ItemInventory {
         this.allItems = allItems;
     }
 }
+*/ // is this class necessary? cant really see why this and ItemManager can't be combined.

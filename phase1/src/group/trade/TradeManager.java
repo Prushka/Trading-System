@@ -7,7 +7,8 @@ import group.menu.data.Response;
 
 import java.time.LocalDateTime;
 
-// TODO: item skip, trade ID 0, enter = no next node
+// TODO: item skip
+// Glitch List: Trade ID 0 works even when this trade , pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
@@ -305,9 +306,8 @@ public class TradeManager {
      */
     private Response tradeRepresentation(Trade trade) {
         return new Response.Builder(true).
-                translatable("submit.trade.represent", trade.getUid(), trade.getUser1(), trade.getUser2(),
-                        trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation())
-                .build();
+                translatable("submit.trade.represent", trade.getUid(), trade.getUser1(),
+                        trade.getUser2(), trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation()).build();
     }
 }
 

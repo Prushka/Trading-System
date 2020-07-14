@@ -166,21 +166,20 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.ticket", false);
     }
 
-    // change this grace code when the actually controller comes in
     public void supportTrade(TestTradeController controller){
         // grace notes: keys correspond to request keys, .master calls the next set of nodes
         menuBuilder.option(Trade.class, OperationType.add, 1)
                 .input("initiator", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.exists)
                 .input("respondent", null, new RepositoryIdValidator(controller.personalUserRepository),
-                        ValidatingType.invalid)
+                        ValidatingType.exists)
                 .input("lendingItem", null, null, ValidatingType.invalid)
                 .input("borrowingItem", null, null, ValidatingType.invalid)
                 .input("isPermanent", String::toLowerCase, controller::isBool, ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
-                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent");
 
         menuBuilder.option(Trade.class, OperationType.edit, 2, "Date/Time")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
@@ -189,7 +188,8 @@ public class MenuConstructor {
                         ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingDateAndTime)
-                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent",
+                "failed.edit.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 3, "Location")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
@@ -198,7 +198,8 @@ public class MenuConstructor {
                         ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingLocation)
-                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent",
+                "failed.edit.trade");
 
         menuBuilder.option(Trade.class, OperationType.verification, 4, "Open")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
@@ -206,7 +207,8 @@ public class MenuConstructor {
                 .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeOpen)
-                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("success.confirm.trade.open",
+                "success.confirm.trade.wait", "failed.confirm.trade");
 
         menuBuilder.option(Trade.class, OperationType.verification, 5, "Complete")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
@@ -214,7 +216,9 @@ public class MenuConstructor {
                 .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeComplete)
-                .succeeded("master.support.trade").failed("master.support.trade").master("master.support.trade");
+                .succeeded("master.support.trade").failed("master.support.trade").master("failed.confirm.trade",
+                "success.confirm.trade.complete.perm", "success.confirm.trade.complete.temp",
+                "success.confirm.trade.wait");
 
         menuBuilder.construct("master.support.trade", false);
     }

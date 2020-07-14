@@ -12,8 +12,7 @@ public class UserController {
     private final Repository<PersonalUser> personalRepo;
     private final Repository<AdministrativeUser> adminRepo;
     private final PersonalUserManager personalUserManager;
-    //private final Repository<AddItemRequest> requestRepository;
-    private PersonalUser curruser;
+    private PersonalUser currUser;
 
     public UserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
@@ -27,8 +26,7 @@ public class UserController {
     public Response loginUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");
-        PersonalUser loginuser = personalUserManager.getCurrPersonalUser(username, password);
-        curruser = loginuser;
+        currUser= personalUserManager.getCurrPersonalUser(username, password);
         return personalUserManager.verifyLogin(username,password);
     }
 
@@ -43,11 +41,11 @@ public class UserController {
     public Response RequestAddNewItem(Request request){
         String item = request.get("item");
         String description = request.get("description");
-        return personalUserManager.createNewItemAndRequestAdd(curruser, item, description);
+        return personalUserManager.createNewItemAndRequestAdd(currUser, item, description);
     }
 
     public Response RequestUnfreeze(Request request) {
-        return personalUserManager.UnfreezeRequest(curruser);
+        return personalUserManager.UnfreezeRequest(currUser);
     }
 
 

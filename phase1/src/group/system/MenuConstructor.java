@@ -48,8 +48,7 @@ public class MenuConstructor {
         menuBuilder.option(User.class, OperationType.verification, 1)
                 .input("username", name -> name.length() > 3, ValidatingType.invalid )
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
-                .input("password", password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::loginUser)
+                .submit("password", controller::loginUser)
                 .master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 2)
@@ -80,25 +79,13 @@ public class MenuConstructor {
 
     }
 
-    public void AdminUser(UserController controller) {
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "addSunadmin")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", null, null, ValidatingType.invalid)
-                .input("telephone", null, null, ValidatingType.notexist)
-                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid);
-        //.submit("confirm", controller::addSubAdmin)
-        //.master("master.account");
-
-    }
 
     public void adminUser(AdministrativeUserController controller) {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.verification, 1)
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
-                .input("password", password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::loginAdminUser)
+                .submit("password", controller::loginAdminUser)
                 .master("master.adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "addSunadmin")
@@ -108,6 +95,15 @@ public class MenuConstructor {
                 .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid)
                 .submit("confirm", controller::addSubAdmin)
                 .master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2)
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .input("email", null, null, ValidatingType.invalid)
+                .input("telephone", null, null, ValidatingType.invalid)
+                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
+                // you can put anything there if you want to process user input before it enters the Request object
+                .submit("confirm", controller::registerAdminUser)
+                .master("master.account");
 
         menuBuilder.construct("master.adminAccount", true);
     }

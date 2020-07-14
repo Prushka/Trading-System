@@ -36,12 +36,7 @@ public class AdministrativeManager {
     }
 
     public Response verifyLogin(String username, String password){
-         if (administrators.ifExists(
-                 AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
-                         && AdministrativeUser.getPassword().equals(password))){
-              currAdmin = administrators.getFirst(
-                      AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
-                      && AdministrativeUser.getPassword().equals(password));
+         if (getCurrAdmin(username, password) != null){
              return new Response.Builder(true).translatable("success.login.user").build();
          }
          return new Response.Builder(false).translatable("failed.login.user").build();
@@ -55,7 +50,15 @@ public class AdministrativeManager {
             return new Response.Builder(false).translatable("failed.add.subadmin").build();
         }
     }
-    public AdministrativeUser getCurrAdmin(){
+
+    public AdministrativeUser getCurrAdmin(String username, String password){
+        if (administrators.ifExists(
+                AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
+                        && AdministrativeUser.getPassword().equals(password))) {
+            currAdmin = administrators.getFirst(
+                    AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
+                            && AdministrativeUser.getPassword().equals(password));
+        }
         return currAdmin;
     }
 

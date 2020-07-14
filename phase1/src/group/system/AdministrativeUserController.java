@@ -14,13 +14,13 @@ public class AdministrativeUserController {
     private final Repository<PersonalUser> personalRepo;
     private final Repository<AdministrativeUser> adminRepo;
     private final AdministrativeManager administrativeManager;
+    private AdministrativeUser currAdmin;
 
     public AdministrativeUserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
         administrativeManager = new AdministrativeManager(adminRepo, personalRepo);
-        // dispatcher.menuConstructor.adminUser(this);
-        // please don't push things that contain error
+        dispatcher.menuConstructor.adminUser(this);
     }
 
     // Lucy comment: for now it is only for admin, will discuss how to put in personal
@@ -28,6 +28,7 @@ public class AdministrativeUserController {
     public Response loginAdminUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");
+        currAdmin = administrativeManager.getCurrAdmin(username, password);
         return administrativeManager.verifyLogin(username, password);
     }
 
@@ -41,18 +42,19 @@ public class AdministrativeUserController {
     }
 
     public Response addSubAdmin(Request request){
-        AdministrativeUser curradmin = administrativeManager.getCurrAdmin();
         String username = request.get("username");
         String email = request.get("email");
         String telephone = request.get("telephone");
         String password = request.get("password");
         //boolean isHead = request.getBoolean("isHead");
-        return administrativeManager.addSubAdmin(curradmin, username, email, telephone, password);
+        return administrativeManager.addSubAdmin(currAdmin, username, email, telephone, password);
     }
 
     public Iterator<PersonalUser> freezeUser(Request request){
         return administrativeManager.getListUserShouldBeFreezed();
     }
+
+
 
 
 }

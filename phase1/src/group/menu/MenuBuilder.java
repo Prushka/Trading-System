@@ -217,8 +217,19 @@ public class MenuBuilder {
                 masterOptionNodePool = new MasterOptionNodePool();
             }
 
-            public void master(String... masterIdentifiers) {
+            public SubmitNodeBuilder master(String... masterIdentifiers) {
                 masterOptionNodePool.addPlaceholder(masterIdentifiers);
+                return this;
+            }
+
+            public SubmitNodeBuilder succeeded(String masterIdentifier) {
+                masterOptionNodePool.setSucceededPlaceHolder(masterIdentifier);
+                return this;
+            }
+
+            public SubmitNodeBuilder failed(String masterIdentifier) {
+                masterOptionNodePool.setFailedPlaceHolder(masterIdentifier);
+                return this;
             }
         }
     }
@@ -279,8 +290,8 @@ public class MenuBuilder {
 
     public MasterOptionNode constructFinal() {
         for (OptionNodeBuilder optionNodeBuilder : optionNodePool.values()) {
-            SubmitNode submitNode = optionNodeBuilder.submitNodeBuilder.submitNode;
             optionNodeBuilder.submitNodeBuilder.masterOptionNodePool.feedMe(masters);
+            optionNodeBuilder.submitNodeBuilder.submitNode.setMasterPool(optionNodeBuilder.submitNodeBuilder.masterOptionNodePool);
         }
         return entryNode;
     }

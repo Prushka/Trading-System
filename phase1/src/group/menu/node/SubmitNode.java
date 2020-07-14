@@ -99,9 +99,9 @@ public class SubmitNode extends InputNode {
         } else {
             realChild = failedResultNode;
         }
-        if (responseNode.getChild() == null) { // the next master node identifier doesn't exist in Response object, use the response success state and node from pool
+        if (realChild == null) { // the next master node identifier doesn't exist in Response object, use the response success state and node from pool
             if (response.success()) {
-                realChild = masterOptionNodePool.getSucceed();
+                realChild = masterOptionNodePool.getSucceeded();
             } else {
                 realChild = masterOptionNodePool.getFailed();
             }

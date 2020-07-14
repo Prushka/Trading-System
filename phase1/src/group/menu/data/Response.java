@@ -13,7 +13,7 @@ public class Response {
     /**
      * <code>true</code> if the Request is successfully made
      */
-    private final boolean success;
+    private boolean success;
 
     /**
      * The persistent Request key.
@@ -76,6 +76,13 @@ public class Response {
      */
     public String getPersistentKey() {
         return persistentKey;
+    }
+
+    /**
+     * @param success the success state
+     */
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     /**

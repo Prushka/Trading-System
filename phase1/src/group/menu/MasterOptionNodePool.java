@@ -18,7 +18,11 @@ public class MasterOptionNodePool {
 
     private MasterOptionNode failed;
 
-    private MasterOptionNode succeed;
+    private MasterOptionNode succeeded;
+
+    private String succeededPlaceHolder;
+
+    private String failedPlaceHolder;
 
     MasterOptionNodePool() {
     }
@@ -27,18 +31,16 @@ public class MasterOptionNodePool {
         return failed;
     }
 
-    public MasterOptionNode getSucceed() {
-        return succeed;
+    public MasterOptionNode getSucceeded() {
+        return succeeded;
     }
 
-    MasterOptionNodePool setFailed(MasterOptionNode failed) {
-        this.failed = failed;
-        return this;
+    void setSucceededPlaceHolder(String succeededPlaceHolder) {
+        this.succeededPlaceHolder = succeededPlaceHolder;
     }
 
-    MasterOptionNodePool setSucceed(MasterOptionNode succeed) {
-        this.succeed = succeed;
-        return this;
+    void setFailedPlaceHolder(String failedPlaceHolder) {
+        this.failedPlaceHolder = failedPlaceHolder;
     }
 
     MasterOptionNodePool addPlaceholder(String... nodes) {
@@ -50,13 +52,15 @@ public class MasterOptionNodePool {
         return availableNodes.get(key);
     }
 
-    Set<String> getPlaceholders() {
-        return placeholders;
-    }
-
     void feedMe(Map<String, MasterOptionNode> masters) {
         for (String placeHolder : placeholders) {
             availableNodes.put(placeHolder, masters.get(placeHolder));
+        }
+        if (succeededPlaceHolder != null) {
+            succeeded = masters.get(succeededPlaceHolder);
+        }
+        if (failedPlaceHolder != null) {
+            failed = masters.get(failedPlaceHolder);
         }
     }
 

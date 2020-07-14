@@ -51,7 +51,7 @@ public class MenuConstructor {
                 .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.support.trade",true); // this one should be the root, but many things are unimplemented
+        menuBuilder.construct("master.account", false); // this one should be the root, but many things are unimplemented
         // You have to call construct before creating a new master option node.
 
         /* Language & Text:
@@ -77,13 +77,18 @@ public class MenuConstructor {
                 .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
                 .input("priority", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
                 .submit("confirm", controller::addTicket)
-                .master("master.support.ticket");
+                .succeeded("master.support.ticket");
 
         menuBuilder.option(SupportTicket.class, OperationType.query, 2)
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
-                .master("master.support.ticket");
+                .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
 
-        menuBuilder.construct("master.support.ticket", false);
+        // NOTICE what will happen:
+        // when Response success == true, the "master.support.ticket" will be the next menu
+        // when Response success == false, the "master.account" will be the next menu
+        // when you define "master.support.trade" in your response object, "master.support.trade" will be next
+
+        menuBuilder.construct("master.support.ticket", true);
     }
 
     // change this grace code when the actually controller comes in

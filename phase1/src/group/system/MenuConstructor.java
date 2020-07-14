@@ -166,14 +166,13 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.ticket", false);
     }
 
-    // change this grace code when the actually controller comes in
     public void supportTrade(TestTradeController controller){
         // grace notes: keys correspond to request keys, .master calls the next set of nodes
         menuBuilder.option(Trade.class, OperationType.add, 1)
                 .input("initiator", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.exists)
                 .input("respondent", null, new RepositoryIdValidator(controller.personalUserRepository),
-                        ValidatingType.invalid)
+                        ValidatingType.exists)
                 .input("lendingItem", null, null, ValidatingType.invalid)
                 .input("borrowingItem", null, null, ValidatingType.invalid)
                 .input("isPermanent", String::toLowerCase, controller::isBool, ValidatingType.invalid)

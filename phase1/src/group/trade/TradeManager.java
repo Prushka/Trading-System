@@ -7,7 +7,8 @@ import group.menu.data.Response;
 
 import java.time.LocalDateTime;
 
-// TODO: item skip, trade ID 0, enter = no next node
+// TODO: item skip
+// Glitch List: Trade ID 0 works even when this trade , pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
@@ -105,7 +106,8 @@ public class TradeManager {
             currTrade.unconfirmUser1();
             currTrade.confirmUser2();
         } else {
-            return new Response.Builder(false).translatable("failed.edit.trade").build();
+            return new Response.Builder(false).translatable("failed.edit.trade",
+                    "master.support.trade").build();
         }
         return tradeRepresentation(currTrade);
     }
@@ -138,7 +140,8 @@ public class TradeManager {
             currTrade.unconfirmUser1();
             currTrade.confirmUser2();
         } else {
-            return new Response.Builder(false).translatable("failed.edit.trade").build();
+            return new Response.Builder(false).translatable("failed.edit.trade",
+                    "master.support.trade").build();
         }
         return tradeRepresentation(currTrade);
     }
@@ -159,7 +162,8 @@ public class TradeManager {
         } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && currTrade.getIsClosed()) {
             currTrade.confirmUser2();
         } else {
-            return new Response.Builder(false).translatable("failed.confirm.trade").build();
+            return new Response.Builder(false).translatable("failed.confirm.trade",
+                    "master.support.trade").build();
         }
         return openTrade(tradeID);
     }
@@ -184,9 +188,11 @@ public class TradeManager {
                 Trade oldTrade = tradeRepository.get(currTrade.getPrevMeeting());
                 oldTrade.closeTrade();
             }
-            return new Response.Builder(true).translatable("success.confirm.trade.open").build();
+            return new Response.Builder(true).translatable("success.confirm.trade.open",
+                    "master.support.trade").build();
         } else {
-            return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
+            return new Response.Builder(true).translatable("success.confirm.trade.wait",
+                    "master.support.trade").build();
         }
     }
 
@@ -206,7 +212,8 @@ public class TradeManager {
         } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && !currTrade.getIsClosed()) {
             currTrade.confirmUser2();
         } else {
-            return new Response.Builder(false).translatable("failed.confirm.trade").build();
+            return new Response.Builder(false).translatable("failed.confirm.trade",
+                    "master.support.trade").build();
         }
         return completeTrade(tradeID);
     }
@@ -225,13 +232,16 @@ public class TradeManager {
             makeTrades(currTrade);
             if (currTrade.getIsPermanent()) {
                 currTrade.closeTrade();
-                return new Response.Builder(true).translatable("success.confirm.trade.complete.perm").build();
+                return new Response.Builder(true).translatable("success.confirm.trade.complete.perm",
+                        "master.support.trade").build();
             } else {
                 scheduleTradeBack(currTrade);
-                return new Response.Builder(true).translatable("success.confirm.trade.complete.temp").build();
+                return new Response.Builder(true).translatable("success.confirm.trade.complete.temp",
+                        "master.support.trade").build();
             }
         } else {
-            return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
+            return new Response.Builder(true).translatable("success.confirm.trade.wait",
+                    "master.support.trade").build();
         }
     }
 
@@ -285,7 +295,8 @@ public class TradeManager {
         trader1.removeFromTrade(currTrade.getUid());
         trader2.removeFromTrade(currTrade.getUid());
         tradeRepository.remove(currTrade);
-        return new Response.Builder(false).translatable("failed.cancel.trade").build();
+        return new Response.Builder(false).translatable("failed.cancel.trade",
+                "master.support.trade").build();
     }
 
     /**
@@ -305,9 +316,9 @@ public class TradeManager {
      */
     private Response tradeRepresentation(Trade trade) {
         return new Response.Builder(true).
-                translatable("submit.trade.represent", trade.getUid(), trade.getUser1(), trade.getUser2(),
-                        trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation())
-                .build();
+                translatable("submit.trade.represent", trade.getUid(), trade.getUser1(),
+                        trade.getUser2(), trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation(),
+                        "master.support.trade").build();
     }
 }
 

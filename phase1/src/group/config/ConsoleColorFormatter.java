@@ -4,7 +4,6 @@ import group.config.property.LanguageProperties;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
 /**
@@ -13,7 +12,7 @@ import java.util.logging.LogRecord;
  * @author Dan Lyu
  * @author shakram02 - <a href="https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println">print color in console</a>
  */
-public class ConsoleLanguageFormatter extends Formatter {
+public class ConsoleColorFormatter extends LanguageFormatter {
 
     /**
      * The map of String identifier to AnsiColor
@@ -67,15 +66,10 @@ public class ConsoleLanguageFormatter extends Formatter {
     }};
 
     /**
-     * Language Properties that predefines the identifier to the text
+     * @param lang Language Properties that maps the identifier to the text
      */
-    private final LanguageProperties lang;
-
-    /**
-     * @param lang Language Properties that predefines the identifier to the text
-     */
-    public ConsoleLanguageFormatter(LanguageProperties lang) {
-        this.lang = lang;
+    public ConsoleColorFormatter(LanguageProperties lang) {
+        super(lang);
     }
 
     /**
@@ -84,7 +78,7 @@ public class ConsoleLanguageFormatter extends Formatter {
      * @param message the raw message to format
      * @return the formatted message
      */
-    public String formatColor(String message) {
+    public String applyColor(String message) {
         message = "{BLACK}" + message;
         for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
             message = message.replace(entry.getKey(), entry.getValue());
@@ -105,6 +99,6 @@ public class ConsoleLanguageFormatter extends Formatter {
             case "FINEST":
                 prefix = ansiColor.get("{BLACK}") + "[DEBUG] ";
         }
-        return prefix + formatColor(lang.getMessage(record.getMessage(), record.getParameters())) + ansiColor.get("{RESET}") + "\n";
+        return prefix + applyColor(applyLanguage(record)) + ansiColor.get("{RESET}") + "\n";
     }
 }

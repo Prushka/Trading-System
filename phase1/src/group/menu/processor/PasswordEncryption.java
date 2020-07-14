@@ -2,6 +2,7 @@ package group.menu.processor;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
 
 /**
  * This classes uses md5 to encrypt password.<p>
@@ -28,7 +29,7 @@ public class PasswordEncryption implements InputPreProcessor {
             }
             return sb.toString();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Something went wrong with password encryption.", e);
             return null;
         }
     }

@@ -65,7 +65,7 @@ public class MenuConstructor {
                 .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account", true);
+        menuBuilder.construct("master.account", false);
     }
 
     public void AdminUser(UserController controller) {

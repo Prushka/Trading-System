@@ -1,7 +1,6 @@
 package group.menu.node;
 
 import group.config.LoggerFactory;
-import group.menu.Menu;
 
 import java.util.logging.Logger;
 
@@ -16,7 +15,7 @@ public abstract class Node {
     /**
      * The logger to log information from the Node
      */
-    static final Logger LOGGER = new LoggerFactory(Menu.class).getConfiguredLogger();
+    static final Logger LOGGER = new LoggerFactory(Node.class).getConfiguredLogger();
 
     /**
      * The child node

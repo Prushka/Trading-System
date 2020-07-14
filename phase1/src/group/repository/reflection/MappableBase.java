@@ -1,5 +1,7 @@
 package group.repository.reflection;
 
+import group.config.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -8,6 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +30,8 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public abstract class MappableBase {
+
+    static final Logger LOGGER = new LoggerFactory(MappableBase.class).getConfiguredLogger();
 
     /**
      * The empty constructor used to make sure that extending
@@ -64,7 +70,7 @@ public abstract class MappableBase {
                 field.set(this, obj);
                 id++;
             } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Some error occurred in reflection when instantiating an object from CSV record.", e);
             }
         }
     }
@@ -206,7 +212,7 @@ public abstract class MappableBase {
                 value.append(",");
             } catch (IllegalAccessException | NullPointerException e) {
                 value.append("null");
-                e.printStackTrace();
+                LOGGER.log(Level.WARNING, "Field " + field.getName() + " cannot be mapped to a value!", e);
             }
         }
         return value.substring(0, value.length() - 1);

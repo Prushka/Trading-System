@@ -1,10 +1,13 @@
 package group.system;
 
+import group.config.LoggerFactory;
 import group.menu.Menu;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The main loop of the presenter part.
@@ -13,6 +16,8 @@ import java.io.InputStreamReader;
  * @author Dan Lyu
  */
 public class ConsoleSystem {
+
+    static final Logger LOGGER = new LoggerFactory(ConsoleSystem.class).getConfiguredLogger();
 
     public void run(Menu menu) {
 
@@ -27,10 +32,9 @@ public class ConsoleSystem {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e){
-            e.printStackTrace();
-            System.err.println("There's no node next!");
+            LOGGER.log(Level.SEVERE, "Unable to read from Buffered reader.", e);
+        } catch (NullPointerException e) {
+            LOGGER.log(Level.SEVERE, "There's no node next.", e);
         }
 
     }

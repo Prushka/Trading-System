@@ -1,11 +1,14 @@
 package group.config.property;
 
+import group.config.LoggerFactory;
 import group.system.Savable;
 import group.system.SaveHook;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The Property class that wraps a Properties object.<p>
@@ -14,6 +17,8 @@ import java.util.Properties;
  * @author Dan Lyu
  */
 public abstract class Property implements Savable {
+
+    static final Logger LOGGER = new LoggerFactory(Property.class).getConfiguredLogger();
 
     /**
      * The java native Properties
@@ -32,7 +37,7 @@ public abstract class Property implements Savable {
             properties.load(new FileInputStream(getFile()));
             saveHook.addSavable(this);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Cannot initialize the property!", e);
         }
     }
 
@@ -66,7 +71,7 @@ public abstract class Property implements Savable {
         try {
             properties.store(new FileOutputStream(getFile()), null);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Cannot save the property to file!", e);
         }
     }
 

@@ -296,8 +296,8 @@ public class MenuBuilder {
         return entryNode;
     }
 
+    // only use this in test / dev
     public void generateLanguage(String language) { // properties is not in order thus a file writer is used, maybe we can extend Properties class
-
         PrintWriter writer;
         try {
             writer = new PrintWriter(new File("resources/" + language + ".properties"));

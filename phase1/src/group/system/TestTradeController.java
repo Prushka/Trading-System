@@ -1,6 +1,5 @@
 package group.system;
 
-import group.config.property.TradeProperties;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.repository.Repository;
@@ -22,8 +21,7 @@ public class TestTradeController {
     public TestTradeController(ControllerDispatcher dispatcher){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
-        final TradeProperties tradeProperties = dispatcher.tradeProperties;
-        tradeManager = new TradeManager(tradeRepository, personalUserRepository, tradeProperties);
+        tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties);
         dispatcher.menuConstructor.supportTrade(this);
     }
 

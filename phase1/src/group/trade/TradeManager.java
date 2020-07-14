@@ -8,7 +8,7 @@ import group.menu.data.Response;
 import java.time.LocalDateTime;
 
 // TODO: item skip
-// Glitch List: Trade ID 0 works even when this trade , pressing exit immediately exists program, normal to keep removing personalUser.csv?
+// Glitch List: Trade ID 0 works even when this trade, pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
@@ -79,7 +79,7 @@ public class TradeManager {
     }
 
     /**
-     * Edit date and time of a trade
+     * Edit date and time of a trade and cancels the trade if the users edited too much
      * @param tradeID The trade ID of the trade to be edited
      * @param editingUser The user ID of who wishes to edit this trade
      * @param dateAndTime The new date and time that this trade will take place
@@ -112,7 +112,7 @@ public class TradeManager {
     }
 
     /**
-     Edit location of a trade
+     Edit location of a trade and cancels the trade if the users edited too much
      * @param tradeID The trade ID of the trade to be edited
      * @param editingUser The user ID of who wishes to edit this trade
      * @param location The new location of where this trade will take place
@@ -144,8 +144,18 @@ public class TradeManager {
         return tradeRepresentation(currTrade);
     }
 
+    // Removes a trade from user's trade list and the trade repository
+    private Response cancelTrades(Trade currTrade) {
+        PersonalUser trader1 = userRepository.get(currTrade.getUser1());
+        PersonalUser trader2 = userRepository.get(currTrade.getUser1());
+        trader1.removeFromTrade(currTrade.getUid());
+        trader2.removeFromTrade(currTrade.getUid());
+        tradeRepository.remove(currTrade);
+        return new Response.Builder(false).translatable("failed.cancel.trade").build();
+    }
+
     /**
-     * Confirm a trade will take place
+     * Confirm a trade will take place and opens the trade
      * @param tradeID The trade ID of the trade to be confirmed
      * @param editingUser The user ID of who wishes to confirm to this trade
      * @return A response object that details the success or failure of this action
@@ -165,11 +175,7 @@ public class TradeManager {
         return openTrade(tradeID);
     }
 
-    /**
-     * Opens a trade
-     * @param tradeID he trade ID of the trade to be opened
-     * @return A response that details the state of confirming the trade meeting
-     */
+    // Opens a trade and closes the previous trade if applicable
     private Response openTrade(int tradeID){
         // Get trade from repository
         Trade currTrade = tradeRepository.get(tradeID);
@@ -192,7 +198,8 @@ public class TradeManager {
     }
 
     /**
-     * Confirm that a trade has occurred
+     * Confirm that a trade has occurred and completes a trade by making the trades and closing it or scheduling another
+     * meeting.
      * @param tradeID The trade ID of the trade to be confirmed
      * @param editingUser The user ID of who wishes to confirmed this trade
      * @return A response object that details the success or failure of this action
@@ -212,34 +219,7 @@ public class TradeManager {
         return completeTrade(tradeID);
     }
 
-    /**
-     * Completes a trade by closing it or scheduling another meeting.
-     * @param tradeID he trade ID of the trade to be completed
-     * @return A response that details the state of confirming the trade meeting
-     */
-    private Response completeTrade(int tradeID) {
-        // Get trade from repository
-        Trade currTrade = tradeRepository.get(tradeID);
-
-        // If both users confirm, make the trade
-        if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
-            makeTrades(currTrade);
-            if (currTrade.getIsPermanent()) {
-                currTrade.closeTrade();
-                return new Response.Builder(true).translatable("success.confirm.trade.complete.perm").build();
-            } else {
-                scheduleTradeBack(currTrade);
-                return new Response.Builder(true).translatable("success.confirm.trade.complete.temp").build();
-            }
-        } else {
-            return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
-        }
-    }
-
-    /**
-     * Makes trades between users
-     * @param currTrade The trade object
-     */
+    // Makes a one-way or two-way trade
     private void makeTrades(Trade currTrade) {
         PersonalUser initUser = userRepository.get(currTrade.getUser1());
         PersonalUser otherUser = userRepository.get(currTrade.getUser2());
@@ -275,35 +255,34 @@ public class TradeManager {
         }
     }
 
-    /**
-     * Cancels a trade
-     * @param currTrade A trade object
-     * @return A response object that describes the cancellation of this trade
-     */
-    private Response cancelTrades(Trade currTrade) {
-        PersonalUser trader1 = userRepository.get(currTrade.getUser1());
-        PersonalUser trader2 = userRepository.get(currTrade.getUser1());
-        trader1.removeFromTrade(currTrade.getUid());
-        trader2.removeFromTrade(currTrade.getUid());
-        tradeRepository.remove(currTrade);
-        return new Response.Builder(false).translatable("failed.cancel.trade").build();
+    // Completes a trade by making trades or scheduling second meeting
+    private Response completeTrade(int tradeID) {
+        // Get trade from repository
+        Trade currTrade = tradeRepository.get(tradeID);
+
+        // If both users confirm, make the trade
+        if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
+            makeTrades(currTrade);
+            if (currTrade.getIsPermanent()) {
+                currTrade.closeTrade();
+                return new Response.Builder(true).translatable("success.confirm.trade.complete.perm").build();
+            } else {
+                scheduleTradeBack(currTrade);
+                return new Response.Builder(true).translatable("success.confirm.trade.complete.temp").build();
+            }
+        } else {
+            return new Response.Builder(true).translatable("success.confirm.trade.wait").build();
+        }
     }
 
-    /**
-     * Creates a second trade meeting
-     * @param currTrade The first trade meeting
-     */
+    // Schedules a second trade meeting
     private void scheduleTradeBack(Trade currTrade) {
         LocalDateTime newDateAndTime = currTrade.getDateAndTime().plusMonths(timeLimit);
         createTrade(currTrade.getUser1(), currTrade.getUser1(), currTrade.getItem2(), currTrade.getItem1(),
                 true, newDateAndTime, currTrade.getLocation(), currTrade.getUid());
     }
 
-    /**
-     * Represents a trade in a string
-     * @param trade A trade to be converted
-     * @return A response object that corresponds with a string representation of a Trade
-     */
+    // Represents a trade in a string
     private Response tradeRepresentation(Trade trade) {
         return new Response.Builder(true).
                 translatable("submit.trade.represent", trade.getUid(), trade.getUser1(),

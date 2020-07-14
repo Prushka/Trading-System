@@ -28,6 +28,9 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     private LocalDateTime dateAndTime;
     private String location;
 
+    /**
+     * @param record Representation of a trade's parameters
+     */
     // Needed to implement Mappable Base
     public Trade(List<String> record){
         super(record);
@@ -63,35 +66,137 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
         this.isClosed = true;
     }
 
-    // Getters
+    // GETTERS
+
+    /**
+     * @return The trade ID of this trade
+     */
     @Override
     public long getUid() { return this.tradeID;}
+
+    /**
+     * @return The user ID of the initiator
+     */
     public long getUser1(){ return user1;}
+
+    /**
+     * @return The user ID of the respondent
+     */
     public long getUser2(){ return user2;}
+
+    /**
+     * @return The amount of times the initiator has edited
+     */
     public int getUser1Edits(){ return user1Edits;}
+
+    /**
+     * @return The amount of times the respondent has edited
+     */
     public int getUser2Edits(){ return user2Edits;}
+
+    /**
+     * @return True iff the initiator has confirmed to the opening/ completion of this trade
+     */
     public boolean getUser1Confirms(){ return user1Confirms;}
+
+    /**
+     * @return True iff the respondent has confirmed to the opening/ completion of this trade
+     */
     public boolean getUser2Confirms(){ return user2Confirms;}
+
+    /**
+     * @return The item ID of what the initiator wants to lend to the respondent
+     */
     public Long getItem1(){ return item1;}
+
+    /**
+     * @return The item ID of what the initiator wants to borrow from the respondent
+     */
     public Long getItem2(){ return item2;}
+
+    /**
+     * @return True iff this trade is permanent
+     */
     public boolean getIsPermanent(){ return isPermanent;}
+
+    /**
+     * @return True iff this trade is closed
+     */
     public boolean getIsClosed(){ return isClosed;}
+
+    /**
+     * @return The date and time of this trade
+     */
     public LocalDateTime getDateAndTime(){ return dateAndTime;}
+
+    /**
+     * @return The location of this trade
+     */
     public String getLocation(){ return location;}
+
+    /**
+     * @return The trade ID of the previous trade if applicable
+     */
     public Long getPrevMeeting(){ return prevMeeting;}
 
-    // Setters
+    // SETTERS
+
+    /**
+     * @param new_uid The new trade ID for this trade
+     */
     @Override
     public void setUid(long new_uid) { this.tradeID = new_uid;}
+
+    /**
+     * Increases the initiator's edits by one.
+     */
     public void increaseUser1Edits(){ user1Edits++;}
+
+    /**
+     * Increase the initiator's edits by one.
+     */
     public void increaseUser2Edits(){ user2Edits++;}
+
+    /**
+     * Confirms the initiator's commitment to the trade/ verification of completion
+     */
     public void confirmUser1(){ user1Confirms = true;}
+
+    /**
+     * Confirms the respondent's commitment to the trade/ verification of completion
+     */
     public void confirmUser2(){ user2Confirms = true;}
+
+    /**
+     * Un-confirms the initiator's commitment to the trade/ verification of completion
+     */
     public void unconfirmUser1(){ user1Confirms = false;}
+
+    /**
+     * Un-confirms the respondent's commitment to the trade/ verification of completion
+     */
     public void unconfirmUser2(){ user2Confirms = false;}
+
+    /**
+     * Sets the state of this trade to open
+     */
     public void openTrade(){ isClosed = false;}
+
+    /**
+     * Sets the state of this trade to close
+     */
     public void closeTrade(){ isClosed = true;}
+
+    /**
+     * Sets a trade to a new date and time
+     * @param newDateAndTime The new date and time of this trade
+     */
     public void setDateAndTime(LocalDateTime newDateAndTime){ dateAndTime = newDateAndTime;}
+
+    /**
+     * Sets a trade to a new location
+     * @param newLocation The new location of this trade
+     */
     public void setLocation(String newLocation){ location = newLocation;}
 
     /**

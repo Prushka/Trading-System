@@ -55,10 +55,10 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
-                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
+                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .submit("confirm", controller::registerUser)
-                .succeeded("master.support.trade").failed("master.account").master("master.account");
+                .succeeded("master.account").failed("master.account").master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
 
@@ -96,7 +96,7 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
-                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
+                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .submit("confirm", controller::registerAdminUser)
                 .master("master.account");
@@ -180,13 +180,14 @@ public class MenuConstructor {
                         ValidatingType.exists)
                 .input("respondent", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.exists)
-                .input("lendingItem", null, null, ValidatingType.invalid)
-                .input("borrowingItem", null, null, ValidatingType.invalid)
+                .input("lendingItem", null, controller::isAnItem, ValidatingType.invalid)
+                .input("borrowingItem", null, controller::isAnItem, ValidatingType.invalid)
                 .input("isPermanent", String::toLowerCase, controller::isBool, ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
-                .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent");
+                .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent",
+                "failed.create.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 2, "Date/Time")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),

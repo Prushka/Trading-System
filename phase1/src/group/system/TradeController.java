@@ -9,6 +9,7 @@ import group.user.PersonalUser;
 
 import java.time.LocalDateTime;
 
+// Glitch List: Trade ID 0 works even when this trade, pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeController {
     private final TradeManager tradeManager;
     final Repository<Trade> tradeRepository;
@@ -35,16 +36,27 @@ public class TradeController {
         Long item2;
         Long user1 =  request.getLong("initiator");
         Long user2 =  request.getLong("respondent");
+
+        PersonalUser trader1 = personalUserRepository.get(user1);
+        PersonalUser trader2 = personalUserRepository.get(user2);
+
+        // Check if items are in their inventories or are null
         if (request.get("lendingItem").equals("null")){
             item1 = null;
-        } else {
+        } else if (trader1.getInventory().contains(request.getLong("lendingItem"))){
             item1 = request.getLong("lendingItem");
+        } else {
+            return new Response.Builder(false).translatable("failed.create.trade").build();
         }
         if (request.get("borrowingItem").equals("null")){
             item2 = null;
+        } else if (trader2.getInventory().contains(request.getLong("borrowingItem"))){
+            item2 = request.getLong("borrowingItem");
         } else {
-            item2 = request.getLong("lendingItem");
-        }        Boolean isPermanent = request.getBoolean("isPermanent");
+            return new Response.Builder(false).translatable("failed.create.trade").build();
+        }
+
+        Boolean isPermanent = request.getBoolean("isPermanent");
         String[] data = request.get("dateAndTime").split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
@@ -108,4 +120,19 @@ public class TradeController {
        return (input.equals("true") || input.equals("false"));
     }
 
+    /**
+     * @param input The user's input
+     * @return True iff the input is correct item input
+     */
+    public boolean isAnItem(String input){
+        try {
+            if (input.equals("null")){
+                return true;
+            }
+            Long.parseLong(input);
+            return true;
+        } catch (IllegalArgumentException e){
+            return false;
+        }
+    }
 }

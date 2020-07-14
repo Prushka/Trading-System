@@ -6,9 +6,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * The main loop of the presenter part.
+ *
+ * @author lecture code, Logging project
+ * @author Dan Lyu
+ */
 public class ConsoleSystem {
 
-    public void run(Menu menu) { // lecture code
+    public void run(Menu menu) {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         menu.displayInitial();

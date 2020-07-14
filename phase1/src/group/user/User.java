@@ -34,7 +34,7 @@ public class User extends MappableBase implements CSVMappable, UniqueId {
         this.password = password;
     }
 
-    public String getName() {
+    public String getUserName() {
         return userName;
     }
 

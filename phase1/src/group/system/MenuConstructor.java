@@ -15,6 +15,11 @@ import group.user.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {\__/}
+ * (●_●)
+ * ( >🌮
+ */
 public class MenuConstructor {
 
     private final MenuBuilder menuBuilder;
@@ -48,27 +53,8 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.trade",true); // this one should be the root, but many things are unimplemented
         // You have to call construct before creating a new master option node.
 
-        /* Menu Structure:
-         master option node has option nodes as children, they will be displayed together. You don't need to worry about the order since they are sorted by option nodes' ids when building
-         option nodes have input nodes as children
-         submit nodes will be the child of an input node or option node
-         Finally submit node can have a master option node as a child.
-
-         (For example:
-         If the user logs in, the submit node receives a successful Response object,
-          then another master option node with options will be displayed for users to choose from)
-
-         This is the way I think a menu level should be constructed. So you can only do this in MenuFactory. There's more freedom if you want to build nodes directly.
-         (The MenuFactory class is not perfect for now (it's a mess :(
-         */
-
         /* Language & Text:
-        If you use the menu factory, the identifier will be the combination of {OperationType, Input Key, Validating Type, Class} etc.
-
         If you create nodes directly, you have to pass identifiers manually as parameters. You also need to read about all builders.
-
-        You can generate the language.properties by calling menuFactory.generateLanguage("language"); if you are using menu factory.
-        This will put all identifiers in the properties file with undefined value
          */
     }
 

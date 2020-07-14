@@ -7,7 +7,7 @@ import java.util.Optional;
 
 /**
  * The root node that manages branches of {@link OptionNode}.<p>
- * This node accepts input and displays on its own but using information from its branches of {@link OptionNode}.
+ * This node accepts input and displays on its own but using information from its branches of {@link OptionNode} in a sorted order.
  *
  * @author Dan Lyu
  * @see OptionNode

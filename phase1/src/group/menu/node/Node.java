@@ -17,7 +17,7 @@ public abstract class Node {
     /**
      * The logger to log information from the Node
      */
-    static Logger LOGGER;
+    static final Logger LOGGER;
 
     static {
         LOGGER = Logger.getLogger(Node.class.getName());

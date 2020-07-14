@@ -40,7 +40,7 @@ public class SupportTicket extends MappableBase implements Serializable, CSVMapp
     public enum Category {
         UNDEFINED(-1), ACCOUNT(0), TRADE(1), BOOK(2);
 
-        int id;
+        final int id;
 
         Category(int id) {
             this.id = id;
@@ -58,7 +58,7 @@ public class SupportTicket extends MappableBase implements Serializable, CSVMapp
     public enum Priority {
         UNDEFINED(-1), LOW(0), MEDIUM(1), HIGH(2);
 
-        int id;
+        final int id;
 
         Priority(int id) {
             this.id = id;

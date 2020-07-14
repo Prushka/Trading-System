@@ -1,17 +1,15 @@
 package group.config.property;
 
 import group.system.Savable;
+import group.system.SaveHook;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.Properties;
 
 /**
- * The Property class that wraps a Properties object.
- * It saves the Property from resources root to a destination file on need.
+ * The Property class that wraps a Properties object.<p>
+ * The Properties object will be saved by an injected {@link group.system.SaveHook} if this class is constructed using a {@link group.system.SaveHook}.
  *
  * @author Dan Lyu
  */
@@ -21,6 +19,28 @@ public abstract class Property implements Savable {
      * The java native Properties
      */
     final Properties properties = new Properties();
+
+    /**
+     * Constructs a Property object and save the file from resources root to the destination file.<p>
+     * Then the saveHook will manage the save process of the {@link #properties}.
+     *
+     * @param saveHook the properties will be saved by a saveHook
+     */
+    public Property(SaveHook saveHook) {
+        try {
+            saveDefault();
+            properties.load(new FileInputStream(getFile()));
+            saveHook.addSavable(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Empty constructor to be used by subclasses that don't save by default and don't save by {@link group.system.SaveHook}.
+     */
+    public Property() {
+    }
 
     /**
      * Saves the file from resources root the a destination file.

@@ -22,7 +22,7 @@ public class Menu {
     /**
      * The logger to log information from the Menu
      */
-    static Logger LOGGER; // consider using instance variable
+    static final Logger LOGGER; // consider using instance variable
 
     static {
         LOGGER = Logger.getLogger(Menu.class.getName());

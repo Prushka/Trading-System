@@ -4,9 +4,7 @@ import group.item.Item;
 import group.menu.data.Response;
 import group.repository.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class AdministrativeManager { //TODO where to find request of unfreeze user and request of adding book
 
@@ -17,15 +15,21 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
     private AdministrativeUser currAdmin;
+    private PersonalUser currPersonalUser;
+    private Iterator<PersonalUser> needToConfirmAddItem;
+    private Iterator<PersonalUser> userRequestToUnfreeze;
+
 
     public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
                                  Repository<PersonalUser> personalUserRepository){
         this.administrators = administrativeUserRepository;
         this.personalUserRepository = personalUserRepository;
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
+        needToConfirmAddItem = personalUserRepository.iterator(PersonalUser::getAddToInventoryRequestIsNotEmpty);
+        userRequestToUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);
     }
 
-    public Response createadministrator(String username, String email, String telephone, String password, boolean isHead){
+    public Response createAdministrator(String username, String email, String telephone, String password, boolean isHead){
         AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
         administrators.add(admin);
         return new Response.Builder(true).translatable("success.create.new").build();
@@ -45,7 +49,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
 
     public Response addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
         if (head.getIsHead()){
-            createadministrator(username, email, telephone, password, false);
+            createAdministrator(username, email, telephone, password, false);
             return new Response.Builder(true).translatable("success.add.subadmin").build();
         } else{
             return new Response.Builder(false).translatable("failed.add.subadmin").build();
@@ -53,6 +57,11 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
     }
     public AdministrativeUser getCurrAdmin(){
         return currAdmin;
+    }
+
+    public PersonalUser getCurrPersonalUser(){
+        currPersonalUser = needToFreezelist.next();
+        return currPersonalUser;
     }
 
     public Iterator<PersonalUser> getListUserShouldBeFreezed(){
@@ -65,26 +74,53 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
 
     public void unfreezeUser(PersonalUser user){
         user.setIsFrozen(false);
+        user.setRequestToUnfreeze(false);
     }
 
     public boolean removeUserItem(PersonalUser user, Long item){
         return (user.getInventory()).remove(item);
     }
 
-    public boolean confirmAddItem(PersonalUser user, Long item){ //TODO where do admin get the request of adding item
-        user.addToInventory(item);
+    public boolean confirmAddItem(PersonalUser user) { //TODO where do admin get the request of adding item
+        for (Long item : user.getAddToInventoryRequest()) {
+            user.addToInventory(item);
+            user.getAddToInventoryRequest().remove(item);
+        }
         return true;
     }
 
-    public void confirmFreezeUser(PersonalUser user) {
-        freezeUser(user);
+    public void confirmAddAllitemRequest(){
+        while (needToConfirmAddItem.hasNext()){
+            PersonalUser curruser = needToConfirmAddItem.next();
+            for (Long item : curruser.getAddToInventoryRequest()){
+                confirmAddItem(curruser);
+            }
+        }
+    }
+
+    public Iterator<PersonalUser> getUserRequestToUnfreeze(){
+        return userRequestToUnfreeze;
+    }
+
+    public void confirmToUnfreezeUser(PersonalUser user){
+        unfreezeUser(user);
+    }
+
+    public void confirmToUnfreezeAllUser(){
+        while (userRequestToUnfreeze.hasNext()){
+            unfreezeUser(userRequestToUnfreeze.next());
+        }
+    }
+
+    public void confirmFreezeCurrUser() {
+        freezeUser(currPersonalUser);
     }
 
     public void confirmFreezeAllUser(){
         while (needToFreezelist.hasNext()){
-            freezeUser(needToFreezelist.next());
+            currPersonalUser = needToFreezelist.next();
+            freezeUser(currPersonalUser);
         }
-
     }
 
     public int getTransactionLimit(){

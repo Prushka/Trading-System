@@ -1,20 +1,20 @@
 package group.user;
 
+import group.menu.data.Response;
 import group.repository.Filter;
 import group.repository.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class PersonalUserManager {
-    private static final List<PersonalUser> personalusers = new ArrayList<>();
-    private static AdministrativeManager am;
+    //private static AdministrativeManager am;
     private final Repository<PersonalUser> personalUserRepository;
+
 
     public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
         //instantiate AdminManager
         this.personalUserRepository = personalUserRepository;
+
     }
 
     public void exampleOfFilter() {
@@ -29,14 +29,24 @@ public class PersonalUserManager {
         // this iterator has all PersonalUsers that need to be frozen
     }
 
-    public boolean verify(String username, String password) {
-        for (PersonalUser p : personalusers) {
-            if (p.getName().equals(username) && p.getPassword().equals(password)) {
-                return true;
-            }
+    public Response verifyLogin(String username, String password){
+        if (personalUserRepository.ifExists(
+                PersonalUser -> PersonalUser.getUserName().equals(username)
+                        && PersonalUser.getPassword().equals(password))){
+            //currPersonalUser = personalUser.getFirst(
+                    //AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
+                            //&& AdministrativeUser.getPassword().equals(password));
+            return new Response.Builder(true).translatable("success.login.user").build();
         }
-        return false;
+        return new Response.Builder(false).translatable("failed.login.user").build();
     }
+
+    public Response createPersonalUser(String userName, String email, String telephone, String password) {
+        PersonalUser p = new PersonalUser(userName, email, telephone, password);
+        personalUserRepository.add(p);
+        return new Response.Builder(true).translatable("success.create.new").build();
+    }
+
 
     public boolean notifyAdmin(String input, PersonalUser p) { //TODO send the request to admin
         if (input.equalsIgnoreCase("add")) {
@@ -47,9 +57,12 @@ public class PersonalUserManager {
         return false;
     }
 
-    public void createPersonalUser(String userName, String email, String telephone, String password) {
-        PersonalUser p = new PersonalUser(userName, email, telephone, password);
-        personalusers.add(p);
+    //public void addItemRequest(PersonalUser user, Long item){
+        //user.getAddItemRequest().add(item);
+    //}
+
+    public void addUnfreezeRequest(PersonalUser user){
+        //TODO implement repo or list??
     }
 
 

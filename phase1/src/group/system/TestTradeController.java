@@ -14,8 +14,6 @@ public class TestTradeController {
     private final TradeManager tradeManager;
     final Repository<Trade> tradeRepository;
     final Repository<PersonalUser> personalUserRepository;
-    private final TradeProperties tradeProperties;
-
 
     /**
      * Takes Requests from a User and turns it into information that can be used by TradeManager
@@ -24,7 +22,7 @@ public class TestTradeController {
     public TestTradeController(ControllerDispatcher dispatcher){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
-        tradeProperties = dispatcher.tradeProperties;
+        final TradeProperties tradeProperties = dispatcher.tradeProperties;
         tradeManager = new TradeManager(tradeRepository, personalUserRepository, tradeProperties);
         dispatcher.menuConstructor.supportTrade(this);
     }

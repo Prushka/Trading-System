@@ -180,13 +180,14 @@ public class MenuConstructor {
                         ValidatingType.exists)
                 .input("respondent", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.exists)
-                .input("lendingItem", null, null, ValidatingType.invalid)
-                .input("borrowingItem", null, null, ValidatingType.invalid)
+                .input("lendingItem", null, controller::isAnItem, ValidatingType.invalid)
+                .input("borrowingItem", null, controller::isAnItem, ValidatingType.invalid)
                 .input("isPermanent", String::toLowerCase, controller::isBool, ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
-                .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent");
+                .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent",
+                "failed.create.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 2, "Date/Time")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),

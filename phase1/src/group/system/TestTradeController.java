@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 
 public class TestTradeController {
     private final TradeManager tradeManager;
-    private final Repository<Trade> tradeRepository;
-    private final Repository<PersonalUser> personalUserRepository;
+    final Repository<Trade> tradeRepository;
+    final Repository<PersonalUser> personalUserRepository;
     private final TradeProperties tradeProperties;
 
 
@@ -70,11 +70,4 @@ public class TestTradeController {
         return tradeManager.confirmTradeComplete(tradeID, editingUser);
     }
 
-    public boolean ifTradeExist(String input) {
-        return tradeRepository.ifExists(Long.valueOf(input));
-    }
-
-    public boolean ifUserExist(String input) {
-        return personalUserRepository.ifExists(Long.valueOf(input));
-    }
 }

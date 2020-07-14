@@ -11,12 +11,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 
-public class FileHandlerFactory {
+class FileHandlerFactory {
 
     private static FileHandler fileHandler;
     private final DateTimeFormatter dateTimeFormatter; // maybe as an instant variable
 
-    public FileHandlerFactory() {
+    FileHandlerFactory() {
         dateTimeFormatter =
                 DateTimeFormatter
                         .ofPattern("yyyy-MM-dd-HH-mm-ss")

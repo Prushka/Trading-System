@@ -65,7 +65,7 @@ public class MenuConstructor {
                 .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account", false);
+        menuBuilder.construct("master.account", true);
     }
 
     public void AdminUser(UserController controller) {
@@ -90,9 +90,9 @@ public class MenuConstructor {
 
         menuBuilder.option(SupportTicket.class, OperationType.query, 2)
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
-                ;
+                .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
 
-        menuBuilder.construct("master.support.ticket", true);
+        menuBuilder.construct("master.support.ticket", false);
     }
 
     // change this grace code when the actually controller comes in

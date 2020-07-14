@@ -18,14 +18,14 @@ import java.util.logging.LogRecord;
  * @author Dan Lyu
  * @author print stacktrace from {@link LogRecord#getThrown()} - from {@link java.util.logging.SimpleFormatter}
  */
-public class FileFormatter extends LanguageFormatter {
+class FileFormatter extends LanguageFormatter {
 
     private final DateTimeFormatter dateTimeFormatter;
 
     /**
      * @param lang Language Properties that map the identifier to the text
      */
-    public FileFormatter(LanguageProperties lang) {
+    FileFormatter(LanguageProperties lang) {
         super(lang);
 
         dateTimeFormatter =

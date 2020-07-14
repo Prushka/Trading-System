@@ -12,7 +12,7 @@ import java.util.logging.LogRecord;
  *
  * @author Dan Lyu
  */
-public abstract class LanguageFormatter extends Formatter {
+abstract class LanguageFormatter extends Formatter {
 
     /**
      * The map of String identifier to AnsiColor.<p>
@@ -74,7 +74,7 @@ public abstract class LanguageFormatter extends Formatter {
     /**
      * @param lang Language Properties that map the identifier to the text
      */
-    public LanguageFormatter(LanguageProperties lang) {
+    LanguageFormatter(LanguageProperties lang) {
         this.lang = lang;
     }
 

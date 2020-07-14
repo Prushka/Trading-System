@@ -63,12 +63,10 @@ public class AdministrativeUserController {
         String username = request.get("username");
         PersonalUser user = administrativeManager.findUser(username);
         return administrativeManager.confirmFreezeUser(user);
-
     }
 
     public Response confirmFreezeAllUser(Request request){
         return administrativeManager.confirmFreezeAllUser();
-
     }
 
     public Response confirmUnFreezeUser(Request request){

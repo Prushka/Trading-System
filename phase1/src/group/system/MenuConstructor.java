@@ -45,13 +45,13 @@ public class MenuConstructor {
 
     public void user(UserController controller) {
         // user login / register example
-        menuBuilder.option(User.class, OperationType.verification, 1)
+        menuBuilder.option(User.class, OperationType.verification, 1, "login")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid )
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", controller::loginUser)
                 .succeeded("master.support.trade").failed("master.account").master("master.account");
 
-        menuBuilder.option(User.class, OperationType.add, 2)
+        menuBuilder.option(User.class, OperationType.add, 2, "register")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
@@ -61,42 +61,39 @@ public class MenuConstructor {
                 .succeeded("master.support.trade").failed("master.account").master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
+
         menuBuilder.construct("master.account", true);
     }
 
     public void userRequest(UserController controller){
 
-        menuBuilder.option(User.class, OperationType.add, 1)
+        menuBuilder.option(User.class, OperationType.add, 1, "requestAddItem")
                 .input("item",null, null, ValidatingType.invalid)
                 .input("description", null, null, ValidatingType.invalid)
                 .submit("unfreeze", controller::RequestAddNewItem)
                 .master("master.account");
 
 
-        menuBuilder.option(User.class, OperationType.add, 2)
+        menuBuilder.option(User.class, OperationType.add, 2, "requestUnfreeze")
                 .submit("unfreeze", controller::RequestUnfreeze)
                 .master("master.account");
 
+        menuBuilder.option(User.class, OperationType.remove, 3)
+                .input("itemname",null, null, ValidatingType.invalid)
+                .submit("", controller::removeItemFromInventory)
+                .master("master.account");
     }
 
 
     public void adminUser(AdministrativeUserController controller) {
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 1)
+        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 1,"login")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", controller::loginAdminUser)
                 .master("master.adminAccount");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "addSunadmin")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", null, null, ValidatingType.invalid)
-                .input("telephone", null, null, ValidatingType.notexist)
-                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::addSubAdmin)
-                .master("master.adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2)
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "register")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
@@ -104,6 +101,50 @@ public class MenuConstructor {
                 // you can put anything there if you want to process user input before it enters the Request object
                 .submit("confirm", controller::registerAdminUser)
                 .master("master.account");
+    }
+
+    public void adminUserAccess(AdministrativeUserController controller) {
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 1, "addSunadmin")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .input("email", null, null, ValidatingType.invalid)
+                .input("telephone", null, null, ValidatingType.notexist)
+                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid)
+                .submit("confirm", controller::addSubAdmin)
+                .master("master.adminAccount");
+
+        //menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "finduser")
+                //.submit("username", name -> name.length() > 3, ValidatingType.invalid, controller::findUser)
+                //.master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "confirmFreezeUser")
+                .submit("username", controller::confirmFreezeUser)
+                .master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeAllUser")
+                .submit("confirm", controller::confirmFreezeAllUser)
+                .master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 5, "confirmUnFreezeUser")
+                .submit("username", controller::confirmUnFreezeUser)
+                .master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 6, "confirmUnFreezeAllUser")
+                .submit("confirm", controller::confirmUnFreezeAllUser)
+                .master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 7, "confirmAddItem")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .submit("confirm", controller::confirmAddItemRequest)
+                .master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 8, "confirmAddItemAUser")
+                .submit("username", controller::confirmAddAllItemRequestForAUser)
+                .master("master.adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 9, "confirmAddAllUser")
+                .submit("confirm", controller::confirmAddAllItemRequest)
+                .master("master.adminAccount");
 
         menuBuilder.construct("master.adminAccount", true);
     }

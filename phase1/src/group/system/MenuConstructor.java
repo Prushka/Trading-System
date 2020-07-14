@@ -6,6 +6,7 @@ import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.processor.PasswordEncrypt;
 import group.menu.validator.EnumValidator;
+import group.menu.validator.RepositoryIdValidator;
 import group.notification.SupportTicket;
 import group.trade.Trade;
 import group.user.AdministrativeUser;
@@ -44,7 +45,7 @@ public class MenuConstructor {
                 .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account",false); // this one should be the root, but many things are unimplemented
+        menuBuilder.construct("master.support.trade",true); // this one should be the root, but many things are unimplemented
         // You have to call construct before creating a new master option node.
 
         /* Menu Structure:
@@ -71,28 +72,17 @@ public class MenuConstructor {
          */
     }
 
-    public void adminUser(AdministrativeUserController controller) {
+    public void AdminUser(UserController controller) {
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 1)
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
-                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
-                .input("password", password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::loginAdminUser)
-                .master("master.adminaccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2,"addSunadmin")
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3,"addSunadmin")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email",null,null,ValidatingType.invalid)
                 .input("telephone",null,null,ValidatingType.notexist)
                 .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid)
                 .submit("confirm", controller::addSubAdmin)
-                .master("master.adminaccount");
-
-        menuBuilder.construct("master.adminaccount",true);
+                .master("master.account");
 
     }
-
-
 
     public void supportTicket(SupportTicketController controller) {
         menuBuilder.option(SupportTicket.class, OperationType.add, 1)
@@ -106,7 +96,6 @@ public class MenuConstructor {
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
                 .master("master.support.ticket");
 
-        // TODO: Change back to true
         menuBuilder.construct("master.support.ticket", false);
     }
 
@@ -114,8 +103,10 @@ public class MenuConstructor {
     public void supportTrade(TestTradeController controller){
         // grace notes: keys correspond to request keys, .master calls the next set of nodes
         menuBuilder.option(Trade.class, OperationType.add, 1)
-                .input("initiator", null, null,  ValidatingType.exists)
-                .input("respondent", null, null, ValidatingType.invalid)
+                .input("initiator", null, new RepositoryIdValidator(controller.personalUserRepository),
+                        ValidatingType.exists)
+                .input("respondent", null, new RepositoryIdValidator(controller.personalUserRepository),
+                        ValidatingType.invalid)
                 .input("lendingItem", null, null, ValidatingType.invalid)
                 .input("borrowingItem", null, null, ValidatingType.invalid)
                 .input("isPermanent", String::toLowerCase, null, ValidatingType.invalid)
@@ -125,28 +116,36 @@ public class MenuConstructor {
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 2, "Date/Time")
-                .input("tradeID", null, controller::ifTradeExist, ValidatingType.exists)
-                .input("editingUser", null, null, ValidatingType.invalid)
+                .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
+                        ValidatingType.exists)
+                .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
+                        ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingDateAndTime)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.edit, 3, "Location")
-                .input("tradeID", null, controller::ifTradeExist, ValidatingType.exists)
-                .input("editingUser", null, null, ValidatingType.invalid)
+                .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
+                        ValidatingType.exists)
+                .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
+                        ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingLocation)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.verification, 4, "Open")
-                .input("tradeID", null, controller::ifTradeExist, ValidatingType.exists)
-                .input("editingUser", null, null, ValidatingType.invalid)
+                .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
+                        ValidatingType.exists)
+                .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
+                        ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeOpen)
                 .master("master.support.trade");
 
         menuBuilder.option(Trade.class, OperationType.verification, 5, "Complete")
-                .input("tradeID", null, controller::ifTradeExist, ValidatingType.exists)
-                .input("editingUser", null, null, ValidatingType.invalid)
+                .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
+                        ValidatingType.exists)
+                .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
+                        ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeComplete)
                 .master("master.support.trade");
 

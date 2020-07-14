@@ -5,8 +5,7 @@ import java.util.regex.Pattern;
 /**
  * The validator used to validate an email String
  *
- * @author GeeksforGeeks
- * @see <a href="https://www.geeksforgeeks.org/check-email-address-valid-not-java/">Check Email Address Valid</a>
+ * @author GeeksforGeeks - <a href="https://www.geeksforgeeks.org/check-email-address-valid-not-java/">Check Email Address Valid</a>
  */
 public class EmailValidator implements Validator {
 

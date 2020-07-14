@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Saves a bunch of savable objects on request
+ * Saves a bunch of savable objects on request.
+ * SaveHook is currently used in Shutdownable object.
  *
  * @author Dan Lyu
  */

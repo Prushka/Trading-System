@@ -12,12 +12,13 @@ import java.io.PrintWriter;
 import java.util.*;
 
 /**
- * A step builder class to build different menu nodes in order.
- *
  * @author Dan Lyu
  */
 public class MenuBuilder {
 
+    /**
+     * The option node builder step to build an option node and its children.
+     */
     public class OptionNodeBuilder {
         private final Class<?> clazz;
         private final OperationType type;
@@ -78,6 +79,9 @@ public class MenuBuilder {
             return String.format("%s.%s%s", nodeType, type, clazzSimple);
         }
 
+        /**
+         * The submit node builder step to build a submit node and to fill its master node pool using identifiers.
+         */
         public class SubmitNodeBuilder {
 
             private final List<String> flexibleMasterPlaceHolder = new ArrayList<>();
@@ -99,6 +103,10 @@ public class MenuBuilder {
         }
     }
 
+    /**
+     * The place where a global persistent request object is instantiated.<p>
+     * This is the only place where a persistent request object should be instantiated.
+     */
     final PersistentRequest persistentRequest = new PersistentRequest();
 
     public enum OperationType {
@@ -112,7 +120,6 @@ public class MenuBuilder {
     public enum ValidatingType {
         invalid, exists, notexist
     }
-
 
     private final Map<String, OptionNodeBuilder> optionNodePoolCache = new HashMap<>();
 

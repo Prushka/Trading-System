@@ -12,7 +12,9 @@ import java.io.PrintWriter;
 import java.util.*;
 
 /**
- * @author DanLyu
+ * A step builder class to build different menu nodes in order.
+ *
+ * @author Dan Lyu
  */
 public class MenuBuilder {
 

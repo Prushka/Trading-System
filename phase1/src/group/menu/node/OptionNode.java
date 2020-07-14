@@ -3,8 +3,8 @@ package group.menu.node;
 import java.util.logging.Level;
 
 /**
- * The node that contains single option information.
- * This node does not accept input and displays nothing on its own.
+ * The node that contains single option information.<p>
+ * This node does not accept input and displays nothing on its own.<p>
  * This node will display option only when {@link MasterOptionNode} asks it to.
  *
  * @author Dan Lyu

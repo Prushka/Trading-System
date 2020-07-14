@@ -12,10 +12,8 @@ import java.time.LocalDateTime;
 
 public class TestTradeController {
     private final TradeManager tradeManager;
-    private final Repository<Trade> tradeRepository;
-    private final Repository<PersonalUser> personalUserRepository;
-    private final TradeProperties tradeProperties;
-
+    final Repository<Trade> tradeRepository;
+    final Repository<PersonalUser> personalUserRepository;
 
     /**
      * Takes Requests from a User and turns it into information that can be used by TradeManager
@@ -24,7 +22,7 @@ public class TestTradeController {
     public TestTradeController(ControllerDispatcher dispatcher){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
-        tradeProperties = dispatcher.tradeProperties;
+        final TradeProperties tradeProperties = dispatcher.tradeProperties;
         tradeManager = new TradeManager(tradeRepository, personalUserRepository, tradeProperties);
         dispatcher.menuConstructor.supportTrade(this);
     }
@@ -70,11 +68,4 @@ public class TestTradeController {
         return tradeManager.confirmTradeComplete(tradeID, editingUser);
     }
 
-    public boolean ifTradeExist(String input) {
-        return tradeRepository.ifExists(Long.valueOf(input));
-    }
-
-    public boolean ifUserExist(String input) {
-        return personalUserRepository.ifExists(Long.valueOf(input));
-    }
 }

@@ -3,7 +3,7 @@ package group.menu.node;
 import java.util.Comparator;
 
 /**
- * The class used to compare OptionNode's id
+ * The class used to compare OptionNode's id.
  *
  * @author Dan Lyu
  */

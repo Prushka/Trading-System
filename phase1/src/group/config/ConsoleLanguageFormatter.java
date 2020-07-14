@@ -11,8 +11,7 @@ import java.util.logging.LogRecord;
  * The formatter used to log information using LanguageProperties and ansiColor.
  *
  * @author Dan Lyu
- * @author shakram02 - print color in console
- * @see <a href="https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println">print color in console</a>
+ * @author shakram02 - <a href="https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println">print color in console</a>
  */
 public class ConsoleLanguageFormatter extends Formatter {
 

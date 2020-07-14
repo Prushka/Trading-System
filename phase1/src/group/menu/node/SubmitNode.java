@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * A node that generates Request using parent Nodes, accepts input and will generate a ResponseNode after parsing Request.
+ * A node that generates Request using parent Nodes, and will further generate a ResponseNode after parsing Request using an injected {@link RequestHandler}.<p>
+ * This node accepts input and displays on its own.
  *
  * @author Dan Lyu
  * @see InputNode

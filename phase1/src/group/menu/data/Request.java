@@ -122,4 +122,11 @@ public class Request {
     public void setPersistentRequest(PersistentRequest persistentRequest) {
         this.persistentRequest = persistentRequest;
     }
+
+    /**
+     * @return the global persistent request
+     */
+    public PersistentRequest getPersistentRequest() {
+        return persistentRequest;
+    }
 }

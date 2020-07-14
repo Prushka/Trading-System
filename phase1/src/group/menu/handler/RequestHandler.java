@@ -14,6 +14,8 @@ import group.menu.data.Response;
 public interface RequestHandler {
 
     /**
+     * Returns a Response object from a Request object after parsing it
+     *
      * @param request the Request object to be parsed
      * @return the expected Response object
      */

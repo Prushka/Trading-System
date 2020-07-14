@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * The Node that handles user input.
+ * The Node that handles user input.<p>
+ * This node accepts input and displays on its own.
  *
  * @author Dan Lyu
  */

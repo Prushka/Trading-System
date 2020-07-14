@@ -80,6 +80,28 @@ public class MenuConstructor {
 
     }
 
+    public void adminUser(AdministrativeUserController controller) {
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 1)
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .input("password", password -> password.length() > 8, ValidatingType.invalid)
+                .submit("confirm", controller::loginAdminUser)
+                .master("master.adminaccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "addSunadmin")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .input("email", null, null, ValidatingType.invalid)
+                .input("telephone", null, null, ValidatingType.notexist)
+                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid)
+                .submit("confirm", controller::addSubAdmin)
+                .master("master.adminaccount");
+
+        menuBuilder.construct("master.adminaccount", true);
+    }
+
+
+
     public void supportTicket(SupportTicketController controller) {
         menuBuilder.option(SupportTicket.class, OperationType.add, 1)
                 .input("content", controller::ifTicketContentNotExist, ValidatingType.exists)

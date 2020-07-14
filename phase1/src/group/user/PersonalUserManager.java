@@ -57,12 +57,14 @@ public class PersonalUserManager {
         return false;
     }
 
-    //public void addItemRequest(PersonalUser user, Long item){
-        //user.getAddItemRequest().add(item);
-    //}
+    public Response requestToAddItemToInventory(PersonalUser user, Long item){
+        user.addItemToAddToInventoryRequest(item);
+        return new Response.Builder(true).translatable("success.request.addItem").build();
+    }
 
-    public void addUnfreezeRequest(PersonalUser user){
-        //TODO implement repo or list??
+    public Response UnfreezeRequest(PersonalUser user){
+        user.setRequestToUnfreeze(true);
+        return new Response.Builder(true).translatable("success.request.unfreeze").build();
     }
 
 

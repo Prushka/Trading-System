@@ -5,6 +5,7 @@ import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.processor.PasswordEncryption;
+import group.menu.validator.DateValidator;
 import group.menu.validator.EnumValidator;
 import group.menu.validator.RepositoryIdValidator;
 import group.notification.SupportTicket;
@@ -96,7 +97,7 @@ public class MenuConstructor {
                 .input("lendingItem", null, null, ValidatingType.invalid)
                 .input("borrowingItem", null, null, ValidatingType.invalid)
                 .input("isPermanent", String::toLowerCase, null, ValidatingType.invalid)
-                .input("dateAndTime", String::toUpperCase, null, ValidatingType.invalid)
+                .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::addTrade)
                 .master("master.support.trade");
@@ -106,7 +107,7 @@ public class MenuConstructor {
                         ValidatingType.exists)
                 .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.invalid)
-                .input("dateAndTime", String::toUpperCase, null, ValidatingType.invalid)
+                .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingDateAndTime)
                 .master("master.support.trade");
 

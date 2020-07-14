@@ -1,9 +1,11 @@
 package group.system;
 
+import group.item.ItemManager;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.repository.Repository;
 import group.user.*;
+import group.item.Item;
 
 import java.util.Iterator;
 
@@ -11,13 +13,17 @@ public class UserController {
 
     private final Repository<PersonalUser> personalRepo;
     private final Repository<AdministrativeUser> adminRepo;
+    private final Repository<Item> itemRepo;
     private final PersonalUserManager personalUserManager;
+    private final ItemManager itemManager;
     private PersonalUser currUser;
 
     public UserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
+        itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
+        itemManager = new ItemManager(itemRepo);
         dispatcher.menuConstructor.user(this);
     }
 
@@ -38,6 +44,8 @@ public class UserController {
 
     public Response removeItemFromInventory(Request request){
         Long item = request.getLong("itemname");
+        Item itemEntity = itemManager.findItemByUid(item);
+        itemManager.remove(itemEntity);
         return personalUserManager.removeItemFromInventory(currUser, item);
     }
 

@@ -2,16 +2,23 @@ package group.item;
 
 import group.notification.SupportTicket;
 import group.repository.UniqueId;
+import group.repository.reflection.CSVMappable;
+import group.repository.reflection.MappableBase;
 import group.user.PersonalUser;
 
+import java.util.List;
 import java.util.Objects;
 
-public class Item implements UniqueId {
+public class Item extends MappableBase implements CSVMappable, UniqueId {
 
     private Long uid;
     private PersonalUser owner;
     private String name;
     private String description;
+
+    public Item(List<String> record) {
+        super(record);
+    }
 
     public Item(PersonalUser owner, String name, String description){
         this.owner = owner;

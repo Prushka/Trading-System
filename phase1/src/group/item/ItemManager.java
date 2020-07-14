@@ -1,14 +1,14 @@
-package group.inventory;
+package group.item;
 
 import group.item.Item;
 import group.menu.data.Response;
-//import group.repository.Repository;
-import java.util.ArrayList;
+import group.repository.Repository;
+// import java.util.ArrayList;
 
 public class ItemManager {
-    private ArrayList<Item> items;
+    private Repository<Item> items;
 
-    public ItemManager(ArrayList<Item> items) {
+    public ItemManager(Repository<Item> items) {
         this.items = items;
     }
 
@@ -22,6 +22,11 @@ public class ItemManager {
         return new Response.Builder(true).translatable("itemRemove").build();
     }
 
+    public Item findItemByUid(Long uid) {
+        return items.get(uid);
+    }
+
+    /*
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -30,5 +35,6 @@ public class ItemManager {
         }
         return stringBuilder.toString();
     }
+     */
 
 }

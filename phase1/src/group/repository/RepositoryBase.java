@@ -23,7 +23,7 @@ public abstract class RepositoryBase<T extends UniqueId> implements RepositorySa
     /**
      * The file object this Repository reads to and saves from
      */
-    File file;
+    final File file;
 
     /**
      * @param path     the path to the file

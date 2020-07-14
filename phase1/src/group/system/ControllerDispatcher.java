@@ -7,6 +7,7 @@ import group.repository.Repository;
 import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
+import group.item.Item;
 
 public class ControllerDispatcher implements Shutdownable {
 
@@ -14,6 +15,7 @@ public class ControllerDispatcher implements Shutdownable {
     Repository<PersonalUser> personalUserRepository;
     Repository<AdministrativeUser> adminUserRepository;
     Repository<Trade> tradeRepository;
+    Repository<Item> itemRepository;
 
     SupportTicketController supportTicketController;
     UserController userController;
@@ -48,6 +50,7 @@ public class ControllerDispatcher implements Shutdownable {
         personalUserRepository = new CSVRepository<>("data/personal_user.csv", PersonalUser::new, saveHook);
         adminUserRepository = new CSVRepository<>("data/admin_user.csv", AdministrativeUser::new, saveHook);
         tradeRepository = new CSVRepository<>("data/trade.csv", Trade::new, saveHook);
+        itemRepository = new CSVRepository<>("data/item.csv", Item::new, saveHook);
     }
 
     public void createProperties() {

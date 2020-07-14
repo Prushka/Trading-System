@@ -61,7 +61,7 @@ public class PersonalUserManager {
 
     public Response requestToAddItemToInventory(PersonalUser user, Long item){
         user.addItemToAddToInventoryRequest(item);
-        return new Response.Builder(true).translatable("success.request.addItem").build();
+        return new Response.Builder(true).translatable("success.request.addItem").build(); // this one
     }
 
     public Response UnfreezeRequest(PersonalUser user){

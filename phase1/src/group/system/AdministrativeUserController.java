@@ -6,6 +6,7 @@ import group.repository.Repository;
 import group.user.AdministrativeManager;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
+import group.item.ItemManager;
 
 import java.util.Iterator;
 
@@ -93,6 +94,8 @@ public class AdministrativeUserController {
         String username = request.get("username");
         Long item = request.getLong("item");
         PersonalUser user = administrativeManager.findUser(username);
+        // Item itemEntity = itemManager.get(item);
+        // itemManager.add(itemEntity)
         return administrativeManager.confirmAddItemRequest(user, item);
     }
 
@@ -100,6 +103,8 @@ public class AdministrativeUserController {
         String username = request.get("username");
         Long item = request.getLong("item");
         PersonalUser user = administrativeManager.findUser(username);
+        // Item itemEntity = itemManager.get(item);
+        // itemManager.remove(itemEntity)
         return administrativeManager.removeUserItem(user, item);
     }
 

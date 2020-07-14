@@ -9,7 +9,8 @@ import group.menu.validator.Validator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A class to build different menu nodes in order. This class contains inner classes for different steps needed to build a menu using nodes.<p>
@@ -203,7 +204,7 @@ public class MenuBuilder {
          */
         public class SubmitNodeBuilder {
 
-            private final List<String> flexibleMasterPlaceHolder = new ArrayList<>();
+            private final MasterOptionNodePool masterOptionNodePool;
 
             private final SubmitNode submitNode;
 
@@ -213,10 +214,11 @@ public class MenuBuilder {
                         .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
                 currentNode.setChild(submitNode);
                 this.submitNode = submitNode;
+                masterOptionNodePool = new MasterOptionNodePool();
             }
 
-            public void master(String... masterIdentifier) {
-                flexibleMasterPlaceHolder.addAll(Arrays.asList(masterIdentifier));
+            public void master(String... masterIdentifiers) {
+                masterOptionNodePool.addPlaceholder(masterIdentifiers);
             }
         }
     }
@@ -277,13 +279,8 @@ public class MenuBuilder {
 
     public MasterOptionNode constructFinal() {
         for (OptionNodeBuilder optionNodeBuilder : optionNodePool.values()) {
-            List<String> placeHolders = optionNodeBuilder.submitNodeBuilder.flexibleMasterPlaceHolder;
-            if (placeHolders.size() == 0) continue;
             SubmitNode submitNode = optionNodeBuilder.submitNodeBuilder.submitNode;
-            // submitNode.setChild(masters.get(placeHolders.get(0)));
-            for (String placeHolder : placeHolders) {
-                submitNode.fillMasterPool(masters.get(placeHolder));
-            }
+            optionNodeBuilder.submitNodeBuilder.masterOptionNodePool.feedMe(masters);
         }
         return entryNode;
     }

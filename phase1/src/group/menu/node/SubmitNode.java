@@ -1,12 +1,11 @@
 package group.menu.node;
 
+import group.menu.MasterOptionNodePool;
 import group.menu.data.PersistentRequest;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.menu.handler.RequestHandler;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -28,12 +27,8 @@ public class SubmitNode extends InputNode {
      */
     private final Node failedResultNode;
 
-    /**
-     * The map of {@link MasterOptionNode} to find a corresponding Node to the {@link Response#getNextMasterNodeIdentifier()}
-     * when a Response want the node to navigate to another {@link MasterOptionNode}. If a node is not specified and the SubmitNode has a
-     * null child, the first element in the pool will be used.
-     */
-    private final Map<String, MasterOptionNode> flexibleMasterPool = new LinkedHashMap<>();
+
+    private MasterOptionNodePool masterOptionNodePool;
 
     /**
      * The global persistent request object to be injected
@@ -93,29 +88,35 @@ public class SubmitNode extends InputNode {
      */
     private Node parseResponse(Response response) {
         ResponseNode responseNode = new ResponseNode.Builder(response).build();
+        Node realChild;
         if (response.getNextMasterNodeIdentifier() != null) {
-            responseNode.setChild(flexibleMasterPool.get(response.getNextMasterNodeIdentifier()));
+            realChild = masterOptionNodePool.getMasterOptionNode(response.getNextMasterNodeIdentifier());
         } else if (response.success()) {
-            responseNode.setChild(getChild());
+            realChild = getChild();
             if (response.getPersistentKey() != null) {
                 persistentRequest.addCachedRequest(response.getPersistentKey(), getRequest());
             }
         } else {
-            responseNode.setChild(failedResultNode);
+            realChild = failedResultNode;
         }
-        if (responseNode.getChild() == null) { // the next master node identifier doesn't exist in Response object, use the default one
-            responseNode.setChild(flexibleMasterPool.entrySet().iterator().next().getValue());
+        if (responseNode.getChild() == null) { // the next master node identifier doesn't exist in Response object, use the response success state and node from pool
+            if (response.success()) {
+                realChild = masterOptionNodePool.getSucceed();
+            } else {
+                realChild = masterOptionNodePool.getFailed();
+            }
         }
+        responseNode.setChild(realChild);
         return responseNode;
     }
 
     /**
      * Add a MasterOptionNode into current SubmitNode in case this MasterOptionNode will be used by a Response object to navigate to.
      *
-     * @param master the {@link MasterOptionNode}
+     * @param masterPool the {@link MasterOptionNodePool}
      */
-    public void fillMasterPool(MasterOptionNode master) {
-        flexibleMasterPool.put(master.getTranslatable(), master);
+    public void setMasterPool(MasterOptionNodePool masterPool) {
+        masterOptionNodePool = masterPool;
     }
 
     /**

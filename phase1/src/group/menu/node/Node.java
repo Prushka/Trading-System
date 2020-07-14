@@ -5,6 +5,7 @@ import group.config.FileHandlerFactory;
 import group.config.property.LanguageProperties;
 
 import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -23,7 +24,9 @@ public abstract class Node {
     static {
         LOGGER = Logger.getLogger(Node.class.getName());
         LOGGER.setUseParentHandlers(false);
+        LOGGER.setLevel(Level.ALL);
         ConsoleHandler handler = new ConsoleHandler();
+        handler.setLevel(Level.INFO);
         handler.setFormatter(new ConsoleColorFormatter(new LanguageProperties()));
         LOGGER.addHandler(new FileHandlerFactory().getFileHandler());
         LOGGER.addHandler(handler);

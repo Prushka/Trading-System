@@ -2,6 +2,8 @@ package group.config;
 
 import group.config.property.LanguageProperties;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +16,7 @@ import java.util.logging.LogRecord;
  * yyyy-MM-dd HH:mm:ss [ClassSimpleName] [LEVEL] (left padding) - message
  *
  * @author Dan Lyu
+ * @author print stacktrace from {@link LogRecord#getThrown()} - from {@link java.util.logging.SimpleFormatter}
  */
 public class FileFormatter extends LanguageFormatter {
 
@@ -50,11 +53,20 @@ public class FileFormatter extends LanguageFormatter {
     @Override
     public String format(LogRecord record) {
         String className = record.getSourceClassName();
-        String prefix = getDate() +
+        String result = getDate() +
                 " [" +
                 className.substring((className.lastIndexOf(".")) + 1) +
                 "]" + " [" + record.getLevel() + "] ";
-        prefix = String.format("%-" + 45 + "s", prefix);
-        return prefix + "- " + removeColor(applyLanguage(record)) + "\n";
+        result = String.format("%-" + 45 + "s", result);
+        result = result + "- " + removeColor(applyLanguage(record));
+        if (record.getThrown() != null) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            pw.println();
+            record.getThrown().printStackTrace(pw);
+            pw.close();
+            result += sw.toString();
+        }
+        return result + "\n";
     }
 }

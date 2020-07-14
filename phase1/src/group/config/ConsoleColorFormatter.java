@@ -40,6 +40,13 @@ public class ConsoleColorFormatter extends LanguageFormatter {
      */
     @Override
     public String format(LogRecord record) {
-        return applyColor(applyLanguage(record)) + ansiColor.get("{RESET}") + "\n";
+        String affix = "";
+        switch (record.getLevel().toString()) {
+            case "WARNING":
+            case "SEVERE":
+                affix = " The stacktrace can be found in the most recent .log file in log folder"; // replacing this with a log file name will have to use another static variable in FileHandlerFactory
+                break;
+        }
+        return applyColor(applyLanguage(record)) + ansiColor.get("{RESET}") + affix + "\n";
     }
 }

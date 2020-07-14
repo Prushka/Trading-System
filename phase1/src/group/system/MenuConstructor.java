@@ -90,7 +90,7 @@ public class MenuConstructor {
 
         menuBuilder.option(SupportTicket.class, OperationType.query, 2)
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
-                .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
+                ;
 
         menuBuilder.construct("master.support.ticket", true);
     }

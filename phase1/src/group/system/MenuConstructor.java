@@ -4,7 +4,7 @@ import group.menu.Menu;
 import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
-import group.menu.processor.PasswordEncrypt;
+import group.menu.processor.PasswordEncryption;
 import group.menu.validator.EnumValidator;
 import group.menu.validator.RepositoryIdValidator;
 import group.notification.SupportTicket;
@@ -42,9 +42,9 @@ public class MenuConstructor {
 
         menuBuilder.option(User.class, OperationType.add, 2)
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email",null,null,ValidatingType.invalid)
-                .input("telephone",null,null,ValidatingType.invalid)
-                .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
+                .input("email", null, null, ValidatingType.invalid)
+                .input("telephone", null, null, ValidatingType.invalid)
+                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
                 .submit("confirm", controller::registerUser)
                 .master("master.account");
@@ -60,13 +60,13 @@ public class MenuConstructor {
 
     public void AdminUser(UserController controller) {
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3,"addSunadmin")
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "addSunadmin")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email",null,null,ValidatingType.invalid)
-                .input("telephone",null,null,ValidatingType.notexist)
-                .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::addSubAdmin)
-                .master("master.account");
+                .input("email", null, null, ValidatingType.invalid)
+                .input("telephone", null, null, ValidatingType.notexist)
+                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid);
+        //.submit("confirm", controller::addSubAdmin)
+        //.master("master.account");
 
     }
 

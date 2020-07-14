@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * @author Adrian Stamin - <a href="https://stackoverflow.com/questions/6592010/encrypt-and-decrypt-a-password-in-java">crypt with md5</a>
  */
-public class PasswordEncrypt implements InputPreProcessor {
+public class PasswordEncryption implements InputPreProcessor {
     @Override
     public String process(String input) {
         try {

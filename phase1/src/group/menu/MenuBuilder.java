@@ -30,6 +30,7 @@ import java.util.*;
  * <p>
  * It is possible to build nodes without this builder and generate menu from those built nodes.<p>
  * The purpose of this builder is to simplify the node's builders' calls and the generation of language identifiers.<p>
+ * This builder prevents unrelated nodes to be chained by using different inner classes as steps.<p>
  * The identifiers may not be unified without the restriction of certain operation types. This builder also simplifies the operation to build a menu as a whole by chaining method calls.
  *
  * @author Dan Lyu

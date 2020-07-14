@@ -41,12 +41,38 @@ public class MenuBuilder {
      * The option node builder step to build an option node and its children.
      */
     public class OptionNodeBuilder {
+
+        /**
+         * The class this option node operates on, only to be used as an identifier
+         */
         private final Class<?> clazz;
+
+        /**
+         * the type of the operation
+         */
         private final OperationType type;
+
+        /**
+         * The root option node of this builder
+         */
         private final OptionNode optionNode;
+
+        /**
+         * The current node used to chain next nodes
+         */
         private Node currentNode;
+
+        /**
+         * The final SubmitNodeBuilder that ends this Builder
+         */
         private SubmitNodeBuilder submitNodeBuilder;
 
+        /**
+         * @param clazz The class this option node operates on, only to be used as an identifier
+         * @param type  the type of the operation
+         * @param id    the id of this option
+         * @param addon the addon String to be used in the language identifier
+         */
         public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, String addon) {
             this.clazz = clazz;
             this.type = type;
@@ -54,6 +80,15 @@ public class MenuBuilder {
             currentNode = optionNode;
         }
 
+        /**
+         * Returns the builder itself. Adds an input node that follows the previous node.
+         *
+         * @param key            the key of the input value
+         * @param processor      the processor used to pre-process user input
+         * @param validator      the validator used to validate user input
+         * @param validatingType the validating type to use if the validation fails
+         * @return the builder itself
+         */
         public OptionNodeBuilder input(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType) {
             String translatable = getTranslatable("input", key);
             InputNode inputNode = new InputNode.Builder(translatable, key)
@@ -63,35 +98,98 @@ public class MenuBuilder {
             return this;
         }
 
+        /**
+         * Overloads {@link #input(String, InputPreProcessor, Validator, ValidatingType)} with no input processor.
+         *
+         * @param key            the key of the input value
+         * @param validator      the validator used to validate user input
+         * @param validatingType the validating type to use if the validation fails
+         * @return the builder itself
+         */
         public OptionNodeBuilder input(String key, Validator validator, ValidatingType validatingType) {
             return this.input(key, null, validator, validatingType);
         }
 
+        /**
+         * Overloads {@link #input(String, Validator, ValidatingType)} method with an invalid validating type as default.
+         *
+         * @param key       the key of the input value
+         * @param validator the validator used to validate user input
+         * @return the builder itself
+         */
         public OptionNodeBuilder input(String key, Validator validator) {
-            return this.input(key, null, validator, ValidatingType.invalid);
+            return this.input(key, validator, ValidatingType.invalid);
         }
 
+        /**
+         * Overloads {@link #input(String, Validator)} with no validator.
+         *
+         * @param key the key of the input value
+         * @return the builder itself
+         */
         public OptionNodeBuilder input(String key) {
-            return this.input(key, null, null, ValidatingType.invalid);
+            return this.input(key, null);
         }
 
+        /**
+         * Returns a SubmitNodeBuilder. Will add a submit node that follows the previous node.
+         *
+         * @param key            the key of the input value
+         * @param processor      the processor used to pre-process user input
+         * @param validator      the validator used to validate user input
+         * @param validatingType the validating type to use if the validation fails
+         * @param requestHandler the handler to parse request and expect response
+         * @return a new SubmitNodeBuilder
+         */
         public SubmitNodeBuilder submit(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
             submitNodeBuilder = new SubmitNodeBuilder(key, processor, validator, validatingType, requestHandler);
             return submitNodeBuilder;
         }
 
+        /**
+         * Overloads {@link #submit(String, InputPreProcessor, Validator, ValidatingType, RequestHandler)} with no input processor.
+         *
+         * @param key            the key of the input value
+         * @param validator      the validator used to validate user input
+         * @param validatingType the validating type to use if the validation fails
+         * @param requestHandler the handler to parse request and expect response
+         * @return a new SubmitNodeBuilder
+         */
         public SubmitNodeBuilder submit(String key, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
             return this.submit(key, null, validator, validatingType, requestHandler);
         }
 
+        /**
+         * Overloads {@link #submit(String, Validator, ValidatingType, RequestHandler)} with invalid validating type as default.
+         *
+         * @param key            the key of the input value
+         * @param validator      the validator used to validate user input
+         * @param requestHandler the handler to parse request and expect response
+         * @return a new SubmitNodeBuilder
+         */
         public SubmitNodeBuilder submit(String key, Validator validator, RequestHandler requestHandler) {
             return this.submit(key, validator, ValidatingType.invalid, requestHandler);
         }
 
+        /**
+         * Overloads {@link #submit(String, Validator, RequestHandler)} with no validator.
+         *
+         * @param key            the key of the input value
+         * @param requestHandler the handler to parse request and expect response
+         * @return a new SubmitNodeBuilder
+         */
         public SubmitNodeBuilder submit(String key, RequestHandler requestHandler) {
             return this.submit(key, null, requestHandler);
         }
 
+        /**
+         * Returns a String identifier for language use.<p>
+         * The identifier will be nodeType.operationType.operatingClassSimpleName(with dot splitting all upper case letters)(.addon).
+         *
+         * @param nodeType The node's type (input / submit / invalid / option)
+         * @param addon    the addon String to be added, it is the key of input or the invalid type
+         * @return the String identifier for language
+         */
         private String getTranslatable(String nodeType, String addon) {
             String clazzSimple = clazz.getSimpleName().replaceAll("([A-Z])", ".$1").toLowerCase();
             if (addon.length() > 0) {

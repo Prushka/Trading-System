@@ -27,6 +27,20 @@ public class MasterOptionNodePool {
     MasterOptionNodePool() {
     }
 
+    void feedMe(Map<String, MasterOptionNode> masters) {
+        for (String placeHolder : placeholders) {
+            availableNodes.put(placeHolder, masters.get(placeHolder));
+        }
+        if (succeededPlaceHolder != null) {
+            succeeded = masters.get(succeededPlaceHolder);
+            availableNodes.put(succeededPlaceHolder, masters.get(succeededPlaceHolder));
+        }
+        if (failedPlaceHolder != null) {
+            failed = masters.get(failedPlaceHolder);
+            availableNodes.put(failedPlaceHolder, masters.get(failedPlaceHolder));
+        }
+    }
+
     public MasterOptionNode getFailed() {
         return failed;
     }
@@ -43,25 +57,12 @@ public class MasterOptionNodePool {
         this.failedPlaceHolder = failedPlaceHolder;
     }
 
-    MasterOptionNodePool addPlaceholder(String... nodes) {
+    void addPlaceholder(String... nodes) {
         placeholders.addAll(Arrays.asList(nodes));
-        return this;
     }
 
     public MasterOptionNode getMasterOptionNode(String key) {
         return availableNodes.get(key);
-    }
-
-    void feedMe(Map<String, MasterOptionNode> masters) {
-        for (String placeHolder : placeholders) {
-            availableNodes.put(placeHolder, masters.get(placeHolder));
-        }
-        if (succeededPlaceHolder != null) {
-            succeeded = masters.get(succeededPlaceHolder);
-        }
-        if (failedPlaceHolder != null) {
-            failed = masters.get(failedPlaceHolder);
-        }
     }
 
 }

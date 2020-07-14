@@ -2,6 +2,9 @@ package group.config;
 
 import group.config.property.LanguageProperties;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.logging.LogRecord;
 
@@ -12,11 +15,18 @@ import java.util.logging.LogRecord;
  */
 public class FileFormatter extends LanguageFormatter {
 
+    private final DateTimeFormatter dateTimeFormatter;
+
     /**
      * @param lang Language Properties that map the identifier to the text
      */
     public FileFormatter(LanguageProperties lang) {
         super(lang);
+
+        dateTimeFormatter =
+                DateTimeFormatter
+                        .ofPattern("yyyy-MM-dd HH:mm:ss ")
+                        .withZone(ZoneId.of("UTC-04:00"));
     }
 
 
@@ -27,19 +37,23 @@ public class FileFormatter extends LanguageFormatter {
         return message;
     }
 
+    private String getDate() {
+        return dateTimeFormatter.format(Instant.now());
+    }
+
     /**
      * @param record the record to log
      * @return the formatted String after applying language, parameters and ansiColor
      */
     @Override
     public String format(LogRecord record) {
-        String prefix = "";
+        StringBuilder prefix = new StringBuilder(getDate());
         switch (record.getLevel().toString()) {
             case "FINE":
             case "FINER":
             case "FINEST":
-                prefix = "[DEBUG] ";
+                prefix.append("[DEBUG] ");
         }
-        return prefix + removeColor(applyLanguage(record)) + "\n";
+        return prefix.toString() + removeColor(applyLanguage(record)) + "\n";
     }
 }

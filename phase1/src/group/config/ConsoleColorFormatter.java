@@ -40,13 +40,6 @@ public class ConsoleColorFormatter extends LanguageFormatter {
      */
     @Override
     public String format(LogRecord record) {
-        String prefix = "";
-        switch (record.getLevel().toString()) {
-            case "FINE":
-            case "FINER":
-            case "FINEST":
-                prefix = ansiColor.get("{BLACK}") + "[DEBUG] ";
-        }
-        return prefix + applyColor(applyLanguage(record)) + ansiColor.get("{RESET}") + "\n";
+        return applyColor(applyLanguage(record)) + ansiColor.get("{RESET}") + "\n";
     }
 }

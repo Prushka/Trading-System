@@ -7,7 +7,7 @@ import group.menu.data.Response;
 
 import java.time.LocalDateTime;
 
-// TODO: item skip
+// TODO: item skip, trade ID 0, enter = no next node
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;

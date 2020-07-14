@@ -8,7 +8,7 @@ public class AdministrativeUser extends User {
     private String email;
     private String telephone;
     private String password;
-    private boolean isHead;
+    private Boolean isHead;
 
     public AdministrativeUser(String userName, String email, String telephone, String password, boolean isHead) {
         super(userName, email, telephone, password);

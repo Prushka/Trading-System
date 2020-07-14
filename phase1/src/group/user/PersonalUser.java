@@ -9,13 +9,13 @@ public class PersonalUser extends User {
     private List<Long> wishlist;
     private List<Long> inventory;
     private List<Long> trades;
-    private boolean isFrozen;
-    private int lendCount;
-    private int borrowCount;
-    private int numTransactions;
+    private Boolean isFrozen;
+    private Integer lendCount;
+    private Integer borrowCount;
+    private Integer numTransactions;
     private Map<String, Integer> traderFrequency;
     private List<Long> addToInventoryRequest;
-    private boolean requestToUnfreeze;
+    private Boolean requestToUnfreeze;
 
     /**
      * Creates a PersonalUser with the given userName, email, telephone, password
@@ -89,7 +89,7 @@ public class PersonalUser extends User {
     }
 
     public boolean getAddToInventoryRequestIsNotEmpty(){
-        return addToInventoryRequest.isEmpty() == false;
+        return !addToInventoryRequest.isEmpty();
     }
 
     public void setRequestToUnfreeze(boolean state){

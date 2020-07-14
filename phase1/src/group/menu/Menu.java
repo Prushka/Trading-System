@@ -1,7 +1,6 @@
 package group.menu;
 
-import group.config.ConsoleLanguageFormatter;
-import group.config.property.LanguageProperties;
+import group.config.LoggerFactory;
 import group.menu.node.InputNode;
 import group.menu.node.MasterOptionNode;
 import group.menu.node.Node;
@@ -20,19 +19,11 @@ import java.util.logging.Logger;
 public class Menu {
 
     /**
-     * The logger to log information from the Menu
+     * The logger to log information from the Menu,
+     * instantiated using a single instance {@link java.util.logging.FileHandler} with Level.ALL
+     * and a {@link ConsoleHandler} with Level.INFO
      */
-    static Logger LOGGER; // consider using instance variable
-
-    static {
-        LOGGER = Logger.getLogger(Menu.class.getName());
-        LOGGER.setUseParentHandlers(false);
-        LOGGER.setLevel(Level.FINEST);
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setLevel(Level.FINEST);
-        handler.setFormatter(new ConsoleLanguageFormatter(new LanguageProperties()));
-        LOGGER.addHandler(handler);
-    }
+    static final Logger LOGGER = new LoggerFactory(Menu.class).getConfiguredLogger();
 
     /**
      * The current menu node where the user is at

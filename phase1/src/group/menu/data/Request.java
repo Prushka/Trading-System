@@ -17,13 +17,16 @@ public class Request {
     /**
      * The Request Map to hold the key and value in order
      */
-    Map<String, String> requestMap = new LinkedHashMap<>();
+    final Map<String, String> requestMap = new LinkedHashMap<>();
 
     /**
      * The timestamp when the Request is made
      */
     private long timeStamp;
 
+    /**
+     * The global persistent request object to be injected
+     */
     private PersistentRequest persistentRequest;
 
     /**

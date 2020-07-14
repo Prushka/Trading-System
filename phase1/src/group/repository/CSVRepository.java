@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
 
 /**
  * The CSV implementation of storing and reading the list of entities to and from CSV files.
@@ -24,7 +25,7 @@ import java.util.Scanner;
 public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryBase<T> {
 
     /**
-     * The factory used to instantiate a mappable object.
+     * The factory used to instantiate a mappable object using fixed parameter <code>List</code>.
      */
     private final EntityMappingFactory<T> factory;
 
@@ -54,7 +55,7 @@ public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryB
         try {
             scanner = new Scanner(new FileInputStream(file.getPath()));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "The file couldn't be found: " + file.getName(), e);
         }
         assert scanner != null;
         scanner.nextLine(); // skip header
@@ -107,7 +108,7 @@ public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryB
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Something went wrong when trying to save the file: " + file.getName(), e);
         }
     }
 }

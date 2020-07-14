@@ -14,6 +14,7 @@ public class AdministrativeUserController {
     private final Repository<PersonalUser> personalRepo;
     private final Repository<AdministrativeUser> adminRepo;
     private final AdministrativeManager administrativeManager;
+    private AdministrativeUser currAdmin;
 
     public AdministrativeUserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
@@ -27,6 +28,7 @@ public class AdministrativeUserController {
     public Response loginAdminUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");
+        currAdmin = administrativeManager.getCurrAdmin(username, password);
         return administrativeManager.verifyLogin(username, password);
     }
 
@@ -40,18 +42,65 @@ public class AdministrativeUserController {
     }
 
     public Response addSubAdmin(Request request){
-        AdministrativeUser curradmin = administrativeManager.getCurrAdmin();
         String username = request.get("username");
         String email = request.get("email");
         String telephone = request.get("telephone");
         String password = request.get("password");
         //boolean isHead = request.getBoolean("isHead");
-        return administrativeManager.addSubAdmin(curradmin, username, email, telephone, password);
+        return administrativeManager.addSubAdmin(currAdmin, username, email, telephone, password);
     }
 
-    public Iterator<PersonalUser> freezeUser(Request request){
+    public Iterator<PersonalUser> getfreezeUserlist(Request request){
         return administrativeManager.getListUserShouldBeFreezed();
     }
+
+    public PersonalUser findUser(Request request){
+        String username = request.get("username");
+        return administrativeManager.findUser(username);
+    }
+
+    public Response confirmFreezeUser(Request request){
+        String username = request.get("username");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.confirmFreezeUser(user);
+
+    }
+
+    public Response confirmFreezeAllUser(Request request){
+        return administrativeManager.confirmFreezeAllUser();
+
+    }
+
+    public Response confirmUnFreezeUser(Request request){
+        String username = request.get("username");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.confirmUnfreezeUser(user);
+    }
+
+    public Response confirmUnFreezeAllUser(Request request){
+        return administrativeManager.confirmUnfreezeAllUser();
+
+    }
+
+    public Response confirmAddAllItemRequestForAUser(Request request){
+        String username = request.get("username");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.confirmAddAllItemRequestForAUser(user);
+    }
+
+    public Response confirmAddAllItemRequest(Request request){
+        return administrativeManager.confirmAddAllItemRequest();
+    }
+
+    public Response confirmAddItemRequest(Request request){
+        String username = request.get("username");
+        Long item = request.getLong("item");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.confirmAddItemRequest(user, item);
+    }
+
+
+
 
 
 }

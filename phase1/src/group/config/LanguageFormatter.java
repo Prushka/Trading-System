@@ -8,17 +8,17 @@ import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
 /**
- * The formatter used to log information using LanguageProperties and ansiColor.
+ * The abstract formatter used to log information using LanguageProperties.
  *
  * @author Dan Lyu
- * @author shakram02 - <a href="https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println">print color in console</a>
  */
-public class ConsoleLanguageFormatter extends Formatter {
+abstract class LanguageFormatter extends Formatter {
 
     /**
-     * The map of String identifier to AnsiColor
+     * The map of String identifier to AnsiColor.<p>
+     * They are here so that subclasses can either remove them or apply them.
      */
-    private final Map<String, String> ansiColor = new HashMap<String, String>() {{
+    final Map<String, String> ansiColor = new HashMap<String, String>() {{
         put("{RESET}", "\u001B[0m");
         put("{BLACK}", "\u001B[30m");
         put("{RED}", "\u001B[31m");
@@ -72,39 +72,18 @@ public class ConsoleLanguageFormatter extends Formatter {
     private final LanguageProperties lang;
 
     /**
-     * @param lang Language Properties that predefines the identifier to the text
+     * @param lang Language Properties that map the identifier to the text
      */
-    public ConsoleLanguageFormatter(LanguageProperties lang) {
+    LanguageFormatter(LanguageProperties lang) {
         this.lang = lang;
     }
 
     /**
-     * Applies ansi color
-     *
-     * @param message the raw message to format
-     * @return the formatted message
+     * @param record the LogRecord
+     * @return the formatted String after applying language and parameters
      */
-    public String formatColor(String message) {
-        message = "{BLACK}" + message;
-        for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
-            message = message.replace(entry.getKey(), entry.getValue());
-        }
-        return message;
+    String applyLanguage(LogRecord record) {
+        return lang.getMessage(record.getMessage(), record.getParameters());
     }
 
-    /**
-     * @param record the record to log
-     * @return the formatted String after applying language, parameters and ansiColor
-     */
-    @Override
-    public String format(LogRecord record) {
-        String prefix = "";
-        switch (record.getLevel().toString()) {
-            case "FINE":
-            case "FINER":
-            case "FINEST":
-                prefix = ansiColor.get("{BLACK}") + "[DEBUG] ";
-        }
-        return prefix + formatColor(lang.getMessage(record.getMessage(), record.getParameters())) + ansiColor.get("{RESET}") + "\n";
-    }
 }

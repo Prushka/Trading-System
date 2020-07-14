@@ -3,30 +3,23 @@ package group.config.property;
 import group.system.SaveHook;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
- * The Trade Property. The trade.properties file will be saved from resources to config by default.
- * File trade.properties is predefined in the resources root.
+ * The class for all trade properties. The trade.properties file will be saved from resources to config by default.<p>
+ * File trade.properties is predefined in the resources root.<p>
  *
  * @author Dan Lyu
  */
 public class TradeProperties extends Property {
 
     /**
-     * Constructs a TradeProperties object and save the file from resources root to the destination file.
+     * Constructs a TradeProperties object and save the file from resources root to the destination file.<p>
+     * Then the saveHook will manage the save process of the {@link #properties}.
      *
      * @param saveHook the properties will be saved by a saveHook
      */
     public TradeProperties(SaveHook saveHook) {
-        try {
-            saveDefault();
-            properties.load(new FileInputStream(getFile()));
-            saveHook.addSavable(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        super(saveHook);
     }
 
     /**

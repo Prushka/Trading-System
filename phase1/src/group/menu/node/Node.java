@@ -1,9 +1,7 @@
 package group.menu.node;
 
-import group.config.ConsoleLanguageFormatter;
-import group.config.property.LanguageProperties;
+import group.config.LoggerFactory;
 
-import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
 
 /**
@@ -17,15 +15,7 @@ public abstract class Node {
     /**
      * The logger to log information from the Node
      */
-    static Logger LOGGER;
-
-    static {
-        LOGGER = Logger.getLogger(Node.class.getName());
-        LOGGER.setUseParentHandlers(false);
-        ConsoleHandler handler = new ConsoleHandler();
-        handler.setFormatter(new ConsoleLanguageFormatter(new LanguageProperties()));
-        LOGGER.addHandler(handler);
-    }
+    static final Logger LOGGER = new LoggerFactory(Node.class).getConfiguredLogger();
 
     /**
      * The child node

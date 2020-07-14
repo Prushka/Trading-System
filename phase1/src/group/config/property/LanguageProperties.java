@@ -2,6 +2,7 @@ package group.config.property;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * The Language Property. The language.properties file will not be saved from resources to config by default.
@@ -18,7 +19,7 @@ public class LanguageProperties extends Property {
         try {
             properties.load(getResource());
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Cannot initialize the property!", e);
         }
     }
 

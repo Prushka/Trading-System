@@ -2,7 +2,7 @@ package group.repository;
 
 /**
  * A functional interface used to filter result.
- * Use this in lambda or implement a concrete class.
+ * Use this in lambda, anonymous inner class or implement a concrete class.
  * This will be used by {@link RepositoryIterator} to filter through the list
  *
  * @param <T> The entity to be matched

@@ -5,6 +5,7 @@ import group.system.SaveHook;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * The Serialization implementation of storing and reading the list of entities to and from ser files.
@@ -44,7 +45,7 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
             data = (List<T>) input.readObject();
             input.close();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Something went wrong when trying to read: " + file.getName(), e);
         }
     }
 
@@ -70,7 +71,7 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
             output.writeObject(data);
             output.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Something went wrong when trying to save: " + file.getName(), e);
         }
     }
 

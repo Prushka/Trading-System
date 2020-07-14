@@ -1,5 +1,7 @@
 package group.repository.reflection;
 
+import group.config.LoggerFactory;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -8,27 +10,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
  * The reflection implementation of {@link CSVMappable}.<p>
  * Contains a constructor that takes in a CSV representation String.<p>
  * Subclasses are required to have a sub-constructor corresponding to <code>MappableBase(List data)</code><p>
- * This reflection implementation has limits on certain classes.<p>
- * Use only non-final List, Long, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
+ * This reflection implementation has limits on certain classes,
+ * use only non-final List, Long, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
  * To allow more more flexibility, implement {@link CSVMappable} directly in the entity class.
  *
  * @author Dan Lyu
- * @author Bozho - "instantiating an enum using reflection"
- * @author BalusC - "Get generic type of java.util.List"
+ * @author Bozho - <a href="https://stackoverflow.com/questions/3735927/java-instantiating-an-enum-using-reflection">Instantiating an enum using reflection</a>
+ * @author BalusC - <a href="https://stackoverflow.com/questions/1942644/get-generic-type-of-java-util-list">Get generic type of java.util.List</a>
  * @see CSVMappable
- * @see <a href="https://stackoverflow.com/questions/3735927/java-instantiating-an-enum-using-reflection">Instantiating an enum using reflection</a>
- * @see <a href="https://stackoverflow.com/questions/10638826/java-reflection-impact-of-setaccessibletrue">Impact of setAccessible(true)</a>
- * @see <a href="https://stackoverflow.com/questions/1942644/get-generic-type-of-java-util-list">Get generic type of java.util.List</a>
  */
 
 @SuppressWarnings("unchecked")
 public abstract class MappableBase {
+
+    static final Logger LOGGER = new LoggerFactory(MappableBase.class).getConfiguredLogger();
 
     /**
      * The empty constructor used to make sure that extending
@@ -67,7 +70,7 @@ public abstract class MappableBase {
                 field.set(this, obj);
                 id++;
             } catch (IllegalAccessException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
-                e.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Some error occurred in reflection when instantiating an object from CSV record.", e);
             }
         }
     }
@@ -157,8 +160,6 @@ public abstract class MappableBase {
     /**
      * @param clazz the class to exam for fields
      * @return the sorted and non-transient fields of the class
-     * @see <a href="https://stackoverflow.com/questions/1097807/java-reflection-is-the-order-of-class-fields-and-methods-standardized">Field Order in Reflection</a>
-     * @see FieldComparator
      */
     private List<Field> getSortedFields(Class<?> clazz) {
         return Arrays
@@ -210,9 +211,8 @@ public abstract class MappableBase {
                 }
                 value.append(",");
             } catch (IllegalAccessException | NullPointerException e) {
-                //TODO: implement better error handling
                 value.append("null");
-                e.printStackTrace();
+                LOGGER.log(Level.WARNING, "Field " + field.getName() + " cannot be mapped to a value!", e);
             }
         }
         return value.substring(0, value.length() - 1);

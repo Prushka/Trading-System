@@ -9,7 +9,7 @@ import java.util.List;
 
 public class User extends MappableBase implements CSVMappable, UniqueId {
 
-    private long uid;
+    private Long uid;
     private String userName;
     private String email;
     private String telephone;

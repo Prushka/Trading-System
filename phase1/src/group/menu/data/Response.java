@@ -13,14 +13,14 @@ public class Response {
     /**
      * <code>true</code> if the Request is successfully made
      */
-    private final boolean success;
+    private boolean success;
 
     /**
      * The persistent Request key.
      * If <code>success == true</code> and this key is not null,
      * the corresponding Request will be persistent.
      */
-    private final String persistentKey;
+    private String persistentKey;
 
     /**
      * A list of pairs of translatable Strings and parameters
@@ -72,10 +72,24 @@ public class Response {
     }
 
     /**
-     * @return the persistent key for the corresponding Request
+     * @return the persistent key for the corresponding Request to allow it to be persistent
      */
     public String getPersistentKey() {
         return persistentKey;
+    }
+
+    /**
+     * @param key the persistent key for the corresponding Request to allow it to be persistent
+     */
+    public void setPersistentKey(String key) {
+        this.persistentKey = key;
+    }
+
+    /**
+     * @param success the success state
+     */
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     /**

@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.logging.LogRecord;
 
 /**
- * The formatter used to log information using LanguageProperties into log Files.
+ * The formatter used to log information using LanguageProperties into log Files.<p>
+ * The logged record has following format:<p>
+ * yyyy-MM-dd HH:mm:ss [ClassSimpleName] [LEVEL] (left padding) - message
  *
  * @author Dan Lyu
  */
@@ -47,13 +49,12 @@ public class FileFormatter extends LanguageFormatter {
      */
     @Override
     public String format(LogRecord record) {
-        StringBuilder prefix = new StringBuilder(getDate());
-        switch (record.getLevel().toString()) {
-            case "FINE":
-            case "FINER":
-            case "FINEST":
-                prefix.append("[DEBUG] ");
-        }
-        return prefix.toString() + removeColor(applyLanguage(record)) + "\n";
+        String className = record.getSourceClassName();
+        String prefix = getDate() +
+                " [" +
+                className.substring((className.lastIndexOf(".")) + 1) +
+                "]" + " [" + record.getLevel() + "] ";
+        prefix = String.format("%-" + 45 + "s", prefix);
+        return prefix + "- " + removeColor(applyLanguage(record)) + "\n";
     }
 }

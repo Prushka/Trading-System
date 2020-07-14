@@ -55,16 +55,6 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.create.new").build();
     }
 
-
-    public boolean notifyAdmin(String input, PersonalUser p) { //TODO send the request to admin
-        if (input.equalsIgnoreCase("add")) {
-            //add a request to add item to the main inventory to the notification list.
-        } else if (input.equalsIgnoreCase("unfreeze")) {
-            //add a request to unfreeze the user's account to the notification list.
-        }
-        return false;
-    }
-
     public Response requestToAddItemToInventory(PersonalUser user, Long item){
         user.addItemToAddToInventoryRequest(item);
         return new Response.Builder(true).translatable("success.request.addItem").build();

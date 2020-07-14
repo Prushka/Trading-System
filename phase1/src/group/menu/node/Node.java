@@ -27,7 +27,6 @@ public abstract class Node {
         handler.setFormatter(new ConsoleColorFormatter(new LanguageProperties()));
         LOGGER.addHandler(new FileHandlerFactory().getFileHandler());
         LOGGER.addHandler(handler);
-
     }
 
     /**

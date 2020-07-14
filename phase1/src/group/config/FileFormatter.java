@@ -2,6 +2,7 @@ package group.config;
 
 import group.config.property.LanguageProperties;
 
+import java.util.Map;
 import java.util.logging.LogRecord;
 
 /**
@@ -18,6 +19,14 @@ public class FileFormatter extends LanguageFormatter {
         super(lang);
     }
 
+
+    private String removeColor(String message) {
+        for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
+            message = message.replace(entry.getKey(), "");
+        }
+        return message;
+    }
+
     /**
      * @param record the record to log
      * @return the formatted String after applying language, parameters and ansiColor
@@ -31,6 +40,6 @@ public class FileFormatter extends LanguageFormatter {
             case "FINEST":
                 prefix = "[DEBUG] ";
         }
-        return prefix + applyLanguage(record) + "\n";
+        return prefix + removeColor(applyLanguage(record)) + "\n";
     }
 }

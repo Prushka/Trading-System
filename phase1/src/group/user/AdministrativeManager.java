@@ -17,6 +17,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
     private AdministrativeUser currAdmin;
+    private PersonalUser currPersonalUser;
 
     public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
                                  Repository<PersonalUser> personalUserRepository){
@@ -25,7 +26,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
     }
 
-    public Response createadministrator(String username, String email, String telephone, String password, boolean isHead){
+    public Response createAdministrator(String username, String email, String telephone, String password, boolean isHead){
         AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
         administrators.add(admin);
         return new Response.Builder(true).translatable("success.create.new").build();
@@ -45,7 +46,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
 
     public Response addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
         if (head.getIsHead()){
-            createadministrator(username, email, telephone, password, false);
+            createAdministrator(username, email, telephone, password, false);
             return new Response.Builder(true).translatable("success.add.subadmin").build();
         } else{
             return new Response.Builder(false).translatable("failed.add.subadmin").build();
@@ -53,6 +54,10 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
     }
     public AdministrativeUser getCurrAdmin(){
         return currAdmin;
+    }
+
+    public PersonalUser getCurrPersonalUser(){
+        return currPersonalUser;
     }
 
     public Iterator<PersonalUser> getListUserShouldBeFreezed(){
@@ -76,15 +81,15 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         return true;
     }
 
-    public void confirmFreezeUser(PersonalUser user) {
-        freezeUser(user);
+    public void confirmFreezeCurrUser() {
+        freezeUser(currPersonalUser);
     }
 
     public void confirmFreezeAllUser(){
         while (needToFreezelist.hasNext()){
-            freezeUser(needToFreezelist.next());
+            currPersonalUser = needToFreezelist.next();
+            freezeUser(currPersonalUser);
         }
-
     }
 
     public int getTransactionLimit(){

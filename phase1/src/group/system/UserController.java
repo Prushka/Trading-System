@@ -6,6 +6,7 @@ import group.repository.Repository;
 import group.user.AdministrativeManager;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
+import group.user.PersonalUserManager;
 
 import java.util.Iterator;
 
@@ -13,12 +14,12 @@ public class UserController {
 
     private final Repository<PersonalUser> personalRepo;
     private final Repository<AdministrativeUser> adminRepo;
-    private final AdministrativeManager administrativeManager;
+    private final PersonalUserManager personalUserManager;
 
     public UserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
-        administrativeManager = new AdministrativeManager(adminRepo, personalRepo);
+        personalUserManager = new PersonalUserManager(personalRepo);
         dispatcher.menuConstructor.user(this);
     }
 
@@ -27,7 +28,7 @@ public class UserController {
     public Response loginUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");
-        return administrativeManager.verifyLogin(username, password);
+        return personalUserManager.verifyLogin(username, password);
     }
 
     public Response registerUser(Request request) {
@@ -35,22 +36,18 @@ public class UserController {
         String email = request.get("email");
         String telephone = request.get("telephone");
         String password = request.get("password");
-        boolean isHead = request.getBoolean("isHead");
-        return administrativeManager.createadministrator(username, email, telephone, password, isHead);
+        return personalUserManager.createPersonalUser(username, email, telephone, password);
     }
 
-    public Response addSubAdmin(Request request){
-        AdministrativeUser curradmin = administrativeManager.getCurrAdmin();
-        String username = request.get("username");
-        String email = request.get("email");
-        String telephone = request.get("telephone");
-        String password = request.get("password");
+    //public Response addSubAdmin(Request request){
+       // AdministrativeUser curradmin = administrativeManager.getCurrAdmin();
+        //String username = request.get("username");
+       // String email = request.get("email");
+        //String telephone = request.get("telephone");
+        //String password = request.get("password");
         //boolean isHead = request.getBoolean("isHead");
-        return administrativeManager.addSubAdmin(curradmin, username, email, telephone, password);
-    }
+        //return administrativeManager.addSubAdmin(curradmin, username, email, telephone, password);
+    //}
 
-    public Iterator<PersonalUser> freezeUser(Request request){
-        return administrativeManager.getListUserShouldBeFreezed();
-    }
 
 }

@@ -44,7 +44,7 @@ public class MenuConstructor {
                 .master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account",true); // this one should be the root, but many things are unimplemented
+        menuBuilder.construct("master.account",false); // this one should be the root, but many things are unimplemented
         // You have to call construct before creating a new master option node.
 
         /* Menu Structure:
@@ -71,17 +71,28 @@ public class MenuConstructor {
          */
     }
 
-    public void AdminUser(UserController controller) {
+    public void adminUser(AdministrativeUserController controller) {
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3,"addSunadmin")
+        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 1)
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .input("password", password -> password.length() > 8, ValidatingType.invalid)
+                .submit("confirm", controller::loginAdminUser)
+                .master("master.adminaccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2,"addSunadmin")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email",null,null,ValidatingType.invalid)
                 .input("telephone",null,null,ValidatingType.notexist)
                 .input("password", new PasswordEncrypt(), password -> password.length() > 8, ValidatingType.invalid)
                 .submit("confirm", controller::addSubAdmin)
-                .master("master.account");
+                .master("master.adminaccount");
+
+        menuBuilder.construct("master.adminaccount",true);
 
     }
+
+
 
     public void supportTicket(SupportTicketController controller) {
         menuBuilder.option(SupportTicket.class, OperationType.add, 1)

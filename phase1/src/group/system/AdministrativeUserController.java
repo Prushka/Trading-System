@@ -50,13 +50,13 @@ public class AdministrativeUserController {
         return administrativeManager.addSubAdmin(currAdmin, username, email, telephone, password);
     }
 
-    public Iterator<PersonalUser> getfreezeUserlist(Request request){
+    public Response getFreezeUserList(Request request){
         return administrativeManager.getListUserShouldBeFreezed();
     }
 
-    public PersonalUser findUser(Request request){
+    public Response findUserForAdmin(Request request){
         String username = request.get("username");
-        return administrativeManager.findUser(username);
+        return administrativeManager.findUserForAdmin(username);
     }
 
     public Response confirmFreezeUser(Request request){
@@ -77,7 +77,6 @@ public class AdministrativeUserController {
 
     public Response confirmUnFreezeAllUser(Request request){
         return administrativeManager.confirmUnfreezeAllUser();
-
     }
 
     public Response confirmAddAllItemRequestForAUser(Request request){
@@ -95,6 +94,13 @@ public class AdministrativeUserController {
         Long item = request.getLong("item");
         PersonalUser user = administrativeManager.findUser(username);
         return administrativeManager.confirmAddItemRequest(user, item);
+    }
+
+    public Response removeItemInUserInventory(Request request){
+        String username = request.get("username");
+        Long item = request.getLong("item");
+        PersonalUser user = administrativeManager.findUser(username);
+        return administrativeManager.removeUserItem(user, item);
     }
 
 

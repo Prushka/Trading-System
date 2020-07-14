@@ -11,13 +11,13 @@ public class AdministrativeManager {
 
     private Repository<AdministrativeUser> administrators;
     private Repository<PersonalUser> personalUserRepository;
-    private Iterator<PersonalUser> needToFreezelist;
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
-    private AdministrativeUser currAdmin;
+    private AdministrativeUser currAdmin = null;
     private PersonalUser currPersonalUser;
+    private Iterator<PersonalUser> needToFreezelist;
     private Iterator<PersonalUser> needToConfirmAddItem;
-    private Iterator<PersonalUser> userRequestToUnfreeze;
+    private Iterator<PersonalUser> needToConfirmUnfreeze;
 
 
     public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
@@ -26,7 +26,7 @@ public class AdministrativeManager {
         this.personalUserRepository = personalUserRepository;
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
         needToConfirmAddItem = personalUserRepository.iterator(PersonalUser::getAddToInventoryRequestIsNotEmpty);
-        userRequestToUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);
+        needToConfirmUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);
     }
 
     public Response createAdministrator(String username, String email, String telephone, String password, boolean isHead){
@@ -67,8 +67,19 @@ public class AdministrativeManager {
         return currPersonalUser;
     }
 
-    public Iterator<PersonalUser> getListUserShouldBeFreezed(){
-        return needToFreezelist;
+    public Response getListUserShouldBeFreezed(){
+        return new Response.Builder(true)
+                .translatable("success.get.unfreeze", needToFreezelist).build();
+    }
+
+    public Response getNeedToConfirmAddItemUserList(){
+        return new Response.Builder(true)
+                .translatable("success.get.addItem", needToConfirmAddItem).build();
+    }
+
+    public Response getUserRequestToUnfreeze() {
+        return new Response.Builder(true)
+                .translatable("success.get.unfreezeRequest", needToConfirmUnfreeze).build();
     }
 
     public void freezeUser(PersonalUser user){
@@ -80,9 +91,11 @@ public class AdministrativeManager {
         user.setRequestToUnfreeze(false);
     }
 
-    public boolean removeUserItem(PersonalUser user, Long item){
-        return (user.getInventory()).remove(item);
+    public Response removeUserItem(PersonalUser user, Long item){
+        user.getInventory().remove(item);
+        return new Response.Builder(true).translatable("success.remove.item").build();
     }
+
 
     public Response confirmAddAllItemRequestForAUser(PersonalUser user) {
         for (Long item : user.getAddToInventoryRequest()) {
@@ -105,18 +118,14 @@ public class AdministrativeManager {
         return new Response.Builder(true).translatable("success.confirm.allAddItem").build();
     }
 
-    public Iterator<PersonalUser> getUserRequestToUnfreeze(){
-        return userRequestToUnfreeze;
-    }
-
     public Response confirmUnfreezeUser(PersonalUser user){
         unfreezeUser(user);
         return new Response.Builder(true).translatable("success.confirm.unfreeze").build();
     }
 
     public Response confirmUnfreezeAllUser(){
-        while (userRequestToUnfreeze.hasNext()){
-            unfreezeUser(userRequestToUnfreeze.next());
+        while (needToConfirmUnfreeze.hasNext()){
+            unfreezeUser(needToConfirmUnfreeze.next());
         }
         return new Response.Builder(true).translatable("success.confirm.unfreezeAll").build();
     }
@@ -134,32 +143,48 @@ public class AdministrativeManager {
         return new Response.Builder(true).translatable("success.confirm.freezeAll").build();
     }
 
-    public int getTransactionLimit(){
-        return transactionLimit;
+    public Response getTransactionLimit(){
+        return new Response.Builder(true).translatable("success.get.tradeLimit", transactionLimit).build();
     }
 
-    public void setTransactionLimit(int limit){
+    public Response setTransactionLimit(int limit){
         transactionLimit = limit;
+        return new Response.Builder(true).translatable("success.set.tradeLimit").build();
     }
 
-    public int getLendBeforeBorrowLimit(){
-        return lendBeforeBorrow;
+    public Response getLendBeforeBorrowLimit(){
+        return new Response.Builder(true).translatable("success.get.borrowLimit", lendBeforeBorrow).build();
     }
 
-    public void setLendBeforeBorrowLimit(int limit){
+    public Response setLendBeforeBorrowLimit(int limit){
         lendBeforeBorrow = limit;
+        return new Response.Builder(true).translatable("success.set.borrowLimit").build();
     }
 
     public PersonalUser findUser(String username) {
-        return personalUserRepository.getFirst(
-                PersonalUser -> PersonalUser.getUserName().equals(username));
+            return personalUserRepository.getFirst(
+                    PersonalUser -> PersonalUser.getUserName().equals(username));
     }
 
-    public AdministrativeUser findAdminUser(String username) {
-        return administrators.getFirst(
-                AdministrativeUser -> AdministrativeUser.getUserName().equals(username));
+    public Response findUserForAdmin (String username) {
+        if (personalUserRepository.ifExists(
+                PersonalUser -> PersonalUser.getUserName().equals(username))) {
+            PersonalUser foundUser = personalUserRepository.getFirst(
+                    PersonalUser -> PersonalUser.getUserName().equals(username));
+            return new Response.Builder(true).translatable("success.find.admin", foundUser).build();
+        }
+        return new Response.Builder(false).translatable("failed.find.user").build();
     }
 
+    public Response findAdminUser(String username) {
+        if (administrators.ifExists(
+                AdministrativeUser -> AdministrativeUser.getUserName().equals(username))) {
+            AdministrativeUser foundAdmin = administrators.getFirst(
+                    AdministrativeUser -> AdministrativeUser.getUserName().equals(username));
+            return new Response.Builder(true).translatable("success.find.admin", foundAdmin).build();
+        }
+        return new Response.Builder(false).translatable("failed.find.admin").build();
+    }
 
 
 }

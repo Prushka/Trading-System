@@ -15,33 +15,7 @@ public class AdministrativeUser extends User {
         this.isHead = isHead;
     }
 
-
-
     public AdministrativeUser(List<String> record){super(record);}
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public boolean getIsHead() {
         return this.isHead;

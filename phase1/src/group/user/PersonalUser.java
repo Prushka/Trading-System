@@ -14,6 +14,8 @@ public class PersonalUser extends User {
     private int borrowCount;
     private int numTransactions;
     private Map<String, Integer> traderFrequency;
+    private List<Long> addToInventoryRequest;
+    private boolean requestToUnfreeze;
 
     /**
      * Creates a PersonalUser with the given userName, email, telephone, password
@@ -34,6 +36,8 @@ public class PersonalUser extends User {
         borrowCount = 0;
         numTransactions = 0;
         traderFrequency = new HashMap<>();
+        addToInventoryRequest = new ArrayList<>();
+        requestToUnfreeze = false;
     }
 
     public PersonalUser(List<String> record){ super(record); }
@@ -75,6 +79,26 @@ public class PersonalUser extends User {
     public void setNumTransactions(int numTransactions) { this.numTransactions = numTransactions; }
 
     public Map<String, Integer> getTraderFrequency() { return traderFrequency; }
+
+    public List<Long> getAddToInventoryRequest(){
+        return addToInventoryRequest;
+    }
+
+    public void addItemToAddToInventoryRequest(long item){
+        addToInventoryRequest.add(item);
+    }
+
+    public boolean getAddToInventoryRequestIsNotEmpty(){
+        return addToInventoryRequest.isEmpty() == false;
+    }
+
+    public void setRequestToUnfreeze(boolean state){
+        requestToUnfreeze = state;
+    }
+
+    public boolean getRequestToUnfreeze(){
+        return requestToUnfreeze;
+    }
 
     /**
      * returns the usernames of the top three most frequent traders for this user as a map.

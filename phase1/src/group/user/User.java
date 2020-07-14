@@ -34,12 +34,6 @@ public class User extends MappableBase implements CSVMappable, UniqueId {
         this.password = password;
     }
 
-    public User(String userName, String email, String password) {
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
-    }
-
     public String getName() {
         return userName;
     }
@@ -83,5 +77,6 @@ public class User extends MappableBase implements CSVMappable, UniqueId {
     public long getUid() {
         return this.uid;
     }
+
 }
 

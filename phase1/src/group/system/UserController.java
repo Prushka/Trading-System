@@ -7,6 +7,8 @@ import group.user.AdministrativeManager;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 
+import java.util.Iterator;
+
 public class UserController {
 
     private final Repository<PersonalUser> personalRepo;
@@ -45,6 +47,10 @@ public class UserController {
         String password = request.get("password");
         //boolean isHead = request.getBoolean("isHead");
         return administrativeManager.addSubAdmin(curradmin, username, email, telephone, password);
+    }
+
+    public Iterator<PersonalUser> freezeUser(Request request){
+        return administrativeManager.getListUserShouldBeFreezed();
     }
 
 }

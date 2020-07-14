@@ -25,12 +25,6 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
     }
 
-    public Response createadministrator(String username, String email, String password, boolean isHead){
-        AdministrativeUser admin = new AdministrativeUser(username, email, password, isHead);
-        administrators.add(admin);
-        return new Response.Builder(true).translatable("success.create.new").build();
-    }
-
     public Response createadministrator(String username, String email, String telephone, String password, boolean isHead){
         AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
         administrators.add(admin);
@@ -49,16 +43,6 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
          return new Response.Builder(false).translatable("failed.login.user").build();
     }
 
-
-    public Response addSubAdmin(AdministrativeUser head, String username, String email, String password){
-        if (head.getIsHead()){
-            createadministrator(username, email, password, false);
-            return new Response.Builder(true).translatable("success.add.subadmin").build();
-        } else{
-            return new Response.Builder(false).translatable("failed.add.subadmin").build();
-        }
-    }
-
     public Response addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
         if (head.getIsHead()){
             createadministrator(username, email, telephone, password, false);
@@ -71,23 +55,7 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
         return currAdmin;
     }
 
-    public int getTransactionLimit(){
-        return transactionLimit;
-    }
-
-    public void setTransactionLimit(int limit){
-        transactionLimit = limit;
-    }
-
-    public int getLendBeforeBorrowLimit(){
-        return lendBeforeBorrow;
-    }
-
-    public void setLendBeforeBorrowLimit(int limit){
-        lendBeforeBorrow = limit;
-    }
-
-    public Iterator<PersonalUser>getListUserShouldBeFreezed(){
+    public Iterator<PersonalUser> getListUserShouldBeFreezed(){
         return needToFreezelist;
     }
 
@@ -117,6 +85,22 @@ public class AdministrativeManager { //TODO where to find request of unfreeze us
             freezeUser(needToFreezelist.next());
         }
 
+    }
+
+    public int getTransactionLimit(){
+        return transactionLimit;
+    }
+
+    public void setTransactionLimit(int limit){
+        transactionLimit = limit;
+    }
+
+    public int getLendBeforeBorrowLimit(){
+        return lendBeforeBorrow;
+    }
+
+    public void setLendBeforeBorrowLimit(int limit){
+        lendBeforeBorrow = limit;
     }
 
     //public void exampleOfFilter() {

@@ -1,7 +1,6 @@
 package group.menu.validator;
 
 import group.menu.data.Response;
-import group.menu.node.ResponseNode;
 
 /**
  * The pair of validator and ResponseNode.<p>
@@ -9,7 +8,6 @@ import group.menu.node.ResponseNode;
  * If it didn't, the {@link #failResponseNode} will be the place where failed result is stored.<p>
  *
  * @author Dan Lyu
- * @see ResponseNode
  */
 public class ValidatorPair {
 

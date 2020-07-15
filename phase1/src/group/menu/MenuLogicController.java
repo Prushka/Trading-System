@@ -56,7 +56,7 @@ public class MenuLogicController {
         // These restrictions only apply if the user goes back to a node that he/she already inputs something and wants to get back to the next node without actually inputting anything in that previous node
         // Implement this in a polymorphism way may need to add fields and methods to all node classes. I don't know!
         if (currentNode.getChild() != null && currentNode instanceof InputNode && currentNode.getChild() instanceof InputNode) {
-            if (currentNode.getValue() != null && currentNode.getValue().length() > 0 && !((InputNode) currentNode).validate().isPresent()) {
+            if (currentNode.getValue() != null && currentNode.getValue().length() > 0 && ((InputNode) currentNode).validate().success()) {
                 setCurrentNode(currentNode.getChild());
             }
         }

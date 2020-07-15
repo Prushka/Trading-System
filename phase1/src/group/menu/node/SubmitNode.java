@@ -5,8 +5,7 @@ import group.menu.data.PersistentRequest;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.menu.handler.RequestHandler;
-
-import java.util.Optional;
+import group.menu.persenter.ResponsePresenter;
 
 /**
  * A node that generates Request using parent Nodes, and will further generate a ResponseNode after parsing Request using an injected {@link RequestHandler}.<p>
@@ -21,11 +20,6 @@ public class SubmitNode extends InputNode {
      * The injected handler used to parse Request and expect Response
      */
     private final RequestHandler handler;
-
-    /**
-     * The Node used when the Response returned by {@link #handler} doesn't represent a successful state
-     */
-    private final Node failedResultNode;
 
 
     private MasterOptionNodePool masterOptionNodePool;
@@ -43,7 +37,6 @@ public class SubmitNode extends InputNode {
     SubmitNode(Builder builder) {
         super(builder);
         handler = builder.handler;
-        failedResultNode = builder.failedResultNode;
         persistentRequest = builder.persistentRequest;
     }
 
@@ -74,8 +67,10 @@ public class SubmitNode extends InputNode {
     @Override
     public Node parseInput(String input) {
         inputPreProcessing(input);
-        Optional<Node> validateResult = validate();
-        return validateResult.orElseGet(() -> parseResponse(handler.handle(getRequest())));
+        if (!validate().success()) {
+            return this;
+        }
+        return parseResponse(handler.handle(getRequest()));
     }
 
     /**
@@ -87,27 +82,21 @@ public class SubmitNode extends InputNode {
      * @return the node to navigate to after parsing user input
      */
     private Node parseResponse(Response response) {
-        ResponseNode responseNode = new ResponseNode.Builder(response).build();
         Node realChild;
+
         if (response.getNextMasterNodeIdentifier() != null) {
             realChild = masterOptionNodePool.getMasterOptionNode(response.getNextMasterNodeIdentifier());
         } else if (response.success()) {
-            realChild = getChild();
+            realChild = masterOptionNodePool.getSucceeded();
             if (response.getPersistentKey() != null) {
                 persistentRequest.addCachedRequest(response.getPersistentKey(), getRequest());
             }
         } else {
-            realChild = failedResultNode;
+            realChild = masterOptionNodePool.getFailed();
         }
-        if (realChild == null) { // the next master node identifier doesn't exist in Response object, use the response success state and node from pool
-            if (response.success()) {
-                realChild = masterOptionNodePool.getSucceeded();
-            } else {
-                realChild = masterOptionNodePool.getFailed();
-            }
-        }
-        responseNode.setChild(realChild);
-        return responseNode;
+
+        new ResponsePresenter(response);
+        return realChild;
     }
 
     /**
@@ -130,11 +119,6 @@ public class SubmitNode extends InputNode {
          * The injected handler used to parse Request and expect Response
          */
         private final RequestHandler handler;
-
-        /**
-         * The Node used when the Response returned by {@link #handler} doesn't represent a successful state
-         */
-        private Node failedResultNode;
 
         /**
          * The global persistent request object to be injected
@@ -164,16 +148,6 @@ public class SubmitNode extends InputNode {
         @Deprecated
         public Builder submitSuccessNext(Node node) {
             child(node);
-            return getThis();
-        }
-
-        /**
-         * @param node the node to navigate to when submission fails
-         * @return the builder itself
-         */
-        @Deprecated
-        public Builder submitFailNext(ResponseNode node) {
-            failedResultNode = node;
             return getThis();
         }
 

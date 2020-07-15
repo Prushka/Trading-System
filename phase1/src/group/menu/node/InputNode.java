@@ -94,7 +94,7 @@ public class InputNode extends RequestableNode {
      */
     public Node parseInput(String input) {
         inputPreProcessing(input);
-        if (fetchResponse().success()) {
+        if (!validate().success()) {
             return getChild();
         }
         return this;

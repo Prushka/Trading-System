@@ -69,7 +69,7 @@ public class MasterOptionNode extends RequestableNode {
     public Node parseInput(String input) {
         Optional<OptionNode> node = getChild(input);
         if (!node.isPresent()) {
-            return new ResponseNode.Builder("invalid.option").child(this).build();
+            return this;
         }
         value = input;
         return node.get();

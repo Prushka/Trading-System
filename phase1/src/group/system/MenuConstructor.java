@@ -75,6 +75,11 @@ public class MenuConstructor {
                 .submit("itemname", userController::removeItemFromInventory)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
+        menuBuilder.option(User.class, OperationType.add, 6, "requestUnfreeze")
+                .submit("unfreeze", userController::RequestUnfreeze)
+                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+
+
         menuBuilder.construct("master.view.account", true);
     }
 
@@ -99,38 +104,6 @@ public class MenuConstructor {
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
         menuBuilder.construct("master.account", false);
-    }
-
-    public void userRequest(UserController controller){
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "Item")
-                .submit("item", controller::AddItemToWishlist)
-                .succeeded("master.account.access").failed("master.account").master("master.account.access");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.remove, 3,"Item")
-                .submit("item", controller::removeItemFromWishlist)
-                .succeeded("master.account.access").failed("master.account").master("master.account.access");
-
-        menuBuilder.option(User.class, OperationType.add, 4, "requestAddItem")
-                .input("item",null, null, ValidatingType.invalid)
-                .input("description", null, null, ValidatingType.invalid)
-                .submit("confirm", controller::RequestAddNewItem)
-                .succeeded("master.account.access").failed("master.account").master("master.account.access");
-
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 5, "removeItem")
-                .submit("item", controller::removeItemFromInventory)
-                .succeeded("master.account.access").failed("master.account").master("master.account.access");
-
-        menuBuilder.option(User.class, OperationType.add, 6, "requestUnfreeze")
-                .submit("unfreeze", controller::RequestUnfreeze)
-                .succeeded("master.account.access").failed("master.account").master("master.account.access");
-
-
-        menuBuilder.construct("master.account.access", true);
-
-
-
     }
 
 

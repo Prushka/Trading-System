@@ -19,8 +19,7 @@ public class ControllerDispatcher implements Shutdownable {
 
     SupportTicketController supportTicketController;
     UserController userController;
-
-    // remove this grace code when actual controller comes in
+    AdministrativeUserController administrativeUserController;
     TradeController testTradeController;
 
     TradeProperties tradeProperties;
@@ -41,6 +40,9 @@ public class ControllerDispatcher implements Shutdownable {
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
         testTradeController = new TradeController(this);
+        administrativeUserController = new AdministrativeUserController(this);
+
+        this.menuConstructor.mainMenu(userController, administrativeUserController);
     }
 
     public void createRepositories() {

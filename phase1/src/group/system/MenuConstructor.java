@@ -45,12 +45,39 @@ public class MenuConstructor {
 
 
     // re building menu from scratch, see menu design at bottom of google doc
-    /*public void chooseLogin(){
+    public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController){
         menuBuilder.option(User.class, OperationType.verification, 1, "login")
-        .input("personal", null, null, ValidatingType.invalid)
-        .input("administrator", null, null, ValidatingType.invalid);
-        //.submit("confirm");
-    }*/
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .submit("password", userController::loginUser)
+                .succeeded("master.account").failed("master.account").master("master.account");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2,"login")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .submit("password", administrativeUserController::loginAdminUser)
+                .succeeded("master.account").failed("master.account").master("master.account");
+
+        menuBuilder.option(User.class, OperationType.add, 3, "register")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .input("email", null, null, ValidatingType.invalid)
+                .input("telephone", null, null, ValidatingType.invalid)
+                .submit("password", password -> password.length() > 7, ValidatingType.invalid, userController::registerUser)
+                .succeeded("master.account").failed("master.account").master("master.account");
+
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "register")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+                .input("email", null, null, ValidatingType.invalid)
+                .input("telephone", null, null, ValidatingType.invalid)
+                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
+                // you can put anything there if you want to process user input before it enters the Request object
+                .submit("confirm", administrativeUserController::registerAdminUser)
+                .succeeded("master.account").failed("master.account").master("master.account");
+
+        menuBuilder.construct("master.account", true);
+
+    }
 
     public void viewAccount(UserController userController) {
 

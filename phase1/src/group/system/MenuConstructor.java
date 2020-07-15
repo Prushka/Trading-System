@@ -52,40 +52,31 @@ public class MenuConstructor {
         //.submit("confirm");
     }*/
 
-    /*public void ViewAccount(UserController userController, TradeController tradeController) {
+    public void viewAccount(UserController userController, TradeController tradeController) {
+        /*
         menuBuilder.option(User.class, OperationType.verification, 1, "browseItems")
                 .submit("browseAllItems", userController::browseAllItems)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
-
-        menuBuilder.construct("master.view.account", true);*/
-        /*
-        menuBuilder.option(User.class, OperationType.add, 2, "wishlist")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
-
-                .submit("password", controller::loginUser)
-                .succeeded("master.support.trade").failed("master.account").master("master.account");
-
-        menuBuilder.option(User.class, OperationType.verification, 1, "login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
-
-                .submit("password", controller::loginUser)
-                .succeeded("master.support.trade").failed("master.account").master("master.account");
-
-        menuBuilder.option(User.class, OperationType.verification, 1, "login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
-
-                .submit("password", controller::loginUser)
-                .succeeded("master.support.trade").failed("master.account").master("master.account");
-
-        menuBuilder.option(User.class, OperationType.verification, 1, "login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
-
-                .submit("password", controller::loginUser)
-                .succeeded("master.support.trade").failed("master.account").master("master.account");
         */
+        menuBuilder.option(User.class, OperationType.add, 2, "wishlist")
+                .submit("item", userController::AddItemToWishlist)
+                .succeeded("master.view.account").failed("master.view.account").master("");
 
+        menuBuilder.option(User.class, OperationType.remove, 3, "wishlist")
+                .submit("itemname", userController::removeItemFromWishlist)
+                .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
-    //}
+        menuBuilder.option(User.class, OperationType.add, 4, "inventory")
+                .input("item", null, ValidatingType.invalid )
+                .submit("description", userController::RequestAddNewItem)
+                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+
+        menuBuilder.option(User.class, OperationType.remove, 5, "inventory")
+                .submit("itemname", userController::removeItemFromInventory)
+                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+
+        menuBuilder.construct("master.view.account", true);
+    }
 
 
     // previous code
@@ -107,7 +98,7 @@ public class MenuConstructor {
                 .succeeded("master.account").failed("master.account").master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account", true);
+        menuBuilder.construct("master.account", false);
     }
 
     public void userRequest(UserController controller){
@@ -149,6 +140,9 @@ public class MenuConstructor {
                 // you can put anything there if you want to process user input before it enters the Request object
                 .submit("confirm", controller::registerAdminUser)
                 .master("master.account");
+
+        menuBuilder.construct("master.adminAccount", false);
+
     }
 
     public void adminUserAccess(AdministrativeUserController controller) {

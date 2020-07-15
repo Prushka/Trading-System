@@ -26,6 +26,7 @@ public class UserController {
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
         dispatcher.menuConstructor.viewAccount(this);
+        dispatcher.menuConstructor.personalUserAccess(this);
     }
 
     public Response loginUser(Request request) {
@@ -84,6 +85,12 @@ public class UserController {
 
     }
 
+    public Response checkFrozen(Request request) {
+        if (currUser.getIsFrozen()){
+            return new Response.Builder(false).translatable("frozen").build();
+        }
+        return new Response.Builder(true).translatable("not.frozen").build();
+    }
 
 
 }

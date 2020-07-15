@@ -103,21 +103,31 @@ public class MenuConstructor {
 
     public void userRequest(UserController controller){
 
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "Item")
+                .submit("item", controller::AddItemToWishlist)
+                .succeeded("master.account.access").failed("master.account").master("master.account.access");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.remove, 3,"Item")
+                .submit("item", controller::removeItemFromWishlist)
+                .succeeded("master.account.access").failed("master.account").master("master.account.access");
+
         menuBuilder.option(User.class, OperationType.add, 4, "requestAddItem")
                 .input("item",null, null, ValidatingType.invalid)
                 .input("description", null, null, ValidatingType.invalid)
-                .submit("unfreeze", controller::RequestAddNewItem)
-                .succeeded("master.account.access").failed("master.account").master("master.account");
+                .submit("confirm", controller::RequestAddNewItem)
+                .succeeded("master.account.access").failed("master.account").master("master.account.access");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "removeItem")
-                .submit("confirm", controller::removeItemFromInventory)
-                .succeeded("master.account.access").failed("master.account").master("master.account");
 
-        menuBuilder.option(User.class, OperationType.add, 3, "requestUnfreeze")
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 5, "removeItem")
+                .submit("item", controller::removeItemFromInventory)
+                .succeeded("master.account.access").failed("master.account").master("master.account.access");
+
+        menuBuilder.option(User.class, OperationType.add, 6, "requestUnfreeze")
                 .submit("unfreeze", controller::RequestUnfreeze)
-                .master("master.account");
+                .succeeded("master.account.access").failed("master.account").master("master.account.access");
 
-        menuBuilder.construct("master.account.access", false);
+
+        menuBuilder.construct("master.account.access", true);
 
 
 

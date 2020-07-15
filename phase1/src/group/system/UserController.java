@@ -43,7 +43,7 @@ public class UserController {
     }
 
     public Response removeItemFromInventory(Request request){
-        Long item = request.getLong("itemname");
+        Long item = request.getLong("item");
         Item itemEntity = itemManager.findItemByUid(item);
         itemManager.remove(itemEntity);
         return personalUserManager.removeItemFromInventory(currUser, item);
@@ -65,7 +65,7 @@ public class UserController {
     }
 
     public Response removeItemFromWishlist(Request request){
-        Long item = request.getLong("itemname");
+        Long item = request.getLong("item");
         return personalUserManager.removeItemFromInventory(currUser, item);
     }
 

@@ -6,6 +6,7 @@ import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.processor.PasswordEncryption;
 import group.menu.validator.DateValidator;
+import group.menu.validator.EmailValidator;
 import group.menu.validator.EnumValidator;
 import group.menu.validator.RepositoryIdValidator;
 import group.notification.SupportTicket;

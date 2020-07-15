@@ -7,6 +7,7 @@ import group.repository.Repository;
 import group.user.*;
 import group.item.Item;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class UserController {
@@ -24,6 +25,7 @@ public class UserController {
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
+
         dispatcher.menuConstructor.viewAccount(this);
         //dispatcher.menuConstructor.user(this);
     }
@@ -69,9 +71,6 @@ public class UserController {
         Long item = request.getLong("item");
         return personalUserManager.removeItemFromInventory(currUser, item);
     }
-
-
-
 
     public Response browseAllItems(Request request) {
         return itemManager.browseItemsDisplay();

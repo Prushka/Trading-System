@@ -3,14 +3,17 @@ package group.item;
 import group.item.Item;
 import group.menu.data.Response;
 import group.repository.Repository;
+import group.user.PersonalUser;
+
 import java.util.ArrayList;
 
 public class ItemManager {
     private Repository<Item> items;
     private ArrayList<Item> itemsArrayList; //temp solution
 
-    public ItemManager(Repository<Item> items) {
+    public ItemManager(Repository<Item> items){
         this.items = items;
+        itemsArrayList = new ArrayList<Item>();
     }
 
     public Response add (Item item) {
@@ -30,8 +33,7 @@ public class ItemManager {
     }
 
 
-    public Response browseItemsDisplay() {
-        StringBuilder stringBuilder = new StringBuilder();
+    public  Response browseItemsDisplay() { StringBuilder stringBuilder = new StringBuilder();
         for (Item i : itemsArrayList) {
             stringBuilder.append(i.toString()).append("\n");
         }

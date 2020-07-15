@@ -12,7 +12,8 @@ import java.util.Objects;
 public class Item extends MappableBase implements CSVMappable, UniqueId {
 
     private Long uid;
-    private PersonalUser owner;
+    private Long ownerUID;
+    // private PersonalUser owner; CHANGED
     private String name;
     private String description;
 
@@ -20,14 +21,14 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
         super(record);
     }
 
-    public Item(PersonalUser owner, String name, String description){
-        this.owner = owner;
+    public Item(Long ownerUID, String name, String description){
+        this.ownerUID = ownerUID;
         this.name = name;
         this.description = description;
     }
 
-    public PersonalUser getOwner(){
-        return this.owner;
+    public Long getOwner(){
+        return this.ownerUID;
     }
 
     public String getItemName(){
@@ -38,8 +39,8 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
         return description;
     }
 
-    public void setOwnerUsername(PersonalUser owner){
-        this.owner = owner;
+    public void setOwnerUsername(Long owner){
+        this.ownerUID = owner;
     }
 
     public void setItemName(String newName){
@@ -59,7 +60,7 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
 
     @Override
     public String toString(){
-        return name + ": " + description + " Owned by: " + owner.getUserName();
+        return name + "- " + description + " (Owned by: " + ownerUID + ")";
     }
 
     @Override
@@ -67,11 +68,11 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
         if (other instanceof Item) {
             Item otherItem = (Item) other;
             return this.name.equals(otherItem.name) && this.description.equals(otherItem.description) &&
-                    this.owner.equals(otherItem.owner);
+                    this.ownerUID.equals(otherItem.ownerUID);
         }
         return false;
     }
 
     @Override
-    public int hashCode(){ return name.hashCode() + description.hashCode() + owner.getUserName().hashCode(); }
+    public int hashCode(){ return name.hashCode() + description.hashCode() + ownerUID.hashCode(); }
 }

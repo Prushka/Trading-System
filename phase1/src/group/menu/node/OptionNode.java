@@ -1,6 +1,6 @@
 package group.menu.node;
 
-import java.util.logging.Level;
+import group.menu.data.Response;
 
 /**
  * The node that contains single option information.<p>
@@ -40,7 +40,8 @@ public class OptionNode extends Node {
      * The option node will be managed by {@link MasterOptionNode} to display information.
      */
     @Override
-    public void display() {
+    public Response fetchResponse() {
+        return new Response.Builder(true).translatable(getTranslatable(), getId()).build();
     }
 
     /**
@@ -51,14 +52,6 @@ public class OptionNode extends Node {
     @Override
     boolean acceptInput() {
         return false;
-    }
-
-    /**
-     * Display information of the option.
-     * Only to be used by {@link MasterOptionNode}
-     */
-    void displayUnsafe() {
-        LOGGER.log(Level.INFO, getTranslatable(), getId());
     }
 
     /**

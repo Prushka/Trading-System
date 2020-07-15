@@ -23,7 +23,7 @@ public class TradeController {
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
         tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties);
-        dispatcher.menuConstructor.supportTrade(this);
+        dispatcher.menuController.supportTrade(this);
     }
 
     /**

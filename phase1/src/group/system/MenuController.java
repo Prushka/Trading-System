@@ -1,10 +1,12 @@
 package group.system;
 
-import group.menu.Menu;
+import group.config.LoggerFactory;
 import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
-import group.menu.processor.PasswordEncryption;
+import group.menu.MenuLogicController;
+import group.menu.data.Response;
+import group.menu.persenter.ResponsePresenter;
 import group.menu.validator.DateValidator;
 import group.menu.validator.EmailValidator;
 import group.menu.validator.EnumValidator;
@@ -15,8 +17,13 @@ import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 import group.user.User;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * {\__/}
@@ -34,13 +41,15 @@ import java.util.List;
 //  When you define "master.support.trade" in your response object, "master.support.trade" will be next. To use custom masters, they have to be put in here
 //  In other words: if there's no method call: .master("master.support.trade"), you can't set it in Response as next node
 
-public class MenuConstructor {
+public class MenuController {
+
+    static final Logger LOGGER = new LoggerFactory(MenuController.class).getConfiguredLogger();
 
     private final MenuBuilder menuBuilder;
 
     private final List<Shutdownable> shutdowns;
 
-    public MenuConstructor() {
+    public MenuController() {
         menuBuilder = new MenuBuilder();
         shutdowns = new ArrayList<>();
     }
@@ -274,8 +283,24 @@ public class MenuConstructor {
     }
 
     public void runMenu() {
-        ConsoleSystem console = new ConsoleSystem();
-        console.run(new Menu(menuBuilder.constructFinal())); // the construct final will put all place holders to nodes
+        MenuLogicController menu = new MenuLogicController(menuBuilder.constructFinal()); // the construct final will put all place holders to nodes
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        new ResponsePresenter(menu.fetchInitialResponse()).display();
+
+        try {
+            String input = "";
+            while (!input.equalsIgnoreCase("exit")) {
+                input = br.readLine();
+                if (!input.equalsIgnoreCase("exit")) {
+                    new ResponsePresenter(menu.parseInput(input)).display();
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Unable to read from Buffered reader.", e);
+        } catch (NullPointerException e) {
+            LOGGER.log(Level.SEVERE, "There's no node next.", e);
+        }
         shutdown();
     }
 
@@ -286,4 +311,5 @@ public class MenuConstructor {
     private void shutdown() {
         shutdowns.forEach(Shutdownable::shutdown);
     }
+
 }

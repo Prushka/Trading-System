@@ -1,5 +1,7 @@
 package group.menu.node;
 
+import group.menu.data.Response;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -77,10 +79,12 @@ public class MasterOptionNode extends RequestableNode {
      * Displays the option nodes
      */
     @Override
-    public void display() {
+    public Response fetchResponse() {
+        Response.Builder responseBuilder = new Response.Builder(true);
         for (OptionNode child : children) {
-            child.displayUnsafe();
+            responseBuilder.response(child.fetchResponse());
         }
+        return responseBuilder.build();
     }
 
     /**

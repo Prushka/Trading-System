@@ -1,5 +1,6 @@
 package group.menu.node;
 
+import group.menu.data.Response;
 import group.menu.processor.InputPreProcessor;
 import group.menu.validator.Validator;
 import group.menu.validator.ValidatorPair;
@@ -79,6 +80,11 @@ public class InputNode extends RequestableNode {
         if (processor != null) {
             this.value = processor.process(value);
         }
+    }
+
+    @Override
+    public Response fetchResponse() {
+        return new Response.Builder(true).translatable(getTranslatable()).build();
     }
 
     /**

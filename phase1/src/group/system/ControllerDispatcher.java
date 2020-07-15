@@ -1,15 +1,20 @@
 package group.system;
 
+import group.config.LoggerFactory;
 import group.config.property.TradeProperties;
+import group.item.Item;
 import group.notification.SupportTicket;
 import group.repository.CSVRepository;
 import group.repository.Repository;
 import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
-import group.item.Item;
+
+import java.util.logging.Logger;
 
 public class ControllerDispatcher implements Shutdownable {
+
+    static final Logger LOGGER = new LoggerFactory(ControllerDispatcher.class).getConfiguredLogger();
 
     Repository<SupportTicket> ticketRepository;
     Repository<PersonalUser> personalUserRepository;
@@ -24,16 +29,16 @@ public class ControllerDispatcher implements Shutdownable {
 
     TradeProperties tradeProperties;
 
-    final MenuConstructor menuConstructor = new MenuConstructor();
+    final MenuController menuController = new MenuController();
 
     private final SaveHook saveHook = new SaveHook();
 
     public ControllerDispatcher() {
-        menuConstructor.shutdownHook(this);
+        menuController.shutdownHook(this);
         createProperties();
         createRepositories();
         dispatchController();
-        menuConstructor.runMenu();
+        menuController.runMenu();
     }
 
     public void dispatchController() {
@@ -41,8 +46,8 @@ public class ControllerDispatcher implements Shutdownable {
         userController = new UserController(this);
         testTradeController = new TradeController(this);
         administrativeUserController = new AdministrativeUserController(this);
-        this.menuConstructor.mainMenu(userController, administrativeUserController);
-        this.menuConstructor.adminUserAccess(administrativeUserController);
+        this.menuController.mainMenu(userController, administrativeUserController);
+        this.menuController.adminUserAccess(administrativeUserController);
     }
 
     public void createRepositories() {

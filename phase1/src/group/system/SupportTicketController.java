@@ -15,7 +15,7 @@ public class SupportTicketController {
     public SupportTicketController(ControllerDispatcher dispatcher) {
         ticketRepository = dispatcher.ticketRepository;
         supportTicketManager = new SupportTicketManager(ticketRepository);
-        dispatcher.menuConstructor.supportTicket(this);
+        dispatcher.menuController.supportTicket(this);
     }
 
     public Response addTicket(Request request) {

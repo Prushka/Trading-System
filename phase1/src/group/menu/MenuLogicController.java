@@ -1,6 +1,7 @@
 package group.menu;
 
 import group.config.LoggerFactory;
+import group.menu.data.Response;
 import group.menu.node.InputNode;
 import group.menu.node.MasterOptionNode;
 import group.menu.node.Node;
@@ -16,14 +17,14 @@ import java.util.logging.Logger;
  *
  * @author Dan Lyu
  */
-public class Menu {
+public class MenuLogicController {
 
     /**
      * The logger to log information from the Menu,
      * instantiated using a single instance {@link java.util.logging.FileHandler} with Level.ALL
      * and a {@link ConsoleHandler} with Level.INFO
      */
-    static final Logger LOGGER = new LoggerFactory(Menu.class).getConfiguredLogger();
+    static final Logger LOGGER = new LoggerFactory(MenuLogicController.class).getConfiguredLogger();
 
     /**
      * The current menu node where the user is at
@@ -35,9 +36,8 @@ public class Menu {
      *
      * @param node the entry {@link MasterOptionNode}
      */
-    public Menu(MasterOptionNode node) {
+    public MenuLogicController(MasterOptionNode node) {
         this.currentNode = node;
-        display();
     }
 
     /**
@@ -57,7 +57,6 @@ public class Menu {
         // Implement this in a polymorphism way may need to add fields and methods to all node classes. I don't know!
         if (currentNode.getChild() != null && currentNode instanceof InputNode && currentNode.getChild() instanceof InputNode) {
             if (currentNode.getValue() != null && currentNode.getValue().length() > 0 && !((InputNode) currentNode).validate().isPresent()) {
-                LOGGER.log(Level.INFO, "current.value.tip");
                 setCurrentNode(currentNode.getChild());
             }
         }
@@ -69,7 +68,7 @@ public class Menu {
      *
      * @param input user input
      */
-    public void parseInput(String input) {
+    public Response parseInput(String input) {
         if (input.equalsIgnoreCase("back")) {
             goBack();
         } else if (input.equalsIgnoreCase("next")) {
@@ -77,14 +76,11 @@ public class Menu {
         } else {
             setCurrentNode(currentNode.parseInput(input).traceForward());
         }
-        display();
+        return currentNode.fetchResponse();
     }
 
-    /**
-     * Displays the current menu node
-     */
-    private void display() {
-        currentNode.display();
+    public Response fetchInitialResponse() {
+        return new Response.Builder(true).translatable("init.tip").response(currentNode.fetchResponse()).build();
     }
 
     /**
@@ -95,12 +91,5 @@ public class Menu {
     private void setCurrentNode(Node nextNode) {
         LOGGER.log(Level.FINE, "debug.switch.node", new Object[]{currentNode, nextNode});
         this.currentNode = nextNode;
-    }
-
-    /**
-     * Displays the initial information before every node.
-     */
-    public void displayInitial() {
-        LOGGER.log(Level.INFO, "init.tip");
     }
 }

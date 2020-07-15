@@ -49,6 +49,10 @@ public class ControllerDispatcher implements Shutdownable {
         administrativeUserController = new AdministrativeUserController(this);
         this.menuController.mainMenu(userController, administrativeUserController); // these steps should not be here
         this.menuController.adminUserAccess(administrativeUserController);
+        this.menuController.adminUserLimitAccess(administrativeUserController);
+        this.menuController.adminUserAddItemAccess(administrativeUserController);
+        this.menuController.adminUserUnfreezeAccess(administrativeUserController);
+        this.menuController.adminUserFreezeAccess(administrativeUserController);
     }
 
     public void createRepositories() {

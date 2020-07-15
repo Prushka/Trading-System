@@ -73,7 +73,7 @@ public class AdministrativeManager {
 
     public Response getListUserShouldBeFreezed(){
         return new Response.Builder(true)
-                .translatable("success.get.unfreeze", needToFreezelist).build();
+                .translatable("success.get.freeze", needToFreezelist).build();
     }
 
     public Response getNeedToConfirmAddItemUserList(){

@@ -125,6 +125,17 @@ public class AdministrativeUserController {
         return administrativeManager.setLendBeforeBorrowLimit(limit);
     }
 
+    public Response viewTransactionLimit(Request request){
+        //int limit = request.getInt("limit");
+        return administrativeManager.getTransactionLimit();
+    }
+
+    public Response viewLendBeforeBorrowLimit(Request request){
+        //int limit = request.getInt("limit");
+        return administrativeManager.getLendBeforeBorrowLimit();
+    }
+
+
 
 
 

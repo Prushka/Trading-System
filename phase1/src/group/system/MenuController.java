@@ -40,14 +40,14 @@ public class MenuController {
     // re building menu from scratch, see menu design at bottom of google doc
     public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController) {
         menuBuilder.option(User.class, OperationType.verification, 1, "login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .input("username", null, ValidatingType.notexist)
+                // if you want to check if the username exists directly in this input node, change the null to a lambda expression
                 .submit("password", userController::loginUser)
                 .succeeded("master.userAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2, "login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
+                .input("username", null, ValidatingType.notexist)
+                // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", administrativeUserController::loginAdminUser)
                 .succeeded("master.adminAccess").failed("master.account").master("master.account");
 
@@ -68,7 +68,7 @@ public class MenuController {
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.construct("master.account", true);
+        menuBuilder.construct("master.account", false);
 
     }
 
@@ -203,69 +203,106 @@ public class MenuController {
                 .submit("password", password -> password.length() > 8, ValidatingType.invalid, controller::addSubAdmin)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "findUser")
-                .submit("username", name -> name.length() > 3, ValidatingType.invalid, controller::findUserForAdmin)
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "findUser") //TODO is it neccessary??
+                .submit("username", null, ValidatingType.notexist, controller::findUserForAdmin)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "findUser")
-                .submit("confirm", name -> name.length() > 3, ValidatingType.invalid, controller::viewFreezeUserList)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeUser")
-                .submit("username", controller::confirmFreezeUser)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeAllUser") //TODO
-                .submit("confirm", controller::confirmFreezeAllUser)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 5, "confirmUnFreezeUser")
-                .submit("username", controller::confirmUnFreezeUser)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 6, "confirmUnFreezeAllUser")
-                .submit("confirm", controller::confirmUnFreezeAllUser)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmAddItem")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .submit("item", controller::confirmAddItemRequest)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 8, "confirmAddItemAUser")
-                .submit("username", controller::confirmAddAllItemRequestForAUser)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 9, "confirmAddAllUser")
-                .submit("confirm", controller::confirmAddAllItemRequest)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 10, "removeItem")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "removeItem")
+                .input("username", null, ValidatingType.notexist)
                 .submit("item", controller::removeItemInUserInventory)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 9, "setTransLimit")
-                .submit("limit", controller::setTransactionLimit)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 10, "setLandBeforeBorrowLimit")
-                .submit("limit", controller::setLendBeforeBorrowLimit)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.view, 9, "setTransLimit")
-                .submit("confirm", controller::viewAddItemRequest)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.view, 10, "addItemRequest")
-                .submit("confirm", controller::viewUnfreezeRequest)
-                .succeeded("master.adminAccess").failed("master.adminAccess").master("unfreezeRequest");
-
         menuBuilder.construct("master.adminAccess", false);
+    }
+
+
+    public void adminUserAddItemAccess(AdministrativeUserController controller) {
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "allAddItemRequest")
+                .submit("confirm", controller::viewAddItemRequest)
+                .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmAddItem")
+                .input("username", null, ValidatingType.notexist)
+                .submit("item", controller::confirmAddItemRequest)
+                .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "confirmAddItemAUser")
+                .submit("username", controller::confirmAddAllItemRequestForAUser)
+                .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmAddAllUser")
+                .submit("confirm", controller::confirmAddAllItemRequest)
+                .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
+
+        menuBuilder.construct("master.adminUserAddItemAccess", false);
+    }
+
+
+    public void adminUserFreezeAccess(AdministrativeUserController controller) {
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "freezelist")
+                .submit("confirm", null, ValidatingType.notexist, controller::viewFreezeUserList)
+                .succeeded("master.adminUserFreezeAccess").failed("master.adminUserFreezeAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeUser")
+                .submit("username", controller::confirmFreezeUser)
+                .succeeded("master.adminUserFreezeAccess").failed("master.adminUserFreezeAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 5, "confirmFreezeAllUser") //TODO
+                .submit("confirm", controller::confirmFreezeAllUser)
+                .succeeded("master.adminUserFreezeAccess").failed("master.adminUserFreezeAccess").master("adminAccount");
+
+        menuBuilder.construct("master.adminUserFreezeAccess", true);
+    }
+
+    public void adminUserUnfreezeAccess(AdministrativeUserController controller) {
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "unfreezeRequest")
+                .submit("confirm", controller::viewUnfreezeRequest)
+                .succeeded("master.adminUserUnfreezeAccess").failed("master.adminUserUnfreezeAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmUnFreezeUser")
+                .submit("username", controller::confirmUnFreezeUser)
+                .succeeded("master.adminUserUnfreezeAccess").failed("master.adminUserUnfreezeAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "confirmUnFreezeAllUser")
+                .submit("confirm", controller::confirmUnFreezeAllUser)
+                .succeeded("master.adminUserUnfreezeAccess").failed("master.adminUserUnfreezeAccess").master("adminAccount");
+
+        menuBuilder.construct("master.adminUserUnfreezeAccess", false);
+    }
+
+
+
+
+
+    public void adminUserLimitAccess(AdministrativeUserController controller) {
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "viewLendBeforeBorrowLimit")
+                .submit("confirm", controller::viewLendBeforeBorrowLimit)
+                .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("adminAccount");
+
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.view, 2, "TransLimit")
+                .submit("confirm", controller::viewTransactionLimit)
+                .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.edit, 3, "LandBeforeBorrowLimit")
+                .submit("limit", controller::setLendBeforeBorrowLimit)
+                .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.edit, 4, "TransLimit")
+                .submit("limit", controller::setTransactionLimit)
+                .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("adminAccount");
+
+        menuBuilder.construct("master.adminUserLimitAccess", false);
     }
 
     public MenuLogicController generateMenuLogicController() {
         return new MenuLogicController(menuBuilder.constructFinal());
     }
+
+
 
 }

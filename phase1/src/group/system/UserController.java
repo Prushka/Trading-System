@@ -85,10 +85,12 @@ public class UserController {
     }
 
     public Response checkFrozen(Request request) {
-        if (currUser.getIsFrozen()){
-            return new Response.Builder(false).translatable("frozen").build();
-        }
-        return new Response.Builder(true).translatable("not.frozen").build();
+        return personalUserManager.getUserIsFrozen(currUser);
+
+        //if (currUser.getIsFrozen()){
+            //return new Response.Builder(false).translatable("frozen").build();
+        //}
+        //return new Response.Builder(true).translatable("not.frozen").build();
     }
 
 

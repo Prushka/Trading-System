@@ -99,6 +99,14 @@ public class PersonalUserManager {
                 translatable("success.get.wishlist", user.getWishlist()).build();
     }
 
+    public Response getUserIsFrozen(PersonalUser user){
+        if (user.getIsFrozen()){
+            return new Response.Builder(true).translatable("true.is.frozen", user.getIsFrozen()).build();
+        }else{
+            return new Response.Builder(false).translatable("false.is.frozen", user.getIsFrozen()).build();
+        }
+    }
+
 
 
 }

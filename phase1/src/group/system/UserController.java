@@ -1,14 +1,13 @@
 package group.system;
 
+import group.item.Item;
 import group.item.ItemManager;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.repository.Repository;
-import group.user.*;
-import group.item.Item;
-
-import java.util.ArrayList;
-import java.util.Iterator;
+import group.user.AdministrativeUser;
+import group.user.PersonalUser;
+import group.user.PersonalUserManager;
 
 public class UserController {
 
@@ -25,8 +24,8 @@ public class UserController {
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
-        dispatcher.menuConstructor.viewAccount(this);
-        dispatcher.menuConstructor.personalUserAccess(this);
+        dispatcher.menuController.viewAccount(this);
+        dispatcher.menuController.personalUserAccess(this);
     }
 
     public Response loginUser(Request request) {

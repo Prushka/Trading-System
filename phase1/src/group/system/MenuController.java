@@ -1,14 +1,10 @@
 package group.system;
 
-import group.config.LoggerFactory;
 import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.MenuLogicController;
-import group.menu.data.Response;
-import group.menu.persenter.ResponsePresenter;
 import group.menu.validator.DateValidator;
-import group.menu.validator.EmailValidator;
 import group.menu.validator.EnumValidator;
 import group.menu.validator.RepositoryIdValidator;
 import group.notification.SupportTicket;
@@ -16,14 +12,6 @@ import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 import group.user.User;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * {\__/}
@@ -43,27 +31,21 @@ import java.util.logging.Logger;
 
 public class MenuController {
 
-    static final Logger LOGGER = new LoggerFactory(MenuController.class).getConfiguredLogger();
-
     private final MenuBuilder menuBuilder;
-
-    private final List<Shutdownable> shutdowns;
 
     public MenuController() {
         menuBuilder = new MenuBuilder();
-        shutdowns = new ArrayList<>();
     }
 
-
     // re building menu from scratch, see menu design at bottom of google doc
-    public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController){
+    public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController) {
         menuBuilder.option(User.class, OperationType.verification, 1, "login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", userController::loginUser)
                 .succeeded("master.userAccess").failed("master.account").master("master.account");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2,"login")
+        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2, "login")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", administrativeUserController::loginAdminUser)
@@ -81,9 +63,9 @@ public class MenuController {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
-                .input("password",password -> password.length() > 7, ValidatingType.invalid /*new PasswordEncryption(),*/ ) // the password encryption is broken,
+                .input("password", password -> password.length() > 7, ValidatingType.invalid /*new PasswordEncryption(),*/) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
-                .submit("isHead",  administrativeUserController::registerAdminUser)
+                .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
         menuBuilder.construct("master.account", true);
@@ -126,7 +108,7 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.add, 6, "inventory")
-                .input("item", null, ValidatingType.invalid )
+                .input("item", null, ValidatingType.invalid)
                 .submit("description", userController::RequestAddNewItem)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
@@ -141,7 +123,7 @@ public class MenuController {
         menuBuilder.construct("master.view.account", false);
     }
 
-    public void supportTrade(TradeController controller){
+    public void supportTrade(TradeController controller) {
         menuBuilder.option(Trade.class, OperationType.add, 1)
                 .input("initiator", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.exists)
@@ -282,34 +264,8 @@ public class MenuController {
         menuBuilder.construct("master.adminAccess", false);
     }
 
-    public void runMenu() {
-        MenuLogicController menu = new MenuLogicController(menuBuilder.constructFinal()); // the construct final will put all place holders to nodes
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        new ResponsePresenter(menu.fetchInitialResponse()).display();
-
-        try {
-            String input = "";
-            while (!input.equalsIgnoreCase("exit")) {
-                input = br.readLine();
-                if (!input.equalsIgnoreCase("exit")) {
-                    new ResponsePresenter(menu.parseInput(input)).display();
-                }
-            }
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Unable to read from Buffered reader.", e);
-        } catch (NullPointerException e) {
-            LOGGER.log(Level.SEVERE, "There's no node next.", e);
-        }
-        shutdown();
-    }
-
-    public void shutdownHook(Shutdownable shutdownable) {
-        this.shutdowns.add(shutdownable);
-    }
-
-    private void shutdown() {
-        shutdowns.forEach(Shutdownable::shutdown);
+    public MenuLogicController generateMenuLogicController() {
+        return new MenuLogicController(menuBuilder.constructFinal());
     }
 
 }

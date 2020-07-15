@@ -34,11 +34,12 @@ public class ControllerDispatcher implements Shutdownable {
     private final SaveHook saveHook = new SaveHook();
 
     public ControllerDispatcher() {
-        menuController.shutdownHook(this);
         createProperties();
         createRepositories();
         dispatchController();
-        menuController.runMenu();
+        MenuRunner menuRunner = new MenuRunner(menuController.generateMenuLogicController());
+        menuRunner.shutdownHook(this);
+        menuRunner.run();
     }
 
     public void dispatchController() {
@@ -46,7 +47,7 @@ public class ControllerDispatcher implements Shutdownable {
         userController = new UserController(this);
         testTradeController = new TradeController(this);
         administrativeUserController = new AdministrativeUserController(this);
-        this.menuController.mainMenu(userController, administrativeUserController);
+        this.menuController.mainMenu(userController, administrativeUserController); // these steps should not be here
         this.menuController.adminUserAccess(administrativeUserController);
     }
 

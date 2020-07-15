@@ -59,6 +59,9 @@ public class UserController {
         return personalUserManager.UnfreezeRequest(currUser);
     }
 
+    public Response browseAllItems(Request request) {
+        return itemManager.browseItemsDisplay();
+    }
 
 
 

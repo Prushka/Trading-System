@@ -13,10 +13,9 @@ import java.util.logging.Level;
  * @param <T> the entity type to be used
  * @author Dan Lyu
  * @author lecture code, Logging project
- * @see RepositorySavable
- * @see RepositoryBase
+ * @see RepositorySaveImpl
  */
-public class SerializableRepository<T extends Serializable & UniqueId> extends RepositoryBase<T> {
+public class SerializableRepository<T extends Serializable & UniqueId> extends RepositorySaveImpl<T> {
 
     /**
      * Constructs a Serialization Repository for saving and reading .ser files

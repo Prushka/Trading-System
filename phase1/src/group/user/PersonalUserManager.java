@@ -79,5 +79,16 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
+    public Response addItemToWishlist(PersonalUser user, Long item){
+        user.addToWishList(item);
+        return new Response.Builder(true).translatable("success.add.wishlist").build(); // this one
+    }
+
+    public Response removeItemFromWishlist(PersonalUser user, Long item){
+        user.removeFromWishList(item);
+        return new Response.Builder(true).translatable("success.remove.wishlist").build();
+    }
+
+
 
 }

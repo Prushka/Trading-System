@@ -1,9 +1,10 @@
 package group.system;
 
+import group.config.LoggerFactory;
 import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
-import group.menu.MenuController;
+import group.menu.MenuLogicController;
 import group.menu.validator.DateValidator;
 import group.menu.validator.EnumValidator;
 import group.menu.validator.RepositoryIdValidator;
@@ -18,6 +19,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * {\__/}
@@ -247,9 +249,11 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.trade", false);
     }
 
+
+    static final Logger LOGGER = new LoggerFactory(MenuConstructor.class).getConfiguredLogger();
+
     public void runMenu() {
-        ConsoleSystem console = new ConsoleSystem();
-        MenuController menu = new MenuController(menuBuilder.constructFinal()); // the construct final will put all place holders to nodes
+        MenuLogicController menu = new MenuLogicController(menuBuilder.constructFinal()); // the construct final will put all place holders to nodes
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         menu.displayInitial();
         try {

@@ -17,14 +17,14 @@ import java.util.logging.Logger;
  *
  * @author Dan Lyu
  */
-public class MenuController {
+public class MenuLogicController {
 
     /**
      * The logger to log information from the Menu,
      * instantiated using a single instance {@link java.util.logging.FileHandler} with Level.ALL
      * and a {@link ConsoleHandler} with Level.INFO
      */
-    static final Logger LOGGER = new LoggerFactory(MenuController.class).getConfiguredLogger();
+    static final Logger LOGGER = new LoggerFactory(MenuLogicController.class).getConfiguredLogger();
 
     /**
      * The current menu node where the user is at
@@ -36,7 +36,7 @@ public class MenuController {
      *
      * @param node the entry {@link MasterOptionNode}
      */
-    public MenuController(MasterOptionNode node) {
+    public MenuLogicController(MasterOptionNode node) {
         this.currentNode = node;
         display();
     }
@@ -85,7 +85,8 @@ public class MenuController {
      * Displays the current menu node
      */
     private void display() {
-        new ResponsePresenter(currentNode.fetchResponse());
+        if (currentNode.fetchResponse() == null) return;
+        new ResponsePresenter(currentNode.fetchResponse()).display();
     }
 
     /**

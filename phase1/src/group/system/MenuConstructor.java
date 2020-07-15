@@ -52,12 +52,12 @@ public class MenuConstructor {
         //.submit("confirm");
     }*/
 
-    public void viewAccount(UserController userController, TradeController tradeController) {
-        /*
+    public void viewAccount(UserController userController) {
+
         menuBuilder.option(User.class, OperationType.verification, 1, "browseItems")
                 .submit("browseAllItems", userController::browseAllItems)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
-        */
+
         menuBuilder.option(User.class, OperationType.add, 2, "wishlist")
                 .submit("item", userController::AddItemToWishlist)
                 .succeeded("master.view.account").failed("master.view.account").master("");

@@ -5,7 +5,6 @@ import group.menu.data.PersistentRequest;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.menu.handler.RequestHandler;
-import group.menu.persenter.ResponsePresenter;
 
 /**
  * A node that generates Request using parent Nodes, and will further generate a ResponseNode after parsing Request using an injected {@link RequestHandler}.<p>
@@ -66,11 +65,13 @@ public class SubmitNode extends InputNode {
      */
     @Override
     public Node parseInput(String input) {
-        inputPreProcessing(input);
-        if (!validate().success()) {
-            return this;
+        inputPreprocess(input);
+        Node node = super.parseInput(input);
+        if (node == getChild()) {
+            return parseResponse(handler.handle(getRequest()));
+        } else {
+            return node;
         }
-        return parseResponse(handler.handle(getRequest()));
     }
 
     /**
@@ -95,7 +96,7 @@ public class SubmitNode extends InputNode {
             realChild = masterOptionNodePool.getFailed();
         }
 
-        new ResponsePresenter(response);
+        response.display();
         return realChild;
     }
 

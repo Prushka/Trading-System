@@ -1,5 +1,7 @@
 package group.menu.data;
 
+import group.menu.persenter.ResponsePresenter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +55,10 @@ public class Response {
 
     public Response(boolean success, String translatable) {
         this(new Response.Builder(success).translatable(translatable));
+    }
+
+    public void display() {
+        new ResponsePresenter(this).display();
     }
 
     /**

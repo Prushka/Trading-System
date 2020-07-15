@@ -68,7 +68,7 @@ public class InputNode extends RequestableNode {
      *
      * @param input user input
      */
-    void inputPreProcessing(String input) {
+    void inputPreprocess(String input) {
         this.value = input;
         if (input == null || input.length() == 0) {
             this.value = defaultValue;
@@ -80,12 +80,7 @@ public class InputNode extends RequestableNode {
 
     @Override
     public Response fetchResponse() {
-        Response response = validate();
-        if (response.success()) {
-            return new Response.Builder(true).translatable(getTranslatable()).build();
-        } else {
-            return response;
-        }
+        return new Response.Builder(true).translatable(getTranslatable()).build();
     }
 
     /**
@@ -93,11 +88,13 @@ public class InputNode extends RequestableNode {
      * @return the node to navigate to after parsing user input
      */
     public Node parseInput(String input) {
-        inputPreProcessing(input);
-        if (!validate().success()) {
-            return getChild();
+        inputPreprocess(input);
+        Response response = validate();
+        if (!response.success()) {
+            response.display();
+            return this;
         }
-        return this;
+        return getChild();
     }
 
     /**

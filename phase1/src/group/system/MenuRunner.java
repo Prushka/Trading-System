@@ -2,7 +2,6 @@ package group.system;
 
 import group.config.LoggerFactory;
 import group.menu.MenuLogicController;
-import group.menu.persenter.ResponsePresenter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,20 +26,21 @@ public class MenuRunner {
 
     public void run() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        new ResponsePresenter(menuLogicController.fetchInitialResponse()).display();
+        menuLogicController.fetchInitialResponse().display();
 
         try {
             String input = "";
             while (!input.equalsIgnoreCase("exit")) {
                 input = br.readLine();
                 if (!input.equalsIgnoreCase("exit")) {
-                    new ResponsePresenter(menuLogicController.parseInput(input)).display();
+                    menuLogicController.parseInput(input).display();
                 }
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Unable to read from Buffered reader.", e);
         } catch (NullPointerException e) {
             LOGGER.log(Level.SEVERE, "There's no node next.", e);
+            e.printStackTrace();
         }
         shutdown();
     }

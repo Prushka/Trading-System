@@ -40,8 +40,6 @@ public class ControllerDispatcher implements Shutdownable {
     public void dispatchController() {
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
-
-        // remove this grace code when actual controller comes in
         testTradeController = new TradeController(this);
     }
 

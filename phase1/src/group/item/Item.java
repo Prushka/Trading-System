@@ -59,8 +59,9 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
 
     @Override
     public String toString(){
-        return name + ": " + description + "\n Owned by: " + owner.getUserName();
+        return name + ": " + description + " Owned by: " + owner.getUserName();
     }
+
     @Override
     public boolean equals(Object other){
         if (other instanceof Item) {

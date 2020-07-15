@@ -43,6 +43,52 @@ public class MenuConstructor {
         shutdowns = new ArrayList<>();
     }
 
+
+    // re building menu from scratch, see menu design at bottom of google doc
+    /*public void chooseLogin(){
+        menuBuilder.option(User.class, OperationType.verification, 1, "login")
+        .input("personal", null, null, ValidatingType.invalid)
+        .input("administrator", null, null, ValidatingType.invalid);
+        //.submit("confirm");
+    }*/
+
+    public void ViewAccount(UserController userController, TradeController tradeController) {
+        menuBuilder.option(User.class, OperationType.verification, 1, "browseItems")
+                .submit("browseAllItems", userController::browseAllItems)
+                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+
+        menuBuilder.construct("master.view.account", true);
+        /*
+        menuBuilder.option(User.class, OperationType.add, 2, "wishlist")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+
+                .submit("password", controller::loginUser)
+                .succeeded("master.support.trade").failed("master.account").master("master.account");
+
+        menuBuilder.option(User.class, OperationType.verification, 1, "login")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+
+                .submit("password", controller::loginUser)
+                .succeeded("master.support.trade").failed("master.account").master("master.account");
+
+        menuBuilder.option(User.class, OperationType.verification, 1, "login")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+
+                .submit("password", controller::loginUser)
+                .succeeded("master.support.trade").failed("master.account").master("master.account");
+
+        menuBuilder.option(User.class, OperationType.verification, 1, "login")
+                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+
+                .submit("password", controller::loginUser)
+                .succeeded("master.support.trade").failed("master.account").master("master.account");
+        */
+
+
+    }
+
+
+    // previous code
     public void user(UserController controller) {
         // user login / register example
         menuBuilder.option(User.class, OperationType.verification, 1, "login")
@@ -61,7 +107,7 @@ public class MenuConstructor {
                 .succeeded("master.account").failed("master.account").master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account", true);
+        menuBuilder.construct("master.account", false);
     }
 
     public void userRequest(UserController controller){

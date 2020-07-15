@@ -3,10 +3,11 @@ package group.item;
 import group.item.Item;
 import group.menu.data.Response;
 import group.repository.Repository;
-// import java.util.ArrayList;
+import java.util.ArrayList;
 
 public class ItemManager {
     private Repository<Item> items;
+    private ArrayList<Item> itemsArrayList; //temp solution
 
     public ItemManager(Repository<Item> items) {
         this.items = items;
@@ -14,11 +15,13 @@ public class ItemManager {
 
     public Response add (Item item) {
         items.add(item);
+        itemsArrayList.add(item);
         return new Response.Builder(true).translatable("itemAdd").build();
     }
 
     public Response remove (Item item) {
         items.remove(item);
+        itemsArrayList.remove(item);
         return new Response.Builder(true).translatable("itemRemove").build();
     }
 
@@ -26,15 +29,12 @@ public class ItemManager {
         return items.get(uid);
     }
 
-    /*
-    @Override
-    public String toString() {
+
+    public Response browseItemsDisplay() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Item i : this.items) {
+        for (Item i : itemsArrayList) {
             stringBuilder.append(i.toString()).append("\n");
         }
-        return stringBuilder.toString();
+        return new Response.Builder(true).translatable("allItems", stringBuilder.toString()).build();
     }
-     */
-
 }

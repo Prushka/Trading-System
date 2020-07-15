@@ -70,11 +70,11 @@ public class PersonalUserManager {
     }
 
     public Response createNewItemAndRequestAdd(PersonalUser owner, String item, String description){
-        Item newitem = new Item(owner, item, description);
+        Item newitem = new Item(owner.getUid(), item, description);
         return requestToAddItemToInventory(owner, newitem.getUid());
     }
 
-    public Response removeItemFromInventory(PersonalUser user, Long item){
+    public Response removeItemFromInventory(PersonalUser user, Long item) {
         user.removeFromInventory(item);
         return new Response.Builder(true).translatable("success.remove.item").build();
     }

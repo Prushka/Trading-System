@@ -50,8 +50,16 @@ public class AdministrativeUserController {
         return administrativeManager.addSubAdmin(currAdmin, username, email, telephone, password);
     }
 
-    public Response getFreezeUserList(Request request){
+    public Response viewFreezeUserList(Request request){
         return administrativeManager.getListUserShouldBeFreezed();
+    }
+
+    public Response viewAddItemRequest(Request request){
+        return administrativeManager.getNeedToConfirmAddItemUserList();
+    }
+
+    public Response viewUnfreezeRequest(Request request){
+        return administrativeManager.getUserRequestToUnfreeze();
     }
 
     public Response findUserForAdmin(Request request){
@@ -105,6 +113,16 @@ public class AdministrativeUserController {
         // Item itemEntity = itemManager.get(item);
         // itemManager.remove(itemEntity)
         return administrativeManager.removeUserItem(user, item);
+    }
+
+    public Response setTransactionLimit(Request request){
+        int limit = request.getInt("limit");
+        return administrativeManager.setTransactionLimit(limit);
+    }
+
+    public Response setLendBeforeBorrowLimit(Request request){
+        int limit = request.getInt("limit");
+        return administrativeManager.setLendBeforeBorrowLimit(limit);
     }
 
 

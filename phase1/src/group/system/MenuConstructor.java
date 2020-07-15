@@ -133,7 +133,7 @@ public class MenuConstructor {
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "findUser")
-                .submit("confirm", name -> name.length() > 3, ValidatingType.invalid, controller::getFreezeUserList)
+                .submit("confirm", name -> name.length() > 3, ValidatingType.invalid, controller::viewFreezeUserList)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeUser")
@@ -169,6 +169,25 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .submit("item", controller::removeItemInUserInventory)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 9, "setTransLimit")
+                .submit("limit", controller::setTransactionLimit)
+                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 10, "setLandBeforeBorrowLimit")
+                .submit("limit", controller::setLendBeforeBorrowLimit)
+                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.view, 9, "setTransLimit")
+                .submit("confirm", controller::viewAddItemRequest)
+                .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
+
+        menuBuilder.option(AdministrativeUser.class, OperationType.view, 10, "addItemRequest")
+                .submit("confirm", controller::viewUnfreezeRequest)
+                .succeeded("master.adminAccess").failed("master.adminAccess").master("unfreezeRequest");
+
+
+
 
         menuBuilder.construct("master.adminAccess", false);
     }

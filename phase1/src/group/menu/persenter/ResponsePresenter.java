@@ -25,6 +25,7 @@ public class ResponsePresenter {
     }
 
     public void display() {
+        if (response == null) return;
         for (TranslatablePair pair : response.getTranslatablePairs()) {
             LOGGER.log(Level.INFO, pair.getTranslatable(), pair.getParas());
         }

@@ -1,10 +1,10 @@
 package group.menu;
 
 import group.config.LoggerFactory;
+import group.menu.data.Response;
 import group.menu.node.InputNode;
 import group.menu.node.MasterOptionNode;
 import group.menu.node.Node;
-import group.menu.persenter.ResponsePresenter;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -38,7 +38,6 @@ public class MenuLogicController {
      */
     public MenuLogicController(MasterOptionNode node) {
         this.currentNode = node;
-        display();
     }
 
     /**
@@ -58,7 +57,6 @@ public class MenuLogicController {
         // Implement this in a polymorphism way may need to add fields and methods to all node classes. I don't know!
         if (currentNode.getChild() != null && currentNode instanceof InputNode && currentNode.getChild() instanceof InputNode) {
             if (currentNode.getValue() != null && currentNode.getValue().length() > 0 && !((InputNode) currentNode).validate().isPresent()) {
-                LOGGER.log(Level.INFO, "current.value.tip");
                 setCurrentNode(currentNode.getChild());
             }
         }
@@ -70,7 +68,7 @@ public class MenuLogicController {
      *
      * @param input user input
      */
-    public void parseInput(String input) {
+    public Response parseInput(String input) {
         if (input.equalsIgnoreCase("back")) {
             goBack();
         } else if (input.equalsIgnoreCase("next")) {
@@ -78,15 +76,11 @@ public class MenuLogicController {
         } else {
             setCurrentNode(currentNode.parseInput(input).traceForward());
         }
-        display();
+        return currentNode.fetchResponse();
     }
 
-    /**
-     * Displays the current menu node
-     */
-    private void display() {
-        if (currentNode.fetchResponse() == null) return;
-        new ResponsePresenter(currentNode.fetchResponse()).display();
+    public Response fetchInitialResponse() {
+        return new Response.Builder(true).translatable("init.tip").response(currentNode.fetchResponse()).build();
     }
 
     /**
@@ -97,12 +91,5 @@ public class MenuLogicController {
     private void setCurrentNode(Node nextNode) {
         LOGGER.log(Level.FINE, "debug.switch.node", new Object[]{currentNode, nextNode});
         this.currentNode = nextNode;
-    }
-
-    /**
-     * Displays the initial information before every node.
-     */
-    public void displayInitial() {
-        LOGGER.log(Level.INFO, "init.tip");
     }
 }

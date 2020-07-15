@@ -29,16 +29,16 @@ public class ControllerDispatcher implements Shutdownable {
 
     TradeProperties tradeProperties;
 
-    final MenuConstructor menuConstructor = new MenuConstructor();
+    final MenuController menuController = new MenuController();
 
     private final SaveHook saveHook = new SaveHook();
 
     public ControllerDispatcher() {
-        menuConstructor.shutdownHook(this);
+        menuController.shutdownHook(this);
         createProperties();
         createRepositories();
         dispatchController();
-        menuConstructor.runMenu();
+        menuController.runMenu();
     }
 
     public void dispatchController() {
@@ -47,7 +47,7 @@ public class ControllerDispatcher implements Shutdownable {
         testTradeController = new TradeController(this);
         administrativeUserController = new AdministrativeUserController(this);
 
-        this.menuConstructor.mainMenu(userController, administrativeUserController);
+        this.menuController.mainMenu(userController, administrativeUserController);
     }
 
     public void createRepositories() {

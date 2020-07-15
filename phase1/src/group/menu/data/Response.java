@@ -43,6 +43,10 @@ public class Response {
         this.persistentKey = builder.persistentKey;
     }
 
+    public Response(String translatable) {
+        this(new Response.Builder(true).translatable(translatable));
+    }
+
     /**
      * @return <code>true</code> if the Response represents a successful Response
      */

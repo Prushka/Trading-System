@@ -5,6 +5,8 @@ import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.MenuLogicController;
+import group.menu.data.Response;
+import group.menu.persenter.ResponsePresenter;
 import group.menu.validator.DateValidator;
 import group.menu.validator.EnumValidator;
 import group.menu.validator.RepositoryIdValidator;
@@ -37,27 +39,29 @@ import java.util.logging.Logger;
 //  When you define "master.support.trade" in your response object, "master.support.trade" will be next. To use custom masters, they have to be put in here
 //  In other words: if there's no method call: .master("master.support.trade"), you can't set it in Response as next node
 
-public class MenuConstructor {
+public class MenuController {
+
+    static final Logger LOGGER = new LoggerFactory(MenuController.class).getConfiguredLogger();
 
     private final MenuBuilder menuBuilder;
 
     private final List<Shutdownable> shutdowns;
 
-    public MenuConstructor() {
+    public MenuController() {
         menuBuilder = new MenuBuilder();
         shutdowns = new ArrayList<>();
     }
 
 
     // re building menu from scratch, see menu design at bottom of google doc
-    public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController){
+    public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController) {
         menuBuilder.option(User.class, OperationType.verification, 1, "login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
+                .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", userController::loginUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2,"login")
+        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2, "login")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", administrativeUserController::loginAdminUser)
@@ -99,7 +103,7 @@ public class MenuConstructor {
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.add, 4, "inventory")
-                .input("item", null, ValidatingType.invalid )
+                .input("item", null, ValidatingType.invalid)
                 .submit("description", userController::RequestAddNewItem)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
@@ -191,7 +195,7 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.ticket", false);
     }
 
-    public void supportTrade(TradeController controller){
+    public void supportTrade(TradeController controller) {
         // grace notes: keys correspond to request keys, .master calls the next set of nodes
         menuBuilder.option(Trade.class, OperationType.add, 1)
                 .input("initiator", null, new RepositoryIdValidator(controller.personalUserRepository),
@@ -249,19 +253,22 @@ public class MenuConstructor {
         menuBuilder.construct("master.support.trade", false);
     }
 
+    public void present(Response response) {
 
-    static final Logger LOGGER = new LoggerFactory(MenuConstructor.class).getConfiguredLogger();
+    }
 
     public void runMenu() {
         MenuLogicController menu = new MenuLogicController(menuBuilder.constructFinal()); // the construct final will put all place holders to nodes
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        menu.displayInitial();
+
+        new ResponsePresenter(menu.fetchInitialResponse()).display();
+
         try {
             String input = "";
             while (!input.equalsIgnoreCase("exit")) {
                 input = br.readLine();
                 if (!input.equalsIgnoreCase("exit")) {
-                    menu.parseInput(input);
+                    new ResponsePresenter(menu.parseInput(input)).display();
                 }
             }
         } catch (IOException e) {
@@ -269,7 +276,6 @@ public class MenuConstructor {
         } catch (NullPointerException e) {
             LOGGER.log(Level.SEVERE, "There's no node next.", e);
         }
-
         shutdown();
     }
 

@@ -63,7 +63,11 @@ public abstract class MappableBase {
                     obj = field.getType().getDeclaredConstructor(List.class).newInstance(childRepresentation);
                     id -= 1;
                 } else if (List.class.isAssignableFrom(field.getType())) {
-                    obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
+                    if (representation.length() == 0 || representation.equals("null")) {
+                        obj = null;
+                    } else {
+                        obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
+                    }
                 } else {
                     obj = getObjectFrom(field.getType(), representation);
                 }

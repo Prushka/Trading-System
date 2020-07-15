@@ -59,6 +59,19 @@ public class UserController {
         return personalUserManager.UnfreezeRequest(currUser);
     }
 
+    public Response AddItemToWishlist(Request request){
+        Long item = request.getLong("item");
+        return personalUserManager.addItemToWishlist(currUser, item);
+    }
+
+    public Response removeItemFromWishlist(Request request){
+        Long item = request.getLong("itemname");
+        return personalUserManager.removeItemFromInventory(currUser, item);
+    }
+
+
+
+
     public Response browseAllItems(Request request) {
         return itemManager.browseItemsDisplay();
     }

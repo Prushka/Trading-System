@@ -52,12 +52,12 @@ public class MenuConstructor {
         //.submit("confirm");
     }*/
 
-    public void ViewAccount(UserController userController, TradeController tradeController) {
+    /*public void ViewAccount(UserController userController, TradeController tradeController) {
         menuBuilder.option(User.class, OperationType.verification, 1, "browseItems")
                 .submit("browseAllItems", userController::browseAllItems)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
-        menuBuilder.construct("master.view.account", true);
+        menuBuilder.construct("master.view.account", true);*/
         /*
         menuBuilder.option(User.class, OperationType.add, 2, "wishlist")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid )
@@ -85,7 +85,7 @@ public class MenuConstructor {
         */
 
 
-    }
+    //}
 
 
     // previous code
@@ -95,7 +95,7 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid )
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", controller::loginUser)
-                .succeeded("master.support.trade").failed("master.account").master("master.account");
+                .succeeded("master.account.access").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 2, "register")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
@@ -107,20 +107,20 @@ public class MenuConstructor {
                 .succeeded("master.account").failed("master.account").master("master.account");
         // submit node can be password, if you don't want the user to confirm their input. doing so users will directly submit their input in the password part
 
-        menuBuilder.construct("master.account", false);
+        menuBuilder.construct("master.account", true);
     }
 
     public void userRequest(UserController controller){
 
-        menuBuilder.option(User.class, OperationType.add, 1, "requestAddItem")
+        menuBuilder.option(User.class, OperationType.add, 4, "requestAddItem")
                 .input("item",null, null, ValidatingType.invalid)
                 .input("description", null, null, ValidatingType.invalid)
                 .submit("unfreeze", controller::RequestAddNewItem)
-                .succeeded("master.support.trade").failed("master.account").master("master.account");
+                .succeeded("master.account.access").failed("master.account").master("master.account");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "removeItem")
                 .submit("confirm", controller::removeItemFromInventory)
-                .master("master.account");
+                .succeeded("master.account.access").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 3, "requestUnfreeze")
                 .submit("unfreeze", controller::RequestUnfreeze)

@@ -1,10 +1,9 @@
 package group.system;
 
-import group.menu.Menu;
 import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
-import group.menu.processor.PasswordEncryption;
+import group.menu.MenuController;
 import group.menu.validator.DateValidator;
 import group.menu.validator.EnumValidator;
 import group.menu.validator.RepositoryIdValidator;
@@ -13,8 +12,12 @@ import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.User;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * {\__/}
@@ -246,7 +249,23 @@ public class MenuConstructor {
 
     public void runMenu() {
         ConsoleSystem console = new ConsoleSystem();
-        console.run(new Menu(menuBuilder.constructFinal())); // the construct final will put all place holders to nodes
+        MenuController menu = new MenuController(menuBuilder.constructFinal()); // the construct final will put all place holders to nodes
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        menu.displayInitial();
+        try {
+            String input = "";
+            while (!input.equalsIgnoreCase("exit")) {
+                input = br.readLine();
+                if (!input.equalsIgnoreCase("exit")) {
+                    menu.parseInput(input);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Unable to read from Buffered reader.", e);
+        } catch (NullPointerException e) {
+            LOGGER.log(Level.SEVERE, "There's no node next.", e);
+        }
+
         shutdown();
     }
 

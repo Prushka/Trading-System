@@ -1,15 +1,20 @@
 package group.system;
 
+import group.config.LoggerFactory;
 import group.config.property.TradeProperties;
+import group.item.Item;
 import group.notification.SupportTicket;
 import group.repository.CSVRepository;
 import group.repository.Repository;
 import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
-import group.item.Item;
+
+import java.util.logging.Logger;
 
 public class ControllerDispatcher implements Shutdownable {
+
+    static final Logger LOGGER = new LoggerFactory(ControllerDispatcher.class).getConfiguredLogger();
 
     Repository<SupportTicket> ticketRepository;
     Repository<PersonalUser> personalUserRepository;

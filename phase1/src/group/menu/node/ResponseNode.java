@@ -1,9 +1,6 @@
 package group.menu.node;
 
 import group.menu.data.Response;
-import group.menu.data.TranslatablePair;
-
-import java.util.logging.Level;
 
 /**
  * A node that contains only response information.<p>
@@ -51,13 +48,11 @@ public class ResponseNode extends Node {
      * Display the current response node.
      * All information in TranslatablePairs will be logged.
      */
-    public void display() {
+    public Response fetchResponse() {
         if (response == null || response.getTranslatablePairs() == null || response.getTranslatablePairs().size() == 0) {
-            LOGGER.log(Level.INFO, getTranslatable());
+            return new Response.Builder(true).translatable(getTranslatable()).build();
         } else {
-            for (TranslatablePair pair : response.getTranslatablePairs()) {
-                LOGGER.log(Level.INFO, pair.getTranslatable(), pair.getParas());
-            }
+            return response;
         }
     }
 

@@ -4,6 +4,7 @@ import group.config.LoggerFactory;
 import group.menu.node.InputNode;
 import group.menu.node.MasterOptionNode;
 import group.menu.node.Node;
+import group.menu.persenter.ResponsePresenter;
 
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -16,14 +17,14 @@ import java.util.logging.Logger;
  *
  * @author Dan Lyu
  */
-public class Menu {
+public class MenuController {
 
     /**
      * The logger to log information from the Menu,
      * instantiated using a single instance {@link java.util.logging.FileHandler} with Level.ALL
      * and a {@link ConsoleHandler} with Level.INFO
      */
-    static final Logger LOGGER = new LoggerFactory(Menu.class).getConfiguredLogger();
+    static final Logger LOGGER = new LoggerFactory(MenuController.class).getConfiguredLogger();
 
     /**
      * The current menu node where the user is at
@@ -35,7 +36,7 @@ public class Menu {
      *
      * @param node the entry {@link MasterOptionNode}
      */
-    public Menu(MasterOptionNode node) {
+    public MenuController(MasterOptionNode node) {
         this.currentNode = node;
         display();
     }
@@ -84,7 +85,7 @@ public class Menu {
      * Displays the current menu node
      */
     private void display() {
-        currentNode.display();
+        new ResponsePresenter(currentNode.fetchResponse());
     }
 
     /**

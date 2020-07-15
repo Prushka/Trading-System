@@ -25,7 +25,7 @@ public class UserController {
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
         dispatcher.menuConstructor.viewAccount(this);
-        dispatcher.menuConstructor.user(this);
+        //dispatcher.menuConstructor.user(this);
     }
 
     public Response loginUser(Request request) {

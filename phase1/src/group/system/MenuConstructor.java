@@ -70,9 +70,9 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
-                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
+                //.input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
-                .submit("confirm", administrativeUserController::registerAdminUser)
+                .submit("password", password -> password.length() > 7, ValidatingType.invalid, administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
         menuBuilder.construct("master.account", true);
@@ -110,45 +110,9 @@ public class MenuConstructor {
     }
 
 
-    public void user(UserController controller) {
-        // user login / register example
-        menuBuilder.option(User.class, OperationType.verification, 1, "login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid )
-                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
-                .submit("password", controller::loginUser)
-                .succeeded("master.account.access").failed("master.account").master("master.account");
-
-        menuBuilder.option(User.class, OperationType.add, 2, "register")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", null, null, ValidatingType.invalid)
-                .input("telephone", null, null, ValidatingType.invalid)
-                .submit("password", password -> password.length() > 7, ValidatingType.invalid, controller::registerUser)
-                .succeeded("master.account").failed("master.account").master("master.account");
-
-        menuBuilder.construct("master.account", false);
-    }
 
 
-    public void adminUser(AdministrativeUserController controller) {
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 1,"login")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
-                .submit("password", controller::loginAdminUser)
-                .succeeded("master.adminAccess").failed("master.adminAccount").master("adminAccount");
-
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "register")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", null, null, ValidatingType.invalid)
-                .input("telephone", null, null, ValidatingType.invalid)
-                .input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
-                // you can put anything there if you want to process user input before it enters the Request object
-                .submit("confirm", controller::registerAdminUser)
-                .succeeded("master.Account").failed("master.adminAccount").master("adminAccount");
-
-        menuBuilder.construct("master.adminAccount", false);
-
-    }
     /*
 
     public void adminUserAccess(AdministrativeUserController controller) {

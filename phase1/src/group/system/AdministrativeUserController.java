@@ -22,6 +22,7 @@ public class AdministrativeUserController {
         adminRepo = dispatcher.adminUserRepository;
         administrativeManager = new AdministrativeManager(adminRepo, personalRepo);
         dispatcher.menuConstructor.adminUser(this);
+        //dispatcher.menuConstructor.adminUserAccess(this);
     }
 
     // Lucy comment: for now it is only for admin, will discuss how to put in personal

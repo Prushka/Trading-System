@@ -25,15 +25,13 @@ public class UserController {
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
-
         dispatcher.menuConstructor.viewAccount(this);
-        //dispatcher.menuConstructor.user(this);
     }
 
     public Response loginUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");
-        currUser= personalUserManager.getCurrPersonalUser(username, password);
+        currUser = personalUserManager.getCurrPersonalUser(username, password);
         return personalUserManager.verifyLogin(username,password);
     }
 
@@ -69,13 +67,22 @@ public class UserController {
 
     public Response removeItemFromWishlist(Request request){
         Long item = request.getLong("item");
-        return personalUserManager.removeItemFromInventory(currUser, item);
+        return personalUserManager.removeItemFromWishlist(currUser, item);
     }
 
     public Response browseAllItems(Request request) {
         return itemManager.browseItemsDisplay();
     }
 
+    public Response browseInventory(Request request){
+        return personalUserManager.getUserInventory(currUser);
+
+    }
+
+    public Response browseWishlist(Request request){
+        return personalUserManager.getUserWishlist(currUser);
+
+    }
 
 
 

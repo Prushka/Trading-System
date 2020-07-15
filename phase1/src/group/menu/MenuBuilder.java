@@ -279,7 +279,7 @@ public class MenuBuilder {
      * The operation types this option stands for, used only as an identifier for language
      */
     public enum OperationType {
-        edit, add, query, remove, verification
+        edit, add, query, remove, verification, view
     }
 
     /**

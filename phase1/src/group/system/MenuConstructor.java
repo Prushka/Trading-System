@@ -50,13 +50,13 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid )
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", userController::loginUser)
-                .succeeded("master.account").failed("master.account").master("master.account");
+                .succeeded("master.view.account").failed("master.account").master("master.account");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2,"login")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", administrativeUserController::loginAdminUser)
-                .succeeded("master.account").failed("master.account").master("master.account");
+                .succeeded("master.view.account").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 3, "register")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
@@ -70,12 +70,12 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.invalid)
-                //.input("password", /*new PasswordEncryption(),*/ password -> password.length() > 7, ValidatingType.invalid) // the password encryption is broken,
+                .input("password",password -> password.length() > 7, ValidatingType.invalid /*new PasswordEncryption(),*/ ) // the password encryption is broken,
                 // you can put anything there if you want to process user input before it enters the Request object
-                .submit("password", password -> password.length() > 7, ValidatingType.invalid, administrativeUserController::registerAdminUser)
+                .submit("isHead",  administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.construct("master.account", true);
+        menuBuilder.construct("master.account", false);
 
     }
 
@@ -111,18 +111,13 @@ public class MenuConstructor {
 
 
 
-
-
-    /*
-
     public void adminUserAccess(AdministrativeUserController controller) {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 1, "addSunadmin")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .input("email", null, null, ValidatingType.invalid)
                 .input("telephone", null, null, ValidatingType.notexist)
-                .input("password", new PasswordEncryption(), password -> password.length() > 8, ValidatingType.invalid)
-                .submit("confirm", controller::addSubAdmin)
+                .submit("password", password -> password.length() > 8, ValidatingType.invalid, controller::addSubAdmin)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "findUser")
@@ -133,11 +128,11 @@ public class MenuConstructor {
                 .submit("confirm", name -> name.length() > 3, ValidatingType.invalid, controller::getFreezeUserList)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "confirmFreezeUser")
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeUser")
                 .submit("username", controller::confirmFreezeUser)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeAllUser")
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeAllUser") //TODO
                 .submit("confirm", controller::confirmFreezeAllUser)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
@@ -149,7 +144,7 @@ public class MenuConstructor {
                 .submit("confirm", controller::confirmUnFreezeAllUser)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 7, "confirmAddItem")
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmAddItem")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 .submit("item", controller::confirmAddItemRequest)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
@@ -167,8 +162,8 @@ public class MenuConstructor {
                 .submit("item", controller::removeItemInUserInventory)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");
 
-        menuBuilder.construct("master.adminAccess", false);
-    }*/
+        menuBuilder.construct("master.adminAccess", true);
+    }
 
 
     public void supportTicket(SupportTicketController controller) {

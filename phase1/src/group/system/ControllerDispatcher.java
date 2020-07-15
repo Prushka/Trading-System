@@ -41,8 +41,8 @@ public class ControllerDispatcher implements Shutdownable {
         userController = new UserController(this);
         testTradeController = new TradeController(this);
         administrativeUserController = new AdministrativeUserController(this);
-
         this.menuConstructor.mainMenu(userController, administrativeUserController);
+        this.menuConstructor.adminUserAccess(administrativeUserController);
     }
 
     public void createRepositories() {

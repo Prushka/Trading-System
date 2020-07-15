@@ -6,6 +6,7 @@ import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.processor.PasswordEncryption;
 import group.menu.validator.DateValidator;
+import group.menu.validator.EmailValidator;
 import group.menu.validator.EnumValidator;
 import group.menu.validator.RepositoryIdValidator;
 import group.notification.SupportTicket;
@@ -50,13 +51,13 @@ public class MenuConstructor {
                 .input("username", name -> name.length() > 3, ValidatingType.invalid )
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", userController::loginUser)
-                .succeeded("master.account").failed("master.account").master("master.account");
+                .succeeded("master.view.account").failed("master.account").master("master.account");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2,"login")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
                 //.input("email", null, ValidatingType.notexist) // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", administrativeUserController::loginAdminUser)
-                .succeeded("master.account").failed("master.account").master("master.account");
+                .succeeded("master.view.account").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 3, "register")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)

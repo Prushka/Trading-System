@@ -7,7 +7,6 @@ import group.menu.validator.ValidatorPair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * The Node that handles user input.<p>
@@ -44,9 +43,6 @@ public class InputNode extends RequestableNode {
         this.validatorPairs = builder.validatorPairs;
         this.defaultValue = builder.defaultValue;
         this.processor = builder.processor;
-        for (ValidatorPair validatorPair : validatorPairs) {
-            validatorPair.setFailResponseNextNodeIfNull(this);
-        }
     }
 
     /**
@@ -56,15 +52,15 @@ public class InputNode extends RequestableNode {
      *
      * @return <code>true</code> if user input passes validation or there's no available validators
      */
-    public Optional<Node> validate() {
+    public Response validate() {
         if (validatorPairs != null) {
             for (ValidatorPair validatorPair : validatorPairs) {
                 if (!validatorPair.validate(value)) {
-                    return Optional.of(validatorPair.getFailResponseNode());
+                    return validatorPair.getFailResponse();
                 }
             }
         }
-        return Optional.empty();
+        return new Response(true);
     }
 
     /**
@@ -84,7 +80,12 @@ public class InputNode extends RequestableNode {
 
     @Override
     public Response fetchResponse() {
-        return new Response.Builder(true).translatable(getTranslatable()).build();
+        Response response = validate();
+        if (response.success()) {
+            return new Response.Builder(true).translatable(getTranslatable()).build();
+        } else {
+            return response;
+        }
     }
 
     /**
@@ -93,8 +94,10 @@ public class InputNode extends RequestableNode {
      */
     public Node parseInput(String input) {
         inputPreProcessing(input);
-        Optional<Node> validateResult = validate();
-        return validateResult.orElseGet(this::getChild);
+        if (fetchResponse().success()) {
+            return getChild();
+        }
+        return this;
     }
 
     /**
@@ -159,31 +162,18 @@ public class InputNode extends RequestableNode {
          * @return the builder itself
          */
         public T validator(Validator validator, String translatableFailed) {
-            return validator(validator, new ResponseNode(translatableFailed), null);
-        }
-
-        /**
-         * Puts the validator and failed ResponseNode into the Builder.<p>
-         * The validateFailNextNode will be the InputNode itself using this method and users will repeat the same input until the validation passes.<p>
-         *
-         * @param validator                the validator used to validate user input
-         * @param validateFailResponseNode the failed Response Node
-         * @return the builder itself
-         */
-        public T validator(Validator validator, ResponseNode validateFailResponseNode) {
-            return validator(validator, validateFailResponseNode, null);
+            return validator(validator, new Response(false, translatableFailed));
         }
 
         /**
          * Puts the validator, failed ResponseNode and the node after the failedResponseNode into the Builder.
          *
-         * @param validator                the validator used to validate user input
-         * @param validateFailResponseNode the failed Response Node
-         * @param validateFailNextNode     the node to continue after ResponseNode
+         * @param validator    the validator used to validate user input
+         * @param failResponse the failed Response to use when validation fails
          * @return the builder itself
          */
-        public T validator(Validator validator, ResponseNode validateFailResponseNode, Node validateFailNextNode) {
-            this.validatorPairs.add(new ValidatorPair(validator, validateFailResponseNode, validateFailNextNode));
+        public T validator(Validator validator, Response failResponse) {
+            this.validatorPairs.add(new ValidatorPair(validator, failResponse));
             return getThis();
         }
 

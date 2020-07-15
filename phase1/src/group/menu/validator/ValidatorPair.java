@@ -1,7 +1,6 @@
 package group.menu.validator;
 
-import group.menu.node.InputNode;
-import group.menu.node.Node;
+import group.menu.data.Response;
 import group.menu.node.ResponseNode;
 
 /**
@@ -20,32 +19,17 @@ public class ValidatorPair {
     private final Validator validator;
 
     /**
-     * The response node to be used if the validation didn't pass
+     * The response to be used if the validation didn't pass
      */
-    private final ResponseNode failResponseNode;
+    private final Response failResponse;
 
     /**
-     * @param validator            The validator used to validate user input
-     * @param failResponseNode     The response node to be used if the validation didn't pass
-     * @param failResponseNextNode the node after the failResponseNode to ask the user to repeat his/her input
+     * @param validator    The validator used to validate user input
+     * @param failResponse The response to be used if the validation didn't pass
      */
-    public ValidatorPair(Validator validator, ResponseNode failResponseNode, Node failResponseNextNode) {
+    public ValidatorPair(Validator validator, Response failResponse) {
         this.validator = validator;
-        this.failResponseNode = failResponseNode;
-        this.failResponseNode.setChild(failResponseNextNode);
-    }
-
-    /**
-     * Sets the failed response node's child
-     * If the failResponseNextNode is not set when constructing the {@link #failResponseNode}.<p>
-     * The input node itself will be set to be the next node
-     *
-     * @param inputNode the input node
-     */
-    public void setFailResponseNextNodeIfNull(InputNode inputNode) {
-        if (failResponseNode.getChild() == null) {
-            failResponseNode.setChild(inputNode);
-        }
+        this.failResponse = failResponse;
     }
 
     /**
@@ -58,9 +42,9 @@ public class ValidatorPair {
     }
 
     /**
-     * @return {@link #failResponseNode}
+     * @return the response to be used if the validation didn't pass
      */
-    public ResponseNode getFailResponseNode() {
-        return failResponseNode;
+    public Response getFailResponse() {
+        return failResponse;
     }
 }

@@ -44,7 +44,15 @@ public class Response {
     }
 
     public Response(String translatable) {
-        this(new Response.Builder(true).translatable(translatable));
+        this(true, translatable);
+    }
+
+    public Response(boolean success) {
+        this(new Response.Builder(success));
+    }
+
+    public Response(boolean success, String translatable) {
+        this(new Response.Builder(success).translatable(translatable));
     }
 
     /**

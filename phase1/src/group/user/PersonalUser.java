@@ -129,12 +129,13 @@ public class PersonalUser extends User {
         }
     }
 
-    /**
+
+    /*
      * returns the user IDs of the top three most frequent traders for this user as a map.
      * if this user has not traded with three different users, returns top 2 or the top
      * trader accordingly.
      * @return map of the top 3 most frequent traders for this user
-     */
+
     public Map<Integer, Integer> getTopThreeTraders() {
         int len = traderFrequency.keySet().toArray().length;
         if (traderFrequency.isEmpty()) {
@@ -153,20 +154,20 @@ public class PersonalUser extends User {
         }
     }
 
-    /**
+    /*
      * helper method that returns a key from a value only for a one-to-one Map<Integer, Integer></>
      * type map.
      * @param value times traded with someone else
      * @return key mapped to the given value
-     */
-   private Integer keyFromValue(Integer value) {
+
+   private Long keyFromValue(Integer value) {
         for (Map.Entry<Integer , Integer> entry : traderFrequency.entrySet()) {
             if (value.equals(entry.getValue())) {
                 return entry.getKey();
             }
         }
         return null;
-    }
+    }*/
 
     @Override
     public String toString() {

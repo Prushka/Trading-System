@@ -6,10 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -51,7 +48,7 @@ public abstract class MappableBase {
         for (Field field : getSortedFields()) {
             field.setAccessible(true);
             String representation = data.get(id);
-            Object obj; // declaring within the smallest scope. https://stackoverflow.com/questions/8803674/declaring-variables-inside-or-outside-of-a-loop
+            Object obj;
             try {
                 // what's the difference between == and isAssignedFrom() and isAssignableFrom() from the class?
                 if (CSVMappable.class.isAssignableFrom(field.getType())) { // aha
@@ -68,6 +65,12 @@ public abstract class MappableBase {
                     } else {
                         obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
                     }
+                } else if (Map.class.isAssignableFrom(field.getType())) {
+                    if (representation.length() == 0 || representation.equals("null")) {
+                        obj = null;
+                    } else {
+                        obj = stringToMap((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
+                    }
                 } else {
                     obj = getObjectFrom(field.getType(), representation);
                 }
@@ -77,6 +80,15 @@ public abstract class MappableBase {
                 LOGGER.log(Level.SEVERE, "Some error occurred in reflection when instantiating an object from CSV record.", e);
             }
         }
+    }
+
+    private <T> Map<T, T> stringToMap(Class<T> fieldListGenericClass, String representation) { // map has to have the same type for key and value, this also only uses HashMap
+        Map<T, T> map = new HashMap<>();
+        for (String element : representation.split(";")) {
+            String[] subElement = element.split(":");
+            map.put((T) getObjectFrom(fieldListGenericClass, subElement[0]), (T) getObjectFrom(fieldListGenericClass, subElement[1]));
+        }
+        return map;
     }
 
     /**
@@ -210,6 +222,10 @@ public abstract class MappableBase {
                     value.append(((CSVMappable) obj).toCSVString());
                 } else if (obj instanceof List) {
                     ((List<?>) obj).forEach(o -> value.append(o.toString()).append(";"));
+                } else if (obj instanceof Map) {
+                    for(Map.Entry<?,?> entry:((Map<?,?>) obj).entrySet()){
+                        value.append(entry.getKey().toString()).append(":").append(entry.getValue().toString()).append(";");
+                    }
                 } else {
                     value.append(obj.toString());
                 }

@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The persistent request class to hold cached user requests.
+ * The persistent request class to hold cached user requests.<p>
+ * This class is currently not used since current logged in User is cached elsewhere.
  *
  * @author Dan Lyu
  * @see Request

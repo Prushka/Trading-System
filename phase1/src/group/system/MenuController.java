@@ -50,7 +50,7 @@ public class MenuController {
                 .input("username", validatorFactory.getValidator(ValidatorFactory.Type.USER_NAME))
                 .input("email", new EmailValidator())
                 .input("telephone", validatorFactory.getValidator(ValidatorFactory.Type.TELEPHONE))
-                .submit("password", validatorFactory.getValidator(ValidatorFactory.Type.PASSWORD), ValidatingType.invalid, userController::registerUser)
+                .submit("password", new PasswordEncryption(), validatorFactory.getValidator(ValidatorFactory.Type.PASSWORD), ValidatingType.invalid, userController::registerUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
 
@@ -90,7 +90,7 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.add, 3, "wishlist")
-                .input("item", null, null,ValidatingType.invalid)
+                .input("item", null, null, ValidatingType.invalid)
                 .submit("description", userController::AddItemToWishlist)
                 .succeeded("master.view.account").failed("master.view.account").master("");
 

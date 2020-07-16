@@ -7,14 +7,20 @@ The program won't run without doing these 2 steps
 
 Configuration:
 -------------
-* The default configuration files can be found in resources folder: language.properties and trade.properties.
-* language.properties: contains all language identifiers and English text. This file will stay in the resources folder.
-* trade.properties: contains all trade related configurations. This file will be save to config/trade.properties the first time this program runs.
+* The default configuration files can be found in resources folder: **language.properties** and **trade.properties**.
+* **language.properties**: contains all language identifiers and English text. This file will stay in the resources folder.
+* **trade.properties**: contains all trade related configurations. This file will be save to config/trade.properties the first time this program runs.
 
 Log:
 -------------
 * No checked exception stacktrace will be printed in the console. It will print something to let you check the log files if something wrong happened.
-* Log files are located at log/{date time}.log. This file also contains debug records.
+* Log files are located at **log/{date time}.log**. This file also contains debug records.
+
+Data:
+-------------
+* We used CSV for every entity class, and the files are located in **/data** folder.
+* Serialization can be easily swapped by replacing CSVRepository -> SerializationRepository in ControllerDispatcher.
+* The CSV mapping is achieved by reflection, which can be found in MappableBase.
 
 Reference:
 -------------

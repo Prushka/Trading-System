@@ -81,7 +81,7 @@ public class PersonalUserManager {
 
     public Response addItemToWishlist(PersonalUser user, Long item){
         user.addToWishList(item);
-        return new Response.Builder(true).translatable("success.add.wishlist").build(); // this one
+        return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 
     public Response removeItemFromWishlist(PersonalUser user, Long item){
@@ -105,6 +105,10 @@ public class PersonalUserManager {
         }else{
             return new Response.Builder(false).translatable("false.is.frozen", user.getIsFrozen()).build();
         }
+    }
+
+    public Item createNewItem(Long ownerUID, String item, String description){
+        return new Item(ownerUID, item, description);
     }
 
 

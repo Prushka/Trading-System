@@ -61,8 +61,10 @@ public class UserController {
     }
 
     public Response AddItemToWishlist(Request request){
-        Long item = request.getLong("item");
-        return personalUserManager.addItemToWishlist(currUser, item);
+        String item = request.get("item");
+        String description = request.get("description");
+        Item newItem = personalUserManager.createNewItem(currUser.getUid(), item, description);
+        return personalUserManager.addItemToWishlist(currUser, newItem.getUid());
     }
 
     public Response removeItemFromWishlist(Request request){

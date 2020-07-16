@@ -1,6 +1,7 @@
 package group.user;
 
 import group.item.Item;
+import group.repository.UniqueId;
 
 import java.util.*;
 
@@ -148,4 +149,6 @@ public class PersonalUser extends User {
     public String toString() {
         return "PersonalUser" + super.toString();
     }
+
+
 }

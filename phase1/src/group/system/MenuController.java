@@ -90,7 +90,8 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.add, 3, "wishlist")
-                .submit("item", userController::AddItemToWishlist)
+                .input("item", null, null,ValidatingType.invalid)
+                .submit("description", userController::AddItemToWishlist)
                 .succeeded("master.view.account").failed("master.view.account").master("");
 
         menuBuilder.option(User.class, OperationType.remove, 4, "wishlist")
@@ -186,9 +187,9 @@ public class MenuController {
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
                 .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
 
-       menuBuilder.option(SupportTicket.class, OperationType.query, 3,"test")
+       /*menuBuilder.option(SupportTicket.class, OperationType.query, 3,"test")
                .skippableSubmit(controller::getTicketsByCategory2)
-               .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
+               .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");*/ //cause error when run
 
         menuBuilder.construct("master.support.ticket", false);
     }

@@ -11,7 +11,7 @@ public class PersonalUser extends User {
 
     private List<Long> wishlist;
     private List<Long> inventory;
-    private List<Long> trades;
+    private ArrayList<Long> trades;
     private List<Long> supportTickets;
     private Boolean isFrozen;
     private Integer lendCount;
@@ -60,7 +60,7 @@ public class PersonalUser extends User {
 
     public void removeFromInventory(Long oldItem){ inventory.remove(oldItem); }
 
-    public List<Long> getTrades() { return trades; }
+    public ArrayList<Long> getTrades() { return trades; }
 
     public void addToTrades(Long newItem){ trades.add(newItem);}
 

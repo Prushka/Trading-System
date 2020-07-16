@@ -28,7 +28,6 @@ public class UserController {
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
-        dispatcher.menuController.viewAccount(this);
         dispatcher.menuController.personalUserAccess(this);
     }
 
@@ -99,7 +98,7 @@ public class UserController {
         //return new Response.Builder(true).translatable("not.frozen").build();
     }
 
-    public Response topTraders(){
+    public Response topTraders(Request request){
         Map<Long, Integer> frequentTraders = currUser.getTopThreeTraders();
         StringBuilder stringBuilder = new StringBuilder();
         for (Long i : frequentTraders.keySet()) {

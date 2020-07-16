@@ -135,7 +135,7 @@ public class TradeController {
         }
     }
 
-    public Response getRecentCompleteTrades(){
+    public Response getRecentTrades(Request request){
         ArrayList<Long> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
         for (Long i : recentCompleteTrades) {
@@ -143,5 +143,15 @@ public class TradeController {
             stringBuilder.append(trade.toString()).append("\n");
         }
         return new Response.Builder(true).translatable("recentTrades", stringBuilder.toString()).build();
+    }
+
+    public Response getAllTrades(Request request){
+        ArrayList<Long> allTrades = currUser.getTrades();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Long i : allTrades) {
+            Trade trade = tradeRepository.get(i);
+            stringBuilder.append(trade.toString()).append("\n");
+        }
+        return new Response.Builder(true).translatable("allTrades", stringBuilder.toString()).build();
     }
 }

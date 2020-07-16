@@ -187,10 +187,6 @@ public class MenuController {
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
                 .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
 
-       /*menuBuilder.option(SupportTicket.class, OperationType.query, 3,"test")
-               .skippableSubmit(controller::getTicketsByCategory2)
-               .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");*/ //cause error when run
-
         menuBuilder.construct("master.support.ticket", false);
     }
 

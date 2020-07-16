@@ -74,15 +74,11 @@ public class MenuBuilder {
          * @param id    the id of this option
          * @param addon the addon String to be used in the language identifier
          */
-        public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, RequestHandler requestHandler, String addon) {
+        public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, String addon) {
             this.clazz = clazz;
             this.type = type;
-            optionNode = new OptionNode.Builder(getTranslatable("option", addon)).id(id).requestHandler(requestHandler).build();
+            optionNode = new OptionNode.Builder(getTranslatable("option", addon)).id(id).build();
             currentNode = optionNode;
-        }
-
-        public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, String addon) {
-            this(clazz, type, id, null, addon);
         }
 
         /**

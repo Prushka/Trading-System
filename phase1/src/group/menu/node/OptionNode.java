@@ -18,8 +18,6 @@ public class OptionNode extends Node {
      */
     private final int id;
 
-    private final RequestHandler handler;
-
     /**
      * Constructs an OptionNode from a {@link OptionNode.Builder}
      *
@@ -28,7 +26,6 @@ public class OptionNode extends Node {
     OptionNode(Builder builder) {
         super(builder);
         this.id = builder.id;
-        this.handler = builder.handler;
     }
 
     /**
@@ -46,13 +43,6 @@ public class OptionNode extends Node {
     @Override
     public Response fetchResponse() {
         return new Response.Builder(true).translatable(getTranslatable(), getId()).build();
-    }
-
-    Response fetchProcessedResponse() {
-        if (handler != null) {
-            return new Response.Builder(true).response(handler.handle(null)).build();
-        }
-        return null;
     }
 
     /**
@@ -84,8 +74,6 @@ public class OptionNode extends Node {
          */
         private int id;
 
-        private RequestHandler handler;
-
         /**
          * Constructs a OptionNode.Builder
          *
@@ -101,11 +89,6 @@ public class OptionNode extends Node {
          */
         public Builder id(int id) {
             this.id = id;
-            return getThis();
-        }
-
-        public Builder requestHandler(RequestHandler handler) {
-            this.handler = handler;
             return getThis();
         }
 

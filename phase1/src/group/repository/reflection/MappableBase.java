@@ -103,8 +103,8 @@ public abstract class MappableBase {
             obj = null; // this is necessary since classes below can be null
         } else if (fieldTypeClass.isEnum()) {
             obj = Enum.valueOf((Class<Enum>) fieldTypeClass, representation);
-        } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
-            obj = Integer.valueOf(representation);
+        } else if (Long.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Long.valueOf(representation);
         } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
             obj = Integer.valueOf(representation);
         } else if (Boolean.class.isAssignableFrom(fieldTypeClass)) {

@@ -62,13 +62,15 @@ public abstract class MappableBase {
                     obj = field.getType().getDeclaredConstructor(List.class).newInstance(childRepresentation);
                     id -= 1;
                 } else if (List.class.isAssignableFrom(field.getType())) {
-                    if (representation.length() == 0 || representation.equals("null")) {
+                    if (representation.equals("null")) {
+                        System.out.println("null");
                         obj = null;
                     } else {
+                        System.out.println("to list");
                         obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
                     }
                 } else if (Map.class.isAssignableFrom(field.getType())) {
-                    if (representation.length() == 0 || representation.equals("null")) {
+                    if (representation.equals("null")) {
                         obj = null;
                     } else {
                         obj = stringToMap((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]
@@ -87,6 +89,7 @@ public abstract class MappableBase {
 
     private <K, V> Map<K, V> stringToMap(Class<K> keyClass, Class<V> valueClass, String representation) { // this only uses HashMap
         Map<K, V> map = new HashMap<>();
+        if(representation.length()==0) return map;
         for (String element : representation.split(";",-1)) {
             String[] subElement = element.split(":",-1);
             map.put((K) getObjectFrom(keyClass, subElement[0]), (V) getObjectFrom(valueClass, subElement[1]));
@@ -133,6 +136,7 @@ public abstract class MappableBase {
      */
     private <T> List<T> stringToList(Class<T> fieldListGenericClass, String representation) {
         List<T> list = new ArrayList<>();
+        if(representation.length() == 0) return list;
         for (String element : representation.split(";")) {
             list.add((T) getObjectFrom(fieldListGenericClass, element));
         }

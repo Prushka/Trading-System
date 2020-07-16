@@ -1,9 +1,11 @@
 package group.system;
 
+import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.MenuLogicController;
+import group.menu.data.Response;
 import group.menu.processor.PasswordEncryption;
 import group.menu.validator.*;
 import group.notification.SupportTicket;
@@ -11,6 +13,7 @@ import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 import group.user.User;
+import org.omg.CORBA.portable.ResponseHandler;
 
 /**
  * {\__/}
@@ -38,19 +41,19 @@ public class MenuController {
     public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController) {
         menuBuilder.option(User.class, OperationType.verification, 1, "loginUser")
                 .input("username")
-                .submit("password", userController::loginUser)
+                .submit("password",new PasswordEncryption(),null,ValidatingType.invalid, userController::loginUser)
                 .succeeded("master.userAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2, "loginAdmin")
                 .input("username")
-                .submit("password", administrativeUserController::loginAdminUser)
+                .submit("password",new PasswordEncryption(),null,ValidatingType.invalid, administrativeUserController::loginAdminUser)
                 .succeeded("master.adminAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 3, "register")
                 .input("username", validatorFactory.getValidator(ValidatorFactory.Type.USER_NAME))
                 .input("email", new EmailValidator())
                 .input("telephone", validatorFactory.getValidator(ValidatorFactory.Type.TELEPHONE))
-                .submit("password", validatorFactory.getValidator(ValidatorFactory.Type.PASSWORD), ValidatingType.invalid, userController::registerUser)
+                .submit("password", new PasswordEncryption(), validatorFactory.getValidator(ValidatorFactory.Type.PASSWORD), ValidatingType.invalid, userController::registerUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
 
@@ -66,7 +69,7 @@ public class MenuController {
 
     }
 
-    public void personalUserAccess(UserController controller) {
+    public void personalUserAccess(UserController controller, SupportTicketController supportController) {
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 1, "account")
                 .submit("enter", controller::checkFrozen)
@@ -74,7 +77,14 @@ public class MenuController {
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 2, "trade")
                 .submit("enter", controller::checkFrozen)
-                .succeeded("master.support.trade").failed("master.userAccess").master("master.account");
+                .succeeded("master.userAccess").failed("master.support.trade").master("master.account");
+
+        menuBuilder.option(SupportTicket.class, OperationType.add, 3)
+                .input("content", supportController::ifTicketContentNotExist, ValidatingType.exists)
+                .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
+                .input("priority", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .submit("confirm", supportController::addTicket)
+                .succeeded("master.support.ticket");
 
         menuBuilder.construct("master.userAccess", false);
     }
@@ -90,7 +100,7 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.add, 3, "wishlist")
-                .input("item", null, null,ValidatingType.invalid)
+                .input("item", null, null, ValidatingType.invalid)
                 .submit("description", userController::AddItemToWishlist)
                 .succeeded("master.view.account").failed("master.view.account").master("");
 
@@ -115,7 +125,7 @@ public class MenuController {
                 .submit("unfreeze", userController::RequestUnfreeze)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
-        menuBuilder.option(User.class, OperationType.view, 9, "all")
+        menuBuilder.option(Trade.class, OperationType.view, 9, "all")
                 .submit("unfreeze", userController::RequestUnfreeze)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
@@ -126,6 +136,10 @@ public class MenuController {
         menuBuilder.option(Trade.class, OperationType.view, 11, "frequentTrades")
                 .submit("frequent", tradeController::getRecentTrades)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
+
+        menuBuilder.option(PersonalUser.class, OperationType.query, 12, "trade")
+                .submit("enter", userController::checkFrozen)
+                .succeeded("master.view.account").failed("master.support.trade").master("master.account");
 
         menuBuilder.construct("master.view.account", false);
     }
@@ -173,6 +187,12 @@ public class MenuController {
                 .succeeded("master.support.trade").failed("master.support.trade").master("failed.confirm.trade",
                 "success.confirm.trade.complete.perm", "success.confirm.trade.complete.temp",
                 "success.confirm.trade.wait");
+
+        /*
+        menuBuilder.option(PersonalUser.class, OperationType.query, 6, "trade")
+                .submit("trade", new Response.Builder(true).translatable("okay").build())
+                .succeeded("master.view.account").failed("master.view.account").master("master.account");
+         */
 
         menuBuilder.construct("master.support.trade", false);
     }

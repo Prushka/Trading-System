@@ -13,4 +13,10 @@ public class ReflectionTest {
         reflectionEntityRepository.add(new TestEntity());
         saveHook.save();
     }
+
+    @Test
+    public void testSplit(){
+        String test = "1,2,3";
+        String test2 = "1,2,3,,";
+    }
 }

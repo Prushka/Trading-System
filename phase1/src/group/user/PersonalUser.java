@@ -17,8 +17,7 @@ public class PersonalUser extends User {
     private Integer lendCount;
     private Integer borrowCount;
     private Integer numTransactions;
-    private ArrayList<Integer> recentTrades;
-    private Map<Integer, Integer> traderFrequency;
+    private List<Integer> recentTrades;
     private List<Integer> addToInventoryRequest;
     private Boolean requestToUnfreeze;
 
@@ -26,12 +25,12 @@ public class PersonalUser extends User {
      * Creates a PersonalUser with the given userName, email, telephone, password
      * and initializes all other instance variables.
      *
-     * @param userName username of this user
-     * @param email email of this user
+     * @param userName  username of this user
+     * @param email     email of this user
      * @param telephone telephone number of this user
-     * @param password password of this user
+     * @param password  password of this user
      */
-    public PersonalUser (String userName, String email, String telephone, String password) {
+    public PersonalUser(String userName, String email, String telephone, String password) {
         super(userName, email, telephone, password);
         wishlist = new ArrayList<>();
         inventory = new ArrayList<>();
@@ -41,68 +40,103 @@ public class PersonalUser extends User {
         borrowCount = 0;
         numTransactions = 0;
         recentTrades = new ArrayList<>();
-        traderFrequency = new HashMap<>();
         addToInventoryRequest = new ArrayList<>();
         requestToUnfreeze = false;
     }
 
-    public PersonalUser(List<String> record){ super(record); }
+    public PersonalUser(List<String> record) {
+        super(record);
+    }
 
-    public List<Integer> getWishlist() { return wishlist; }
+    public List<Integer> getWishlist() {
+        return wishlist;
+    }
 
-    public void addToWishList(Integer newItem){ wishlist.add(newItem); }
+    public void addToWishList(Integer newItem) {
+        wishlist.add(newItem);
+    }
 
-    public void removeFromWishList(Integer oldItem){ wishlist.remove(oldItem); }
+    public void removeFromWishList(Integer oldItem) {
+        wishlist.remove(oldItem);
+    }
 
-    public List<Integer> getInventory() { return inventory; }
+    public List<Integer> getInventory() {
+        return inventory;
+    }
 
-    public void addToInventory(Integer newItem){ inventory.add(newItem);}
+    public void addToInventory(Integer newItem) {
+        inventory.add(newItem);
+    }
 
-    public void removeFromInventory(Integer oldItem){ inventory.remove(oldItem); }
+    public void removeFromInventory(Integer oldItem) {
+        inventory.remove(oldItem);
+    }
 
-    public List<Integer> getTrades() { return trades; }
+    public List<Integer> getTrades() {
+        return trades;
+    }
 
-    public void addToTrades(Integer newItem){ trades.add(newItem);}
+    public void addToTrades(Integer newItem) {
+        trades.add(newItem);
+    }
 
-    public void removeFromTrade(Integer oldItem){ trades.remove(oldItem); }
+    public void removeFromTrade(Integer oldItem) {
+        trades.remove(oldItem);
+    }
 
-    public boolean getIsFrozen() { return isFrozen; }
+    public boolean getIsFrozen() {
+        return isFrozen;
+    }
 
-    public void setIsFrozen (boolean isFrozen) { this.isFrozen = isFrozen; }
+    public void setIsFrozen(boolean isFrozen) {
+        this.isFrozen = isFrozen;
+    }
 
-    public int getLendCount() { return lendCount; }
+    public int getLendCount() {
+        return lendCount;
+    }
 
-    public void setLendCount(int lendCount) { this.lendCount = lendCount; }
+    public void setLendCount(int lendCount) {
+        this.lendCount = lendCount;
+    }
 
-    public int getBorrowCount() { return borrowCount; }
+    public int getBorrowCount() {
+        return borrowCount;
+    }
 
-    public void setBorrowCount(int borrowCount) { this.borrowCount = borrowCount; }
+    public void setBorrowCount(int borrowCount) {
+        this.borrowCount = borrowCount;
+    }
 
-    public boolean getShouldBeFreezedUser(){ return lendCount < borrowCount; }
+    public boolean getShouldBeFreezedUser() {
+        return lendCount < borrowCount;
+    }
 
-    public int getNumTransactions() { return numTransactions; }
+    public int getNumTransactions() {
+        return numTransactions;
+    }
 
-    public void setNumTransactions(int numTransactions) { this.numTransactions = numTransactions; }
+    public void setNumTransactions(int numTransactions) {
+        this.numTransactions = numTransactions;
+    }
 
-    public Map<Integer, Integer> getTraderFrequency() { return traderFrequency; }
-
-    public List<Integer> getAddToInventoryRequest(){
+    public List<Integer> getAddToInventoryRequest() {
         return addToInventoryRequest;
     }
 
-    public void addItemToAddToInventoryRequest(int item){
+    public void addItemToAddToInventoryRequest(int item) {
         addToInventoryRequest.add(item);
     }
 
-    public boolean getAddToInventoryRequestIsNotEmpty(){
+    public boolean getAddToInventoryRequestIsNotEmpty() {
         return !addToInventoryRequest.isEmpty();
     }
 
-    public void setRequestToUnfreeze(boolean state){
+    public void setRequestToUnfreeze(boolean state) {
         requestToUnfreeze = state;
     }
 
-    public boolean getRequestToUnfreeze(){
+    public boolean getRequestToUnfreeze() {
         return requestToUnfreeze;
     }
 
@@ -111,22 +145,14 @@ public class PersonalUser extends User {
     }
 
     public void addRecentTrades(Integer tradeID) {
-        if (recentTrades.size() >= 3){
+        if (recentTrades.size() >= 3) {
             recentTrades.remove(0);
         }
         recentTrades.add(tradeID);
     }
 
-    public ArrayList<Integer> getRecentCompleteTrades() {
+    public List<Integer> getRecentCompleteTrades() {
         return recentTrades;
-    }
-
-    public void setTraderFrequency(Integer userID) {
-        if (traderFrequency.containsKey(userID)){
-            traderFrequency.put(userID, traderFrequency.get(userID) + 1);
-        } else {
-            traderFrequency.put(userID, 1);
-        }
     }
 
 
@@ -135,7 +161,13 @@ public class PersonalUser extends User {
      * if this user has not traded with three different users, returns top 2 or the top
      * trader accordingly.
      * @return map of the top 3 most frequent traders for this user
-
+  public void setTraderFrequency(Integer userID) {
+        if (traderFrequency.containsKey(userID)){
+            traderFrequency.put(userID, traderFrequency.get(userID) + 1);
+        } else {
+            traderFrequency.put(userID, 1);
+        }
+    }
     public Map<Integer, Integer> getTopThreeTraders() {
         int len = traderFrequency.keySet().toArray().length;
         if (traderFrequency.isEmpty()) {

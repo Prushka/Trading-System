@@ -45,8 +45,10 @@ public abstract class MappableBase {
      */
     public MappableBase(List<String> data) {
         int id = 0;
+        System.out.println(data.size());
         for (Field field : getSortedFields()) {
             field.setAccessible(true);
+            System.out.println(field.getName());
             String representation = data.get(id);
             Object obj;
             try {
@@ -85,8 +87,8 @@ public abstract class MappableBase {
 
     private <K, V> Map<K, V> stringToMap(Class<K> keyClass, Class<V> valueClass, String representation) { // this only uses HashMap
         Map<K, V> map = new HashMap<>();
-        for (String element : representation.split(";")) {
-            String[] subElement = element.split(":");
+        for (String element : representation.split(";",-1)) {
+            String[] subElement = element.split(":",-1);
             map.put((K) getObjectFrom(keyClass, subElement[0]), (V) getObjectFrom(valueClass, subElement[1]));
         }
         return map;

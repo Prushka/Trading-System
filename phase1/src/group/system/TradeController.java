@@ -138,7 +138,7 @@ public class TradeController {
     }
 
     public Response getRecentTrades(Request request){
-        ArrayList<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
+        List<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : recentCompleteTrades) {
             Trade trade = tradeRepository.get(i);

@@ -9,27 +9,26 @@ import group.user.PersonalUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 // Glitch List: Trade ID 0 works even when this trade, pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeController {
     private final TradeManager tradeManager;
     final Repository<Trade> tradeRepository;
     final Repository<PersonalUser> personalUserRepository;
-    private PersonalUser user;
+    final UserController userController;
+    final PersonalUser currUser;
 
     /**
      * Takes requests from a user and turns it into information that can be used by TradeManager
      * @param dispatcher The controller dispatcher
      */
-    public TradeController(ControllerDispatcher dispatcher, Integer userID){
+    public TradeController(ControllerDispatcher dispatcher, UserController userController){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
-        tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties);
+        this.userController = userController;
+        currUser = userController.getCurrUser();
+        tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties, userController.getItemManager());
         dispatcher.menuController.supportTrade(this);
-        user = personalUserRepository.get(userID);
     }
 
     /**
@@ -38,26 +37,24 @@ public class TradeController {
      * @return A description of the success of the creation of the trade
      */
     public Response addTrade(Request request) {
-        Integer item1;
-        Integer item2;
-        Integer user1 =  request.getInteger("initiator");
-        Integer user2 =  request.getInteger("respondent");
+        Long item1;
+        Long item2;
+        Long user2 =  request.getLong("respondent");
 
-        PersonalUser trader1 = personalUserRepository.get(user1);
         PersonalUser trader2 = personalUserRepository.get(user2);
 
         // Check if items are in their inventories or are null
         if (request.get("lendingItem").equals("null")){
             item1 = null;
-        } else if (trader1.getInventory().contains(request.getInteger("lendingItem"))){
-            item1 = request.getInteger("lendingItem");
+        } else if (currUser.getInventory().contains(request.getLong("lendingItem"))){
+            item1 = request.getLong("lendingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
         if (request.get("borrowingItem").equals("null")){
             item2 = null;
-        } else if (trader2.getInventory().contains(request.getInteger("borrowingItem"))){
-            item2 = request.getInteger("borrowingItem");
+        } else if (trader2.getInventory().contains(request.getLong("borrowingItem"))){
+            item2 = request.getLong("borrowingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
@@ -67,7 +64,7 @@ public class TradeController {
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
         String location =  request.get("location");
-        return tradeManager.createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location);
+        return tradeManager.createTrade(currUser.getUid(), user2, item1, item2, isPermanent, dateAndTime, location);
     }
 
     /**
@@ -77,11 +74,10 @@ public class TradeController {
      */
     public Response editMeetingDateAndTime(Request request){
         Integer tradeID = request.getInt("tradeID");
-        Integer editingUser = request.getInt("editingUser");
         String[] data = request.get("dateAndTime").split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
-        return tradeManager.editDateAndTime(tradeID, editingUser, dateAndTime);
+        return tradeManager.editDateAndTime(tradeID, (int) currUser.getUid(), dateAndTime);
     }
 
     /**
@@ -91,9 +87,8 @@ public class TradeController {
      */
     public Response editMeetingLocation(Request request){
         Integer tradeID = request.getInt("tradeID");
-        Integer editingUser = request.getInt("editingUser");
         String location = request.get("location");
-        return tradeManager.editLocation(tradeID, editingUser, location);
+        return tradeManager.editLocation(tradeID, (int) currUser.getUid(), location);
     }
 
     /**
@@ -103,8 +98,7 @@ public class TradeController {
      */
     public Response confirmingTradeOpen(Request request){
         Integer tradeID = request.getInt("tradeID");
-        Integer editingUser = request.getInt("editingUser");
-        return tradeManager.confirmTrade(tradeID, editingUser);
+        return tradeManager.confirmTrade(tradeID, (int) currUser.getUid());
     }
 
     /**
@@ -114,8 +108,7 @@ public class TradeController {
      */
     public Response confirmingTradeComplete(Request request){
         Integer tradeID = request.getInt("tradeID");
-        Integer editingUser = request.getInt("editingUser");
-        return tradeManager.confirmTradeComplete(tradeID, editingUser);
+        return tradeManager.confirmTradeComplete(tradeID, (int) currUser.getUid());
     }
 
     /**
@@ -135,24 +128,30 @@ public class TradeController {
             if (input.equals("null")){
                 return true;
             }
-            Integer.parseInt(input);
+            Long.parseLong(input);
             return true;
         } catch (IllegalArgumentException e){
             return false;
         }
     }
 
-    public Response getRecentCompleteTrades(){
-        ArrayList<Integer> recentCompleteTrades = user.getRecentCompleteTrades();
+    public Response getRecentTrades(Request request){
+        ArrayList<Long> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Integer i : recentCompleteTrades) {
+        for (Long i : recentCompleteTrades) {
             Trade trade = tradeRepository.get(i);
             stringBuilder.append(trade.toString()).append("\n");
         }
         return new Response.Builder(true).translatable("recentTrades", stringBuilder.toString()).build();
     }
 
-    public Map<Integer, Integer> getTradeFrequency(int user){
-        return tradeManager.getTradeFrequency(user);
+    public Response getAllTrades(Request request){
+        ArrayList<Long> allTrades = currUser.getTrades();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Long i : allTrades) {
+            Trade trade = tradeRepository.get(i);
+            stringBuilder.append(trade.toString()).append("\n");
+        }
+        return new Response.Builder(true).translatable("allTrades", stringBuilder.toString()).build();
     }
 }

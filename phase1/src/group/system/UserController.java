@@ -10,8 +10,7 @@ import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 import group.user.PersonalUserManager;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class UserController {
@@ -22,7 +21,6 @@ public class UserController {
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
     private PersonalUser currUser;
-    private final TradeController tradeController;
 
     public UserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
@@ -30,8 +28,6 @@ public class UserController {
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
-        tradeController = dispatcher.tradeController;
-        dispatcher.menuController.viewAccount(this);
         dispatcher.menuController.personalUserAccess(this);
     }
 
@@ -51,7 +47,7 @@ public class UserController {
     }
 
     public Response removeItemFromInventory(Request request){
-        Integer item = request.getInteger("item");
+        Long item = request.getLong("item");
         Item itemEntity = itemManager.findItemByUid(item);
         itemManager.remove(itemEntity);
         return personalUserManager.removeItemFromInventory(currUser, item);
@@ -75,7 +71,7 @@ public class UserController {
     }
 
     public Response removeItemFromWishlist(Request request){
-        Integer item = request.getInteger("item");
+        Long item = request.getLong("item");
         return personalUserManager.removeItemFromWishlist(currUser, item);
     }
 
@@ -102,15 +98,18 @@ public class UserController {
         //return new Response.Builder(true).translatable("not.frozen").build();
     }
 
-    public Response topTraders(){
-        Map<Integer, Integer> frequentTraders = tradeController.getTradeFrequency(currUser.getUid());
+    public Response topTraders(Request request){
+        Map<Long, Integer> frequentTraders = currUser.getTopThreeTraders();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Integer i : frequentTraders.keySet()) {
+        for (Long i : frequentTraders.keySet()) {
             PersonalUser other = personalRepo.get(i);
             Integer times = frequentTraders.get(i);
             stringBuilder.append("Traded with ").append(other.toString()).append(times).append(" times.").append("\n");
         }
         return new Response.Builder(true).translatable("topTraders", stringBuilder.toString()).build();
     }
+
+    public PersonalUser getCurrUser(){ return currUser; }
+    public ItemManager getItemManager(){ return itemManager;}
 
 }

@@ -45,7 +45,6 @@ public abstract class MappableBase {
      */
     public MappableBase(List<String> data) {
         int id = 0;
-        System.out.println(data.size());
         for (Field field : getSortedFields()) {
             field.setAccessible(true);
             String representation = data.get(id);
@@ -185,7 +184,6 @@ public abstract class MappableBase {
         List<Field> fields = new ArrayList<>();
         Class<?> currentClass = clazz;
         while (!currentClass.getName().equals(Object.class.getName())) {
-            System.out.println(currentClass.getName());
             fields.addAll(Arrays
                     .stream(currentClass.getDeclaredFields())
                     .filter(this::ifFieldNotTransient)

@@ -41,12 +41,12 @@ public class MenuController {
     public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController) {
         menuBuilder.option(User.class, OperationType.verification, 1, "login")
                 .input("username")
-                .submit("password", userController::loginUser)
+                .submit("password",new PasswordEncryption(),null,ValidatingType.invalid, userController::loginUser)
                 .succeeded("master.userAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2, "login")
                 .input("username")
-                .submit("password", administrativeUserController::loginAdminUser)
+                .submit("password",new PasswordEncryption(),null,ValidatingType.invalid, administrativeUserController::loginAdminUser)
                 .succeeded("master.adminAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 3, "register")

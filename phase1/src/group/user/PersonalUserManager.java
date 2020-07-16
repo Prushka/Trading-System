@@ -2,7 +2,6 @@ package group.user;
 
 import group.item.Item;
 import group.menu.data.Response;
-import group.menu.processor.PasswordEncryption;
 import group.repository.Filter;
 import group.repository.Repository;
 
@@ -42,10 +41,10 @@ public class PersonalUserManager {
     public PersonalUser getCurrPersonalUser(String username, String password) {
         if (personalUserRepository.ifExists(
                 PersonalUser -> PersonalUser.getUserName().equals(username)
-                        && PersonalUser.getPassword().equals(new PasswordEncryption().process(password)))) {
+                        && PersonalUser.getPassword().equals(password))) {
             currPersonalUser = personalUserRepository.getFirst(
                     PersonalUser -> PersonalUser.getUserName().equals(username)
-                            && PersonalUser.getPassword().equals(new PasswordEncryption().process(password)));
+                            && PersonalUser.getPassword().equals(password));
         }
         return currPersonalUser;
     }

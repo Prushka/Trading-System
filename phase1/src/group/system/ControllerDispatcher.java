@@ -30,7 +30,7 @@ public class ControllerDispatcher implements Shutdownable {
     SupportTicketController supportTicketController;
     UserController userController;
     AdministrativeUserController administrativeUserController;
-    TradeController testTradeController;
+    TradeController tradeController;
 
     TradeProperties tradeProperties;
 

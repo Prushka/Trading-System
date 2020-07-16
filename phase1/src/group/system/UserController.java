@@ -10,7 +10,8 @@ import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 import group.user.PersonalUserManager;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class UserController {
@@ -21,6 +22,7 @@ public class UserController {
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
     private PersonalUser currUser;
+    private final TradeController tradeController;
 
     public UserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
@@ -28,6 +30,7 @@ public class UserController {
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
+        tradeController = dispatcher.tradeController;
         dispatcher.menuController.viewAccount(this);
         dispatcher.menuController.personalUserAccess(this);
     }
@@ -100,7 +103,7 @@ public class UserController {
     }
 
     public Response topTraders(){
-        Map<Integer, Integer> frequentTraders = currUser.getTopThreeTraders();
+        Map<Integer, Integer> frequentTraders = tradeController.getTradeFrequency(currUser.getUid());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : frequentTraders.keySet()) {
             PersonalUser other = personalRepo.get(i);
@@ -109,6 +112,5 @@ public class UserController {
         }
         return new Response.Builder(true).translatable("topTraders", stringBuilder.toString()).build();
     }
-
 
 }

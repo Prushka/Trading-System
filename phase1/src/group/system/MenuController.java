@@ -4,6 +4,7 @@ import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.MenuLogicController;
+import group.menu.processor.PasswordEncryption;
 import group.menu.validator.*;
 import group.notification.SupportTicket;
 import group.trade.Trade;
@@ -45,18 +46,17 @@ public class MenuController {
 
         menuBuilder.option(User.class, OperationType.add, 3, "register")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", null, new EmailValidator(), ValidatingType.invalid)
-                .input("telephone", null, new GeneralValidator(GeneralValidator.InputType.Number, 3, 10, true), ValidatingType.invalid)
+                .input("email", new EmailValidator(), ValidatingType.invalid)
+                .input("telephone", new GeneralValidator(GeneralValidator.InputType.Number, 3, 10, true), ValidatingType.invalid)
                 .submit("password", password -> password.length() > 7, ValidatingType.invalid, userController::registerUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "register")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", null, null, ValidatingType.invalid)
-                .input("telephone", null, null, ValidatingType.invalid)
-                .input("password", password -> password.length() > 7, ValidatingType.invalid /*new PasswordEncryption(),*/) // the password encryption is broken,
-                // you can put anything there if you want to process user input before it enters the Request object
+                .input("email", new EmailValidator(), ValidatingType.invalid)
+                .input("telephone", new GeneralValidator(GeneralValidator.InputType.Number,3,10,true), ValidatingType.invalid)
+                .input("password",new PasswordEncryption(), password -> password.length() > 7, ValidatingType.invalid)
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 

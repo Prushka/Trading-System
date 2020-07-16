@@ -54,7 +54,7 @@ public abstract class Property implements Savable {
      */
     public void saveDefault() throws IOException {
         if (!getFile().exists()) {
-            System.out.println("file: " + getFile() + " not exist");
+            // System.out.println("file: " + getFile() + " not exist");
             InputStream inputStream = getResource();
             assert inputStream != null;
             if (getFile().getParent() != null) {

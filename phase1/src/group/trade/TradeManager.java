@@ -1,11 +1,15 @@
 package group.trade;
 
 import group.config.property.TradeProperties;
+import group.repository.Filter;
 import group.repository.Repository;
 import group.user.PersonalUser;
 import group.menu.data.Response;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class TradeManager {
     private final Integer editLimit;
@@ -15,8 +19,9 @@ public class TradeManager {
 
     /**
      * Creates, confirms and edits trades
+     *
      * @param tradeRepository A repository of all the trades in the system
-     * @param userRepository A repository of all users in the system
+     * @param userRepository  A repository of all users in the system
      * @param tradeProperties A place to store restrictions on a trade (e.g how many times a user can edit,
      *                        how many days until temporary trades must be reversed)
      */
@@ -31,13 +36,14 @@ public class TradeManager {
 
     /**
      * Creates a trade meeting to trade back items
-     * @param user1 The user ID of who initiated this trade
-     * @param user2 The user ID of who the other trader
-     * @param item1 The item ID of what the initiator plans to lend
-     * @param item2 The item ID of what the initiator plans to borrow
+     *
+     * @param user1       The user ID of who initiated this trade
+     * @param user2       The user ID of who the other trader
+     * @param item1       The item ID of what the initiator plans to lend
+     * @param item2       The item ID of what the initiator plans to borrow
      * @param isPermanent True iff this trade is permanent
      * @param dateAndTime The date and time that this trade will take place
-     * @param location The location of where this trade will take place
+     * @param location    The location of where this trade will take place
      * @param prevMeeting The trade ID of the previous meeting
      * @return A response object of the representation of the trade or a description of why creation failed
      */
@@ -54,25 +60,49 @@ public class TradeManager {
         return tradeRepresentation(newTrade);
     }
 
+    public Response getTradeFrequency(long user) {
+        Map<Long, Integer> tradeFrequency = new HashMap<>();
+        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getUser1() == user || entity.getUser2() == user);
+        while (tradeIterator.hasNext()) {
+            Trade trade = tradeIterator.next();
+            if (user == trade.getUser1()) {
+                putOrAppend(tradeFrequency, trade.getUser2());
+            } else {
+                putOrAppend(tradeFrequency, trade.getUser1());
+            }
+        }
+        return null;
+    }
+
+    private void putOrAppend(Map<Long, Integer> map, Long key) {
+        if (map.containsKey(key)) {
+            map.put(key, map.get(key) + 1);
+        } else {
+            map.put(key, 1);
+        }
+    }
+
     /**
      * Create a trade trade meeting to trade items
-     * @param user1 The user ID of who initiated this trade
-     * @param user2 The user ID of who the other trader
-     * @param item1 The item ID of what the initiator plans to lend
-     * @param item2 The item ID of what the initiator plans to borrow
+     *
+     * @param user1       The user ID of who initiated this trade
+     * @param user2       The user ID of who the other trader
+     * @param item1       The item ID of what the initiator plans to lend
+     * @param item2       The item ID of what the initiator plans to borrow
      * @param isPermanent True iff this trade is permanent
      * @param dateAndTime The date and time that this trade will take place
-     * @param location The location of where this trade will take place
+     * @param location    The location of where this trade will take place
      * @return A response object of the representation of the trade or a description of why creation failed
      */
     public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
-                                LocalDateTime dateAndTime, String location){
+                                LocalDateTime dateAndTime, String location) {
         return createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location, null);
     }
 
     /**
      * Edit date and time of a trade and cancels the trade if the users edited too much
-     * @param tradeID The trade ID of the trade to be edited
+     *
+     * @param tradeID     The trade ID of the trade to be edited
      * @param editingUser The user ID of who wishes to edit this trade
      * @param dateAndTime The new date and time that this trade will take place
      * @return A response object of the representation of the new trade or a description of why creation failed
@@ -104,10 +134,11 @@ public class TradeManager {
     }
 
     /**
-     Edit location of a trade and cancels the trade if the users edited too much
-     * @param tradeID The trade ID of the trade to be edited
+     * Edit location of a trade and cancels the trade if the users edited too much
+     *
+     * @param tradeID     The trade ID of the trade to be edited
      * @param editingUser The user ID of who wishes to edit this trade
-     * @param location The new location of where this trade will take place
+     * @param location    The new location of where this trade will take place
      * @return A response object of the representation of the new trade or a description of why creation failed
      */
     public Response editLocation(int tradeID, int editingUser, String location) {
@@ -148,7 +179,8 @@ public class TradeManager {
 
     /**
      * Confirm a trade will take place and opens the trade
-     * @param tradeID The trade ID of the trade to be confirmed
+     *
+     * @param tradeID     The trade ID of the trade to be confirmed
      * @param editingUser The user ID of who wishes to confirm to this trade
      * @return A response object that details the success or failure of this action
      */
@@ -168,7 +200,7 @@ public class TradeManager {
     }
 
     // Opens a trade and closes the previous trade if applicable
-    private Response openTrade(int tradeID){
+    private Response openTrade(int tradeID) {
         // Get trade from repository
         Trade currTrade = tradeRepository.get(tradeID);
 
@@ -192,7 +224,8 @@ public class TradeManager {
     /**
      * Confirm that a trade has occurred and completes a trade by making the trades and closing it or scheduling another
      * meeting.
-     * @param tradeID The trade ID of the trade to be confirmed
+     *
+     * @param tradeID     The trade ID of the trade to be confirmed
      * @param editingUser The user ID of who wishes to confirmed this trade
      * @return A response object that details the success or failure of this action
      */

@@ -102,6 +102,9 @@ public interface Repository<T extends UniqueId> {
      */
     Iterator<T> iterator(Filter<T> filter);
 
+    /**
+     * @return the iterator that iterates every element in the Repository
+     */
     Iterator<T> iterator();
 
     /**
@@ -111,6 +114,10 @@ public interface Repository<T extends UniqueId> {
      */
     Response filterResponse(Filter<T> filter, ResponseMapper<T> mapper);
 
+    /**
+     * @param mapper the mapper used to map the iterator results to a Response object
+     * @return the Response object
+     */
     Response filterResponse(ResponseMapper<T> mapper);
 
 }

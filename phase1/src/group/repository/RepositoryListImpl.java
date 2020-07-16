@@ -89,6 +89,9 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
         return new RepositoryIterator<>(data, filter);
     }
 
+    /**
+     * @return the iterator that iterates every element in the Repository
+     */
     @Override
     public Iterator<T> iterator() {
         return new RepositoryIterator<>(data);
@@ -135,16 +138,27 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
         return mapIterator(iterator(filter), mapper);
     }
 
+    /**
+     * @param mapper the mapper used to map the iterator results to a Response object
+     * @return the Response object
+     */
     @Override
     public Response filterResponse(ResponseMapper<T> mapper) {
         return filterResponse(null, mapper);
     }
 
+    /**
+     * @return the size of this repository
+     */
     @Override
     public int size() {
         return data.size();
     }
 
+    /**
+     * @param filter the filter to be used to match results
+     * @return the size of the iterator that has all matched results
+     */
     @Override
     public int size(Filter<T> filter) {
         Iterator<T> iterator = iterator(filter);

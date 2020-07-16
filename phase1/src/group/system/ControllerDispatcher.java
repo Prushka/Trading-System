@@ -12,8 +12,15 @@ import group.user.PersonalUser;
 
 import java.util.logging.Logger;
 
+/**
+ * A wrapper class for all Controllers, Repositories and Properties.<p>
+ * This class dispatches them.
+ */
 public class ControllerDispatcher implements Shutdownable {
 
+    /**
+     * The repository that holds {@link SupportTicket}
+     */
     Repository<SupportTicket> ticketRepository;
     Repository<PersonalUser> personalUserRepository;
     Repository<AdministrativeUser> adminUserRepository;

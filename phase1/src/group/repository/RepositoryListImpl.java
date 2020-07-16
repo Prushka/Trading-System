@@ -89,6 +89,11 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
         return new RepositoryIterator<>(data, filter);
     }
 
+    @Override
+    public Iterator<T> iterator() {
+        return new RepositoryIterator<>(data);
+    }
+
     /**
      * The helper class used by {@link #filterResponse(Filter, ResponseMapper)}
      *
@@ -128,6 +133,11 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
     @Override
     public Response filterResponse(Filter<T> filter, ResponseMapper<T> mapper) {
         return mapIterator(iterator(filter), mapper);
+    }
+
+    @Override
+    public Response filterResponse(ResponseMapper<T> mapper) {
+        return filterResponse(null, mapper);
     }
 
     @Override

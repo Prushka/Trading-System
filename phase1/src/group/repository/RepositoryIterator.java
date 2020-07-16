@@ -38,13 +38,17 @@ public class RepositoryIterator<T> implements Iterator<T> {
         this.filter = filter;
     }
 
+    public RepositoryIterator(List<T> data) {
+        this(data, null);
+    }
+
     /**
      * @return if the list has a next element that meets the {@link #filter} condition
      */
     @Override
     public boolean hasNext() {
         if (current < data.size()) {
-            if (!filter.match(data.get(current))) {
+            if (filter != null && !filter.match(data.get(current))) {
                 current++;
                 return hasNext();
             } else {

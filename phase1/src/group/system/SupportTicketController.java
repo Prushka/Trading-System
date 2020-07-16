@@ -10,11 +10,8 @@ public class SupportTicketController {
 
     private final SupportTicketManager supportTicketManager;
 
-    private final Repository<SupportTicket> ticketRepository;
-
     public SupportTicketController(ControllerDispatcher dispatcher) {
-        ticketRepository = dispatcher.ticketRepository;
-        supportTicketManager = new SupportTicketManager(ticketRepository);
+        supportTicketManager = new SupportTicketManager(dispatcher.ticketRepository, dispatcher.personalUserRepository);
         dispatcher.menuController.supportTicket(this);
     }
 
@@ -26,12 +23,12 @@ public class SupportTicketController {
         return supportTicketManager.getTicketsByCategory(SupportTicket.Category.valueOf(request.get("category")));
     }
 
-    public Response getTicketsByCategory2(Request request) {
-        return new Response(true,"123456");
+    public Response getAllTickets(Request request){
+        return supportTicketManager.getAllTickets();
     }
 
     public boolean ifTicketContentNotExist(String input) {
-        return !ticketRepository.ifExists(entity -> input.equalsIgnoreCase(entity.getContent()));
+        return supportTicketManager.ifTicketContentNotExist(input);
     }
 
 }

@@ -102,11 +102,15 @@ public interface Repository<T extends UniqueId> {
      */
     Iterator<T> iterator(Filter<T> filter);
 
+    Iterator<T> iterator();
+
     /**
      * @param filter the filter used to match the result
      * @param mapper A {@link ResponseMapper} used to directly map the records in iterator to a Response Object
      * @return the Response object
      */
     Response filterResponse(Filter<T> filter, ResponseMapper<T> mapper);
+
+    Response filterResponse(ResponseMapper<T> mapper);
 
 }

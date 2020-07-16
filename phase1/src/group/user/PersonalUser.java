@@ -9,6 +9,7 @@ public class PersonalUser extends User {
     private List<Long> wishlist;
     private List<Long> inventory;
     private List<Long> trades;
+    private List<Long> supportTickets;
     private Boolean isFrozen;
     private Integer lendCount;
     private Integer borrowCount;
@@ -98,6 +99,10 @@ public class PersonalUser extends User {
 
     public boolean getRequestToUnfreeze(){
         return requestToUnfreeze;
+    }
+
+    public List<Long> getSupportTickets() {
+        return supportTickets;
     }
 
     /**

@@ -37,7 +37,11 @@ public class AdministrativeUserController {
         String email = request.get("email");
         String telephone = request.get("telephone");
         String password = request.get("password");
-        boolean isHead = request.getBoolean("isHead");
+        boolean isHead;
+        if (request.get("isHead").equalsIgnoreCase("yes")){
+            isHead = true;
+        }else{
+            isHead = false;}
         return administrativeManager.createAdministrator(username, email, telephone, password, isHead);
     }
 

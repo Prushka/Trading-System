@@ -4,8 +4,7 @@ import group.menu.data.Response;
 
 /**
  * The pair of validator and ResponseNode.<p>
- * If user input passes the {@link #validator}, the {@link #failResponseNode} won't be used.<p>
- * If it didn't, the {@link #failResponseNode} will be the place where failed result is stored.<p>
+ * If user didn't pass the validation, the Response will be printed.<p>
  *
  * @author Dan Lyu
  */

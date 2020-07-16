@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ItemManager {
     private Repository<Item> items;
-    private ArrayList<Long> itemsArrayList; //temp solution
+    private ArrayList<Integer> itemsArrayList; //temp solution
 
     public ItemManager(Repository<Item> items){
         this.items = items;
@@ -28,21 +28,21 @@ public class ItemManager {
         return new Response.Builder(true).translatable("itemAdd").build();
     }
 
-    public void addAvailable (Long itemID) {
+    public void addAvailable (Integer itemID) {
         itemsArrayList.add(itemID);
     }
 
-    public void removeAvailable (Long itemID) {
+    public void removeAvailable (Integer itemID) {
         itemsArrayList.remove(itemID);
     }
 
-    public Item findItemByUid(Long uid) {
+    public Item findItemByUid(Integer uid) {
         return items.get(uid);
     }
 
 
     public  Response browseItemsDisplay() { StringBuilder stringBuilder = new StringBuilder();
-        for (Long i : itemsArrayList) {
+        for (Integer i : itemsArrayList) {
             Item item = items.get(i);
             stringBuilder.append(item.toString()).append("\n");
         }

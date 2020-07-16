@@ -20,6 +20,7 @@ public class UserController {
     private final Repository<Item> itemRepo;
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
+    private final TradeController tradeController;
     private PersonalUser currUser;
 
     public UserController(ControllerDispatcher dispatcher) {
@@ -28,7 +29,7 @@ public class UserController {
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
-        dispatcher.menuController.viewAccount(this);
+        tradeController = dispatcher.tradeController;
         dispatcher.menuController.personalUserAccess(this);
     }
 
@@ -48,7 +49,7 @@ public class UserController {
     }
 
     public Response removeItemFromInventory(Request request){
-        Long item = request.getLong("item");
+        Integer item = request.getInteger("item");
         Item itemEntity = itemManager.findItemByUid(item);
         itemManager.remove(itemEntity);
         return personalUserManager.removeItemFromInventory(currUser, item);
@@ -72,7 +73,7 @@ public class UserController {
     }
 
     public Response removeItemFromWishlist(Request request){
-        Long item = request.getLong("item");
+        Integer item = request.getInteger("item");
         return personalUserManager.removeItemFromWishlist(currUser, item);
     }
 
@@ -99,10 +100,10 @@ public class UserController {
         //return new Response.Builder(true).translatable("not.frozen").build();
     }
 
-    public Response topTraders(){
-        Map<Long, Integer> frequentTraders = currUser.getTopThreeTraders();
+    public Response topTraders(Request request){
+        Map<Integer, Integer> frequentTraders = tradeController.getTradeFrequency(currUser.getUid());
         StringBuilder stringBuilder = new StringBuilder();
-        for (Long i : frequentTraders.keySet()) {
+        for (Integer i : frequentTraders.keySet()) {
             PersonalUser other = personalRepo.get(i);
             Integer times = frequentTraders.get(i);
             stringBuilder.append("Traded with ").append(other.toString()).append(times).append(" times.").append("\n");

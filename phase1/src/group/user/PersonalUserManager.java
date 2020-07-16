@@ -59,7 +59,7 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.create.new").build();
     }
 
-    public Response requestToAddItemToInventory(PersonalUser user, Long item){
+    public Response requestToAddItemToInventory(PersonalUser user, Integer item){
         user.addItemToAddToInventoryRequest(item);
         return new Response.Builder(true).translatable("success.request.addItem").build(); // this one
     }
@@ -74,17 +74,17 @@ public class PersonalUserManager {
         return requestToAddItemToInventory(owner, newitem.getUid());
     }
 
-    public Response removeItemFromInventory(PersonalUser user, Long item) {
+    public Response removeItemFromInventory(PersonalUser user, Integer item) {
         user.removeFromInventory(item);
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
-    public Response addItemToWishlist(PersonalUser user, Long item){
+    public Response addItemToWishlist(PersonalUser user, Integer item){
         user.addToWishList(item);
         return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 
-    public Response removeItemFromWishlist(PersonalUser user, Long item){
+    public Response removeItemFromWishlist(PersonalUser user, Integer item){
         user.removeFromWishList(item);
         return new Response.Builder(true).translatable("success.remove.wishlist").build();
     }
@@ -107,7 +107,7 @@ public class PersonalUserManager {
         }
     }
 
-    public Item createNewItem(Long ownerUID, String item, String description){
+    public Item createNewItem(Integer ownerUID, String item, String description){
         return new Item(ownerUID, item, description);
     }
 

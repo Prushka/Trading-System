@@ -99,21 +99,21 @@ public class AdministrativeManager {
         user.setRequestToUnfreeze(false);
     }
 
-    public Response removeUserItem(PersonalUser user, Long item){
+    public Response removeUserItem(PersonalUser user, Integer item){
         user.getInventory().remove(item);
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
 
     public Response confirmAddAllItemRequestForAUser(PersonalUser user) {
-        for (Long item : user.getAddToInventoryRequest()) {
+        for (Integer item : user.getAddToInventoryRequest()) {
             user.addToInventory(item);
             user.getAddToInventoryRequest().remove(item);
         }
         return new Response.Builder(true).translatable("success.confirm.AddItem").build();
     }
 
-    public Response confirmAddItemRequest(PersonalUser user, long item) {
+    public Response confirmAddItemRequest(PersonalUser user, int item) {
         user.addToInventory(item);
         user.getAddToInventoryRequest().remove(item);
         return new Response.Builder(true).translatable("success.confirm.AddItem").build();

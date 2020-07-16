@@ -48,15 +48,6 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
         return data.get(id);
     }
 
-    /**
-     * @param id the unique id of this entity
-     * @return the entity
-     */
-    @Override
-    public T get(Long id) {
-        return get(id.intValue());
-    }
-
     @Override
     public T getFirst(Filter<T> filter) {
         if (iterator(filter).hasNext()) {
@@ -117,15 +108,6 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
     @Override
     public boolean ifExists(int id) {
         return id >= 0 && id < data.size();
-    }
-
-    /**
-     * @param id the unique id as Long to be found
-     * @return <code>true</code> if the entity with id exists
-     */
-    @Override
-    public boolean ifExists(Long id) {
-        return ifExists(id.intValue());
     }
 
     /**

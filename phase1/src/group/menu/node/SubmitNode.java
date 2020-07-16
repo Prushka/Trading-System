@@ -21,6 +21,9 @@ public class SubmitNode extends InputNode {
     private final RequestHandler handler;
 
 
+    /**
+     * The pool used to keep all available master nodes for this SubmitNode
+     */
     private MasterOptionNodePool masterOptionNodePool;
 
     /**
@@ -28,6 +31,12 @@ public class SubmitNode extends InputNode {
      */
     private final PersistentRequest persistentRequest;
 
+    /**
+     * When skippable is <code>true</code>:<p>
+     * This node will not have its original Response<p>
+     * This node will be skipped once encountered<p>
+     * This node's RequestHandler will still be executed and its Response will be printed
+     */
     private final boolean skippable;
 
     /**
@@ -103,11 +112,9 @@ public class SubmitNode extends InputNode {
         return realChild;
     }
 
-    @Override
-    public Response fetchResponse() {
-        return super.fetchResponse();
-    }
-
+    /**
+     * @return <code>true</code> if this node is built to be skippable
+     */
     public boolean isSkippable() {
         return skippable;
     }
@@ -138,14 +145,30 @@ public class SubmitNode extends InputNode {
          */
         private final PersistentRequest persistentRequest;
 
+        /**
+         * When skippable is <code>true</code>:<p>
+         * This node will not have its original Response<p>
+         * This node will be skipped once encountered<p>
+         * This node's RequestHandler will still be executed and its Response will be printed
+         */
         private boolean skippable = false;
 
+        /**
+         * @param translatable the language identifier
+         * @param key the key to be used for user input
+         * @param handler the injected handler to be used to process Request and return a Response
+         * @param persistentRequest the global Request that keeps all cached requests
+         */
         public Builder(String translatable, String key, RequestHandler handler, PersistentRequest persistentRequest) {
             super(translatable, key);
             this.handler = handler;
             this.persistentRequest = persistentRequest;
         }
 
+        /**
+         * @param requestHandler the injected handler to be used to process Request and return a Response
+         * @param persistentRequest the global Request that keeps all cached requests
+         */
         public Builder(RequestHandler requestHandler, PersistentRequest persistentRequest){
             super("skippable.submit","skippable.submit");
             this.handler = requestHandler;

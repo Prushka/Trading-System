@@ -9,17 +9,17 @@ import java.util.*;
 
 public class PersonalUser extends User {
 
-    private List<Long> wishlist;
-    private List<Long> inventory;
-    private List<Long> trades;
-    private List<Long> supportTickets;
+    private List<Integer> wishlist;
+    private List<Integer> inventory;
+    private List<Integer> trades;
+    private List<Integer> supportTickets;
     private Boolean isFrozen;
     private Integer lendCount;
     private Integer borrowCount;
     private Integer numTransactions;
-    private ArrayList<Long> recentTrades;
-    private Map<Long, Integer> traderFrequency;
-    private List<Long> addToInventoryRequest;
+    private ArrayList<Integer> recentTrades;
+    private Map<Integer, Integer> traderFrequency;
+    private List<Integer> addToInventoryRequest;
     private Boolean requestToUnfreeze;
 
     /**
@@ -48,23 +48,23 @@ public class PersonalUser extends User {
 
     public PersonalUser(List<String> record){ super(record); }
 
-    public List<Long> getWishlist() { return wishlist; }
+    public List<Integer> getWishlist() { return wishlist; }
 
-    public void addToWishList(Long newItem){ wishlist.add(newItem); }
+    public void addToWishList(Integer newItem){ wishlist.add(newItem); }
 
-    public void removeFromWishList(Long oldItem){ wishlist.remove(oldItem); }
+    public void removeFromWishList(Integer oldItem){ wishlist.remove(oldItem); }
 
-    public List<Long> getInventory() { return inventory; }
+    public List<Integer> getInventory() { return inventory; }
 
-    public void addToInventory(Long newItem){ inventory.add(newItem);}
+    public void addToInventory(Integer newItem){ inventory.add(newItem);}
 
-    public void removeFromInventory(Long oldItem){ inventory.remove(oldItem); }
+    public void removeFromInventory(Integer oldItem){ inventory.remove(oldItem); }
 
-    public List<Long> getTrades() { return trades; }
+    public List<Integer> getTrades() { return trades; }
 
-    public void addToTrades(Long newItem){ trades.add(newItem);}
+    public void addToTrades(Integer newItem){ trades.add(newItem);}
 
-    public void removeFromTrade(Long oldItem){ trades.remove(oldItem); }
+    public void removeFromTrade(Integer oldItem){ trades.remove(oldItem); }
 
     public boolean getIsFrozen() { return isFrozen; }
 
@@ -84,13 +84,13 @@ public class PersonalUser extends User {
 
     public void setNumTransactions(int numTransactions) { this.numTransactions = numTransactions; }
 
-    public Map<Long, Integer> getTraderFrequency() { return traderFrequency; }
+    public Map<Integer, Integer> getTraderFrequency() { return traderFrequency; }
 
-    public List<Long> getAddToInventoryRequest(){
+    public List<Integer> getAddToInventoryRequest(){
         return addToInventoryRequest;
     }
 
-    public void addItemToAddToInventoryRequest(long item){
+    public void addItemToAddToInventoryRequest(int item){
         addToInventoryRequest.add(item);
     }
 
@@ -106,22 +106,22 @@ public class PersonalUser extends User {
         return requestToUnfreeze;
     }
 
-    public List<Long> getSupportTickets() {
+    public List<Integer> getSupportTickets() {
         return supportTickets;
     }
 
-    public void addRecentTrades(Long tradeID) {
+    public void addRecentTrades(Integer tradeID) {
         if (recentTrades.size() >= 3){
             recentTrades.remove(0);
         }
         recentTrades.add(tradeID);
     }
 
-    public ArrayList<Long> getRecentCompleteTrades() {
+    public ArrayList<Integer> getRecentCompleteTrades() {
         return recentTrades;
     }
 
-    public void setTraderFrequency(Long userID) {
+    public void setTraderFrequency(Integer userID) {
         if (traderFrequency.containsKey(userID)){
             traderFrequency.put(userID, traderFrequency.get(userID) + 1);
         } else {
@@ -135,14 +135,14 @@ public class PersonalUser extends User {
      * trader accordingly.
      * @return map of the top 3 most frequent traders for this user
      */
-    public Map<Long, Integer> getTopThreeTraders() {
+    public Map<Integer, Integer> getTopThreeTraders() {
         int len = traderFrequency.keySet().toArray().length;
         if (traderFrequency.isEmpty()) {
             return null;
         } else if (len <= 3) {
             return traderFrequency;
         } else {
-            Map<Long, Integer> ans = new HashMap<>();
+            Map<Integer, Integer> ans = new HashMap<>();
             List<Integer> v = (ArrayList<Integer>) traderFrequency.values();
             Collections.sort(v);
             v = v.subList(v.size() - 3, v.size());
@@ -154,13 +154,13 @@ public class PersonalUser extends User {
     }
 
     /**
-     * helper method that returns a key from a value only for a one-to-one Map<Long, Integer></>
+     * helper method that returns a key from a value only for a one-to-one Map<Integer, Integer></>
      * type map.
      * @param value times traded with someone else
      * @return key mapped to the given value
      */
-   private Long keyFromValue(Integer value) {
-        for (Map.Entry<Long , Integer> entry : traderFrequency.entrySet()) {
+   private Integer keyFromValue(Integer value) {
+        for (Map.Entry<Integer , Integer> entry : traderFrequency.entrySet()) {
             if (value.equals(entry.getValue())) {
                 return entry.getKey();
             }

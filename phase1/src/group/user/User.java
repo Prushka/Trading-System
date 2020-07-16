@@ -9,7 +9,7 @@ import java.util.List;
 
 public class User extends MappableBase implements CSVMappable, UniqueId {
 
-    private Long uid;
+    private Integer uid;
     private String userName;
     private String email;
     private String telephone;
@@ -69,12 +69,12 @@ public class User extends MappableBase implements CSVMappable, UniqueId {
     }
 
     @Override
-    public void setUid(long new_uid) {
+    public void setUid(int new_uid) {
         this.uid = new_uid;
     }
 
     @Override
-    public long getUid() {
+    public int getUid() {
         return this.uid;
     }
 

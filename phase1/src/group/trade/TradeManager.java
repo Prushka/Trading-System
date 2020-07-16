@@ -7,6 +7,9 @@ import group.user.PersonalUser;
 import group.menu.data.Response;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class TradeManager {
     private final Integer editLimit;
@@ -44,8 +47,8 @@ public class TradeManager {
      * @param prevMeeting The trade ID of the previous meeting
      * @return A response object of the representation of the trade or a description of why creation failed
      */
-    public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
-                                LocalDateTime dateAndTime, String location, Long prevMeeting) {
+    public Response createTrade(int user1, int user2, int item1, int item2, Boolean isPermanent,
+                                LocalDateTime dateAndTime, String location, Integer prevMeeting) {
         // Get users from Repository
         PersonalUser trader1 = userRepository.get(user1);
         PersonalUser trader2 = userRepository.get(user2);
@@ -68,7 +71,7 @@ public class TradeManager {
      * @param location The location of where this trade will take place
      * @return A response object of the representation of the trade or a description of why creation failed
      */
-    public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
+    public Response createTrade(int user1, int user2, int item1, int item2, Boolean isPermanent,
                                 LocalDateTime dateAndTime, String location){
         return createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location, null);
     }
@@ -292,6 +295,29 @@ public class TradeManager {
         return new Response.Builder(true).
                 translatable("submit.trade.represent", trade.getUid(), trade.getUser1(),
                         trade.getUser2(), trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation()).build();
+    }
+
+
+    public Map<Integer, Integer> getTradeFrequency(int user) {
+        Map<Integer, Integer> tradeFrequency = new HashMap<>();
+        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getUser1() == user || entity.getUser2() == user);
+        while (tradeIterator.hasNext()) {
+            Trade trade = tradeIterator.next();
+            if (user == trade.getUser1()) {
+                putOrAppend(tradeFrequency, trade.getUser2());
+            } else {
+                putOrAppend(tradeFrequency, trade.getUser1());
+            }
+        }
+        return tradeFrequency;
+    }
+
+    private void putOrAppend(Map<Integer, Integer> map, Integer key) {
+        if (map.containsKey(key)) {
+            map.put(key, map.get(key) + 1);
+        } else {
+            map.put(key, 1);
+        }
     }
 }
 

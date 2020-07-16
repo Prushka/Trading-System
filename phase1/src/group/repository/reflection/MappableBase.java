@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Contains a constructor that takes in a CSV representation String.<p>
  * Subclasses are required to have a sub-constructor corresponding to <code>MappableBase(List data)</code><p>
  * This reflection implementation has limits on certain classes,
- * use only non-final List, Long, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
+ * use only non-final List, Integer, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
  * To allow more more flexibility, implement {@link CSVMappable} directly in the entity class.
  *
  * @author Dan Lyu
@@ -69,7 +69,8 @@ public abstract class MappableBase {
                     if (representation.length() == 0 || representation.equals("null")) {
                         obj = null;
                     } else {
-                        obj = stringToMap((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
+                        obj = stringToMap((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]
+                                , (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[1], representation);
                     }
                 } else {
                     obj = getObjectFrom(field.getType(), representation);
@@ -82,11 +83,11 @@ public abstract class MappableBase {
         }
     }
 
-    private <T> Map<T, T> stringToMap(Class<T> fieldListGenericClass, String representation) { // map has to have the same type for key and value, this also only uses HashMap
-        Map<T, T> map = new HashMap<>();
+    private <K, V> Map<K, V> stringToMap(Class<K> keyClass, Class<V> valueClass, String representation) { // this only uses HashMap
+        Map<K, V> map = new HashMap<>();
         for (String element : representation.split(";")) {
             String[] subElement = element.split(":");
-            map.put((T) getObjectFrom(fieldListGenericClass, subElement[0]), (T) getObjectFrom(fieldListGenericClass, subElement[1]));
+            map.put((K) getObjectFrom(keyClass, subElement[0]), (V) getObjectFrom(valueClass, subElement[1]));
         }
         return map;
     }
@@ -104,8 +105,8 @@ public abstract class MappableBase {
             obj = Enum.valueOf((Class<Enum>) fieldTypeClass, representation);
         } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
             obj = Integer.valueOf(representation);
-        } else if (Long.class.isAssignableFrom(fieldTypeClass)) {
-            obj = Long.valueOf(representation);
+        } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Integer.valueOf(representation);
         } else if (Boolean.class.isAssignableFrom(fieldTypeClass)) {
             obj = Boolean.valueOf(representation);
         } else if (Double.class.isAssignableFrom(fieldTypeClass)) {
@@ -115,7 +116,7 @@ public abstract class MappableBase {
         } else if (String.class.isAssignableFrom(fieldTypeClass)) {
             obj = representation;
         } else if (Date.class.isAssignableFrom(fieldTypeClass)) {
-            obj = new Date(Long.parseLong(representation));
+            obj = new Date(Integer.parseInt(representation));
         } else {
             obj = null;
         }
@@ -223,7 +224,7 @@ public abstract class MappableBase {
                 } else if (obj instanceof List) {
                     ((List<?>) obj).forEach(o -> value.append(o.toString()).append(";"));
                 } else if (obj instanceof Map) {
-                    for(Map.Entry<?,?> entry:((Map<?,?>) obj).entrySet()){
+                    for (Map.Entry<?, ?> entry : ((Map<?, ?>) obj).entrySet()) {
                         value.append(entry.getKey().toString()).append(":").append(entry.getValue().toString()).append(";");
                     }
                 } else {

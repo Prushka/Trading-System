@@ -35,9 +35,9 @@ public class AdministrativeManager {
             return new Response.Builder(false).translatable("existed.username").build();
         }
         if (isHead){
-        AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, isHead);
+        AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, true);
         administrators.add(admin);
-        return new Response.Builder(true).translatable("success.create.new").build();
+        return new Response.Builder(true).translatable("success.create.newAdmin").build();
         }else{
             return new Response.Builder(false).translatable("not.head").build();
         }
@@ -45,9 +45,9 @@ public class AdministrativeManager {
 
     public Response verifyLogin(String username, String password){
          if (getCurrAdmin(username, password) != null){
-             return new Response.Builder(true).translatable("success.login.user").build();
+             return new Response.Builder(true).translatable("success.login.adminUser").build();
          }
-         return new Response.Builder(false).translatable("failed.login.user").build();
+         return new Response.Builder(false).translatable("failed.login.adminUser").build();
     }
 
     public Response addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){

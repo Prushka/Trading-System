@@ -23,8 +23,6 @@ public class AdministrativeUserController {
         administrativeManager = new AdministrativeManager(adminRepo, personalRepo);
     }
 
-    // Lucy comment: for now it is only for admin, will discuss how to put in personal
-    // or separate personal and admin controller
     public Response loginAdminUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");
@@ -51,7 +49,6 @@ public class AdministrativeUserController {
         String email = request.get("email");
         String telephone = request.get("telephone");
         String password = request.get("password");
-        //boolean isHead = request.getBoolean("isHead");
         return administrativeManager.addSubAdmin(currAdmin, username, email, telephone, password);
     }
 

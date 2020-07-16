@@ -4,9 +4,7 @@ import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.MenuLogicController;
-import group.menu.validator.DateValidator;
-import group.menu.validator.EnumValidator;
-import group.menu.validator.RepositoryIdValidator;
+import group.menu.validator.*;
 import group.notification.SupportTicket;
 import group.trade.Trade;
 import group.user.AdministrativeUser;
@@ -37,20 +35,18 @@ public class MenuController {
     public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController) {
         menuBuilder.option(User.class, OperationType.verification, 1, "login")
                 .input("username", null, ValidatingType.notexist)
-                // if you want to check if the username exists directly in this input node, change the null to a lambda expression
                 .submit("password", userController::loginUser)
                 .succeeded("master.userAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2, "login")
                 .input("username", null, ValidatingType.notexist)
-                // if you want to check if the email exists directly in this input node, change the null to a lambda expression
                 .submit("password", administrativeUserController::loginAdminUser)
                 .succeeded("master.adminAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 3, "register")
                 .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", null, null, ValidatingType.invalid)
-                .input("telephone", null, null, ValidatingType.invalid)
+                .input("email", null, new EmailValidator(), ValidatingType.invalid)
+                .input("telephone", null, new GeneralValidator(GeneralValidator.InputType.Number, 3, 10, true), ValidatingType.invalid)
                 .submit("password", password -> password.length() > 7, ValidatingType.invalid, userController::registerUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 

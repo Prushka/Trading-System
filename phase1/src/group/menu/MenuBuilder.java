@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+
 /**
  * A class to build different menu nodes in order. This class contains inner classes for different steps needed to build a menu using nodes.<p>
  * <p>
@@ -73,11 +74,15 @@ public class MenuBuilder {
          * @param id    the id of this option
          * @param addon the addon String to be used in the language identifier
          */
-        public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, String addon) {
+        public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, RequestHandler requestHandler, String addon) {
             this.clazz = clazz;
             this.type = type;
-            optionNode = new OptionNode(getTranslatable("option", addon), id);
+            optionNode = new OptionNode.Builder(getTranslatable("option", addon)).id(id).requestHandler(requestHandler).build();
             currentNode = optionNode;
+        }
+
+        public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, String addon) {
+            this(clazz, type, id, null, addon);
         }
 
         /**

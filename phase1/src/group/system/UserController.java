@@ -30,7 +30,6 @@ public class UserController {
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
         tradeController = dispatcher.tradeController;
-        dispatcher.menuController.personalUserAccess(this);
     }
 
     public Response loginUser(Request request) {

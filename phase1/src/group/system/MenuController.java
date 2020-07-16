@@ -1,9 +1,11 @@
 package group.system;
 
+import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import group.menu.MenuBuilder;
 import group.menu.MenuBuilder.OperationType;
 import group.menu.MenuBuilder.ValidatingType;
 import group.menu.MenuLogicController;
+import group.menu.data.Response;
 import group.menu.processor.PasswordEncryption;
 import group.menu.validator.*;
 import group.notification.SupportTicket;
@@ -11,6 +13,7 @@ import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 import group.user.User;
+import org.omg.CORBA.portable.ResponseHandler;
 
 /**
  * {\__/}
@@ -66,7 +69,7 @@ public class MenuController {
 
     }
 
-    public void personalUserAccess(UserController controller) {
+    public void personalUserAccess(UserController controller, SupportTicketController supportController) {
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 1, "account")
                 .submit("enter", controller::checkFrozen)
@@ -75,6 +78,13 @@ public class MenuController {
         menuBuilder.option(PersonalUser.class, OperationType.query, 2, "trade")
                 .submit("enter", controller::checkFrozen)
                 .succeeded("master.userAccess").failed("master.support.trade").master("master.account");
+
+        menuBuilder.option(SupportTicket.class, OperationType.add, 3)
+                .input("content", supportController::ifTicketContentNotExist, ValidatingType.exists)
+                .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
+                .input("priority", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
+                .submit("confirm", supportController::addTicket)
+                .succeeded("master.support.ticket");
 
         menuBuilder.construct("master.userAccess", false);
     }
@@ -127,6 +137,10 @@ public class MenuController {
                 .submit("frequent", tradeController::getRecentTrades)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
+        menuBuilder.option(PersonalUser.class, OperationType.query, 12, "trade")
+                .submit("enter", userController::checkFrozen)
+                .succeeded("master.view.account").failed("master.support.trade").master("master.account");
+
         menuBuilder.construct("master.view.account", false);
     }
 
@@ -173,6 +187,12 @@ public class MenuController {
                 .succeeded("master.support.trade").failed("master.support.trade").master("failed.confirm.trade",
                 "success.confirm.trade.complete.perm", "success.confirm.trade.complete.temp",
                 "success.confirm.trade.wait");
+
+        /*
+        menuBuilder.option(PersonalUser.class, OperationType.query, 6, "trade")
+                .submit("trade", new Response.Builder(true).translatable("okay").build())
+                .succeeded("master.view.account").failed("master.view.account").master("master.account");
+         */
 
         menuBuilder.construct("master.support.trade", false);
     }

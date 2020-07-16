@@ -120,8 +120,6 @@ public class MenuController {
 
     public void supportTrade(TradeController controller) {
         menuBuilder.option(Trade.class, OperationType.add, 1)
-                .input("initiator", null, new RepositoryIdValidator(controller.personalUserRepository),
-                        ValidatingType.exists)
                 .input("respondent", null, new RepositoryIdValidator(controller.personalUserRepository),
                         ValidatingType.exists)
                 .input("lendingItem", null, controller::isAnItem, ValidatingType.invalid)
@@ -136,8 +134,6 @@ public class MenuController {
         menuBuilder.option(Trade.class, OperationType.edit, 2, "Date/Time")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
                         ValidatingType.exists)
-                .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
-                        ValidatingType.invalid)
                 .input("dateAndTime", String::toUpperCase, new DateValidator(), ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingDateAndTime)
                 .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent",
@@ -146,8 +142,6 @@ public class MenuController {
         menuBuilder.option(Trade.class, OperationType.edit, 3, "Location")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
                         ValidatingType.exists)
-                .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
-                        ValidatingType.invalid)
                 .input("location", String::toUpperCase, null, ValidatingType.invalid)
                 .submit("confirm", controller::editMeetingLocation)
                 .succeeded("master.support.trade").failed("master.support.trade").master("submit.trade.represent",
@@ -156,8 +150,6 @@ public class MenuController {
         menuBuilder.option(Trade.class, OperationType.verification, 4, "Open")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
                         ValidatingType.exists)
-                .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
-                        ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeOpen)
                 .succeeded("master.support.trade").failed("master.support.trade").master("success.confirm.trade.open",
                 "success.confirm.trade.wait", "failed.confirm.trade");
@@ -165,8 +157,6 @@ public class MenuController {
         menuBuilder.option(Trade.class, OperationType.verification, 5, "Complete")
                 .input("tradeID", null, new RepositoryIdValidator(controller.tradeRepository),
                         ValidatingType.exists)
-                .input("editingUser", null, new RepositoryIdValidator(controller.personalUserRepository),
-                        ValidatingType.invalid)
                 .submit("confirm", controller::confirmingTradeComplete)
                 .succeeded("master.support.trade").failed("master.support.trade").master("failed.confirm.trade",
                 "success.confirm.trade.complete.perm", "success.confirm.trade.complete.temp",

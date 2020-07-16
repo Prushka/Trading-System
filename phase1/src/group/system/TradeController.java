@@ -39,16 +39,14 @@ public class TradeController {
     public Response addTrade(Request request) {
         Long item1;
         Long item2;
-        Long user1 =  request.getLong("initiator");
         Long user2 =  request.getLong("respondent");
 
-        PersonalUser trader1 = personalUserRepository.get(user1);
         PersonalUser trader2 = personalUserRepository.get(user2);
 
         // Check if items are in their inventories or are null
         if (request.get("lendingItem").equals("null")){
             item1 = null;
-        } else if (trader1.getInventory().contains(request.getLong("lendingItem"))){
+        } else if (currUser.getInventory().contains(request.getLong("lendingItem"))){
             item1 = request.getLong("lendingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
@@ -66,7 +64,7 @@ public class TradeController {
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
         String location =  request.get("location");
-        return tradeManager.createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location);
+        return tradeManager.createTrade(currUser.getUid(), user2, item1, item2, isPermanent, dateAndTime, location);
     }
 
     /**
@@ -76,11 +74,10 @@ public class TradeController {
      */
     public Response editMeetingDateAndTime(Request request){
         Integer tradeID = request.getInt("tradeID");
-        Integer editingUser = request.getInt("editingUser");
         String[] data = request.get("dateAndTime").split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
-        return tradeManager.editDateAndTime(tradeID, editingUser, dateAndTime);
+        return tradeManager.editDateAndTime(tradeID, (int) currUser.getUid(), dateAndTime);
     }
 
     /**
@@ -90,9 +87,8 @@ public class TradeController {
      */
     public Response editMeetingLocation(Request request){
         Integer tradeID = request.getInt("tradeID");
-        Integer editingUser = request.getInt("editingUser");
         String location = request.get("location");
-        return tradeManager.editLocation(tradeID, editingUser, location);
+        return tradeManager.editLocation(tradeID, (int) currUser.getUid(), location);
     }
 
     /**
@@ -102,8 +98,7 @@ public class TradeController {
      */
     public Response confirmingTradeOpen(Request request){
         Integer tradeID = request.getInt("tradeID");
-        Integer editingUser = request.getInt("editingUser");
-        return tradeManager.confirmTrade(tradeID, editingUser);
+        return tradeManager.confirmTrade(tradeID, (int) currUser.getUid());
     }
 
     /**
@@ -113,8 +108,7 @@ public class TradeController {
      */
     public Response confirmingTradeComplete(Request request){
         Integer tradeID = request.getInt("tradeID");
-        Integer editingUser = request.getInt("editingUser");
-        return tradeManager.confirmTradeComplete(tradeID, editingUser);
+        return tradeManager.confirmTradeComplete(tradeID, (int) currUser.getUid());
     }
 
     /**

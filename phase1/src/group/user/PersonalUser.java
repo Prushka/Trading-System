@@ -1,8 +1,10 @@
 package group.user;
 
 import group.item.Item;
+import group.menu.data.Response;
 import group.repository.UniqueId;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class PersonalUser extends User {
@@ -15,7 +17,8 @@ public class PersonalUser extends User {
     private Integer lendCount;
     private Integer borrowCount;
     private Integer numTransactions;
-    private Map<String, Integer> traderFrequency;
+    private ArrayList<Long> recentTrades;
+    private Map<Long, Integer> traderFrequency;
     private List<Long> addToInventoryRequest;
     private Boolean requestToUnfreeze;
 
@@ -37,6 +40,7 @@ public class PersonalUser extends User {
         lendCount = 0;
         borrowCount = 0;
         numTransactions = 0;
+        recentTrades = new ArrayList<>();
         traderFrequency = new HashMap<>();
         addToInventoryRequest = new ArrayList<>();
         requestToUnfreeze = false;
@@ -80,7 +84,7 @@ public class PersonalUser extends User {
 
     public void setNumTransactions(int numTransactions) { this.numTransactions = numTransactions; }
 
-    public Map<String, Integer> getTraderFrequency() { return traderFrequency; }
+    public Map<Long, Integer> getTraderFrequency() { return traderFrequency; }
 
     public List<Long> getAddToInventoryRequest(){
         return addToInventoryRequest;
@@ -106,20 +110,39 @@ public class PersonalUser extends User {
         return supportTickets;
     }
 
+    public void addRecentTrades(Long tradeID) {
+        if (recentTrades.size() >= 3){
+            recentTrades.remove(0);
+        }
+        recentTrades.add(tradeID);
+    }
+
+    public ArrayList<Long> getRecentCompleteTrades() {
+        return recentTrades;
+    }
+
+    public void setTraderFrequency(Long userID) {
+        if (traderFrequency.containsKey(userID)){
+            traderFrequency.put(userID, traderFrequency.get(userID) + 1);
+        } else {
+            traderFrequency.put(userID, 1);
+        }
+    }
+
     /**
-     * returns the usernames of the top three most frequent traders for this user as a map.
+     * returns the user IDs of the top three most frequent traders for this user as a map.
      * if this user has not traded with three different users, returns top 2 or the top
      * trader accordingly.
      * @return map of the top 3 most frequent traders for this user
      */
-    public Map<String, Integer> getTopThreeTraders() {
+    public Map<Long, Integer> getTopThreeTraders() {
         int len = traderFrequency.keySet().toArray().length;
         if (traderFrequency.isEmpty()) {
             return null;
         } else if (len <= 3) {
             return traderFrequency;
         } else {
-            Map<String, Integer> ans = new HashMap<>();
+            Map<Long, Integer> ans = new HashMap<>();
             List<Integer> v = (ArrayList<Integer>) traderFrequency.values();
             Collections.sort(v);
             v = v.subList(v.size() - 3, v.size());
@@ -131,13 +154,13 @@ public class PersonalUser extends User {
     }
 
     /**
-     * helper method that returns a key from a value only for a one-to-one Map<String, Integer></>
+     * helper method that returns a key from a value only for a one-to-one Map<Long, Integer></>
      * type map.
-     * @param value
+     * @param value times traded with someone else
      * @return key mapped to the given value
      */
-   private String keyFromValue(Integer value) {
-        for (Map.Entry<String , Integer> entry : traderFrequency.entrySet()) {
+   private Long keyFromValue(Integer value) {
+        for (Map.Entry<Long , Integer> entry : traderFrequency.entrySet()) {
             if (value.equals(entry.getValue())) {
                 return entry.getKey();
             }

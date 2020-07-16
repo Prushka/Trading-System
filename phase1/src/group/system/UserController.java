@@ -5,9 +5,13 @@ import group.item.ItemManager;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.repository.Repository;
+import group.trade.Trade;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 import group.user.PersonalUserManager;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class UserController {
 
@@ -93,6 +97,17 @@ public class UserController {
             //return new Response.Builder(false).translatable("frozen").build();
         //}
         //return new Response.Builder(true).translatable("not.frozen").build();
+    }
+
+    public Response topTraders(){
+        Map<Long, Integer> frequentTraders = currUser.getTopThreeTraders();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Long i : frequentTraders.keySet()) {
+            PersonalUser other = personalRepo.get(i);
+            Integer times = frequentTraders.get(i);
+            stringBuilder.append("Traded with ").append(other.toString()).append(times).append(" times.").append("\n");
+        }
+        return new Response.Builder(true).translatable("topTraders", stringBuilder.toString()).build();
     }
 
 

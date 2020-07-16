@@ -8,22 +8,25 @@ import group.trade.TradeManager;
 import group.user.PersonalUser;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 // Glitch List: Trade ID 0 works even when this trade, pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeController {
     private final TradeManager tradeManager;
     final Repository<Trade> tradeRepository;
     final Repository<PersonalUser> personalUserRepository;
+    private PersonalUser user;
 
     /**
      * Takes requests from a user and turns it into information that can be used by TradeManager
      * @param dispatcher The controller dispatcher
      */
-    public TradeController(ControllerDispatcher dispatcher){
+    public TradeController(ControllerDispatcher dispatcher, Long userID){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
         tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties);
         dispatcher.menuController.supportTrade(this);
+        user = personalUserRepository.get(userID);
     }
 
     /**
@@ -134,5 +137,15 @@ public class TradeController {
         } catch (IllegalArgumentException e){
             return false;
         }
+    }
+
+    public Response getRecentCompleteTrades(){
+        ArrayList<Long> recentCompleteTrades = user.getRecentCompleteTrades();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Long i : recentCompleteTrades) {
+            Trade trade = tradeRepository.get(i);
+            stringBuilder.append(trade.toString()).append("\n");
+        }
+        return new Response.Builder(true).translatable("recentTrades", stringBuilder.toString()).build();
     }
 }

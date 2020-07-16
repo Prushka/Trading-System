@@ -74,7 +74,7 @@ public class MenuController {
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 2, "trade")
                 .submit("enter", controller::checkFrozen)
-                .succeeded("master.support.trade").failed("master.userAccess").master("master.account");
+                .succeeded("master.userAccess").failed("master.view.account").master("master.account");
 
         menuBuilder.construct("master.userAccess", false);
     }

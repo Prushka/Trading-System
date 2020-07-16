@@ -74,7 +74,7 @@ public class MenuController {
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 2, "trade")
                 .submit("enter", controller::checkFrozen)
-                .succeeded("master.userAccess").failed("master.view.account").master("master.account");
+                .succeeded("master.userAccess").failed("master.support.trade").master("master.account");
 
         menuBuilder.construct("master.userAccess", false);
     }
@@ -115,7 +115,7 @@ public class MenuController {
                 .submit("unfreeze", userController::RequestUnfreeze)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
-        menuBuilder.option(User.class, OperationType.view, 9, "all")
+        menuBuilder.option(Trade.class, OperationType.view, 9, "all")
                 .submit("unfreeze", userController::RequestUnfreeze)
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 

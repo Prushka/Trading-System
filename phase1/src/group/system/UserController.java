@@ -49,7 +49,7 @@ public class UserController {
     }
 
     public Response removeItemFromInventory(Request request){
-        Integer item = request.getInteger("item");
+        Integer item = request.getInt("item");
         Item itemEntity = itemManager.findItemByUid(item);
         itemManager.remove(itemEntity);
         return personalUserManager.removeItemFromInventory(currUser, item);
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     public Response removeItemFromWishlist(Request request){
-        Integer item = request.getInteger("item");
+        Integer item = request.getInt("item");
         return personalUserManager.removeItemFromWishlist(currUser, item);
     }
 

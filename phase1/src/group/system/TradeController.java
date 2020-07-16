@@ -41,22 +41,22 @@ public class TradeController {
     public Response addTrade(Request request) {
         Integer item1;
         Integer item2;
-        Integer user2 =  request.getInteger("respondent");
+        Integer user2 =  request.getInt("respondent");
 
         PersonalUser trader2 = personalUserRepository.get(user2);
 
         // Check if items are in their inventories or are null
         if (request.get("lendingItem").equals("null")){
             item1 = null;
-        } else if (currUser.getInventory().contains(request.getInteger("lendingItem"))){
-            item1 = request.getInteger("lendingItem");
+        } else if (currUser.getInventory().contains(request.getInt("lendingItem"))){
+            item1 = request.getInt("lendingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
         if (request.get("borrowingItem").equals("null")){
             item2 = null;
-        } else if (trader2.getInventory().contains(request.getInteger("borrowingItem"))){
-            item2 = request.getInteger("borrowingItem");
+        } else if (trader2.getInventory().contains(request.getInt("borrowingItem"))){
+            item2 = request.getInt("borrowingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
@@ -79,7 +79,7 @@ public class TradeController {
         String[] data = request.get("dateAndTime").split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
-        return tradeManager.editDateAndTime(tradeID, (int) currUser.getUid(), dateAndTime);
+        return tradeManager.editDateAndTime(tradeID, currUser.getUid(), dateAndTime);
     }
 
     /**
@@ -90,7 +90,7 @@ public class TradeController {
     public Response editMeetingLocation(Request request){
         Integer tradeID = request.getInt("tradeID");
         String location = request.get("location");
-        return tradeManager.editLocation(tradeID, (int) currUser.getUid(), location);
+        return tradeManager.editLocation(tradeID, currUser.getUid(), location);
     }
 
     /**
@@ -110,7 +110,7 @@ public class TradeController {
      */
     public Response confirmingTradeComplete(Request request){
         Integer tradeID = request.getInt("tradeID");
-        return tradeManager.confirmTradeComplete(tradeID, (int) currUser.getUid());
+        return tradeManager.confirmTradeComplete(tradeID, currUser.getUid());
     }
 
     /**

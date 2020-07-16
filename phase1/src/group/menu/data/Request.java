@@ -49,18 +49,18 @@ public class Request {
 
     /**
      * @param key the key to lookup
-     * @return the value in Integer
+     * @return the value in Long
      */
-    public Integer getInteger(String key) {
-        return Integer.valueOf(get(key));
+    public Long getLong(String key) {
+        return Long.valueOf(get(key));
     }
 
     /**
      * @param key the key to lookup
      * @return the value in Int
      */
-    public Integer getInt(String key) {
-        return Integer.valueOf(get(key));
+    public int getInt(String key) {
+        return Integer.parseInt(get(key));
     }
 
     /**
@@ -94,7 +94,7 @@ public class Request {
      * @return the value in Date
      */
     public Date getDate(String key) {
-        return new Date(getInteger(key));
+        return new Date(getLong(key));
     }
 
     /**

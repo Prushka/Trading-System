@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Contains a constructor that takes in a CSV representation String.<p>
  * Subclasses are required to have a sub-constructor corresponding to <code>MappableBase(List data)</code><p>
  * This reflection implementation has limits on certain classes,
- * use only non-final List, Integer, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
+ * use only non-final List, Integer, Long, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
  * To allow more more flexibility, implement {@link CSVMappable} directly in the entity class.
  *
  * @author Dan Lyu

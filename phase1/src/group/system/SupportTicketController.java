@@ -26,6 +26,10 @@ public class SupportTicketController {
         return supportTicketManager.getTicketsByCategory(SupportTicket.Category.valueOf(request.get("category")));
     }
 
+    public Response getTicketsByCategory2(Request request) {
+        return new Response(true,"123456");
+    }
+
     public boolean ifTicketContentNotExist(String input) {
         return !ticketRepository.ifExists(entity -> input.equalsIgnoreCase(entity.getContent()));
     }

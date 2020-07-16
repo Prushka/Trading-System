@@ -62,7 +62,7 @@ public class MenuController {
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.construct("master.account", true);
+        menuBuilder.construct("master.account", false);
 
     }
 
@@ -186,7 +186,11 @@ public class MenuController {
                 .submit("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid, controller::getTicketsByCategory)
                 .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
 
-        menuBuilder.construct("master.support.ticket", false);
+       menuBuilder.option(SupportTicket.class, OperationType.query, 3,"test")
+               .skippableSubmit(controller::getTicketsByCategory2)
+               .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
+
+        menuBuilder.construct("master.support.ticket", true);
     }
 
     public void adminUserAccess(AdministrativeUserController controller) {

@@ -68,7 +68,7 @@ public class MenuLogicController {
      *
      * @param input user input
      */
-    public Response parseInput(String input) {
+    public void parseInput(String input) {
         if (input.equalsIgnoreCase("back")) {
             goBack();
         } else if (input.equalsIgnoreCase("next")) {
@@ -76,7 +76,11 @@ public class MenuLogicController {
         } else {
             setCurrentNode(currentNode.parseInput(input).traceForward());
         }
-        return currentNode.fetchResponse();
+        if (currentNode.isSkippable()) {
+            parseInput("");
+        } else {
+            currentNode.fetchResponse().display();
+        }
     }
 
     public Response fetchInitialResponse() {

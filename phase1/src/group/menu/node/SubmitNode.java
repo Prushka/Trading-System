@@ -28,6 +28,8 @@ public class SubmitNode extends InputNode {
      */
     private final PersistentRequest persistentRequest;
 
+    private final boolean skippable;
+
     /**
      * Constructs a SubmitNode from a {@link SubmitNode.Builder}
      *
@@ -37,6 +39,7 @@ public class SubmitNode extends InputNode {
         super(builder);
         handler = builder.handler;
         persistentRequest = builder.persistentRequest;
+        skippable = builder.skippable;
     }
 
     /**
@@ -100,6 +103,15 @@ public class SubmitNode extends InputNode {
         return realChild;
     }
 
+    @Override
+    public Response fetchResponse() {
+        return super.fetchResponse();
+    }
+
+    public boolean isSkippable() {
+        return skippable;
+    }
+
     /**
      * Add a MasterOptionNode into current SubmitNode in case this MasterOptionNode will be used by a Response object to navigate to.
      *
@@ -126,10 +138,19 @@ public class SubmitNode extends InputNode {
          */
         private final PersistentRequest persistentRequest;
 
+        private boolean skippable = false;
+
         public Builder(String translatable, String key, RequestHandler handler, PersistentRequest persistentRequest) {
             super(translatable, key);
             this.handler = handler;
             this.persistentRequest = persistentRequest;
+        }
+
+        public Builder(RequestHandler requestHandler, PersistentRequest persistentRequest){
+            super("skippable.submit","skippable.submit");
+            this.handler = requestHandler;
+            this.persistentRequest = persistentRequest;
+            skippable = true;
         }
 
         /**

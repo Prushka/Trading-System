@@ -33,7 +33,7 @@ public class MenuRunner {
             while (!input.equalsIgnoreCase("exit")) {
                 input = br.readLine();
                 if (!input.equalsIgnoreCase("exit")) {
-                    menuLogicController.parseInput(input).display();
+                    menuLogicController.parseInput(input);
                 }
             }
         } catch (IOException e) {

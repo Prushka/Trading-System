@@ -184,6 +184,14 @@ public class MenuBuilder {
         }
 
         /**
+         * @return A submit node that will be skipped but still call the handler
+         */
+        public SubmitNodeBuilder skippableSubmit(RequestHandler requestHandler) {
+            submitNodeBuilder = new SubmitNodeBuilder(requestHandler);
+            return submitNodeBuilder;
+        }
+
+        /**
          * Returns a String identifier for language use.<p>
          * The identifier will be nodeType.operationType.operatingClassSimpleName(with dot splitting all upper case letters)(.addon).
          *
@@ -207,7 +215,7 @@ public class MenuBuilder {
             /**
              * The MasterOptionNodePool used for this SubmitNode, will have all placeholders and be fed by the actual MasterOptionNodes
              */
-            private final MasterOptionNodePool masterOptionNodePool;
+            private final MasterOptionNodePool masterOptionNodePool = new MasterOptionNodePool();
 
             /**
              * The SubmitNode this SubmitNodeBuilder is building
@@ -222,12 +230,14 @@ public class MenuBuilder {
              * @param requestHandler the handler to parse request and expect response
              */
             public SubmitNodeBuilder(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
-                String translatable = getTranslatable("submit", key);
-                SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler, persistentRequest)
+                submitNode = new SubmitNode.Builder(getTranslatable("submit", key), key, requestHandler, persistentRequest)
                         .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
                 currentNode.setChild(submitNode);
-                this.submitNode = submitNode;
-                masterOptionNodePool = new MasterOptionNodePool();
+            }
+
+            public SubmitNodeBuilder(RequestHandler requestHandler) {
+                submitNode = new SubmitNode.Builder(requestHandler, persistentRequest).build();
+                currentNode.setChild(submitNode);
             }
 
             /**

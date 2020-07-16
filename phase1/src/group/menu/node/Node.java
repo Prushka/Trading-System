@@ -91,6 +91,13 @@ public abstract class Node {
     }
 
     /**
+     * @return <code>true</code> if this node can be skipped
+     */
+    public boolean isSkippable() {
+        return false;
+    }
+
+    /**
      * @return the child node of current node
      */
     public Node getChild() {

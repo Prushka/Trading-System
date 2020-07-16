@@ -2,7 +2,7 @@ package group.menu.node;
 
 import group.config.LoggerFactory;
 import group.menu.data.Response;
-import group.menu.persenter.ResponsePresenter;
+import group.menu.data.ResponsePresenter;
 
 import java.util.logging.Logger;
 

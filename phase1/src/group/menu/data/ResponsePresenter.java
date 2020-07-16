@@ -1,8 +1,6 @@
-package group.menu.persenter;
+package group.menu.data;
 
 import group.config.LoggerFactory;
-import group.menu.data.Response;
-import group.menu.data.TranslatablePair;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class ResponsePresenter {
 
-    static final Logger LOGGER = new LoggerFactory(ResponsePresenter.class).getConfiguredLogger();
+    private static final Logger LOGGER = new LoggerFactory(ResponsePresenter.class).getConfiguredLogger();
 
     private final Response response;
 

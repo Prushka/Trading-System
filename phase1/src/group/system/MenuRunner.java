@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class MenuRunner {
 
-    private static final Logger LOGGER = new LoggerFactory(MenuController.class).getConfiguredLogger();
+    private static final Logger LOGGER = new LoggerFactory(MenuRunner.class).getConfiguredLogger();
 
     private final MenuLogicController menuLogicController;
 
@@ -40,7 +40,6 @@ public class MenuRunner {
             LOGGER.log(Level.SEVERE, "Unable to read from Buffered reader.", e);
         } catch (NullPointerException e) {
             LOGGER.log(Level.SEVERE, "There's no node next.", e);
-            e.printStackTrace();
         }
         shutdown();
     }

@@ -72,6 +72,10 @@ public class MasterOptionNode extends RequestableNode {
             return this;
         }
         value = input;
+        Response directResponse = node.get().fetchProcessedResponse();
+        if (directResponse != null) {
+            directResponse.display();
+        }
         return node.get();
     }
 

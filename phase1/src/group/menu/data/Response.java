@@ -1,7 +1,5 @@
 package group.menu.data;
 
-import group.menu.persenter.ResponsePresenter;
-
 import java.util.ArrayList;
 import java.util.List;
 

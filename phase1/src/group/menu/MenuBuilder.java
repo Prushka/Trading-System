@@ -11,7 +11,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  * A class to build different menu nodes in order. This class contains inner classes for different steps needed to build a menu using nodes.<p>
  * <p>

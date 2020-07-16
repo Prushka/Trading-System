@@ -11,7 +11,6 @@ import java.util.logging.LogRecord;
  * The stacktrace is handled in {@link FileFormatter}
  *
  * @author Dan Lyu
- * @author shakram02 - <a href="https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println">print color in console</a>
  */
 class ConsoleColorFormatter extends LanguageFormatter {
 

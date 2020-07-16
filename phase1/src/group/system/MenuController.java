@@ -27,36 +27,38 @@ import group.user.User;
 public class MenuController {
 
     private final MenuBuilder menuBuilder;
+    private final ValidatorFactory validatorFactory;
 
     public MenuController() {
         menuBuilder = new MenuBuilder();
+        validatorFactory = new ValidatorFactory();
     }
 
     // re building menu from scratch, see menu design at bottom of google doc
     public void mainMenu(UserController userController, AdministrativeUserController administrativeUserController) {
         menuBuilder.option(User.class, OperationType.verification, 1, "login")
-                .input("username", null, ValidatingType.notexist)
+                .input("username")
                 .submit("password", userController::loginUser)
                 .succeeded("master.userAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2, "login")
-                .input("username", null, ValidatingType.notexist)
+                .input("username")
                 .submit("password", administrativeUserController::loginAdminUser)
                 .succeeded("master.adminAccess").failed("master.account").master("master.account");
 
         menuBuilder.option(User.class, OperationType.add, 3, "register")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", new EmailValidator(), ValidatingType.invalid)
-                .input("telephone", new GeneralValidator(GeneralValidator.InputType.Number, 3, 10, true), ValidatingType.invalid)
-                .submit("password", password -> password.length() > 7, ValidatingType.invalid, userController::registerUser)
+                .input("username", validatorFactory.getValidator(ValidatorFactory.Type.USER_NAME))
+                .input("email", new EmailValidator())
+                .input("telephone", validatorFactory.getValidator(ValidatorFactory.Type.TELEPHONE))
+                .submit("password", validatorFactory.getValidator(ValidatorFactory.Type.PASSWORD), ValidatingType.invalid, userController::registerUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "register")
-                .input("username", name -> name.length() > 3, ValidatingType.invalid)
-                .input("email", new EmailValidator(), ValidatingType.invalid)
-                .input("telephone", new GeneralValidator(GeneralValidator.InputType.Number,3,10,true), ValidatingType.invalid)
-                .input("password",new PasswordEncryption(), password -> password.length() > 7, ValidatingType.invalid)
+                .input("username", validatorFactory.getValidator(ValidatorFactory.Type.USER_NAME))
+                .input("email", new EmailValidator())
+                .input("telephone", validatorFactory.getValidator(ValidatorFactory.Type.TELEPHONE))
+                .input("password", new PasswordEncryption(), validatorFactory.getValidator(ValidatorFactory.Type.PASSWORD), ValidatingType.invalid)
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
@@ -225,7 +227,6 @@ public class MenuController {
     }
 
 
-
     public void adminUserAddItemAccess(AdministrativeUserController controller) {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "allAddItemRequest")
@@ -309,7 +310,6 @@ public class MenuController {
     public MenuLogicController generateMenuLogicController() {
         return new MenuLogicController(menuBuilder.constructFinal());
     }
-
 
 
 }

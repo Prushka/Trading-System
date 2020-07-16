@@ -11,8 +11,8 @@ import java.util.Objects;
 
 public class Item extends MappableBase implements CSVMappable, UniqueId {
 
-    private Long uid;
-    private Long ownerUID;
+    private Integer uid;
+    private Integer ownerUID;
     // private PersonalUser owner; CHANGED
     private String name;
     private String description;
@@ -21,13 +21,13 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
         super(record);
     }
 
-    public Item(Long ownerUID, String name, String description){
+    public Item(Integer ownerUID, String name, String description){
         this.ownerUID = ownerUID;
         this.name = name;
         this.description = description;
     }
 
-    public Long getOwner(){
+    public Integer getOwner(){
         return this.ownerUID;
     }
 
@@ -39,7 +39,7 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
         return description;
     }
 
-    public void setOwnerUsername(Long owner){
+    public void setOwnerUsername(Integer owner){
         this.ownerUID = owner;
     }
 
@@ -52,10 +52,10 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
     }
 
     @Override
-    public long getUid() { return this.uid;}
+    public int getUid() { return this.uid;}
 
     @Override
-    public void setUid(long new_uid) { this.uid = new_uid;}
+    public void setUid(int new_uid) { this.uid = new_uid;}
 
 
     @Override

@@ -19,7 +19,7 @@ import group.user.User;
  */
 
 // TODO: succeeded / failed / master can all be ignored if you don't use them.
-//   The addon can also be ignored as long as there are no two options that have same class and operation type
+//   The addon can also be ignored as int as there are no two options that have same class and operation type
 // When Response success == true, the "master.support.ticket" will be the next menu
 // When Response success == false, the "master.account" will be the next menu
 // When you define "master.support.trade" in your response object, "master.support.trade" will be next. To use custom masters, they have to be put in here

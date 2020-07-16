@@ -21,7 +21,7 @@ public class TradeController {
      * Takes requests from a user and turns it into information that can be used by TradeManager
      * @param dispatcher The controller dispatcher
      */
-    public TradeController(ControllerDispatcher dispatcher, Long userID){
+    public TradeController(ControllerDispatcher dispatcher, Integer userID){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
         tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties);
@@ -35,10 +35,10 @@ public class TradeController {
      * @return A description of the success of the creation of the trade
      */
     public Response addTrade(Request request) {
-        Long item1;
-        Long item2;
-        Long user1 =  request.getLong("initiator");
-        Long user2 =  request.getLong("respondent");
+        Integer item1;
+        Integer item2;
+        Integer user1 =  request.getInteger("initiator");
+        Integer user2 =  request.getInteger("respondent");
 
         PersonalUser trader1 = personalUserRepository.get(user1);
         PersonalUser trader2 = personalUserRepository.get(user2);
@@ -46,15 +46,15 @@ public class TradeController {
         // Check if items are in their inventories or are null
         if (request.get("lendingItem").equals("null")){
             item1 = null;
-        } else if (trader1.getInventory().contains(request.getLong("lendingItem"))){
-            item1 = request.getLong("lendingItem");
+        } else if (trader1.getInventory().contains(request.getInteger("lendingItem"))){
+            item1 = request.getInteger("lendingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
         if (request.get("borrowingItem").equals("null")){
             item2 = null;
-        } else if (trader2.getInventory().contains(request.getLong("borrowingItem"))){
-            item2 = request.getLong("borrowingItem");
+        } else if (trader2.getInventory().contains(request.getInteger("borrowingItem"))){
+            item2 = request.getInteger("borrowingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
@@ -132,7 +132,7 @@ public class TradeController {
             if (input.equals("null")){
                 return true;
             }
-            Long.parseLong(input);
+            Integer.parseInt(input);
             return true;
         } catch (IllegalArgumentException e){
             return false;
@@ -140,9 +140,9 @@ public class TradeController {
     }
 
     public Response getRecentCompleteTrades(){
-        ArrayList<Long> recentCompleteTrades = user.getRecentCompleteTrades();
+        ArrayList<Integer> recentCompleteTrades = user.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Long i : recentCompleteTrades) {
+        for (Integer i : recentCompleteTrades) {
             Trade trade = tradeRepository.get(i);
             stringBuilder.append(trade.toString()).append("\n");
         }

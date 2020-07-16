@@ -9,18 +9,18 @@ import java.time.LocalDateTime;
 
 public class Trade extends MappableBase implements CSVMappable, UniqueId {
     // Trading Details
-    private Long tradeID;
-    private Long user1;
-    private Long user2;
+    private Integer tradeID;
+    private Integer user1;
+    private Integer user2;
     private Integer user1Edits;
     private Integer user2Edits;
     private Boolean user1Confirms;
     private Boolean user2Confirms;
-    private Long prevMeeting;
+    private Integer prevMeeting;
 
     // Item Details
-    private Long item1;
-    private Long item2;
+    private Integer item1;
+    private Integer item2;
     private Boolean isPermanent;
     private Boolean isClosed;
 
@@ -47,8 +47,8 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
      * @param location Where this trade occurs
      * @param prevMeeting The previous trade meeting
      */
-    public Trade(Long user1, Long user2, Long item1, Long item2, Boolean isPermanent, LocalDateTime dateAndTime,
-                 String location, Long prevMeeting){
+    public Trade(Integer user1, Integer user2, Integer item1, Integer item2, Boolean isPermanent, LocalDateTime dateAndTime,
+                 String location, Integer prevMeeting){
         this.user1 =  user1;
         this.user2 =  user2;
         this.item1 =  item1;
@@ -72,17 +72,17 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
      * @return The trade ID of this trade
      */
     @Override
-    public long getUid() { return this.tradeID;}
+    public int getUid() { return this.tradeID;}
 
     /**
      * @return The user ID of the initiator
      */
-    public long getUser1(){ return user1;}
+    public int getUser1(){ return user1;}
 
     /**
      * @return The user ID of the respondent
      */
-    public long getUser2(){ return user2;}
+    public int getUser2(){ return user2;}
 
     /**
      * @return The amount of times the initiator has edited
@@ -107,12 +107,12 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     /**
      * @return The item ID of what the initiator wants to lend to the respondent
      */
-    public Long getItem1(){ return item1;}
+    public Integer getItem1(){ return item1;}
 
     /**
      * @return The item ID of what the initiator wants to borrow from the respondent
      */
-    public Long getItem2(){ return item2;}
+    public Integer getItem2(){ return item2;}
 
     /**
      * @return True iff this trade is permanent
@@ -137,7 +137,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     /**
      * @return The trade ID of the previous trade if applicable
      */
-    public Long getPrevMeeting(){ return prevMeeting;}
+    public Integer getPrevMeeting(){ return prevMeeting;}
 
     // SETTERS
 
@@ -145,7 +145,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
      * @param new_uid The new trade ID for this trade
      */
     @Override
-    public void setUid(long new_uid) { this.tradeID = new_uid;}
+    public void setUid(int new_uid) { this.tradeID = new_uid;}
 
     /**
      * Increases the initiator's edits by one.

@@ -28,7 +28,7 @@ public class ItemManager {
         return new Response.Builder(true).translatable("itemRemove").build();
     }
 
-    public Item findItemByUid(Long uid) {
+    public Item findItemByUid(Integer uid) {
         return items.get(uid);
     }
 

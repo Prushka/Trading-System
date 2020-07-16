@@ -47,8 +47,8 @@ public class TradeManager {
      * @param prevMeeting The trade ID of the previous meeting
      * @return A response object of the representation of the trade or a description of why creation failed
      */
-    public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
-                                LocalDateTime dateAndTime, String location, Long prevMeeting) {
+    public Response createTrade(int user1, int user2, int item1, int item2, Boolean isPermanent,
+                                LocalDateTime dateAndTime, String location, Integer prevMeeting) {
         // Get users from Repository
         PersonalUser trader1 = userRepository.get(user1);
         PersonalUser trader2 = userRepository.get(user2);
@@ -60,8 +60,8 @@ public class TradeManager {
         return tradeRepresentation(newTrade);
     }
 
-    public Response getTradeFrequency(long user) {
-        Map<Long, Integer> tradeFrequency = new HashMap<>();
+    public Response getTradeFrequency(int user) {
+        Map<Integer, Integer> tradeFrequency = new HashMap<>();
         Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getUser1() == user || entity.getUser2() == user);
         while (tradeIterator.hasNext()) {
             Trade trade = tradeIterator.next();
@@ -74,7 +74,7 @@ public class TradeManager {
         return null;
     }
 
-    private void putOrAppend(Map<Long, Integer> map, Long key) {
+    private void putOrAppend(Map<Integer, Integer> map, Integer key) {
         if (map.containsKey(key)) {
             map.put(key, map.get(key) + 1);
         } else {
@@ -94,7 +94,7 @@ public class TradeManager {
      * @param location    The location of where this trade will take place
      * @return A response object of the representation of the trade or a description of why creation failed
      */
-    public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
+    public Response createTrade(int user1, int user2, int item1, int item2, Boolean isPermanent,
                                 LocalDateTime dateAndTime, String location) {
         return createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location, null);
     }

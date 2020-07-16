@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Contains a constructor that takes in a CSV representation String.<p>
  * Subclasses are required to have a sub-constructor corresponding to <code>MappableBase(List data)</code><p>
  * This reflection implementation has limits on certain classes,
- * use only non-final List, Long, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
+ * use only non-final List, Integer, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
  * To allow more more flexibility, implement {@link CSVMappable} directly in the entity class.
  *
  * @author Dan Lyu
@@ -105,8 +105,8 @@ public abstract class MappableBase {
             obj = Enum.valueOf((Class<Enum>) fieldTypeClass, representation);
         } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
             obj = Integer.valueOf(representation);
-        } else if (Long.class.isAssignableFrom(fieldTypeClass)) {
-            obj = Long.valueOf(representation);
+        } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Integer.valueOf(representation);
         } else if (Boolean.class.isAssignableFrom(fieldTypeClass)) {
             obj = Boolean.valueOf(representation);
         } else if (Double.class.isAssignableFrom(fieldTypeClass)) {
@@ -116,7 +116,7 @@ public abstract class MappableBase {
         } else if (String.class.isAssignableFrom(fieldTypeClass)) {
             obj = representation;
         } else if (Date.class.isAssignableFrom(fieldTypeClass)) {
-            obj = new Date(Long.parseLong(representation));
+            obj = new Date(Integer.parseInt(representation));
         } else {
             obj = null;
         }

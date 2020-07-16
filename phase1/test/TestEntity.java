@@ -8,10 +8,10 @@ import java.util.Map;
 
 public class TestEntity extends MappableBase implements CSVMappable, UniqueId {
 
-    private Map<Long, String> testMap1;
+    private Map<Integer, String> testMap1;
     private Map<String, Boolean> testMap2;
 
-    private Long uid;
+    private Integer uid;
 
     public TestEntity() {
         // testMap1 = new HashMap<>();
@@ -25,17 +25,15 @@ public class TestEntity extends MappableBase implements CSVMappable, UniqueId {
 
     public TestEntity(List<String> data) {
         super(data);
-        System.out.println(testMap1.toString());
-        System.out.println(testMap2.toString());
     }
 
     @Override
-    public void setUid(long value) {
+    public void setUid(int value) {
         this.uid = value;
     }
 
     @Override
-    public long getUid() {
+    public int getUid() {
         return uid;
     }
 }

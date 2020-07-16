@@ -22,7 +22,7 @@ public class Request {
     /**
      * The timestamp when the Request is made
      */
-    private long timeStamp;
+    private Long timeStamp;
 
     /**
      * The global persistent request object to be injected
@@ -49,10 +49,10 @@ public class Request {
 
     /**
      * @param key the key to lookup
-     * @return the value in Long
+     * @return the value in Integer
      */
-    public Long getLong(String key) {
-        return Long.valueOf(get(key));
+    public Integer getInteger(String key) {
+        return Integer.valueOf(get(key));
     }
 
     /**
@@ -94,13 +94,13 @@ public class Request {
      * @return the value in Date
      */
     public Date getDate(String key) {
-        return new Date(getLong(key));
+        return new Date(getInteger(key));
     }
 
     /**
      * @return the timestamp the Request is made
      */
-    public long getTimeStamp() {
+    public Long getTimeStamp() {
         return timeStamp;
     }
 

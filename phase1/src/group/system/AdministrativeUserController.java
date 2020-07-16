@@ -99,7 +99,7 @@ public class AdministrativeUserController {
 
     public Response confirmAddItemRequest(Request request){
         String username = request.get("username");
-        Long item = request.getLong("item");
+        Integer item = request.getInteger("item");
         PersonalUser user = administrativeManager.findUser(username);
         // Item itemEntity = itemManager.get(item);
         // itemManager.add(itemEntity)
@@ -108,7 +108,7 @@ public class AdministrativeUserController {
 
     public Response removeItemInUserInventory(Request request){
         String username = request.get("username");
-        Long item = request.getLong("item");
+        Integer item = request.getInteger("item");
         PersonalUser user = administrativeManager.findUser(username);
         // Item itemEntity = itemManager.get(item);
         // itemManager.remove(itemEntity)

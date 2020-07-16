@@ -47,7 +47,7 @@ public class UserController {
     }
 
     public Response removeItemFromInventory(Request request){
-        Long item = request.getLong("item");
+        Integer item = request.getInteger("item");
         Item itemEntity = itemManager.findItemByUid(item);
         itemManager.remove(itemEntity);
         return personalUserManager.removeItemFromInventory(currUser, item);
@@ -71,7 +71,7 @@ public class UserController {
     }
 
     public Response removeItemFromWishlist(Request request){
-        Long item = request.getLong("item");
+        Integer item = request.getInteger("item");
         return personalUserManager.removeItemFromWishlist(currUser, item);
     }
 
@@ -99,9 +99,9 @@ public class UserController {
     }
 
     public Response topTraders(Request request){
-        Map<Long, Integer> frequentTraders = currUser.getTopThreeTraders();
+        Map<Integer, Integer> frequentTraders = currUser.getTopThreeTraders();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Long i : frequentTraders.keySet()) {
+        for (Integer i : frequentTraders.keySet()) {
             PersonalUser other = personalRepo.get(i);
             Integer times = frequentTraders.get(i);
             stringBuilder.append("Traded with ").append(other.toString()).append(times).append(" times.").append("\n");

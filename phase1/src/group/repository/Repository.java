@@ -23,7 +23,7 @@ public interface Repository<T extends UniqueId> {
     /**
      * Gets the entity by unique id. List doesn't allow int size.
      * The int unique id decision was made as a convention earlier.
-     * The implementation may change in the future to use Long.
+     * The implementation may change in the future to use Integer.
      *
      * @param id the unique id of this entity
      * @return the entity
@@ -44,7 +44,7 @@ public interface Repository<T extends UniqueId> {
 
     /**
      * The int unique id decision was made as a convention earlier.
-     * The implementation may change in the future to use Long.
+     * The implementation may change in the future to use Integer.
      *
      * @param id the unique id to be found
      * @return <code>true</code> if the entity with id exists

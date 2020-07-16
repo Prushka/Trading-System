@@ -9,6 +9,7 @@ import group.user.PersonalUser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 // Glitch List: Trade ID 0 works even when this trade, pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeController {
@@ -37,24 +38,24 @@ public class TradeController {
      * @return A description of the success of the creation of the trade
      */
     public Response addTrade(Request request) {
-        Long item1;
-        Long item2;
-        Long user2 =  request.getLong("respondent");
+        Integer item1;
+        Integer item2;
+        Integer user2 =  request.getInteger("respondent");
 
         PersonalUser trader2 = personalUserRepository.get(user2);
 
         // Check if items are in their inventories or are null
         if (request.get("lendingItem").equals("null")){
             item1 = null;
-        } else if (currUser.getInventory().contains(request.getLong("lendingItem"))){
-            item1 = request.getLong("lendingItem");
+        } else if (currUser.getInventory().contains(request.getInteger("lendingItem"))){
+            item1 = request.getInteger("lendingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
         if (request.get("borrowingItem").equals("null")){
             item2 = null;
-        } else if (trader2.getInventory().contains(request.getLong("borrowingItem"))){
-            item2 = request.getLong("borrowingItem");
+        } else if (trader2.getInventory().contains(request.getInteger("borrowingItem"))){
+            item2 = request.getInteger("borrowingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
@@ -128,7 +129,7 @@ public class TradeController {
             if (input.equals("null")){
                 return true;
             }
-            Long.parseLong(input);
+            Integer.parseInt(input);
             return true;
         } catch (IllegalArgumentException e){
             return false;
@@ -136,9 +137,9 @@ public class TradeController {
     }
 
     public Response getRecentTrades(Request request){
-        ArrayList<Long> recentCompleteTrades = currUser.getRecentCompleteTrades();
+        ArrayList<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Long i : recentCompleteTrades) {
+        for (Integer i : recentCompleteTrades) {
             Trade trade = tradeRepository.get(i);
             stringBuilder.append(trade.toString()).append("\n");
         }
@@ -146,9 +147,9 @@ public class TradeController {
     }
 
     public Response getAllTrades(Request request){
-        ArrayList<Long> allTrades = currUser.getTrades();
+        List<Integer> allTrades = currUser.getTrades();
         StringBuilder stringBuilder = new StringBuilder();
-        for (Long i : allTrades) {
+        for (Integer i : allTrades) {
             Trade trade = tradeRepository.get(i);
             stringBuilder.append(trade.toString()).append("\n");
         }

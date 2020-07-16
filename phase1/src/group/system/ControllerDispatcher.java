@@ -14,8 +14,6 @@ import java.util.logging.Logger;
 
 public class ControllerDispatcher implements Shutdownable {
 
-    static final Logger LOGGER = new LoggerFactory(ControllerDispatcher.class).getConfiguredLogger();
-
     Repository<SupportTicket> ticketRepository;
     Repository<PersonalUser> personalUserRepository;
     Repository<AdministrativeUser> adminUserRepository;

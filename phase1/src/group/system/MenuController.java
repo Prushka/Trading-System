@@ -62,7 +62,7 @@ public class MenuController {
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.construct("master.account", false);
+        menuBuilder.construct("master.account", true);
 
     }
 
@@ -190,7 +190,7 @@ public class MenuController {
                .skippableSubmit(controller::getTicketsByCategory2)
                .succeeded("master.support.ticket").failed("master.account").master("master.support.trade");
 
-        menuBuilder.construct("master.support.ticket", true);
+        menuBuilder.construct("master.support.ticket", false);
     }
 
     public void adminUserAccess(AdministrativeUserController controller) {

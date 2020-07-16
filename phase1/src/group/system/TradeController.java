@@ -15,18 +15,20 @@ public class TradeController {
     private final TradeManager tradeManager;
     final Repository<Trade> tradeRepository;
     final Repository<PersonalUser> personalUserRepository;
-    private PersonalUser user;
+    final UserController userController;
+    final PersonalUser currUser;
 
     /**
      * Takes requests from a user and turns it into information that can be used by TradeManager
      * @param dispatcher The controller dispatcher
      */
-    public TradeController(ControllerDispatcher dispatcher, Long userID){
+    public TradeController(ControllerDispatcher dispatcher, UserController userController){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
-        tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties);
+        this.userController = userController;
+        currUser = userController.getCurrUser();
+        tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties, userController.getItemManager());
         dispatcher.menuController.supportTrade(this);
-        user = personalUserRepository.get(userID);
     }
 
     /**
@@ -140,7 +142,7 @@ public class TradeController {
     }
 
     public Response getRecentCompleteTrades(){
-        ArrayList<Long> recentCompleteTrades = user.getRecentCompleteTrades();
+        ArrayList<Long> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
         for (Long i : recentCompleteTrades) {
             Trade trade = tradeRepository.get(i);

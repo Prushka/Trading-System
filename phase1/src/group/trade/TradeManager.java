@@ -1,6 +1,7 @@
 package group.trade;
 
 import group.config.property.TradeProperties;
+import group.item.ItemManager;
 import group.repository.Repository;
 import group.user.PersonalUser;
 import group.menu.data.Response;
@@ -12,6 +13,7 @@ public class TradeManager {
     private final Integer timeLimit;
     private final Repository<Trade> tradeRepository;
     private final Repository<PersonalUser> userRepository;
+    private final ItemManager itemManager;
 
     /**
      * Creates, confirms and edits trades
@@ -21,12 +23,13 @@ public class TradeManager {
      *                        how many days until temporary trades must be reversed)
      */
     public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
-            tradeProperties) {
+            tradeProperties, ItemManager itemManager) {
         // Default Values for trade information stored in tradeProperties:
         editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
         timeLimit = Integer.parseInt(tradeProperties.get("timeLimit"));
         this.tradeRepository = tradeRepository;
         this.userRepository = userRepository;
+        this.itemManager = itemManager;
     }
 
     /**
@@ -229,7 +232,7 @@ public class TradeManager {
             initUser.setLendCount(initUser.getLendCount() + 1);
             initUser.removeFromInventory(currTrade.getItem1());
             if (currTrade.getIsPermanent()) {
-                otherUser.addToInventory(currTrade.getItem2());
+                otherUser.addToInventory(currTrade.getItem1());
             }
         } else {
             initUser.setBorrowCount(initUser.getBorrowCount() + 1);
@@ -240,9 +243,13 @@ public class TradeManager {
             otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
             otherUser.removeFromWishList(currTrade.getItem1());
             otherUser.removeFromInventory(currTrade.getItem2());
+            itemManager.removeAvailable(currTrade.getItem1());
+            itemManager.removeAvailable(currTrade.getItem2());
             if (currTrade.getIsPermanent()) {
                 initUser.addToInventory(currTrade.getItem2());
                 otherUser.addToInventory(currTrade.getItem1());
+                itemManager.addAvailable(currTrade.getItem1());
+                itemManager.addAvailable(currTrade.getItem2());
             }
         }
 

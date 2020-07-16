@@ -110,5 +110,7 @@ public class UserController {
         return new Response.Builder(true).translatable("topTraders", stringBuilder.toString()).build();
     }
 
+    public PersonalUser getCurrUser(){ return currUser; }
+    public ItemManager getItemManager(){ return itemManager;}
 
 }

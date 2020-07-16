@@ -259,8 +259,8 @@ public class TradeManager {
         // Updates recent trades and trader frequency
         initUser.addRecentTrades(currTrade.getUid());
         otherUser.addRecentTrades(currTrade.getUid());
-        initUser.setTraderFrequency(otherUser.getUid());
-        otherUser.setTraderFrequency(initUser.getUid());
+        // initUser.setTraderFrequency(otherUser.getUid());
+        // otherUser.setTraderFrequency(initUser.getUid());
     }
 
     // Completes a trade by making trades or scheduling second meeting

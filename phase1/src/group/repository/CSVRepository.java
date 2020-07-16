@@ -66,7 +66,7 @@ public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryS
                 data.add(null);
                 continue;
             }
-            record = recordString.split(",");
+            record = recordString.split(",",-1);
             data.add(factory.get(Arrays.asList(record)));
         }
         scanner.close();

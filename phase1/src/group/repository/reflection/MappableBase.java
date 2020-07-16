@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 public abstract class MappableBase {
 
-    static final Logger LOGGER = new LoggerFactory(MappableBase.class).getConfiguredLogger();
+    static transient final Logger LOGGER = new LoggerFactory(MappableBase.class).getConfiguredLogger();
 
     /**
      * The empty constructor used to make sure that extending
@@ -45,6 +45,7 @@ public abstract class MappableBase {
      */
     public MappableBase(List<String> data) {
         int id = 0;
+        System.out.println(data.size());
         for (Field field : getSortedFields()) {
             field.setAccessible(true);
             String representation = data.get(id);
@@ -60,13 +61,13 @@ public abstract class MappableBase {
                     obj = field.getType().getDeclaredConstructor(List.class).newInstance(childRepresentation);
                     id -= 1;
                 } else if (List.class.isAssignableFrom(field.getType())) {
-                    if (representation.length() == 0 || representation.equals("null")) {
+                    if (representation.equals("null")) {
                         obj = null;
                     } else {
                         obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
                     }
                 } else if (Map.class.isAssignableFrom(field.getType())) {
-                    if (representation.length() == 0 || representation.equals("null")) {
+                    if (representation.equals("null")) {
                         obj = null;
                     } else {
                         obj = stringToMap((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]
@@ -85,8 +86,9 @@ public abstract class MappableBase {
 
     private <K, V> Map<K, V> stringToMap(Class<K> keyClass, Class<V> valueClass, String representation) { // this only uses HashMap
         Map<K, V> map = new HashMap<>();
-        for (String element : representation.split(";")) {
-            String[] subElement = element.split(":");
+        if (representation.length() == 0) return map;
+        for (String element : representation.split(";", -1)) {
+            String[] subElement = element.split(":", -1);
             map.put((K) getObjectFrom(keyClass, subElement[0]), (V) getObjectFrom(valueClass, subElement[1]));
         }
         return map;
@@ -131,6 +133,7 @@ public abstract class MappableBase {
      */
     private <T> List<T> stringToList(Class<T> fieldListGenericClass, String representation) {
         List<T> list = new ArrayList<>();
+        if (representation.length() == 0) return list;
         for (String element : representation.split(";")) {
             list.add((T) getObjectFrom(fieldListGenericClass, element));
         }
@@ -179,11 +182,18 @@ public abstract class MappableBase {
      * @return the sorted and non-transient fields of the class
      */
     private List<Field> getSortedFields(Class<?> clazz) {
-        return Arrays
-                .stream(clazz.getDeclaredFields())
-                .filter(this::ifFieldNotTransient)
-                .sorted(new FieldComparator())
-                .collect(Collectors.toList());
+        List<Field> fields = new ArrayList<>();
+        Class<?> currentClass = clazz;
+        while (!currentClass.getName().equals(Object.class.getName())) {
+            System.out.println(currentClass.getName());
+            fields.addAll(Arrays
+                    .stream(currentClass.getDeclaredFields())
+                    .filter(this::ifFieldNotTransient)
+                    .sorted(new FieldComparator())
+                    .collect(Collectors.toList()));
+            currentClass = currentClass.getSuperclass();
+        }
+        return fields;
     }
 
     /**

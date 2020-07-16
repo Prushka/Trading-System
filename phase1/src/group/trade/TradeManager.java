@@ -7,6 +7,9 @@ import group.user.PersonalUser;
 import group.menu.data.Response;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class TradeManager {
     private final Integer editLimit;
@@ -292,6 +295,29 @@ public class TradeManager {
         return new Response.Builder(true).
                 translatable("submit.trade.represent", trade.getUid(), trade.getUser1(),
                         trade.getUser2(), trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation()).build();
+    }
+
+
+    public Map<Integer, Integer> getTradeFrequency(int user) {
+        Map<Integer, Integer> tradeFrequency = new HashMap<>();
+        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getUser1() == user || entity.getUser2() == user);
+        while (tradeIterator.hasNext()) {
+            Trade trade = tradeIterator.next();
+            if (user == trade.getUser1()) {
+                putOrAppend(tradeFrequency, trade.getUser2());
+            } else {
+                putOrAppend(tradeFrequency, trade.getUser1());
+            }
+        }
+        return tradeFrequency;
+    }
+
+    private void putOrAppend(Map<Integer, Integer> map, Integer key) {
+        if (map.containsKey(key)) {
+            map.put(key, map.get(key) + 1);
+        } else {
+            map.put(key, 1);
+        }
     }
 }
 

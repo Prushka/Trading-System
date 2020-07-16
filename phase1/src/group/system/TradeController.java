@@ -10,6 +10,7 @@ import group.user.PersonalUser;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 // Glitch List: Trade ID 0 works even when this trade, pressing exit immediately exists program, normal to keep removing personalUser.csv?
 public class TradeController {
@@ -154,5 +155,10 @@ public class TradeController {
             stringBuilder.append(trade.toString()).append("\n");
         }
         return new Response.Builder(true).translatable("allTrades", stringBuilder.toString()).build();
+    }
+
+
+    public Map<Integer, Integer> getTradeFrequency(int user){
+        return tradeManager.getTradeFrequency(user);
     }
 }

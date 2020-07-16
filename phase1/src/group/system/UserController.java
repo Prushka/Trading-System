@@ -20,6 +20,7 @@ public class UserController {
     private final Repository<Item> itemRepo;
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
+    private final TradeController tradeController;
     private PersonalUser currUser;
 
     public UserController(ControllerDispatcher dispatcher) {
@@ -28,6 +29,7 @@ public class UserController {
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
+        tradeController = dispatcher.tradeController;
         dispatcher.menuController.personalUserAccess(this);
     }
 
@@ -99,7 +101,7 @@ public class UserController {
     }
 
     public Response topTraders(Request request){
-        Map<Integer, Integer> frequentTraders = currUser.getTopThreeTraders();
+        Map<Integer, Integer> frequentTraders = tradeController.getTradeFrequency(currUser.getUid());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : frequentTraders.keySet()) {
             PersonalUser other = personalRepo.get(i);

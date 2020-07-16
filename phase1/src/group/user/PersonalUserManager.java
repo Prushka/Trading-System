@@ -8,18 +8,16 @@ import group.repository.Repository;
 import java.util.*;
 
 public class PersonalUserManager {
-    //private static AdministrativeManager am;
+
     private final Repository<PersonalUser> personalUserRepository;
     private PersonalUser currPersonalUser = null;
 
 
     public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
-        //instantiate AdminManager
         this.personalUserRepository = personalUserRepository;
-
     }
 
-    public void exampleOfFilter() {
+    /*public void exampleOfFilter() {
         Iterator<PersonalUser> usersToBeFrozen = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
         Iterator<PersonalUser> usersToBeFrozen2 = personalUserRepository.iterator(personalUser -> personalUser.getLendCount() < personalUser.getBorrowCount());
         Iterator<PersonalUser> usersToBeFrozen3 = personalUserRepository.iterator(new Filter<PersonalUser>() {
@@ -29,7 +27,7 @@ public class PersonalUserManager {
             }
         }); // usersToBeFrozen / usersToBeFrozen2 / usersToBeFrozen3 work the same here
         // this iterator has all PersonalUsers that need to be frozen
-    }
+    }*/
 
     public Response verifyLogin(String username, String password){
         if (getCurrPersonalUser(username, password) != null){

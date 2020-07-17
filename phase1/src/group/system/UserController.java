@@ -17,7 +17,7 @@ public class UserController {
 
     private final Repository<PersonalUser> personalRepo;
     private final Repository<AdministrativeUser> adminRepo;
-    private final Repository<Item> itemRepo;
+    final Repository<Item> itemRepo;
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
     private final TradeController tradeController;

@@ -73,6 +73,7 @@ public class ControllerDispatcher implements Shutdownable {
         menuController.viewAccount(userController, tradeController);
         this.menuController.mainMenu(userController, administrativeUserController); // these steps should not be here
         this.menuController.personalUserAccess(userController, supportTicketController);
+        this.menuController.supportTrade(tradeController);
         this.menuController.adminUserAccess(administrativeUserController);
         this.menuController.adminUserLimitAccess(administrativeUserController);
         this.menuController.adminUserAddItemAccess(administrativeUserController);

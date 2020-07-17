@@ -2,6 +2,7 @@ package group.system;
 
 import group.menu.data.Request;
 import group.menu.data.Response;
+import group.menu.validator.RepositoryIdValidator;
 import group.repository.Repository;
 import group.trade.Trade;
 import group.trade.TradeManager;
@@ -29,7 +30,6 @@ public class TradeController {
         this.userController = dispatcher.userController;
         currUser = userController.getCurrUser();
         tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties, userController.getItemManager());
-        dispatcher.menuController.supportTrade(this);
     }
 
     /**
@@ -126,10 +126,9 @@ public class TradeController {
      */
     public boolean isAnItem(String input){
         try {
-            if (input.equals("null")){
+            if (input.equals("null") || new RepositoryIdValidator(userController.itemRepo).validate(input)){
                 return true;
             }
-            Integer.parseInt(input);
             return true;
         } catch (IllegalArgumentException e){
             return false;

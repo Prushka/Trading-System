@@ -92,7 +92,7 @@ public class MenuController {
                 .skippableSubmit(userController::browseAllItems).succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.view, 2, "wishlist")
-                .skippableSubmit(userController::browseWishlist).succeeded("master.view.account").failed("master.view.account").master("");
+                .skippableSubmit(userController::browseWishlist).succeeded("master.view.account").failed("master.view.account").master("success.get.inventory");
 
         menuBuilder.option(User.class, OperationType.add, 3, "wishlist")
                 .input("itemName", null, null, ValidatingType.invalid)
@@ -104,7 +104,7 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("success.remove.wishlist");
 
         menuBuilder.option(User.class, OperationType.view, 5, "inventory")
-                .skippableSubmit(userController::browseInventory).succeeded("master.view.account").failed("master.view.account").master("");
+                .skippableSubmit(userController::browseInventory).succeeded("master.view.account").failed("master.view.account").master("success.get.wishlist");
 
         menuBuilder.option(User.class, OperationType.add, 6, "inventory")
                 .input("item", null, ValidatingType.invalid)

@@ -1,5 +1,6 @@
 package group.system;
 
+import group.item.Item;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.repository.Repository;
@@ -15,12 +16,14 @@ public class AdministrativeUserController {
     private final Repository<PersonalUser> personalRepo;
     private final Repository<AdministrativeUser> adminRepo;
     private final AdministrativeManager administrativeManager;
+    private final Repository<Item> itemRepo;
     private AdministrativeUser currAdmin;
 
     public AdministrativeUserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
-        administrativeManager = new AdministrativeManager(adminRepo, personalRepo, dispatcher.tradeRepository);
+        itemRepo = dispatcher.itemRepository;
+        administrativeManager = new AdministrativeManager(adminRepo, personalRepo, dispatcher.tradeRepository, itemRepo);
     }
 
     public Response loginAdminUser(Request request) {
@@ -103,18 +106,16 @@ public class AdministrativeUserController {
         String username = request.get("username");
         Integer item = request.getInt("item");
         PersonalUser user = administrativeManager.findUser(username);
-        // Item itemEntity = itemManager.get(item);
-        // itemManager.add(itemEntity)
-        return administrativeManager.confirmAddItemRequest(user, item);
+        Item itemEntity = itemRepo.get(item);
+        return administrativeManager.confirmAddItemRequest(user, itemEntity);
     }
 
     public Response removeItemInUserInventory(Request request) {
         String username = request.get("username");
         Integer item = request.getInt("item");
         PersonalUser user = administrativeManager.findUser(username);
-        // Item itemEntity = itemManager.get(item);
-        // itemManager.remove(itemEntity)
-        return administrativeManager.removeUserItem(user, item);
+        Item itemEntity = itemRepo.get(item);
+        return administrativeManager.removeUserItem(user, itemEntity);
     }
 
     public Response setTransactionLimit(Request request) {

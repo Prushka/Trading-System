@@ -20,13 +20,16 @@ public class AdministrativeManager {
     private Iterator<PersonalUser> needToFreezelist;
     private Iterator<PersonalUser> needToConfirmAddItem;
     private Iterator<PersonalUser> needToConfirmUnfreeze;
+    private Repository<Item> itemRepository;
 
 
     public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
-                                 Repository<PersonalUser> personalUserRepository, Repository<Trade> tradeRepository){
+                                 Repository<PersonalUser> personalUserRepository, Repository<Trade> tradeRepository,
+                                 Repository<Item> itemRepository){
         this.administrators = administrativeUserRepository;
         this.personalUserRepository = personalUserRepository;
         this.tradeRepository = tradeRepository;
+        this.itemRepository = itemRepository;
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
         needToConfirmAddItem = personalUserRepository.iterator(PersonalUser::getAddToInventoryRequestIsNotEmpty);
         needToConfirmUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);
@@ -102,23 +105,26 @@ public class AdministrativeManager {
         user.setRequestToUnfreeze(false);
     }
 
-    public Response removeUserItem(PersonalUser user, Integer item){
+    public Response removeUserItem(PersonalUser user, Item item){
         user.getInventory().remove(item);
+        itemRepository.remove(item);
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
 
     public Response confirmAddAllItemRequestForAUser(PersonalUser user) {
-        for (Integer item : user.getAddToInventoryRequest()) {
+        for (Item item : user.getAddToInventoryRequest()) {
             user.addToInventory(item);
             user.getAddToInventoryRequest().remove(item);
+            itemRepository.add(item);
         }
         return new Response.Builder(true).translatable("success.confirm.AddItem").build();
     }
 
-    public Response confirmAddItemRequest(PersonalUser user, int item) {
+    public Response confirmAddItemRequest(PersonalUser user, Item item) {
         user.addToInventory(item);
         user.getAddToInventoryRequest().remove(item);
+        itemRepository.add(item);
         return new Response.Builder(true).translatable("success.confirm.AddItem").build();
     }
 
@@ -199,7 +205,7 @@ public class AdministrativeManager {
 
     public void incompleteTransactions(){
         int incomplete = 0;
-        ArrayList<Integer> allTrades = currPersonalUser.getTrades();
+        List<Integer> allTrades = currPersonalUser.getTrades();
         for(Integer i: allTrades){
             Trade trade = tradeRepository.get(i);
             if (!trade.getIsClosed() && trade.getPrevMeeting() == null){

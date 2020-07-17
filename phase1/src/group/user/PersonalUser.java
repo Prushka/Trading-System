@@ -9,17 +9,18 @@ import java.util.*;
 
 public class PersonalUser extends User {
 
-    private List<Integer> wishlist;
-    private List<Integer> inventory;
-    private ArrayList<Integer> trades;
+    private List<Item> wishlist;
+    private List<Item> inventory;
+    private List<Integer> trades;
     private List<Integer> supportTickets;
     private Boolean isFrozen;
     private Integer lendCount;
     private Integer borrowCount;
     private Integer numTransactions;
     private List<Integer> recentTrades;
-    private List<Integer> addToInventoryRequest;
+    private List<Item> addToInventoryRequest;
     private Boolean requestToUnfreeze;
+    //private int incompleteTrades;
 
     /**
      * Creates a PersonalUser with the given userName, email, telephone, password
@@ -42,37 +43,42 @@ public class PersonalUser extends User {
         recentTrades = new ArrayList<>();
         addToInventoryRequest = new ArrayList<>();
         requestToUnfreeze = false;
+        //incompleteTrades = 0;
     }
+
+    //public int getIncompleteTrades() {
+        //return incompleteTrades;
+    //}
 
     public PersonalUser(List<String> record) {
         super(record);
     }
 
-    public List<Integer> getWishlist() {
+    public List<Item> getWishlist() {
         return wishlist;
     }
 
-    public void addToWishList(Integer newItem) {
+    public void addToWishList(Item newItem) {
         wishlist.add(newItem);
     }
 
-    public void removeFromWishList(Integer oldItem) {
+    public void removeFromWishList(Item oldItem) {
         wishlist.remove(oldItem);
     }
 
-    public List<Integer> getInventory() {
+    public List<Item> getInventory() {
         return inventory;
     }
 
-    public void addToInventory(Integer newItem) {
+    public void addToInventory(Item newItem) {
         inventory.add(newItem);
     }
 
-    public void removeFromInventory(Integer oldItem) {
+    public void removeFromInventory(Item oldItem) {
         inventory.remove(oldItem);
     }
 
-    public ArrayList<Integer> getTrades() {
+    public List<Integer> getTrades() {
         return trades;
     }
 
@@ -120,11 +126,11 @@ public class PersonalUser extends User {
         this.numTransactions = numTransactions;
     }
 
-    public List<Integer> getAddToInventoryRequest() {
+    public List<Item> getAddToInventoryRequest() {
         return addToInventoryRequest;
     }
 
-    public void addItemToAddToInventoryRequest(int item) {
+    public void addItemToAddToInventoryRequest(Item item) {
         addToInventoryRequest.add(item);
     }
 

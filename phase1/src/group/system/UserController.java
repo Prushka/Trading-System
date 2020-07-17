@@ -27,7 +27,7 @@ public class UserController {
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
         itemRepo = dispatcher.itemRepository;
-        personalUserManager = new PersonalUserManager(personalRepo, itemRepo);
+        personalUserManager = new PersonalUserManager(personalRepo);
         itemManager = new ItemManager(itemRepo);
         tradeController = dispatcher.tradeController;
     }
@@ -51,14 +51,13 @@ public class UserController {
         Integer item = request.getInt("item");
         Item itemEntity = itemManager.findItemByUid(item);
         itemManager.remove(itemEntity);
-        return personalUserManager.removeItemFromInventory(currUser, item);
+        return personalUserManager.removeItemFromInventory(currUser, itemEntity);
     }
 
     public Response RequestAddNewItem(Request request){
         String item = request.get("item");
         String description = request.get("description");
-        Item newItem = personalUserManager.createNewItem(currUser.getUid(), item, description);
-        return personalUserManager.createNewItemAndRequestAdd(currUser, item, description);
+        return personalUserManager.requestToAddItemToInventory(currUser, item, description);
     }
 
     public Response RequestUnfreeze(Request request) {
@@ -73,7 +72,8 @@ public class UserController {
 
     public Response removeItemFromWishlist(Request request){
         Integer item = request.getInt("item");
-        return personalUserManager.removeItemFromWishlist(currUser, item);
+        Item itemEntity = itemManager.findItemByUid(item);
+        return personalUserManager.removeItemFromWishlist(currUser, itemEntity);
     }
 
     public Response browseAllItems(Request request) {

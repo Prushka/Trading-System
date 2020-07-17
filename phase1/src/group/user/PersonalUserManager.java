@@ -11,12 +11,12 @@ public class PersonalUserManager {
 
     private final Repository<PersonalUser> personalUserRepository;
     private PersonalUser currPersonalUser = null;
-    private Repository<Item> itemRepository;
 
 
-    public PersonalUserManager(Repository<PersonalUser> personalUserRepository, Repository<Item> itemRepository) {
+
+    public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
         this.personalUserRepository = personalUserRepository;
-        this.itemRepository = itemRepository;
+
     }
 
     /*public void exampleOfFilter() {
@@ -59,9 +59,10 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.create.new").build();
     }
 
-    public Response requestToAddItemToInventory(PersonalUser user, Integer item){
-        user.addItemToAddToInventoryRequest(item);
-        return new Response.Builder(true).translatable("success.request.addItem").build(); // this one
+    public Response requestToAddItemToInventory(PersonalUser user, String item, String description){
+        Item newItem = new Item(user.getUid(), item, description);
+        user.addItemToAddToInventoryRequest(newItem);
+        return new Response.Builder(true).translatable("success.request.addItem").build();
     }
 
     public Response UnfreezeRequest(PersonalUser user){
@@ -69,23 +70,23 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.request.unfreeze").build();
     }
 
-    public Response createNewItemAndRequestAdd(PersonalUser owner, String item, String description){
+    /*public Response createNewItemAndRequestAdd(PersonalUser owner, String item, String description){
         Item newitem = new Item(owner.getUid(), item, description);
         return requestToAddItemToInventory(owner, newitem.getUid());
-    }
+    }*/
 
-    public Response removeItemFromInventory(PersonalUser user, Integer item) {
+    public Response removeItemFromInventory(PersonalUser user, Item item) {
         user.removeFromInventory(item);
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
     public Response addItemToWishlist(PersonalUser user, String item, String description){
         Item newItem = createNewItem(user.getUid(), item, description);
-        user.addToWishList(newItem.getUid());
+        user.addToWishList(newItem);
         return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 
-    public Response removeItemFromWishlist(PersonalUser user, Integer item){
+    public Response removeItemFromWishlist(PersonalUser user, Item item){
         user.removeFromWishList(item);
         return new Response.Builder(true).translatable("success.remove.wishlist").build();
     }
@@ -111,6 +112,8 @@ public class PersonalUserManager {
     public Item createNewItem(Integer ownerUID, String item, String description){
         return new Item(ownerUID, item, description);
     }
+
+
 
 
 

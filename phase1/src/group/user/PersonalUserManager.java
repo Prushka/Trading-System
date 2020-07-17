@@ -11,10 +11,12 @@ public class PersonalUserManager {
 
     private final Repository<PersonalUser> personalUserRepository;
     private PersonalUser currPersonalUser = null;
+    private Repository<Item> itemRepository;
 
 
-    public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
+    public PersonalUserManager(Repository<PersonalUser> personalUserRepository, Repository<Item> itemRepository) {
         this.personalUserRepository = personalUserRepository;
+        this.itemRepository = itemRepository;
     }
 
     /*public void exampleOfFilter() {
@@ -77,8 +79,9 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
-    public Response addItemToWishlist(PersonalUser user, Integer item){
-        user.addToWishList(item);
+    public Response addItemToWishlist(PersonalUser user, String item, String description){
+        Item newItem = createNewItem(user.getUid(), item, description);
+        user.addToWishList(newItem.getUid());
         return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 

@@ -27,7 +27,7 @@ public class UserController {
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
         itemRepo = dispatcher.itemRepository;
-        personalUserManager = new PersonalUserManager(personalRepo);
+        personalUserManager = new PersonalUserManager(personalRepo, itemRepo);
         itemManager = new ItemManager(itemRepo);
         tradeController = dispatcher.tradeController;
     }
@@ -57,6 +57,7 @@ public class UserController {
     public Response RequestAddNewItem(Request request){
         String item = request.get("item");
         String description = request.get("description");
+        Item newItem = personalUserManager.createNewItem(currUser.getUid(), item, description);
         return personalUserManager.createNewItemAndRequestAdd(currUser, item, description);
     }
 
@@ -65,10 +66,9 @@ public class UserController {
     }
 
     public Response AddItemToWishlist(Request request){
-        String item = request.get("item");
+        String item = request.get("itemName");
         String description = request.get("description");
-        Item newItem = personalUserManager.createNewItem(currUser.getUid(), item, description);
-        return personalUserManager.addItemToWishlist(currUser, newItem.getUid());
+        return personalUserManager.addItemToWishlist(currUser, item, description);
     }
 
     public Response removeItemFromWishlist(Request request){

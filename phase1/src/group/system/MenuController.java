@@ -62,7 +62,7 @@ public class MenuController {
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.construct("master.account", true);
+        menuBuilder.construct("master.account", false);
 
     }
 
@@ -97,9 +97,9 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.add, 3, "wishlist")
-                .input("item", null, null, ValidatingType.invalid)
+                .input("itemName", null, null, ValidatingType.invalid)
                 .submit("description", userController::AddItemToWishlist)
-                .succeeded("master.view.account").failed("master.view.account").master("");
+                .succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.remove, 4, "wishlist")
                 .submit("itemname", userController::removeItemFromWishlist)
@@ -138,7 +138,7 @@ public class MenuController {
                 .submit("enter", userController::checkFrozen)
                 .succeeded("master.view.account").failed("master.support.trade").master("master.account");
 
-        menuBuilder.construct("master.view.account", false);
+        menuBuilder.construct("master.view.account", true);
     }
 
     public void supportTrade(TradeController controller) {

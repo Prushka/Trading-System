@@ -75,7 +75,7 @@ public class TradeController {
      * @return A description of the success of editing date and time
      */
     public Response editMeetingDateAndTime(Request request){
-        Integer tradeID = request.getInt("tradeID");
+        int tradeID = request.getInt("tradeID");
         String[] data = request.get("dateAndTime").split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
@@ -88,7 +88,7 @@ public class TradeController {
      * @return A description of the success of editing location
      */
     public Response editMeetingLocation(Request request){
-        Integer tradeID = request.getInt("tradeID");
+        int tradeID = request.getInt("tradeID");
         String location = request.get("location");
         return tradeManager.editLocation(tradeID, currUser.getUid(), location);
     }
@@ -99,8 +99,8 @@ public class TradeController {
      * @return A description of the state of confirmation
      */
     public Response confirmingTradeOpen(Request request){
-        Integer tradeID = request.getInt("tradeID");
-        return tradeManager.confirmTrade(tradeID, (int) currUser.getUid());
+        int tradeID = request.getInt("tradeID");
+        return tradeManager.confirmTrade(tradeID, currUser.getUid());
     }
 
     /**
@@ -109,7 +109,7 @@ public class TradeController {
      * @return A description of the state of confirmation
      */
     public Response confirmingTradeComplete(Request request){
-        Integer tradeID = request.getInt("tradeID");
+        int tradeID = request.getInt("tradeID");
         return tradeManager.confirmTradeComplete(tradeID, currUser.getUid());
     }
 
@@ -137,6 +137,10 @@ public class TradeController {
         }
     }
 
+    /**
+     * @param request The user's input
+     * @return A description of the top three traders
+     */
     public Response getRecentTrades(Request request){
         List<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
@@ -147,6 +151,10 @@ public class TradeController {
         return new Response.Builder(true).translatable("recentTrades", stringBuilder.toString()).build();
     }
 
+    /**
+     * @param request The user's input
+     * @return A description of all the user's created trades (including second meetings)
+     */
     public Response getAllTrades(Request request){
         List<Integer> allTrades = currUser.getTrades();
         StringBuilder stringBuilder = new StringBuilder();
@@ -157,7 +165,10 @@ public class TradeController {
         return new Response.Builder(true).translatable("allTrades", stringBuilder.toString()).build();
     }
 
-
+    /**
+     * @param user The userID
+     * @return The user IDs and frequency of trading with this user
+     */
     public Map<Integer, Integer> getTradeFrequency(int user){
         return tradeManager.getTradeFrequency(user);
     }

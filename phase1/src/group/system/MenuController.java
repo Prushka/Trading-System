@@ -136,7 +136,7 @@ public class MenuController {
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 12, "trade")
                 .submit("enter", userController::checkFrozen)
-                .succeeded("master.view.account").failed("master.support.trade");
+                .succeeded("master.view.account");
 
         menuBuilder.construct("master.view.account", false);
     }

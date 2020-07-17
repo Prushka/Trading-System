@@ -1,7 +1,6 @@
 package group.menu.node;
 
 import group.menu.data.Response;
-import group.menu.handler.RequestHandler;
 
 /**
  * The node that contains single option information.<p>
@@ -19,11 +18,11 @@ public class OptionNode extends Node {
     private final int id;
 
     /**
-     * Constructs an OptionNode from a {@link OptionNode.Builder}
+     * Constructs an OptionNode from a {@link OptionNodeBuilder}
      *
-     * @param builder the {@link OptionNode.Builder}
+     * @param builder the {@link OptionNodeBuilder}
      */
-    OptionNode(Builder builder) {
+    OptionNode(OptionNodeBuilder builder) {
         super(builder);
         this.id = builder.id;
     }
@@ -33,7 +32,7 @@ public class OptionNode extends Node {
      * @param id           the id of the option
      */
     public OptionNode(String translatable, int id) {
-        this(new Builder(translatable).id(id));
+        this(new OptionNodeBuilder(translatable).id(id));
     }
 
     /**
@@ -67,7 +66,7 @@ public class OptionNode extends Node {
      *
      * @author Dan Lyu
      */
-    public static class Builder extends NodeBuilder<Builder> {
+    public static class OptionNodeBuilder extends NodeBuilder<OptionNodeBuilder> {
 
         /**
          * The option id
@@ -79,7 +78,7 @@ public class OptionNode extends Node {
          *
          * @param translatable the translatable identifier
          */
-        public Builder(String translatable) {
+        public OptionNodeBuilder(String translatable) {
             super(translatable);
         }
 
@@ -87,7 +86,7 @@ public class OptionNode extends Node {
          * @param id The option id
          * @return the Builder itself
          */
-        public Builder id(int id) {
+        public OptionNodeBuilder id(int id) {
             this.id = id;
             return getThis();
         }
@@ -96,7 +95,7 @@ public class OptionNode extends Node {
          * @return the OptionNode.Builder itself
          */
         @Override
-        Builder getThis() {
+        OptionNodeBuilder getThis() {
             return this;
         }
 

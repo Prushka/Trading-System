@@ -1,6 +1,7 @@
 package group.system;
 
 import group.config.LoggerFactory;
+import group.config.property.SystemProperties;
 import group.config.property.TradeProperties;
 import group.item.Item;
 import group.notification.SupportTicket;
@@ -22,9 +23,25 @@ public class ControllerDispatcher implements Shutdownable {
      * The repository that holds {@link SupportTicket}
      */
     Repository<SupportTicket> ticketRepository;
+
+    /**
+     * The repository that holds {@link PersonalUser}
+     */
     Repository<PersonalUser> personalUserRepository;
+
+    /**
+     * The repository that holds {@link AdministrativeUser}
+     */
     Repository<AdministrativeUser> adminUserRepository;
+
+    /**
+     * The repository that holds {@link Trade}
+     */
     Repository<Trade> tradeRepository;
+
+    /**
+     * The repository that holds {@link Item}
+     */
     Repository<Item> itemRepository;
 
     SupportTicketController supportTicketController;
@@ -33,6 +50,7 @@ public class ControllerDispatcher implements Shutdownable {
     TradeController tradeController;
 
     TradeProperties tradeProperties;
+    SystemProperties systemProperties;
 
     final MenuController menuController = new MenuController();
 
@@ -50,7 +68,7 @@ public class ControllerDispatcher implements Shutdownable {
     public void dispatchController() {
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
-        tradeController = new TradeController(this, userController);
+        tradeController = new TradeController(this);
         administrativeUserController = new AdministrativeUserController(this);
         menuController.viewAccount(userController, tradeController);
         this.menuController.mainMenu(userController, administrativeUserController); // these steps should not be here
@@ -62,6 +80,9 @@ public class ControllerDispatcher implements Shutdownable {
         this.menuController.adminUserFreezeAccess(administrativeUserController);
     }
 
+    /**
+     * Initialize all Repositories
+     */
     public void createRepositories() {
         ticketRepository = new CSVRepository<>("data/support_ticket.csv", SupportTicket::new, saveHook);
         personalUserRepository = new CSVRepository<>("data/personal_user.csv", PersonalUser::new, saveHook);
@@ -70,10 +91,18 @@ public class ControllerDispatcher implements Shutdownable {
         itemRepository = new CSVRepository<>("data/item.csv", Item::new, saveHook);
     }
 
+    /**
+     * Initialize all Properties
+     */
     public void createProperties() {
         tradeProperties = new TradeProperties(saveHook);
+        systemProperties = new SystemProperties(saveHook);
     }
 
+    /**
+     * The shutdowable shutdown
+     */
+    @Override
     public void shutdown() {
         saveHook.save();
     }

@@ -12,12 +12,12 @@ import java.util.logging.LogRecord;
  *
  * @author Dan Lyu
  */
-class ConsoleColorFormatter extends LanguageFormatter {
+class ConsoleFormatter extends LanguageFormatter {
 
     /**
      * @param lang Language Properties that maps the identifier to the text
      */
-    ConsoleColorFormatter(LanguageProperties lang) {
+    ConsoleFormatter(LanguageProperties lang) {
         super(lang);
     }
 
@@ -28,7 +28,7 @@ class ConsoleColorFormatter extends LanguageFormatter {
      * @return the formatted message with color texts to their ansi color representations
      */
     private String applyColor(String message) {
-        message = "{BLACK}" + message;
+        message = "{BLACK}" + message; // the color is default to red in intellij idea
         for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
             message = message.replace(entry.getKey(), entry.getValue());
         }
@@ -49,6 +49,9 @@ class ConsoleColorFormatter extends LanguageFormatter {
             case "SEVERE":
                 affix = " The stacktrace can be found in the most recent .log file in log folder"; // replacing this with a log file name will have to use another static variable in FileHandlerFactory
                 break;
+        }
+        if(record.getThrown()!=null){
+            record.getThrown().printStackTrace();
         }
         return applyColor(applyLanguage(record)) + ansiColor.get("{RESET}") + affix + "\n";
     }

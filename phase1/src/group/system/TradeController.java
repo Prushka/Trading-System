@@ -24,10 +24,10 @@ public class TradeController {
      * Takes requests from a user and turns it into information that can be used by TradeManager
      * @param dispatcher The controller dispatcher
      */
-    public TradeController(ControllerDispatcher dispatcher, UserController userController){
+    public TradeController(ControllerDispatcher dispatcher){
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
-        this.userController = userController;
+        this.userController = dispatcher.userController;
         currUser = userController.getCurrUser();
         tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties, userController.getItemManager());
         dispatcher.menuController.supportTrade(this);

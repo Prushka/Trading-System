@@ -77,7 +77,7 @@ public class MenuBuilder {
         public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, String addon) {
             this.clazz = clazz;
             this.type = type;
-            optionNode = new OptionNode.Builder(getTranslatable("option", addon)).id(id).build();
+            optionNode = new OptionNode.OptionNodeBuilder(getTranslatable("option", addon)).id(id).build();
             currentNode = optionNode;
         }
 
@@ -92,7 +92,7 @@ public class MenuBuilder {
          */
         public OptionNodeBuilder input(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType) {
             String translatable = getTranslatable("input", key);
-            InputNode inputNode = new InputNode.Builder(translatable, key)
+            InputNode inputNode = new InputNode.InputNodeBuilder(translatable, key)
                     .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
             currentNode.setChild(inputNode);
             currentNode = inputNode;
@@ -230,13 +230,13 @@ public class MenuBuilder {
              * @param requestHandler the handler to parse request and expect response
              */
             public SubmitNodeBuilder(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
-                submitNode = new SubmitNode.Builder(getTranslatable("submit", key), key, requestHandler, persistentRequest)
+                submitNode = new SubmitNode.SubmitNodeBuilder(getTranslatable("submit", key), key, requestHandler, persistentRequest)
                         .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
                 currentNode.setChild(submitNode);
             }
 
             public SubmitNodeBuilder(RequestHandler requestHandler) {
-                submitNode = new SubmitNode.Builder(requestHandler, persistentRequest).build();
+                submitNode = new SubmitNode.SubmitNodeBuilder(requestHandler, persistentRequest).build();
                 currentNode.setChild(submitNode);
             }
 
@@ -364,7 +364,7 @@ public class MenuBuilder {
      * @return the MasterOptionNode built
      */
     public MasterOptionNode construct(String masterNodeIdentifier, boolean isEntryNode) {
-        MasterOptionNode.Builder masterBuilder = new MasterOptionNode.Builder(masterNodeIdentifier);
+        MasterOptionNode.MasterOptionNodeBuilder masterBuilder = new MasterOptionNode.MasterOptionNodeBuilder(masterNodeIdentifier);
         for (OptionNodeBuilder factory : optionNodePoolCache.values()) {
             masterBuilder.addChild(factory.optionNode);
         }

@@ -129,8 +129,8 @@ public class MenuController {
         menuBuilder.option(Trade.class, OperationType.view, 11, "frequentTrades")
                 .skippableSubmit(tradeController::getRecentTrades).succeeded("master.view.account").failed("master.view.account").master("topTraders");
 
-        menuBuilder.option(PersonalUser.class, OperationType.query, 12, "trade")
-                .skippableSubmit(tradeController::skip).succeeded("master.view.account");
+        menuBuilder.option(Trade.class, OperationType.query, 12, "return")
+                .skippableSubmit(tradeController::skip).succeeded("master.userAccess");
 
         menuBuilder.construct("master.view.account", false);
     }
@@ -179,11 +179,8 @@ public class MenuController {
                 "success.confirm.trade.complete.perm", "success.confirm.trade.complete.temp",
                 "success.confirm.trade.wait");
 
-        /*
-        menuBuilder.option(PersonalUser.class, OperationType.query, 6, "trade")
-                .submit("trade", new Response.Builder(true).translatable("okay").build())
-                .succeeded("master.view.account").failed("master.view.account").master("master.account");
-         */
+        menuBuilder.option(Trade.class, OperationType.query, 6, "returnAgain")
+                .skippableSubmit(controller::skip).succeeded("master.userAccess");
 
         menuBuilder.construct("master.support.trade", false);
     }

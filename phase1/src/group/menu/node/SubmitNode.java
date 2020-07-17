@@ -96,7 +96,6 @@ public class SubmitNode extends InputNode {
      */
     private Node parseResponse(Response response) {
         Node realChild;
-
         if (response.getNextMasterNodeIdentifier() != null) {
             realChild = masterOptionNodePool.getMasterOptionNode(response.getNextMasterNodeIdentifier());
         } else if (response.success()) {

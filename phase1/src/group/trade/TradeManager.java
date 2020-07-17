@@ -60,6 +60,7 @@ public class TradeManager {
         return tradeRepresentation(newTrade);
     }
 
+
     /**
      * Create a trade trade meeting to trade items
      * @param user1 The user ID of who initiated this trade

@@ -62,7 +62,7 @@ public class MenuController {
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.construct("master.account", false);
+        menuBuilder.construct("master.account", true);
 
     }
 
@@ -138,7 +138,7 @@ public class MenuController {
                 .submit("enter", userController::checkFrozen)
                 .succeeded("master.view.account").failed("master.support.trade").master("master.account");
 
-        menuBuilder.construct("master.view.account", true);
+        menuBuilder.construct("master.view.account", false);
     }
 
     public void supportTrade(TradeController controller) {

@@ -18,13 +18,11 @@ public class ItemManager {
 
     public Response add (Item item) {
         items.add(item);
-        itemsArrayList.add(item.getUid());
         return new Response.Builder(true).translatable("itemAdd").build();
     }
 
     public Response remove(Item item) {
         items.remove(item);
-        itemsArrayList.remove(item.getUid());
         return new Response.Builder(true).translatable("itemAdd").build();
     }
 

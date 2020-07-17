@@ -62,7 +62,7 @@ public class MenuController {
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.construct("master.account", true);
+        menuBuilder.construct("master.account", false);
 
     }
 
@@ -92,7 +92,7 @@ public class MenuController {
                 .skippableSubmit(userController::browseAllItems).succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.view, 2, "wishlist")
-                .skippableSubmit(userController::browseWishlist).succeeded("master.view.account").failed("master.view.account").master("success.get.inventory");
+                .skippableSubmit(userController::browseWishlist).succeeded("master.view.account").failed("master.view.account").master("success.get.wishlist");
 
         menuBuilder.option(User.class, OperationType.add, 3, "wishlist")
                 .input("itemName", null, null, ValidatingType.invalid)
@@ -104,7 +104,7 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("success.remove.wishlist");
 
         menuBuilder.option(User.class, OperationType.view, 5, "inventory")
-                .skippableSubmit(userController::browseInventory).succeeded("master.view.account").failed("master.view.account").master("success.get.wishlist");
+                .skippableSubmit(userController::browseInventory).succeeded("master.view.account").failed("master.view.account").master("success.get.inventory");
 
         menuBuilder.option(User.class, OperationType.add, 6, "inventory")
                 .input("item", null, ValidatingType.invalid)
@@ -132,7 +132,7 @@ public class MenuController {
         menuBuilder.option(PersonalUser.class, OperationType.query, 12, "trade")
                 .skippableSubmit(tradeController::skip).succeeded("master.view.account");
 
-        menuBuilder.construct("master.view.account", false);
+        menuBuilder.construct("master.view.account", true);
     }
 
     public void supportTrade(TradeController controller) {
@@ -217,7 +217,7 @@ public class MenuController {
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");*/
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmAdd")
-                .submit("confirm", null, ValidatingType.notexist, controller::loginAdminUser)
+                .skippableSubmit(controller::loginAdminUser)
                 .succeeded("master.adminUserAddItemAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "removeItem")
@@ -226,15 +226,15 @@ public class MenuController {
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreeze")
-                .submit("confirm", null, ValidatingType.notexist, controller::loginAdminUser)
+                .skippableSubmit(controller::loginAdminUser)
                 .succeeded("master.adminUserFreezeAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 5, "confirmUnfreeze")
-                .submit("confirm", null, ValidatingType.notexist, controller::loginAdminUser)
+                .skippableSubmit(controller::loginAdminUser)
                 .succeeded("master.adminUserUnfreezeAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.edit, 6, "limit")
-                .submit("confirm", null, ValidatingType.notexist, controller::loginAdminUser)
+                .skippableSubmit(controller::loginAdminUser)
                 .succeeded("master.adminUserLimitAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.construct("master.adminAccess", false);
@@ -244,8 +244,8 @@ public class MenuController {
     public void adminUserAddItemAccess(AdministrativeUserController controller) {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "allAddItemRequest")
-                .submit("confirm", controller::viewAddItemRequest)
-                .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
+                .skippableSubmit(controller::viewAddItemRequest)
+                .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("success.get.addItem");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmAddItem")
                 .input("fine.username", null, ValidatingType.notexist)
@@ -253,7 +253,7 @@ public class MenuController {
                 .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "confirmAddItemAUser")
-                .submit("username", controller::confirmAddAllItemRequestForAUser)
+                .submit("confirm", controller::confirmAddAllItemRequestForAUser)
                 .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmAddAllUser")
@@ -267,14 +267,14 @@ public class MenuController {
     public void adminUserFreezeAccess(AdministrativeUserController controller) {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "freezelist")
-                .submit("confirm", null, ValidatingType.notexist, controller::viewFreezeUserList)
-                .succeeded("master.adminUserFreezeAccess").failed("master.adminUserFreezeAccess").master("adminAccount");
+                .skippableSubmit(controller::viewFreezeUserList)
+                .succeeded("master.adminUserFreezeAccess").failed("master.adminUserFreezeAccess").master("success.get.freeze");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreezeUser")
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmFreezeUser")
                 .submit("username", controller::confirmFreezeUser)
                 .succeeded("master.adminUserFreezeAccess").failed("master.adminUserFreezeAccess").master("adminAccount");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 5, "confirmFreezeAllUser") //TODO
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "confirmFreezeAllUser")
                 .submit("confirm", controller::confirmFreezeAllUser)
                 .succeeded("master.adminUserFreezeAccess").failed("master.adminUserFreezeAccess").master("adminAccount");
 
@@ -284,8 +284,8 @@ public class MenuController {
     public void adminUserUnfreezeAccess(AdministrativeUserController controller) {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "unfreezeRequest")
-                .submit("confirm", controller::viewUnfreezeRequest)
-                .succeeded("master.adminUserUnfreezeAccess").failed("master.adminUserUnfreezeAccess").master("adminAccount");
+                .skippableSubmit(controller::viewUnfreezeRequest)
+                .succeeded("master.adminUserUnfreezeAccess").failed("master.adminUserUnfreezeAccess").master("success.get.unfreezeRequest");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmUnFreezeUser")
                 .submit("username", controller::confirmUnFreezeUser)
@@ -302,17 +302,17 @@ public class MenuController {
     public void adminUserLimitAccess(AdministrativeUserController controller) {
 
         menuBuilder.option(AdministrativeUser.class, OperationType.view, 1, "viewLendBeforeBorrowLimit")
-                .submit("confirm", controller::viewLendBeforeBorrowLimit)
-                .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("adminAccount");
+                .skippableSubmit(controller::viewLendBeforeBorrowLimit)
+                .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("success.get.borrowLimit");
 
 
         menuBuilder.option(AdministrativeUser.class, OperationType.view, 2, "TransLimit")
-                .submit("confirm", controller::viewTransactionLimit)
+                .skippableSubmit(controller::viewTransactionLimit)
                 .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("adminAccount");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.edit, 3, "LandBeforeBorrowLimit")
                 .submit("limit", controller::setLendBeforeBorrowLimit)
-                .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("adminAccount");
+                .succeeded("master.adminLimitAccess").failed("master.adminLimitAccess").master("success.get.tradeLimit");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.edit, 4, "TransLimit")
                 .submit("limit", controller::setTransactionLimit)

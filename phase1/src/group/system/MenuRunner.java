@@ -15,15 +15,28 @@ public class MenuRunner {
 
     private static final Logger LOGGER = new LoggerFactory(MenuRunner.class).getConfiguredLogger();
 
+    /**
+     * The logic controller of Menu, contains all menu nodes and exposed parseInput()
+     */
     private final MenuLogicController menuLogicController;
 
+    /**
+     * The shutdownables to be shutdown when the loop ends
+     */
     private final List<Shutdownable> shutdowns;
 
+    /**
+     * @param menuLogicController the logic controller of Menu, contains all menu nodes and exposed parseInput()
+     */
     public MenuRunner(MenuLogicController menuLogicController) {
         this.menuLogicController = menuLogicController;
         shutdowns = new ArrayList<>();
     }
 
+    /**
+     * The main loop which accepts user input and pass it to the {@link MenuLogicController}
+     * This part is based on Lecture Code, Logging project
+     */
     public void run() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         menuLogicController.fetchInitialResponse().display();
@@ -44,10 +57,16 @@ public class MenuRunner {
         shutdown();
     }
 
+    /**
+     * @param shutdownable add a shutdownable to be shutdown by this class
+     */
     public void shutdownHook(Shutdownable shutdownable) {
         this.shutdowns.add(shutdownable);
     }
 
+    /**
+     * operations to perform (shutdown the shutdownables) before the program destroys
+     */
     private void shutdown() {
         shutdowns.forEach(Shutdownable::shutdown);
     }

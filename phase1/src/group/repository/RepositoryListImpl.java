@@ -21,6 +21,10 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
         return data.contains(entity);
     }
 
+    /**
+     * @param filter the filter to be used to match results
+     * @return <code>true</code> if the result exists
+     */
     @Override
     public boolean ifExists(Filter<T> filter) {
         Iterator<T> iterator = iterator(filter);

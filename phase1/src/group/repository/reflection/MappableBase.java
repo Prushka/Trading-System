@@ -83,6 +83,14 @@ public abstract class MappableBase {
         }
     }
 
+    /**
+     * @param keyClass       The key class
+     * @param valueClass     The value class
+     * @param representation The String representation in format: key:value
+     * @param <K>            the Key generic type
+     * @param <V>            the Value generic type
+     * @return the map in its original form
+     */
     private <K, V> Map<K, V> stringToMap(Class<K> keyClass, Class<V> valueClass, String representation) { // this only uses HashMap
         Map<K, V> map = new HashMap<>();
         if (representation.length() == 0) return map;

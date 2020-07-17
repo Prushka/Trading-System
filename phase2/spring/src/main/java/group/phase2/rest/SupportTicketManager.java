@@ -17,4 +17,8 @@ public class SupportTicketManager {
         return supportTicketRepository.getSupportTickets().get(Integer.parseInt(id));
     }
 
+    public SupportTicket addSupportTicket(SupportTicket supportTicket){
+        supportTicketRepository.getSupportTickets().add(supportTicket);
+        return supportTicket;
+    }
 }

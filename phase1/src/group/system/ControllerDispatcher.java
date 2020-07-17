@@ -22,9 +22,25 @@ public class ControllerDispatcher implements Shutdownable {
      * The repository that holds {@link SupportTicket}
      */
     Repository<SupportTicket> ticketRepository;
+
+    /**
+     * The repository that holds {@link PersonalUser}
+     */
     Repository<PersonalUser> personalUserRepository;
+
+    /**
+     * The repository that holds {@link AdministrativeUser}
+     */
     Repository<AdministrativeUser> adminUserRepository;
+
+    /**
+     * The repository that holds {@link Trade}
+     */
     Repository<Trade> tradeRepository;
+
+    /**
+     * The repository that holds {@link Item}
+     */
     Repository<Item> itemRepository;
 
     SupportTicketController supportTicketController;
@@ -62,6 +78,9 @@ public class ControllerDispatcher implements Shutdownable {
         this.menuController.adminUserFreezeAccess(administrativeUserController);
     }
 
+    /**
+     * Initialize all Repositories
+     */
     public void createRepositories() {
         ticketRepository = new CSVRepository<>("data/support_ticket.csv", SupportTicket::new, saveHook);
         personalUserRepository = new CSVRepository<>("data/personal_user.csv", PersonalUser::new, saveHook);
@@ -70,10 +89,17 @@ public class ControllerDispatcher implements Shutdownable {
         itemRepository = new CSVRepository<>("data/item.csv", Item::new, saveHook);
     }
 
+    /**
+     * Initialize all Properties
+     */
     public void createProperties() {
         tradeProperties = new TradeProperties(saveHook);
     }
 
+    /**
+     * The shutdowable shutdown
+     */
+    @Override
     public void shutdown() {
         saveHook.save();
     }

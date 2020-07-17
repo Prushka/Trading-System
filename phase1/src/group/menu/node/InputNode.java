@@ -192,13 +192,13 @@ public class InputNode extends RequestableNode {
      *
      * @author Dan Lyu
      */
-    public static class Builder extends AbstractInputNodeBuilder<Builder> {
+    public static class InputNodeBuilder extends AbstractInputNodeBuilder<InputNodeBuilder> {
 
         /**
          * @param translatable The translatable identifier
          * @param key          the key to map user input
          */
-        public Builder(String translatable, String key) {
+        public InputNodeBuilder(String translatable, String key) {
             super(translatable, key);
         }
 
@@ -206,7 +206,7 @@ public class InputNode extends RequestableNode {
          * @return the builder itself
          */
         @Override
-        Builder getThis() {
+        InputNodeBuilder getThis() {
             return this;
         }
 

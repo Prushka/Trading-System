@@ -22,11 +22,11 @@ public class MasterOptionNode extends RequestableNode {
     private final List<OptionNode> children;
 
     /**
-     * Constructs a MasterOptionNode from a {@link MasterOptionNode.Builder}
+     * Constructs a MasterOptionNode from a {@link MasterOptionNodeBuilder}
      *
-     * @param builder the {@link MasterOptionNode.Builder}
+     * @param builder the {@link MasterOptionNodeBuilder}
      */
-    MasterOptionNode(Builder builder) {
+    MasterOptionNode(MasterOptionNodeBuilder builder) {
         super(builder);
         children = builder.children;
         sort();
@@ -40,7 +40,7 @@ public class MasterOptionNode extends RequestableNode {
      * @param optionNodes  the option nodes as children
      */
     public MasterOptionNode(String translatable, OptionNode... optionNodes) {
-        this(new MasterOptionNode.Builder(translatable).addChild(optionNodes));
+        this(new MasterOptionNodeBuilder(translatable).addChild(optionNodes));
     }
 
     /**
@@ -135,7 +135,7 @@ public class MasterOptionNode extends RequestableNode {
      *
      * @author Dan Lyu
      */
-    public static class Builder extends RequestableNodeBuilder<Builder> {
+    public static class MasterOptionNodeBuilder extends RequestableNodeBuilder<MasterOptionNodeBuilder> {
 
         /**
          * The list of option nodes as branches
@@ -145,7 +145,7 @@ public class MasterOptionNode extends RequestableNode {
         /**
          * @param translatable the identifier of the MasterOptionNode
          */
-        public Builder(String translatable) {
+        public MasterOptionNodeBuilder(String translatable) {
             super(translatable, translatable);
         }
 
@@ -153,7 +153,7 @@ public class MasterOptionNode extends RequestableNode {
          * @return the Builder itself
          */
         @Override
-        Builder getThis() {
+        MasterOptionNodeBuilder getThis() {
             return this;
         }
 
@@ -174,7 +174,7 @@ public class MasterOptionNode extends RequestableNode {
          * @param node the OptionNodes to be added as branches
          * @return the builder itself
          */
-        public Builder addChild(OptionNode... node) {
+        public MasterOptionNodeBuilder addChild(OptionNode... node) {
             children.addAll(Arrays.asList(node));
             return this;
         }
@@ -186,8 +186,8 @@ public class MasterOptionNode extends RequestableNode {
          * @param translatable the translatable identifier for the option
          * @return the builder itself
          */
-        public Builder addChild(int id, String translatable) {
-            this.addChild(new OptionNode.Builder(translatable).id(id).build());
+        public MasterOptionNodeBuilder addChild(int id, String translatable) {
+            this.addChild(new OptionNode.OptionNodeBuilder(translatable).id(id).build());
             return this;
         }
 

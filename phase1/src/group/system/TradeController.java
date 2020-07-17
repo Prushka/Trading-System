@@ -18,7 +18,7 @@ public class TradeController {
     final Repository<Trade> tradeRepository;
     final Repository<PersonalUser> personalUserRepository;
     final UserController userController;
-    final PersonalUser currUser;
+    PersonalUser currUser;
 
     /**
      * Takes requests from a user and turns it into information that can be used by TradeManager
@@ -28,7 +28,7 @@ public class TradeController {
         tradeRepository = dispatcher.tradeRepository;
         personalUserRepository = dispatcher.personalUserRepository;
         this.userController = dispatcher.userController;
-        currUser = userController.getCurrUser();
+        // currUser = userController.getCurrUser();
         tradeManager = new TradeManager(tradeRepository, personalUserRepository, dispatcher.tradeProperties, userController.getItemManager());
     }
 
@@ -38,6 +38,8 @@ public class TradeController {
      * @return A description of the success of the creation of the trade
      */
     public Response addTrade(Request request) {
+        currUser = userController.getCurrUser();
+
         Integer item1;
         Integer item2;
         int user2 =  request.getInt("respondent");
@@ -74,6 +76,8 @@ public class TradeController {
      * @return A description of the success of editing date and time
      */
     public Response editMeetingDateAndTime(Request request){
+        currUser = userController.getCurrUser();
+
         int tradeID = request.getInt("tradeID");
         String[] data = request.get("dateAndTime").split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
@@ -87,6 +91,8 @@ public class TradeController {
      * @return A description of the success of editing location
      */
     public Response editMeetingLocation(Request request){
+        currUser = userController.getCurrUser();
+
         int tradeID = request.getInt("tradeID");
         String location = request.get("location");
         return tradeManager.editLocation(tradeID, currUser.getUid(), location);
@@ -98,6 +104,8 @@ public class TradeController {
      * @return A description of the state of confirmation
      */
     public Response confirmingTradeOpen(Request request){
+        currUser = userController.getCurrUser();
+
         int tradeID = request.getInt("tradeID");
         return tradeManager.confirmTrade(tradeID, currUser.getUid());
     }
@@ -108,6 +116,8 @@ public class TradeController {
      * @return A description of the state of confirmation
      */
     public Response confirmingTradeComplete(Request request){
+        currUser = userController.getCurrUser();
+
         int tradeID = request.getInt("tradeID");
         return tradeManager.confirmTradeComplete(tradeID, currUser.getUid());
     }
@@ -140,6 +150,8 @@ public class TradeController {
      * @return A description of the top three traders
      */
     public Response getRecentTrades(Request request){
+        currUser = userController.getCurrUser();
+
         List<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : recentCompleteTrades) {
@@ -154,6 +166,8 @@ public class TradeController {
      * @return A description of all the user's created trades (including second meetings)
      */
     public Response getAllTrades(Request request){
+        currUser = userController.getCurrUser();
+
         List<Integer> allTrades = currUser.getTrades();
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : allTrades) {

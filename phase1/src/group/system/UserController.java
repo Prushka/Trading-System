@@ -20,16 +20,17 @@ public class UserController {
     final Repository<Item> itemRepo;
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
-    private final TradeController tradeController;
+    private TradeController tradeController;
     private PersonalUser currUser;
+    private ControllerDispatcher dispatcher;
 
     public UserController(ControllerDispatcher dispatcher) {
+        this.dispatcher = dispatcher;
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
         itemRepo = dispatcher.itemRepository;
         personalUserManager = new PersonalUserManager(personalRepo, itemRepo);
         itemManager = new ItemManager(itemRepo);
-        tradeController = dispatcher.tradeController;
     }
 
     public Response loginUser(Request request) {
@@ -71,7 +72,7 @@ public class UserController {
     }
 
     public Response removeItemFromWishlist(Request request){
-        Integer item = request.getInt("item");
+        Integer item = request.getInt("itemname");
         Item itemEntity = itemManager.findItemByUid(item);
         return personalUserManager.removeItemFromWishlist(currUser, itemEntity);
     }
@@ -98,6 +99,7 @@ public class UserController {
     }
 
     public Response topTraders(Request request){
+        this.tradeController = dispatcher.tradeController;
         Map<Integer, Integer> frequentTraders = tradeController.getTradeFrequency(currUser.getUid());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : frequentTraders.keySet()) {

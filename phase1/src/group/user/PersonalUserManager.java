@@ -63,6 +63,7 @@ public class PersonalUserManager {
 
     public Response requestToAddItemToInventory(PersonalUser user, String item, String description){
         Item newItem = new Item(user.getUid(), item, description);
+        itemRepository.add(newItem);
         user.addItemToAddToInventoryRequest(newItem.getUid());
         return new Response.Builder(true).translatable("success.request.addItem").build();
     }

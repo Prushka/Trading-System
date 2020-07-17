@@ -100,7 +100,7 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("success.add.wishlist");
 
         menuBuilder.option(User.class, OperationType.remove, 4, "wishlist")
-                .submit("itemname",null, null,userController::removeItemFromWishlist)
+                .submit("itemname",null, userController::removeItemFromWishlist)
                 .succeeded("master.view.account").failed("master.view.account").master("success.remove.wishlist");
 
         menuBuilder.option(User.class, OperationType.view, 5, "inventory")
@@ -124,10 +124,10 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("allTrades");
 
         menuBuilder.option(User.class, OperationType.view, 10, "recentTrades")
-                .skippableSubmit(userController::topTraders).succeeded("master.view.account").failed("master.view.account").master("recentTrades");
+                .skippableSubmit(tradeController::getRecentTrades).succeeded("master.view.account").failed("master.view.account").master("recentTrades");
 
         menuBuilder.option(Trade.class, OperationType.view, 11, "frequentTrades")
-                .skippableSubmit(tradeController::getRecentTrades).succeeded("master.view.account").failed("master.view.account").master("topTraders");
+                .skippableSubmit(userController::topTraders).succeeded("master.view.account").failed("master.view.account").master("topTraders");
 
         menuBuilder.option(Trade.class, OperationType.query, 12, "return")
                 .skippableSubmit(tradeController::skip).succeeded("master.userAccess");

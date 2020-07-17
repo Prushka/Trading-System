@@ -107,7 +107,7 @@ public class AdministrativeUserController {
         Integer item = request.getInt("item");
         PersonalUser user = administrativeManager.findUser(username);
         Item itemEntity = itemRepo.get(item);
-        return administrativeManager.confirmAddItemRequest(user, itemEntity);
+        return administrativeManager.confirmAddItemRequest(user, item);
     }
 
     public Response removeItemInUserInventory(Request request) {
@@ -115,7 +115,7 @@ public class AdministrativeUserController {
         Integer item = request.getInt("item");
         PersonalUser user = administrativeManager.findUser(username);
         Item itemEntity = itemRepo.get(item);
-        return administrativeManager.removeUserItem(user, itemEntity);
+        return administrativeManager.removeUserItem(user, item);
     }
 
     public Response setTransactionLimit(Request request) {

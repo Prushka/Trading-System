@@ -9,8 +9,8 @@ import java.util.*;
 
 public class PersonalUser extends User {
 
-    private List<Item> wishlist;
-    private List<Item> inventory;
+    private List<Integer> wishlist;
+    private List<Integer> inventory;
     private List<Integer> trades;
     private List<Integer> supportTickets;
     private Boolean isFrozen;
@@ -18,7 +18,7 @@ public class PersonalUser extends User {
     private Integer borrowCount;
     private Integer numTransactions;
     private List<Integer> recentTrades;
-    private List<Item> addToInventoryRequest;
+    private List<Integer> addToInventoryRequest;
     private Boolean requestToUnfreeze;
     //private int incompleteTrades;
 
@@ -54,27 +54,27 @@ public class PersonalUser extends User {
         super(record);
     }
 
-    public List<Item> getWishlist() {
+    public List<Integer> getWishlist() {
         return wishlist;
     }
 
-    public void addToWishList(Item newItem) {
+    public void addToWishList(Integer newItem) {
         wishlist.add(newItem);
     }
 
-    public void removeFromWishList(Item oldItem) {
+    public void removeFromWishList(Integer oldItem) {
         wishlist.remove(oldItem);
     }
 
-    public List<Item> getInventory() {
+    public List<Integer> getInventory() {
         return inventory;
     }
 
-    public void addToInventory(Item newItem) {
+    public void addToInventory(Integer newItem) {
         inventory.add(newItem);
     }
 
-    public void removeFromInventory(Item oldItem) {
+    public void removeFromInventory(Integer oldItem) {
         inventory.remove(oldItem);
     }
 
@@ -126,11 +126,11 @@ public class PersonalUser extends User {
         this.numTransactions = numTransactions;
     }
 
-    public List<Item> getAddToInventoryRequest() {
+    public List<Integer> getAddToInventoryRequest() {
         return addToInventoryRequest;
     }
 
-    public void addItemToAddToInventoryRequest(Item item) {
+    public void addItemToAddToInventoryRequest(Integer item) {
         addToInventoryRequest.add(item);
     }
 

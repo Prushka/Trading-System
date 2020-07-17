@@ -105,26 +105,29 @@ public class AdministrativeManager {
         user.setRequestToUnfreeze(false);
     }
 
-    public Response removeUserItem(PersonalUser user, Item item){
+    public Response removeUserItem(PersonalUser user, Integer item){
         user.getInventory().remove(item);
-        itemRepository.remove(item);
+        Item itemEntity = itemRepository.get(item);
+        itemRepository.remove(itemEntity);
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
 
     public Response confirmAddAllItemRequestForAUser(PersonalUser user) {
-        for (Item item : user.getAddToInventoryRequest()) {
+        for (Integer item : user.getAddToInventoryRequest()) {
             user.addToInventory(item);
             user.getAddToInventoryRequest().remove(item);
-            itemRepository.add(item);
+            Item itemEntity = itemRepository.get(item);
+            itemRepository.add(itemEntity);
         }
         return new Response.Builder(true).translatable("success.confirm.AddItem").build();
     }
 
-    public Response confirmAddItemRequest(PersonalUser user, Item item) {
+    public Response confirmAddItemRequest(PersonalUser user, Integer item) {
         user.addToInventory(item);
         user.getAddToInventoryRequest().remove(item);
-        itemRepository.add(item);
+        Item itemEntity = itemRepository.get(item);
+        itemRepository.add(itemEntity);
         return new Response.Builder(true).translatable("success.confirm.AddItem").build();
     }
 

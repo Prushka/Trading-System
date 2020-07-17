@@ -61,7 +61,7 @@ public class PersonalUserManager {
 
     public Response requestToAddItemToInventory(PersonalUser user, String item, String description){
         Item newItem = new Item(user.getUid(), item, description);
-        user.addItemToAddToInventoryRequest(newItem);
+        user.addItemToAddToInventoryRequest(newItem.getUid());
         return new Response.Builder(true).translatable("success.request.addItem").build();
     }
 
@@ -76,18 +76,18 @@ public class PersonalUserManager {
     }*/
 
     public Response removeItemFromInventory(PersonalUser user, Item item) {
-        user.removeFromInventory(item);
+        user.removeFromInventory(item.getUid());
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
     public Response addItemToWishlist(PersonalUser user, String item, String description){
         Item newItem = createNewItem(user.getUid(), item, description);
-        user.addToWishList(newItem);
+        user.addToWishList(newItem.getUid());
         return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 
     public Response removeItemFromWishlist(PersonalUser user, Item item){
-        user.removeFromWishList(item);
+        user.removeFromWishList(item.getUid());
         return new Response.Builder(true).translatable("success.remove.wishlist").build();
     }
 

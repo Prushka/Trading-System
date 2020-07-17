@@ -222,32 +222,50 @@ public class TradeManager {
         PersonalUser initUser = userRepository.get(currTrade.getUser1());
         PersonalUser otherUser = userRepository.get(currTrade.getUser2());
         if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
-            initUser.setBorrowCount(initUser.getBorrowCount() + 1);
             initUser.removeFromWishList(currTrade.getItem2());
-            otherUser.setLendCount(initUser.getLendCount() + 1);
             otherUser.removeFromInventory(currTrade.getItem2());
+            if (currTrade.getPrevMeeting() == null){
+                initUser.setBorrowCount(initUser.getBorrowCount() + 1);
+                otherUser.setLendCount(initUser.getLendCount() + 1);
+                initUser.addRecentTrades(currTrade.getUid());
+                otherUser.addRecentTrades(currTrade.getUid());
+                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(initUser.getNumTransactions() + 1);
+            }
             if (currTrade.getIsPermanent()) {
                 initUser.addToInventory(currTrade.getItem2());
             }
         } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
-            otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
             otherUser.removeFromWishList(currTrade.getItem1());
-            initUser.setLendCount(initUser.getLendCount() + 1);
             initUser.removeFromInventory(currTrade.getItem1());
+            if (currTrade.getPrevMeeting() == null){
+                otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
+                initUser.setLendCount(initUser.getLendCount() + 1);
+                initUser.addRecentTrades(currTrade.getUid());
+                otherUser.addRecentTrades(currTrade.getUid());
+                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(initUser.getNumTransactions() + 1);
+            }
             if (currTrade.getIsPermanent()) {
                 otherUser.addToInventory(currTrade.getItem1());
             }
         } else {
-            initUser.setBorrowCount(initUser.getBorrowCount() + 1);
-            initUser.setLendCount(initUser.getLendCount() + 1);
             initUser.removeFromWishList(currTrade.getItem2());
             initUser.removeFromInventory(currTrade.getItem1());
-            otherUser.setLendCount(initUser.getLendCount() + 1);
-            otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
             otherUser.removeFromWishList(currTrade.getItem1());
             otherUser.removeFromInventory(currTrade.getItem2());
             itemManager.removeAvailable(currTrade.getItem1());
             itemManager.removeAvailable(currTrade.getItem2());
+            if (currTrade.getPrevMeeting() == null){
+                initUser.setBorrowCount(initUser.getBorrowCount() + 1);
+                initUser.setLendCount(initUser.getLendCount() + 1);
+                otherUser.setLendCount(initUser.getLendCount() + 1);
+                otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
+                initUser.addRecentTrades(currTrade.getUid());
+                otherUser.addRecentTrades(currTrade.getUid());
+                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(initUser.getNumTransactions() + 1);
+            }
             if (currTrade.getIsPermanent()) {
                 initUser.addToInventory(currTrade.getItem2());
                 otherUser.addToInventory(currTrade.getItem1());
@@ -255,14 +273,6 @@ public class TradeManager {
                 itemManager.addAvailable(currTrade.getItem2());
             }
         }
-
-        // Updates recent trades and trader frequency
-        initUser.addRecentTrades(currTrade.getUid());
-        otherUser.addRecentTrades(currTrade.getUid());
-        initUser.setNumTransactions(initUser.getNumTransactions() + 1);
-        otherUser.setNumTransactions(initUser.getNumTransactions() + 1);
-        // initUser.setTraderFrequency(otherUser.getUid());
-        // otherUser.setTraderFrequency(initUser.getUid());
     }
 
     // Completes a trade by making trades or scheduling second meeting
@@ -300,9 +310,14 @@ public class TradeManager {
     }
 
 
+    /**
+     * @param user The user ID
+     * @return The frequency this user trades with other users
+     */
     public Map<Integer, Integer> getTradeFrequency(int user) {
         Map<Integer, Integer> tradeFrequency = new HashMap<>();
-        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getUser1() == user || entity.getUser2() == user);
+        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getUser1() == user ||
+                entity.getUser2() == user);
         while (tradeIterator.hasNext()) {
             Trade trade = tradeIterator.next();
             if (user == trade.getUser1()) {

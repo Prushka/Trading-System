@@ -202,7 +202,7 @@ public class AdministrativeManager {
         ArrayList<Integer> allTrades = currPersonalUser.getTrades();
         for(Integer i: allTrades){
             Trade trade = tradeRepository.get(i);
-            if (!trade.getIsClosed()){
+            if (!trade.getIsClosed() && trade.getPrevMeeting() == null){
                 incomplete++;
             }
 

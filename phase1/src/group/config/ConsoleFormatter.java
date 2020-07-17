@@ -50,9 +50,6 @@ class ConsoleFormatter extends LanguageFormatter {
                 affix = " The stacktrace can be found in the most recent .log file in log folder"; // replacing this with a log file name will have to use another static variable in FileHandlerFactory
                 break;
         }
-        if(record.getThrown()!=null){
-            record.getThrown().printStackTrace();
-        }
         return applyColor(applyLanguage(record)) + ansiColor.get("{RESET}") + affix + "\n";
     }
 }

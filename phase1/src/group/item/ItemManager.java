@@ -6,14 +6,14 @@ import group.repository.Repository;
 import group.user.PersonalUser;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemManager {
     private Repository<Item> items;
-    private ArrayList<Integer> itemsArrayList; //temp solution
+    private List<Integer> itemsArrayList = new ArrayList<>(); //temp solution
 
     public ItemManager(Repository<Item> items){
         this.items = items;
-        itemsArrayList = new ArrayList<>();
     }
 
     public Response add (Item item) {

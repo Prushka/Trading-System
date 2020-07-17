@@ -11,7 +11,7 @@ public class PersonalUser extends User {
 
     private List<Integer> wishlist;
     private List<Integer> inventory;
-    private ArrayList<Integer> trades;
+    private List<Integer> trades;
     private List<Integer> supportTickets;
     private Boolean isFrozen;
     private Integer lendCount;
@@ -72,7 +72,7 @@ public class PersonalUser extends User {
         inventory.remove(oldItem);
     }
 
-    public ArrayList<Integer> getTrades() {
+    public List<Integer> getTrades() {
         return trades;
     }
 

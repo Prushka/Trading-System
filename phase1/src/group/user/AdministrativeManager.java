@@ -199,7 +199,7 @@ public class AdministrativeManager {
 
     public void incompleteTransactions(){
         int incomplete = 0;
-        ArrayList<Integer> allTrades = currPersonalUser.getTrades();
+        List<Integer> allTrades = currPersonalUser.getTrades();
         for(Integer i: allTrades){
             Trade trade = tradeRepository.get(i);
             if (!trade.getIsClosed() && trade.getPrevMeeting() == null){

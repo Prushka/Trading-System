@@ -51,8 +51,6 @@ public class MenuRunner {
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Unable to read from Buffered reader.", e);
-        } catch (NullPointerException e) {
-            LOGGER.log(Level.SEVERE, "There's no node next.", e);
         }
         shutdown();
     }

@@ -11,11 +11,13 @@ public class PersonalUserManager {
 
     private final Repository<PersonalUser> personalUserRepository;
     private PersonalUser currPersonalUser = null;
+    private Repository<Item> itemRepository;
 
 
 
-    public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
+    public PersonalUserManager(Repository<PersonalUser> personalUserRepository, Repository<Item> itemRepository) {
         this.personalUserRepository = personalUserRepository;
+        this.itemRepository = itemRepository;
 
     }
 
@@ -77,17 +79,20 @@ public class PersonalUserManager {
 
     public Response removeItemFromInventory(PersonalUser user, Item item) {
         user.removeFromInventory(item.getUid());
+        itemRepository.remove(item);
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
     public Response addItemToWishlist(PersonalUser user, String item, String description){
         Item newItem = createNewItem(user.getUid(), item, description);
         user.addToWishList(newItem.getUid());
+        itemRepository.add(newItem);
         return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 
     public Response removeItemFromWishlist(PersonalUser user, Item item){
         user.removeFromWishList(item.getUid());
+        itemRepository.remove(item);
         return new Response.Builder(true).translatable("success.remove.wishlist").build();
     }
 

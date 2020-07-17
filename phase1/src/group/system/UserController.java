@@ -27,7 +27,7 @@ public class UserController {
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
         itemRepo = dispatcher.itemRepository;
-        personalUserManager = new PersonalUserManager(personalRepo);
+        personalUserManager = new PersonalUserManager(personalRepo, itemRepo);
         itemManager = new ItemManager(itemRepo);
         tradeController = dispatcher.tradeController;
     }

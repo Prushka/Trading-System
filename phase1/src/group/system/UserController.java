@@ -82,12 +82,10 @@ public class UserController {
 
     public Response browseInventory(Request request){
         return personalUserManager.getUserInventory(currUser);
-
     }
 
     public Response browseWishlist(Request request){
         return personalUserManager.getUserWishlist(currUser);
-
     }
 
     public Response checkFrozen(Request request) {
@@ -112,5 +110,7 @@ public class UserController {
 
     public PersonalUser getCurrUser(){ return currUser; }
     public ItemManager getItemManager(){ return itemManager;}
+
+
 
 }

@@ -330,7 +330,11 @@ public class MenuBuilder {
      */
     public OptionNodeBuilder option(Class<?> clazz, OperationType type, int id, String addon) {
         OptionNodeBuilder optionNodeBuilder = new OptionNodeBuilder(clazz, type, id, addon);
-        optionNodePoolCache.put(optionNodeBuilder.optionNode.getTranslatable(), optionNodeBuilder);
+        String translatable = optionNodeBuilder.optionNode.getTranslatable();
+        if (optionNodePoolCache.containsKey(translatable) || optionNodePool.containsKey(translatable)) {
+            System.err.println("My dear group member: We have two option nodes that have the same identifier: " + translatable + "\nPlease FIX THIS.");
+        }
+        optionNodePoolCache.put(translatable, optionNodeBuilder);
         return optionNodeBuilder;
     }
 

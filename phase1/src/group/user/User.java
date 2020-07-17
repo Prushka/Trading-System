@@ -69,8 +69,8 @@ public class User extends MappableBase implements CSVMappable, UniqueId {
     }
 
     @Override
-    public void setUid(int new_uid) {
-        this.uid = new_uid;
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package group.system;
 
 import group.config.LoggerFactory;
+import group.config.property.SystemProperties;
 import group.config.property.TradeProperties;
 import group.item.Item;
 import group.notification.SupportTicket;
@@ -49,6 +50,7 @@ public class ControllerDispatcher implements Shutdownable {
     TradeController tradeController;
 
     TradeProperties tradeProperties;
+    SystemProperties systemProperties;
 
     final MenuController menuController = new MenuController();
 
@@ -66,7 +68,7 @@ public class ControllerDispatcher implements Shutdownable {
     public void dispatchController() {
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
-        tradeController = new TradeController(this, userController);
+        tradeController = new TradeController(this);
         administrativeUserController = new AdministrativeUserController(this);
         menuController.viewAccount(userController, tradeController);
         this.menuController.mainMenu(userController, administrativeUserController); // these steps should not be here
@@ -94,6 +96,7 @@ public class ControllerDispatcher implements Shutdownable {
      */
     public void createProperties() {
         tradeProperties = new TradeProperties(saveHook);
+        systemProperties = new SystemProperties(saveHook);
     }
 
     /**

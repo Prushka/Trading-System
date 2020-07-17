@@ -18,6 +18,7 @@ public class ItemManager {
 
     public Response add (Item item) {
         items.add(item);
+        itemsArrayList.add(item.getUid());
         return new Response.Builder(true).translatable("itemAdd").build();
     }
 

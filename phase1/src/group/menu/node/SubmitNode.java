@@ -40,11 +40,11 @@ public class SubmitNode extends InputNode {
     private final boolean skippable;
 
     /**
-     * Constructs a SubmitNode from a {@link SubmitNode.Builder}
+     * Constructs a SubmitNode from a {@link SubmitNodeBuilder}
      *
-     * @param builder the {@link SubmitNode.Builder}
+     * @param builder the {@link SubmitNodeBuilder}
      */
-    SubmitNode(Builder builder) {
+    SubmitNode(SubmitNodeBuilder builder) {
         super(builder);
         handler = builder.handler;
         persistentRequest = builder.persistentRequest;
@@ -133,7 +133,7 @@ public class SubmitNode extends InputNode {
      *
      * @author Dan Lyu
      */
-    public static class Builder extends AbstractInputNodeBuilder<Builder> {
+    public static class SubmitNodeBuilder extends AbstractInputNodeBuilder<SubmitNodeBuilder> {
 
         /**
          * The injected handler used to parse Request and expect Response
@@ -159,7 +159,7 @@ public class SubmitNode extends InputNode {
          * @param handler the injected handler to be used to process Request and return a Response
          * @param persistentRequest the global Request that keeps all cached requests
          */
-        public Builder(String translatable, String key, RequestHandler handler, PersistentRequest persistentRequest) {
+        public SubmitNodeBuilder(String translatable, String key, RequestHandler handler, PersistentRequest persistentRequest) {
             super(translatable, key);
             this.handler = handler;
             this.persistentRequest = persistentRequest;
@@ -169,7 +169,7 @@ public class SubmitNode extends InputNode {
          * @param requestHandler the injected handler to be used to process Request and return a Response
          * @param persistentRequest the global Request that keeps all cached requests
          */
-        public Builder(RequestHandler requestHandler, PersistentRequest persistentRequest){
+        public SubmitNodeBuilder(RequestHandler requestHandler, PersistentRequest persistentRequest){
             super("skippable.submit","skippable.submit");
             this.handler = requestHandler;
             this.persistentRequest = persistentRequest;
@@ -180,7 +180,7 @@ public class SubmitNode extends InputNode {
          * @return the builder itself
          */
         @Override
-        Builder getThis() {
+        SubmitNodeBuilder getThis() {
             return this;
         }
 
@@ -191,7 +191,7 @@ public class SubmitNode extends InputNode {
          * @return the builder itself
          */
         @Deprecated
-        public Builder submitSuccessNext(Node node) {
+        public SubmitNodeBuilder submitSuccessNext(Node node) {
             child(node);
             return getThis();
         }

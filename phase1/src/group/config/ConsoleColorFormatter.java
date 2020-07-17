@@ -28,7 +28,7 @@ class ConsoleColorFormatter extends LanguageFormatter {
      * @return the formatted message with color texts to their ansi color representations
      */
     private String applyColor(String message) {
-        message = "{BLACK}" + message;
+        message = "{BLACK}" + message; // the color is default to red in intellij idea
         for (Map.Entry<String, String> entry : ansiColor.entrySet()) {
             message = message.replace(entry.getKey(), entry.getValue());
         }

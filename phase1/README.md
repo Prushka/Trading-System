@@ -13,14 +13,20 @@ Configuration:
 
 Log:
 -------------
-* No checked exception stacktrace will be printed in the console. It will print something to let you check the log files if something wrong happened.
-* Log files are located at **log/{date time}.log**. This file also contains debug records.
+* No checked exception stacktrace will be printed in the console. It will print something to let you check the log files if something wrong happened. This is to be configured by another file.
+* Log files are located at **log/{date time}.log**. These files also contains debug records.
 
-Data:
+Storage:
 -------------
-* We used CSV for every entity class, and the files are located in **/data** folder.
-* Serialization can be easily swapped by replacing CSVRepository -> SerializationRepository in ControllerDispatcher.
+* We used CSV for every entity class. Files are located in **/data** folder.
+* Serialization can be easily swapped by replacing **CSVRepository** to **SerializationRepository** in ControllerDispatcher.
 * The CSV mapping is achieved by reflection, which can be found in MappableBase.
+* The password is encrypted using md5, which will need to be improved.
+
+Commands:
+-------------
+* back : To return to the previous menu levels if possible, the input will be kept
+* next : To go back to the next levels after using back, the input will be kept
 
 Reference:
 -------------

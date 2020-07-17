@@ -117,6 +117,23 @@ public abstract class Property implements Savable {
     }
 
     /**
+     * @param key the key to lookup
+     * @return the value in boolean
+     */
+    public boolean getBoolean(String key) {
+        return Boolean.parseBoolean(properties.getProperty(key));
+    }
+
+    /**
+     * @param key          the key to lookup
+     * @param defaultValue the default value if the value is missing
+     * @return the value in boolean
+     */
+    public boolean getBoolean(String key, int defaultValue) {
+        return Boolean.parseBoolean(properties.getProperty(key, String.valueOf(defaultValue)));
+    }
+
+    /**
      * @param key   the key to save the value to
      * @param value the value
      */

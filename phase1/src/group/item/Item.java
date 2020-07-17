@@ -60,7 +60,7 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
 
     @Override
     public String toString(){
-        return name + "- " + description + " (Owned by: " + ownerUID + ")";
+        return "ItemID: " + uid + name + "- " + description + " (Owned by: " + ownerUID + ")";
     }
 
     @Override

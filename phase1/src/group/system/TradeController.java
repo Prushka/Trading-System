@@ -18,7 +18,6 @@ public class TradeController {
     final Repository<Trade> tradeRepository;
     final Repository<PersonalUser> personalUserRepository;
     final UserController userController;
-    PersonalUser currUser;
 
     /**
      * Takes requests from a user and turns it into information that can be used by TradeManager
@@ -38,26 +37,28 @@ public class TradeController {
      * @return A description of the success of the creation of the trade
      */
     public Response addTrade(Request request) {
-        currUser = userController.getCurrUser();
+        PersonalUser currUser = userController.currUser;
 
         Integer item1;
         Integer item2;
-        int user2 =  request.getInt("respondent");
+        int user2 = request.getInt("respondent");
 
         PersonalUser trader2 = personalUserRepository.get(user2);
 
         // Check if items are in their inventories or are null
-        if (request.get("lendingItem").equals("null")){
+        if (request.get("lendingItem").equals("null")) {
             item1 = null;
-        } else if (currUser.getInventory().contains(request.getInt("lendingItem"))){
+        } else if (currUser.getInventory().contains(request.getInt("lendingItem"))) {
             item1 = request.getInt("lendingItem");
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
-        if (request.get("borrowingItem").equals("null")){
+        if (request.get("borrowingItem").equals("null")) {
             item2 = null;
-        } else if (trader2.getInventory().contains(request.getInt("borrowingItem"))){
+        } else if (trader2.getInventory().contains(request.getInt("borrowingItem"))) {
             item2 = request.getInt("borrowingItem");
+        } else if (currUser.getUid() == user2){
+            return new Response.Builder(false).translatable("failed.same.trade").build();
         } else {
             return new Response.Builder(false).translatable("failed.create.trade").build();
         }
@@ -76,7 +77,7 @@ public class TradeController {
      * @return A description of the success of editing date and time
      */
     public Response editMeetingDateAndTime(Request request){
-        currUser = userController.getCurrUser();
+        PersonalUser currUser = userController.currUser;
 
         int tradeID = request.getInt("tradeID");
         String[] data = request.get("dateAndTime").split("-");
@@ -91,6 +92,8 @@ public class TradeController {
      * @return A description of the success of editing location
      */
     public Response editMeetingLocation(Request request){
+        PersonalUser currUser = userController.currUser;
+
         currUser = userController.getCurrUser();
 
         int tradeID = request.getInt("tradeID");
@@ -104,7 +107,7 @@ public class TradeController {
      * @return A description of the state of confirmation
      */
     public Response confirmingTradeOpen(Request request){
-        currUser = userController.getCurrUser();
+        PersonalUser currUser = userController.currUser;
 
         int tradeID = request.getInt("tradeID");
         return tradeManager.confirmTrade(tradeID, currUser.getUid());
@@ -116,7 +119,7 @@ public class TradeController {
      * @return A description of the state of confirmation
      */
     public Response confirmingTradeComplete(Request request){
-        currUser = userController.getCurrUser();
+        PersonalUser currUser = userController.currUser;
 
         int tradeID = request.getInt("tradeID");
         return tradeManager.confirmTradeComplete(tradeID, currUser.getUid());
@@ -150,7 +153,7 @@ public class TradeController {
      * @return A description of the top three traders
      */
     public Response getRecentTrades(Request request){
-        currUser = userController.getCurrUser();
+        PersonalUser currUser = userController.currUser;
 
         List<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
@@ -166,7 +169,7 @@ public class TradeController {
      * @return A description of all the user's created trades (including second meetings)
      */
     public Response getAllTrades(Request request){
-        currUser = userController.getCurrUser();
+        PersonalUser currUser = userController.currUser;
 
         List<Integer> allTrades = currUser.getTrades();
         StringBuilder stringBuilder = new StringBuilder();

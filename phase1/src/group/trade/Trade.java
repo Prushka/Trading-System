@@ -205,7 +205,7 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     @Override
     public String toString() {
         if (item1 == null && item2 == null){
-            return "This is an invalid trade.";
+            return "This is an empty trade, nothing is traded between UserID: " + user1 + " and UserID: " + user2;
         } else if (item1 == null){
             return "UserID: " + user1 + " lends to UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;

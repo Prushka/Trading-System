@@ -11,7 +11,7 @@ public class PersonalUserManager {
 
     private final Repository<PersonalUser> personalUserRepository;
     private PersonalUser currPersonalUser = null;
-    private Repository<Item> itemRepository;
+    private final Repository<Item> itemRepository;
 
 
 
@@ -85,9 +85,8 @@ public class PersonalUserManager {
     }
 
     public Response addItemToWishlist(PersonalUser user, String item, String description){
-        Item newItem = createNewItem(user.getUid(), item, description);
-        itemRepository.add(newItem);
-        user.addToWishList(newItem.getUid());
+        Integer uid = createNewItem(user.getUid(), item, description);
+        user.addToWishList(uid);
         return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 
@@ -97,14 +96,12 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.remove.wishlist").build();
     }
 
-    public Response getUserInventory(PersonalUser user){
-        return new Response.Builder(true).
-                translatable("success.get.inventory", user.getInventory().toString()).build();
+    public List<Integer> getUserInventory(PersonalUser user){
+        return user.getInventory();
     }
 
-    public Response getUserWishlist(PersonalUser user){
-        return new Response.Builder(true).
-                translatable("success.get.wishlist", user.getWishlist().toString()).build();
+    public List<Integer> getUserWishlist(PersonalUser user){
+        return user.getWishlist();
     }
 
     public Response getUserIsFrozen(PersonalUser user){
@@ -115,15 +112,9 @@ public class PersonalUserManager {
         }
     }
 
-    public Item createNewItem(Integer ownerUID, String item, String description){
-        return new Item(ownerUID, item, description);
+    public Integer createNewItem(Integer ownerUID, String item, String description){
+        Item newItem = new Item(ownerUID, item, description);
+        itemRepository.add(newItem);
+        return newItem.getUid();
     }
-
-
-
-
-
-
-
-
 }

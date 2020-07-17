@@ -11,6 +11,7 @@ import group.user.PersonalUser;
 import group.user.PersonalUserManager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class UserController {
@@ -21,7 +22,7 @@ public class UserController {
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
     private TradeController tradeController;
-    private PersonalUser currUser;
+    PersonalUser currUser;
     private ControllerDispatcher dispatcher;
 
     public UserController(ControllerDispatcher dispatcher) {
@@ -82,11 +83,26 @@ public class UserController {
     }
 
     public Response browseInventory(Request request){
-        return personalUserManager.getUserInventory(currUser);
+        List<Integer> inventory =  personalUserManager.getUserInventory(currUser);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Integer i : inventory) {
+            Item item = itemRepo.get(i);
+            stringBuilder.append(item.toString()).append("\n");
+        }
+        return new Response.Builder(true).
+                translatable("success.get.inventory", stringBuilder.toString()).build();
     }
 
     public Response browseWishlist(Request request){
-        return personalUserManager.getUserWishlist(currUser);
+        List<Integer> wish = personalUserManager.getUserWishlist(currUser);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Integer i : wish) {
+            Item item = itemRepo.get(i);
+            stringBuilder.append("ItemID: ").append(item.getUid()).append(" | Description: ").append(item.getItemName())
+                    .append("- ").append(item.getDescription()).append("\n");
+        }
+        return new Response.Builder(true).
+                translatable("success.get.wishlist", stringBuilder.toString()).build();
     }
 
     public Response checkFrozen(Request request) {

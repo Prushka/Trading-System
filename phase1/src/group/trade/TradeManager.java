@@ -47,7 +47,7 @@ public class TradeManager {
      * @param prevMeeting The trade ID of the previous meeting
      * @return A response object of the representation of the trade or a description of why creation failed
      */
-    public Response createTrade(int user1, int user2, int item1, int item2, Boolean isPermanent,
+    public Response createTrade(int user1, int user2, Integer item1, Integer item2, Boolean isPermanent,
                                 LocalDateTime dateAndTime, String location, Integer prevMeeting) {
         // Get users from Repository
         PersonalUser trader1 = userRepository.get(user1);
@@ -72,7 +72,7 @@ public class TradeManager {
      * @param location The location of where this trade will take place
      * @return A response object of the representation of the trade or a description of why creation failed
      */
-    public Response createTrade(int user1, int user2, int item1, int item2, Boolean isPermanent,
+    public Response createTrade(int user1, int user2, Integer item1, Integer item2, Boolean isPermanent,
                                 LocalDateTime dateAndTime, String location){
         return createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location, null);
     }

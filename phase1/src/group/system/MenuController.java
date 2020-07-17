@@ -62,7 +62,7 @@ public class MenuController {
                 .submit("isHead", administrativeUserController::registerAdminUser)
                 .succeeded("master.account").failed("master.account").master("master.account");
 
-        menuBuilder.construct("master.account", false);
+        menuBuilder.construct("master.account", true);
 
     }
 
@@ -81,7 +81,7 @@ public class MenuController {
                 .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
                 .input("priority", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
                 .submit("confirm", supportController::addTicket)
-                .succeeded("master.support.ticket");
+                .succeeded("master.userAccess");
 
         menuBuilder.construct("master.userAccess", false);
     }
@@ -94,51 +94,51 @@ public class MenuController {
 
         menuBuilder.option(User.class, OperationType.view, 2, "wishlist")
                 .submit("browseWishlist", userController::browseWishlist)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .succeeded("master.view.account").failed("master.view.account").master("");
 
         menuBuilder.option(User.class, OperationType.add, 3, "wishlist")
                 .input("itemName", null, null, ValidatingType.invalid)
                 .submit("description", userController::AddItemToWishlist)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .succeeded("master.view.account").failed("master.view.account").master("success.add.wishlist");
 
         menuBuilder.option(User.class, OperationType.remove, 4, "wishlist")
                 .submit("itemname", userController::removeItemFromWishlist)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .succeeded("master.view.account").failed("master.view.account").master("success.remove.wishlist");
 
         menuBuilder.option(User.class, OperationType.view, 5, "inventory")
                 .submit("browseInventory", userController::browseInventory)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .succeeded("master.view.account").failed("master.view.account").master("");
 
         menuBuilder.option(User.class, OperationType.add, 6, "inventory")
                 .input("item", null, ValidatingType.invalid)
                 .submit("description", userController::RequestAddNewItem)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .succeeded("master.view.account").failed("master.view.account").master("success.request.addItem");
 
         menuBuilder.option(User.class, OperationType.remove, 7, "inventory")
                 .submit("itemname", userController::removeItemFromInventory)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .succeeded("master.view.account").failed("master.view.account").master("success.remove.item");
 
         menuBuilder.option(User.class, OperationType.add, 8, "requestUnfreeze")
                 .submit("unfreeze", userController::RequestUnfreeze)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .succeeded("master.view.account").failed("master.view.account").master("success.request.unfreeze");
 
         menuBuilder.option(Trade.class, OperationType.view, 9, "all")
-                .submit("unfreeze", userController::RequestUnfreeze)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .submit("confirm", tradeController::getAllTrades)
+                .succeeded("master.view.account").failed("master.view.account").master("allTrades");
 
         menuBuilder.option(User.class, OperationType.view, 10, "recentTrades")
-                .submit("trade", userController::topTraders)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .submit("confirm", userController::topTraders)
+                .succeeded("master.view.account").failed("master.view.account").master("recentTrades");
 
         menuBuilder.option(Trade.class, OperationType.view, 11, "frequentTrades")
-                .submit("frequent", tradeController::getRecentTrades)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .submit("confirm", tradeController::getRecentTrades)
+                .succeeded("master.view.account").failed("master.view.account").master("topTraders");
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 12, "trade")
                 .submit("enter", userController::checkFrozen)
-                .succeeded("master.view.account").failed("master.support.trade").master("master.account");
+                .succeeded("master.view.account").failed("master.support.trade");
 
-        menuBuilder.construct("master.view.account", true);
+        menuBuilder.construct("master.view.account", false);
     }
 
     public void supportTrade(TradeController controller) {

@@ -32,4 +32,10 @@ public class SupportTicketController {
         }
         return new ResponseEntity<>(supportTicket, HttpStatus.OK);
     }
+
+    @PostMapping("/support/tickets/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    public SupportTicket addSupportTicket(@RequestBody SupportTicket supportTicket){
+        return supportTicketManager.addSupportTicket(supportTicket);
+    }
 }

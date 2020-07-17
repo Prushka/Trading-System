@@ -7,7 +7,7 @@ import java.util.Iterator;
 /**
  * The interface to be used in use case methods.<p>
  * Contains only list related methods for the Repository.<p>
- * The interface doesn't contain any file related operations.
+ * The interface does not contain any file / gateway related operations.
  *
  * @param <T> the entity type to be used
  * @author Dan Lyu

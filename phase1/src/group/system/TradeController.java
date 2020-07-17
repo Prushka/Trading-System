@@ -40,7 +40,7 @@ public class TradeController {
     public Response addTrade(Request request) {
         Integer item1;
         Integer item2;
-        Integer user2 =  request.getInt("respondent");
+        int user2 =  request.getInt("respondent");
 
         PersonalUser trader2 = personalUserRepository.get(user2);
 
@@ -170,5 +170,9 @@ public class TradeController {
      */
     public Map<Integer, Integer> getTradeFrequency(int user){
         return tradeManager.getTradeFrequency(user);
+    }
+
+    public Response skip(Request request){
+        return new Response.Builder(true).translatable("return").build();
     }
 }

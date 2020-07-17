@@ -130,8 +130,7 @@ public class MenuController {
                 .skippableSubmit(tradeController::getRecentTrades).succeeded("master.view.account").failed("master.view.account").master("topTraders");
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 12, "trade")
-                .submit("enter", userController::checkFrozen)
-                .succeeded("master.view.account");
+                .skippableSubmit(tradeController::skip).succeeded("master.view.account");
 
         menuBuilder.construct("master.view.account", false);
     }

@@ -69,19 +69,19 @@ public class MenuController {
     public void personalUserAccess(UserController controller, SupportTicketController supportController) {
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 1, "account")
-                .submit("enter", controller::checkFrozen)
-                .succeeded("master.view.account").failed("master.view.account").master("master.account");
+                .skippableSubmit(controller::checkFrozen).succeeded("master.view.account").failed("master.view.account").master("master.account");
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 2, "trade")
-                .submit("enter", controller::checkFrozen)
-                .succeeded("master.userAccess").failed("master.support.trade").master("master.account");
+                .skippableSubmit(controller::checkFrozen).succeeded("master.userAccess").failed("master.support.trade").master("master.account");
 
+        /*
         menuBuilder.option(SupportTicket.class, OperationType.add, 3)
                 .input("content", supportController::ifTicketContentNotExist, ValidatingType.exists)
                 .input("category", String::toUpperCase, new EnumValidator<>(SupportTicket.Category.class), ValidatingType.invalid)
                 .input("priority", String::toUpperCase, new EnumValidator<>(SupportTicket.Priority.class), ValidatingType.invalid)
                 .submit("confirm", supportController::addTicket)
                 .succeeded("master.userAccess");
+         */
 
         menuBuilder.construct("master.userAccess", false);
     }
@@ -92,8 +92,7 @@ public class MenuController {
                 .skippableSubmit(userController::browseAllItems).succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.view, 2, "wishlist")
-                .submit("browseWishlist", userController::browseWishlist)
-                .succeeded("master.view.account").failed("master.view.account").master("");
+                .skippableSubmit(userController::browseWishlist).succeeded("master.view.account").failed("master.view.account").master("");
 
         menuBuilder.option(User.class, OperationType.add, 3, "wishlist")
                 .input("itemName", null, null, ValidatingType.invalid)
@@ -105,8 +104,7 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("success.remove.wishlist");
 
         menuBuilder.option(User.class, OperationType.view, 5, "inventory")
-                .submit("browseInventory", userController::browseInventory)
-                .succeeded("master.view.account").failed("master.view.account").master("");
+                .skippableSubmit(userController::browseInventory).succeeded("master.view.account").failed("master.view.account").master("");
 
         menuBuilder.option(User.class, OperationType.add, 6, "inventory")
                 .input("item", null, ValidatingType.invalid)
@@ -122,16 +120,14 @@ public class MenuController {
                 .succeeded("master.view.account").failed("master.view.account").master("success.request.unfreeze");
 
         menuBuilder.option(Trade.class, OperationType.view, 9, "all")
-                .submit("confirm", tradeController::getAllTrades)
+                .skippableSubmit(tradeController::getAllTrades)
                 .succeeded("master.view.account").failed("master.view.account").master("allTrades");
 
         menuBuilder.option(User.class, OperationType.view, 10, "recentTrades")
-                .submit("confirm", userController::topTraders)
-                .succeeded("master.view.account").failed("master.view.account").master("recentTrades");
+                .skippableSubmit(userController::topTraders).succeeded("master.view.account").failed("master.view.account").master("recentTrades");
 
         menuBuilder.option(Trade.class, OperationType.view, 11, "frequentTrades")
-                .submit("confirm", tradeController::getRecentTrades)
-                .succeeded("master.view.account").failed("master.view.account").master("topTraders");
+                .skippableSubmit(tradeController::getRecentTrades).succeeded("master.view.account").failed("master.view.account").master("topTraders");
 
         menuBuilder.option(PersonalUser.class, OperationType.query, 12, "trade")
                 .submit("enter", userController::checkFrozen)

@@ -97,7 +97,7 @@ public class LoggerFactory {
         if (consoleHandlerLevel != null) {
             ConsoleHandler handler = new ConsoleHandler();
             handler.setLevel(consoleHandlerLevel);
-            handler.setFormatter(new ConsoleColorFormatter(new LanguageProperties()));
+            handler.setFormatter(new ConsoleFormatter(new LanguageProperties()));
             logger.addHandler(handler);
         }
         if (useFileLogger) {

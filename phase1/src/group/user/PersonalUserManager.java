@@ -85,8 +85,8 @@ public class PersonalUserManager {
 
     public Response addItemToWishlist(PersonalUser user, String item, String description){
         Item newItem = createNewItem(user.getUid(), item, description);
-        user.addToWishList(newItem.getUid());
         itemRepository.add(newItem);
+        user.addToWishList(newItem.getUid());
         return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 

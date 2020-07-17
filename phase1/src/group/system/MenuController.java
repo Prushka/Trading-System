@@ -89,8 +89,7 @@ public class MenuController {
     public void viewAccount(UserController userController, TradeController tradeController) {
 
         menuBuilder.option(User.class, OperationType.verification, 1, "browseItems")
-                .submit("browseAllItems", userController::browseAllItems)
-                .succeeded("master.view.account").failed("master.view.account").master("allItems");
+                .skippableSubmit(userController::browseAllItems).succeeded("master.view.account").failed("master.view.account").master("allItems");
 
         menuBuilder.option(User.class, OperationType.view, 2, "wishlist")
                 .submit("browseWishlist", userController::browseWishlist)

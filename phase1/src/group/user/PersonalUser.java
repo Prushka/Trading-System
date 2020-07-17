@@ -11,7 +11,7 @@ public class PersonalUser extends User {
 
     private List<Integer> wishlist;
     private List<Integer> inventory;
-    private List<Integer> trades;
+    private ArrayList<Integer> trades;
     private List<Integer> supportTickets;
     private Boolean isFrozen;
     private Integer lendCount;
@@ -20,7 +20,6 @@ public class PersonalUser extends User {
     private List<Integer> recentTrades;
     private List<Integer> addToInventoryRequest;
     private Boolean requestToUnfreeze;
-    private int incompleteTrades;
 
     /**
      * Creates a PersonalUser with the given userName, email, telephone, password
@@ -43,11 +42,6 @@ public class PersonalUser extends User {
         recentTrades = new ArrayList<>();
         addToInventoryRequest = new ArrayList<>();
         requestToUnfreeze = false;
-        incompleteTrades = 0;
-    }
-
-    public int getIncompleteTrades() {
-        return incompleteTrades;
     }
 
     public PersonalUser(List<String> record) {
@@ -78,7 +72,7 @@ public class PersonalUser extends User {
         inventory.remove(oldItem);
     }
 
-    public List<Integer> getTrades() {
+    public ArrayList<Integer> getTrades() {
         return trades;
     }
 

@@ -3,6 +3,7 @@ package group.user;
 import group.item.Item;
 import group.menu.data.Response;
 import group.repository.Repository;
+import group.trade.Trade;
 
 import java.util.*;
 
@@ -11,6 +12,7 @@ public class AdministrativeManager {
 
     private Repository<AdministrativeUser> administrators;
     private Repository<PersonalUser> personalUserRepository;
+    private Repository<Trade> tradeRepository;
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
     private AdministrativeUser currAdmin = null;
@@ -21,9 +23,10 @@ public class AdministrativeManager {
 
 
     public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
-                                 Repository<PersonalUser> personalUserRepository){
+                                 Repository<PersonalUser> personalUserRepository, Repository<Trade> tradeRepository){
         this.administrators = administrativeUserRepository;
         this.personalUserRepository = personalUserRepository;
+        this.tradeRepository = tradeRepository;
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
         needToConfirmAddItem = personalUserRepository.iterator(PersonalUser::getAddToInventoryRequestIsNotEmpty);
         needToConfirmUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);
@@ -194,5 +197,16 @@ public class AdministrativeManager {
         return new Response.Builder(false).translatable("failed.find.admin").build();
     }
 
+    public void incompleteTransactions(){
+        int incomplete = 0;
+        ArrayList<Integer> allTrades = currPersonalUser.getTrades();
+        for(Integer i: allTrades){
+            Trade trade = tradeRepository.get(i);
+            if (!trade.getIsClosed()){
+                incomplete++;
+            }
+
+        }
+    }
 
 }

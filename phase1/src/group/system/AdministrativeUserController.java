@@ -20,7 +20,7 @@ public class AdministrativeUserController {
     public AdministrativeUserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
         adminRepo = dispatcher.adminUserRepository;
-        administrativeManager = new AdministrativeManager(adminRepo, personalRepo);
+        administrativeManager = new AdministrativeManager(adminRepo, personalRepo, dispatcher.tradeRepository);
     }
 
     public Response loginAdminUser(Request request) {

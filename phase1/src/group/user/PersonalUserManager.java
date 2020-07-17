@@ -98,12 +98,12 @@ public class PersonalUserManager {
 
     public Response getUserInventory(PersonalUser user){
         return new Response.Builder(true).
-                translatable("success.get.inventory", user.getInventory()).build();
+                translatable("success.get.inventory", user.getInventory().toString()).build();
     }
 
     public Response getUserWishlist(PersonalUser user){
         return new Response.Builder(true).
-                translatable("success.get.wishlist", user.getWishlist()).build();
+                translatable("success.get.wishlist", user.getWishlist().toString()).build();
     }
 
     public Response getUserIsFrozen(PersonalUser user){

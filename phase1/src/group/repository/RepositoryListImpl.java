@@ -65,16 +65,26 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
         return null;
     }
 
+    /**
+     * @param entity the entity who's unique id is unclear
+     * @return the unique id of the entity
+     */
     @Override
     public int getId(T entity) {
         return data.indexOf(entity);
     }
 
+    /**
+     * @param entity the entity to be removed
+     */
     @Override
     public void remove(T entity) {
         data.set(getId(entity), null);
     }
 
+    /**
+     * @param id the unique id of the entity to be removed
+     */
     @Override
     public void remove(int id) {
         data.set(id, null);

@@ -28,8 +28,8 @@ public class TradeManager {
     public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
             tradeProperties, ItemManager itemManager) {
         // Default Values for trade information stored in tradeProperties:
-        editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
-        timeLimit = Integer.parseInt(tradeProperties.get("timeLimit"));
+        editLimit = tradeProperties.getInt("editLimit");
+        timeLimit = tradeProperties.getInt("timeLimit");
         this.tradeRepository = tradeRepository;
         this.userRepository = userRepository;
         this.itemManager = itemManager;

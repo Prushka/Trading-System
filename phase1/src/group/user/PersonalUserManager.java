@@ -10,9 +10,8 @@ import java.util.*;
 public class PersonalUserManager {
 
     private final Repository<PersonalUser> personalUserRepository;
-    private PersonalUser currPersonalUser = null;
     private final Repository<Item> itemRepository;
-
+    private PersonalUser currUser;
 
 
     public PersonalUserManager(Repository<PersonalUser> personalUserRepository, Repository<Item> itemRepository) {
@@ -33,27 +32,23 @@ public class PersonalUserManager {
         // this iterator has all PersonalUsers that need to be frozen
     }*/
 
-    public Response verifyLogin(String username, String password){
-        if (getCurrPersonalUser(username, password) != null){
+    public Response verifyLogin(String username, String password) {
+        if (setCurrentUser(username, password) != null) {
             return new Response.Builder(true).translatable("success.login.user").build();
         }
         return new Response.Builder(false).translatable("failed.login.user").build();
     }
 
-    public PersonalUser getCurrPersonalUser(String username, String password) {
-        if (personalUserRepository.ifExists(
+    private PersonalUser setCurrentUser(String username, String password) {
+        currUser = personalUserRepository.getFirst(
                 PersonalUser -> PersonalUser.getUserName().equals(username)
-                        && PersonalUser.getPassword().equals(password))) {
-            currPersonalUser = personalUserRepository.getFirst(
-                    PersonalUser -> PersonalUser.getUserName().equals(username)
-                            && PersonalUser.getPassword().equals(password));
-        }
-        return currPersonalUser;
+                        && PersonalUser.getPassword().equals(password));
+        return currUser;
     }
 
     public Response createPersonalUser(String userName, String email, String telephone, String password) {
         if (personalUserRepository.ifExists(
-                PersonalUser -> PersonalUser.getUserName().equals(userName))){
+                PersonalUser -> PersonalUser.getUserName().equals(userName))) {
             return new Response.Builder(false).translatable("failed.create.new").build();
         }
         PersonalUser p = new PersonalUser(userName, email, telephone, password);
@@ -61,14 +56,14 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.create.new").build();
     }
 
-    public Response requestToAddItemToInventory(PersonalUser user, String item, String description){
+    public Response requestToAddItemToInventory(PersonalUser user, String item, String description) {
         Item newItem = new Item(user.getUid(), item, description);
         itemRepository.add(newItem);
         user.addItemToAddToInventoryRequest(newItem.getUid());
         return new Response.Builder(true).translatable("success.request.addItem").build();
     }
 
-    public Response UnfreezeRequest(PersonalUser user){
+    public Response UnfreezeRequest(PersonalUser user) {
         user.setRequestToUnfreeze(true);
         return new Response.Builder(true).translatable("success.request.unfreeze").build();
     }
@@ -84,37 +79,41 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
-    public Response addItemToWishlist(PersonalUser user, String item, String description){
+    public Response addItemToWishlist(PersonalUser user, String item, String description) {
         Integer uid = createNewItem(user.getUid(), item, description);
         user.addToWishList(uid);
         return new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 
-    public Response removeItemFromWishlist(PersonalUser user, Item item){
+    public Response removeItemFromWishlist(PersonalUser user, Item item) {
         user.removeFromWishList(item.getUid());
         itemRepository.remove(item);
         return new Response.Builder(true).translatable("success.remove.wishlist").build();
     }
 
-    public List<Integer> getUserInventory(PersonalUser user){
+    public List<Integer> getUserInventory(PersonalUser user) {
         return user.getInventory();
     }
 
-    public List<Integer> getUserWishlist(PersonalUser user){
+    public List<Integer> getUserWishlist(PersonalUser user) {
         return user.getWishlist();
     }
 
-    public Response getUserIsFrozen(PersonalUser user){
-        if (user.getIsFrozen()){
+    public Response getUserIsFrozen(PersonalUser user) {
+        if (user.getIsFrozen()) {
             return new Response.Builder(true).translatable("true.is.frozen", user.getIsFrozen()).build();
-        }else{
+        } else {
             return new Response.Builder(false).translatable("false.is.frozen", user.getIsFrozen()).build();
         }
     }
 
-    public Integer createNewItem(Integer ownerUID, String item, String description){
+    public Integer createNewItem(Integer ownerUID, String item, String description) {
         Item newItem = new Item(ownerUID, item, description);
         itemRepository.add(newItem);
         return newItem.getUid();
+    }
+
+    public PersonalUser getCurrUser() {
+        return currUser;
     }
 }

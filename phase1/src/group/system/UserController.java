@@ -16,20 +16,17 @@ import java.util.Map;
 
 public class UserController {
 
+    // TODO: What's wrong **** ***
     private final Repository<PersonalUser> personalRepo;
-    private final Repository<AdministrativeUser> adminRepo;
-    final Repository<Item> itemRepo;
+    private final Repository<Item> itemRepo;
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
-    private TradeController tradeController;
-    PersonalUser currUser;
-    private ControllerDispatcher dispatcher;
+    private final TradeController tradeController;
 
     public UserController(ControllerDispatcher dispatcher) {
-        this.dispatcher = dispatcher;
         personalRepo = dispatcher.personalUserRepository;
-        adminRepo = dispatcher.adminUserRepository;
         itemRepo = dispatcher.itemRepository;
+        tradeController = dispatcher.tradeController;
         personalUserManager = new PersonalUserManager(personalRepo, itemRepo);
         itemManager = new ItemManager(itemRepo);
     }
@@ -37,7 +34,6 @@ public class UserController {
     public Response loginUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");
-        currUser = personalUserManager.getCurrPersonalUser(username, password);
         return personalUserManager.verifyLogin(username,password);
     }
 
@@ -55,29 +51,29 @@ public class UserController {
         Integer itemID = itemEntity.getUid();
         itemManager.removeAvailable(itemID);
         itemManager.remove(itemEntity);
-        return personalUserManager.removeItemFromInventory(currUser, itemID);
+        return personalUserManager.removeItemFromInventory(getCurrUser(), itemID);
     }
 
     public Response RequestAddNewItem(Request request){
         String item = request.get("item");
         String description = request.get("description");
-        return personalUserManager.requestToAddItemToInventory(currUser, item, description);
+        return personalUserManager.requestToAddItemToInventory(getCurrUser(), item, description);
     }
 
     public Response RequestUnfreeze(Request request) {
-        return personalUserManager.UnfreezeRequest(currUser);
+        return personalUserManager.UnfreezeRequest(getCurrUser());
     }
 
     public Response AddItemToWishlist(Request request){
         String item = request.get("itemName");
         String description = request.get("description");
-        return personalUserManager.addItemToWishlist(currUser, item, description);
+        return personalUserManager.addItemToWishlist(getCurrUser(), item, description);
     }
 
     public Response removeItemFromWishlist(Request request){
         Integer item = request.getInt("itemname");
         Item itemEntity = itemManager.findItemByUid(item);
-        return personalUserManager.removeItemFromWishlist(currUser, itemEntity);
+        return personalUserManager.removeItemFromWishlist(getCurrUser(), itemEntity);
     }
 
     public Response browseAllItems(Request request) {
@@ -85,7 +81,7 @@ public class UserController {
     }
 
     public Response browseInventory(Request request){
-        List<Integer> inventory =  personalUserManager.getUserInventory(currUser);
+        List<Integer> inventory =  personalUserManager.getUserInventory(getCurrUser());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : inventory) {
             Item item = itemRepo.get(i);
@@ -96,7 +92,7 @@ public class UserController {
     }
 
     public Response browseWishlist(Request request){
-        List<Integer> wish = personalUserManager.getUserWishlist(currUser);
+        List<Integer> wish = personalUserManager.getUserWishlist(getCurrUser());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : wish) {
             Item item = itemRepo.get(i);
@@ -108,7 +104,7 @@ public class UserController {
     }
 
     public Response checkFrozen(Request request) {
-        return personalUserManager.getUserIsFrozen(currUser);
+        return personalUserManager.getUserIsFrozen(getCurrUser());
 
         //if (currUser.getIsFrozen()){
             //return new Response.Builder(false).translatable("frozen").build();
@@ -117,8 +113,7 @@ public class UserController {
     }
 
     public Response topTraders(Request request){
-        this.tradeController = dispatcher.tradeController;
-        Map<Integer, Integer> frequentTraders = tradeController.getTradeFrequency(currUser.getUid());
+        Map<Integer, Integer> frequentTraders = tradeController.getTradeFrequency(getCurrUser().getUid());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : frequentTraders.keySet()) {
             PersonalUser other = personalRepo.get(i);
@@ -128,7 +123,7 @@ public class UserController {
         return new Response.Builder(true).translatable("topTraders", stringBuilder.toString()).build();
     }
 
-    public PersonalUser getCurrUser(){ return currUser; }
+    public PersonalUser getCurrUser(){ return personalUserManager.getCurrUser(); }
     public ItemManager getItemManager(){ return itemManager;}
 
 

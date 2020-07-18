@@ -52,10 +52,15 @@ public class RepositoryListImpl<T extends UniqueId> implements Repository<T> {
         return data.get(id);
     }
 
+    /**
+     * @param filter the filter to be used to match results
+     * @return the first matched element
+     */
     @Override
     public T getFirst(Filter<T> filter) {
-        if (iterator(filter).hasNext()) {
-            return iterator(filter).next();
+        Iterator<T> iterator = iterator(filter);
+        if (iterator.hasNext()) {
+            return iterator.next();
         }
         return null;
     }

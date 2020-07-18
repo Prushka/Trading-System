@@ -15,7 +15,7 @@ public class ReflectionTest {
     }
 
     @Test
-    public void testSplit(){
+    public void testSplit() {
         String test = "1,2,3";
         String test2 = "1,2,3,,";
     }

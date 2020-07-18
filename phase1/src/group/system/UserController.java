@@ -50,10 +50,12 @@ public class UserController {
     }
 
     public Response removeItemFromInventory(Request request){
-        Integer item = request.getInt("item");
+        Integer item = request.getInt("itemname");
         Item itemEntity = itemManager.findItemByUid(item);
+        Integer itemID = itemEntity.getUid();
+        itemManager.removeAvailable(itemID);
         itemManager.remove(itemEntity);
-        return personalUserManager.removeItemFromInventory(currUser, itemEntity);
+        return personalUserManager.removeItemFromInventory(currUser, itemID);
     }
 
     public Response RequestAddNewItem(Request request){

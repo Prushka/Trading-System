@@ -218,7 +218,7 @@ public class MenuController {
                 .succeeded("master.adminUserAddItemAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "removeItem")
-                .input("username", null, ValidatingType.notexist)
+                .input("fine.username", null, ValidatingType.notexist)
                 .submit("item", controller::removeItemInUserInventory)
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccess");
 
@@ -248,7 +248,7 @@ public class MenuController {
                 .input("fine.username", null, ValidatingType.notexist)
                 .submit("item", controller::confirmAddItemRequest)
                 .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
-
+/*
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "confirmAddItemAUser")
                 .submit("confirm", controller::confirmAddAllItemRequestForAUser)
                 .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
@@ -256,7 +256,7 @@ public class MenuController {
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmAddAllUser")
                 .submit("confirm", controller::confirmAddAllItemRequest)
                 .succeeded("master.adminUserAddItemAccess").failed("master.adminUserAddItemAccess").master("adminAccount");
-
+*/
         menuBuilder.construct("master.adminUserAddItemAccess", false);
     }
 

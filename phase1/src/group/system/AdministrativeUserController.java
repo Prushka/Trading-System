@@ -103,18 +103,18 @@ public class AdministrativeUserController {
     }
 
     public Response confirmAddItemRequest(Request request) {
-        String username = request.get("username");
+        Integer username = request.getInt("fine.username");
         Integer item = request.getInt("item");
-        PersonalUser user = administrativeManager.findUser(username);
-        Item itemEntity = itemRepo.get(item);
+        PersonalUser user = personalRepo.get(username);
+        // Item itemEntity = itemRepo.get(item);
         return administrativeManager.confirmAddItemRequest(user, item);
     }
 
     public Response removeItemInUserInventory(Request request) {
-        String username = request.get("username");
+        Integer username = request.getInt("fine.username");
         Integer item = request.getInt("item");
-        PersonalUser user = administrativeManager.findUser(username);
-        Item itemEntity = itemRepo.get(item);
+        PersonalUser user = personalRepo.get(username);
+        // Item itemEntity = itemRepo.get(item);
         return administrativeManager.removeUserItem(user, item);
     }
 

@@ -130,6 +130,10 @@ public class PersonalUser extends User {
         return addToInventoryRequest;
     }
 
+    public void removeAddToInventoryRequest(Integer itemID) {
+        addToInventoryRequest.remove(itemID);
+    }
+
     public void addItemToAddToInventoryRequest(Integer item) {
         addToInventoryRequest.add(item);
     }

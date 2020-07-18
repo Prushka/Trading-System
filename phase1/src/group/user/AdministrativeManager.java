@@ -87,8 +87,14 @@ public class AdministrativeManager {
     }
 
     public Response getNeedToConfirmAddItemUserList(){
+        StringBuilder stringBuilder = new StringBuilder();
+        while (needToConfirmAddItem.hasNext()) {
+            PersonalUser user = needToConfirmAddItem.next();
+            stringBuilder.append("User ID: ").append(user.getUid()).append(" | Request IDs: ")
+                    .append(user.getAddToInventoryRequest()).append("\n");
+        }
         return new Response.Builder(true)
-                .translatable("success.get.addItem", needToConfirmAddItem).build();
+                .translatable("success.get.addItem", stringBuilder.toString()).build();
     }
 
     public Response getUserRequestToUnfreeze() {
@@ -106,9 +112,10 @@ public class AdministrativeManager {
     }
 
     public Response removeUserItem(PersonalUser user, Integer item){
-        user.getInventory().remove(item);
+        user.removeFromInventory(item);
         Item itemEntity = itemRepository.get(item);
         itemRepository.remove(itemEntity);
+        // itemManager.removeAvailable(itemEntity); need to remove from manager available list
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
@@ -125,9 +132,9 @@ public class AdministrativeManager {
 
     public Response confirmAddItemRequest(PersonalUser user, Integer item) {
         user.addToInventory(item);
-        user.getAddToInventoryRequest().remove(item);
-        Item itemEntity = itemRepository.get(item);
-        itemRepository.add(itemEntity);
+        user.removeAddToInventoryRequest(item);
+        // Item itemEntity = itemRepository.get(item);
+        // itemRepository.add(itemEntity);
         return new Response.Builder(true).translatable("success.confirm.AddItem").build();
     }
 

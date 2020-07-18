@@ -78,8 +78,8 @@ public class PersonalUserManager {
         return requestToAddItemToInventory(owner, newitem.getUid());
     }*/
 
-    public Response removeItemFromInventory(PersonalUser user, Item item) {
-        user.removeFromInventory(item.getUid());
+    public Response removeItemFromInventory(PersonalUser user, Integer item) {
+        user.removeFromInventory(item);
         itemRepository.remove(item);
         return new Response.Builder(true).translatable("success.remove.item").build();
     }

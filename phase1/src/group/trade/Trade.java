@@ -207,10 +207,10 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
         if (item1 == null && item2 == null){
             return "This is an empty trade, nothing is traded between UserID: " + user1 + " and UserID: " + user2;
         } else if (item1 == null){
-            return "UserID: " + user1 + " lends to UserID: " + user2 + " at " + this.location + " on " +
+            return "UserID: " + user1 + " borrows from UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         } else if (item2 == null){
-            return "UserID: " + user1 + " borrows from UserID: " + user2 + " at " + this.location + " on " +
+            return "UserID: " + user1 + " lends to UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         } else {
             return "UserID: " + user1 + " trades with UserID: " + user2 + " at " + this.location + " on " +

@@ -227,11 +227,11 @@ public class TradeManager {
             otherUser.removeFromInventory(currTrade.getItem2());
             if (currTrade.getPrevMeeting() == null){
                 initUser.setBorrowCount(initUser.getBorrowCount() + 1);
-                otherUser.setLendCount(initUser.getLendCount() + 1);
+                otherUser.setLendCount(otherUser.getLendCount() + 1);
                 initUser.addRecentTrades(currTrade.getUid());
                 otherUser.addRecentTrades(currTrade.getUid());
                 initUser.setNumTransactions(initUser.getNumTransactions() + 1);
-                otherUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
             }
             if (currTrade.getIsPermanent()) {
                 initUser.addToInventory(currTrade.getItem2());
@@ -240,12 +240,12 @@ public class TradeManager {
             otherUser.removeFromWishList(currTrade.getItem1());
             initUser.removeFromInventory(currTrade.getItem1());
             if (currTrade.getPrevMeeting() == null){
-                otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
+                otherUser.setBorrowCount(otherUser.getBorrowCount() + 1);
                 initUser.setLendCount(initUser.getLendCount() + 1);
                 initUser.addRecentTrades(currTrade.getUid());
                 otherUser.addRecentTrades(currTrade.getUid());
                 initUser.setNumTransactions(initUser.getNumTransactions() + 1);
-                otherUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
             }
             if (currTrade.getIsPermanent()) {
                 otherUser.addToInventory(currTrade.getItem1());
@@ -260,12 +260,12 @@ public class TradeManager {
             if (currTrade.getPrevMeeting() == null){
                 initUser.setBorrowCount(initUser.getBorrowCount() + 1);
                 initUser.setLendCount(initUser.getLendCount() + 1);
-                otherUser.setLendCount(initUser.getLendCount() + 1);
-                otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
+                otherUser.setLendCount(otherUser.getLendCount() + 1);
+                otherUser.setBorrowCount(otherUser.getBorrowCount() + 1);
                 initUser.addRecentTrades(currTrade.getUid());
                 otherUser.addRecentTrades(currTrade.getUid());
                 initUser.setNumTransactions(initUser.getNumTransactions() + 1);
-                otherUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
             }
             if (currTrade.getIsPermanent()) {
                 initUser.addToInventory(currTrade.getItem2());

@@ -16,7 +16,6 @@ import java.util.Map;
 
 public class UserController {
 
-    // TODO: What's wrong **** ***
     private final Repository<PersonalUser> personalRepo;
     private final Repository<Item> itemRepo;
     private final PersonalUserManager personalUserManager;

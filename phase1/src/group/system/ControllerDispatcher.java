@@ -66,10 +66,10 @@ public class ControllerDispatcher implements Shutdownable {
     }
 
     public void dispatchController() {
+        administrativeUserController = new AdministrativeUserController(this);
         supportTicketController = new SupportTicketController(this);
         userController = new UserController(this);
         tradeController = new TradeController(this);
-        administrativeUserController = new AdministrativeUserController(this);
         menuController.viewAccount(userController, tradeController);
         this.menuController.mainMenu(userController, administrativeUserController); // these steps should not be here
         this.menuController.personalUserAccess(userController, supportTicketController);

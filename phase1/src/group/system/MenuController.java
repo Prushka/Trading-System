@@ -41,12 +41,7 @@ public class MenuController {
                 .submit("password",new PasswordEncryption(),null,ValidatingType.invalid, userController::loginUser)
                 .succeeded("master.userAccess").failed("master.account").master("master.account");
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.verification, 2, "loginAdmin")
-                .input("username")
-                .submit("password",new PasswordEncryption(),null,ValidatingType.invalid, administrativeUserController::loginAdminUser)
-                .succeeded("master.adminAccess").failed("master.account").master("master.account");
-
-        menuBuilder.option(User.class, OperationType.add, 3, "register")
+        menuBuilder.option(User.class, OperationType.add, 2, "register")
                 .input("username", validatorFactory.getValidator(ValidatorFactory.Type.USER_NAME))
                 .input("email", new EmailValidator())
                 .input("telephone", validatorFactory.getValidator(ValidatorFactory.Type.TELEPHONE))
@@ -54,7 +49,7 @@ public class MenuController {
                 .succeeded("master.account").failed("master.account").master("master.account");
 
 
-        menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "register")
+        menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "register")
                 .input("username", validatorFactory.getValidator(ValidatorFactory.Type.USER_NAME))
                 .input("email", new EmailValidator())
                 .input("telephone", validatorFactory.getValidator(ValidatorFactory.Type.TELEPHONE))
@@ -214,7 +209,7 @@ public class MenuController {
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccount");*/
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 2, "confirmAdd")
-                .skippableSubmit(controller::loginAdminUser)
+                .skippableSubmit(controller::loginUser)
                 .succeeded("master.adminUserAddItemAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 3, "removeItem")
@@ -223,15 +218,15 @@ public class MenuController {
                 .succeeded("master.adminAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 4, "confirmFreeze")
-                .skippableSubmit(controller::loginAdminUser)
+                .skippableSubmit(controller::loginUser)
                 .succeeded("master.adminUserFreezeAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.add, 5, "confirmUnfreeze")
-                .skippableSubmit(controller::loginAdminUser)
+                .skippableSubmit(controller::loginUser)
                 .succeeded("master.adminUserUnfreezeAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.option(AdministrativeUser.class, OperationType.edit, 6, "limit")
-                .skippableSubmit(controller::loginAdminUser)
+                .skippableSubmit(controller::loginUser)
                 .succeeded("master.adminUserLimitAccess").failed("master.adminAccess").master("adminAccess");
 
         menuBuilder.construct("master.adminAccess", false);

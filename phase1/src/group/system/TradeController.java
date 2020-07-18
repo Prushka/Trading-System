@@ -25,7 +25,7 @@ public class TradeController {
      * Takes requests from a user and turns it into information that can be used by TradeManager
      * @param dispatcher The controller dispatcher
      */
-    public TradeController(ControllerDispatcher dispatcher){
+    public TradeController(ControllerDispatcher dispatcher){ // TODO: put the methods that require these repositories into their managers....
         tradeRepository = dispatcher.tradeRepository;
         itemRepository = dispatcher.itemRepository;
         personalUserRepository = dispatcher.personalUserRepository;
@@ -95,13 +95,9 @@ public class TradeController {
      * @return A description of the success of editing location
      */
     public Response editMeetingLocation(Request request){
-        PersonalUser currUser = userController.getCurrUser();
-
-        currUser = userController.getCurrUser();
-
         int tradeID = request.getInt("tradeID");
         String location = request.get("location");
-        return tradeManager.editLocation(tradeID, currUser.getUid(), location);
+        return tradeManager.editLocation(tradeID, userController.getCurrUser().getUid(), location);
     }
 
     /**

@@ -6,6 +6,7 @@ import group.menu.data.Request;
 import group.menu.data.Response;
 import group.repository.Repository;
 import group.trade.Trade;
+import group.user.AdministrativeManager;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
 import group.user.PersonalUserManager;
@@ -21,11 +22,13 @@ public class UserController {
     private final PersonalUserManager personalUserManager;
     private final ItemManager itemManager;
     private final TradeController tradeController;
+    private final AdministrativeUserController administrativeUserController; // combine them and don't put implementation details in controllers please
 
     public UserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
         itemRepo = dispatcher.itemRepository;
         tradeController = dispatcher.tradeController;
+        administrativeUserController = dispatcher.administrativeUserController;
         personalUserManager = new PersonalUserManager(personalRepo, itemRepo);
         itemManager = new ItemManager(itemRepo);
     }
@@ -33,7 +36,16 @@ public class UserController {
     public Response loginUser(Request request) {
         String username = request.get("username");
         String password = request.get("password");
-        return personalUserManager.verifyLogin(username,password);
+        Response personal = personalUserManager.verifyLogin(username, password);
+        Response admin = administrativeUserController.loginUser(username, password);
+        if (personal.success()) {
+            System.out.println("personal");
+            return personal;
+        } else if (admin.success()) {
+            System.out.println("admin");
+            return admin;
+        }
+        return personal;
     }
 
     public Response registerUser(Request request) {
@@ -44,7 +56,7 @@ public class UserController {
         return personalUserManager.createPersonalUser(username, email, telephone, password);
     }
 
-    public Response removeItemFromInventory(Request request){
+    public Response removeItemFromInventory(Request request) {
         Integer item = request.getInt("itemname");
         Item itemEntity = itemManager.findItemByUid(item);
         Integer itemID = itemEntity.getUid();
@@ -53,7 +65,7 @@ public class UserController {
         return personalUserManager.removeItemFromInventory(getCurrUser(), itemID);
     }
 
-    public Response RequestAddNewItem(Request request){
+    public Response RequestAddNewItem(Request request) {
         String item = request.get("item");
         String description = request.get("description");
         return personalUserManager.requestToAddItemToInventory(getCurrUser(), item, description);
@@ -63,13 +75,13 @@ public class UserController {
         return personalUserManager.UnfreezeRequest(getCurrUser());
     }
 
-    public Response AddItemToWishlist(Request request){
+    public Response AddItemToWishlist(Request request) {
         String item = request.get("itemName");
         String description = request.get("description");
         return personalUserManager.addItemToWishlist(getCurrUser(), item, description);
     }
 
-    public Response removeItemFromWishlist(Request request){
+    public Response removeItemFromWishlist(Request request) {
         Integer item = request.getInt("itemname");
         Item itemEntity = itemManager.findItemByUid(item);
         return personalUserManager.removeItemFromWishlist(getCurrUser(), itemEntity);
@@ -79,8 +91,8 @@ public class UserController {
         return itemManager.browseItemsDisplay();
     }
 
-    public Response browseInventory(Request request){
-        List<Integer> inventory =  personalUserManager.getUserInventory(getCurrUser());
+    public Response browseInventory(Request request) {
+        List<Integer> inventory = personalUserManager.getUserInventory(getCurrUser());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : inventory) {
             Item item = itemRepo.get(i);
@@ -90,7 +102,7 @@ public class UserController {
                 translatable("success.get.inventory", stringBuilder.toString()).build();
     }
 
-    public Response browseWishlist(Request request){
+    public Response browseWishlist(Request request) {
         List<Integer> wish = personalUserManager.getUserWishlist(getCurrUser());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : wish) {
@@ -106,12 +118,12 @@ public class UserController {
         return personalUserManager.getUserIsFrozen(getCurrUser());
 
         //if (currUser.getIsFrozen()){
-            //return new Response.Builder(false).translatable("frozen").build();
+        //return new Response.Builder(false).translatable("frozen").build();
         //}
         //return new Response.Builder(true).translatable("not.frozen").build();
     }
 
-    public Response topTraders(Request request){
+    public Response topTraders(Request request) {
         Map<Integer, Integer> frequentTraders = tradeController.getTradeFrequency(getCurrUser().getUid());
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : frequentTraders.keySet()) {
@@ -122,9 +134,13 @@ public class UserController {
         return new Response.Builder(true).translatable("topTraders", stringBuilder.toString()).build();
     }
 
-    public PersonalUser getCurrUser(){ return personalUserManager.getCurrUser(); }
-    public ItemManager getItemManager(){ return itemManager;}
+    public PersonalUser getCurrUser() {
+        return personalUserManager.getCurrUser();
+    }
 
+    public ItemManager getItemManager() {
+        return itemManager;
+    }
 
 
 }

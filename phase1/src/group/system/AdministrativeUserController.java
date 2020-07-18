@@ -14,21 +14,19 @@ import java.util.Iterator;
 public class AdministrativeUserController {
 
     private final Repository<PersonalUser> personalRepo;
-    private final Repository<AdministrativeUser> adminRepo;
     private final AdministrativeManager administrativeManager;
-    private final Repository<Item> itemRepo;
     private AdministrativeUser currAdmin;
 
     public AdministrativeUserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
-        adminRepo = dispatcher.adminUserRepository;
-        itemRepo = dispatcher.itemRepository;
-        administrativeManager = new AdministrativeManager(adminRepo, personalRepo, dispatcher.tradeRepository, itemRepo);
+        administrativeManager = new AdministrativeManager(dispatcher.adminUserRepository, dispatcher.personalUserRepository, dispatcher.tradeRepository, dispatcher.itemRepository);
     }
 
-    public Response loginAdminUser(Request request) {
-        String username = request.get("username");
-        String password = request.get("password");
+    public Response loginUser(Request request) {
+        return loginUser(request.get("username"), request.get("password"));
+    }
+
+    public Response loginUser(String username, String password) {
         currAdmin = administrativeManager.getCurrAdmin(username, password);
         return administrativeManager.verifyLogin(username, password);
     }
@@ -39,11 +37,7 @@ public class AdministrativeUserController {
         String telephone = request.get("telephone");
         String password = request.get("password");
         boolean isHead;
-        if (request.get("isHead").equalsIgnoreCase("yes")) {
-            isHead = true;
-        } else {
-            isHead = false;
-        }
+        isHead = request.get("isHead").equalsIgnoreCase("yes");
         return administrativeManager.createAdministrator(username, email, telephone, password, isHead);
     }
 
@@ -103,7 +97,7 @@ public class AdministrativeUserController {
     }
 
     public Response confirmAddItemRequest(Request request) {
-        Integer username = request.getInt("fine.username");
+        int username = request.getInt("fine.username");
         Integer item = request.getInt("item");
         PersonalUser user = personalRepo.get(username);
         // Item itemEntity = itemRepo.get(item);
@@ -111,7 +105,7 @@ public class AdministrativeUserController {
     }
 
     public Response removeItemInUserInventory(Request request) {
-        Integer username = request.getInt("fine.username");
+        int username = request.getInt("fine.username");
         Integer item = request.getInt("item");
         PersonalUser user = personalRepo.get(username);
         // Item itemEntity = itemRepo.get(item);

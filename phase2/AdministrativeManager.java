@@ -132,62 +132,60 @@ public class AdministrativeManager {
         return true; //translatable("success.confirm.AddItem").build();
     }
 
-    public Response confirmAddItemRequest(PersonalUser user, Integer item) {
+    public boolean confirmAddItemRequest(PersonalUser user, Integer item) {
         user.addToInventory(item);
         user.removeAddToInventoryRequest(item);
         // Item itemEntity = itemRepository.get(item);
         // itemRepository.add(itemEntity);
-        return new Response.Builder(true).translatable("success.confirm.AddItem").build();
+        return true; //"success.confirm.AddItem";
     }
 
-    public Response confirmAddAllItemRequest(){
+    public boolean confirmAddAllItemRequest(){
         while (needToConfirmAddItem.hasNext()){
             confirmAddAllItemRequestForAUser(needToConfirmAddItem.next());
         }
-        return new Response.Builder(true).translatable("success.confirm.allAddItem").build();
+        return true; //"success.confirm.allAddItem"
     }
 
-    public Response confirmUnfreezeUser(PersonalUser user){
+    public boolean confirmUnfreezeUser(PersonalUser user){
         unfreezeUser(user);
-        return new Response.Builder(true).translatable("success.confirm.unfreeze").build();
+        return true; //"success.confirm.unfreeze"
     }
 
-    public Response confirmUnfreezeAllUser(){
+    public boolean confirmUnfreezeAllUser(){
         while (needToConfirmUnfreeze.hasNext()){
             unfreezeUser(needToConfirmUnfreeze.next());
         }
-        return new Response.Builder(true).translatable("success.confirm.unfreezeAll").build();
+        return true; //"success.confirm.unfreezeAll"
     }
 
-    public Response confirmFreezeUser(PersonalUser user) {
+    public boolean confirmFreezeUser(PersonalUser user) {
         freezeUser(user);
-        return new Response.Builder(true).translatable("success.confirm.freeze").build();
+        return true; //"success.confirm.freeze")
     }
 
-    public Response confirmFreezeAllUser(){
+    public boolean confirmFreezeAllUser(){
         while (needToFreezelist.hasNext()){
             currPersonalUser = needToFreezelist.next();
             freezeUser(currPersonalUser);
         }
-        return new Response.Builder(true).translatable("success.confirm.freezeAll").build();
+        return true; //("success.confirm.freezeAll
     }
 
-    public Response getTransactionLimit(){
-        return new Response.Builder(true).translatable("success.get.tradeLimit", transactionLimit).build();
+    public int getTransactionLimit(){
+        return transactionLimit;
     }
 
-    public Response setTransactionLimit(int limit){
+    public void setTransactionLimit(int limit){
         transactionLimit = limit;
-        return new Response.Builder(true).translatable("success.set.tradeLimit").build();
     }
 
-    public Response getLendBeforeBorrowLimit(){
-        return new Response.Builder(true).translatable("success.get.borrowLimit", lendBeforeBorrow).build();
+    public int getLendBeforeBorrowLimit(){
+        return lendBeforeBorrow;
     }
 
-    public Response setLendBeforeBorrowLimit(int limit){
+    public void setLendBeforeBorrowLimit(int limit){
         lendBeforeBorrow = limit;
-        return new Response.Builder(true).translatable("success.set.borrowLimit").build();
     }
 
     public PersonalUser findUser(String username) {
@@ -195,24 +193,24 @@ public class AdministrativeManager {
                     PersonalUser -> PersonalUser.getUserName().equals(username));
     }
 
-    public Response findUserForAdmin (String username) {
+    public boolean findUserForAdmin (String username) {
         if (personalUserRepository.ifExists(
                 PersonalUser -> PersonalUser.getUserName().equals(username))) {
             PersonalUser foundUser = personalUserRepository.getFirst(
                     PersonalUser -> PersonalUser.getUserName().equals(username));
-            return new Response.Builder(true).translatable("success.find.admin", foundUser).build();
+            return true; //).translatable("success.find.admin", foundUser).build();
         }
-        return new Response.Builder(false).translatable("failed.find.user").build();
+        return false; //).translatable("failed.find.user").build();
     }
 
-    public Response findAdminUser(String username) {
+    public boolean findAdminUser(String username) {
         if (administrators.ifExists(
                 AdministrativeUser -> AdministrativeUser.getUserName().equals(username))) {
             AdministrativeUser foundAdmin = administrators.getFirst(
                     AdministrativeUser -> AdministrativeUser.getUserName().equals(username));
-            return new Response.Builder(true).translatable("success.find.admin", foundAdmin).build();
+            return true; //).translatable("success.find.admin", foundAdmin).build();
         }
-        return new Response.Builder(false).translatable("failed.find.admin").build();
+        return false; //).translatable("failed.find.admin").build();
     }
 
     public void incompleteTransactions(){

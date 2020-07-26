@@ -10,11 +10,11 @@ public interface UniqueId {
     /**
      * @param value the unique id
      */
-    void setUid(long value);
+    void setUid(int value);
 
     /**
      * @return the unique id
      */
-    long getUid();
+    int getUid();
 
 }

@@ -54,7 +54,7 @@ public abstract class Property implements Savable {
      */
     public void saveDefault() throws IOException {
         if (!getFile().exists()) {
-            System.out.println("file: " + getFile() + " not exist");
+            // System.out.println("file: " + getFile() + " not exist");
             InputStream inputStream = getResource();
             assert inputStream != null;
             if (getFile().getParent() != null) {
@@ -114,6 +114,23 @@ public abstract class Property implements Savable {
      */
     public int getInt(String key, int defaultValue) {
         return Integer.parseInt(properties.getProperty(key, String.valueOf(defaultValue)));
+    }
+
+    /**
+     * @param key the key to lookup
+     * @return the value in boolean
+     */
+    public boolean getBoolean(String key) {
+        return Boolean.parseBoolean(properties.getProperty(key));
+    }
+
+    /**
+     * @param key          the key to lookup
+     * @param defaultValue the default value if the value is missing
+     * @return the value in boolean
+     */
+    public boolean getBoolean(String key, int defaultValue) {
+        return Boolean.parseBoolean(properties.getProperty(key, String.valueOf(defaultValue)));
     }
 
     /**

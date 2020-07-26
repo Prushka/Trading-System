@@ -1,18 +1,22 @@
 package group.trade;
 
 import group.config.property.TradeProperties;
+import group.item.ItemManager;
 import group.repository.Repository;
 import group.user.PersonalUser;
 import group.menu.data.Response;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
-// TODO: item skip
 public class TradeManager {
     private final Integer editLimit;
     private final Integer timeLimit;
     private final Repository<Trade> tradeRepository;
     private final Repository<PersonalUser> userRepository;
+    private final ItemManager itemManager;
 
     /**
      * Creates, confirms and edits trades
@@ -22,12 +26,13 @@ public class TradeManager {
      *                        how many days until temporary trades must be reversed)
      */
     public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser> userRepository, TradeProperties
-            tradeProperties) {
+            tradeProperties, ItemManager itemManager) {
         // Default Values for trade information stored in tradeProperties:
-        editLimit = Integer.parseInt(tradeProperties.get("editLimit"));
-        timeLimit = Integer.parseInt(tradeProperties.get("timeLimit"));
+        editLimit = tradeProperties.getInt("editLimit");
+        timeLimit = tradeProperties.getInt("timeLimit");
         this.tradeRepository = tradeRepository;
         this.userRepository = userRepository;
+        this.itemManager = itemManager;
     }
 
     /**
@@ -42,24 +47,19 @@ public class TradeManager {
      * @param prevMeeting The trade ID of the previous meeting
      * @return A response object of the representation of the trade or a description of why creation failed
      */
-    public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
-                                LocalDateTime dateAndTime, String location, Long prevMeeting) {
-        // TODO: Uncomment conditions & remove prompts for ID when user's are implemented in the controller
+    public Response createTrade(int user1, int user2, Integer item1, Integer item2, Boolean isPermanent,
+                                LocalDateTime dateAndTime, String location, Integer prevMeeting) {
         // Get users from Repository
-        // PersonalUser trader1 = userRepository.get(user1);
-        // PersonalUser trader2 = userRepository.get(user2);
+        PersonalUser trader1 = userRepository.get(user1);
+        PersonalUser trader2 = userRepository.get(user2);
 
-        // Check if items are in their inventories
-        //if ((item1.equals(null) || trader1.getInventory().contains(item1)) && (item2.equals(null) ||
-        //      trader2.getInventory().contains(item2))) {
         Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent, dateAndTime, location, prevMeeting);
         tradeRepository.add(newTrade);
-        // trader1.addToTrades(newTrade.getUid());
-        // trader2.addToTrades(newTrade.getUid());
+        trader1.addToTrades(newTrade.getUid());
+        trader2.addToTrades(newTrade.getUid());
         return tradeRepresentation(newTrade);
-        //}
-        //return new Response.Builder(false).translatable("failed.create.trade").build();
     }
+
 
     /**
      * Create a trade trade meeting to trade items
@@ -72,13 +72,13 @@ public class TradeManager {
      * @param location The location of where this trade will take place
      * @return A response object of the representation of the trade or a description of why creation failed
      */
-    public Response createTrade(long user1, long user2, long item1, long item2, Boolean isPermanent,
+    public Response createTrade(int user1, int user2, Integer item1, Integer item2, Boolean isPermanent,
                                 LocalDateTime dateAndTime, String location){
         return createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location, null);
     }
 
     /**
-     * Edit date and time of a trade
+     * Edit date and time of a trade and cancels the trade if the users edited too much
      * @param tradeID The trade ID of the trade to be edited
      * @param editingUser The user ID of who wishes to edit this trade
      * @param dateAndTime The new date and time that this trade will take place
@@ -111,7 +111,7 @@ public class TradeManager {
     }
 
     /**
-     Edit location of a trade
+     Edit location of a trade and cancels the trade if the users edited too much
      * @param tradeID The trade ID of the trade to be edited
      * @param editingUser The user ID of who wishes to edit this trade
      * @param location The new location of where this trade will take place
@@ -143,8 +143,18 @@ public class TradeManager {
         return tradeRepresentation(currTrade);
     }
 
+    // Removes a trade from user's trade list and the trade repository
+    private Response cancelTrades(Trade currTrade) {
+        PersonalUser trader1 = userRepository.get(currTrade.getUser1());
+        PersonalUser trader2 = userRepository.get(currTrade.getUser1());
+        trader1.removeFromTrade(currTrade.getUid());
+        trader2.removeFromTrade(currTrade.getUid());
+        tradeRepository.remove(currTrade);
+        return new Response.Builder(false).translatable("failed.cancel.trade").build();
+    }
+
     /**
-     * Confirm a trade will take place
+     * Confirm a trade will take place and opens the trade
      * @param tradeID The trade ID of the trade to be confirmed
      * @param editingUser The user ID of who wishes to confirm to this trade
      * @return A response object that details the success or failure of this action
@@ -164,11 +174,7 @@ public class TradeManager {
         return openTrade(tradeID);
     }
 
-    /**
-     * Opens a trade
-     * @param tradeID he trade ID of the trade to be opened
-     * @return A response that details the state of confirming the trade meeting
-     */
+    // Opens a trade and closes the previous trade if applicable
     private Response openTrade(int tradeID){
         // Get trade from repository
         Trade currTrade = tradeRepository.get(tradeID);
@@ -191,7 +197,8 @@ public class TradeManager {
     }
 
     /**
-     * Confirm that a trade has occurred
+     * Confirm that a trade has occurred and completes a trade by making the trades and closing it or scheduling another
+     * meeting.
      * @param tradeID The trade ID of the trade to be confirmed
      * @param editingUser The user ID of who wishes to confirmed this trade
      * @return A response object that details the success or failure of this action
@@ -211,11 +218,65 @@ public class TradeManager {
         return completeTrade(tradeID);
     }
 
-    /**
-     * Completes a trade by closing it or scheduling another meeting.
-     * @param tradeID he trade ID of the trade to be completed
-     * @return A response that details the state of confirming the trade meeting
-     */
+    // Makes a one-way or two-way trade
+    private void makeTrades(Trade currTrade) {
+        PersonalUser initUser = userRepository.get(currTrade.getUser1());
+        PersonalUser otherUser = userRepository.get(currTrade.getUser2());
+        if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
+            initUser.removeFromWishList(currTrade.getItem2());
+            otherUser.removeFromInventory(currTrade.getItem2());
+            if (currTrade.getPrevMeeting() == null){
+                initUser.setBorrowCount(initUser.getBorrowCount() + 1);
+                otherUser.setLendCount(otherUser.getLendCount() + 1);
+                initUser.addRecentTrades(currTrade.getUid());
+                otherUser.addRecentTrades(currTrade.getUid());
+                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
+            }
+            if (currTrade.getIsPermanent()) {
+                initUser.addToInventory(currTrade.getItem2());
+            }
+        } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
+            otherUser.removeFromWishList(currTrade.getItem1());
+            initUser.removeFromInventory(currTrade.getItem1());
+            if (currTrade.getPrevMeeting() == null){
+                otherUser.setBorrowCount(otherUser.getBorrowCount() + 1);
+                initUser.setLendCount(initUser.getLendCount() + 1);
+                initUser.addRecentTrades(currTrade.getUid());
+                otherUser.addRecentTrades(currTrade.getUid());
+                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
+            }
+            if (currTrade.getIsPermanent()) {
+                otherUser.addToInventory(currTrade.getItem1());
+            }
+        } else {
+            initUser.removeFromWishList(currTrade.getItem2());
+            initUser.removeFromInventory(currTrade.getItem1());
+            otherUser.removeFromWishList(currTrade.getItem1());
+            otherUser.removeFromInventory(currTrade.getItem2());
+            itemManager.removeAvailable(currTrade.getItem1());
+            itemManager.removeAvailable(currTrade.getItem2());
+            if (currTrade.getPrevMeeting() == null){
+                initUser.setBorrowCount(initUser.getBorrowCount() + 1);
+                initUser.setLendCount(initUser.getLendCount() + 1);
+                otherUser.setLendCount(otherUser.getLendCount() + 1);
+                otherUser.setBorrowCount(otherUser.getBorrowCount() + 1);
+                initUser.addRecentTrades(currTrade.getUid());
+                otherUser.addRecentTrades(currTrade.getUid());
+                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
+                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
+            }
+            if (currTrade.getIsPermanent()) {
+                initUser.addToInventory(currTrade.getItem2());
+                otherUser.addToInventory(currTrade.getItem1());
+                itemManager.addAvailable(currTrade.getItem1());
+                itemManager.addAvailable(currTrade.getItem2());
+            }
+        }
+    }
+
+    // Completes a trade by making trades or scheduling second meeting
     private Response completeTrade(int tradeID) {
         // Get trade from repository
         Trade currTrade = tradeRepository.get(tradeID);
@@ -235,79 +296,46 @@ public class TradeManager {
         }
     }
 
-    /**
-     * Makes trades between users
-     * @param currTrade The trade object
-     */
-    private void makeTrades(Trade currTrade) {
-        PersonalUser initUser = userRepository.get(currTrade.getUser1());
-        PersonalUser otherUser = userRepository.get(currTrade.getUser2());
-        if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
-            initUser.setBorrowCount(initUser.getBorrowCount() + 1);
-            initUser.removeFromWishList(currTrade.getItem2());
-            otherUser.setLendCount(initUser.getLendCount() + 1);
-            otherUser.removeFromInventory(currTrade.getItem2());
-            if (currTrade.getIsPermanent()) {
-                initUser.addToInventory(currTrade.getItem2());
-            }
-        } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
-            otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
-            otherUser.removeFromWishList(currTrade.getItem1());
-            initUser.setLendCount(initUser.getLendCount() + 1);
-            initUser.removeFromInventory(currTrade.getItem1());
-            if (currTrade.getIsPermanent()) {
-                otherUser.addToInventory(currTrade.getItem2());
-            }
-        } else {
-            initUser.setBorrowCount(initUser.getBorrowCount() + 1);
-            initUser.setLendCount(initUser.getLendCount() + 1);
-            initUser.removeFromWishList(currTrade.getItem2());
-            initUser.removeFromInventory(currTrade.getItem1());
-            otherUser.setLendCount(initUser.getLendCount() + 1);
-            otherUser.setBorrowCount(initUser.getBorrowCount() + 1);
-            otherUser.removeFromWishList(currTrade.getItem1());
-            otherUser.removeFromInventory(currTrade.getItem2());
-            if (currTrade.getIsPermanent()) {
-                initUser.addToInventory(currTrade.getItem2());
-                otherUser.addToInventory(currTrade.getItem1());
-            }
-        }
-    }
-
-    /**
-     * Cancels a trade
-     * @param currTrade A trade object
-     * @return A response object that describes the cancellation of this trade
-     */
-    private Response cancelTrades(Trade currTrade) {
-        PersonalUser trader1 = userRepository.get(currTrade.getUser1());
-        PersonalUser trader2 = userRepository.get(currTrade.getUser1());
-        trader1.removeFromTrade(currTrade.getUid());
-        trader2.removeFromTrade(currTrade.getUid());
-        tradeRepository.remove(currTrade);
-        return new Response.Builder(false).translatable("failed.cancel.trade").build();
-    }
-
-    /**
-     * Creates a second trade meeting
-     * @param currTrade The first trade meeting
-     */
+    // Schedules a second trade meeting
     private void scheduleTradeBack(Trade currTrade) {
         LocalDateTime newDateAndTime = currTrade.getDateAndTime().plusMonths(timeLimit);
         createTrade(currTrade.getUser1(), currTrade.getUser1(), currTrade.getItem2(), currTrade.getItem1(),
                 true, newDateAndTime, currTrade.getLocation(), currTrade.getUid());
     }
 
-    /**
-     * Represents a trade in a string
-     * @param trade A trade to be converted
-     * @return A response object that corresponds with a string representation of a Trade
-     */
+    // Represents a trade in a string
     private Response tradeRepresentation(Trade trade) {
         return new Response.Builder(true).
-                translatable("submit.trade.represent", trade.getUid(), trade.getUser1(), trade.getUser2(),
-                        trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation())
-                .build();
+                translatable("submit.trade.represent", trade.getUid(), trade.getUser1(),
+                        trade.getUser2(), trade.getIsPermanent(), trade.getDateAndTime(), trade.getLocation()).build();
+    }
+
+
+    /**
+     * @param user The user ID
+     * @return The frequency this user trades with other users
+     */
+    public Map<Integer, Integer> getTradeFrequency(int user) {
+        Map<Integer, Integer> tradeFrequency = new HashMap<>();
+        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getUser1() == user ||
+                entity.getUser2() == user);
+        while (tradeIterator.hasNext()) {
+            Trade trade = tradeIterator.next();
+            if (user == trade.getUser1()) {
+                putOrAppend(tradeFrequency, trade.getUser2());
+            } else {
+                putOrAppend(tradeFrequency, trade.getUser1());
+            }
+        }
+        return tradeFrequency;
+    }
+
+    private void putOrAppend(Map<Integer, Integer> map, Integer key) {
+        if (map.containsKey(key)) {
+            map.put(key, map.get(key) + 1);
+        } else {
+            map.put(key, 1);
+        }
     }
 }
 

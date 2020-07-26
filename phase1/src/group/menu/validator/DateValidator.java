@@ -5,6 +5,10 @@ import java.time.LocalDateTime;
 
 public class DateValidator implements Validator {
 
+    /**
+     * @param input String input
+     * @return True iff this date is after the current time and can be turned into a proper date
+     */
     @Override
     public boolean validate(String input) {
         String[] data = input.split("-");

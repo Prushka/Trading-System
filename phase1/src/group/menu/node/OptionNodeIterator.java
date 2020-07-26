@@ -14,13 +14,13 @@ public class OptionNodeIterator implements Iterator<Node> {
      */
     private Node current;
 
+    private int initialPosition = -1;
+
     /**
      * @param optionNode The entry OptionNode
      */
     public OptionNodeIterator(OptionNode optionNode) {
-        Node placeHolder = new ResponseNode("placeholder");
-        placeHolder.setChild(optionNode);
-        this.current = placeHolder;
+        this.current = optionNode;
     }
 
     /**
@@ -37,6 +37,10 @@ public class OptionNodeIterator implements Iterator<Node> {
      */
     @Override
     public Node next() {
+        if (initialPosition == -1) {
+            initialPosition++;
+            return current;
+        }
         current = current.getChild();
         return current;
     }

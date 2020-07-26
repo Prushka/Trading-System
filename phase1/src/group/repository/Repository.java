@@ -7,12 +7,12 @@ import java.util.Iterator;
 /**
  * The interface to be used in use case methods.<p>
  * Contains only list related methods for the Repository.<p>
- * The interface doesn't contain any file related operations.
+ * The interface does not contain any file / gateway related operations.
  *
  * @param <T> the entity type to be used
  * @author Dan Lyu
  */
-// TODO: fix the long / int unique id problem
+
 public interface Repository<T extends UniqueId> {
 
     /**
@@ -21,20 +21,14 @@ public interface Repository<T extends UniqueId> {
     void add(T entity);
 
     /**
-     * Gets the entity by unique id. List doesn't allow long size.
-     * The long unique id decision was made as a convention earlier.
-     * The implementation may change in the future.
+     * Gets the entity by unique id. List doesn't allow int size.
+     * The int unique id decision was made as a convention earlier.
+     * The implementation may change in the future to use Long.
      *
      * @param id the unique id of this entity
      * @return the entity
      */
     T get(int id);
-
-    /**
-     * @param id the unique id of this entity
-     * @return the entity
-     */
-    T get(Long id);
 
     /**
      * @param entity the entity to be checked
@@ -49,19 +43,13 @@ public interface Repository<T extends UniqueId> {
     boolean ifExists(Filter<T> filter);
 
     /**
-     * @param id the unique id to be found
-     * @return <code>true</code> if the entity with id exists
-     */
-    boolean ifExists(int id);
-
-    /**
-     * The long unique id decision was made as a convention earlier.
-     * The implementation may change in the future.
+     * The int unique id decision was made as a convention earlier.
+     * The implementation may change in the future to use Long.
      *
      * @param id the unique id to be found
      * @return <code>true</code> if the entity with id exists
      */
-    boolean ifExists(Long id);
+    boolean ifExists(int id);
 
     /**
      * @param filter the filter to be used to match results
@@ -103,10 +91,21 @@ public interface Repository<T extends UniqueId> {
     Iterator<T> iterator(Filter<T> filter);
 
     /**
+     * @return the iterator that iterates every element in the Repository
+     */
+    Iterator<T> iterator();
+
+    /**
      * @param filter the filter used to match the result
      * @param mapper A {@link ResponseMapper} used to directly map the records in iterator to a Response Object
      * @return the Response object
      */
     Response filterResponse(Filter<T> filter, ResponseMapper<T> mapper);
+
+    /**
+     * @param mapper the mapper used to map the iterator results to a Response object
+     * @return the Response object
+     */
+    Response filterResponse(ResponseMapper<T> mapper);
 
 }

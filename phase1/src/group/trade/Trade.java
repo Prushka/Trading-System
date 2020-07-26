@@ -9,18 +9,18 @@ import java.time.LocalDateTime;
 
 public class Trade extends MappableBase implements CSVMappable, UniqueId {
     // Trading Details
-    private Long tradeID;
-    private Long user1;
-    private Long user2;
+    private Integer tradeID;
+    private Integer user1;
+    private Integer user2;
     private Integer user1Edits;
     private Integer user2Edits;
     private Boolean user1Confirms;
     private Boolean user2Confirms;
-    private Long prevMeeting;
+    private Integer prevMeeting;
 
     // Item Details
-    private Long item1;
-    private Long item2;
+    private Integer item1;
+    private Integer item2;
     private Boolean isPermanent;
     private Boolean isClosed;
 
@@ -28,6 +28,9 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     private LocalDateTime dateAndTime;
     private String location;
 
+    /**
+     * @param record Representation of a trade's parameters
+     */
     // Needed to implement Mappable Base
     public Trade(List<String> record){
         super(record);
@@ -44,8 +47,8 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
      * @param location Where this trade occurs
      * @param prevMeeting The previous trade meeting
      */
-    public Trade(Long user1, Long user2, Long item1, Long item2, Boolean isPermanent, LocalDateTime dateAndTime,
-                 String location, Long prevMeeting){
+    public Trade(Integer user1, Integer user2, Integer item1, Integer item2, Boolean isPermanent, LocalDateTime dateAndTime,
+                 String location, Integer prevMeeting){
         this.user1 =  user1;
         this.user2 =  user2;
         this.item1 =  item1;
@@ -63,35 +66,137 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
         this.isClosed = true;
     }
 
-    // Getters
-    @Override
-    public long getUid() { return this.tradeID;}
-    public long getUser1(){ return user1;}
-    public long getUser2(){ return user2;}
-    public int getUser1Edits(){ return user1Edits;}
-    public int getUser2Edits(){ return user2Edits;}
-    public boolean getUser1Confirms(){ return user1Confirms;}
-    public boolean getUser2Confirms(){ return user2Confirms;}
-    public Long getItem1(){ return item1;}
-    public Long getItem2(){ return item2;}
-    public boolean getIsPermanent(){ return isPermanent;}
-    public boolean getIsClosed(){ return isClosed;}
-    public LocalDateTime getDateAndTime(){ return dateAndTime;}
-    public String getLocation(){ return location;}
-    public Long getPrevMeeting(){ return prevMeeting;}
+    // GETTERS
 
-    // Setters
+    /**
+     * @return The trade ID of this trade
+     */
     @Override
-    public void setUid(long new_uid) { this.tradeID = new_uid;}
+    public int getUid() { return this.tradeID;}
+
+    /**
+     * @return The user ID of the initiator
+     */
+    public int getUser1(){ return user1;}
+
+    /**
+     * @return The user ID of the respondent
+     */
+    public int getUser2(){ return user2;}
+
+    /**
+     * @return The amount of times the initiator has edited
+     */
+    public int getUser1Edits(){ return user1Edits;}
+
+    /**
+     * @return The amount of times the respondent has edited
+     */
+    public int getUser2Edits(){ return user2Edits;}
+
+    /**
+     * @return True iff the initiator has confirmed to the opening/ completion of this trade
+     */
+    public boolean getUser1Confirms(){ return user1Confirms;}
+
+    /**
+     * @return True iff the respondent has confirmed to the opening/ completion of this trade
+     */
+    public boolean getUser2Confirms(){ return user2Confirms;}
+
+    /**
+     * @return The item ID of what the initiator wants to lend to the respondent
+     */
+    public Integer getItem1(){ return item1;}
+
+    /**
+     * @return The item ID of what the initiator wants to borrow from the respondent
+     */
+    public Integer getItem2(){ return item2;}
+
+    /**
+     * @return True iff this trade is permanent
+     */
+    public boolean getIsPermanent(){ return isPermanent;}
+
+    /**
+     * @return True iff this trade is closed
+     */
+    public boolean getIsClosed(){ return isClosed;}
+
+    /**
+     * @return The date and time of this trade
+     */
+    public LocalDateTime getDateAndTime(){ return dateAndTime;}
+
+    /**
+     * @return The location of this trade
+     */
+    public String getLocation(){ return location;}
+
+    /**
+     * @return The trade ID of the previous trade if applicable
+     */
+    public Integer getPrevMeeting(){ return prevMeeting;}
+
+    // SETTERS
+
+    /**
+     * @param new_uid The new trade ID for this trade
+     */
+    @Override
+    public void setUid(int new_uid) { this.tradeID = new_uid;}
+
+    /**
+     * Increases the initiator's edits by one.
+     */
     public void increaseUser1Edits(){ user1Edits++;}
+
+    /**
+     * Increase the initiator's edits by one.
+     */
     public void increaseUser2Edits(){ user2Edits++;}
+
+    /**
+     * Confirms the initiator's commitment to the trade/ verification of completion
+     */
     public void confirmUser1(){ user1Confirms = true;}
+
+    /**
+     * Confirms the respondent's commitment to the trade/ verification of completion
+     */
     public void confirmUser2(){ user2Confirms = true;}
+
+    /**
+     * Un-confirms the initiator's commitment to the trade/ verification of completion
+     */
     public void unconfirmUser1(){ user1Confirms = false;}
+
+    /**
+     * Un-confirms the respondent's commitment to the trade/ verification of completion
+     */
     public void unconfirmUser2(){ user2Confirms = false;}
+
+    /**
+     * Sets the state of this trade to open
+     */
     public void openTrade(){ isClosed = false;}
+
+    /**
+     * Sets the state of this trade to close
+     */
     public void closeTrade(){ isClosed = true;}
+
+    /**
+     * Sets a trade to a new date and time
+     * @param newDateAndTime The new date and time of this trade
+     */
     public void setDateAndTime(LocalDateTime newDateAndTime){ dateAndTime = newDateAndTime;}
+
+    /**
+     * Sets a trade to a new location
+     * @param newLocation The new location of this trade
+     */
     public void setLocation(String newLocation){ location = newLocation;}
 
     /**
@@ -100,12 +205,12 @@ public class Trade extends MappableBase implements CSVMappable, UniqueId {
     @Override
     public String toString() {
         if (item1 == null && item2 == null){
-            return "This is an invalid trade.";
+            return "This is an empty trade, nothing is traded between UserID: " + user1 + " and UserID: " + user2;
         } else if (item1 == null){
-            return "UserID: " + user1 + " lends to UserID: " + user2 + " at " + this.location + " on " +
+            return "UserID: " + user1 + " borrows from UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         } else if (item2 == null){
-            return "UserID: " + user1 + " borrows from UserID: " + user2 + " at " + this.location + " on " +
+            return "UserID: " + user1 + " lends to UserID: " + user2 + " at " + this.location + " on " +
                     this.dateAndTime;
         } else {
             return "UserID: " + user1 + " trades with UserID: " + user2 + " at " + this.location + " on " +

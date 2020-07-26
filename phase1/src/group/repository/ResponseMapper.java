@@ -8,7 +8,7 @@ import group.menu.data.Response;
  *
  * @param <T> the entity this ResponseMapper deals with
  * @author Dan Lyu
- * @see RepositoryBase#filterResponse(Filter, ResponseMapper)
+ * @see RepositorySaveImpl#filterResponse(Filter, ResponseMapper)
  */
 
 @FunctionalInterface

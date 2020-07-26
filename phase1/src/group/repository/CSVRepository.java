@@ -19,10 +19,9 @@ import java.util.logging.Level;
  * @param <T> The entity this Repository deals with
  * @author Dan Lyu
  * @author lecture code, Logging project
- * @see RepositorySavable
- * @see RepositoryBase
+ * @see RepositorySaveImpl
  */
-public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryBase<T> {
+public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositorySaveImpl<T> {
 
     /**
      * The factory used to instantiate a mappable object using fixed parameter <code>List</code>.
@@ -67,7 +66,7 @@ public class CSVRepository<T extends CSVMappable & UniqueId> extends RepositoryB
                 data.add(null);
                 continue;
             }
-            record = recordString.split(",");
+            record = recordString.split(",",-1);
             data.add(factory.get(Arrays.asList(record)));
         }
         scanner.close();

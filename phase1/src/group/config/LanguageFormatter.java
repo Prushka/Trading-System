@@ -11,6 +11,7 @@ import java.util.logging.LogRecord;
  * The abstract formatter used to log information using LanguageProperties.
  *
  * @author Dan Lyu
+ * @author shakram02 - <a href="https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println">print color in console</a>
  */
 abstract class LanguageFormatter extends Formatter {
 

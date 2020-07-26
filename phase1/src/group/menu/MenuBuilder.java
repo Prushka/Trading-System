@@ -77,7 +77,7 @@ public class MenuBuilder {
         public OptionNodeBuilder(Class<?> clazz, OperationType type, int id, String addon) {
             this.clazz = clazz;
             this.type = type;
-            optionNode = new OptionNode(getTranslatable("option", addon), id);
+            optionNode = new OptionNode.OptionNodeBuilder(getTranslatable("option", addon)).id(id).build();
             currentNode = optionNode;
         }
 
@@ -92,7 +92,7 @@ public class MenuBuilder {
          */
         public OptionNodeBuilder input(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType) {
             String translatable = getTranslatable("input", key);
-            InputNode inputNode = new InputNode.Builder(translatable, key)
+            InputNode inputNode = new InputNode.InputNodeBuilder(translatable, key)
                     .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
             currentNode.setChild(inputNode);
             currentNode = inputNode;
@@ -184,6 +184,14 @@ public class MenuBuilder {
         }
 
         /**
+         * @return A submit node that will be skipped but still call the handler
+         */
+        public SubmitNodeBuilder skippableSubmit(RequestHandler requestHandler) {
+            submitNodeBuilder = new SubmitNodeBuilder(requestHandler);
+            return submitNodeBuilder;
+        }
+
+        /**
          * Returns a String identifier for language use.<p>
          * The identifier will be nodeType.operationType.operatingClassSimpleName(with dot splitting all upper case letters)(.addon).
          *
@@ -207,7 +215,7 @@ public class MenuBuilder {
             /**
              * The MasterOptionNodePool used for this SubmitNode, will have all placeholders and be fed by the actual MasterOptionNodes
              */
-            private final MasterOptionNodePool masterOptionNodePool;
+            private final MasterOptionNodePool masterOptionNodePool = new MasterOptionNodePool();
 
             /**
              * The SubmitNode this SubmitNodeBuilder is building
@@ -222,12 +230,14 @@ public class MenuBuilder {
              * @param requestHandler the handler to parse request and expect response
              */
             public SubmitNodeBuilder(String key, InputPreProcessor processor, Validator validator, ValidatingType validatingType, RequestHandler requestHandler) {
-                String translatable = getTranslatable("submit", key);
-                SubmitNode submitNode = new SubmitNode.Builder(translatable, key, requestHandler, persistentRequest)
+                submitNode = new SubmitNode.SubmitNodeBuilder(getTranslatable("submit", key), key, requestHandler, persistentRequest)
                         .inputProcessor(processor).validator(validator, getTranslatable(validatingType.toString(), key)).build();
                 currentNode.setChild(submitNode);
-                this.submitNode = submitNode;
-                masterOptionNodePool = new MasterOptionNodePool();
+            }
+
+            public SubmitNodeBuilder(RequestHandler requestHandler) {
+                submitNode = new SubmitNode.SubmitNodeBuilder(requestHandler, persistentRequest).build();
+                currentNode.setChild(submitNode);
             }
 
             /**
@@ -279,7 +289,7 @@ public class MenuBuilder {
      * The operation types this option stands for, used only as an identifier for language
      */
     public enum OperationType {
-        edit, add, query, remove, verification
+        edit, add, query, remove, verification, view
     }
 
     /**
@@ -320,7 +330,11 @@ public class MenuBuilder {
      */
     public OptionNodeBuilder option(Class<?> clazz, OperationType type, int id, String addon) {
         OptionNodeBuilder optionNodeBuilder = new OptionNodeBuilder(clazz, type, id, addon);
-        optionNodePoolCache.put(optionNodeBuilder.optionNode.getTranslatable(), optionNodeBuilder);
+        String translatable = optionNodeBuilder.optionNode.getTranslatable();
+        if (optionNodePoolCache.containsKey(translatable) || optionNodePool.containsKey(translatable)) {
+            System.err.println("My dear group member: We have two option nodes that have the same identifier: " + translatable + "\nPlease FIX THIS.");
+        }
+        optionNodePoolCache.put(translatable, optionNodeBuilder);
         return optionNodeBuilder;
     }
 
@@ -354,7 +368,7 @@ public class MenuBuilder {
      * @return the MasterOptionNode built
      */
     public MasterOptionNode construct(String masterNodeIdentifier, boolean isEntryNode) {
-        MasterOptionNode.Builder masterBuilder = new MasterOptionNode.Builder(masterNodeIdentifier);
+        MasterOptionNode.MasterOptionNodeBuilder masterBuilder = new MasterOptionNode.MasterOptionNodeBuilder(masterNodeIdentifier);
         for (OptionNodeBuilder factory : optionNodePoolCache.values()) {
             masterBuilder.addChild(factory.optionNode);
         }

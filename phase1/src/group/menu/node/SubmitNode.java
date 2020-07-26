@@ -6,8 +6,6 @@ import group.menu.data.Request;
 import group.menu.data.Response;
 import group.menu.handler.RequestHandler;
 
-import java.util.Optional;
-
 /**
  * A node that generates Request using parent Nodes, and will further generate a ResponseNode after parsing Request using an injected {@link RequestHandler}.<p>
  * This node accepts input and displays on its own.
@@ -22,12 +20,10 @@ public class SubmitNode extends InputNode {
      */
     private final RequestHandler handler;
 
+
     /**
-     * The Node used when the Response returned by {@link #handler} doesn't represent a successful state
+     * The pool used to keep all available master nodes for this SubmitNode
      */
-    private final Node failedResultNode;
-
-
     private MasterOptionNodePool masterOptionNodePool;
 
     /**
@@ -36,15 +32,23 @@ public class SubmitNode extends InputNode {
     private final PersistentRequest persistentRequest;
 
     /**
-     * Constructs a SubmitNode from a {@link SubmitNode.Builder}
-     *
-     * @param builder the {@link SubmitNode.Builder}
+     * When skippable is <code>true</code>:<p>
+     * This node will not have its original Response<p>
+     * This node will be skipped once encountered<p>
+     * This node's RequestHandler will still be executed and its Response will be printed
      */
-    SubmitNode(Builder builder) {
+    private final boolean skippable;
+
+    /**
+     * Constructs a SubmitNode from a {@link SubmitNodeBuilder}
+     *
+     * @param builder the {@link SubmitNodeBuilder}
+     */
+    SubmitNode(SubmitNodeBuilder builder) {
         super(builder);
         handler = builder.handler;
-        failedResultNode = builder.failedResultNode;
         persistentRequest = builder.persistentRequest;
+        skippable = builder.skippable;
     }
 
     /**
@@ -73,9 +77,13 @@ public class SubmitNode extends InputNode {
      */
     @Override
     public Node parseInput(String input) {
-        inputPreProcessing(input);
-        Optional<Node> validateResult = validate();
-        return validateResult.orElseGet(() -> parseResponse(handler.handle(getRequest())));
+        inputPreprocess(input);
+        Node node = super.parseInput(input);
+        if (node == getChild()) {
+            return parseResponse(handler.handle(getRequest()));
+        } else {
+            return node;
+        }
     }
 
     /**
@@ -87,27 +95,27 @@ public class SubmitNode extends InputNode {
      * @return the node to navigate to after parsing user input
      */
     private Node parseResponse(Response response) {
-        ResponseNode responseNode = new ResponseNode.Builder(response).build();
         Node realChild;
         if (response.getNextMasterNodeIdentifier() != null) {
             realChild = masterOptionNodePool.getMasterOptionNode(response.getNextMasterNodeIdentifier());
         } else if (response.success()) {
-            realChild = getChild();
+            realChild = masterOptionNodePool.getSucceeded();
             if (response.getPersistentKey() != null) {
                 persistentRequest.addCachedRequest(response.getPersistentKey(), getRequest());
             }
         } else {
-            realChild = failedResultNode;
+            realChild = masterOptionNodePool.getFailed();
         }
-        if (realChild == null) { // the next master node identifier doesn't exist in Response object, use the response success state and node from pool
-            if (response.success()) {
-                realChild = masterOptionNodePool.getSucceeded();
-            } else {
-                realChild = masterOptionNodePool.getFailed();
-            }
-        }
-        responseNode.setChild(realChild);
-        return responseNode;
+
+        response.display();
+        return realChild;
+    }
+
+    /**
+     * @return <code>true</code> if this node is built to be skippable
+     */
+    public boolean isSkippable() {
+        return skippable;
     }
 
     /**
@@ -124,7 +132,7 @@ public class SubmitNode extends InputNode {
      *
      * @author Dan Lyu
      */
-    public static class Builder extends AbstractInputNodeBuilder<Builder> {
+    public static class SubmitNodeBuilder extends AbstractInputNodeBuilder<SubmitNodeBuilder> {
 
         /**
          * The injected handler used to parse Request and expect Response
@@ -132,26 +140,46 @@ public class SubmitNode extends InputNode {
         private final RequestHandler handler;
 
         /**
-         * The Node used when the Response returned by {@link #handler} doesn't represent a successful state
-         */
-        private Node failedResultNode;
-
-        /**
          * The global persistent request object to be injected
          */
         private final PersistentRequest persistentRequest;
 
-        public Builder(String translatable, String key, RequestHandler handler, PersistentRequest persistentRequest) {
+        /**
+         * When skippable is <code>true</code>:<p>
+         * This node will not have its original Response<p>
+         * This node will be skipped once encountered<p>
+         * This node's RequestHandler will still be executed and its Response will be printed
+         */
+        private boolean skippable = false;
+
+        /**
+         * @param translatable the language identifier
+         * @param key the key to be used for user input
+         * @param handler the injected handler to be used to process Request and return a Response
+         * @param persistentRequest the global Request that keeps all cached requests
+         */
+        public SubmitNodeBuilder(String translatable, String key, RequestHandler handler, PersistentRequest persistentRequest) {
             super(translatable, key);
             this.handler = handler;
             this.persistentRequest = persistentRequest;
         }
 
         /**
+         * @param requestHandler the injected handler to be used to process Request and return a Response
+         * @param persistentRequest the global Request that keeps all cached requests
+         */
+        public SubmitNodeBuilder(RequestHandler requestHandler, PersistentRequest persistentRequest){
+            super("skippable.submit","skippable.submit");
+            this.handler = requestHandler;
+            this.persistentRequest = persistentRequest;
+            skippable = true;
+        }
+
+        /**
          * @return the builder itself
          */
         @Override
-        Builder getThis() {
+        SubmitNodeBuilder getThis() {
             return this;
         }
 
@@ -162,18 +190,8 @@ public class SubmitNode extends InputNode {
          * @return the builder itself
          */
         @Deprecated
-        public Builder submitSuccessNext(Node node) {
+        public SubmitNodeBuilder submitSuccessNext(Node node) {
             child(node);
-            return getThis();
-        }
-
-        /**
-         * @param node the node to navigate to when submission fails
-         * @return the builder itself
-         */
-        @Deprecated
-        public Builder submitFailNext(ResponseNode node) {
-            failedResultNode = node;
             return getThis();
         }
 

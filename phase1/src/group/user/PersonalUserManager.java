@@ -8,14 +8,14 @@ import group.repository.Repository;
 import java.util.*;
 
 public class PersonalUserManager {
-    //private static AdministrativeManager am;
+
     private final Repository<PersonalUser> personalUserRepository;
     private PersonalUser currPersonalUser;
 
 
-    public PersonalUserManager(Repository<PersonalUser> personalUserRepository) {
-        //instantiate AdminManager
+    public PersonalUserManager(Repository<PersonalUser> personalUserRepository, Repository<Item> itemRepository) {
         this.personalUserRepository = personalUserRepository;
+        this.itemRepository = itemRepository;
 
     }
 
@@ -50,11 +50,19 @@ public class PersonalUserManager {
     }
 
     public Response createPersonalUser(String userName, String email, String telephone, String password) {
+        if (personalUserRepository.ifExists(
+                PersonalUser -> PersonalUser.getUserName().equals(userName))) {
+            return new Response.Builder(false).translatable("failed.create.new").build();
+        }
         PersonalUser p = new PersonalUser(userName, email, telephone, password);
         personalUserRepository.add(p);
         return new Response.Builder(true).translatable("success.create.new").build();
     }
 
+    public Response requestToAddItemToInventory(PersonalUser user, String item, String description) {
+        Item newItem = new Item(user.getUid(), item, description);
+        itemRepository.add(newItem);
+        user.addItemToAddToInventoryRequest(newItem.getUid());
     public Response requestToAddItemToInventory(PersonalUser user, Long item){
         user.addItemToAddToInventoryRequest(item);
         return new Response.Builder(true).translatable("success.request.addItem").build();
@@ -75,5 +83,41 @@ public class PersonalUserManager {
         return new Response.Builder(true).translatable("success.remove.item").build();
     }
 
+    public Response addItemToWishlist(PersonalUser user, String item, String description) {
+        Integer uid = createNewItem(user.getUid(), item, description);
+        user.addToWishList(uid);
+        return new Response.Builder(true).translatable("success.add.wishlist").build();
+    }
 
+    public Response removeItemFromWishlist(PersonalUser user, Item item) {
+        user.removeFromWishList(item.getUid());
+        itemRepository.remove(item);
+        return new Response.Builder(true).translatable("success.remove.wishlist").build();
+    }
+
+    public List<Integer> getUserInventory(PersonalUser user) {
+        return user.getInventory();
+    }
+
+    public List<Integer> getUserWishlist(PersonalUser user) {
+        return user.getWishlist();
+    }
+
+    public Response getUserIsFrozen(PersonalUser user) {
+        if (user.getIsFrozen()) {
+            return new Response.Builder(true).translatable("true.is.frozen", user.getIsFrozen()).build();
+        } else {
+            return new Response.Builder(false).translatable("false.is.frozen", user.getIsFrozen()).build();
+        }
+    }
+
+    public Integer createNewItem(Integer ownerUID, String item, String description) {
+        Item newItem = new Item(ownerUID, item, description);
+        itemRepository.add(newItem);
+        return newItem.getUid();
+    }
+
+    public PersonalUser getCurrUser() {
+        return currUser;
+    }
 }

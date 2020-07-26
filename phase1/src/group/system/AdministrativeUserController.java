@@ -1,33 +1,32 @@
 package group.system;
 
+import group.item.Item;
 import group.menu.data.Request;
 import group.menu.data.Response;
 import group.repository.Repository;
 import group.user.AdministrativeManager;
 import group.user.AdministrativeUser;
 import group.user.PersonalUser;
+import group.item.ItemManager;
 
 import java.util.Iterator;
 
 public class AdministrativeUserController {
 
     private final Repository<PersonalUser> personalRepo;
-    private final Repository<AdministrativeUser> adminRepo;
     private final AdministrativeManager administrativeManager;
     private AdministrativeUser currAdmin;
 
     public AdministrativeUserController(ControllerDispatcher dispatcher) {
         personalRepo = dispatcher.personalUserRepository;
-        adminRepo = dispatcher.adminUserRepository;
-        administrativeManager = new AdministrativeManager(adminRepo, personalRepo);
-        dispatcher.menuConstructor.adminUser(this);
+        administrativeManager = new AdministrativeManager(dispatcher.adminUserRepository, dispatcher.personalUserRepository, dispatcher.tradeRepository, dispatcher.itemRepository);
     }
 
-    // Lucy comment: for now it is only for admin, will discuss how to put in personal
-    // or separate personal and admin controller
-    public Response loginAdminUser(Request request) {
-        String username = request.get("username");
-        String password = request.get("password");
+    public Response loginUser(Request request) {
+        return loginUser(request.get("username"), request.get("password"));
+    }
+
+    public Response loginUser(String username, String password) {
         currAdmin = administrativeManager.getCurrAdmin(username, password);
         return administrativeManager.verifyLogin(username, password);
     }
@@ -37,70 +36,101 @@ public class AdministrativeUserController {
         String email = request.get("email");
         String telephone = request.get("telephone");
         String password = request.get("password");
-        boolean isHead = request.getBoolean("isHead");
+        boolean isHead;
+        isHead = request.get("isHead").equalsIgnoreCase("yes");
         return administrativeManager.createAdministrator(username, email, telephone, password, isHead);
     }
 
-    public Response addSubAdmin(Request request){
+    public Response addSubAdmin(Request request) {
         String username = request.get("username");
         String email = request.get("email");
         String telephone = request.get("telephone");
         String password = request.get("password");
-        //boolean isHead = request.getBoolean("isHead");
         return administrativeManager.addSubAdmin(currAdmin, username, email, telephone, password);
     }
 
-    public Iterator<PersonalUser> getfreezeUserlist(Request request){
+    public Response viewFreezeUserList(Request request) {
         return administrativeManager.getListUserShouldBeFreezed();
     }
 
-    public PersonalUser findUser(Request request){
-        String username = request.get("username");
-        return administrativeManager.findUser(username);
+    public Response viewAddItemRequest(Request request) {
+        return administrativeManager.getNeedToConfirmAddItemUserList();
     }
 
-    public Response confirmFreezeUser(Request request){
+    public Response viewUnfreezeRequest(Request request) {
+        return administrativeManager.getUserRequestToUnfreeze();
+    }
+
+    public Response findUserForAdmin(Request request) {
+        String username = request.get("username");
+        return administrativeManager.findUserForAdmin(username);
+    }
+
+    public Response confirmFreezeUser(Request request) {
         String username = request.get("username");
         PersonalUser user = administrativeManager.findUser(username);
         return administrativeManager.confirmFreezeUser(user);
-
     }
 
-    public Response confirmFreezeAllUser(Request request){
+    public Response confirmFreezeAllUser(Request request) {
         return administrativeManager.confirmFreezeAllUser();
-
     }
 
-    public Response confirmUnFreezeUser(Request request){
+    public Response confirmUnFreezeUser(Request request) {
         String username = request.get("username");
         PersonalUser user = administrativeManager.findUser(username);
         return administrativeManager.confirmUnfreezeUser(user);
     }
 
-    public Response confirmUnFreezeAllUser(Request request){
+    public Response confirmUnFreezeAllUser(Request request) {
         return administrativeManager.confirmUnfreezeAllUser();
-
     }
 
-    public Response confirmAddAllItemRequestForAUser(Request request){
+    public Response confirmAddAllItemRequestForAUser(Request request) {
         String username = request.get("username");
         PersonalUser user = administrativeManager.findUser(username);
         return administrativeManager.confirmAddAllItemRequestForAUser(user);
     }
 
-    public Response confirmAddAllItemRequest(Request request){
+    public Response confirmAddAllItemRequest(Request request) {
         return administrativeManager.confirmAddAllItemRequest();
     }
 
-    public Response confirmAddItemRequest(Request request){
-        String username = request.get("username");
-        Long item = request.getLong("item");
-        PersonalUser user = administrativeManager.findUser(username);
+    public Response confirmAddItemRequest(Request request) {
+        int username = request.getInt("fine.username");
+        Integer item = request.getInt("item");
+        PersonalUser user = personalRepo.get(username);
+        // Item itemEntity = itemRepo.get(item);
         return administrativeManager.confirmAddItemRequest(user, item);
     }
 
+    public Response removeItemInUserInventory(Request request) {
+        int username = request.getInt("fine.username");
+        Integer item = request.getInt("item");
+        PersonalUser user = personalRepo.get(username);
+        // Item itemEntity = itemRepo.get(item);
+        return administrativeManager.removeUserItem(user, item);
+    }
 
+    public Response setTransactionLimit(Request request) {
+        int limit = request.getInt("limit");
+        return administrativeManager.setTransactionLimit(limit);
+    }
 
+    public Response setLendBeforeBorrowLimit(Request request) {
+        int limit = request.getInt("limit");
+        return administrativeManager.setLendBeforeBorrowLimit(limit);
+    }
+
+    public Response viewTransactionLimit(Request request) {
+        //int limit = request.getInt("limit");
+        return administrativeManager.getTransactionLimit();
+    }
+
+    public Response viewLendBeforeBorrowLimit(Request request) {
+        //int limit = request.getInt("limit");
+        return administrativeManager.getLendBeforeBorrowLimit();
+    }
 
 
 }

@@ -89,7 +89,7 @@ public class GeneralValidator implements Validator {
     public boolean validate(String input) {
         boolean result = input.length() >= minLengthInclusive && input.length() <= maxLengthInclusive;
         if (csvInjectionDetection) {
-            result = result && !input.matches(".*[;,].*");
+            result = result && !input.matches(".*[;, ].*");
         }
         switch (inputType) {
             case String:

@@ -1,32 +1,37 @@
 package group.user;
 
 import group.item.Item;
+import group.menu.data.Response;
+import group.repository.UniqueId;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class PersonalUser extends User {
 
-    private List<Long> wishlist;
-    private List<Long> inventory;
-    private List<Long> trades;
+    private List<Integer> wishlist;
+    private List<Integer> inventory;
+    private List<Integer> trades;
+    private List<Integer> supportTickets;
     private Boolean isFrozen;
     private Integer lendCount;
     private Integer borrowCount;
     private Integer numTransactions;
-    private Map<String, Integer> traderFrequency;
-    private List<Long> addToInventoryRequest;
+    private List<Integer> recentTrades;
+    private List<Integer> addToInventoryRequest;
     private Boolean requestToUnfreeze;
+    //private int incompleteTrades;
 
     /**
      * Creates a PersonalUser with the given userName, email, telephone, password
      * and initializes all other instance variables.
      *
-     * @param userName username of this user
-     * @param email email of this user
+     * @param userName  username of this user
+     * @param email     email of this user
      * @param telephone telephone number of this user
-     * @param password password of this user
+     * @param password  password of this user
      */
-    public PersonalUser (String userName, String email, String telephone, String password) {
+    public PersonalUser(String userName, String email, String telephone, String password) {
         super(userName, email, telephone, password);
         wishlist = new ArrayList<>();
         inventory = new ArrayList<>();
@@ -35,85 +40,152 @@ public class PersonalUser extends User {
         lendCount = 0;
         borrowCount = 0;
         numTransactions = 0;
-        traderFrequency = new HashMap<>();
+        recentTrades = new ArrayList<>();
         addToInventoryRequest = new ArrayList<>();
         requestToUnfreeze = false;
+        //incompleteTrades = 0;
     }
 
-    public PersonalUser(List<String> record){ super(record); }
+    //public int getIncompleteTrades() {
+        //return incompleteTrades;
+    //}
 
-    public List<Long> getWishlist() { return wishlist; }
+    public PersonalUser(List<String> record) {
+        super(record);
+    }
 
-    public void addToWishList(Long newItem){ wishlist.add(newItem); }
+    public List<Integer> getWishlist() {
+        return wishlist;
+    }
 
-    public void removeFromWishList(Long oldItem){ wishlist.remove(oldItem); }
+    public void addToWishList(Integer newItem) {
+        wishlist.add(newItem);
+    }
 
-    public List<Long> getInventory() { return inventory; }
+    public void removeFromWishList(Integer oldItem) {
+        wishlist.remove(oldItem);
+    }
 
-    public void addToInventory(Long newItem){ inventory.add(newItem);}
+    public List<Integer> getInventory() {
+        return inventory;
+    }
 
-    public void removeFromInventory(Long oldItem){ inventory.remove(oldItem); }
+    public void addToInventory(Integer newItem) {
+        inventory.add(newItem);
+    }
 
-    public List<Long> getTrades() { return trades; }
+    public void removeFromInventory(Integer oldItem) {
+        inventory.remove(oldItem);
+    }
 
-    public void addToTrades(Long newItem){ trades.add(newItem);}
+    public List<Integer> getTrades() {
+        return trades;
+    }
 
-    public void removeFromTrade(Long oldItem){ trades.remove(oldItem); }
+    public void addToTrades(Integer newItem) {
+        trades.add(newItem);
+    }
 
-    public boolean getIsFrozen() { return isFrozen; }
+    public void removeFromTrade(Integer oldItem) {
+        trades.remove(oldItem);
+    }
 
-    public void setIsFrozen (boolean isFrozen) { this.isFrozen = isFrozen; }
+    public boolean getIsFrozen() {
+        return isFrozen;
+    }
 
-    public int getLendCount() { return lendCount; }
+    public void setIsFrozen(boolean isFrozen) {
+        this.isFrozen = isFrozen;
+    }
 
-    public void setLendCount(int lendCount) { this.lendCount = lendCount; }
+    public int getLendCount() {
+        return lendCount;
+    }
 
-    public int getBorrowCount() { return borrowCount; }
+    public void setLendCount(int lendCount) {
+        this.lendCount = lendCount;
+    }
 
-    public void setBorrowCount(int borrowCount) { this.borrowCount = borrowCount; }
+    public int getBorrowCount() {
+        return borrowCount;
+    }
 
-    public boolean getShouldBeFreezedUser(){ return lendCount < borrowCount; }
+    public void setBorrowCount(int borrowCount) {
+        this.borrowCount = borrowCount;
+    }
 
-    public int getNumTransactions() { return numTransactions; }
+    public boolean getShouldBeFreezedUser() {
+        return lendCount < borrowCount;
+    }
 
-    public void setNumTransactions(int numTransactions) { this.numTransactions = numTransactions; }
+    public int getNumTransactions() {
+        return numTransactions;
+    }
 
-    public Map<String, Integer> getTraderFrequency() { return traderFrequency; }
+    public void setNumTransactions(int numTransactions) {
+        this.numTransactions = numTransactions;
+    }
 
-    public List<Long> getAddToInventoryRequest(){
+    public List<Integer> getAddToInventoryRequest() {
         return addToInventoryRequest;
     }
 
-    public void addItemToAddToInventoryRequest(long item){
+    public void removeAddToInventoryRequest(Integer itemID) {
+        addToInventoryRequest.remove(itemID);
+    }
+
+    public void addItemToAddToInventoryRequest(Integer item) {
         addToInventoryRequest.add(item);
     }
 
-    public boolean getAddToInventoryRequestIsNotEmpty(){
+    public boolean getAddToInventoryRequestIsNotEmpty() {
         return !addToInventoryRequest.isEmpty();
     }
 
-    public void setRequestToUnfreeze(boolean state){
+    public void setRequestToUnfreeze(boolean state) {
         requestToUnfreeze = state;
     }
 
-    public boolean getRequestToUnfreeze(){
+    public boolean getRequestToUnfreeze() {
         return requestToUnfreeze;
     }
 
-    /**
-     * returns the usernames of the top three most frequent traders for this user as a map.
+    public List<Integer> getSupportTickets() {
+        return supportTickets;
+    }
+
+    public void addRecentTrades(Integer tradeID) {
+        if (recentTrades.size() >= 3) {
+            recentTrades.remove(0);
+        }
+        recentTrades.add(tradeID);
+    }
+
+    public List<Integer> getRecentCompleteTrades() {
+        return recentTrades;
+    }
+
+
+    /*
+     * returns the user IDs of the top three most frequent traders for this user as a map.
      * if this user has not traded with three different users, returns top 2 or the top
      * trader accordingly.
      * @return map of the top 3 most frequent traders for this user
-     */
-    public Map<String, Integer> getTopThreeTraders() {
+  public void setTraderFrequency(Integer userID) {
+        if (traderFrequency.containsKey(userID)){
+            traderFrequency.put(userID, traderFrequency.get(userID) + 1);
+        } else {
+            traderFrequency.put(userID, 1);
+        }
+    }
+    public Map<Integer, Integer> getTopThreeTraders() {
         int len = traderFrequency.keySet().toArray().length;
         if (traderFrequency.isEmpty()) {
             return null;
         } else if (len <= 3) {
             return traderFrequency;
         } else {
-            Map<String, Integer> ans = new HashMap<>();
+            Map<Integer, Integer> ans = new HashMap<>();
             List<Integer> v = (ArrayList<Integer>) traderFrequency.values();
             Collections.sort(v);
             v = v.subList(v.size() - 3, v.size());
@@ -124,23 +196,25 @@ public class PersonalUser extends User {
         }
     }
 
-    /**
-     * helper method that returns a key from a value only for a one-to-one Map<String, Integer></>
+    /*
+     * helper method that returns a key from a value only for a one-to-one Map<Integer, Integer></>
      * type map.
-     * @param value
+     * @param value times traded with someone else
      * @return key mapped to the given value
-     */
-   private String keyFromValue(Integer value) {
-        for (Map.Entry<String , Integer> entry : traderFrequency.entrySet()) {
+
+   private Long keyFromValue(Integer value) {
+        for (Map.Entry<Integer , Integer> entry : traderFrequency.entrySet()) {
             if (value.equals(entry.getValue())) {
                 return entry.getKey();
             }
         }
         return null;
-    }
+    }*/
 
     @Override
     public String toString() {
         return "PersonalUser" + super.toString();
     }
+
+
 }

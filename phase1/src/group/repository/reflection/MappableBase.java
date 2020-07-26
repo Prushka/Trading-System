@@ -6,10 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -19,7 +16,7 @@ import java.util.stream.Collectors;
  * Contains a constructor that takes in a CSV representation String.<p>
  * Subclasses are required to have a sub-constructor corresponding to <code>MappableBase(List data)</code><p>
  * This reflection implementation has limits on certain classes,
- * use only non-final List, Long, Integer, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
+ * use only non-final List, Integer, Long, Float, Double, Boolean, String, Date, Enum and CSVMappable fields in the entity class if you extend this class.<p>
  * To allow more more flexibility, implement {@link CSVMappable} directly in the entity class.
  *
  * @author Dan Lyu
@@ -31,7 +28,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 public abstract class MappableBase {
 
-    static final Logger LOGGER = new LoggerFactory(MappableBase.class).getConfiguredLogger();
+    static transient final Logger LOGGER = new LoggerFactory(MappableBase.class).getConfiguredLogger();
 
     /**
      * The empty constructor used to make sure that extending
@@ -51,7 +48,7 @@ public abstract class MappableBase {
         for (Field field : getSortedFields()) {
             field.setAccessible(true);
             String representation = data.get(id);
-            Object obj; // declaring within the smallest scope. https://stackoverflow.com/questions/8803674/declaring-variables-inside-or-outside-of-a-loop
+            Object obj;
             try {
                 // what's the difference between == and isAssignedFrom() and isAssignableFrom() from the class?
                 if (CSVMappable.class.isAssignableFrom(field.getType())) { // aha
@@ -63,7 +60,18 @@ public abstract class MappableBase {
                     obj = field.getType().getDeclaredConstructor(List.class).newInstance(childRepresentation);
                     id -= 1;
                 } else if (List.class.isAssignableFrom(field.getType())) {
-                    obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
+                    if (representation.equals("null")) {
+                        obj = null;
+                    } else {
+                        obj = stringToList((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0], representation);
+                    }
+                } else if (Map.class.isAssignableFrom(field.getType())) {
+                    if (representation.equals("null")) {
+                        obj = null;
+                    } else {
+                        obj = stringToMap((Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0]
+                                , (Class<?>) ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[1], representation);
+                    }
                 } else {
                     obj = getObjectFrom(field.getType(), representation);
                 }
@@ -73,6 +81,24 @@ public abstract class MappableBase {
                 LOGGER.log(Level.SEVERE, "Some error occurred in reflection when instantiating an object from CSV record.", e);
             }
         }
+    }
+
+    /**
+     * @param keyClass       The key class
+     * @param valueClass     The value class
+     * @param representation The String representation in format: key:value
+     * @param <K>            the Key generic type
+     * @param <V>            the Value generic type
+     * @return the map in its original form
+     */
+    private <K, V> Map<K, V> stringToMap(Class<K> keyClass, Class<V> valueClass, String representation) { // this only uses HashMap
+        Map<K, V> map = new HashMap<>();
+        if (representation.length() == 0) return map;
+        for (String element : representation.split(";", -1)) {
+            String[] subElement = element.split(":", -1);
+            map.put((K) getObjectFrom(keyClass, subElement[0]), (V) getObjectFrom(valueClass, subElement[1]));
+        }
+        return map;
     }
 
     /**
@@ -86,10 +112,10 @@ public abstract class MappableBase {
             obj = null; // this is necessary since classes below can be null
         } else if (fieldTypeClass.isEnum()) {
             obj = Enum.valueOf((Class<Enum>) fieldTypeClass, representation);
-        } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
-            obj = Integer.valueOf(representation);
         } else if (Long.class.isAssignableFrom(fieldTypeClass)) {
             obj = Long.valueOf(representation);
+        } else if (Integer.class.isAssignableFrom(fieldTypeClass)) {
+            obj = Integer.valueOf(representation);
         } else if (Boolean.class.isAssignableFrom(fieldTypeClass)) {
             obj = Boolean.valueOf(representation);
         } else if (Double.class.isAssignableFrom(fieldTypeClass)) {
@@ -99,7 +125,7 @@ public abstract class MappableBase {
         } else if (String.class.isAssignableFrom(fieldTypeClass)) {
             obj = representation;
         } else if (Date.class.isAssignableFrom(fieldTypeClass)) {
-            obj = new Date(Long.parseLong(representation));
+            obj = new Date(Integer.parseInt(representation));
         } else {
             obj = null;
         }
@@ -114,6 +140,7 @@ public abstract class MappableBase {
      */
     private <T> List<T> stringToList(Class<T> fieldListGenericClass, String representation) {
         List<T> list = new ArrayList<>();
+        if (representation.length() == 0) return list;
         for (String element : representation.split(";")) {
             list.add((T) getObjectFrom(fieldListGenericClass, element));
         }
@@ -162,11 +189,17 @@ public abstract class MappableBase {
      * @return the sorted and non-transient fields of the class
      */
     private List<Field> getSortedFields(Class<?> clazz) {
-        return Arrays
-                .stream(clazz.getDeclaredFields())
-                .filter(this::ifFieldNotTransient)
-                .sorted(new FieldComparator())
-                .collect(Collectors.toList());
+        List<Field> fields = new ArrayList<>();
+        Class<?> currentClass = clazz;
+        while (!currentClass.getName().equals(Object.class.getName())) {
+            fields.addAll(Arrays
+                    .stream(currentClass.getDeclaredFields())
+                    .filter(this::ifFieldNotTransient)
+                    .sorted(new FieldComparator())
+                    .collect(Collectors.toList()));
+            currentClass = currentClass.getSuperclass();
+        }
+        return fields;
     }
 
     /**
@@ -206,6 +239,10 @@ public abstract class MappableBase {
                     value.append(((CSVMappable) obj).toCSVString());
                 } else if (obj instanceof List) {
                     ((List<?>) obj).forEach(o -> value.append(o.toString()).append(";"));
+                } else if (obj instanceof Map) {
+                    for (Map.Entry<?, ?> entry : ((Map<?, ?>) obj).entrySet()) {
+                        value.append(entry.getKey().toString()).append(":").append(entry.getValue().toString()).append(";");
+                    }
                 } else {
                     value.append(obj.toString());
                 }

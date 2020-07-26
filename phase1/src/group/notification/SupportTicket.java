@@ -20,9 +20,9 @@ public class SupportTicket extends MappableBase implements Serializable, CSVMapp
 
     private String content;
 
-    private Long timeStamp; // they are nullable
+    private Long timeStamp;
 
-    private Long uid; // it's a list to be serialized. maybe uid = index?
+    private Integer uid;
 
     public SupportTicket(List<String> data) {
         super(data);
@@ -93,11 +93,11 @@ public class SupportTicket extends MappableBase implements Serializable, CSVMapp
         this.content = content;
     }
 
-    public void setUid(long uid) {
+    public void setUid(int uid) {
         this.uid = uid;
     }
 
-    public long getUid() {
+    public int getUid() {
         return uid;
     }
 

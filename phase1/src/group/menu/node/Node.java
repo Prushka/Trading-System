@@ -1,6 +1,8 @@
 package group.menu.node;
 
 import group.config.LoggerFactory;
+import group.menu.data.Response;
+import group.menu.data.ResponsePresenter;
 
 import java.util.logging.Logger;
 
@@ -43,11 +45,11 @@ public abstract class Node {
     }
 
     /**
-     * Displays the current node's information
+     * Displays the current node's information.<p>
+     * To be implemented by subclasses.<p>
+     * To be sent to a {@link ResponsePresenter} to display.
      */
-    public void display() {
-        LOGGER.info(translatable);
-    }
+    public abstract Response fetchResponse();
 
     /**
      * @return <code>true</code> if the Node class accepts input
@@ -60,7 +62,7 @@ public abstract class Node {
     public Node traceForward() {
         Node curr = this;
         while (curr != null && !curr.acceptInput()) {
-            curr.display();
+            curr.fetchResponse();
             curr = curr.getChild();
         }
         return curr;
@@ -86,6 +88,13 @@ public abstract class Node {
      */
     public Node parseInput(String input) {
         return null;
+    }
+
+    /**
+     * @return <code>true</code> if this node can be skipped
+     */
+    public boolean isSkippable() {
+        return false;
     }
 
     /**

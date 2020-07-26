@@ -1,13 +1,15 @@
 package com.phase2.trade.user;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "user")
+@Entity(tableName = "user",indices = {@Index(value = {"email", "telephone"},
+        unique = true)})
 public class User {
 
     @PrimaryKey
-    private Integer id;
+    private int id;
     private String userName;
     private String email;
     private String telephone;

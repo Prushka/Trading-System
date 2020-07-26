@@ -1,28 +1,20 @@
 package com.phase2.trade.user;
 
-import android.content.Context;
-import android.os.AsyncTask;
-
-import androidx.room.Room;
-
+import com.phase2.trade.database.Callback;
 import com.phase2.trade.database.UserDatabase;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class UserRepository {
 
     private UserDatabase userDatabase;
 
-    private final ExecutorService threadPool;
+    private final Executor executor;
 
     public UserRepository(UserDatabase userDatabase){
         this.userDatabase = userDatabase;
-        this.threadPool = Executors.newFixedThreadPool(10); // thread pool is not necessary for sqlite, remove it later
-    }
-
-    public ExecutorService getThreadPool() {
-        return threadPool;
+        this.executor = Executors.newSingleThreadExecutor();
     }
 
     public void insertTask() {
@@ -31,8 +23,18 @@ public class UserRepository {
     }
 
     public void insertTask(AdministrativeUser administrativeUser) {
-        getThreadPool().submit(() -> {
+        getExecutor().execute(() -> {
             userDatabase.administrativeUserDao().insertAll(administrativeUser);
         });
+    }
+
+    public void getUser(Callback<User> callback) {
+        getExecutor().execute(() -> {
+            callback.call(userDatabase.administrativeUserDao().getAll().get(0));
+        });
+    }
+
+    public Executor getExecutor() {
+        return executor;
     }
 }

@@ -79,7 +79,7 @@ class TradeController {
         }
     }
 
-    public Map<Integer, Integer> getTradeFrequency(int user){
+    public Map<Integer, Integer> getTradeFrequency(int user) {
         return tradeManager.getTradeFrequency(user);
     }
 }

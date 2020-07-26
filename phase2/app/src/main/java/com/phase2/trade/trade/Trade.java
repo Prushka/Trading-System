@@ -216,4 +216,5 @@ class Trade extends MappableBase implements CSVMappable, UniqueId {
                     this.dateAndTime;
         }
     }
+    
 }

@@ -1,21 +1,17 @@
-import group.repository.UniqueId;
-import group.repository.reflection.CSVMappable;
-import group.repository.reflection.MappableBase;
+package com.phase2.trade.user;
 
-import java.util.List;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity
+public class User {
 
-public class User extends MappableBase implements CSVMappable, UniqueId {
-
-    private Integer uid;
+    @PrimaryKey
+    private Integer id;
     private String userName;
     private String email;
     private String telephone;
     private String password;
-
-    public User(List<String> record) {
-        super(record);
-    }
 
     /**
      * Creates a new User with userName, email, telephone and given password.
@@ -56,25 +52,12 @@ public class User extends MappableBase implements CSVMappable, UniqueId {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "userName='" + userName + '\'' +
-                ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public Integer getId() {
+        return id;
     }
 
-    @Override
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setId(Integer id) {
+        this.id = id;
     }
-
-    @Override
-    public int getUid() {
-        return this.uid;
-    }
-
 }
 

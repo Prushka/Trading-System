@@ -1,12 +1,7 @@
-import group.menu.data.Request;
-import group.menu.data.Response;
-import group.user.AdministrativeManager;
-import group.user.AdministrativeUser;
-import group.user.PersonalUser;
+package com.phase2.trade.user;
 
 public class AdministrativeUserController {
 
-    private User personalRepo;
     private final AdministrativeManager administrativeManager;
     private AdministrativeUser currAdmin;
 

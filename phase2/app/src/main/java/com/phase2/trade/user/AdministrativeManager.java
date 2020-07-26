@@ -1,15 +1,10 @@
-import group.item.Item;
-import group.menu.data.Response;
-import group.repository.Repository;
-import group.trade.Trade;
-import group.user.AdministrativeUser;
-import group.user.PersonalUser;
+package com.phase2.trade.user;
+
 
 import java.util.Iterator;
 import java.util.List;
 
 public class AdministrativeManager {
-
 
     private Repository<AdministrativeUser> administrators;
     private Repository<PersonalUser> personalUserRepository;

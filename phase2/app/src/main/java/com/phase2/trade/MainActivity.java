@@ -4,18 +4,13 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.phase2.trade.user.AppDatabase;
-import com.phase2.trade.user.User;
+import com.phase2.trade.database.AppDatabase;
 import com.phase2.trade.user.UserManager;
-import com.phase2.trade.view.Login;
-import com.phase2.trade.view.SecondFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.room.Room;
 
-import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;

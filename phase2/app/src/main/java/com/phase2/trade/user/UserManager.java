@@ -1,6 +1,8 @@
 package com.phase2.trade.user;
 
 
+import com.phase2.trade.database.AppDatabase;
+
 public class UserManager {
 
 

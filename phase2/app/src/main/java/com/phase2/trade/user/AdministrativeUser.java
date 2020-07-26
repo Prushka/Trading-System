@@ -1,4 +1,4 @@
-import group.user.User;
+package com.phase2.trade.user;
 
 import java.util.List;
 
@@ -10,8 +10,6 @@ public class AdministrativeUser extends User {
         super(userName, email, telephone, password);
         this.isHead = isHead;
     }
-
-    public AdministrativeUser(List<String> record){super(record);}
 
     public boolean getIsHead() {
         return this.isHead;

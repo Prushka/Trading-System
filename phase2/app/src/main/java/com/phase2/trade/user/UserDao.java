@@ -15,9 +15,11 @@ public interface UserDao {
     @Query("SELECT * FROM user WHERE id IN (:userIds)")
     List<User> loadAllByIds(int[] userIds);
 
-    @Query("SELECT * FROM user WHERE firstName LIKE :first AND " +
-            "last_name LIKE :last LIMIT 1")
-    User findByName(String first, String last);
+    @Query("SELECT * FROM user WHERE userName LIKE :userName")
+    User findByName(String userName);
+
+    @Query("SELECT * FROM user WHERE id IN (:userIds)")
+    List<User> findAllUsersToFreeze(int[] userIds);
 
     @Insert
     void insertAll(User... users);

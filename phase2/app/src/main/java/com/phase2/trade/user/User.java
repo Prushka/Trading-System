@@ -3,7 +3,7 @@ package com.phase2.trade.user;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "user")
 public class User {
 
     @PrimaryKey

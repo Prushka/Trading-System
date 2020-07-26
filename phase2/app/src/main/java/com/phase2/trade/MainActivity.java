@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.phase2.trade.database.AppDatabase;
+import com.phase2.trade.database.UserDatabase;
 import com.phase2.trade.user.UserManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").build();
+        UserDatabase db = Room.databaseBuilder(getApplicationContext(),
+                UserDatabase.class, "trade_db").build();
         UserManager userManager = new UserManager(db);
         userManager.userTest();
     }

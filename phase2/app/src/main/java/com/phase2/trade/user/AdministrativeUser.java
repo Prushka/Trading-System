@@ -1,7 +1,10 @@
 package com.phase2.trade.user;
 
+import androidx.room.Entity;
+
 import java.util.List;
 
+@Entity(tableName = "admin_user")
 public class AdministrativeUser extends User {
 
     private Boolean isHead;

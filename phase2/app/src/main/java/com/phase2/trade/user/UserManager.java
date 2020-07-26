@@ -1,18 +1,17 @@
 package com.phase2.trade.user;
 
 
-import com.phase2.trade.database.AppDatabase;
+import com.phase2.trade.database.UserDatabase;
 
 public class UserManager {
 
+    private UserRepository userRepository;
 
-    private AppDatabase db;
-
-    public UserManager(AppDatabase db){
-        this.db = db;
+    public UserManager(UserDatabase userDatabase){
+        this.userRepository = new UserRepository(userDatabase);
     }
 
     public void userTest(){
-        db.userDao().insertAll(new User("name","aha"));
+        userRepository.insertTask();
     }
 }

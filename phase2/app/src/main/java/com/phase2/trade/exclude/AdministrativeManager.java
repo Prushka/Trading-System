@@ -1,5 +1,7 @@
-package com.phase2.trade.user;
+package com.phase2.trade.exclude;
 
+
+import com.phase2.trade.user.AdministrativeUser;
 
 import java.util.Iterator;
 import java.util.List;
@@ -19,13 +21,7 @@ public class AdministrativeManager {
     private Repository<Item> itemRepository;
 
 
-    public AdministrativeManager(Repository<AdministrativeUser> administrativeUserRepository,
-                                 Repository<PersonalUser> personalUserRepository, Repository<Trade> tradeRepository,
-                                 Repository<Item> itemRepository){
-        this.administrators = administrativeUserRepository;
-        this.personalUserRepository = personalUserRepository;
-        this.tradeRepository = tradeRepository;
-        this.itemRepository = itemRepository;
+    public AdministrativeManager(){
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
         needToConfirmAddItem = personalUserRepository.iterator(PersonalUser::getAddToInventoryRequestIsNotEmpty);
         needToConfirmUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);

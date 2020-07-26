@@ -1,4 +1,7 @@
-package com.phase2.trade.user;
+package com.phase2.trade.exclude;
+
+import com.phase2.trade.user.AdministrativeUser;
+import com.phase2.trade.user.User;
 
 public class AdministrativeUserController {
 

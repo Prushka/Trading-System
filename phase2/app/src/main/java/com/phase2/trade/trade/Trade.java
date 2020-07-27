@@ -6,7 +6,11 @@ import main.java.com.phase2.trade.repository.reflection.*;
 import java.util.*;
 import java.time.LocalDateTime;
 
-class Trade extends MappableBase implements CSVMappable, UniqueId {
+/**
+ * Represents a trade between users at a specific date and place
+ * @author Grace Leung
+ */
+abstract class Trade extends MappableBase implements CSVMappable, UniqueId, Tradable {
     // Trading Details
     private List<Integer> users;
     private List<Boolean> confirmations;

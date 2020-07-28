@@ -5,6 +5,7 @@ import group.repository.UniqueId;
 import group.repository.reflection.CSVMappable;
 import group.repository.reflection.MappableBase;
 import group.user.PersonalUser;
+import group.user.User;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +14,7 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
 
     private Integer uid;
     private Integer ownerUID;
-    // private PersonalUser owner; CHANGED
+    private PersonalUser owner;
     private String name;
     private String description;
 
@@ -23,6 +24,12 @@ public class Item extends MappableBase implements CSVMappable, UniqueId {
 
     public Item(Integer ownerUID, String name, String description){
         this.ownerUID = ownerUID;
+        this.name = name;
+        this.description = description;
+    }
+
+    public Item(PersonalUser ownerUID, String name, String description){
+        this.owner = ownerUID;
         this.name = name;
         this.description = description;
     }

@@ -11,6 +11,8 @@ public class PersonalUserManager {
 
     private final Repository<PersonalUser> personalUserRepository;
     private PersonalUser currPersonalUser;
+    private final Repository<Item> itemRepository;
+    private PersonalUser currUser;
 
 
     public PersonalUserManager(Repository<PersonalUser> personalUserRepository, Repository<Item> itemRepository) {
@@ -31,11 +33,11 @@ public class PersonalUserManager {
         // this iterator has all PersonalUsers that need to be frozen
     }
 
-    public Response verifyLogin(String username, String password){
+    public boolean verifyLogin(String username, String password){
         if (getCurrPersonalUser(username, password) != null){
-            return new Response.Builder(true).translatable("success.login.user").build();
+            return true;
         }
-        return new Response.Builder(false).translatable("failed.login.user").build();
+        return false;
     }
 
     public PersonalUser getCurrPersonalUser(String username, String password) {
@@ -46,68 +48,72 @@ public class PersonalUserManager {
                     PersonalUser -> PersonalUser.getUserName().equals(username)
                             && PersonalUser.getPassword().equals(password));
         }
+        currUser = currPersonalUser;
         return currPersonalUser;
     }
 
-    public Response createPersonalUser(String userName, String email, String telephone, String password) {
+    public boolean createPersonalUser(String userName, String email, String telephone, String password) {
         if (personalUserRepository.ifExists(
                 PersonalUser -> PersonalUser.getUserName().equals(userName))) {
-            return new Response.Builder(false).translatable("failed.create.new").build();
+            return false; // new Response.Builder(false).translatable("failed.create.new").build();
         }
         PersonalUser p = new PersonalUser(userName, email, telephone, password);
         personalUserRepository.add(p);
-        return new Response.Builder(true).translatable("success.create.new").build();
+        return true;// new Response.Builder(true).translatable("success.create.new").build();
     }
 
-    public Response requestToAddItemToInventory(PersonalUser user, String item, String description) {
+    public boolean requestToAddItemToInventory(PersonalUser user, String item, String description) {
         Item newItem = new Item(user.getUid(), item, description);
         itemRepository.add(newItem);
         user.addItemToAddToInventoryRequest(newItem.getUid());
-    public Response requestToAddItemToInventory(PersonalUser user, Long item){
+        return true;
+    }
+
+    public boolean requestToAddItemToInventory(PersonalUser user, Integer item){
         user.addItemToAddToInventoryRequest(item);
-        return new Response.Builder(true).translatable("success.request.addItem").build();
+        return true;//new Response.Builder(true).translatable("success.request.addItem").build();
     }
 
-    public Response UnfreezeRequest(PersonalUser user){
+    public boolean UnfreezeRequest(PersonalUser user){
         user.setRequestToUnfreeze(true);
-        return new Response.Builder(true).translatable("success.request.unfreeze").build();
+        return true;//new Response.Builder(true).translatable("success.request.unfreeze").build();
     }
 
-    public Response createNewItemAndRequestAdd(PersonalUser owner, String item, String description){
+    public boolean createNewItemAndRequestAdd(PersonalUser owner, String item, String description){
         Item newitem = new Item(owner, item, description);
         return requestToAddItemToInventory(owner, newitem.getUid());
     }
 
-    public Response removeItemFromInventory(PersonalUser user, Long item){
+    public boolean removeItemFromInventory(PersonalUser user, Integer item){
         user.removeFromInventory(item);
-        return new Response.Builder(true).translatable("success.remove.item").build();
+        return true;//new Response.Builder(true).translatable("success.remove.item").build();
     }
 
-    public Response addItemToWishlist(PersonalUser user, String item, String description) {
+    public boolean addItemToWishlist(PersonalUser user, String item, String description) {
         Integer uid = createNewItem(user.getUid(), item, description);
         user.addToWishList(uid);
-        return new Response.Builder(true).translatable("success.add.wishlist").build();
+        return true;//new Response.Builder(true).translatable("success.add.wishlist").build();
     }
 
-    public Response removeItemFromWishlist(PersonalUser user, Item item) {
+    public boolean removeItemFromWishlist(PersonalUser user, Item item) {
         user.removeFromWishList(item.getUid());
         itemRepository.remove(item);
-        return new Response.Builder(true).translatable("success.remove.wishlist").build();
+        return true;//new Response.Builder(true).translatable("success.remove.wishlist").build();
     }
 
-    public List<Integer> getUserInventory(PersonalUser user) {
-        return user.getInventory();
-    }
+//    public List<Integer> getUserInventory(PersonalUser user) {
+//        return user.getInventory();
+//    }
+//
+//    public List<Integer> getUserWishlist(PersonalUser user) {
+//        return user.getWishlist();
+//    }
 
-    public List<Integer> getUserWishlist(PersonalUser user) {
-        return user.getWishlist();
-    }
-
-    public Response getUserIsFrozen(PersonalUser user) {
+    public boolean getUserIsFrozen(PersonalUser user) {
         if (user.getIsFrozen()) {
-            return new Response.Builder(true).translatable("true.is.frozen", user.getIsFrozen()).build();
+            return true;//new Response.Builder(true).translatable("true.is.frozen", user.getIsFrozen()).build();
         } else {
-            return new Response.Builder(false).translatable("false.is.frozen", user.getIsFrozen()).build();
+            return false;//new Response.Builder(false).translatable("false.is.frozen", user.getIsFrozen()).build();
         }
     }
 

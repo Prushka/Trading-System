@@ -1,7 +1,8 @@
-package com.phase2.trade.exclude;
+package app.src.main.java.com.phase2.trade.user;
 
 
 import com.phase2.trade.user.AdministrativeUser;
+import group.trade.Trade;
 
 import java.util.Iterator;
 import java.util.List;
@@ -214,5 +215,7 @@ public class AdministrativeManager {
             }
         }
     }
+
+
 
 }

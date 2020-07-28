@@ -1,7 +1,7 @@
 package main.java.com.phase2.trade.trade;
 
-import main.java.com.phase2.trade.property.TradeProperties;
 import main.java.com.phase2.trade.user.*;
+import main.java.com.phase2.trade.item.*;
 import main.java.com.phase2.trade.repository.*;
 
 import java.util.*;
@@ -11,37 +11,17 @@ class TradeController {
     private TradeManager tradeManager;
 
     public TradeController(Repository<Trade> tradeRepository, Repository<PersonalUser>
-            personalUserRepository, TradeProperties tradeProperties){
-        tradeManager = new TradeManager(tradeRepository, personalUserRepository,
-                tradeProperties);
+            personalUserRepository, Repository<Item> itemRepository){
+        tradeManager = new TradeManager(tradeRepository, personalUserRepository, itemRepository);
     }
 
-    public void addTrade(PersonalUser currUser, PersonalUser trader2, Integer lendingItem, Integer
-                         borrowingItem, Boolean isPermanent, String dateInput, String location) {
-        Integer item1;
-        Integer item2;
-
-        // Check if items are in their inventories or are null
-        if (lendingItem.equals("null")) {
-            item1 = null;
-        } else if (currUser.getInventory().contains(lendingItem)) {
-            item1 = lendingItem;
-        } else {
-            return;
-        }
-
-        if (borrowingItem.equals("null")) {
-            item2 = null;
-        } else if (trader2.getInventory().contains(borrowingItem)) {
-            item2 = borrowingItem;
-        } else {
-            return;
-        }
+    public void addTrade(List<Integer> users, List<List<Integer>> items, String dateInput, String
+            location, TradeSpec spec) {
 
         String[] data = dateInput.split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
-        tradeManager.createTrade(currUser.getUid(), trader2.getUid(), item1, item2, isPermanent, dateAndTime, location);
+        tradeManager.createTrade(users, items, dateAndTime, location, spec);
     }
 
     public void editMeetingDateAndTime(PersonalUser currUser, Integer tradeID, String dateInput){

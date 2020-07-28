@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * Represents a trade between users at a specific date and place
  * @author Grace Leung
  */
-abstract class Trade extends MappableBase implements CSVMappable, UniqueId, Tradable {
+class Trade extends MappableBase implements CSVMappable, UniqueId {
     // Trading Details
     private List<Integer> users;
     private List<Boolean> confirmations;
@@ -60,6 +60,21 @@ abstract class Trade extends MappableBase implements CSVMappable, UniqueId, Trad
     public int getUid() { return this.tradeID;}
 
     /**
+     * @return List of all userIDs participating in this trade
+     */
+    public List<Integer> getAllUsers() { return this.users;}
+
+    /**
+     * @return List of all userIDs participating in this trade
+     */
+    public List<Boolean> getAllConfirmations() { return this.confirmations;}
+
+    /**
+     * @return The list of desired items for the user
+     */
+    public List<List<Integer>> getAllItems(){ return this.items;}
+
+    /**
      * @return The amount of times the user has edited
      */
     public int getUserEdits(int userID){ return this.edits.get(this.users.indexOf(userID));}
@@ -70,16 +85,6 @@ abstract class Trade extends MappableBase implements CSVMappable, UniqueId, Trad
     public boolean getUserConfirms(int userID){ return this.confirmations.get(this.users.indexOf(userID));}
 
     /**
-     * @return The list of desired items for the user
-     */
-    public List<Integer> getItems(int userID){ return this.items.get(this.users.indexOf(userID));}
-
-    /**
-     * @return True iff this trade is closed
-     */
-    public boolean getIsClosed(){ return isClosed;}
-
-    /**
      * @return The date and time of this trade
      */
     public LocalDateTime getDateAndTime(){ return dateAndTime;}
@@ -88,6 +93,11 @@ abstract class Trade extends MappableBase implements CSVMappable, UniqueId, Trad
      * @return The location of this trade
      */
     public String getLocation(){ return location;}
+
+    /**
+     * @return True iff this trade is closed
+     */
+    public boolean getIsClosed(){ return isClosed;}
 
     // SETTERS
 
@@ -114,16 +124,6 @@ abstract class Trade extends MappableBase implements CSVMappable, UniqueId, Trad
     public void unconfirmUser(int userID){ this.confirmations.set(this.users.indexOf(userID), false);}
 
     /**
-     * Sets the state of this trade to open
-     */
-    public void openTrade(){ isClosed = false;}
-
-    /**
-     * Sets the state of this trade to close
-     */
-    public void closeTrade(){ isClosed = true;}
-
-    /**
      * Sets a trade to a new date and time
      * @param newDateAndTime The new date and time of this trade
      */
@@ -134,4 +134,14 @@ abstract class Trade extends MappableBase implements CSVMappable, UniqueId, Trad
      * @param newLocation The new location of this trade
      */
     public void setLocation(String newLocation){ location = newLocation;}
+
+    /**
+     * Sets the state of this trade to open
+     */
+    public void openTrade(){ isClosed = false;}
+
+    /**
+     * Sets the state of this trade to close
+     */
+    public void closeTrade(){ isClosed = true;}
 }

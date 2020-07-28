@@ -1,72 +1,78 @@
 package main.java.com.phase2.trade.trade;
 
-import main.java.com.phase2.trade.property.TradeProperties;
 import main.java.com.phase2.trade.user.*;
+import main.java.com.phase2.trade.item.*;
 import main.java.com.phase2.trade.repository.*;
 
 import java.util.*;
 import java.time.LocalDateTime;
 
 class TradeManager {
-    private final Integer editLimit;
-    private final Integer timeLimit;
+    private Integer editLimit = 3;
+    private Integer timeLimit = 1;
     private final Repository<Trade> tradeRepository;
     private final Repository<PersonalUser> userRepository;
+    private final Repository<Item> itemRepository;
 
     /**
      * Creates, confirms and edits trades
      * @param tradeRepository A repository of all the trades in the system
      * @param userRepository A repository of all users in the system
-     * @param tradeProperties A place to store restrictions on a trade (e.g how many times a user can edit,
-     *                        how many days until temporary trades must be reversed)
      */
     public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser>
-            userRepository, TradeProperties tradeProperties) {
-        // Default Values for trade information:
-        editLimit = tradeProperties.getInt("editLimit");
-        timeLimit = tradeProperties.getInt("timeLimit");
+            userRepository, Repository<Item> itemRepository) {
+        // editLimit = tradeProperties.getInt("editLimit");
+        // timeLimit = tradeProperties.getInt("timeLimit");
         this.tradeRepository = tradeRepository;
         this.userRepository = userRepository;
+        this.itemRepository = itemRepository;
     }
 
     /**
-     * Creates a trade meeting to trade back items
-     * @param user1 The user ID of who initiated this trade
-     * @param user2 The user ID of who the other trader
-     * @param item1 The item ID of what the initiator plans to lend
-     * @param item2 The item ID of what the initiator plans to borrow
-     * @param isPermanent True iff this trade is permanent
-     * @param dateAndTime The date and time that this trade will take place
-     * @param location The location of where this trade will take place
-     * @param prevMeeting The trade ID of the previous meeting
+     * Creates a trade meeting to trade items temporarily
+     * @param users All the userID's associated with this trade
+     * @param items All the items associated with this trade. Each list corresponds to the desired
+     *              items of the userID in users with the same index
+     * @param dateAndTime When this trade takes place
+     * @param location Where this trade takes place
      */
-    public void createTrade(int user1, int user2, Integer item1, Integer item2, Boolean isPermanent,
-                                LocalDateTime dateAndTime, String location, Integer prevMeeting) {
-        // Get users from Repository
-        PersonalUser trader1 = userRepository.get(user1);
-        PersonalUser trader2 = userRepository.get(user2);
+    public void createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
+            dateAndTime, String location, TradeSpec spec) {
 
-        Trade newTrade = new Trade(user1, user2, item1, item2, isPermanent, dateAndTime, location,
-                prevMeeting);
+        Trade newTrade;
+        switch (spec){
+            case TEMPORARY:
+                newTrade = new TemporaryTrade(users, items, dateAndTime, location);
+            case PERMANENT:
+                newTrade = new PermanentTrade(users, items, dateAndTime, location);
+            default: newTrade = new Trade(new ArrayList<>(), new ArrayList<>(), LocalDateTime.now(), "");
+        }
+
         tradeRepository.add(newTrade);
-        trader1.addToTrades(newTrade.getUid());
-        trader2.addToTrades(newTrade.getUid());
+        for (int i: users){
+            PersonalUser user = userRepository.get(i);
+            user.addToTrades(newTrade.getUid());
+        }
     }
 
 
     /**
-     * Create a trade trade meeting to trade items
-     * @param user1 The user ID of who initiated this trade
-     * @param user2 The user ID of who the other trader
-     * @param item1 The item ID of what the initiator plans to lend
-     * @param item2 The item ID of what the initiator plans to borrow
-     * @param isPermanent True iff this trade is permanent
-     * @param dateAndTime The date and time that this trade will take place
-     * @param location The location of where this trade will take place
+     * Creates a trade meeting to trade items temporarily
+     * @param users All the userID's associated with this trade
+     * @param items All the items associated with this trade. Each list corresponds to the desired
+     *              items of the userID in users with the same index
+     * @param dateAndTime When this trade takes place
+     * @param location Where this trade takes place
+     * @param prevMeeting The tradeID of the previous meeting
      */
-    public void createTrade(int user1, int user2, Integer item1, Integer item2, Boolean isPermanent,
-                                LocalDateTime dateAndTime, String location){
-        createTrade(user1, user2, item1, item2, isPermanent, dateAndTime, location, null);
+    public void createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
+            dateAndTime, String location, Integer prevMeeting) {
+        Trade newTrade = new ReturnTrade(users, items, dateAndTime, location, prevMeeting);
+        tradeRepository.add(newTrade);
+        for (int i: users){
+            PersonalUser user = userRepository.get(i);
+            user.addToTrades(newTrade.getUid());
+        }
     }
 
     /**
@@ -80,21 +86,20 @@ class TradeManager {
         Trade currTrade = tradeRepository.get(tradeID);
 
         // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
-        if ((currTrade.getUser1() == editingUser || currTrade.getUser2() == editingUser) && currTrade.getUser1Edits() ==
-                editLimit && currTrade.getUser2Edits() == editLimit) {
+        if ((currTrade.getAllUsers().contains(editingUser)) && currTrade.getUserEdits(editingUser)
+                == editLimit) {
             cancelTrades(currTrade);
-        } else if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getUser1Edits() <
+        } else if (currTrade.getAllUsers().contains(editingUser) &&
+                !currTrade.getUserConfirms(editingUser) && currTrade.getUserEdits(editingUser) <
                 editLimit) {
             currTrade.setDateAndTime(dateAndTime);
-            currTrade.increaseUser1Edits();
-            currTrade.confirmUser1();
-            currTrade.unconfirmUser2();
-        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && currTrade.getUser2Edits() <
-                editLimit) {
-            currTrade.setDateAndTime(dateAndTime);
-            currTrade.increaseUser2Edits();
-            currTrade.unconfirmUser1();
-            currTrade.confirmUser2();
+            currTrade.increaseUserEdits(editingUser);
+            currTrade.confirmUser(editingUser);
+            for (int i: currTrade.getAllUsers()){
+                if (i != editingUser) {
+                    currTrade.unconfirmUser(i);
+                }
+            }
         }
     }
 
@@ -105,34 +110,33 @@ class TradeManager {
      * @param location The new location of where this trade will take place
      */
     public void editLocation(int tradeID, int editingUser, String location) {
-        // Get Trade from Repository
+        // Get trade from Repository
         Trade currTrade = tradeRepository.get(tradeID);
 
-        // Only unconfirmed parties can edit and users automatically confirm to their edit
-        if ((currTrade.getUser1() == editingUser || currTrade.getUser2() == editingUser) && currTrade.getUser1Edits() ==
-                editLimit && currTrade.getUser2Edits() == editLimit) {
+        // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
+        if ((currTrade.getAllUsers().contains(editingUser)) && currTrade.getUserEdits(editingUser)
+                == editLimit) {
             cancelTrades(currTrade);
-        } else if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getUser1Edits() <
+        } else if (currTrade.getAllUsers().contains(editingUser) &&
+                !currTrade.getUserConfirms(editingUser) && currTrade.getUserEdits(editingUser) <
                 editLimit) {
             currTrade.setLocation(location);
-            currTrade.increaseUser1Edits();
-            currTrade.confirmUser1();
-            currTrade.unconfirmUser2();
-        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && currTrade.getUser2Edits() <
-                editLimit) {
-            currTrade.setLocation(location);
-            currTrade.increaseUser2Edits();
-            currTrade.unconfirmUser1();
-            currTrade.confirmUser2();
+            currTrade.increaseUserEdits(editingUser);
+            currTrade.confirmUser(editingUser);
+            for (int i: currTrade.getAllUsers()){
+                if (i != editingUser) {
+                    currTrade.unconfirmUser(i);
+                }
+            }
         }
     }
 
     // Removes a trade from user's trade list and the trade repository
     private void cancelTrades(Trade currTrade) {
-        PersonalUser trader1 = userRepository.get(currTrade.getUser1());
-        PersonalUser trader2 = userRepository.get(currTrade.getUser1());
-        trader1.removeFromTrade(currTrade.getUid());
-        trader2.removeFromTrade(currTrade.getUid());
+        for (int i: currTrade.getAllUsers()){
+            PersonalUser user = userRepository.get(i);
+            user.removeFromTrade(currTrade.getUid());
+        }
         tradeRepository.remove(currTrade);
     }
 
@@ -146,10 +150,9 @@ class TradeManager {
         Trade currTrade = tradeRepository.get(tradeID);
 
         // Confirm specific user
-        if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && currTrade.getIsClosed()) {
-            currTrade.confirmUser1();
-        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && currTrade.getIsClosed()) {
-            currTrade.confirmUser2();
+        if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser)
+                && currTrade.getIsClosed()) {
+            currTrade.confirmUser(editingUser);
         }
         openTrade(tradeID);
     }
@@ -159,17 +162,23 @@ class TradeManager {
         // Get trade from repository
         Trade currTrade = tradeRepository.get(tradeID);
 
-        // Open trade if both users confirm
-        if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
-            currTrade.openTrade();
-            currTrade.unconfirmUser1();
-            currTrade.unconfirmUser2();
-
-            // Close first meeting if this is a second meeting to trade back
-            if (currTrade.getPrevMeeting() != null && tradeRepository.ifExists(currTrade.getPrevMeeting())) {
-                Trade oldTrade = tradeRepository.get(currTrade.getPrevMeeting());
-                oldTrade.closeTrade();
+        // Check that all users confirm
+        for (Boolean i: currTrade.getAllConfirmations()){
+            if (i.equals(false)){
+                return;
             }
+        }
+
+        // Opens trade and unconfirms users
+        currTrade.openTrade();
+        for (int i: currTrade.getAllUsers()){
+            currTrade.unconfirmUser(i);
+        }
+
+        // Close first meeting if this is a second meeting to trade back
+        if (currTrade instanceof ReturnTrade && tradeRepository.ifExists(((ReturnTrade)currTrade).getPrevMeeting())) {
+            Trade oldTrade = tradeRepository.get(((ReturnTrade)currTrade).getPrevMeeting());
+            oldTrade.closeTrade();
         }
     }
 
@@ -184,70 +193,11 @@ class TradeManager {
         Trade currTrade = tradeRepository.get(tradeID);
 
         // Confirm specific user
-        if (currTrade.getUser1() == editingUser && !currTrade.getUser1Confirms() && !currTrade.getIsClosed()) {
-            currTrade.confirmUser1();
-        } else if (currTrade.getUser2() == editingUser && !currTrade.getUser2Confirms() && !currTrade.getIsClosed()) {
-            currTrade.confirmUser2();
+        if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser)
+                && currTrade.getIsClosed()) {
+            currTrade.confirmUser(editingUser);
         }
         completeTrade(tradeID);
-    }
-
-    // Makes a one-way or two-way trade
-    private void makeTrades(Trade currTrade) {
-        PersonalUser initUser = userRepository.get(currTrade.getUser1());
-        PersonalUser otherUser = userRepository.get(currTrade.getUser2());
-        if (currTrade.getItem1() == null && currTrade.getItem2() != null) {
-            initUser.removeFromWishList(currTrade.getItem2());
-            otherUser.removeFromInventory(currTrade.getItem2());
-            if (currTrade.getPrevMeeting() == null){
-                initUser.setBorrowCount(initUser.getBorrowCount() + 1);
-                otherUser.setLendCount(otherUser.getLendCount() + 1);
-                initUser.addRecentTrades(currTrade.getUid());
-                otherUser.addRecentTrades(currTrade.getUid());
-                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
-                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
-            }
-            if (currTrade.getIsPermanent()) {
-                initUser.addToInventory(currTrade.getItem2());
-            }
-        } else if (currTrade.getItem2() == null && currTrade.getItem1() != null) {
-            otherUser.removeFromWishList(currTrade.getItem1());
-            initUser.removeFromInventory(currTrade.getItem1());
-            if (currTrade.getPrevMeeting() == null){
-                otherUser.setBorrowCount(otherUser.getBorrowCount() + 1);
-                initUser.setLendCount(initUser.getLendCount() + 1);
-                initUser.addRecentTrades(currTrade.getUid());
-                otherUser.addRecentTrades(currTrade.getUid());
-                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
-                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
-            }
-            if (currTrade.getIsPermanent()) {
-                otherUser.addToInventory(currTrade.getItem1());
-            }
-        } else {
-            initUser.removeFromWishList(currTrade.getItem2());
-            initUser.removeFromInventory(currTrade.getItem1());
-            otherUser.removeFromWishList(currTrade.getItem1());
-            otherUser.removeFromInventory(currTrade.getItem2());
-            // itemManager.removeAvailable(currTrade.getItem1());
-            // itemManager.removeAvailable(currTrade.getItem2());
-            if (currTrade.getPrevMeeting() == null){
-                initUser.setBorrowCount(initUser.getBorrowCount() + 1);
-                initUser.setLendCount(initUser.getLendCount() + 1);
-                otherUser.setLendCount(otherUser.getLendCount() + 1);
-                otherUser.setBorrowCount(otherUser.getBorrowCount() + 1);
-                initUser.addRecentTrades(currTrade.getUid());
-                otherUser.addRecentTrades(currTrade.getUid());
-                initUser.setNumTransactions(initUser.getNumTransactions() + 1);
-                otherUser.setNumTransactions(otherUser.getNumTransactions() + 1);
-            }
-            if (currTrade.getIsPermanent()) {
-                initUser.addToInventory(currTrade.getItem2());
-                otherUser.addToInventory(currTrade.getItem1());
-                // itemManager.addAvailable(currTrade.getItem1());
-                // itemManager.addAvailable(currTrade.getItem2());
-            }
-        }
     }
 
     // Completes a trade by making trades or scheduling second meeting
@@ -255,22 +205,71 @@ class TradeManager {
         // Get trade from repository
         Trade currTrade = tradeRepository.get(tradeID);
 
-        // If both users confirm, make the trade
-        if (currTrade.getUser1Confirms() && currTrade.getUser2Confirms()) {
-            makeTrades(currTrade);
-            if (currTrade.getIsPermanent()) {
-                currTrade.closeTrade();
-            } else {
-                scheduleTradeBack(currTrade);
+        // If all users confirm, make the trade
+        for (Boolean i: currTrade.getAllConfirmations()){
+            if (i.equals(false)){
+                return;
             }
+        }
+        makeTrades(currTrade);
+        if (currTrade instanceof TemporaryTrade){
+            scheduleTradeBack(currTrade);
+        } else {
+            currTrade.closeTrade();
+        }
+    }
+
+    // Makes a one-way or two-way trade
+    private void makeTrades(Trade currTrade) {
+        List<Integer> lenders = new ArrayList<>();
+        int index = 0;
+        while (index < currTrade.getAllUsers().size()){
+
+            // Get a user and their respective desired items list
+            PersonalUser user = userRepository.get(currTrade.getAllUsers().get(index));
+            List<Integer> items = currTrade.getAllItems().get(index);
+
+            // Update that they traded
+            if (!(currTrade instanceof ReturnTrade)){
+                user.addRecentTrades(currTrade.getUid());
+                user.setNumTransactions(user.getNumTransactions() + 1);
+
+                // Update borrowing count
+                if (!items.isEmpty()){
+                    user.setBorrowCount(user.getBorrowCount() + 1);
+                }
+            }
+
+            // Changes item availability and item owner name
+            for (int item: items){
+                Item currItem = itemRepository.get(item);
+                user.removeFromWishList(item);
+                if (currTrade instanceof PermanentTrade){
+                    currItem.setIsAvailable(true);
+                    currItem.setOwnerUsername(user.getUid());
+                } else if (currTrade instanceof  TemporaryTrade){
+                    currItem.setIsAvailable(false);
+                } else {
+                    currItem.setIsAvailable(true);
+                }
+                if (!(currTrade instanceof ReturnTrade) && !lenders.contains(currItem.getOwner())){
+                    lenders.add(currItem.getOwner());
+                }
+            }
+        }
+
+        // Update lending count
+        for (int i: lenders){
+            PersonalUser lender = userRepository.get(i);
+            lender.setLendCount(lender.getLendCount() + 1);
         }
     }
 
     // Schedules a second trade meeting
     private void scheduleTradeBack(Trade currTrade) {
         LocalDateTime newDateAndTime = currTrade.getDateAndTime().plusMonths(timeLimit);
-        createTrade(currTrade.getUser1(), currTrade.getUser1(), currTrade.getItem2(), currTrade.getItem1(),
-                true, newDateAndTime, currTrade.getLocation(), currTrade.getUid());
+        createTrade(currTrade.getAllUsers(), currTrade.getAllItems(), newDateAndTime,
+                currTrade.getLocation(), currTrade.getUid());
     }
 
 
@@ -280,14 +279,13 @@ class TradeManager {
      */
     public Map<Integer, Integer> getTradeFrequency(int user) {
         Map<Integer, Integer> tradeFrequency = new HashMap<>();
-        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getUser1() == user ||
-                entity.getUser2() == user);
+        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getAllUsers().contains(user));
         while (tradeIterator.hasNext()) {
             Trade trade = tradeIterator.next();
-            if (user == trade.getUser1()) {
-                putOrAppend(tradeFrequency, trade.getUser2());
-            } else {
-                putOrAppend(tradeFrequency, trade.getUser1());
+            for (int i: trade.getAllUsers()){
+                if (user != i){
+                    putOrAppend(tradeFrequency, i);
+                }
             }
         }
         return tradeFrequency;
@@ -301,6 +299,9 @@ class TradeManager {
         }
     }
 
+    /**
+     * @param currUser The current user being examined
+     */
     public void getRecentTrades(PersonalUser currUser){
         List<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
@@ -310,6 +311,9 @@ class TradeManager {
         }
     }
 
+    /**
+     * @param currUser The current user being examined
+     */
     public void getAllTrades(PersonalUser currUser){
         List<Integer> allTrades = currUser.getTrades();
         StringBuilder stringBuilder = new StringBuilder();

@@ -2,8 +2,6 @@ package main.java.com.phase2.trade.user;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import group.user.User;
 import main.java.com.phase2.trade.repository.UniqueId;
 
 public class PersonalUser extends User implements UniqueId {

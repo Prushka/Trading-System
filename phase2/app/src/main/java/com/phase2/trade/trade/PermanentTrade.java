@@ -3,7 +3,7 @@ package main.java.com.phase2.trade.trade;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class PermanentTrade extends Trade {
+class PermanentTrade extends Trade {
 
     /**
      * @param users All the userID's associated with this trade
@@ -12,7 +12,7 @@ public class PermanentTrade extends Trade {
      * @param dateAndTime When this trade takes place
      * @param location Where this trade takes place
      */
-    public PermanentTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime dateAndTime,
+    PermanentTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime dateAndTime,
                           String location){
         super(users, items, dateAndTime, location);
     }

@@ -1,6 +1,6 @@
 package main.java.com.phase2.trade.trade;
 
-public enum TradeSpec {
+enum TradeSpec {
     TEMPORARY,
     PERMANENT
 }

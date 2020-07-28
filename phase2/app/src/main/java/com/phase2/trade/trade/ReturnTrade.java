@@ -3,7 +3,7 @@ package main.java.com.phase2.trade.trade;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ReturnTrade extends Trade {
+class ReturnTrade extends Trade {
     private Integer prevMeeting;
 
     /**
@@ -14,7 +14,7 @@ public class ReturnTrade extends Trade {
      * @param location Where this trade takes place
      * @param prevMeeting The tradeID of the previous meeting
      */
-    public ReturnTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime dateAndTime,
+    ReturnTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime dateAndTime,
                           String location, Integer prevMeeting){
         super(users, items, dateAndTime, location);
         this.prevMeeting = prevMeeting;
@@ -23,5 +23,5 @@ public class ReturnTrade extends Trade {
     /**
      * @return The trade ID of the previous trade if applicable
      */
-    public Integer getPrevMeeting(){ return prevMeeting;}
+    Integer getPrevMeeting(){ return prevMeeting;}
 }

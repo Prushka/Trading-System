@@ -19,7 +19,7 @@ class TradeManager {
      * @param tradeRepository A repository of all the trades in the system
      * @param userRepository A repository of all users in the system
      */
-    public TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser>
+    TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser>
             userRepository, Repository<Item> itemRepository) {
         // editLimit = tradeProperties.getInt("editLimit");
         // timeLimit = tradeProperties.getInt("timeLimit");
@@ -36,7 +36,7 @@ class TradeManager {
      * @param dateAndTime When this trade takes place
      * @param location Where this trade takes place
      */
-    public void createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
+    void createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
             dateAndTime, String location, TradeSpec spec) {
 
         Trade newTrade;
@@ -65,7 +65,7 @@ class TradeManager {
      * @param location Where this trade takes place
      * @param prevMeeting The tradeID of the previous meeting
      */
-    public void createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
+    void createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
             dateAndTime, String location, Integer prevMeeting) {
         Trade newTrade = new ReturnTrade(users, items, dateAndTime, location, prevMeeting);
         tradeRepository.add(newTrade);
@@ -81,7 +81,7 @@ class TradeManager {
      * @param editingUser The user ID of who wishes to edit this trade
      * @param dateAndTime The new date and time that this trade will take place
      */
-    public void editDateAndTime(int tradeID, int editingUser, LocalDateTime dateAndTime) {
+    void editDateAndTime(int tradeID, int editingUser, LocalDateTime dateAndTime) {
         // Get trade from Repository
         Trade currTrade = tradeRepository.get(tradeID);
 
@@ -109,7 +109,7 @@ class TradeManager {
      * @param editingUser The user ID of who wishes to edit this trade
      * @param location The new location of where this trade will take place
      */
-    public void editLocation(int tradeID, int editingUser, String location) {
+    void editLocation(int tradeID, int editingUser, String location) {
         // Get trade from Repository
         Trade currTrade = tradeRepository.get(tradeID);
 
@@ -145,7 +145,7 @@ class TradeManager {
      * @param tradeID The trade ID of the trade to be confirmed
      * @param editingUser The user ID of who wishes to confirm to this trade
      */
-    public void confirmTrade(int tradeID, int editingUser) {
+    void confirmTrade(int tradeID, int editingUser) {
         // Get Trade from Repository
         Trade currTrade = tradeRepository.get(tradeID);
 
@@ -188,7 +188,7 @@ class TradeManager {
      * @param tradeID The trade ID of the trade to be confirmed
      * @param editingUser The user ID of who wishes to confirmed this trade
      */
-    public void confirmTradeComplete(int tradeID, int editingUser) {
+    void confirmTradeComplete(int tradeID, int editingUser) {
         // Get Trade from Repository
         Trade currTrade = tradeRepository.get(tradeID);
 
@@ -277,7 +277,7 @@ class TradeManager {
      * @param user The user ID
      * @return The frequency this user trades with other users
      */
-    public Map<Integer, Integer> getTradeFrequency(int user) {
+    Map<Integer, Integer> getTradeFrequency(int user) {
         Map<Integer, Integer> tradeFrequency = new HashMap<>();
         Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getAllUsers().contains(user));
         while (tradeIterator.hasNext()) {
@@ -302,7 +302,7 @@ class TradeManager {
     /**
      * @param currUser The current user being examined
      */
-    public void getRecentTrades(PersonalUser currUser){
+    void getRecentTrades(PersonalUser currUser){
         List<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : recentCompleteTrades) {
@@ -314,7 +314,7 @@ class TradeManager {
     /**
      * @param currUser The current user being examined
      */
-    public void getAllTrades(PersonalUser currUser){
+    void getAllTrades(PersonalUser currUser){
         List<Integer> allTrades = currUser.getTrades();
         StringBuilder stringBuilder = new StringBuilder();
         for (Integer i : allTrades) {

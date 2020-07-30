@@ -4,6 +4,7 @@ package app.src.main.java.com.phase2.trade.user;
 import com.phase2.trade.user.AdministrativeUser;
 import group.trade.Trade;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,12 +21,18 @@ public class AdministrativeManager {
     private Iterator<PersonalUser> needToConfirmAddItem;
     private Iterator<PersonalUser> needToConfirmUnfreeze;
     private Repository<Item> itemRepository;
+    private List<PersonalUser> freezeActivities;
+    private List<PersonalUser> unfreezeActivities;
+    private List<PersonalUser> addItemActivities;
 
 
     public AdministrativeManager(){
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
         needToConfirmAddItem = personalUserRepository.iterator(PersonalUser::getAddToInventoryRequestIsNotEmpty);
         needToConfirmUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);
+        freezeActivities = new ArrayList();
+        unfreezeActivities = new ArrayList();
+        addItemActivities = new ArrayList();
     }
 
     public boolean createAdministrator(String username, String email, String telephone, String password, boolean isHead){
@@ -81,15 +88,14 @@ public class AdministrativeManager {
         return needToFreezelist;
     }
 
-    public Response getNeedToConfirmAddItemUserList(){
+    public String getNeedToConfirmAddItemUserList(){
         StringBuilder stringBuilder = new StringBuilder();
         while (needToConfirmAddItem.hasNext()) {
             PersonalUser user = needToConfirmAddItem.next();
             stringBuilder.append("User ID: ").append(user.getUid()).append(" | Request IDs: ")
                     .append(user.getAddToInventoryRequest()).append("\n");
         }
-        return new Response.Builder(true)
-                .translatable("success.get.addItem", stringBuilder.toString()).build();
+        return stringBuilder.toString();
     }
 
     public Iterator<PersonalUser> getUserRequestToUnfreeze() {
@@ -98,11 +104,13 @@ public class AdministrativeManager {
 
     public void freezeUser(PersonalUser user){
         user.setIsFrozen(true);
+        freezeActivities.add(user);
     }
 
     public void unfreezeUser(PersonalUser user){
         user.setIsFrozen(false);
         user.setRequestToUnfreeze(false);
+        unfreezeActivities.add(user);
     }
 
     public boolean removeUserItem(PersonalUser user, Integer item){
@@ -214,6 +222,16 @@ public class AdministrativeManager {
                 incomplete++;
             }
         }
+    }
+
+    public void undoFreezeActivities(PersonalUser user){
+        user.setIsFrozen(false);
+        freezeActivities.remove(user);
+    }
+
+    public void undoUnfreezeActivities(PersonalUser user){
+        user.setIsFrozen(true);
+        unfreezeActivities.remove(user);
     }
 
 

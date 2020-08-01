@@ -61,4 +61,15 @@ public class AccountManager {
         });
     }
 
+    public void logOut(){
+        loggedInUser = null;
+    }
+
+    public boolean isUserLoggedIn(){
+        return loggedInUser!=null;
+    }
+
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
 }

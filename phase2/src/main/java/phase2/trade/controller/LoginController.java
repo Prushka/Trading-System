@@ -41,7 +41,7 @@ public class LoginController extends AbstractController implements Initializable
             if (result != null) {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
-                                new DashboardController(), actionEvent, true));
+                                new DashboardController(accountManager), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
             }

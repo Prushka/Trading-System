@@ -14,12 +14,7 @@ public abstract class AbstractController {
 
     SceneFactory sceneFactory = new SceneFactory();
 
-
-    void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
-        this.switchScene(fileName, controller, actionEvent, false);
-    }
-
-    void switchScene(String fileName, Object controller, ActionEvent actionEvent, boolean applyCSS) {
+    void switchScene(String fileName, Object controller, Stage stage, boolean applyCSS) {
         FXMLLoader loader = sceneFactory.getLoader(fileName);
         loader.setController(controller);
         try {
@@ -27,13 +22,32 @@ public abstract class AbstractController {
             if (applyCSS) {
                 scene.getStylesheets().add("css/trade.css");
             }
-            ((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).setScene(scene);
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    Parent loadPane(String fileName, Object controller){
+    void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
+        this.switchScene(fileName, controller, actionEvent, false);
+    }
+
+    void switchScene(String fileName, Object controller, ActionEvent actionEvent, boolean applyCSS) {
+        this.switchScene(fileName, controller,
+                (Stage) ((Node) actionEvent.getSource()).getScene().getWindow(), applyCSS);
+    }
+
+
+    void switchScene(String fileName, Object controller, Parent parent) {
+        this.switchScene(fileName, controller, parent, false);
+    }
+
+    void switchScene(String fileName, Object controller, Parent parent, boolean applyCSS) {
+        this.switchScene(fileName, controller,
+                (Stage) parent.getScene().getWindow(), applyCSS);
+    }
+
+    Parent loadPane(String fileName, Object controller) {
         FXMLLoader fxmlLoader = sceneFactory.getLoader(fileName);
         fxmlLoader.setController(controller);
         Parent pane = null;

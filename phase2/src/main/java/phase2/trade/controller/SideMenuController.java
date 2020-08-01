@@ -16,8 +16,22 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private GridPane center;
 
-    public SideMenuController(GridPane center) {
-        this.center = center;
+    private final AccountManager accountManager;
+
+    public SideMenuController(AccountManager accountManager, GridPane center){
+        this.accountManager = accountManager;
+    }
+
+    private void logOut(){
+        accountManager.logOut();
+        switchScene("login.fxml",new LoginController(accountManager),logOut);
+    }
+
+    private void userInfo(){
+        Parent userInfo = sceneFactory.getPane("user_info.fxml");
+        GridPane.setConstraints(userInfo, 0, 0);
+        center.getChildren().clear();
+        center.getChildren().addAll(userInfo);
     }
 
     @Override
@@ -26,10 +40,10 @@ public class SideMenuController extends AbstractController implements Initializa
             if (newValue != null) {
                 switch (newValue.getId()) {
                     case "userInfo":
-                        Parent userInfo = sceneFactory.getPane("user_info.fxml");
-                        GridPane.setConstraints(userInfo, 0, 0);
-                        center.getChildren().clear();
-                        center.getChildren().addAll(userInfo);
+                        userInfo();
+                        break;
+                    case "logOut":
+                        logOut();
                         break;
                 }
             }

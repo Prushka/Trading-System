@@ -43,7 +43,7 @@ public class RegisterController extends AbstractController implements Initializa
             if (result != null) {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
-                                new DashboardController(), actionEvent, true));
+                                new DashboardController(accountManager), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
             }

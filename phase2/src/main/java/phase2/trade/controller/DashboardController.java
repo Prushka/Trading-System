@@ -22,10 +22,17 @@ public class DashboardController extends AbstractController implements Initializ
     public JFXHamburger hamburger;
     public GridPane center;
 
+
+    private final AccountManager accountManager;
+
+    public DashboardController(AccountManager accountManager) {
+        this.accountManager = accountManager;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(center)));
+        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(accountManager, center)));
 
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
         transition.setRate(-1);

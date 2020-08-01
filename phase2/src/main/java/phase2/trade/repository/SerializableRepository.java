@@ -43,7 +43,7 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
             data = (List<T>) input.readObject();
             input.close();
         } catch (IOException | ClassNotFoundException e) {
-            LOGGER.log(Level.SEVERE, "Something went wrong when trying to read: " + file.getName(), e);
+            e.printStackTrace();
         }
     }
 
@@ -69,7 +69,7 @@ public class SerializableRepository<T extends Serializable & UniqueId> extends R
             output.writeObject(data);
             output.close();
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Something went wrong when trying to save: " + file.getName(), e);
+            e.printStackTrace();
         }
     }
 

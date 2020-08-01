@@ -13,8 +13,6 @@ import java.util.logging.Logger;
  */
 public abstract class RepositorySaveImpl<T extends UniqueId> extends RepositoryListImpl<T> implements Savable {
 
-    Logger LOGGER = new LoggerFactory(RepositorySaveImpl.class).getConfiguredLogger();
-
     /**
      * The file object this Repository reads to and saves from
      */

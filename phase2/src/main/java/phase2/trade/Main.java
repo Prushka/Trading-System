@@ -1,14 +1,16 @@
 package phase2.trade;
 
 
+import io.datafx.controller.flow.Flow;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
+import phase2.trade.controller.LoginController;
+import phase2.trade.controller.UserRepository;
+import phase2.trade.repository.SaveHook;
+import phase2.trade.view.SceneFactory;
 
 public class Main extends Application {
 
@@ -18,12 +20,19 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Locale locale = new Locale("en", "US");
-        ResourceBundle bundle = ResourceBundle.getBundle("language.strings", locale);
 
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/login.fxml"),bundle);
+        SaveHook saveHook = new SaveHook();
+        Flow flow = new Flow(LoginController.class);
 
-        Scene scene = new Scene(root, 800, 500);
+
+        SceneFactory sceneFactory = new SceneFactory();
+        FXMLLoader login = sceneFactory.getLoader("login.fxml");
+
+        LoginController loginController = new LoginController(new UserRepository(saveHook));
+        login.setController(loginController);
+
+        Scene scene = new Scene(login.load());
+
         primaryStage.setTitle("Trade");
         primaryStage.setScene(scene);
         primaryStage.show();

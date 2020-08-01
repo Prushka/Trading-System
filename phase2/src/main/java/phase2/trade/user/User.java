@@ -1,8 +1,10 @@
 package phase2.trade.user;
 
-public class User {
+import phase2.trade.repository.UniqueId;
 
-    private int id;
+public class User implements UniqueId {
+
+    private int uuid;
     private String userName;
     private String email;
     private String telephone;
@@ -15,13 +17,11 @@ public class User {
      *
      * @param userName  the username of this Person.
      * @param email     the email this Person.
-     * @param telephone the telephone number of this person
      * @param password  the password this user set to
      */
-    public User(String userName, String email, String telephone, String password) {
+    public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
-        this.telephone = telephone;
         this.password = password;
     }
 
@@ -49,12 +49,14 @@ public class User {
         this.password = password;
     }
 
-    public Integer getId() {
-        return id;
+    @Override
+    public void setUid(int value) {
+        this.uuid = value;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public int getUid() {
+        return uuid;
     }
 }
 

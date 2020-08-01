@@ -24,11 +24,10 @@ public class PersonalUser extends User {
      *
      * @param userName  username of this user
      * @param email     email of this user
-     * @param telephone telephone number of this user
      * @param password  password of this user
      */
-    public PersonalUser(String userName, String email, String telephone, String password) {
-        super(userName, email, telephone, password);
+    public PersonalUser(String userName, String email, String password) {
+        super(userName, email, password);
         wishlist = new ArrayList<>();
         inventory = new ArrayList<>();
         trades = new ArrayList<>();

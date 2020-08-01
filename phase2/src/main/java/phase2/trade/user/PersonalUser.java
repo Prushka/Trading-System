@@ -2,9 +2,8 @@ package phase2.trade.user;
 
 import java.util.ArrayList;
 import java.util.List;
-import main.java.com.phase2.trade.repository.UniqueId;
 
-public class PersonalUser extends User implements UniqueId {
+public class PersonalUser extends User {
 
     private List<Integer> wishlist;
     private List<Integer> inventory;
@@ -46,10 +45,6 @@ public class PersonalUser extends User implements UniqueId {
     //public int getIncompleteTrades() {
         //return incompleteTrades;
     //}
-
-    public PersonalUser(List<String> record) {
-        super(record);
-    }
 
     public List<Integer> getWishlist() {
         return wishlist;

@@ -36,7 +36,7 @@ public class AccountManager {
             userDAO.openCurrentSessionWithTransaction();
             List<User> usersByEmail = userDAO.findByEmail(email);
             List<User> usersByName = userDAO.findByEmail(email);
-            if (usersByEmail.size() > 0 && usersByName.size() > 0) {
+            if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new PersonalUser(username, email, password);
                 userDAO.add(user);
                 loggedInUser = user;

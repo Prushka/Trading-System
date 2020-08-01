@@ -27,4 +27,7 @@ public class AdministrativeUser extends User {
     }
 
 
+    public boolean isAdmin(){
+        return true;
+    }
 }

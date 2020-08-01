@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class User {
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,5 +67,7 @@ public class User {
     public int getUid() {
         return uuid;
     }
+
+    public abstract boolean isAdmin();
 }
 

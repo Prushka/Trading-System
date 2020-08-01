@@ -85,6 +85,10 @@ public class PersonalUser extends User {
     }
 
 
+    public boolean isAdmin(){
+        return false;
+    }
+
     /*
      * returns the user IDs of the top three most frequent traders for this user as a map.
      * if this user has not traded with three different users, returns top 2 or the top

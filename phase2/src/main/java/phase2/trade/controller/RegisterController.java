@@ -1,5 +1,8 @@
 package phase2.trade.controller;
 
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,11 +19,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class RegisterController {
+public class RegisterController extends AbstractController implements Initializable {
 
     private final AccountManager accountManager;
 
+    private StringProperty submissionResultProperty;
+
+    public Label submissionResult;
+
     private final SceneFactory sceneFactory = new SceneFactory();
+
+    private StringProperty submissionPrompt;
 
     public TextField username, email, password;
 
@@ -31,9 +40,10 @@ public class RegisterController {
     public void signUpButtonClicked(ActionEvent actionEvent) {
         accountManager.register(result -> {
             if (result != null) {
-                System.out.println("success");
+                switchScene("personal_dashboard.fxml",
+                        new DashboardController(), actionEvent);
             } else {
-                System.out.println("failed");
+                Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
             }
         }, username.getText(), email.getText(), password.getText());
     }
@@ -43,5 +53,11 @@ public class RegisterController {
         FXMLLoader loader = sceneFactory.getLoader("login.fxml");
         loader.setController(registerController);
         ((Node) actionEvent.getSource()).getScene().setRoot(loader.load());
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        submissionResultProperty = new SimpleStringProperty("");
+        submissionResult.textProperty().bind(submissionResultProperty);
     }
 }

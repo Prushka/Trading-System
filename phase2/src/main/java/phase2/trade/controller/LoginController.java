@@ -14,18 +14,17 @@ import javafx.stage.Stage;
 import phase2.trade.database.UserDAO;
 import phase2.trade.view.SceneFactory;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController implements Initializable {
+public class LoginController extends AbstractController implements Initializable {
 
     private final AccountManager accountManager;
 
-    private StringProperty submissionPrompt;
+    private StringProperty submissionResultProperty;
 
-    public Label invalidUserNameLabel;
+    public Label submissionResult;
 
     public TextField usernameOrEmail, password;
 
@@ -45,7 +44,7 @@ public class LoginController implements Initializable {
                 switchScene("personal_dashboard.fxml",
                         new DashboardController(), actionEvent);
             } else {
-                Platform.runLater(() -> submissionPrompt.setValue("Invalid Username / Password"));
+                Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
             }
         }, usernameOrEmail.getText(), password.getText());
     }
@@ -54,19 +53,9 @@ public class LoginController implements Initializable {
         switchScene("register.fxml", new RegisterController(accountManager), actionEvent);
     }
 
-    private void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
-        FXMLLoader loader = sceneFactory.getLoader(fileName);
-        loader.setController(controller);
-        try {
-            ((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).setScene(new Scene(loader.load()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        submissionPrompt = new SimpleStringProperty("");
-        invalidUserNameLabel.textProperty().bind(submissionPrompt);
+        submissionResultProperty = new SimpleStringProperty("");
+        submissionResult.textProperty().bind(submissionResultProperty);
     }
 }

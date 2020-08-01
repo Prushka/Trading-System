@@ -1,4 +1,4 @@
-package com.phase2.trade.user;
+package src.main.java.com.phase2.trade.user;
 
 
 import com.phase2.trade.user.AdministrativeUser;
@@ -21,44 +21,92 @@ public class AdministrativeManager {
     private Iterator<PersonalUser> needToConfirmAddItem;
     private Iterator<PersonalUser> needToConfirmUnfreeze;
     private Repository<Item> itemRepository;
-    private List<PersonalUser> freezeActivities;
-    private List<PersonalUser> unfreezeActivities;
-    private List<PersonalUser> addItemActivities;
 
 
-    public AdministrativeManager(){
+    /**
+     * all administrative user activities happened here
+     * @param administrators A repository of admin in the system
+     * @param personalUserRepository repository of all users in the system
+     */
+    public AdministrativeManager(Repository<AdministrativeUser> administrators, Repository<PersonalUser> personalUserRepository){
+        this.administrators = administrators;
+        this.personalUserRepository = personalUserRepository;
         needToFreezelist = personalUserRepository.iterator(PersonalUser::getShouldBeFreezedUser);
         needToConfirmAddItem = personalUserRepository.iterator(PersonalUser::getAddToInventoryRequestIsNotEmpty);
         needToConfirmUnfreeze = personalUserRepository.iterator(PersonalUser::getRequestToUnfreeze);
-        freezeActivities = new ArrayList();
-        unfreezeActivities = new ArrayList();
-        addItemActivities = new ArrayList();
     }
 
+    /**
+     * Creates an administrative user, only Head administrative user can create.
+     * @param username The username of this c
+     * @param email The email of this administrative user
+     * @param telephone The telephone of this administrative user
+     * @param password The password of this administrative user
+     * @param isHead  The boolean if this administrative user is head
+     * @return Boolean if this administrative user is successfully created
+     */
     public boolean createAdministrator(String username, String email, String telephone, String password, boolean isHead){
-        if (personalUserRepository.ifExists(
-                PersonalUser -> PersonalUser.getUserName().equals(username))){
+        if (adminUserExist(username)){
             return false; //username existed
-            //return new Response.Builder(false).translatable("existed.username").build();
+            //existed.username";
         }
         if (isHead){
         AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, true);
         administrators.add(admin);
-        return true;
-        //return new Response.Builder(true).translatable("success.create.newAdmin").build();
+        return true; //"success.create.newAdmin"
         }else{
-            return false; // not head can't register
-            //return new Response.Builder(false).translatable("not.head").build();
+            return false; // not head can't register, "not.head"
         }
     }
 
+    /**
+     * Check if the administrative user gives the correct username and password to login
+     * @param username This administrative user's username
+     * @param password This administrative user's password
+     * @return True if correct, otherwise false
+     */
     public boolean verifyLogin(String username, String password){
-         if (getCurrAdmin(username, password) != null){
-             return true; //"success.login.adminUser"
-         }
-         return false; //"failed.login.adminUser"
+        if (getCurrAdmin(username, password) != null){
+            return true; //"success.login.adminUser"
+        }
+        return false; //"failed.login.adminUser"
     }
 
+
+    /**
+     * helper method to check if the administrative user gaven username and password exists
+     * @param username This administrative user's username
+     * @param password This administrative user's password
+     * @return True if exists, otherwise false
+     */
+    private boolean adminUserExist(String username, String password){
+        if (administrators.ifExists(
+                AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
+                        && AdministrativeUser.getPassword().equals(password))){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private boolean adminUserExist(String username){
+        if (administrators.ifExists(
+                AdministrativeUser -> AdministrativeUser.getUserName().equals(username))){
+            return true; //username existed
+    }else{
+            return false;
+        }
+    }
+    /**
+     * Head administrative user creates a subsequent administrative user, only head administrative user can create
+     * subsequent  administrative user
+     * @param head The head administrative user that is creating the subsequent  administrative user
+     * @param username The username of the subsequent  administrative user
+     * @param email The email of the subsequent administrative user
+     * @param telephone The telephone of the subsequent administrative user
+     * @param password The password of the subsequent administrative user
+     * @return Boolean if the subsequent administrative user is successfully created
+     */
     public boolean addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
         if (head.getIsHead()){
             createAdministrator(username, email, telephone, password, false);
@@ -69,12 +117,12 @@ public class AdministrativeManager {
     }
 
     public AdministrativeUser getCurrAdmin(String username, String password){
-        if (administrators.ifExists(
-                AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
-                        && AdministrativeUser.getPassword().equals(password))) {
+        if (adminUserExist(username, password)) {
             currAdmin = administrators.getFirst(
                     AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
                             && AdministrativeUser.getPassword().equals(password));
+        }else {
+            currAdmin = null;
         }
         return currAdmin;
     }
@@ -101,6 +149,11 @@ public class AdministrativeManager {
     public Iterator<PersonalUser> getUserRequestToUnfreeze() {
         return needToConfirmUnfreeze;
     }
+
+    /**
+     * Initialize the  a trade to a new location
+     * @param newLocation The new location of this trade
+     */
 
     public void freezeUser(PersonalUser user){
         user.setIsFrozen(true);
@@ -223,6 +276,18 @@ public class AdministrativeManager {
             }
         }
     }
+
+    /**
+     * undo the personal user add items to wishlist
+     * @param user
+     * @param item
+     */
+    public void removeItemFromUserWishlist(PersonalUser user, Integer item){
+        user.removeFromWishList(item);
+    }
+    /*
+    public void cancelTrade(Trade trade){
+    }*/
 
 
 

@@ -41,6 +41,10 @@ public class LoginController extends AbstractController implements Initializable
     }
 
     public void loginButtonClicked(ActionEvent actionEvent) {
+        ValidatorBind validatorBind = new ValidatorBind(submissionResultProperty).validate(ValidatorType.USER_NAME, "Invalid UserName", usernameOrEmail.getText())
+                .validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
+        if (!validatorBind.isAllPass()) return;
+        submissionResultProperty.setValue("Signing in..");
         accountManager.login(result -> {
             if (result != null) {
                 Platform.runLater(() ->

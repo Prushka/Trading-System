@@ -11,9 +11,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import phase2.trade.user.User;
 
+import java.net.URL;
 import java.util.ResourceBundle;
 
-public class UserInfoPresenter {
+public class UserInfoPresenter implements Initializable {
 
     public Label userId = new Label("");
 
@@ -25,24 +26,19 @@ public class UserInfoPresenter {
 
     public Label currentStatus = new Label("");
 
-    private User user;
+    private final User user;
 
     public UserInfoPresenter(User user) {
         this.user = user;
+        System.out.println(user.getUserName());
     }
 
-    public Parent getPane() { // resource bundle
-        userId.setText("User Id: "+user.getUid());
-        userName.setText("User Name: "+user.getUserName());
-        email.setText("Email: "+user.getEmail());
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        userId.setText("User Id: " + user.getUid());
+        userName.setText("User Name: " + user.getUserName());
+        email.setText("Email: " + user.getEmail());
         bio.setText("Bio: ");
-        currentStatus.setText("Current Status: "+user.getUid());
-
-        VBox vBox = new VBox();
-        vBox.setSpacing(15);
-        vBox.setPadding(new Insets(20, 20, 20, 20));
-        vBox.getChildren().addAll(userId, userName, email, new Separator(), bio, currentStatus);
-        return vBox;
+        currentStatus.setText("Current Status: " + user.getUid());
     }
-
 }

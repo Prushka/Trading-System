@@ -35,10 +35,12 @@ public class Main extends Application {
         LoginController loginController = new LoginController(new UserDAO());
         login.setController(loginController);
 
-        primaryStage.setOnCloseRequest(event -> saveHook.save());
-        primaryStage.setTitle("Trade");
-        primaryStage.setScene(new Scene(login.load()));
-        primaryStage.show();
+        mockDashboard(primaryStage);
+
+        // primaryStage.setOnCloseRequest(event -> saveHook.save());
+        // primaryStage.setTitle("Trade");
+        // primaryStage.setScene(new Scene(login.load()));
+        // primaryStage.show();
     }
 
     private void mockDashboard(Stage primaryStage) {
@@ -51,6 +53,9 @@ public class Main extends Application {
 
                 Parent dashboard = sceneFactory.getPane("personal_dashboard.fxml", dashboardController);
                 Scene scene = new Scene(dashboard);
+
+                scene.getStylesheets().add("css/trade.css");
+
                 primaryStage.setScene(scene);
                 primaryStage.show();
             });

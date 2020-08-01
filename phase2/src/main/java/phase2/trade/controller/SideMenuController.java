@@ -32,7 +32,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void userInfo() {
-        Parent userPane = new UserInfoPresenter(accountManager.getLoggedInUser()).getPane();
+        Parent userPane = loadPane("user_info.fxml",new UserInfoPresenter(accountManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
@@ -40,7 +40,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userInfoBox.getChildren().add(loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
+        userInfoBox.getChildren().add(loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue.getId()) {
@@ -53,5 +53,6 @@ public class SideMenuController extends AbstractController implements Initializa
                 }
             }
         });
+        sideList.getSelectionModel().select(userInfo);
     }
 }

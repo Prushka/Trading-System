@@ -1,16 +1,19 @@
 package phase2.trade;
 
 
-import io.datafx.controller.flow.Flow;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import phase2.trade.controller.LoginController;
-import phase2.trade.controller.UserRepository;
+import phase2.trade.database.UserDAO;
 import phase2.trade.repository.SaveHook;
 import phase2.trade.view.SceneFactory;
+
+import java.util.logging.Level;
 
 public class Main extends Application {
 
@@ -21,18 +24,18 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         SaveHook saveHook = new SaveHook();
-        Flow flow = new Flow(LoginController.class);
-
 
         SceneFactory sceneFactory = new SceneFactory();
         FXMLLoader login = sceneFactory.getLoader("login.fxml");
 
-        LoginController loginController = new LoginController(new UserRepository(saveHook));
+        LoginController loginController = new LoginController(new UserDAO());
         login.setController(loginController);
 
         Scene scene = new Scene(login.load());
 
+        primaryStage.setOnCloseRequest(event -> saveHook.save());
         primaryStage.setTitle("Trade");
         primaryStage.setScene(scene);
         primaryStage.show();

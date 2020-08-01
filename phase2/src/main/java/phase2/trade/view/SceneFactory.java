@@ -10,11 +10,15 @@ import java.util.ResourceBundle;
 
 public class SceneFactory {
 
-    public FXMLLoader getLoader(String fileName) {
+    public FXMLLoader getLoader(String fileName, Class<?> clazz) {
         Locale locale = new Locale("en", "US");
         ResourceBundle en = ResourceBundle.getBundle("language.strings", locale);
 
-        return new FXMLLoader(Main.class.getResource("/fxml/" + fileName), en);
+        return new FXMLLoader(clazz.getResource("/fxml/" + fileName), en);
+    }
+
+    public FXMLLoader getLoader(String fileName) {
+        return getLoader(fileName, Main.class);
     }
 
     public Parent getPane(String fileName) {
@@ -26,8 +30,8 @@ public class SceneFactory {
         return null;
     }
 
-    public Parent getPane(String fileName, Object controller) {
-        FXMLLoader loader = getLoader(fileName);
+    public Parent getPane(String fileName, Object controller) { // exactly same code and this one couldn't find the location
+        FXMLLoader loader = getLoader(fileName, controller.getClass());
         loader.setController(controller);
         try {
             return loader.load();

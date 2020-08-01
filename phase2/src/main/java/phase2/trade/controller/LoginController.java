@@ -1,13 +1,17 @@
 package phase2.trade.controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import phase2.trade.database.UserDAO;
 import phase2.trade.view.SceneFactory;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -19,8 +23,8 @@ public class LoginController {
 
     private final SceneFactory sceneFactory = new SceneFactory();
 
-    public LoginController(UserRepository userRepository) {
-        this.accountManager = new AccountManager(userRepository);
+    public LoginController(UserDAO userDAO) {
+        this.accountManager = new AccountManager(userDAO);
     }
 
     LoginController(AccountManager accountManager) {
@@ -31,8 +35,10 @@ public class LoginController {
         invalidUserNameLabel.setVisible(true);
     }
 
-    public void signUpButtonClicked(ActionEvent actionEvent) {
-        ((Node) actionEvent.getSource()).getScene().setRoot(sceneFactory.getPane("register.xml", new RegisterController(accountManager)));
+    public void signUpButtonClicked(ActionEvent actionEvent) throws IOException {
+        RegisterController registerController = new RegisterController(accountManager);
+        FXMLLoader loader = sceneFactory.getLoader("register.fxml");
+        loader.setController(registerController);
+        ((Node) actionEvent.getSource()).getScene().setRoot(loader.load());
     }
-
 }

@@ -1,28 +1,39 @@
 package phase2.trade.user;
 
-import phase2.trade.repository.UniqueId;
 
-public class User implements UniqueId {
+import javax.persistence.*;
+import java.util.List;
 
-    private int uuid;
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer uuid;
     private String userName;
     private String email;
     private String telephone;
     private String password;
 
+    @Embedded
     public Address address;
 
     /**
      * Creates a new User with userName, email, telephone and given password.
      *
-     * @param userName  the username of this Person.
-     * @param email     the email this Person.
-     * @param password  the password this user set to
+     * @param userName the username of this Person.
+     * @param email    the email this Person.
+     * @param password the password this user set to
      */
     public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
         this.password = password;
+    }
+
+    public User() {
+
     }
 
     public String getUserName() {
@@ -49,12 +60,10 @@ public class User implements UniqueId {
         this.password = password;
     }
 
-    @Override
     public void setUid(int value) {
         this.uuid = value;
     }
 
-    @Override
     public int getUid() {
         return uuid;
     }

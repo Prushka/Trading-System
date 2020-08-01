@@ -29,10 +29,10 @@
         <VBox alignment="CENTER" spacing="40.0">
             <children>
                 <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0"
-                              promptText="%input.username.prompt"/>
+                              promptText="%input.username.prompt" fx:id="username"/>
                 <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0"
-                              promptText="Email"/>
-                <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Password"/>
+                              promptText="Email" fx:id="email"/>
+                <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Password" fx:id="password"/>
                 <JFXButton buttonType="RAISED" onAction="#signUpButtonClicked" prefHeight="40" prefWidth="100"
                            style="-fx-text-fill:WHITE;-fx-background-color:#ba8baf;-fx-font-size:14px;"
                            text="Sign Up">

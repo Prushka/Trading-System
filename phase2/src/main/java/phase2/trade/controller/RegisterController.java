@@ -50,17 +50,6 @@ public class RegisterController extends AbstractController implements Initializa
         }, username.getText(), email.getText(), password.getText());
     }
 
-    void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
-        System.out.println("Switching scene");
-        FXMLLoader loader = sceneFactory.getLoader(fileName);
-        loader.setController(controller);
-        try {
-            ((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).setScene(new Scene(loader.load()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void goToSignIn(ActionEvent actionEvent) {
         switchScene("login.fxml",
                 new LoginController(accountManager), actionEvent);

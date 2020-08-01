@@ -17,6 +17,7 @@ public class PersonalUser extends User implements UniqueId {
     private List<Integer> recentTrades;
     private List<Integer> addToInventoryRequest;
     private Boolean requestToUnfreeze;
+    private List<Item> suggestedItems;
     //private int incompleteTrades;
 
     /**
@@ -40,6 +41,7 @@ public class PersonalUser extends User implements UniqueId {
         recentTrades = new ArrayList<>();
         addToInventoryRequest = new ArrayList<>();
         requestToUnfreeze = false;
+        suggestedItems = new ArrayList<>();
         //incompleteTrades = 0;
     }
 
@@ -162,6 +164,13 @@ public class PersonalUser extends User implements UniqueId {
         return recentTrades;
     }
 
+    public List<Item> getSuggestedItems() {
+        return suggestedItems;
+    }
+
+    public void suggest(Item i) {
+        suggestedItems.add(i);
+    }
 
     /*
      * returns the user IDs of the top three most frequent traders for this user as a map.

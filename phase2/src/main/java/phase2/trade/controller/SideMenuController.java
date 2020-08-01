@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,6 +15,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     public JFXListView<Label> sideList;
     public Label userInfo, market, wishList, settings, logOut;
+    public VBox userInfoBox;
 
     private GridPane center;
 
@@ -38,6 +40,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        userInfoBox.getChildren().add(loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue.getId()) {

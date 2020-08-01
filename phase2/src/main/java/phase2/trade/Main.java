@@ -2,6 +2,7 @@ package phase2.trade;
 
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -34,21 +35,28 @@ public class Main extends Application {
         LoginController loginController = new LoginController(new UserDAO());
         login.setController(loginController);
 
+        mockDashboard(primaryStage);
 
-        Scene scene = new Scene(mockDashboard());
-
-        primaryStage.setOnCloseRequest(event -> saveHook.save());
-        primaryStage.setTitle("Trade");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        // primaryStage.setOnCloseRequest(event -> saveHook.save());
+        // primaryStage.setTitle("Trade");
+        // primaryStage.setScene(scene);
+        // primaryStage.show();
     }
 
-    private Parent mockDashboard() {
+    private void mockDashboard(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
         AccountManager accountManager = new AccountManager(new UserDAO());
         accountManager.login(result -> {
+            DashboardController dashboardController = new DashboardController(accountManager);
+
+            Platform.runLater(() -> {
+
+                Parent dashboard = sceneFactory.getPane("personal_dashboard.fxml", dashboardController);
+                Scene scene = new Scene(dashboard);
+                primaryStage.setScene(scene);
+                primaryStage.show();
+            });
+
         }, "123", "123");
-        DashboardController dashboardController = new DashboardController(accountManager);
-        return sceneFactory.getPane("personal_dashboard.fxml", dashboardController);
     }
 }

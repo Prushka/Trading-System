@@ -1,0 +1,18 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://muddy.ca:3308/group</property>
+        <property name="connection.username">member</property>
+        <property name="connection.password">SLHfT6Ui#9kF</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="show_sql">true</property>
+        <mapping class="phase2.trade.user.User" />
+        <mapping class="phase2.trade.user.AdministrativeUser" />
+        <mapping class="phase2.trade.user.PersonalUser" />
+    </session-factory>
+</hibernate-configuration>

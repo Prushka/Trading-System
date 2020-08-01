@@ -41,8 +41,9 @@ public class LoginController extends AbstractController implements Initializable
     public void loginButtonClicked(ActionEvent actionEvent) {
         accountManager.login(result -> {
             if (result != null) {
-                switchScene("personal_dashboard.fxml",
-                        new DashboardController(), actionEvent);
+                Platform.runLater(() ->
+                        switchScene("personal_dashboard.fxml",
+                                new DashboardController(), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
             }

@@ -34,10 +34,7 @@ public class Main extends Application {
         LoginController loginController = new LoginController(new UserDAO());
         login.setController(loginController);
 
-
         Scene scene = new Scene(login.load());
-
-        scene.getStylesheets().add("css/trade.css");
 
         primaryStage.setOnCloseRequest(event -> saveHook.save());
         primaryStage.setTitle("Trade");

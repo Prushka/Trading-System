@@ -23,7 +23,7 @@
                 <Insets top="20.0" />
             </VBox.margin>
         </HBox>
-        <Label fx:id="invalidUserNameLabel" text="Label" visible="false" />
+        <Label fx:id="submissionResult" text="Label"/>
         <VBox alignment="CENTER" spacing="40.0">
             <children>
                 <JFXTextField fx:id="username" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0" promptText="%input.username.prompt" />

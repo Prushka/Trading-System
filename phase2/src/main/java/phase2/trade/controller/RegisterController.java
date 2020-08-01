@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -40,19 +41,29 @@ public class RegisterController extends AbstractController implements Initializa
     public void signUpButtonClicked(ActionEvent actionEvent) {
         accountManager.register(result -> {
             if (result != null) {
-                switchScene("personal_dashboard.fxml",
-                        new DashboardController(), actionEvent);
+                Platform.runLater(() ->
+                        switchScene("personal_dashboard.fxml",
+                                new DashboardController(), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
             }
         }, username.getText(), email.getText(), password.getText());
     }
 
-    public void goToSignIn(ActionEvent actionEvent) throws IOException {
-        LoginController registerController = new LoginController(accountManager);
-        FXMLLoader loader = sceneFactory.getLoader("login.fxml");
-        loader.setController(registerController);
-        ((Node) actionEvent.getSource()).getScene().setRoot(loader.load());
+    void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
+        System.out.println("Switching scene");
+        FXMLLoader loader = sceneFactory.getLoader(fileName);
+        loader.setController(controller);
+        try {
+            ((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).setScene(new Scene(loader.load()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void goToSignIn(ActionEvent actionEvent) {
+        switchScene("login.fxml",
+                new LoginController(accountManager), actionEvent);
     }
 
     @Override

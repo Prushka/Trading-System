@@ -224,15 +224,6 @@ public class AdministrativeManager {
         }
     }
 
-    public void undoFreezeActivities(PersonalUser user){
-        user.setIsFrozen(false);
-        freezeActivities.remove(user);
-    }
-
-    public void undoUnfreezeActivities(PersonalUser user){
-        user.setIsFrozen(true);
-        unfreezeActivities.remove(user);
-    }
 
 
 

@@ -6,7 +6,6 @@ public class Guest extends User {
      *
      * @param userName  the username of this Person.
      * @param email     the email this Person.
-     * @param telephone the telephone number of this person
      * @param password  the password this user set to
      */
     public Guest(String userName, String email,String password) {

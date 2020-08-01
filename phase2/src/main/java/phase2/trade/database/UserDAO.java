@@ -86,18 +86,22 @@ public class UserDAO {
         }
     }
 
-    public boolean ifCredentialMatches(String usernameOrEmail, String password) {
+    public List<User> findMatches(String usernameOrEmail, String password) {
         Query query = getCurrentSession().createQuery("from User where (userName = :usernameOrEmail AND password = :password) OR (email = :usernameOrEmail AND password = :password)");
         query.setParameter("usernameOrEmail", usernameOrEmail);
         query.setParameter("password", password);
-        return query.list().size() > 0;
+        return query.list();
     }
 
-    public User findByEmail(String email) {
-        return getCurrentSession().get(User.class, email);
+    public List<User> findByEmail(String email) {
+        Query query = getCurrentSession().createQuery("from User where email = :email");
+        query.setParameter("email", email);
+        return query.list();
     }
 
-    public User findByUserName(String userName) {
-        return getCurrentSession().get(User.class, userName);
+    public List<User> findByUserName(String userName) {
+        Query query = getCurrentSession().createQuery("from User where userName = :userName");
+        query.setParameter("userName", userName);
+        return query.list();
     }
 }

@@ -12,22 +12,21 @@ import phase2.trade.repository.Repository;
 import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
+import java.util.List;
 import java.util.logging.Level;
 
 public class AccountManager {
 
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
 
     public AccountManager(UserDAO userDAO) {
         this.userDAO = userDAO;
     }
 
-
     public boolean register(String username, String email, String password) {
         boolean result;
         userDAO.openCurrentSessionWithTransaction();
-        userDAO.add(new PersonalUser(username, email, password));
-        if (userDAO.findByEmail(email) != null && userDAO.findByUserName(username) != null) {
+        if (userDAO.findByEmail(email).size() > 0 && userDAO.findByUserName(username).size() > 0) {
             System.out.println("exists");
             result = false;
         } else {
@@ -38,13 +37,16 @@ public class AccountManager {
         return result;
     }
 
-    public boolean login(String usernameOrEmail, String password) {
-        if (userDAO.ifCredentialMatches(usernameOrEmail, password)) {
+    public User login(String usernameOrEmail, String password) {
+        userDAO.openCurrentSession();
+        List<User> matchedUsers = userDAO.findMatches(usernameOrEmail, password);
+        userDAO.closeCurrentSession();
+        if (matchedUsers.size() > 0) {
             System.out.println("success");
-            return true;
+            return matchedUsers.get(0);
         } else {
             System.out.println("failed");
-            return false;
+            return null;
         }
     }
 

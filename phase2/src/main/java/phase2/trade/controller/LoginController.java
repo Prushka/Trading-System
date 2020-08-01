@@ -1,5 +1,8 @@
 package phase2.trade.controller;
 
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,9 +19,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class LoginController {
+public class LoginController implements Initializable {
 
     private final AccountManager accountManager;
+
+    private StringProperty submissionPrompt;
 
     public Label invalidUserNameLabel;
 
@@ -35,20 +40,33 @@ public class LoginController {
     }
 
     public void loginButtonClicked(ActionEvent actionEvent) {
-        invalidUserNameLabel.setVisible(true);
         accountManager.login(result -> {
             if (result != null) {
-                System.out.println("success");
+                switchScene("personal_dashboard.fxml",
+                        new DashboardController(), actionEvent);
             } else {
-                System.out.println("failed");
+                Platform.runLater(() -> submissionPrompt.setValue("Invalid Username / Password"));
             }
         }, usernameOrEmail.getText(), password.getText());
     }
 
-    public void signUpButtonClicked(ActionEvent actionEvent) throws IOException {
-        RegisterController registerController = new RegisterController(accountManager);
-        FXMLLoader loader = sceneFactory.getLoader("register.fxml");
-        loader.setController(registerController);
-        ((Node) actionEvent.getSource()).getScene().setRoot(loader.load());
+    public void signUpButtonClicked(ActionEvent actionEvent) {
+        switchScene("register.fxml", new RegisterController(accountManager), actionEvent);
+    }
+
+    private void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
+        FXMLLoader loader = sceneFactory.getLoader(fileName);
+        loader.setController(controller);
+        try {
+            ((Stage) ((Node) actionEvent.getSource()).getScene().getWindow()).setScene(new Scene(loader.load()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        submissionPrompt = new SimpleStringProperty("");
+        invalidUserNameLabel.textProperty().bind(submissionPrompt);
     }
 }

@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
 import phase2.trade.database.UserDAO;
 import phase2.trade.repository.SaveHook;
@@ -33,7 +34,10 @@ public class Main extends Application {
         LoginController loginController = new LoginController(new UserDAO());
         login.setController(loginController);
 
+
         Scene scene = new Scene(login.load());
+
+        scene.getStylesheets().add("css/trade.css");
 
         primaryStage.setOnCloseRequest(event -> saveHook.save());
         primaryStage.setTitle("Trade");

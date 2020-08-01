@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.StackPane?>
+<?import java.lang.String?>
+<StackPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+prefWidth="250" prefHeight="1000">
+    <styleClass>
+        <String fx:value="side-menu"/>
+    </styleClass>
+    <JFXListView fx:id="sideList">
+        <Label fx:id="userInfo" styleClass="side-label">User Info</Label>
+        <Label fx:id="Market" styleClass="side-label">Market</Label>
+        <Label fx:id="wishList" styleClass="side-label">Wishlist</Label>
+        <Label fx:id="settings" styleClass="side-label">Settings</Label>
+    </JFXListView>
+</StackPane>

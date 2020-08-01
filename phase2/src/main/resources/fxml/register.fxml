@@ -9,40 +9,34 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="500.0" prefWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <HBox alignment="CENTER">
             <children>
                 <Label text="%label.signup.text">
                     <font>
-                        <Font size="30.0"/>
+                        <Font size="30.0" />
                     </font>
                 </Label>
             </children>
             <VBox.margin>
-                <Insets bottom="20.0" top="20.0"/>
+                <Insets top="20.0" />
             </VBox.margin>
         </HBox>
-        <Label fx:id="invalidUserNameLabel" text="Label" visible="false"/>
+        <Label fx:id="invalidUserNameLabel" text="Label" visible="false" />
         <VBox alignment="CENTER" spacing="40.0">
             <children>
-                <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0"
-                              promptText="%input.username.prompt" fx:id="username"/>
-                <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0"
-                              promptText="Email" fx:id="email"/>
-                <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Password" fx:id="password"/>
-                <JFXButton buttonType="RAISED" onAction="#signUpButtonClicked" prefHeight="40" prefWidth="100"
-                           style="-fx-text-fill:WHITE;-fx-background-color:#ba8baf;-fx-font-size:14px;"
-                           text="Sign Up">
+                <JFXTextField fx:id="username" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0" promptText="%input.username.prompt" />
+                <JFXTextField fx:id="email" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Email" />
+                <JFXTextField fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Password" />
+                <JFXButton buttonType="RAISED" onAction="#signUpButtonClicked" prefHeight="40" prefWidth="100" style="-fx-text-fill:WHITE;-fx-background-color:#ba8baf;-fx-font-size:14px;" text="Sign Up">
                     <VBox.margin>
-                        <Insets top="20.0"/>
+                        <Insets top="20.0" />
                     </VBox.margin>
                 </JFXButton>
                 <JFXButton onAction="#goToSignIn" text="ha">
                     <VBox.margin>
-                        <Insets top="20.0"/>
+                        <Insets />
                     </VBox.margin>
                 </JFXButton>
             </children>

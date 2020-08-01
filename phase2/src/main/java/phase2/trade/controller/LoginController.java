@@ -36,7 +36,13 @@ public class LoginController {
 
     public void loginButtonClicked(ActionEvent actionEvent) {
         invalidUserNameLabel.setVisible(true);
-        accountManager.login(usernameOrEmail.getText(), password.getText());
+        accountManager.login(result -> {
+            if (result != null) {
+                System.out.println("success");
+            } else {
+                System.out.println("failed");
+            }
+        }, usernameOrEmail.getText(), password.getText());
     }
 
     public void signUpButtonClicked(ActionEvent actionEvent) throws IOException {

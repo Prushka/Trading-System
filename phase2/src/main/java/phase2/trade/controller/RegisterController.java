@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import phase2.trade.database.Callback;
+import phase2.trade.user.User;
 import phase2.trade.view.SceneFactory;
 import sun.rmi.runtime.Log;
 
@@ -27,7 +29,13 @@ public class RegisterController {
     }
 
     public void signUpButtonClicked(ActionEvent actionEvent) {
-        accountManager.register(username.getText(), email.getText(), password.getText());
+        accountManager.register(result -> {
+            if (result != null) {
+                System.out.println("success");
+            } else {
+                System.out.println("failed");
+            }
+        }, username.getText(), email.getText(), password.getText());
     }
 
     public void goToSignIn(ActionEvent actionEvent) throws IOException {

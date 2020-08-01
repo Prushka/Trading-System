@@ -13,7 +13,5 @@ public class ORMTest {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
         AccountManager accountManager = new AccountManager(new UserDAO());
-        accountManager.register("test","email","password");
-        System.out.println(accountManager.login("email","password"));
     }
 }

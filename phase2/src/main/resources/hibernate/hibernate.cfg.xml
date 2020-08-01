@@ -16,15 +16,15 @@
         <!-- Assume students is the database name -->
 
         <property name = "hibernate.connection.url">
-            jdbc:mysql://localhost/test
+            jdbc:mysql://muddy.ca:3308/group
         </property>
 
         <property name = "hibernate.connection.username">
-            root
+            member
         </property>
 
         <property name = "hibernate.connection.password">
-            cohondob
+            SLHfT6Ui#9kF
         </property>
 
     </session-factory>

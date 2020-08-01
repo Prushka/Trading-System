@@ -48,15 +48,7 @@ public abstract class AbstractController {
     }
 
     Parent loadPane(String fileName, Object controller) {
-        FXMLLoader fxmlLoader = sceneFactory.getLoader(fileName);
-        fxmlLoader.setController(controller);
-        Parent pane = null;
-        try {
-            pane = fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return pane;
+        return sceneFactory.getPane(fileName, controller);
     }
 
 }

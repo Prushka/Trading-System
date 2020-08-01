@@ -2,19 +2,15 @@ package phase2.trade;
 
 
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import phase2.trade.controller.AccountManager;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
-import phase2.trade.database.Callback;
 import phase2.trade.database.UserDAO;
 import phase2.trade.repository.SaveHook;
-import phase2.trade.user.User;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
@@ -39,7 +35,7 @@ public class Main extends Application {
         login.setController(loginController);
 
 
-        Scene scene = new Scene(sideLoadDashboard());
+        Scene scene = new Scene(mockDashboard());
 
         primaryStage.setOnCloseRequest(event -> saveHook.save());
         primaryStage.setTitle("Trade");
@@ -47,13 +43,12 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    private Parent sideLoadDashboard() throws IOException {
+    private Parent mockDashboard() {
         SceneFactory sceneFactory = new SceneFactory();
         AccountManager accountManager = new AccountManager(new UserDAO());
-        accountManager.login(result -> {}, "123","123");
+        accountManager.login(result -> {
+        }, "123", "123");
         DashboardController dashboardController = new DashboardController(accountManager);
-        FXMLLoader fxmlLoader = sceneFactory.getLoader("personal_dashboard.fxml");
-        fxmlLoader.setController(dashboardController);
-        return fxmlLoader.load();
+        return sceneFactory.getPane("personal_dashboard.fxml", dashboardController);
     }
 }

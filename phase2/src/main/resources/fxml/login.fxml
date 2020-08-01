@@ -9,34 +9,40 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="phase2.trade.controller.LoginController">
-   <children>
-      <HBox alignment="CENTER">
-         <children>
-            <Label text=":(">
-               <font>
-                  <Font size="30.0" />
-               </font>
-            </Label>
-         </children>
-         <VBox.margin>
-            <Insets top="20.0" />
-         </VBox.margin></HBox>
-      <VBox alignment="CENTER" spacing="20.0">
-         <children>
-            <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="48.0" prefWidth="209.0" promptText="Username" />
-            <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="48.0" prefWidth="209.0" promptText="Password" />
-            <JFXButton buttonType="RAISED" onAction="#loginButtonClicked" prefHeight="40" prefWidth="100" style="-fx-text-fill:WHITE;-fx-background-color:#ba8baf;-fx-font-size:14px;" text="Log In">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin></JFXButton>
-            <JFXButton onAction="#signUpButtonClicked" text="Don't have an account?">
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </JFXButton>
-         </children>
-      </VBox>
-   </children>
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="400.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="phase2.trade.controller.LoginController">
+    <children>
+        <HBox alignment="CENTER">
+            <children>
+                <Label text=":(">
+                    <font>
+                        <Font size="30.0"/>
+                    </font>
+                </Label>
+            </children>
+            <VBox.margin>
+                <Insets bottom="20.0" top="20.0"/>
+            </VBox.margin>
+        </HBox>
+        <VBox alignment="CENTER" spacing="40.0">
+            <children>
+                <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0"
+                              promptText="%input.username.prompt"/>
+                <JFXTextField labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0"
+                              promptText="%input.password.prompt"/>
+                <JFXButton buttonType="RAISED" onAction="#loginButtonClicked" prefHeight="40" prefWidth="100"
+                           style="-fx-text-fill:WHITE;-fx-background-color:#ba8baf;-fx-font-size:14px;" text="%button.login.text">
+                    <VBox.margin>
+                        <Insets top="20.0"/>
+                    </VBox.margin>
+                </JFXButton>
+                <JFXButton onAction="#signUpButtonClicked" text="%button.signup.text">
+                    <VBox.margin>
+                        <Insets top="20.0"/>
+                    </VBox.margin>
+                </JFXButton>
+            </children>
+        </VBox>
+    </children>
 </VBox>

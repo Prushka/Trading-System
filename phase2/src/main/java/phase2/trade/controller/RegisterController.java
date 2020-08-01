@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import phase2.trade.database.Callback;
 import phase2.trade.user.User;
+import phase2.trade.validator.ValidatorBind;
+import phase2.trade.validator.ValidatorType;
 import phase2.trade.view.SceneFactory;
 import sun.rmi.runtime.Log;
 
@@ -30,8 +32,6 @@ public class RegisterController extends AbstractController implements Initializa
 
     private final SceneFactory sceneFactory = new SceneFactory();
 
-    private StringProperty submissionPrompt;
-
     public TextField username, email, password;
 
     public RegisterController(AccountManager accountManager) {
@@ -39,6 +39,10 @@ public class RegisterController extends AbstractController implements Initializa
     }
 
     public void signUpButtonClicked(ActionEvent actionEvent) {
+        ValidatorBind validatorBind = new ValidatorBind(submissionResultProperty).validate(ValidatorType.USER_NAME, "Invalid UserName", username.getText())
+                .validate(ValidatorType.EMAIL, "Invalid Email", email.getText()).validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
+        if (!validatorBind.isAllPass()) return;
+        submissionResultProperty.setValue("Signing up..");
         accountManager.register(result -> {
             if (result != null) {
                 Platform.runLater(() ->

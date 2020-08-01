@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import phase2.trade.validator.ValidatorFactory;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.io.IOException;
 public abstract class AbstractController {
 
     SceneFactory sceneFactory = new SceneFactory();
+
+    ValidatorFactory validatorFactory = new ValidatorFactory();
 
     void switchScene(String fileName, Object controller, Stage stage, boolean applyCSS) {
         FXMLLoader loader = sceneFactory.getLoader(fileName);

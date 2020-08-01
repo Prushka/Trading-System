@@ -12,6 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import phase2.trade.database.UserDAO;
+import phase2.trade.validator.Validator;
+import phase2.trade.validator.ValidatorBind;
+import phase2.trade.validator.ValidatorFactory;
+import phase2.trade.validator.ValidatorType;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
@@ -20,13 +24,13 @@ import java.util.ResourceBundle;
 
 public class LoginController extends AbstractController implements Initializable {
 
-    private final AccountManager accountManager;
-
-    private StringProperty submissionResultProperty;
-
     public Label submissionResult;
 
     public TextField usernameOrEmail, password;
+
+    private final AccountManager accountManager;
+
+    private StringProperty submissionResultProperty;
 
     public LoginController(UserDAO userDAO) {
         this.accountManager = new AccountManager(userDAO);

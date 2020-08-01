@@ -28,8 +28,6 @@ public class LoginController extends AbstractController implements Initializable
 
     public TextField usernameOrEmail, password;
 
-    private final SceneFactory sceneFactory = new SceneFactory();
-
     public LoginController(UserDAO userDAO) {
         this.accountManager = new AccountManager(userDAO);
     }

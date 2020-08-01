@@ -3,6 +3,7 @@ package phase2.trade.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import phase2.trade.view.SceneFactory;
@@ -17,6 +18,7 @@ public abstract class AbstractController {
     void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
         this.switchScene(fileName, controller, actionEvent, false);
     }
+
     void switchScene(String fileName, Object controller, ActionEvent actionEvent, boolean applyCSS) {
         FXMLLoader loader = sceneFactory.getLoader(fileName);
         loader.setController(controller);
@@ -29,6 +31,18 @@ public abstract class AbstractController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    Parent loadPane(String fileName, Object controller){
+        FXMLLoader fxmlLoader = sceneFactory.getLoader(fileName);
+        fxmlLoader.setController(controller);
+        Parent pane = null;
+        try {
+            pane = fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pane;
     }
 
 }

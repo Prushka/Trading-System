@@ -1,44 +1,44 @@
 package phase2.trade.controller;
 
 import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXDrawersStack;
 import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.animation.Transition;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.util.Duration;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static javafx.scene.input.MouseEvent.MOUSE_PRESSED;
-
-public class DashboardController implements Initializable {
+public class DashboardController extends AbstractController implements Initializable {
 
     public JFXDrawer drawer;
     public JFXHamburger hamburger;
+    public GridPane center;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        StackPane side = null;
-        try {
-            side = new SceneFactory().getLoader("side_menu.fxml").load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        drawer.setSidePane(side);
+
+        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(center)));
 
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
         transition.setRate(-1);
+
+        drawer.setOnDrawerOpening(e -> {
+            transition.setRate(1);
+            transition.play();
+        });
+
+        drawer.setOnDrawerClosing(e -> {
+            transition.setRate(-1);
+            transition.play();
+        });
 
         hamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
             transition.setRate(transition.getRate() * -1);

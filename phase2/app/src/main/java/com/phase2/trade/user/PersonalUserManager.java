@@ -119,6 +119,16 @@ public class PersonalUserManager {
         return newItem.getUid();
     }
 
+    public void suggest (PersonalUser p) {
+        for (PersonalUser x : personalUserRepository) {
+            for (Item i : x.getInventory()) {
+                if (p.getWishlist().contains(i)) {
+                    p.suggest(i);
+                }
+            }
+        }
+    }
+
     public PersonalUser getCurrUser() {
         return currUser;
     }

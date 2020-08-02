@@ -7,19 +7,20 @@ import java.time.LocalDateTime;
  * Represents a trade between users at a specific date and place
  * @author Grace Leung
  */
-class Trade {
+abstract class Trade {
     // Trading Details
     private List<Integer> users;
     private List<Boolean> confirmations;
     private List<Integer> edits;
     private List<List<Integer>> items;
     private Integer prevMeeting;
-    private Boolean isPermanent;
 
     // Meeting Details
     private LocalDateTime dateAndTime;
     private String location;
     private Boolean isClosed;
+
+    private Tradable strategy;
 
     /**
      * @param users All the userID's associated with this trade
@@ -29,11 +30,12 @@ class Trade {
      * @param location Where this trade takes place
      */
     Trade(List<Integer> users, List<List<Integer>> items, LocalDateTime dateAndTime, String
-            location){
+            location, Integer prevMeeting){
         this.users = users;
         this.items = items;
         this.dateAndTime = dateAndTime;
         this.location =  location;
+        this.prevMeeting = prevMeeting;
 
         // Default Values
         edits = new ArrayList<>(users.size());
@@ -141,4 +143,6 @@ class Trade {
     void unconfirmAll(){
         confirmations = new ArrayList<>(confirmations.size());
     }
+
+    abstract Tradable getStrategy();
 }

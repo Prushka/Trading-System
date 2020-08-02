@@ -84,5 +84,55 @@ class TradeController {
         }
         return false;
     }
+
+    /**
+     * @param user The user ID
+     * @return The frequency this user trades with other users
+     */
+    Map<Integer, Integer> getTradeFrequency(int user) {
+        Map<Integer, Integer> tradeFrequency = new HashMap<>();
+        Iterator<Trade> tradeIterator = tradeRepository.iterator(entity -> entity.getAllUsers().contains(user));
+        while (tradeIterator.hasNext()) {
+            Trade trade = tradeIterator.next();
+            for (int i: trade.getAllUsers()){
+                if (user != i){
+                    putOrAppend(tradeFrequency, i);
+                }
+            }
+        }
+        return tradeFrequency;
+    }
+
+    private void putOrAppend(Map<Integer, Integer> map, Integer key) {
+        if (map.containsKey(key)) {
+            map.put(key, map.get(key) + 1);
+        } else {
+            map.put(key, 1);
+        }
+    }
+
+    /**
+     * @param currUser The current user being examined
+     */
+    void getRecentTrades(PersonalUser currUser){
+        List<Integer> recentCompleteTrades = currUser.getRecentCompleteTrades();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Integer i : recentCompleteTrades) {
+            Trade trade = tradeRepository.get(i);
+            stringBuilder.append(trade.toString()).append("\n");
+        }
+    }
+
+    /**
+     * @param currUser The current user being examined
+     */
+    void getAllTrades(PersonalUser currUser){
+        List<Integer> allTrades = currUser.getTrades();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Integer i : allTrades) {
+            Trade trade = tradeRepository.get(i);
+            stringBuilder.append(trade.toString()).append("\n");
+        }
+    }
 }
 

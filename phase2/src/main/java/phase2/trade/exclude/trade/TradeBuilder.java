@@ -7,69 +7,56 @@ import java.util.List;
 public class TradeBuilder {
 
     Integer numTraders;
-
-    List<Integer> users;
-    List<Boolean> confirmations;
-    List<Integer> edits;
-    List<List<Integer>> items;
-    Integer prevMeeting;
     Boolean isPermanent;
+    List<Integer> users;
+    List<List<Integer>> items;
     LocalDateTime dateAndTime;
     String location;
+    Integer prevMeeting;
 
     Trade newTrade;
 
     public TradeBuilder() {}
 
-    public TradeBuilder buildAmountOfTraders(int num) {
+    public void buildAmountOfTraders(int num) {
         numTraders = num;
         users = new ArrayList<>(num);
-        edits = new ArrayList<>(num);
-        confirmations = new ArrayList<>(num);
-        confirmations.set(0, true);
         items = new ArrayList<>(num);
-        return this;
     }
 
-    public TradeBuilder buildTraders(List<Integer> users) {
+    public void buildTraders(List<Integer> users) {
         for (Integer i: users){
          this.users.add(i);
         }
-        return this;
     }
 
-    public TradeBuilder buildItems(List<List<Integer>> items){
+    public void buildItems(List<List<Integer>> items){
         for (List<Integer> i: items){
             this.items.add(i);
         }
-        return this;
     }
 
-    public TradeBuilder buildDateAndTime(LocalDateTime dateAndTime){
+    public void buildDateAndTime(LocalDateTime dateAndTime){
         this.dateAndTime = dateAndTime;
-        return this;
     }
 
-    public TradeBuilder buildLocation(String location){
+    public void buildLocation(String location){
         this.location = location;
-        return this;
     }
 
-    public TradeBuilder buildType(boolean isPermanent){
+    public void buildType(boolean isPermanent){
         this.isPermanent = isPermanent;
-        return this;
     }
 
-    public TradeBuilder buildPastMeeting(Integer prevMeeting){
+    public void buildPastMeeting(Integer prevMeeting){
         this.prevMeeting = prevMeeting;
-        return this;
     }
 
     public Trade buildTrade() {
         if (isPermanent) {
-            newTrade = new TemporaryTrade(order, bc, bl, bp);
-        }else {
-            newTrade = new PermanentTrade(order, bc, bl, bp);
+            newTrade = new PermanentTrade(users, items, dateAndTime, location, prevMeeting, new PermanentTradingStrategy());
+        } else {
+            newTrade = new TemporaryTrade(users, items, dateAndTime, location, prevMeeting, new TemporaryTradingStrategy());
         }
         return newTrade;
     }

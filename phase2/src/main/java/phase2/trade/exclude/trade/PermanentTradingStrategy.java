@@ -1,17 +1,35 @@
 package main.java.phase2.trade.exclude.trade;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-public class PermanentTradeManager extends TradeManager{
+public class PermanentTradingStrategy implements Tradable{
 
-    public PermanentTradeManager(){
-        super();
+    public PermanentTradingStrategy(){}
+
+    /**
+     * Confirm a trade will take place and opens the trade
+     * @param tradeID The trade ID of the trade to be confirmed
+     * @param editingUser The user ID of who wishes to confirm to this trade
+     */
+    void confirmTrade(int tradeID, int editingUser) {
+        // Get Trade from Repository
+        Trade currTrade = tradeRepository.get(tradeID);
+
+        // Confirm specific user
+        if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser)
+                && currTrade.getIsClosed()) {
+            currTrade.confirmUser(editingUser);
+            if (currTrade.getIsClosed()){
+                openTrade(tradeID);
+            } else {
+                completeTrade(tradeID);
+            }
+        }
     }
 
-    // Opens a trade and closes the previous trade if applicable
-    private void openTrade(int tradeID){
+
+    @Override
+    void openTrade(int tradeID){
         // Get trade from repository
         Trade currTrade = tradeRepository.get(tradeID);
 
@@ -28,8 +46,8 @@ public class PermanentTradeManager extends TradeManager{
         }
     }
 
-    // Completes a trade by making trades or scheduling second meeting
-    private void completeTrade(int tradeID) {
+    @Override
+    void completeTrade(int tradeID) {
         // Get trade from repository
         Trade currTrade = tradeRepository.get(tradeID);
 

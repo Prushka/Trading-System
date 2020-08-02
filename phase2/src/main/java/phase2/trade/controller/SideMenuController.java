@@ -27,6 +27,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void logOut(Label old) {
+        System.out.println("log out");
         ConfirmPopup confirmPopup = new ConfirmPopup();
         Parent confirm = loadPane("confirm_popup.fxml",confirmPopup);
         if (confirmPopup.display("Log out", "Do you really want to log out?")) {

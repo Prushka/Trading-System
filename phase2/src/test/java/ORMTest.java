@@ -1,3 +1,6 @@
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
 import org.junit.Test;
 import phase2.trade.user.AccountManager;
 import phase2.trade.database.UserDAO;
@@ -8,11 +11,12 @@ import java.util.logging.Level;
 
 public class ORMTest {
 
-    @Test
-    public void testAccountManager() {
+    private final SessionFactory sessionFactory;
 
-
-        AccountManager accountManager = new AccountManager(new UserDAO());
+    public ORMTest(){
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        sessionFactory = new Configuration().configure().buildSessionFactory();
     }
 
     @Test
@@ -24,7 +28,7 @@ public class ORMTest {
         item.setName("test item2");
         item.setDescription("test description2");
 
-        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO = new UserDAO(sessionFactory);
         userDAO.openCurrentSessionWithTransaction();
         User user = userDAO.findById(1L);
         user.addItem(item);
@@ -41,7 +45,7 @@ public class ORMTest {
     }
 
     private User getTestUser() {
-        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO = new UserDAO(sessionFactory);
         userDAO.openCurrentSession();
         User user = userDAO.findById(1L);
         userDAO.closeCurrentSession();
@@ -54,7 +58,7 @@ public class ORMTest {
 
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
-        UserDAO userDAO = new UserDAO();
+        UserDAO userDAO = new UserDAO(sessionFactory);
 
         userDAO.openCurrentSession();
 

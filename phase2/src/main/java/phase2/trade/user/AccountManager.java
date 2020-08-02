@@ -32,7 +32,6 @@ public class AccountManager {
     public void login(Callback<User> callback, String usernameOrEmail, String password) {
         userDAO.submitSession(() -> {
             List<User> matchedUsers = userDAO.findMatches(usernameOrEmail, password);
-            userDAO.closeCurrentSession();
             if (matchedUsers.size() > 0) {
                 loggedInUser = matchedUsers.get(0);
                 callback.call(loggedInUser);

@@ -19,20 +19,21 @@ public class AbstractDAO<T> {
 
     private final ExecutorService threadPool;
 
-    AbstractDAO(Class<T> clazz) {
+    private final SessionFactory sessionFactory;
+
+    AbstractDAO(Class<T> clazz, SessionFactory sessionFactory) {
         this.clazz = clazz;
+        this.sessionFactory = sessionFactory;
         threadPool = Executors.newFixedThreadPool(5); // do we need to configure this
     }
 
-    public Session openCurrentSession() {
+    public void openCurrentSession() {
         currentSession = getSessionFactory().openSession();
-        return currentSession;
     }
 
-    public Session openCurrentSessionWithTransaction() {
+    public void openCurrentSessionWithTransaction() {
         currentSession = getSessionFactory().openSession();
         currentTransaction = currentSession.beginTransaction();
-        return currentSession;
     }
 
     public void closeCurrentSession() {
@@ -44,24 +45,12 @@ public class AbstractDAO<T> {
         currentSession.close();
     }
 
-    private static SessionFactory getSessionFactory() {
-        return new Configuration().configure().buildSessionFactory();
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 
     public Session getCurrentSession() {
         return currentSession;
-    }
-
-    public void setCurrentSession(Session currentSession) {
-        this.currentSession = currentSession;
-    }
-
-    public Transaction getCurrentTransaction() {
-        return currentTransaction;
-    }
-
-    public void setCurrentTransaction(Transaction currentTransaction) {
-        this.currentTransaction = currentTransaction;
     }
 
     public void add(T entity) {

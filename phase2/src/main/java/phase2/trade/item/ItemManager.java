@@ -14,8 +14,8 @@ public class ItemManager {
 
     private ExecutorService threadPool;
 
-    public ItemManager(){
-        itemDAO = new ItemDAO(Item.class);
+    public ItemManager(ItemDAO itemDAO){
+        this.itemDAO = itemDAO;
 
         threadPool = Executors.newFixedThreadPool(3);
     }

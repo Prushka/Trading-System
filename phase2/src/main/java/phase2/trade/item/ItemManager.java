@@ -25,7 +25,6 @@ public class ItemManager {
             itemDAO.openCurrentSession();
             Item item = new Item();
             item.setName("item name");
-            item.setOwner(owner);
             itemDAO.add(item);
             itemDAO.closeCurrentSession();
         });

@@ -16,8 +16,8 @@ public class Item {
     private String description;
     private String category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User owner;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // private User owner;
 
     public Long getUid() {
         return uid;
@@ -49,13 +49,5 @@ public class Item {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
-    }
-
-    public User getOwner() {
-        return owner;
     }
 }

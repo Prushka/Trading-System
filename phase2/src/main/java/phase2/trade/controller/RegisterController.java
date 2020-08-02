@@ -45,6 +45,7 @@ public class RegisterController extends AbstractController implements Initializa
         submissionResultProperty.setValue("Signing up..");
         accountManager.register(result -> {
             if (result != null) {
+                System.out.println("Sign up successfully");
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
                                 new DashboardController(accountManager), actionEvent, true));

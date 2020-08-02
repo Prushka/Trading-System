@@ -27,8 +27,8 @@ public abstract class User {
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "owner")
-    private Collection<Item> items = new ArrayList<>();
+    // @OneToMany(mappedBy = "owner")
+    // private Collection<Item> items = new ArrayList<>();
 
 
     /**

@@ -56,7 +56,7 @@ public class LoginController extends AbstractController implements Initializable
         }, usernameOrEmail.getText(), password.getText());
     }
 
-    public void signUpButtonClicked(ActionEvent actionEvent) {
+    public void goToSignUp(ActionEvent actionEvent) {
         switchScene("register.fxml", new RegisterController(accountManager), actionEvent);
     }
 

@@ -5,7 +5,7 @@ import phase2.trade.repository.SaveHook;
 
 import java.io.File;
 
-public class SystemProperties  extends Property {
+public class SystemProperties extends Property {
 
     /**
      * Constructs a TradeProperties object and save the file from resources root to the destination file.<p>

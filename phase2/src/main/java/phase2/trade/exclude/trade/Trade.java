@@ -1,7 +1,4 @@
-package phase2.trade.trade;
-
-import main.java.com.phase2.trade.repository.*;
-import main.java.com.phase2.trade.repository.reflection.*;
+package main.java.phase2.trade.exclude.trade;
 
 import java.util.*;
 import java.time.LocalDateTime;
@@ -16,9 +13,10 @@ class Trade {
     private List<Boolean> confirmations;
     private List<Integer> edits;
     private List<List<Integer>> items;
+    private Integer prevMeeting;
+    private Boolean isPermanent;
 
     // Meeting Details
-    private Integer tradeID;
     private LocalDateTime dateAndTime;
     private String location;
     private Boolean isClosed;
@@ -45,12 +43,6 @@ class Trade {
     }
 
     // GETTERS
-
-    /**
-     * @return The trade ID of this trade
-     */
-    @Override
-    public int getUid() { return this.tradeID;}
 
     /**
      * @return List of all userIDs participating in this trade
@@ -95,12 +87,6 @@ class Trade {
     // SETTERS
 
     /**
-     * @param new_uid The new trade ID for this trade
-     */
-    @Override
-    public void setUid(int new_uid) { this.tradeID = new_uid;}
-
-    /**
      * Increases the user's edits by one.
      */
     void increaseUserEdits(int userID){ this.edits.set(this.users.indexOf(userID),
@@ -137,4 +123,22 @@ class Trade {
      * Sets the state of this trade to close
      */
     void closeTrade(){ isClosed = true;}
+
+    /**
+     * @return The trade ID of the previous trade if applicable
+     */
+    Integer getPrevMeeting(){ return prevMeeting;}
+
+    Boolean getAllConfirmed(){
+        for (Boolean i: confirmations){
+            if (i.equals(false)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void unconfirmAll(){
+        confirmations = new ArrayList<>(confirmations.size());
+    }
 }

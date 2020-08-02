@@ -1,9 +1,10 @@
-package phase2.trade.trade;
+package main.java.phase2.trade.exclude.trade;
 
 import main.java.com.phase2.trade.user.*;
 import main.java.com.phase2.trade.item.*;
 import main.java.com.phase2.trade.repository.*;
 
+import java.time.DateTimeException;
 import java.util.*;
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ class TradeController {
     }
 
     public void addTrade(List<Integer> users, List<List<Integer>> items, String dateInput, String
-            location, TradeSpec spec) {
+            location) {
 
         String[] data = dateInput.split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
@@ -44,6 +45,10 @@ class TradeController {
         tradeManager.confirmTradeComplete(tradeID, currUser.getUid());
     }
 
+    findByLocation(){
+
+    }
+
     public boolean isBool(String input){
         return (input.equals("true") || input.equals("false"));
     }
@@ -61,6 +66,23 @@ class TradeController {
 
     public Map<Integer, Integer> getTradeFrequency(int user) {
         return tradeManager.getTradeFrequency(user);
+    }
+
+    public boolean validate(String input) {
+        String[] data = input.split("-");
+        if (data.length == 5){
+            try {
+                int year = Integer.parseInt(data[0]);
+                int month = Integer.parseInt(data[1]);
+                int day = Integer.parseInt(data[2]);
+                int hour = Integer.parseInt(data[3]);
+                int minute = Integer.parseInt(data[4]);
+                return (LocalDateTime.of(year, month, day, hour, minute)).isAfter(LocalDateTime.now());
+            } catch (NumberFormatException | DateTimeException e) { // is this allowed
+                return false;
+            }
+        }
+        return false;
     }
 }
 

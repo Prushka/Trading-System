@@ -1,13 +1,9 @@
-package phase2.trade.trade;
-
-import main.java.com.phase2.trade.user.*;
-import main.java.com.phase2.trade.item.*;
-import main.java.com.phase2.trade.repository.*;
+package main.java.phase2.trade.exclude.trade;
 
 import java.util.*;
 import java.time.LocalDateTime;
 
-class TradeManager {
+abstract class TradeManager {
     private Integer editLimit = 3;
     private Integer timeLimit = 1;
     private final Repository<Trade> tradeRepository;
@@ -21,8 +17,6 @@ class TradeManager {
      */
     TradeManager(Repository<Trade> tradeRepository, Repository<PersonalUser>
             userRepository, Repository<Item> itemRepository) {
-        // editLimit = tradeProperties.getInt("editLimit");
-        // timeLimit = tradeProperties.getInt("timeLimit");
         this.tradeRepository = tradeRepository;
         this.userRepository = userRepository;
         this.itemRepository = itemRepository;
@@ -35,39 +29,12 @@ class TradeManager {
      *              items of the userID in users with the same index
      * @param dateAndTime When this trade takes place
      * @param location Where this trade takes place
-     */
-    void createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
-            dateAndTime, String location, TradeSpec spec) {
-
-        Trade newTrade;
-        switch (spec){
-            case TEMPORARY:
-                newTrade = new TemporaryTrade(users, items, dateAndTime, location);
-            case PERMANENT:
-                newTrade = new PermanentTrade(users, items, dateAndTime, location);
-            default: newTrade = new Trade(new ArrayList<>(), new ArrayList<>(), LocalDateTime.now(), "");
-        }
-
-        tradeRepository.add(newTrade);
-        for (int i: users){
-            PersonalUser user = userRepository.get(i);
-            user.addToTrades(newTrade.getUid());
-        }
-    }
-
-
-    /**
-     * Creates a trade meeting to trade items temporarily
-     * @param users All the userID's associated with this trade
-     * @param items All the items associated with this trade. Each list corresponds to the desired
-     *              items of the userID in users with the same index
-     * @param dateAndTime When this trade takes place
-     * @param location Where this trade takes place
      * @param prevMeeting The tradeID of the previous meeting
      */
-    void createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
+    void createTrade(int num, List<Integer> users, List<List<Integer>> items, LocalDateTime
             dateAndTime, String location, Integer prevMeeting) {
-        Trade newTrade = new ReturnTrade(users, items, dateAndTime, location, prevMeeting);
+        TradeBuilder tb = new TradeBuilder();
+        Trade newTrade = tb.buildAmountOfTraders(num).buildTraders(users).buildItems(items).buildDateAndTime(dateAndTime).buildLocation(location).buildType(true).buildTrade();
         tradeRepository.add(newTrade);
         for (int i: users){
             PersonalUser user = userRepository.get(i);
@@ -86,12 +53,9 @@ class TradeManager {
         Trade currTrade = tradeRepository.get(tradeID);
 
         // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
-        if ((currTrade.getAllUsers().contains(editingUser)) && currTrade.getUserEdits(editingUser)
-                == editLimit) {
+        if ((currTrade.getAllUsers().contains(editingUser)) && currTrade.getUserEdits(editingUser) == editLimit) {
             cancelTrades(currTrade);
-        } else if (currTrade.getAllUsers().contains(editingUser) &&
-                !currTrade.getUserConfirms(editingUser) && currTrade.getUserEdits(editingUser) <
-                editLimit) {
+        } else if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser) && currTrade.getUserEdits(editingUser) < editLimit) {
             currTrade.setDateAndTime(dateAndTime);
             currTrade.increaseUserEdits(editingUser);
             currTrade.confirmUser(editingUser);
@@ -114,12 +78,9 @@ class TradeManager {
         Trade currTrade = tradeRepository.get(tradeID);
 
         // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
-        if ((currTrade.getAllUsers().contains(editingUser)) && currTrade.getUserEdits(editingUser)
-                == editLimit) {
+        if ((currTrade.getAllUsers().contains(editingUser)) && currTrade.getUserEdits(editingUser) == editLimit) {
             cancelTrades(currTrade);
-        } else if (currTrade.getAllUsers().contains(editingUser) &&
-                !currTrade.getUserConfirms(editingUser) && currTrade.getUserEdits(editingUser) <
-                editLimit) {
+        } else if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser) && currTrade.getUserEdits(editingUser) < editLimit) {
             currTrade.setLocation(location);
             currTrade.increaseUserEdits(editingUser);
             currTrade.confirmUser(editingUser);
@@ -153,124 +114,16 @@ class TradeManager {
         if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser)
                 && currTrade.getIsClosed()) {
             currTrade.confirmUser(editingUser);
-        }
-        openTrade(tradeID);
-    }
-
-    // Opens a trade and closes the previous trade if applicable
-    private void openTrade(int tradeID){
-        // Get trade from repository
-        Trade currTrade = tradeRepository.get(tradeID);
-
-        // Check that all users confirm
-        for (Boolean i: currTrade.getAllConfirmations()){
-            if (i.equals(false)){
-                return;
+            if (currTrade.getIsClosed()){
+                openTrade(tradeID);
+            } else {
+                completeTrade(tradeID);
             }
         }
-
-        // Opens trade and unconfirms users
-        currTrade.openTrade();
-        for (int i: currTrade.getAllUsers()){
-            currTrade.unconfirmUser(i);
-        }
-
-        // Close first meeting if this is a second meeting to trade back
-        if (currTrade instanceof ReturnTrade && tradeRepository.ifExists(((ReturnTrade)currTrade).getPrevMeeting())) {
-            Trade oldTrade = tradeRepository.get(((ReturnTrade)currTrade).getPrevMeeting());
-            oldTrade.closeTrade();
-        }
     }
 
-    /**
-     * Confirm that a trade has occurred and completes a trade by making the trades and closing it or scheduling another
-     * meeting.
-     * @param tradeID The trade ID of the trade to be confirmed
-     * @param editingUser The user ID of who wishes to confirmed this trade
-     */
-    void confirmTradeComplete(int tradeID, int editingUser) {
-        // Get Trade from Repository
-        Trade currTrade = tradeRepository.get(tradeID);
-
-        // Confirm specific user
-        if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser)
-                && currTrade.getIsClosed()) {
-            currTrade.confirmUser(editingUser);
-        }
-        completeTrade(tradeID);
-    }
-
-    // Completes a trade by making trades or scheduling second meeting
-    private void completeTrade(int tradeID) {
-        // Get trade from repository
-        Trade currTrade = tradeRepository.get(tradeID);
-
-        // If all users confirm, make the trade
-        for (Boolean i: currTrade.getAllConfirmations()){
-            if (i.equals(false)){
-                return;
-            }
-        }
-        makeTrades(currTrade);
-        if (currTrade instanceof TemporaryTrade){
-            scheduleTradeBack(currTrade);
-        } else {
-            currTrade.closeTrade();
-        }
-    }
-
-    // Makes a one-way or two-way trade
-    private void makeTrades(Trade currTrade) {
-        List<Integer> lenders = new ArrayList<>();
-        int index = 0;
-        while (index < currTrade.getAllUsers().size()){
-
-            // Get a user and their respective desired items list
-            PersonalUser user = userRepository.get(currTrade.getAllUsers().get(index));
-            List<Integer> items = currTrade.getAllItems().get(index);
-
-            // Update that they traded
-            if (!(currTrade instanceof ReturnTrade)){
-                user.addRecentTrades(currTrade.getUid());
-                user.setNumTransactions(user.getNumTransactions() + 1);
-
-                // Update borrowing count
-                if (!items.isEmpty()){
-                    user.setBorrowCount(user.getBorrowCount() + 1);
-                }
-            }
-
-            // Changes item availability and item owner name
-            for (int item: items){
-                Item currItem = itemRepository.get(item);
-                user.removeFromWishList(item);
-                if (currTrade instanceof PermanentTrade){
-                    currItem.setIsAvailable(true);
-                    currItem.setOwnerUsername(user.getUid());
-                } else if (currTrade instanceof  TemporaryTrade){
-                    currItem.setIsAvailable(false);
-                } else {
-                    currItem.setIsAvailable(true);
-                }
-                if (!(currTrade instanceof ReturnTrade) && !lenders.contains(currItem.getOwner())){
-                    lenders.add(currItem.getOwner());
-                }
-            }
-        }
-
-        // Update lending count
-        for (int i: lenders){
-            PersonalUser lender = userRepository.get(i);
-            lender.setLendCount(lender.getLendCount() + 1);
-        }
-    }
-
-    // Schedules a second trade meeting
-    private void scheduleTradeBack(Trade currTrade) {
-        LocalDateTime newDateAndTime = currTrade.getDateAndTime().plusMonths(timeLimit);
-        createTrade(currTrade.getAllUsers(), currTrade.getAllItems(), newDateAndTime,
-                currTrade.getLocation(), currTrade.getUid());
-    }
+    abstract void openTrade(int tradeID);
+    abstract void completeTrade(int tradeID);
 
 
     /**

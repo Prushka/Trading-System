@@ -8,9 +8,8 @@ import java.util.List;
  * Represents a trade between users at a specific date and place
  * @author Grace Leung
  */
-public class TradeBuilder {
+class TradeBuilder {
 
-    Integer numTraders;
     Boolean isPermanent;
     List<Integer> users;
     List<List<Integer>> items;
@@ -20,43 +19,33 @@ public class TradeBuilder {
 
     Trade newTrade;
 
-    public TradeBuilder() {}
+    TradeBuilder() {}
 
-    public void buildAmountOfTraders(int num) {
-        numTraders = num;
-        users = new ArrayList<>(num);
-        items = new ArrayList<>(num);
+    void buildTraders(List<Integer> users) {
+        this.users = users;
     }
 
-    public void buildTraders(List<Integer> users) {
-        for (Integer i: users){
-         this.users.add(i);
-        }
+    void buildItems(List<List<Integer>> items){
+        this.items = items;
     }
 
-    public void buildItems(List<List<Integer>> items){
-        for (List<Integer> i: items){
-            this.items.add(i);
-        }
-    }
-
-    public void buildDateAndTime(LocalDateTime dateAndTime){
+    void buildDateAndTime(LocalDateTime dateAndTime){
         this.dateAndTime = dateAndTime;
     }
 
-    public void buildLocation(String location){
+    void buildLocation(String location){
         this.location = location;
     }
 
-    public void buildType(boolean isPermanent){
+    void buildType(boolean isPermanent){
         this.isPermanent = isPermanent;
     }
 
-    public void buildPastMeeting(Integer prevMeeting){
+    void buildPastMeeting(Integer prevMeeting){
         this.prevMeeting = prevMeeting;
     }
 
-    public Trade buildTrade() {
+   Trade buildTrade() {
         if (isPermanent) {
             newTrade = new PermanentTrade(users, items, dateAndTime, location, prevMeeting, new PermanentTradingStrategy());
         } else {

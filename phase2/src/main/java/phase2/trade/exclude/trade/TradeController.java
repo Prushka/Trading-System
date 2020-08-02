@@ -9,48 +9,42 @@ import java.util.*;
 import java.time.LocalDateTime;
 
 /**
- * Represents a trade between users at a specific date and place
- * @author Grace Leung
+ * Controls the input for using the trade manager
  */
 class TradeController {
-    private TradeManager tradeManager;
+    private TradeManagerFacade tm;
 
-    public TradeController(Repository<Trade> tradeRepository, Repository<PersonalUser>
-            personalUserRepository, Repository<Item> itemRepository){
-        tradeManager = new TradeManager(tradeRepository, personalUserRepository, itemRepository);
+    public TradeController(){
+        tm = new TradeManagerFacade();
     }
 
     public void addTrade(List<Integer> users, List<List<Integer>> items, String dateInput, String
-            location) {
+            location, boolean isPermanent) {
 
         String[] data = dateInput.split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
-        tradeManager.createTrade(users, items, dateAndTime, location, spec);
+        tm.createTrade(users, items, dateAndTime, location, null, isPermanent);
     }
 
     public void editMeetingDateAndTime(PersonalUser currUser, Integer tradeID, String dateInput){
         String[] data = dateInput.split("-");
         LocalDateTime dateAndTime = LocalDateTime.of(Integer.parseInt(data[0]), Integer.parseInt(data[1]),
                 Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]));
-        tradeManager.editDateAndTime(tradeID, currUser.getUid(), dateAndTime);
+        tm.editDateAndTime(tradeID, currUser.getUid(), dateAndTime);
     }
 
 
     public void editMeetingLocation(PersonalUser currUser, Integer tradeID, String location){
-        tradeManager.editLocation(tradeID, currUser.getUid(), location);
+        tm.editLocation(tradeID, currUser.getUid(), location);
     }
 
-    public void confirmingTradeOpen(PersonalUser currUser, Integer tradeID){
-        tradeManager.confirmTrade(tradeID, currUser.getUid());
+    public void confirmingTradeOpen(PersonalUser currUser, Integer tradeID) {
+        tm.confirmTrade(tradeID, currUser.getUid());
     }
 
-    public void confirmingTradeComplete(PersonalUser currUser, Integer tradeID){
-        tradeManager.confirmTradeComplete(tradeID, currUser.getUid());
-    }
-
-    findByLocation(){
-
+    public List<PersonalUser> findByLocation(){
+        return new ArrayList<>();
     }
 
     public boolean isBool(String input){
@@ -69,7 +63,7 @@ class TradeController {
     }
 
     public Map<Integer, Integer> getTradeFrequency(int user) {
-        return tradeManager.getTradeFrequency(user);
+        return getTradeFrequency(user);
     }
 
     public boolean validate(String input) {

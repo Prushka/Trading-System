@@ -8,10 +8,10 @@ import java.util.*;
  * @author Grace Leung
  */
 public class TradeManagerFacade {
-    private TradeBuilder tb = new TradeBuilder();
-    private TradeEditor te = new TradeEditor();
     private Integer editLimit = 3;
     private Integer timeLimit = 1;
+    private TradeBuilder tb = new TradeBuilder();
+    private TradeEditor te = new TradeEditor(editLimit);
 
     public TradeManagerFacade() {}
 
@@ -24,15 +24,14 @@ public class TradeManagerFacade {
      * @param location Where this trade takes place
      * @param prevMeeting The tradeID of the previous meeting
      */
-    public Trade createTrade(int num, List<Integer> users, List<List<Integer>> items, LocalDateTime
-            dateAndTime, String location, Integer prevMeeting) {
+    public Trade createTrade(List<Integer> users, List<List<Integer>> items, LocalDateTime
+            dateAndTime, String location, Integer prevMeeting, boolean isPermanent) {
         TradeBuilder tb = new TradeBuilder();
-        tb.buildAmountOfTraders(num);
         tb.buildTraders(users);
         tb.buildItems(items);
         tb.buildDateAndTime(dateAndTime);
         tb.buildLocation(location);
-        tb.buildType(true);
+        tb.buildType(isPermanent);
         tb.buildPastMeeting(prevMeeting);
         Trade newTrade = tb.buildTrade();
         // TODO: add trade to database and add trade to each user's all trades list

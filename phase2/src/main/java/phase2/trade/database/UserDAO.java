@@ -11,8 +11,8 @@ import java.util.List;
 
 public class UserDAO extends AbstractDAO<User> {
 
-    public UserDAO(SessionFactory sessionFactory) {
-        super(User.class, sessionFactory);
+    public UserDAO(DatabaseResource databaseResource) {
+        super(User.class, databaseResource);
     }
 
     public List<User> findMatches(String usernameOrEmail, String password) {

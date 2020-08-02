@@ -1,5 +1,6 @@
 package phase2.trade.item;
 
+import phase2.trade.database.Callback;
 import phase2.trade.database.ItemDAO;
 import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
@@ -11,22 +12,18 @@ public class ItemManager {
 
     private final ItemDAO itemDAO;
 
-
-    private ExecutorService threadPool;
-
     public ItemManager(ItemDAO itemDAO){
         this.itemDAO = itemDAO;
-
-        threadPool = Executors.newFixedThreadPool(3);
     }
 
-    public void addItem(User owner){
-        threadPool.submit(() -> {
-            itemDAO.openCurrentSession();
+    public void addItem(Callback<Item> callback, String category, String name, String description){
+        itemDAO.submitSessionWithTransaction(() -> {
             Item item = new Item();
-            item.setName("item name");
+            item.setCategory(category);
+            item.setName(name);
+            item.setDescription(description);
             itemDAO.add(item);
-            itemDAO.closeCurrentSession();
+            callback.call(item);
         });
     }
 }

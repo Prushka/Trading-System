@@ -2,6 +2,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.junit.Test;
+import phase2.trade.database.DatabaseResource;
 import phase2.trade.user.AccountManager;
 import phase2.trade.database.UserDAO;
 import phase2.trade.item.Item;
@@ -11,12 +12,12 @@ import java.util.logging.Level;
 
 public class ORMTest {
 
-    private final SessionFactory sessionFactory;
+    private final DatabaseResource databaseResource;
 
     public ORMTest(){
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        sessionFactory = new Configuration().configure().buildSessionFactory();
+        databaseResource = new DatabaseResource();
     }
 
     @Test
@@ -28,7 +29,7 @@ public class ORMTest {
         item.setName("test item2");
         item.setDescription("test description2");
 
-        UserDAO userDAO = new UserDAO(sessionFactory);
+        UserDAO userDAO = new UserDAO(databaseResource);
         userDAO.openCurrentSessionWithTransaction();
         User user = userDAO.findById(1L);
         user.addItem(item);
@@ -45,7 +46,7 @@ public class ORMTest {
     }
 
     private User getTestUser() {
-        UserDAO userDAO = new UserDAO(sessionFactory);
+        UserDAO userDAO = new UserDAO(databaseResource);
         userDAO.openCurrentSession();
         User user = userDAO.findById(1L);
         userDAO.closeCurrentSession();
@@ -58,7 +59,7 @@ public class ORMTest {
 
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
-        UserDAO userDAO = new UserDAO(sessionFactory);
+        UserDAO userDAO = new UserDAO(databaseResource);
 
         userDAO.openCurrentSession();
 

@@ -6,7 +6,7 @@ import phase2.trade.item.Item;
 public class ItemDAO extends AbstractDAO<Item> {
 
 
-    public ItemDAO(Class<Item> clazz, SessionFactory sessionFactory) {
-        super(clazz, sessionFactory);
+    public ItemDAO(Class<Item> clazz, DatabaseResource resource) {
+        super(clazz, resource);
     }
 }

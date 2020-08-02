@@ -10,10 +10,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
+import phase2.trade.database.DatabaseResource;
 import phase2.trade.database.UserDAO;
-import phase2.trade.repository.SaveHook;
 import phase2.trade.user.AccountManager;
-import phase2.trade.user.User;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
@@ -21,18 +20,20 @@ import java.util.logging.Level;
 
 public class TradeApplication extends Application {
 
-    private final SessionFactory sessionFactory;
+    private final DatabaseResource databaseResource;
+
+    private final ShutdownHook shutdownHook;
 
     public TradeApplication() {
-        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-        Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
-        sessionFactory = configuration.configure().buildSessionFactory();
+        databaseResource = new DatabaseResource();
+        shutdownHook = new ShutdownHook();
+        shutdownHook.addShutdownable(databaseResource);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // mockDashboard(primaryStage);
-        login(primaryStage);
+        mockDashboard(primaryStage);
+        // login(primaryStage);
     }
 
     private void login(Stage primaryStage) throws IOException {
@@ -40,7 +41,7 @@ public class TradeApplication extends Application {
         SceneFactory sceneFactory = new SceneFactory();
         FXMLLoader login = sceneFactory.getLoader("login.fxml");
 
-        LoginController loginController = new LoginController(new UserDAO(sessionFactory));
+        LoginController loginController = new LoginController(new UserDAO(databaseResource));
         login.setController(loginController);
         primaryStage.setTitle("Trade");
         primaryStage.setScene(new Scene(login.load()));
@@ -49,7 +50,7 @@ public class TradeApplication extends Application {
 
     private void mockDashboard(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
-        AccountManager accountManager = new AccountManager(new UserDAO(sessionFactory));
+        AccountManager accountManager = new AccountManager(new UserDAO(databaseResource));
         accountManager.login(result -> {
             DashboardController dashboardController = new DashboardController(accountManager);
             Platform.runLater(() -> {
@@ -68,11 +69,7 @@ public class TradeApplication extends Application {
 
     @Override
     public void stop() {
-        sessionFactory.close();
-        System.exit(0);
-        // hibernate in single thread exits normally with 0
-        // while doing multiple threads, the hibernate part will block the termination even the factory and sessions are all closed.
-        // No answer can be found.
+        shutdownHook.shutdown();
     }
 
 }

@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,13 +27,19 @@ public class SideMenuController extends AbstractController implements Initializa
         this.center = center;
     }
 
-    private void logOut() {
-        accountManager.logOut();
-        switchScene("login.fxml", new LoginController(accountManager), logOut);
+    private void logOut(Label old) {
+        ConfirmPopup confirmPopup = new ConfirmPopup();
+        Parent confirm = loadPane("confirm_popup.fxml",confirmPopup);
+        if (confirmPopup.display("Log out", "Do you really want to log out?")) {
+            accountManager.logOut();
+            switchScene("login.fxml", new LoginController(accountManager), logOut);
+        }else{
+            sideList.getSelectionModel().select(old);
+        }
     }
 
     private void userInfo() {
-        Parent userPane = loadPane("user_info.fxml",new UserInfoPresenter(accountManager.getLoggedInUser()));
+        Parent userPane = loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
@@ -48,7 +55,7 @@ public class SideMenuController extends AbstractController implements Initializa
                         userInfo();
                         break;
                     case "logOut":
-                        logOut();
+                        logOut(oldValue);
                         break;
                 }
             }

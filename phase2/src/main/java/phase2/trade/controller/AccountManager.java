@@ -28,7 +28,7 @@ public class AccountManager {
 
     public AccountManager(UserDAO userDAO) {
         this.userDAO = userDAO;
-        threadPool = Executors.newFixedThreadPool(10);
+        threadPool = Executors.newFixedThreadPool(3);
     }
 
     public void register(Callback<User> callback, String username, String email, String password) {

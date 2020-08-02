@@ -1,7 +1,11 @@
 package phase2.trade.user;
 
 
+import phase2.trade.item.Item;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -10,14 +14,22 @@ public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer uuid;
+    private Long uid;
+
+    @Column(unique = true)
     private String userName;
+
+    @Column(unique = true)
     private String email;
     private String telephone;
     private String password;
 
     @Embedded
-    public Address address;
+    private Address address;
+
+    @OneToMany(mappedBy = "owner")
+    private Collection<Item> items = new ArrayList<>();
+
 
     /**
      * Creates a new User with userName, email, telephone and given password.
@@ -60,12 +72,20 @@ public abstract class User {
         this.password = password;
     }
 
-    public void setUid(int value) {
-        this.uuid = value;
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
 
-    public int getUid() {
-        return uuid;
+    public Long getUid() {
+        return uid;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public abstract boolean isAdmin();

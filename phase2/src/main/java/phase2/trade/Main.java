@@ -35,12 +35,12 @@ public class Main extends Application {
         LoginController loginController = new LoginController(new UserDAO());
         login.setController(loginController);
 
-        mockDashboard(primaryStage);
+        // mockDashboard(primaryStage);
 
-        // primaryStage.setOnCloseRequest(event -> saveHook.save());
-        // primaryStage.setTitle("Trade");
-        // primaryStage.setScene(new Scene(login.load()));
-        // primaryStage.show();
+        primaryStage.setOnCloseRequest(event -> saveHook.save());
+        primaryStage.setTitle("Trade");
+        primaryStage.setScene(new Scene(login.load()));
+        primaryStage.show();
     }
 
     private void mockDashboard(Stage primaryStage) {
@@ -60,6 +60,6 @@ public class Main extends Application {
                 primaryStage.show();
             });
 
-        }, "123", "123");
+        }, "aaa@bbb.ccc", "12345678");
     }
 }

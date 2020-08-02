@@ -30,7 +30,6 @@ public class UserInfoPresenter implements Initializable {
 
     public UserInfoPresenter(User user) {
         this.user = user;
-        System.out.println(user.getUserName());
     }
 
     @Override

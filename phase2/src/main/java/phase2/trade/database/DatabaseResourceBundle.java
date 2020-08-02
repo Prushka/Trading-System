@@ -8,13 +8,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
-public class DatabaseResource implements Shutdownable {
+public class DatabaseResourceBundle implements Shutdownable {
 
     private final ExecutorService threadPool;
 
     private final SessionFactory sessionFactory;
 
-    public DatabaseResource() {
+    public DatabaseResourceBundle() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
         sessionFactory = configuration.configure().buildSessionFactory();

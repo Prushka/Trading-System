@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.user.AccountManager;
 
 import java.net.URL;
@@ -21,25 +22,32 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private final AccountManager accountManager;
 
-    public SideMenuController(AccountManager accountManager, GridPane center) {
+    public SideMenuController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager, GridPane center) {
+        super(databaseResourceBundle);
         this.accountManager = accountManager;
         this.center = center;
     }
 
     private void logOut(Label old) {
-        System.out.println("log out");
         ConfirmPopup confirmPopup = new ConfirmPopup();
-        Parent confirm = loadPane("confirm_popup.fxml",confirmPopup);
+        Parent confirm = loadPane("confirm_popup.fxml", confirmPopup);
         if (confirmPopup.display("Log out", "Do you really want to log out?")) {
             accountManager.logOut();
-            switchScene("login.fxml", new LoginController(accountManager), logOut);
-        }else{
+            switchScene("login.fxml", new LoginController(databaseResourceBundle, accountManager), logOut);
+        } else {
             sideList.getSelectionModel().select(old);
         }
     }
 
     private void userInfo() {
         Parent userPane = loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
+        GridPane.setConstraints(userPane, 0, 0);
+        center.getChildren().clear();
+        center.getChildren().addAll(userPane);
+    }
+
+    private void inventory() {
+        Parent userPane = loadPane("add_item.fxml", new ItemAddController());
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
@@ -56,6 +64,9 @@ public class SideMenuController extends AbstractController implements Initializa
                         break;
                     case "logOut":
                         logOut(oldValue);
+                        break;
+                    case "inventory":
+                        inventory();
                         break;
                 }
             }

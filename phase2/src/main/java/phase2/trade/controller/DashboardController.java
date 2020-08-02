@@ -6,6 +6,7 @@ import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.user.AccountManager;
 
 import java.net.URL;
@@ -20,14 +21,15 @@ public class DashboardController extends AbstractController implements Initializ
 
     private final AccountManager accountManager;
 
-    public DashboardController(AccountManager accountManager) {
+    public DashboardController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager) {
+        super(databaseResourceBundle);
         this.accountManager = accountManager;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(accountManager, center)));
+        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(databaseResourceBundle, accountManager, center)));
 
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
         transition.setRate(-1);

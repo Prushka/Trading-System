@@ -1,9 +1,5 @@
 package phase2.trade.database;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import phase2.trade.user.User;
 
@@ -11,8 +7,8 @@ import java.util.List;
 
 public class UserDAO extends AbstractDAO<User> {
 
-    public UserDAO(DatabaseResource databaseResource) {
-        super(User.class, databaseResource);
+    public UserDAO(DatabaseResourceBundle databaseResourceBundle) {
+        super(User.class, databaseResourceBundle);
     }
 
     public List<User> findMatches(String usernameOrEmail, String password) {

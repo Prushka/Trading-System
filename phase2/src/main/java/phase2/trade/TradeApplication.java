@@ -6,28 +6,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
-import phase2.trade.database.DatabaseResource;
+import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.database.UserDAO;
 import phase2.trade.user.AccountManager;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
-import java.util.logging.Level;
 
 public class TradeApplication extends Application {
 
-    private final DatabaseResource databaseResource;
+    private final DatabaseResourceBundle databaseResourceBundle;
 
     private final ShutdownHook shutdownHook;
 
     public TradeApplication() {
-        databaseResource = new DatabaseResource();
+        databaseResourceBundle = new DatabaseResourceBundle();
         shutdownHook = new ShutdownHook();
-        shutdownHook.addShutdownable(databaseResource);
+        shutdownHook.addShutdownable(databaseResourceBundle);
     }
 
     @Override
@@ -41,7 +38,7 @@ public class TradeApplication extends Application {
         SceneFactory sceneFactory = new SceneFactory();
         FXMLLoader login = sceneFactory.getLoader("login.fxml");
 
-        LoginController loginController = new LoginController(new UserDAO(databaseResource));
+        LoginController loginController = new LoginController(databaseResourceBundle);
         login.setController(loginController);
         primaryStage.setTitle("Trade");
         primaryStage.setScene(new Scene(login.load()));
@@ -50,9 +47,9 @@ public class TradeApplication extends Application {
 
     private void mockDashboard(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
-        AccountManager accountManager = new AccountManager(new UserDAO(databaseResource));
+        AccountManager accountManager = new AccountManager(new UserDAO(databaseResourceBundle));
         accountManager.login(result -> {
-            DashboardController dashboardController = new DashboardController(accountManager);
+            DashboardController dashboardController = new DashboardController(databaseResourceBundle, accountManager);
             Platform.runLater(() -> {
 
                 Parent dashboard = sceneFactory.getPane("personal_dashboard.fxml", dashboardController);

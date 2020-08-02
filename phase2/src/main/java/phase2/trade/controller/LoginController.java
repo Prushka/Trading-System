@@ -7,8 +7,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.database.UserDAO;
 import phase2.trade.user.AccountManager;
+import phase2.trade.user.User;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
 
@@ -25,11 +27,12 @@ public class LoginController extends AbstractController implements Initializable
 
     private StringProperty submissionResultProperty;
 
-    public LoginController(UserDAO userDAO) {
-        this.accountManager = new AccountManager(userDAO);
+    public LoginController(DatabaseResourceBundle databaseResourceBundle) {
+        this(databaseResourceBundle, new AccountManager(new UserDAO(databaseResourceBundle)));
     }
 
-    LoginController(AccountManager accountManager) {
+    LoginController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager) {
+        super(databaseResourceBundle);
         this.accountManager = accountManager;
     }
 
@@ -42,7 +45,7 @@ public class LoginController extends AbstractController implements Initializable
             if (result != null) {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
-                                new DashboardController(accountManager), actionEvent, true));
+                                new DashboardController(databaseResourceBundle, accountManager), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
             }
@@ -50,7 +53,7 @@ public class LoginController extends AbstractController implements Initializable
     }
 
     public void goToSignUp(ActionEvent actionEvent) {
-        switchScene("register.fxml", new RegisterController(accountManager), actionEvent);
+        switchScene("register.fxml", new RegisterController(databaseResourceBundle, accountManager), actionEvent);
     }
 
     @Override

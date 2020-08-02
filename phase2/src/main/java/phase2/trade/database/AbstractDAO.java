@@ -3,11 +3,9 @@ package phase2.trade.database;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class AbstractDAO<T> {
 
@@ -17,11 +15,11 @@ public class AbstractDAO<T> {
 
     private final Class<T> clazz;
 
-    private final DatabaseResource databaseResource;
+    private final DatabaseResourceBundle databaseResourceBundle;
 
-    AbstractDAO(Class<T> clazz, DatabaseResource databaseResource) {
+    AbstractDAO(Class<T> clazz, DatabaseResourceBundle databaseResourceBundle) {
         this.clazz = clazz;
-        this.databaseResource = databaseResource;
+        this.databaseResourceBundle = databaseResourceBundle;
     }
 
     public void openCurrentSession() {
@@ -43,11 +41,11 @@ public class AbstractDAO<T> {
     }
 
     public SessionFactory getSessionFactory() {
-        return databaseResource.getSessionFactory();
+        return databaseResourceBundle.getSessionFactory();
     }
 
     public ExecutorService getThreadPool() {
-        return databaseResource.getThreadPool();
+        return databaseResourceBundle.getThreadPool();
     }
 
     public Session getCurrentSession() {

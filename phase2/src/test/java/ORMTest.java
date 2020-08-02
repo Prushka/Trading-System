@@ -1,11 +1,7 @@
 import org.junit.Test;
-import phase2.trade.controller.AccountManager;
-import phase2.trade.database.Callback;
-import phase2.trade.database.ItemDAO;
+import phase2.trade.user.AccountManager;
 import phase2.trade.database.UserDAO;
 import phase2.trade.item.Item;
-import phase2.trade.item.ItemManager;
-import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 import java.util.logging.Level;

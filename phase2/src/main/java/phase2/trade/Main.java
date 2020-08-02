@@ -7,14 +7,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import phase2.trade.controller.AccountManager;
+import phase2.trade.user.AccountManager;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
 import phase2.trade.database.UserDAO;
 import phase2.trade.repository.SaveHook;
 import phase2.trade.view.SceneFactory;
 
-import java.io.IOException;
 import java.util.logging.Level;
 
 public class Main extends Application {

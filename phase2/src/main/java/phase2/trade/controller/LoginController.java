@@ -4,21 +4,14 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import phase2.trade.database.UserDAO;
-import phase2.trade.validator.Validator;
+import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
-import phase2.trade.validator.ValidatorFactory;
 import phase2.trade.validator.ValidatorType;
-import phase2.trade.view.SceneFactory;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 

@@ -6,6 +6,8 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AbstractDAO<T> {
 
@@ -15,8 +17,11 @@ public class AbstractDAO<T> {
 
     private final Class<T> clazz;
 
+    private final ExecutorService threadPool;
+
     AbstractDAO(Class<T> clazz) {
         this.clazz = clazz;
+        threadPool = Executors.newFixedThreadPool(5); // do we need to configure this
     }
 
     public Session openCurrentSession() {
@@ -93,5 +98,25 @@ public class AbstractDAO<T> {
         for (T entity : entityList) {
             delete(entity);
         }
+    }
+
+    public void submit(Runnable runnable){
+        threadPool.submit(runnable);
+    }
+
+    public void submitSession(Runnable runnable){
+        threadPool.submit(() -> {
+            openCurrentSession();
+            runnable.run();
+            closeCurrentSession();
+        });
+    }
+
+    public void submitSessionWithTransaction(Runnable runnable){
+        threadPool.submit(() -> {
+            openCurrentSessionWithTransaction();
+            runnable.run();
+            closeCurrentSessionWithTransaction();
+        });
     }
 }

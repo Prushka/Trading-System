@@ -3,16 +3,11 @@ package phase2.trade.controller;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
-import javafx.animation.Transition;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import phase2.trade.view.SceneFactory;
+import phase2.trade.user.AccountManager;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 

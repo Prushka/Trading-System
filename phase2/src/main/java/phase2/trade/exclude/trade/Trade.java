@@ -1,7 +1,4 @@
-package phase2.trade.trade;
-
-import main.java.com.phase2.trade.repository.*;
-import main.java.com.phase2.trade.repository.reflection.*;
+package main.java.phase2.trade.exclude.trade;
 
 import java.util.*;
 import java.time.LocalDateTime;
@@ -10,15 +7,15 @@ import java.time.LocalDateTime;
  * Represents a trade between users at a specific date and place
  * @author Grace Leung
  */
-class Trade {
+abstract class Trade {
     // Trading Details
     private List<Integer> users;
     private List<Boolean> confirmations;
     private List<Integer> edits;
     private List<List<Integer>> items;
+    private Integer prevMeeting;
 
     // Meeting Details
-    private Integer tradeID;
     private LocalDateTime dateAndTime;
     private String location;
     private Boolean isClosed;
@@ -29,13 +26,15 @@ class Trade {
      *              items of the userID in users with the same index
      * @param dateAndTime When this trade takes place
      * @param location Where this trade takes place
+     * @param prevMeeting The trade ID of the previous meeting
      */
     Trade(List<Integer> users, List<List<Integer>> items, LocalDateTime dateAndTime, String
-            location){
+            location, Integer prevMeeting){
         this.users = users;
         this.items = items;
         this.dateAndTime = dateAndTime;
         this.location =  location;
+        this.prevMeeting = prevMeeting;
 
         // Default Values
         edits = new ArrayList<>(users.size());
@@ -47,20 +46,9 @@ class Trade {
     // GETTERS
 
     /**
-     * @return The trade ID of this trade
-     */
-    @Override
-    public int getUid() { return this.tradeID;}
-
-    /**
      * @return List of all userIDs participating in this trade
      */
     List<Integer> getAllUsers() { return this.users;}
-
-    /**
-     * @return List of all userIDs participating in this trade
-     */
-    List<Boolean> getAllConfirmations() { return this.confirmations;}
 
     /**
      * @return The list of desired items for the user
@@ -78,6 +66,18 @@ class Trade {
     boolean getUserConfirms(int userID){ return this.confirmations.get(this.users.indexOf(userID));}
 
     /**
+     * @return True iff all the users have confirmed to the opening/ completion of this trade
+     */
+    boolean getAllConfirmed(){
+        for (Boolean i: confirmations){
+            if (i.equals(false)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * @return The date and time of this trade
      */
     LocalDateTime getDateAndTime(){ return dateAndTime;}
@@ -88,17 +88,16 @@ class Trade {
     String getLocation(){ return location;}
 
     /**
+     * @return The trade ID of the previous trade if applicable
+     */
+    Integer getPrevMeeting(){ return prevMeeting;}
+
+    /**
      * @return True iff this trade is closed
      */
     boolean getIsClosed(){ return isClosed;}
 
     // SETTERS
-
-    /**
-     * @param new_uid The new trade ID for this trade
-     */
-    @Override
-    public void setUid(int new_uid) { this.tradeID = new_uid;}
 
     /**
      * Increases the user's edits by one.
@@ -115,6 +114,13 @@ class Trade {
      * Un-confirms the user's commitment to the trade/ verification of completion
      */
     void unconfirmUser(int userID){ this.confirmations.set(this.users.indexOf(userID), false);}
+
+    /**
+     * Un-confirms all user's commitment to the trade/ verification of completion
+     */
+    void unconfirmAll(){
+        confirmations = new ArrayList<>(confirmations.size());
+    }
 
     /**
      * Sets a trade to a new date and time
@@ -137,4 +143,6 @@ class Trade {
      * Sets the state of this trade to close
      */
     void closeTrade(){ isClosed = true;}
+
+    abstract Tradable getStrategy();
 }

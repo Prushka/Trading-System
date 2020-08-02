@@ -1,17 +1,23 @@
-package phase2.trade.user;
+package main.java.com.phase2.trade.user;
 
-import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
+import main.java.com.phase2.trade.repository.UniqueId;
 
-@Entity
-public class PersonalUser extends User {
+public class PersonalUser extends User implements UniqueId {
 
+    private List<Integer> wishlist;
+    private List<Integer> inventory;
+    private List<Integer> trades;
+    private List<Integer> supportTickets;
     private Boolean isFrozen;
     private Integer lendCount;
     private Integer borrowCount;
     private Integer numTransactions;
+    private List<Integer> recentTrades;
+    private List<Integer> addToInventoryRequest;
     private Boolean requestToUnfreeze;
+    private List<Item> suggestedItems;
     //private int incompleteTrades;
 
     /**
@@ -20,25 +26,68 @@ public class PersonalUser extends User {
      *
      * @param userName  username of this user
      * @param email     email of this user
+     * @param telephone telephone number of this user
      * @param password  password of this user
      */
-    public PersonalUser(String userName, String email, String password) {
-        super(userName, email, password);
+    public PersonalUser(String userName, String email, String telephone, String password) {
+        super(userName, email, telephone, password);
+        wishlist = new ArrayList<>();
+        inventory = new ArrayList<>();
+        trades = new ArrayList<>();
         isFrozen = false;
         lendCount = 0;
         borrowCount = 0;
         numTransactions = 0;
+        recentTrades = new ArrayList<>();
+        addToInventoryRequest = new ArrayList<>();
         requestToUnfreeze = false;
+        suggestedItems = new ArrayList<>();
         //incompleteTrades = 0;
-    }
-
-    public PersonalUser() {
-
     }
 
     //public int getIncompleteTrades() {
         //return incompleteTrades;
     //}
+
+    public PersonalUser(List<String> record) {
+        super(record);
+    }
+
+    public List<Integer> getWishlist() {
+        return wishlist;
+    }
+
+    public void addToWishList(Integer newItem) {
+        wishlist.add(newItem);
+    }
+
+    public void removeFromWishList(Integer oldItem) {
+        wishlist.remove(oldItem);
+    }
+
+    public List<Integer> getInventory() {
+        return inventory;
+    }
+
+    public void addToInventory(Integer newItem) {
+        inventory.add(newItem);
+    }
+
+    public void removeFromInventory(Integer oldItem) {
+        inventory.remove(oldItem);
+    }
+
+    public List<Integer> getTrades() {
+        return trades;
+    }
+
+    public void addToTrades(Integer newItem) {
+        trades.add(newItem);
+    }
+
+    public void removeFromTrade(Integer oldItem) {
+        trades.remove(oldItem);
+    }
 
     public boolean getIsFrozen() {
         return isFrozen;
@@ -76,6 +125,22 @@ public class PersonalUser extends User {
         this.numTransactions = numTransactions;
     }
 
+    public List<Integer> getAddToInventoryRequest() {
+        return addToInventoryRequest;
+    }
+
+    public void removeAddToInventoryRequest(Integer itemID) {
+        addToInventoryRequest.remove(itemID);
+    }
+
+    public void addItemToAddToInventoryRequest(Integer item) {
+        addToInventoryRequest.add(item);
+    }
+
+    public boolean getAddToInventoryRequestIsNotEmpty() {
+        return !addToInventoryRequest.isEmpty();
+    }
+
     public void setRequestToUnfreeze(boolean state) {
         requestToUnfreeze = state;
     }
@@ -84,9 +149,27 @@ public class PersonalUser extends User {
         return requestToUnfreeze;
     }
 
+    public List<Integer> getSupportTickets() {
+        return supportTickets;
+    }
 
-    public boolean isAdmin(){
-        return false;
+    public void addRecentTrades(Integer tradeID) {
+        if (recentTrades.size() >= 3) {
+            recentTrades.remove(0);
+        }
+        recentTrades.add(tradeID);
+    }
+
+    public List<Integer> getRecentCompleteTrades() {
+        return recentTrades;
+    }
+
+    public List<Item> getSuggestedItems() {
+        return suggestedItems;
+    }
+
+    public void suggest(Item i) {
+        suggestedItems.add(i);
     }
 
     /*
@@ -133,4 +216,11 @@ public class PersonalUser extends User {
         }
         return null;
     }*/
+
+    @Override
+    public String toString() {
+        return "PersonalUser" + super.toString();
+    }
+
+
 }

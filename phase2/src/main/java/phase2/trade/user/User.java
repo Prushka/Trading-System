@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -16,10 +17,10 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 40)
     private String userName;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 40)
     private String email;
     private String telephone;
     private String password;
@@ -27,8 +28,8 @@ public abstract class User {
     @Embedded
     private Address address;
 
-    // @OneToMany(mappedBy = "owner")
-    // private Collection<Item> items = new ArrayList<>();
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<Item> items;
 
 
     /**
@@ -42,6 +43,7 @@ public abstract class User {
         this.userName = userName;
         this.email = email;
         this.password = password;
+        this.items = new ArrayList<>();
     }
 
     public User() {
@@ -89,5 +91,18 @@ public abstract class User {
     }
 
     public abstract boolean isAdmin();
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public void addItem(Item item){
+        this.items.add(item);
+        item.setOwner(this);
+    }
 }
 

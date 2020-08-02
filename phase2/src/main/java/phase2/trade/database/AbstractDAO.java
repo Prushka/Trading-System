@@ -71,6 +71,14 @@ public class AbstractDAO<T> {
         return getCurrentSession().get(clazz, id);
     }
 
+    public T findById(Long id) {
+        return getCurrentSession().get(clazz, id);
+    }
+
+    public T findById(Integer id) {
+        return getCurrentSession().get(clazz, id);
+    }
+
     public void delete(T entity) {
         getCurrentSession().delete(entity);
     }

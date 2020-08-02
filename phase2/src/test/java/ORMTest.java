@@ -1,8 +1,11 @@
 import org.junit.Test;
 import phase2.trade.controller.AccountManager;
 import phase2.trade.database.Callback;
+import phase2.trade.database.ItemDAO;
 import phase2.trade.database.UserDAO;
+import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
+import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 import java.util.logging.Level;
@@ -17,15 +20,50 @@ public class ORMTest {
     }
 
     @Test
-    public void testItemManager() throws InterruptedException {
+    public void testItemManager() {
 
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
-        AccountManager accountManager = new AccountManager(new UserDAO());
-        accountManager.login(result -> {
-            ItemManager itemManager = new ItemManager();
-            itemManager.addItem(accountManager.getLoggedInUser());
-        }, "aaa@bbb.ccc", "12345678");
-        Thread.sleep(10000);
+        Item item = new Item();
+        item.setName("test item2");
+        item.setDescription("test description2");
+
+        UserDAO userDAO = new UserDAO();
+        userDAO.openCurrentSessionWithTransaction();
+        User user = userDAO.findById(1L);
+        user.addItem(item);
+        userDAO.update(user);
+        userDAO.closeCurrentSessionWithTransaction();
+
+
+        // item.setOwner(user);
+
+        // ItemDAO itemDAO = new ItemDAO(Item.class);
+        // itemDAO.openCurrentSession();
+        // itemDAO.add(item);
+        // itemDAO.closeCurrentSession();
+    }
+
+    private User getTestUser() {
+        UserDAO userDAO = new UserDAO();
+        userDAO.openCurrentSession();
+        User user = userDAO.findById(1L);
+        userDAO.closeCurrentSession();
+        return user;
+    }
+
+    @Test
+    public void getItemFromUser() {
+
+
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+
+        UserDAO userDAO = new UserDAO();
+
+        userDAO.openCurrentSession();
+
+        User user = userDAO.findById(1L);
+        System.out.println(user.getItems().get(0).getName());
+        userDAO.closeCurrentSession();
     }
 }

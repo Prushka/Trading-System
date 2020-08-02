@@ -16,8 +16,16 @@ public class Item {
     private String description;
     private String category;
 
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // private User owner;
+    @ManyToOne
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
     public Long getUid() {
         return uid;

@@ -8,6 +8,10 @@ import java.time.DateTimeException;
 import java.util.*;
 import java.time.LocalDateTime;
 
+/**
+ * Represents a trade between users at a specific date and place
+ * @author Grace Leung
+ */
 class TradeController {
     private TradeManager tradeManager;
 

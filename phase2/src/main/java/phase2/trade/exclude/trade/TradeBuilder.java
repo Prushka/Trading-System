@@ -4,6 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a trade between users at a specific date and place
+ * @author Grace Leung
+ */
 public class TradeBuilder {
 
     Integer numTraders;

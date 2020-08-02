@@ -20,14 +20,13 @@ abstract class Trade {
     private String location;
     private Boolean isClosed;
 
-    private Tradable strategy;
-
     /**
      * @param users All the userID's associated with this trade
      * @param items All the items associated with this trade. Each list corresponds to the desired
      *              items of the userID in users with the same index
      * @param dateAndTime When this trade takes place
      * @param location Where this trade takes place
+     * @param prevMeeting The trade ID of the previous meeting
      */
     Trade(List<Integer> users, List<List<Integer>> items, LocalDateTime dateAndTime, String
             location, Integer prevMeeting){
@@ -52,11 +51,6 @@ abstract class Trade {
     List<Integer> getAllUsers() { return this.users;}
 
     /**
-     * @return List of all userIDs participating in this trade
-     */
-    List<Boolean> getAllConfirmations() { return this.confirmations;}
-
-    /**
      * @return The list of desired items for the user
      */
     List<List<Integer>> getAllItems(){ return this.items;}
@@ -72,6 +66,18 @@ abstract class Trade {
     boolean getUserConfirms(int userID){ return this.confirmations.get(this.users.indexOf(userID));}
 
     /**
+     * @return True iff all the users have confirmed to the opening/ completion of this trade
+     */
+    boolean getAllConfirmed(){
+        for (Boolean i: confirmations){
+            if (i.equals(false)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * @return The date and time of this trade
      */
     LocalDateTime getDateAndTime(){ return dateAndTime;}
@@ -80,6 +86,11 @@ abstract class Trade {
      * @return The location of this trade
      */
     String getLocation(){ return location;}
+
+    /**
+     * @return The trade ID of the previous trade if applicable
+     */
+    Integer getPrevMeeting(){ return prevMeeting;}
 
     /**
      * @return True iff this trade is closed
@@ -105,6 +116,13 @@ abstract class Trade {
     void unconfirmUser(int userID){ this.confirmations.set(this.users.indexOf(userID), false);}
 
     /**
+     * Un-confirms all user's commitment to the trade/ verification of completion
+     */
+    void unconfirmAll(){
+        confirmations = new ArrayList<>(confirmations.size());
+    }
+
+    /**
      * Sets a trade to a new date and time
      * @param newDateAndTime The new date and time of this trade
      */
@@ -125,24 +143,6 @@ abstract class Trade {
      * Sets the state of this trade to close
      */
     void closeTrade(){ isClosed = true;}
-
-    /**
-     * @return The trade ID of the previous trade if applicable
-     */
-    Integer getPrevMeeting(){ return prevMeeting;}
-
-    Boolean getAllConfirmed(){
-        for (Boolean i: confirmations){
-            if (i.equals(false)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    void unconfirmAll(){
-        confirmations = new ArrayList<>(confirmations.size());
-    }
 
     abstract Tradable getStrategy();
 }

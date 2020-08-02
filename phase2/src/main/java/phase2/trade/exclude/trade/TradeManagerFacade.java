@@ -3,6 +3,10 @@ package main.java.phase2.trade.exclude.trade;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Represents a trade between users at a specific date and place
+ * @author Grace Leung
+ */
 public class TradeManagerFacade {
     private TradeBuilder tb = new TradeBuilder();
     private TradeEditor te = new TradeEditor();

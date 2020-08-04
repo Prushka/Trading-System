@@ -6,6 +6,7 @@ import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Order {
@@ -15,13 +16,10 @@ public class Order {
     private Long uid;
 
     @ManyToOne
-    private User initiator;
+    private UserOrderBundle initiator;
 
     @ManyToOne
-    private User target;
-
-    @OneToOne
-    private TradeItemHolder tradeItemHolder;
+    private UserOrderBundle target;
 
     private LocalDateTime dateAndTime;
 
@@ -38,27 +36,43 @@ public class Order {
         this.uid = uid;
     }
 
-    public User getInitiator() {
+    public UserOrderBundle getInitiator() {
         return initiator;
     }
 
-    public void setInitiator(User initiator) {
+    public void setInitiator(UserOrderBundle initiator) {
         this.initiator = initiator;
     }
 
-    public User getTarget() {
+    public UserOrderBundle getTarget() {
         return target;
     }
 
-    public void setTarget(User target) {
+    public void setTarget(UserOrderBundle target) {
         this.target = target;
     }
 
-    public TradeItemHolder getTradeItemHolder() {
-        return tradeItemHolder;
+    public LocalDateTime getDateAndTime() {
+        return dateAndTime;
     }
 
-    public void setTradeItemHolder(TradeItemHolder tradeItemHolder) {
-        this.tradeItemHolder = tradeItemHolder;
+    public void setDateAndTime(LocalDateTime dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
+
+    public Address getLocation() {
+        return location;
+    }
+
+    public void setLocation(Address location) {
+        this.location = location;
+    }
+
+    public OrderState getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(OrderState orderState) {
+        this.orderState = orderState;
     }
 }

@@ -20,6 +20,10 @@ public abstract class Trade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
+    @OneToMany
+    private List<Order> orders;
+
+    // ?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
     @ManyToMany
     private List<PersonalUser> users;
     private List<Boolean> confirmations;
@@ -34,6 +38,7 @@ public abstract class Trade {
     @Column(name="TRADE_LOCATION")
     private Address location;
     private Boolean isClosed;
+    // ?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿?¿
 
     public Trade() {}
 

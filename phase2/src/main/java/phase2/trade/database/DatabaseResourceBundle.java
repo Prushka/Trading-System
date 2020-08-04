@@ -14,11 +14,19 @@ public class DatabaseResourceBundle implements Shutdownable {
 
     private final SessionFactory sessionFactory;
 
+    private final UserDAO userDAO;
+
+    private final ItemDAO itemDAO;
+
     public DatabaseResourceBundle() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
         sessionFactory = configuration.configure().buildSessionFactory();
         threadPool = Executors.newFixedThreadPool(10); // do we need to configure this
+
+        userDAO = new UserDAO(this);
+
+        itemDAO = new ItemDAO(this);
     }
 
     public SessionFactory getSessionFactory() {
@@ -32,5 +40,13 @@ public class DatabaseResourceBundle implements Shutdownable {
     public void stop() {
         sessionFactory.close();
         threadPool.shutdown();
+    }
+
+    public UserDAO getUserDAO() {
+        return userDAO;
+    }
+
+    public ItemDAO getItemDAO() {
+        return itemDAO;
     }
 }

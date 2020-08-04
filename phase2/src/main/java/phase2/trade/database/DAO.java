@@ -7,7 +7,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-public class AbstractDAO<T> {
+public class DAO<T> {
 
     private Session currentSession;
 
@@ -17,7 +17,7 @@ public class AbstractDAO<T> {
 
     private final DatabaseResourceBundle databaseResourceBundle;
 
-    AbstractDAO(Class<T> clazz, DatabaseResourceBundle databaseResourceBundle) {
+    public DAO(Class<T> clazz, DatabaseResourceBundle databaseResourceBundle) {
         this.clazz = clazz;
         this.databaseResourceBundle = databaseResourceBundle;
     }
@@ -69,7 +69,7 @@ public class AbstractDAO<T> {
     }
 
     public T findById(Integer id) {
-        return getCurrentSession().get(clazz, id);
+        return getCurrentSession().get(clazz, new Long(id));
     }
 
     public void delete(T entity) {

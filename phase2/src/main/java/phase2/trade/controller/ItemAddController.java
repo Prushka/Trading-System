@@ -24,9 +24,6 @@ public class ItemAddController implements Initializable {
     }
 
     public void submitItem() {
-        itemManager.addItem(result -> {
-
-        }, category.getSelectionModel().getSelectedItem(), name.getText(), description.getText());
     }
 
     @Override

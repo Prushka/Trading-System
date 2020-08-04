@@ -45,8 +45,15 @@ public abstract class User {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        itemListMap.put(InventoryType.INVENTORY, new Inventory());
-        itemListMap.put(InventoryType.CART, new Cart());
+
+        Inventory inventory = new Inventory();
+        inventory.setOwner(this);
+
+        Cart cart = new Cart();
+        cart.setOwner(this);
+
+        itemListMap.put(InventoryType.INVENTORY, cart);
+        itemListMap.put(InventoryType.CART, inventory);
     }
 
     public User() {
@@ -91,10 +98,6 @@ public abstract class User {
 
     public abstract boolean isAdmin();
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -105,6 +108,14 @@ public abstract class User {
 
     public void setItemListMap(Map<InventoryType, ItemList> itemListMap) {
         this.itemListMap = itemListMap;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }
 

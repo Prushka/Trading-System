@@ -5,7 +5,7 @@ import phase2.trade.user.User;
 
 import java.util.List;
 
-public class UserDAO extends AbstractDAO<User> {
+public class UserDAO extends DAO<User> {
 
     public UserDAO(DatabaseResourceBundle databaseResourceBundle) {
         super(User.class, databaseResourceBundle);

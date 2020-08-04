@@ -2,11 +2,11 @@ package phase2.trade.database;
 
 import phase2.trade.item.Item;
 
-public class ItemDAO extends AbstractDAO<Item> {
+public class ItemDAO extends DAO<Item> {
 
 
-    public ItemDAO(Class<Item> clazz, DatabaseResourceBundle resource) {
-        super(clazz, resource);
+    public ItemDAO(DatabaseResourceBundle resource) {
+        super(Item.class, resource);
     }
 
 

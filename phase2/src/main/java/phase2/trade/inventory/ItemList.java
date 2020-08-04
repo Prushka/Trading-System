@@ -45,5 +45,17 @@ public abstract class ItemList {
         this.itemList.add(item);
     }
 
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
     public abstract InventoryType getInventoryType();
 }

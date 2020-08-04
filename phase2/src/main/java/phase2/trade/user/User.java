@@ -50,6 +50,11 @@ public abstract class User {
 
     }
 
+
+    /**
+     *
+     * @return The username of the user.
+     */
     public String getUserName() {
         return userName;
     }

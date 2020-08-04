@@ -89,6 +89,12 @@ public class AdministrativeManager {
         }
     }
 
+    /**
+     * helper method, checks if the administrative user exist with the given username
+     * @param username The username of the administrative method
+     * @return true if exists, otherwise false
+     */
+
     private boolean adminUserExist(String username){
         if (administrators.ifExists(
                 AdministrativeUser -> AdministrativeUser.getUserName().equals(username))){
@@ -151,22 +157,31 @@ public class AdministrativeManager {
     }
 
     /**
-     * Initialize the  a trade to a new location
-     * @param newLocation The new location of this trade
+     * Freeze a personal user
+     * @param user The personal user that is going to be frozen
      */
-
     public void freezeUser(PersonalUser user){
         user.setIsFrozen(true);
         freezeActivities.add(user);
     }
 
+    /**
+     * Unfreeze a personal user
+     * @param user The personal user that is going to be unfrozen
+     */
     public void unfreezeUser(PersonalUser user){
         user.setIsFrozen(false);
         user.setRequestToUnfreeze(false);
         unfreezeActivities.add(user);
     }
 
-    public boolean removeUserItem(PersonalUser user, Integer item){
+    /**
+     * Remove an item from a personal user inventory
+     * @param user The personal user
+     * @param item The id of the item
+     * @return true if the item is removed form the user's inventory, otherwise false
+     */
+    public boolean removeUserInventoryItem(PersonalUser user, Integer item){
         user.removeFromInventory(item);
         Item itemEntity = itemRepository.get(item);
         itemRepository.remove(itemEntity);
@@ -174,8 +189,36 @@ public class AdministrativeManager {
         return true; //"success.remove.item")
     }
 
+    /**
+     * Undo the personal user add items to wishlist activity
+     * @param user The user that is going to undo
+     * @param item Thw item that need to br removed
+     */
+    public void removeUserWishlistItem(PersonalUser user, Integer item){
+        user.removeFromWishList(item);
+    }
 
-    public boolean confirmAddAllItemRequestForAUser(PersonalUser user) {
+    /**
+     * Confirm to add an item to a personal user's inventory
+     * @param user The personal user need to confirm add
+     * @param item The item id
+     * @return true if successfully added, otherwise false
+     */
+    public boolean confirmAddItem(PersonalUser user, Integer item) {
+        user.addToInventory(item);
+        user.removeAddToInventoryRequest(item);
+        // Item itemEntity = itemRepository.get(item);
+        // itemRepository.add(itemEntity);
+        return true; //"success.confirm.AddItem";
+    }
+
+
+    /**
+     * Confirm to add all items to a personal user's inventory
+     * @param user The personal user
+     * @return true if successfully added all items, otherwise false
+     */
+    public boolean confirmAddAllItemForAUser(PersonalUser user) {
         for (Integer item : user.getAddToInventoryRequest()) {
             user.addToInventory(item);
             user.getAddToInventoryRequest().remove(item);
@@ -185,15 +228,11 @@ public class AdministrativeManager {
         return true; //translatable("success.confirm.AddItem").build();
     }
 
-    public boolean confirmAddItemRequest(PersonalUser user, Integer item) {
-        user.addToInventory(item);
-        user.removeAddToInventoryRequest(item);
-        // Item itemEntity = itemRepository.get(item);
-        // itemRepository.add(itemEntity);
-        return true; //"success.confirm.AddItem";
-    }
-
-    public boolean confirmAddAllItemRequest(){
+    /**
+     * Confirm to add all items request to all personal user's inventory
+     * @return true if successfully added all items, otherwise false
+     */
+    public boolean confirmAddAllItem(){
         while (needToConfirmAddItem.hasNext()){
             confirmAddAllItemRequestForAUser(needToConfirmAddItem.next());
         }
@@ -202,7 +241,7 @@ public class AdministrativeManager {
 
     public boolean confirmUnfreezeUser(PersonalUser user){
         unfreezeUser(user);
-        return true; //"success.confirm.unfreeze"
+        return true; //"success.confirm.unfreeze" //TODO the method id repeated, delete?
     }
 
     public boolean confirmUnfreezeAllUser(){
@@ -277,17 +316,11 @@ public class AdministrativeManager {
         }
     }
 
-    /**
-     * undo the personal user add items to wishlist
-     * @param user
-     * @param item
-     */
-    public void removeItemFromUserWishlist(PersonalUser user, Integer item){
-        user.removeFromWishList(item);
-    }
+
+
     /*
     public void cancelTrade(Trade trade){
-    }*/
+    }*///TODO ask to combine the cancel trade method from trade manager
 
 
 

@@ -24,8 +24,6 @@ public class RegisterController extends AbstractController implements Initializa
 
     public Label submissionResult;
 
-    private final SceneFactory sceneFactory = new SceneFactory();
-
     public TextField username, email, password;
 
     public RegisterController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager) {

@@ -5,7 +5,9 @@ import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.user.AccountManager;
 
@@ -17,6 +19,8 @@ public class DashboardController extends AbstractController implements Initializ
     public JFXDrawer drawer;
     public JFXHamburger hamburger;
     public GridPane center;
+    public StackPane root;
+    public BorderPane top;
 
 
     private final AccountManager accountManager;
@@ -42,6 +46,14 @@ public class DashboardController extends AbstractController implements Initializ
         drawer.setOnDrawerClosing(e -> {
             transition.setRate(-1);
             transition.play();
+        });
+
+        drawer.setOnDrawerOpened(e -> {
+            top.setPickOnBounds(true);
+        });
+
+        drawer.setOnDrawerClosed(e -> {
+            top.setPickOnBounds(false);
         });
 
         hamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {

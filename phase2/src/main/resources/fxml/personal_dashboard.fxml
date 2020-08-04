@@ -9,31 +9,31 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <GridPane fx:id="center">
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </GridPane>
-      <BorderPane prefHeight="800.0" prefWidth="1000.0">
-         <center>
-            <JFXDrawer fx:id="drawer" defaultDrawerSize="250.0" layoutY="-6.0" prefWidth="250.0" />
-         </center>
-         <top>
-            <JFXToolbar minHeight="60.0" minWidth="1000.0" BorderPane.alignment="CENTER">
-               <center>
-                  <HBox style="-fx-background-color: #ba8baf;" BorderPane.alignment="CENTER">
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                     <children>
-                        <JFXHamburger fx:id="hamburger" />
-                     </children>
-                  </HBox>
-               </center>
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:id="root">
+    <GridPane fx:id="center">
+        <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        </padding>
+        <StackPane.margin>
+            <Insets top="60.0"/>
+        </StackPane.margin>
+    </GridPane>
+    <BorderPane prefHeight="800.0" prefWidth="1000.0" fx:id="top">
+        <center>
+            <JFXDrawer fx:id="drawer" defaultDrawerSize="250.0" layoutY="-6.0" prefWidth="250.0"/>
+        </center>
+        <top>
+            <JFXToolbar BorderPane.alignment="CENTER">
+                <center>
+                    <HBox style="-fx-background-color: #ba8baf;" BorderPane.alignment="CENTER">
+                        <padding>
+                            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                        </padding>
+
+                        <JFXHamburger fx:id="hamburger"/>
+                    </HBox>
+                </center>
             </JFXToolbar>
-         </top>
-      </BorderPane>
-   </children>
+        </top>
+    </BorderPane>
 </StackPane>

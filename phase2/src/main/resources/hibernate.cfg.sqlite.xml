@@ -10,6 +10,7 @@
     <property name="connection.url">jdbc:sqlite:trade.db</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
     <property name="show_sql">true</property>
+    <mapping class="phase2.trade.item.Item" />
     <mapping class="phase2.trade.user.User" />
     <mapping class="phase2.trade.user.AdministrativeUser" />
     <mapping class="phase2.trade.user.PersonalUser" />

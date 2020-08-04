@@ -5,9 +5,7 @@ import phase2.trade.item.Item;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -29,7 +27,13 @@ public abstract class User {
     private Address address;
 
     @OneToMany(cascade=CascadeType.ALL)
-    private List<Item> items;
+    private List<Item> inventory;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<Item> wishToBorrowList;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<Item> wishToLendList;
 
 
     /**
@@ -43,20 +47,11 @@ public abstract class User {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.items = new ArrayList<>();
+        this.inventory = new ArrayList<>();
     }
 
     public User() {
 
-    }
-
-
-    /**
-     *
-     * @return The username of the user.
-     */
-    public String getUserName() {
-        return userName;
     }
 
     public String getEmail() {
@@ -97,17 +92,41 @@ public abstract class User {
 
     public abstract boolean isAdmin();
 
-    public List<Item> getItems() {
-        return items;
+    public List<Item> getInventory() {
+        return inventory;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setInventory(List<Item> items) {
+        this.inventory = items;
     }
 
     public void addItem(Item item){
-        this.items.add(item);
+        this.inventory.add(item);
         item.setOwner(this);
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Item> getWishToBorrowList() {
+        return wishToBorrowList;
+    }
+
+    public void setWishToBorrowList(List<Item> wishToBorrowList) {
+        this.wishToBorrowList = wishToBorrowList;
+    }
+
+    public List<Item> getWishToLendList() {
+        return wishToLendList;
+    }
+
+    public void setWishToLendList(List<Item> wishToLendList) {
+        this.wishToLendList = wishToLendList;
     }
 }
 

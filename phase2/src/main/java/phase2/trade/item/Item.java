@@ -16,6 +16,10 @@ public class Item {
     private String description;
     private String category;
 
+    private Ownership ownership;
+
+    private Willingness willingness;
+
     @ManyToOne
     private User owner;
 
@@ -24,7 +28,7 @@ public class Item {
     }
 
     public void setOwner(User owner) {
-        this.owner = owner;
+        owner.addItem(this);
     }
 
     public Long getUid() {
@@ -58,4 +62,13 @@ public class Item {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public Ownership getOwnership() {
+        return ownership;
+    }
+
+    public void setOwnership(Ownership ownership) {
+        this.ownership = ownership;
+    }
+
 }

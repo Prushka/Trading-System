@@ -61,7 +61,7 @@ public class ORMTest {
         userDAO.openCurrentSession();
 
         User user = userDAO.findById(1L);
-        System.out.println(user.getItems().get(0).getName());
+        System.out.println(user.getInventory().get(0).getName());
         userDAO.closeCurrentSession();
     }
 }

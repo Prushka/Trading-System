@@ -7,7 +7,7 @@ import java.util.List;
 @Entity
 public class PersonalUser extends User {
 
-    private Boolean isFrozen;
+    private AccountState accountState;
     private Integer lendCount;
     private Integer borrowCount;
     private Integer numTransactions;
@@ -24,7 +24,7 @@ public class PersonalUser extends User {
      */
     public PersonalUser(String userName, String email, String password) {
         super(userName, email, password);
-        isFrozen = false;
+        accountState = AccountState.NORMAL;
         lendCount = 0;
         borrowCount = 0;
         numTransactions = 0;
@@ -40,12 +40,13 @@ public class PersonalUser extends User {
     //return incompleteTrades;
     //}
 
-    public boolean getIsFrozen() {
-        return isFrozen;
+
+    public AccountState getAccountState() {
+        return accountState;
     }
 
-    public void setIsFrozen(boolean isFrozen) {
-        this.isFrozen = isFrozen;
+    public void setAccountState(AccountState accountState) {
+        this.accountState = accountState;
     }
 
     public int getLendCount() {

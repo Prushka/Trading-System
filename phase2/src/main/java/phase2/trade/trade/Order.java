@@ -9,22 +9,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @ManyToOne
+    @OneToOne
     private UserOrderBundle initiator;
 
-    @ManyToOne
+    @OneToOne
     private UserOrderBundle target;
 
     private LocalDateTime dateAndTime;
-
-    @Embedded
-    private Address location;
 
     private OrderState orderState;
 
@@ -58,14 +56,6 @@ public class Order {
 
     public void setDateAndTime(LocalDateTime dateAndTime) {
         this.dateAndTime = dateAndTime;
-    }
-
-    public Address getLocation() {
-        return location;
-    }
-
-    public void setLocation(Address location) {
-        this.location = location;
     }
 
     public OrderState getOrderState() {

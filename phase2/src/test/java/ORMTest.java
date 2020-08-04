@@ -5,7 +5,6 @@ import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
-import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 import java.util.logging.Level;

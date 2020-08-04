@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXListView;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import phase2.trade.database.DatabaseResourceBundle;

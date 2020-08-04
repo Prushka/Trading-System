@@ -11,7 +11,6 @@ import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
-import phase2.trade.view.SceneFactory;
 
 import java.net.URL;
 import java.util.ResourceBundle;

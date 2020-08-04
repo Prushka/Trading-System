@@ -2,14 +2,9 @@ package phase2.trade.item;
 
 import phase2.trade.database.Callback;
 import phase2.trade.database.DatabaseResourceBundle;
-import phase2.trade.database.ItemDAO;
-import phase2.trade.database.UserDAO;
-import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.user.User;
-
-import java.util.List;
 
 public class ItemManager {
 

@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
 import phase2.trade.database.DatabaseResourceBundle;
+import phase2.trade.database.DatabaseResourceBundleImpl;
 import phase2.trade.database.UserDAO;
 import phase2.trade.user.AccountManager;
 import phase2.trade.view.SceneFactory;
@@ -22,9 +23,10 @@ public class TradeApplication extends Application {
     private final ShutdownHook shutdownHook;
 
     public TradeApplication() {
-        databaseResourceBundle = new DatabaseResourceBundle();
+        DatabaseResourceBundleImpl databaseResourceBundle = new DatabaseResourceBundleImpl();
         shutdownHook = new ShutdownHook();
         shutdownHook.addShutdownable(databaseResourceBundle);
+        this.databaseResourceBundle = databaseResourceBundle;
     }
 
     @Override
@@ -47,7 +49,7 @@ public class TradeApplication extends Application {
 
     private void mockDashboard(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
-        AccountManager accountManager = new AccountManager(new UserDAO(databaseResourceBundle));
+        AccountManager accountManager = new AccountManager(databaseResourceBundle.getUserDAO());
         accountManager.login(result -> {
             DashboardController dashboardController = new DashboardController(databaseResourceBundle, accountManager);
             Platform.runLater(() -> {

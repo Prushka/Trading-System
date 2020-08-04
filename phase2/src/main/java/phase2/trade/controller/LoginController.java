@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.database.UserDAO;
 import phase2.trade.user.AccountManager;
-import phase2.trade.user.User;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
 
@@ -28,7 +27,7 @@ public class LoginController extends AbstractController implements Initializable
     private StringProperty submissionResultProperty;
 
     public LoginController(DatabaseResourceBundle databaseResourceBundle) {
-        this(databaseResourceBundle, new AccountManager(new UserDAO(databaseResourceBundle)));
+        this(databaseResourceBundle, new AccountManager(databaseResourceBundle.getUserDAO()));
     }
 
     LoginController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager) {

@@ -1,7 +1,7 @@
 package phase2.trade.item;
 
 
-import phase2.trade.user.User;
+import phase2.trade.inventory.ItemList;
 
 import javax.persistence.*;
 
@@ -21,14 +21,14 @@ public class Item {
     private Willingness willingness;
 
     @ManyToOne
-    private User owner;
+    private ItemList itemList;
 
-    public User getOwner() {
-        return owner;
+    public ItemList getItemList() {
+        return itemList;
     }
 
-    public void setOwner(User owner) {
-        owner.addItem(this);
+    public void setItemList(ItemList inventory) {
+        this.itemList = inventory;
     }
 
     public Long getUid() {
@@ -71,4 +71,11 @@ public class Item {
         this.ownership = ownership;
     }
 
+    public Willingness getWillingness() {
+        return willingness;
+    }
+
+    public void setWillingness(Willingness willingness) {
+        this.willingness = willingness;
+    }
 }

@@ -3,12 +3,10 @@ package phase2.trade.item;
 import phase2.trade.database.Callback;
 import phase2.trade.database.ItemDAO;
 import phase2.trade.inventory.Inventory;
-import phase2.trade.user.PersonalUser;
+import phase2.trade.inventory.InventoryType;
 import phase2.trade.user.User;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ItemManager {
 
@@ -21,21 +19,16 @@ public class ItemManager {
         this.operator = operator;
     }
 
-    public void addItem(Callback<Item> callback, String category, String name, String description) {
+    public void addItemTo(InventoryType inventoryType, Callback<Item> callback, String category, String name, String description) {
         itemDAO.submitSessionWithTransaction(() -> {
             Item item = new Item();
             item.setCategory(category);
             item.setName(name);
             item.setDescription(description);
-            item.setOwner(operator);
-            item.setOwnership(Ownership.TO_BE_REVIEWED);
+            operator.getItemListMap().get(inventoryType).addItem(item);
             itemDAO.add(item);
             callback.call(item);
         });
-    }
-
-    public void addItemToInventory() {
-
     }
 
     public void reviewItem(Callback<Boolean> callback, Ownership ownership, Long itemId) {
@@ -43,25 +36,14 @@ public class ItemManager {
             itemDAO.submitSessionWithTransaction(() -> {
                 Item item = itemDAO.findById(itemId);
                 item.setOwnership(ownership);
+                callback.call(true);
             });
         }
     }
 
-    public void getInventory(Callback<List<Item>> callback) {
+    public void getInventory(InventoryType inventoryType, Callback<Boolean> callback) {
         itemDAO.submitSessionWithTransaction(() -> {
-            callback.call(operator.getInventory());
-        });
-    }
 
-    public void getWishToBorrowList(Callback<List<Item>> callback) {
-        itemDAO.submitSessionWithTransaction(() -> {
-            callback.call(operator.getWishToBorrowList());
-        });
-    }
-
-    public void getWishToLendList(Callback<List<Item>> callback) {
-        itemDAO.submitSessionWithTransaction(() -> {
-            callback.call(operator.getWishToLendList());
         });
     }
 

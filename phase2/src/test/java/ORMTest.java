@@ -52,8 +52,6 @@ public class ORMTest {
 
     @Test
     public void getItemFromUser() {
-
-
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
         UserDAO userDAO = new UserDAO(databaseResourceBundle);

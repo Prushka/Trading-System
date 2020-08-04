@@ -20,7 +20,7 @@ public abstract class Trade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToMany
+    @ManyToMany
     private List<PersonalUser> users;
     private List<Boolean> confirmations;
     private List<Integer> edits;

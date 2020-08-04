@@ -5,11 +5,10 @@ import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.Cart;
-import phase2.trade.item.Item;
+import phase2.trade.trade.Trade;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -36,8 +35,14 @@ public abstract class User {
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Trade> listOfTrades;
+
     // using a map may add some polymorphism but will complicate the db structure
 
+    private Integer reputation;
+
+    private Integer point;
 
     /**
      * Creates a new User with userName, email, telephone and given password.
@@ -137,6 +142,30 @@ public abstract class User {
                 return inventory;
         }
         return null;
+    }
+
+    public List<Trade> getListOfTrades() {
+        return listOfTrades;
+    }
+
+    public void setListOfTrades(List<Trade> listOfTrade) {
+        this.listOfTrades = listOfTrade;
+    }
+
+    public Integer getReputation() {
+        return reputation;
+    }
+
+    public void setReputation(Integer reputation) {
+        this.reputation = reputation;
+    }
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
     }
 }
 

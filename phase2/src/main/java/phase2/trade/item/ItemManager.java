@@ -17,7 +17,19 @@ public class ItemManager {
         this.operator = operator;
     }
 
-    public void addItemTo(InventoryType inventoryType, Callback<Item> callback, String category, String name, String description) {
+    public void addItemTo(InventoryType inventoryType, Callback<Item> callback, Long itemId) {
+        daoBundle.getUserDAO().submitSessionWithTransaction(() -> {
+            daoBundle.getItemDAO().openCurrentSessionWithTransaction();
+            Item item = daoBundle.getItemDAO().findById(itemId);
+            daoBundle.getItemDAO().closeCurrentSessionWithTransaction();
+
+            operator.getItemList(inventoryType).addItem(item);
+            daoBundle.getUserDAO().update(operator);
+            callback.call(item);
+        });
+    }
+
+    public void addItemTo(InventoryType inventoryType, Callback<Item> callback, Category category, String name, String description) {
         daoBundle.getUserDAO().submitSessionWithTransaction(() -> {
             Item item = new Item();
             item.setCategory(category);
@@ -25,7 +37,6 @@ public class ItemManager {
             item.setDescription(description);
 
             operator.getItemList(inventoryType).addItem(item);
-            System.out.println(operator.getItemList(inventoryType).getListOfItems().size());
             daoBundle.getUserDAO().update(operator);
             callback.call(item);
         });

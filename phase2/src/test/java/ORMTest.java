@@ -3,6 +3,7 @@ import org.junit.Test;
 import phase2.trade.database.*;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
+import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
 import phase2.trade.user.PersonalUser;
@@ -73,7 +74,7 @@ public class ORMTest {
             public void call(Item result) {
                 System.out.println(result.getOwnership());
             }
-        }, "TestCategory", "TestName", "TestDescription");
+        }, Category.BOOK, "TestName", "TestDescription");
 
         itemManager.getInventory(InventoryType.INVENTORY, new Callback<ItemList>() {
             @Override

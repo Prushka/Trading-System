@@ -14,11 +14,13 @@ public class Item {
 
     private String name;
     private String description;
-    private String category;
+    private Category category;
 
     private Ownership ownership;
 
     private Willingness willingness;
+
+    private int count;
 
     @ManyToOne
     private ItemList itemList;
@@ -55,11 +57,11 @@ public class Item {
         this.description = description;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -77,5 +79,13 @@ public class Item {
 
     public void setWillingness(Willingness willingness) {
         this.willingness = willingness;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

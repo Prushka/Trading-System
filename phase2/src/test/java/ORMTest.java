@@ -60,7 +60,7 @@ public class ORMTest {
     }
 
     @Test
-    public void getItemFromUser() {
+    public void getItemFromUser() throws InterruptedException {
         // PersonalUser user = new PersonalUser("name", "email", "password");
 
         userDAO.openCurrentSession();
@@ -72,10 +72,12 @@ public class ORMTest {
         itemManager.addItemTo(InventoryType.INVENTORY, new Callback<Item>() {
             @Override
             public void call(Item result) {
+                System.out.println("123");
                 System.out.println(result.getOwnership());
             }
         }, "TestCategory", "TestName", "TestDescription");
 
+        Thread.sleep(10000);
         // itemDAO.openCurrentSessionWithTransaction();
         // System.out.println(user.getItemListMap());
         // itemDAO.closeCurrentSessionWithTransaction();

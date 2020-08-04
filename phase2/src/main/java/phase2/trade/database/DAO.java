@@ -92,7 +92,19 @@ public class DAO<T> {
         getThreadPool().submit(runnable);
     }
 
-    public void submitSession(Runnable runnable) {
+    public void submitSessionSync(Runnable runnable) {
+        openCurrentSession();
+        runnable.run();
+        closeCurrentSession();
+    }
+
+    public void submitSessionWithTransactionSync(Runnable runnable) {
+        openCurrentSessionWithTransaction();
+        runnable.run();
+        closeCurrentSessionWithTransaction();
+    }
+
+    public void submitSessionAsync(Runnable runnable) {
         getThreadPool().submit(() -> {
             openCurrentSession();
             runnable.run();
@@ -100,7 +112,7 @@ public class DAO<T> {
         });
     }
 
-    public void submitSessionWithTransaction(Runnable runnable) {
+    public void submitSessionWithTransactionAsync(Runnable runnable) {
         getThreadPool().submit(() -> {
             openCurrentSessionWithTransaction();
             runnable.run();

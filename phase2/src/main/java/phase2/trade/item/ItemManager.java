@@ -1,39 +1,40 @@
 package phase2.trade.item;
 
 import phase2.trade.database.Callback;
-import phase2.trade.database.DatabaseResourceBundle;
+import phase2.trade.database.DAOBundle;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.user.User;
 
 public class ItemManager {
 
-    private final DatabaseResourceBundle databaseResourceBundle;
+    private final DAOBundle daoBundle;
 
     private final User operator;
 
-    public ItemManager(DatabaseResourceBundle databaseResourceBundle, User operator) {
-        this.databaseResourceBundle = databaseResourceBundle;
+    public ItemManager(DAOBundle daoBundle, User operator) {
+        this.daoBundle = daoBundle;
         this.operator = operator;
     }
 
     public void addItemTo(InventoryType inventoryType, Callback<Item> callback, String category, String name, String description) {
-        databaseResourceBundle.getUserDAO().submitSessionWithTransaction(() -> {
+        daoBundle.getUserDAO().submitSessionWithTransactionSync(() -> {
             Item item = new Item();
             item.setCategory(category);
             item.setName(name);
             item.setDescription(description);
 
             operator.getItemListMap().get(inventoryType).addItem(item);
-            databaseResourceBundle.getUserDAO().update(operator);
+            System.out.println(operator.getItemListMap().get(inventoryType).getItemList().size());
+            daoBundle.getUserDAO().update(operator);
             callback.call(item);
         });
     }
 
     public void reviewItem(Callback<Boolean> callback, Ownership ownership, Long itemId) {
         if (operator.isAdmin()) {
-            databaseResourceBundle.getItemDAO().submitSessionWithTransaction(() -> {
-                Item item = databaseResourceBundle.getItemDAO().findById(itemId);
+            daoBundle.getItemDAO().submitSessionWithTransactionAsync(() -> {
+                Item item = daoBundle.getItemDAO().findById(itemId);
                 item.setOwnership(ownership);
                 callback.call(true);
             });
@@ -41,7 +42,7 @@ public class ItemManager {
     }
 
     public void getInventory(InventoryType inventoryType, Callback<ItemList> callback) {
-        databaseResourceBundle.getItemDAO().submitSessionWithTransaction(() -> {
+        daoBundle.getItemDAO().submitSessionWithTransactionAsync(() -> {
             callback.call(operator.getItemListMap().get(inventoryType));
         });
     }

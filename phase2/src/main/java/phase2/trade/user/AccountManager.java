@@ -16,7 +16,7 @@ public class AccountManager {
     }
 
     public void register(Callback<User> callback, String username, String email, String password) {
-        userDAO.submitSessionWithTransaction(() -> {
+        userDAO.submitSessionWithTransactionAsync(() -> {
             List<User> usersByEmail = userDAO.findByEmail(email);
             List<User> usersByName = userDAO.findByEmail(email);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
@@ -30,7 +30,7 @@ public class AccountManager {
     }
 
     public void login(Callback<User> callback, String usernameOrEmail, String password) {
-        userDAO.submitSession(() -> {
+        userDAO.submitSessionAsync(() -> {
             List<User> matchedUsers = userDAO.findMatches(usernameOrEmail, password);
             if (matchedUsers.size() > 0) {
                 loggedInUser = matchedUsers.get(0);

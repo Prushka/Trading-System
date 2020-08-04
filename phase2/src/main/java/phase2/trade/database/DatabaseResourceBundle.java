@@ -1,8 +1,12 @@
 package phase2.trade.database;
 
-public interface DatabaseResourceBundle {
+import org.hibernate.SessionFactory;
 
-    UserDAO getUserDAO();
+import java.util.concurrent.ExecutorService;
 
-    ItemDAO getItemDAO();
+public interface DatabaseResourceBundle extends DAOBundle {
+
+    SessionFactory getSessionFactory();
+
+    ExecutorService getThreadPool();
 }

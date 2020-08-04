@@ -22,7 +22,7 @@ public class ORMTest {
 
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        databaseResourceBundle = new DatabaseResourceBundle();
+        databaseResourceBundle = new DatabaseResourceBundleImpl();
 
         userDAO = new UserDAO(databaseResourceBundle);
         itemDAO = new ItemDAO(databaseResourceBundle);

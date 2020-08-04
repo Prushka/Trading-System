@@ -20,7 +20,7 @@ public class Item {
 
     private Willingness willingness;
 
-    private int count;
+    private int quantity;
 
     @ManyToOne
     private ItemList itemList;
@@ -81,11 +81,11 @@ public class Item {
         this.willingness = willingness;
     }
 
-    public int getCount() {
-        return count;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

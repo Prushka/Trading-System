@@ -30,8 +30,13 @@ public abstract class User {
     @Embedded
     private Address address;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Map<InventoryType, ItemList> itemListMap = new HashMap<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    private Inventory inventory;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cart cart;
+
+    // using a map may add some polymorphism but will complicate the db structure
 
 
     /**
@@ -46,14 +51,12 @@ public abstract class User {
         this.email = email;
         this.password = password;
 
-        Inventory inventory = new Inventory();
+        inventory = new Inventory();
         inventory.setOwner(this);
 
-        Cart cart = new Cart();
+        cart = new Cart();
         cart.setOwner(this);
 
-        itemListMap.put(InventoryType.INVENTORY, cart);
-        itemListMap.put(InventoryType.CART, inventory);
     }
 
     public User() {
@@ -102,20 +105,38 @@ public abstract class User {
         this.email = email;
     }
 
-    public Map<InventoryType, ItemList> getItemListMap() {
-        return itemListMap;
-    }
-
-    public void setItemListMap(Map<InventoryType, ItemList> itemListMap) {
-        this.itemListMap = itemListMap;
-    }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
     public String getUserName() {
         return userName;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public ItemList getItemList(InventoryType inventoryType) {
+        switch (inventoryType) {
+            case CART:
+                return cart;
+            case INVENTORY:
+                return inventory;
+        }
+        return null;
     }
 }
 

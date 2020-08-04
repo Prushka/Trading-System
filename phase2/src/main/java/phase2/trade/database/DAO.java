@@ -119,4 +119,22 @@ public class DAO<T> {
             closeCurrentSessionWithTransaction();
         });
     }
+
+    private boolean async = false;
+
+    public void submitSessionWithTransaction(Runnable runnable) {
+        if (async) {
+            submitSessionWithTransactionAsync(runnable);
+        } else {
+            submitSessionWithTransactionSync(runnable);
+        }
+    }
+
+    public void submitSession(Runnable runnable) {
+        if (async) {
+            submitSessionAsync(runnable);
+        } else {
+            submitSessionSync(runnable);
+        }
+    }
 }

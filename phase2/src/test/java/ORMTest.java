@@ -5,6 +5,7 @@ import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
+import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 import java.util.logging.Level;
@@ -61,23 +62,25 @@ public class ORMTest {
 
     @Test
     public void getItemFromUser() throws InterruptedException {
-        // PersonalUser user = new PersonalUser("name", "email", "password");
+        PersonalUser user = new PersonalUser("name", "email", "password");
 
-        userDAO.openCurrentSession();
-        User user = userDAO.findById(1);
-        userDAO.closeCurrentSession();
+        userDAO.submitSessionSync(() -> userDAO.add(user));
 
         ItemManager itemManager = new ItemManager(databaseResourceBundle, user);
 
         itemManager.addItemTo(InventoryType.INVENTORY, new Callback<Item>() {
             @Override
             public void call(Item result) {
-                System.out.println("123");
                 System.out.println(result.getOwnership());
             }
         }, "TestCategory", "TestName", "TestDescription");
 
-        Thread.sleep(10000);
+        itemManager.getInventory(InventoryType.INVENTORY, new Callback<ItemList>() {
+            @Override
+            public void call(ItemList result) {
+                System.out.println(result.size());
+            }
+        });
         // itemDAO.openCurrentSessionWithTransaction();
         // System.out.println(user.getItemListMap());
         // itemDAO.closeCurrentSessionWithTransaction();

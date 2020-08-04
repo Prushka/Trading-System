@@ -18,14 +18,14 @@ public class ItemManager {
     }
 
     public void addItemTo(InventoryType inventoryType, Callback<Item> callback, String category, String name, String description) {
-        daoBundle.getUserDAO().submitSessionWithTransactionSync(() -> {
+        daoBundle.getUserDAO().submitSessionWithTransaction(() -> {
             Item item = new Item();
             item.setCategory(category);
             item.setName(name);
             item.setDescription(description);
 
-            operator.getItemListMap().get(inventoryType).addItem(item);
-            System.out.println(operator.getItemListMap().get(inventoryType).getItemList().size());
+            operator.getItemList(inventoryType).addItem(item);
+            System.out.println(operator.getItemList(inventoryType).getListOfItems().size());
             daoBundle.getUserDAO().update(operator);
             callback.call(item);
         });
@@ -33,7 +33,7 @@ public class ItemManager {
 
     public void reviewItem(Callback<Boolean> callback, Ownership ownership, Long itemId) {
         if (operator.isAdmin()) {
-            daoBundle.getItemDAO().submitSessionWithTransactionAsync(() -> {
+            daoBundle.getItemDAO().submitSessionWithTransaction(() -> {
                 Item item = daoBundle.getItemDAO().findById(itemId);
                 item.setOwnership(ownership);
                 callback.call(true);
@@ -42,8 +42,8 @@ public class ItemManager {
     }
 
     public void getInventory(InventoryType inventoryType, Callback<ItemList> callback) {
-        daoBundle.getItemDAO().submitSessionWithTransactionAsync(() -> {
-            callback.call(operator.getItemListMap().get(inventoryType));
+        daoBundle.getItemDAO().submitSessionWithTransaction(() -> {
+            callback.call(operator.getItemList(inventoryType));
         });
     }
 

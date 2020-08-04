@@ -9,7 +9,7 @@
         <property name="connection.url">jdbc:mysql://muddy.ca:3308/group</property>
         <property name="connection.username">member</property>
         <property name="connection.password">SLHfT6Ui#9kF</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="show_sql">true</property>
         <property name="connection.pool_size">10</property>
         <mapping class="phase2.trade.inventory.ItemList" />

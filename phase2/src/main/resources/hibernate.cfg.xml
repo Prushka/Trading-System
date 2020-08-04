@@ -20,6 +20,7 @@
         <mapping class="phase2.trade.trade.Order" />
         <mapping class="phase2.trade.item.Item" />
         <mapping class="phase2.trade.user.User" />
+        <mapping class="phase2.trade.user.UserPermission" />
         <mapping class="phase2.trade.user.AdministrativeUser" />
         <mapping class="phase2.trade.user.PersonalUser" />
     </session-factory>

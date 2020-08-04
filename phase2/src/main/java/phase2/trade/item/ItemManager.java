@@ -4,6 +4,7 @@ import phase2.trade.database.Callback;
 import phase2.trade.database.DAOBundle;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
+import phase2.trade.user.Permission;
 import phase2.trade.user.User;
 
 public class ItemManager {
@@ -43,7 +44,7 @@ public class ItemManager {
     }
 
     public void reviewItem(Callback<Boolean> callback, Ownership ownership, Long itemId) {
-        if (operator.isAdmin()) {
+        if (operator.hasPermission(Permission.ADMIN)) {
             daoBundle.getItemDAO().submitSessionWithTransaction(() -> {
                 Item item = daoBundle.getItemDAO().findById(itemId);
                 item.setOwnership(ownership);

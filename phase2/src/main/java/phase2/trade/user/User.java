@@ -29,6 +29,9 @@ public abstract class User {
     @Embedded
     private Address address;
 
+    @Embedded
+    private UserPermission userPermission;
+
     @OneToOne(cascade = CascadeType.ALL)
     private Inventory inventory;
 
@@ -104,8 +107,6 @@ public abstract class User {
         this.address = address;
     }
 
-    public abstract boolean isAdmin();
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -166,6 +167,18 @@ public abstract class User {
 
     public void setPoint(Integer point) {
         this.point = point;
+    }
+
+    public UserPermission getUserPermission() {
+        return userPermission;
+    }
+
+    public void setUserPermission(UserPermission permission) {
+        this.userPermission = permission;
+    }
+
+    public boolean hasPermission(Permission permission) {
+        return userPermission.hasPermission(permission);
     }
 }
 

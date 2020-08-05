@@ -33,20 +33,19 @@ public class TradeController extends AbstractController {
         });
     }
 
-    public void editMeetingDateAndTime(Callback<Trade> callback, Trade currTrade, Long orderID, User currUser,
-                                       LocalDateTime dateTime){
+    public void editMeetingDateAndTime(Callback<Trade> callback, Trade currTrade, User currUser, LocalDateTime dateTime){
         tradeDAO.submitSessionWithTransaction(() -> {
-            Trade trade = tm.editDateAndTime(currTrade, orderID, currUser, dateTime);
+            Trade trade = tm.editDateAndTime(currTrade, currUser, dateTime);
             tradeDAO.update(trade);
             callback.call(trade);
         });
     }
 
-    public void editMeetingLocation(Callback<Trade> callback, Trade currTrade, Long orderID, User currUser, String
+    public void editMeetingLocation(Callback<Trade> callback, Trade currTrade, User currUser, String
             country, String city, String street, int streetNumber) {
         tradeDAO.submitSessionWithTransaction(() -> {
             Address location = new Address(country, city, street, streetNumber);
-            Trade trade = tm.editLocation(currTrade, orderID, currUser, location);
+            Trade trade = tm.editLocation(currTrade, currUser, location);
             tradeDAO.update(trade);
             callback.call(trade);
         });

@@ -34,16 +34,16 @@ public class TradeManager {
         return tb.buildTrade();
     }
 
-    public Trade editDateAndTime(Trade currTrade, Long orderID, User editingUser, LocalDateTime dateAndTime) {
+    public Trade editDateAndTime(Trade currTrade, User editingUser, LocalDateTime dateAndTime) {
         TradeEditor te = new TradeEditor(editLimit);
-        return te.editDateAndTime(currTrade, orderID, editingUser, dateAndTime);
+        return te.editDateAndTime(currTrade, editingUser, dateAndTime);
     }
 
-    public Trade editLocation(Trade currTrade, Long orderID, User editingUser, Address location) {
+    public Trade editLocation(Trade currTrade, User editingUser, Address location) {
         TradeEditor te = new TradeEditor(editLimit);
-        return te.editLocation(currTrade, orderID, editingUser, location);
+        return te.editLocation(currTrade, editingUser, location);
     }
 
-//    public void confirmTrade(int editingUser, Trade currTrade) { currTrade.getStrategy().confirmTrade(editingUser);}
+    public Trade confirmTrade(Trade currTrade, User editingUser) { return currTrade.getStrategy().confirmTrade(editingUser);}
 }
 

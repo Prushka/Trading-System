@@ -1,7 +1,9 @@
 package phase2.trade.trade;
 
+import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.user.PersonalUser;
+import phase2.trade.user.User;
 
 import java.util.List;
 
@@ -22,39 +24,50 @@ class TemporaryTradingStrategy implements Tradable{
      * @param editingUser The user ID of who wishes to confirm to this trade
      */
     @Override
-    public void confirmTrade(int editingUser) {
-        // Confirm specific user and checks if all users are confirmed yet
-//        if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser)
-//                && currTrade.getIsClosed()) {
-//            currTrade.confirmUser(editingUser);
-//            if (currTrade.getIsClosed() && currTrade.getAllConfirmed()){
-//                currTrade.openTrade();
-//                currTrade.unconfirmAll();
-//            } else if (!currTrade.getIsClosed() && currTrade.getAllConfirmed()){
-//                makeTrades();
-//                scheduleTradeBack();
-//            }
-//        }
+    public Trade confirmTrade(User editingUser) {
+        boolean canStart = true;
+
+        if (currTrade.getTradeState().equals(TradeState.CANCELLED) || currTrade.getTradeState().equals(TradeState.DEALT)){
+            return currTrade;
+        }
+        for (UserOrderBundle user: currTrade.getOrder().getTraders()){
+            if (user.getUser().equals(editingUser) && !user.getConfirmations()){
+                user.setConfirmations(true);
+            }
+            if (!user.getConfirmations()){
+                canStart = false;
+            }
+        }
+
+        if (currTrade.getTradeState().equals(TradeState.IN_PROGRESS) && canStart){
+            currTrade.setTradeState(TradeState.PENDING_TRADE);
+            for (UserOrderBundle user: currTrade.getOrder().getTraders()){
+                user.setConfirmations(false);
+            }
+        } else if (currTrade.getTradeState().equals(TradeState.PENDING_TRADE) && canStart){
+            makeTrades();
+            scheduleTradeBack();
+        }
+        return currTrade;
     }
 
-//    // Adjusts transaction, borrow, and lend counts
-//    private void makeTrades() {
-//        int index = 0;
-//        while (index < currTrade.getAllUsers().size()){
-//            // Get a user and their respective desired items list
-//            PersonalUser user = currTrade.getAllUsers().get(index);
-//            // List<Item> items = currTrade.getAllItems().get(index);
-//            user.setNumTransactions(user.getNumTransactions() + 1);
-//
-//            //for (Item item: items){
-//                // user.removeFromWishList(item);
-//                user.setBorrowCount(user.getBorrowCount() + 1);
-//                // currItem.setIsAvailable(false);
-//                // User other = item.getOwner();
-//                // other.setLendCount(other.getLendCount() + 1);
-//            //}
-//        }
-//    }
+    // Adjusts transaction, borrow, and lend counts
+    private void makeTrades() {
+        for (UserOrderBundle user: currTrade.getOrder().getTraders()) {
+            PersonalUser currUser = (PersonalUser) user.getUser();
+            List<Item> newCartList = currUser.getItemList(InventoryType.CART).getListOfItems();
+            List<Item> newInventory = currUser.getItemList(InventoryType.INVENTORY).getListOfItems();
+            currUser.setNumTransactions(currUser.getNumTransactions() + 1);
+            for (Item item : user.getTradeItemHolder().getListOfItems()) {
+                newCartList.remove(item);
+                newInventory.add(item);
+                currUser.setBorrowCount(currUser.getBorrowCount() + 1);
+                // currItem.setIsAvailable(false);
+                // User other = item.getOwner();
+                // other.setLendCount(other.getLendCount() + 1);
+            }
+        }
+    }
 
     // Schedules a second trade meeting
     private void scheduleTradeBack() {
@@ -62,6 +75,4 @@ class TemporaryTradingStrategy implements Tradable{
         // createTrade(currTrade.getAllUsers(), currTrade.getAllItems(), newDateAndTime,
                 // currTrade.getLocation(), currTrade.getUid());
     }
-
-
 }

@@ -3,7 +3,9 @@ package phase2.trade.trade;
 import phase2.trade.user.Address;
 
 import javax.persistence.Embedded;
+import javax.persistence.Entity;
 
+@Entity
 public class MeetUpOrder extends Order {
 
     @Embedded

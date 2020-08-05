@@ -1,11 +1,5 @@
 package phase2.trade.trade;
 
-import phase2.trade.item.Item;
-import phase2.trade.user.Address;
-import phase2.trade.user.PersonalUser;
-
-import java.util.*;
-import java.time.LocalDateTime;
 import javax.persistence.*;
 
 @Entity
@@ -16,28 +10,30 @@ public abstract class Trade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToMany
-    private List<Order> orders;
+    @OneToOne
+    private Order order;
 
-    /**
-     * Represents a trade
-     */
+    private TradeState tradeState;
+
     public Trade() {}
 
-    /**
-     * @return The ID of this trade
-     */
     Long getUid() { return uid; }
 
-    List<Order> getOrders(){ return orders; }
-
-    /**
-     * @param uid New trade ID
-     */
     void setUid(Long uid) { this.uid = uid; }
 
-    void setOrders(List<Order> orders){ this.orders = orders;}
+    Order getOrder(){ return order; }
+
+    void setOrder(Order order){ this.order = order;}
+
+    public TradeState getTradeState() {
+        return tradeState;
+    }
+
+    public void setTradeState(TradeState tradeState) {
+        this.tradeState = tradeState;
+    }
 
     abstract Tradable getStrategy();
+
     abstract void setStrategy(Tradable newStrategy);
 }

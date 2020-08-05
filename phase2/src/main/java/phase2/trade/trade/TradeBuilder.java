@@ -1,9 +1,7 @@
 package phase2.trade.trade;
 
-import net.bytebuddy.asm.Advice;
 import phase2.trade.item.Item;
 import phase2.trade.user.Address;
-import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 import java.time.LocalDateTime;
@@ -18,24 +16,33 @@ class TradeBuilder {
     Trade newTrade;
 
     // For UserOrderBundle(s)
-    User initiator;
-    User target;
-    List<Item> items;
+    List<UserOrderBundle> traders;
+    UserOrderBundleBuilder uobb;
 
     // For Order(s)
-    LocalDateTime dateAndTime;
-    OrderState type;
-    Address location;
+    Order order;
 
     // For a Trade
     Boolean isPermanent;
-    List<Order> orders;
+    TradeState type;
 
     TradeBuilder() {}
 
-    void buildUserOrderBundle(User user, List<Item> items){ this.initiator = user; }
+    void buildUserOrderBundle(User user, List<Item> items){
+        uobb.buildUser(user);
+        uobb.buildDesiredItems(items);
+        UserOrderBundle newBundle = uobb.buildUserOrderBundle();
+        traders.add(newBundle);
+    }
 
-    void build(){}
+    void buildOrder(LocalDateTime dateAndTime, Address location){
+        MeetUpOrder newOrder = new MeetUpOrder();
+        newOrder.setDateAndTime(dateAndTime);
+        newOrder.setLocation(location);
+        order = newOrder;
+    }
+
+    void buildIsPermanent(boolean isPermanent){ this.isPermanent = isPermanent; }
 
     Trade buildTrade() {
         if (isPermanent) {

@@ -3,6 +3,7 @@ package phase2.trade.database;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import phase2.trade.Shutdownable;
+import phase2.trade.trade.Trade;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,6 +19,8 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
 
     private final ItemDAO itemDAO;
 
+    private final TradeDAO tradeDAO;
+
     public DatabaseResourceBundleImpl() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
@@ -27,6 +30,8 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
         userDAO = new UserDAO(this);
 
         itemDAO = new ItemDAO(this);
+
+        tradeDAO = new TradeDAO(this);
     }
 
     public SessionFactory getSessionFactory() {
@@ -48,5 +53,9 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
 
     public ItemDAO getItemDAO() {
         return itemDAO;
+    }
+
+    public TradeDAO getTradeDAO() {
+        return tradeDAO;
     }
 }

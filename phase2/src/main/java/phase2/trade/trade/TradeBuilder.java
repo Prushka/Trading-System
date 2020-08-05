@@ -1,8 +1,10 @@
 package phase2.trade.trade;
 
+import net.bytebuddy.asm.Advice;
 import phase2.trade.item.Item;
 import phase2.trade.user.Address;
 import phase2.trade.user.PersonalUser;
+import phase2.trade.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,47 +15,34 @@ import java.util.List;
  */
 class TradeBuilder {
 
-    Boolean isPermanent;
-    List<PersonalUser> users;
-    List<List<Item>> items;
-    LocalDateTime dateAndTime;
-    Address location;
-    Long prevMeeting;
-
     Trade newTrade;
+
+    // For UserOrderBundle(s)
+    User initiator;
+    User target;
+    List<Item> items;
+
+    // For Order(s)
+    LocalDateTime dateAndTime;
+    OrderState type;
+    Address location;
+
+    // For a Trade
+    Boolean isPermanent;
+    List<Order> orders;
 
     TradeBuilder() {}
 
-    void buildTraders(List<PersonalUser> users) {
-        this.users = users;
-    }
+    void buildUserOrderBundle(User user, List<Item> items){ this.initiator = user; }
 
-    void buildItems(List<List<Item>> items){
-        this.items = items;
-    }
+    void build(){}
 
-    void buildDateAndTime(LocalDateTime dateAndTime){
-        this.dateAndTime = dateAndTime;
-    }
-
-    void buildLocation(Address location){
-        this.location = location;
-    }
-
-    void buildType(boolean isPermanent){
-        this.isPermanent = isPermanent;
-    }
-
-    void buildPastMeeting(Long prevMeeting){
-        this.prevMeeting = prevMeeting;
-    }
-
-   Trade buildTrade() {
+    Trade buildTrade() {
         if (isPermanent) {
-            newTrade = new PermanentTrade(users, items, dateAndTime, location, prevMeeting, null);
+            newTrade = new PermanentTrade();
             newTrade.setStrategy(new PermanentTradingStrategy(newTrade));
         } else {
-            newTrade = new TemporaryTrade(users, items, dateAndTime, location, prevMeeting, null);
+            newTrade = new TemporaryTrade();
             newTrade.setStrategy(new TemporaryTradingStrategy(newTrade));
         }
         return newTrade;

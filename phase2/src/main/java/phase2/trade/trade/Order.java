@@ -1,12 +1,7 @@
 package phase2.trade.trade;
 
-import phase2.trade.inventory.TradeItemHolder;
-import phase2.trade.user.Address;
-import phase2.trade.user.User;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

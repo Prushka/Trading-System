@@ -4,7 +4,7 @@ import phase2.trade.user.Address;
 
 import javax.persistence.Embedded;
 
-public class LetsMeetEachOtherOrder extends Order {
+public class MeetUpOrder extends Order {
 
     @Embedded
     private Address location;

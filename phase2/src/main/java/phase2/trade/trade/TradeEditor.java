@@ -17,54 +17,84 @@ class TradeEditor {
         this.editLimit = editLimit;
     }
 
-    /**
-     Edit location of a trade and cancels the trade if the users edited too much
-     * @param editingUser The user ID of who wishes to edit this trade
-     * @param dateAndTime The new date and time when this trade will take place
-     */
-    void editDateAndTime(Trade currTrade, int editingUser, LocalDateTime dateAndTime) {
+    Trade editDateAndTime(Trade currTrade, Long orderID, User editingUser, LocalDateTime dateAndTime) {
+        Order currOrder = currTrade.getOrders().get(0); // Change later
+        for (Order order: currTrade.getOrders()){
+            if (order.getUid().equals(orderID)){
+                currOrder = order;
+            }
+        }
+
+        UserOrderBundle init = currOrder.getInitiator();
+        UserOrderBundle targ = currOrder.getTarget();
+
         // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
-        if ((currTrade.getAllUsers().contains(editingUser)) && currTrade.getUserEdits(editingUser) == editLimit) {
-            cancelTrades(currTrade);
-        } else if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser) && currTrade.getUserEdits(editingUser) < editLimit) {
-            currTrade.setDateAndTime(dateAndTime);
-            currTrade.increaseUserEdits(editingUser);
-            currTrade.confirmUser(editingUser);
-            for (User i: currTrade.getAllUsers()){
-                if (i.getUid() != editingUser) {
-                    // currTrade.unconfirmUser(i);
+        if (init.getUser().equals(editingUser)){
+            if (!init.getConfirmations()){
+                if (init.getEdits() == editLimit) {
+                    cancelOrder(currOrder);
+                } else {
+                    currOrder.setDateAndTime(dateAndTime);
+                    init.setEdits(init.getEdits() + 1);
+                    init.setConfirmations(true);
+                    targ.setConfirmations(false);
+                }
+            }
+        } else if (targ.getUser().equals(editingUser)){
+            if (!targ.getConfirmations()){
+                if (targ.getEdits() == editLimit) {
+                    cancelOrder(currOrder);
+                } else {
+                    currOrder.setDateAndTime(dateAndTime);
+                    targ.setEdits(targ.getEdits() + 1);
+                    targ.setConfirmations(true);
+                    init.setConfirmations(false);
                 }
             }
         }
+
+        return currTrade;
     }
 
-    /**
-     Edit location of a trade and cancels the trade if the users edited too much
-     * @param editingUser The user ID of who wishes to edit this trade
-     * @param location The new location of where this trade will take place
-     */
-    void editLocation(Trade currTrade, int editingUser, Address location) {
+    Trade editLocation(Trade currTrade, Long orderID, User editingUser, Address location) {
+        Order currOrder = currTrade.getOrders().get(0); // Change later
+        for (Order order: currTrade.getOrders()){
+            if (order.getUid().equals(orderID)){
+                currOrder = order;
+            }
+        }
+
+        UserOrderBundle init = currOrder.getInitiator();
+        UserOrderBundle targ = currOrder.getTarget();
+
         // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
-        if ((currTrade.getAllUsers().contains(editingUser)) && currTrade.getUserEdits(editingUser) == editLimit) {
-            cancelTrades(currTrade);
-        } else if (currTrade.getAllUsers().contains(editingUser) && !currTrade.getUserConfirms(editingUser) && currTrade.getUserEdits(editingUser) < editLimit) {
-            currTrade.setLocation(location);
-            currTrade.increaseUserEdits(editingUser);
-            currTrade.confirmUser(editingUser);
-            for (User i: currTrade.getAllUsers()){
-                if (i.getUid() != editingUser) {
-                    // currTrade.unconfirmUser(i.getUid());
+        if (init.getUser().equals(editingUser)){
+            if (!init.getConfirmations()){
+                if (init.getEdits() == editLimit) {
+                    cancelOrder(currOrder);
+                } else {
+                    ((MeetUpOrder) currOrder).setLocation(location);
+                    init.setEdits(init.getEdits() + 1);
+                    init.setConfirmations(true);
+                    targ.setConfirmations(false);
+                }
+            }
+        } else if (targ.getUser().equals(editingUser)){
+            if (!targ.getConfirmations()){
+                if (targ.getEdits() == editLimit) {
+                    cancelOrder(currOrder);
+                } else {
+                    ((MeetUpOrder) currOrder).setLocation(location);
+                    targ.setEdits(targ.getEdits() + 1);
+                    targ.setConfirmations(true);
+                    init.setConfirmations(false);
                 }
             }
         }
+        return currTrade;
     }
 
-    // Removes a trade from user's trade list and the trade repository
-    private void cancelTrades(Trade currTrade) {
-        // for (int i: currTrade.getAllUsers()){
-            // PersonalUser user = userRepository.get(i);
-            // user.removeFromTrade(currTrade.getUid());
-        // }
-        // tradeRepository.remove(currTrade);
+    private void cancelOrder(Order currOrder) {
+        // currOrder.setOrderState(CANCELED);
     }
 }

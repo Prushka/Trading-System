@@ -18,9 +18,9 @@ public class UserOrderBundle {
     @OneToOne
     private TradeItemHolder tradeItemHolder;
 
-    private int edits;
+    private int edit;
 
-    private int confirmations;
+    private boolean confirmation;
 
     public Long getUid() {
         return uid;
@@ -47,18 +47,18 @@ public class UserOrderBundle {
     }
 
     public int getEdits() {
-        return edits;
+        return edit;
     }
 
-    public void setEdits(int edits) {
-        this.edits = edits;
+    public void setEdits(int edit) {
+        this.edit = edit;
     }
 
-    public int getConfirmations() {
-        return confirmations;
+    public boolean getConfirmations() {
+        return confirmation;
     }
 
-    public void setConfirmations(int confirmations) {
-        this.confirmations = confirmations;
+    public void setConfirmations(boolean confirmation) {
+        this.confirmation = confirmation;
     }
 }

@@ -5,15 +5,16 @@ import phase2.trade.database.DAOBundle;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.user.Permission;
+import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 public class ItemManager {
 
     private final DAOBundle daoBundle;
 
-    private final User operator;
+    private final PersonalUser operator;
 
-    public ItemManager(DAOBundle daoBundle, User operator) {
+    public ItemManager(DAOBundle daoBundle, PersonalUser operator) {
         this.daoBundle = daoBundle;
         this.operator = operator;
     }

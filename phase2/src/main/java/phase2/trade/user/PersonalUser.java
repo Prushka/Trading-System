@@ -1,6 +1,16 @@
 package phase2.trade.user;
 
+import phase2.trade.inventory.Cart;
+import phase2.trade.inventory.Inventory;
+import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemList;
+import phase2.trade.item.Item;
+import phase2.trade.trade.Trade;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +22,19 @@ public class PersonalUser extends User {
     private Integer borrowCount;
     private Integer numTransactions;
     private Boolean requestToUnfreeze;
+
+    //@OneToOne(cascade = CascadeType.ALL)
+    private List<Item> addInventoryRequest;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Inventory inventory;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Cart cart;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Trade> listOfTrades;
+
     //private int incompleteTrades;
 
     /**
@@ -29,7 +52,14 @@ public class PersonalUser extends User {
         borrowCount = 0;
         numTransactions = 0;
         requestToUnfreeze = false;
+        addInventoryRequest = new ArrayList<>();
         //incompleteTrades = 0;
+
+        inventory = new Inventory();
+        inventory.setOwner(this);
+
+        cart = new Cart();
+        cart.setOwner(this);
     }
 
     public PersonalUser() {
@@ -65,9 +95,9 @@ public class PersonalUser extends User {
         this.borrowCount = borrowCount;
     }
 
-    public boolean getShouldBeFreezedUser() {
+    /*public boolean getShouldBeFreezedUser() {
         return lendCount < borrowCount;
-    }
+    }*/
 
     public int getNumTransactions() {
         return numTransactions;
@@ -83,6 +113,44 @@ public class PersonalUser extends User {
 
     public boolean getRequestToUnfreeze() {
         return requestToUnfreeze;
+    }
+
+    public void addItemToAddInventoryRequest(Item item){
+        addInventoryRequest.add(item);
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public ItemList getItemList(InventoryType inventoryType) {
+        switch (inventoryType) {
+            case CART:
+                return cart;
+            case INVENTORY:
+                return inventory;
+        }
+        return null;
+    }
+
+    public List<Trade> getListOfTrades() {
+        return listOfTrades;
+    }
+
+    public void setListOfTrades(List<Trade> listOfTrade) {
+        this.listOfTrades = listOfTrade;
     }
 
     /*

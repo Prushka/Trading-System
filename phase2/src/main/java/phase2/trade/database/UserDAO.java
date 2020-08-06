@@ -29,4 +29,10 @@ public class UserDAO extends DAO<User> {
         query.setParameter("userName", userName);
         return query.list();
     }
+
+    /*public List<User> findByUserFreeze(String userName) {
+        Query query = getCurrentSession().createQuery("from User where lendCount < :borrowCount");
+        query.setParameter("lendCount", lendCount);
+        query.setParameter("borrowCount", borrowCount);
+        return query.list();*/
 }

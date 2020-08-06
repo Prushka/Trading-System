@@ -61,4 +61,8 @@ public abstract class ItemList {
     public int size() {return listOfItems.size();}
 
     public abstract InventoryType getInventoryType();
+
+    public void removeItem(Item item){
+        this.listOfItems.remove(item);
+    }
 }

@@ -2,6 +2,8 @@ package phase2.trade.user;
 
 import phase2.trade.database.Callback;
 import phase2.trade.database.UserDAO;
+import phase2.trade.item.Category;
+import phase2.trade.item.Item;
 
 import java.util.List;
 

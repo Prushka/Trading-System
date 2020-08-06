@@ -42,6 +42,13 @@ public class ItemManager {
             callback.call(item);
         });
     }
+    /*public Item createNewItem(Callback<Item> callback, Category category, String name, String description) {
+        Item item = new Item();
+        item.setCategory(category);
+        item.setName(name);
+        item.setDescription(description);
+        return item;
+    }*/
 
     public void reviewItem(Callback<Boolean> callback, Ownership ownership, Long itemId) {
         if (operator.hasPermission(Permission.ADMIN)) {

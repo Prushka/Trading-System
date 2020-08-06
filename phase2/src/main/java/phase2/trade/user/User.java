@@ -5,9 +5,11 @@ import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.Cart;
+import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,14 +34,7 @@ public abstract class User {
     @Embedded
     private UserPermission userPermission;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Inventory inventory;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Cart cart;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<Trade> listOfTrades;
 
     // using a map may add some polymorphism but will complicate the db structure
 
@@ -59,11 +54,7 @@ public abstract class User {
         this.email = email;
         this.password = password;
 
-        inventory = new Inventory();
-        inventory.setOwner(this);
 
-        cart = new Cart();
-        cart.setOwner(this);
 
     }
 
@@ -117,40 +108,6 @@ public abstract class User {
 
     public String getUserName() {
         return userName;
-    }
-
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public ItemList getItemList(InventoryType inventoryType) {
-        switch (inventoryType) {
-            case CART:
-                return cart;
-            case INVENTORY:
-                return inventory;
-        }
-        return null;
-    }
-
-    public List<Trade> getListOfTrades() {
-        return listOfTrades;
-    }
-
-    public void setListOfTrades(List<Trade> listOfTrade) {
-        this.listOfTrades = listOfTrade;
     }
 
     public Integer getReputation() {

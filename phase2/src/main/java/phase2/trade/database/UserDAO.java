@@ -30,6 +30,12 @@ public class UserDAO extends DAO<User> {
         return query.list();
     }
 
+    public List<User> findByCity(String city) {
+        Query query = getCurrentSession().createQuery("from User where address.city = :city");
+        query.setParameter("city", city);
+        return query.list();
+    }
+
     /*public List<User> findByUserFreeze(String userName) {
         Query query = getCurrentSession().createQuery("from User where lendCount < :borrowCount");
         query.setParameter("lendCount", lendCount);

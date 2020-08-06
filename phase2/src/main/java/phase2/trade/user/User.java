@@ -38,10 +38,11 @@ public abstract class User {
      * @param email    the email this Person.
      * @param password the password this user set to
      */
-    public User(String userName, String email, String password) {
+    public User(String userName, String email, String password, String country, String city) {
         this.userName = userName;
         this.email = email;
         this.password = password;
+        this.address = new Address(country, city);
         this.reputation = 0;
         this.point = 0;
     }

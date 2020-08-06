@@ -23,7 +23,7 @@ public class RegisterController extends AbstractController implements Initializa
 
     public Label submissionResult;
 
-    public TextField username, email, password;
+    public TextField username, email, password, country, city;
 
     public RegisterController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager) {
         super(databaseResourceBundle);
@@ -43,7 +43,7 @@ public class RegisterController extends AbstractController implements Initializa
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
             }
-        }, username.getText(), email.getText(), password.getText());
+        }, username.getText(), email.getText(), password.getText(), country.getText(), city.getText());
     }
 
     public void goToSignIn(ActionEvent actionEvent) {

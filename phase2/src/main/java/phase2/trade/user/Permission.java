@@ -2,9 +2,11 @@ package phase2.trade.user;
 
 public enum Permission {
 
-    GUEST,
-    ADMIN,
-    REGULAR,
-    OWNER
+    CHANGE_THRESHOLD,
+    ADD_ITEM,
+    TRADE,
+
+    REMOVE_ITEM,
+    REVIEW_ITEM
 
 }

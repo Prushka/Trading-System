@@ -6,13 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Entity
 @Embeddable
 public class UserPermission {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uid;
 
     @ElementCollection(targetClass=Permission.class)
     private Set<Permission> perm;
@@ -23,14 +18,6 @@ public class UserPermission {
 
     public UserPermission(Set<Permission> perm) {
         this.perm = perm;
-    }
-
-    public Long getUid() {
-        return uid;
-    }
-
-    public void setUid(Long uid) {
-        this.uid = uid;
     }
 
     public Set<Permission> getPerm() {

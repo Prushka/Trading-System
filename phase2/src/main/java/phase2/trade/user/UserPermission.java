@@ -3,24 +3,24 @@ package phase2.trade.user;
 import javax.persistence.*;
 import java.util.Map;
 
-@Entity
+//@Entity
 @Embeddable
 public class UserPermission {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uid;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long uid;
 
     @Embedded
     private Map<Permission, Boolean> perm;
 
-    public Long getUid() {
-        return uid;
-    }
-
-    public void setUid(Long uid) {
-        this.uid = uid;
-    }
+//    public Long getUid() {
+//        return uid;
+//    }
+//
+//    public void setUid(Long uid) {
+//        this.uid = uid;
+//    }
 
     public Map<Permission, Boolean> getPerm() {
         return perm;

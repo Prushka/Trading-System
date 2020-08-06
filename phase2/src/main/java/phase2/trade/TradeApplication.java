@@ -32,7 +32,7 @@ public class TradeApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         mockDashboard(primaryStage);
-        // login(primaryStage);
+        login(primaryStage);
     }
 
     private void login(Stage primaryStage) throws IOException {

@@ -36,8 +36,8 @@ public class PersonalUser extends User {
      * @param email     email of this user
      * @param password  password of this user
      */
-    public PersonalUser(String userName, String email, String password) {
-        super(userName, email, password);
+    public PersonalUser(String userName, String email, String password, String country, String city) {
+        super(userName, email, password, country, city);
         accountState = AccountState.NORMAL;
         //incompleteTrades = 0;
 

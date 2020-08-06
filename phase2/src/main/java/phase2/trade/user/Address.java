@@ -22,6 +22,11 @@ public class Address {
         this.streetNumber = streetNumber;
     }
 
+    public Address(String country, String city){
+        this.country = country;
+        this.city = city;
+    }
+
     public Address() {
 
     }

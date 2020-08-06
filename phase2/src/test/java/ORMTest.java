@@ -34,7 +34,7 @@ public class ORMTest {
     @Test
     public void testAccount() {
 
-        PersonalUser user = new PersonalUser("name", "email", "password");
+        PersonalUser user = new PersonalUser("name", "email", "password", "country", "city");
 
         userDAO.submitSessionSync(() -> userDAO.add(user));
     }
@@ -71,7 +71,7 @@ public class ORMTest {
 
     @Test
     public void getItemFromUser() throws InterruptedException {
-        PersonalUser user = new PersonalUser("name", "email", "password");
+        PersonalUser user = new PersonalUser("name", "email", "password", "country", "city");
 
         userDAO.submitSessionSync(() -> userDAO.add(user));
 

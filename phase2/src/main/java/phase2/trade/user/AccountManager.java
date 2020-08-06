@@ -17,12 +17,13 @@ public class AccountManager {
         this.userDAO = userDAO;
     }
 
-    public void register(Callback<User> callback, String username, String email, String password) {
+    public void register(Callback<User> callback, String username, String email, String password, String country,
+                         String city) {
         userDAO.submitSessionWithTransactionAsync(() -> {
             List<User> usersByEmail = userDAO.findByEmail(email);
             List<User> usersByName = userDAO.findByEmail(email);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
-                User user = new PersonalUser(username, email, password);
+                User user = new PersonalUser(username, email, password, country, city);
                 userDAO.add(user);
                 loggedInUser = user;
                 callback.call(user);

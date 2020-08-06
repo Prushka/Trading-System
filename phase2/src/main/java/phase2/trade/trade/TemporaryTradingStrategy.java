@@ -62,7 +62,6 @@ class TemporaryTradingStrategy implements Tradable{
                 newInventory.add(item);
                 // currItem.setIsAvailable(false);
                 // User other = item.getOwner();
-                // other.setLendCount(other.getLendCount() + 1);
             }
         }
     }

@@ -12,8 +12,9 @@
       <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
       <Label text="User Id" />
       <Label layoutX="30.0" layoutY="180.0" text="User Name" />
-      <Label layoutX="30.0" layoutY="199.0" text="Email" />
-      <Separator prefWidth="200.0" />
+      <Label layoutX="30.0" layoutY="200.0" text="Email" />
+      <Label layoutX="30.0" layoutY="209.0" text="Email" />
+      <Separator prefWidth="210.0" />
       <Label layoutX="30.0" layoutY="218.0" text="Bio" />
       <Label layoutX="30.0" layoutY="315.0" text="Currrent Status" />
    </children>

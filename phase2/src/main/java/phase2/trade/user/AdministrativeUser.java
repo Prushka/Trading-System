@@ -7,23 +7,12 @@ import java.util.List;
 @Entity
 public class AdministrativeUser extends User {
 
-    private boolean isHead;
-
-    public AdministrativeUser(String userName, String email, String password, boolean isHead) {
+    public AdministrativeUser(String userName, String email, String password) {
         super(userName, email, password);
-        this.isHead = isHead;
     }
 
     public AdministrativeUser() {
 
-    }
-
-    public boolean getIsHead() {
-        return this.isHead;
-    }
-
-    public void setIsHead(boolean isHead) {
-        this.isHead = isHead;
     }
 
 }

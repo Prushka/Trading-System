@@ -52,7 +52,7 @@ public class ItemManager {
     }*/
 
     public void reviewItem(Callback<Boolean> callback, Ownership ownership, Long itemId) {
-        if (operator.hasPermission(Permission.ADMIN)) {
+        if (operator.hasPermission(Permission.REVIEW_ITEM)) {
             daoBundle.getItemDAO().submitSessionWithTransaction(() -> {
                 Item item = daoBundle.getItemDAO().findById(itemId);
                 item.setOwnership(ownership);

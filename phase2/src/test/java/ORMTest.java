@@ -32,6 +32,14 @@ public class ORMTest {
     }
 
     @Test
+    public void testAccount() {
+
+        PersonalUser user = new PersonalUser("name", "email", "password");
+
+        userDAO.submitSessionSync(() -> userDAO.add(user));
+    }
+
+    @Test
     public void testItemManager() {
 
         Item item = new Item();

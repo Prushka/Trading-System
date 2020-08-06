@@ -1,9 +1,15 @@
 package phase2.trade.user;
 
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
-@Embeddable
+@Entity
 public class Address {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long uid;
+
     private String country;
     private String city;
     private String street;
@@ -13,6 +19,50 @@ public class Address {
         this.country = country;
         this.city = city;
         this.street = street;
+        this.streetNumber = streetNumber;
+    }
+
+    public Address() {
+
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public int getStreetNumber() {
+        return streetNumber;
+    }
+
+    public void setStreetNumber(int streetNumber) {
         this.streetNumber = streetNumber;
     }
 }

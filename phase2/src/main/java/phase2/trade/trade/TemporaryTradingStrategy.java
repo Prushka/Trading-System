@@ -57,11 +57,9 @@ class TemporaryTradingStrategy implements Tradable{
             PersonalUser currUser = (PersonalUser) user.getUser();
             List<Item> newCartList = currUser.getItemList(InventoryType.CART).getListOfItems();
             List<Item> newInventory = currUser.getItemList(InventoryType.INVENTORY).getListOfItems();
-            currUser.setNumTransactions(currUser.getNumTransactions() + 1);
             for (Item item : user.getTradeItemHolder().getListOfItems()) {
                 newCartList.remove(item);
                 newInventory.add(item);
-                currUser.setBorrowCount(currUser.getBorrowCount() + 1);
                 // currItem.setIsAvailable(false);
                 // User other = item.getOwner();
                 // other.setLendCount(other.getLendCount() + 1);

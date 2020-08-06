@@ -1,16 +1,6 @@
 package phase2.trade.user;
 
-
-import phase2.trade.inventory.Inventory;
-import phase2.trade.inventory.InventoryType;
-import phase2.trade.inventory.ItemList;
-import phase2.trade.inventory.Cart;
-import phase2.trade.item.Item;
-import phase2.trade.trade.Trade;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -28,12 +18,11 @@ public abstract class User {
     private String telephone;
     private String password;
 
-    @Embedded
+    @OneToOne
     private Address address;
 
     @Embedded
     private UserPermission userPermission;
-
 
 
     // using a map may add some polymorphism but will complicate the db structure
@@ -53,9 +42,8 @@ public abstract class User {
         this.userName = userName;
         this.email = email;
         this.password = password;
-
-
-
+        this.reputation = 0;
+        this.point = 0;
     }
 
     public User() {
@@ -135,7 +123,7 @@ public abstract class User {
     }
 
     public boolean hasPermission(Permission permission) {
-        return userPermission.hasPermission(permission);
+        return true;
     }
 }
 

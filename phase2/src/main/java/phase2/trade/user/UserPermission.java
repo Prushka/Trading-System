@@ -11,8 +11,8 @@ public class UserPermission {
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
 //    private Long uid;
 
-    @Embedded
-    private Map<Permission, Boolean> perm;
+    // @Embedded
+    // private Map<Permission, Boolean> perm;
 
 //    public Long getUid() {
 //        return uid;
@@ -22,16 +22,16 @@ public class UserPermission {
 //        this.uid = uid;
 //    }
 
-    public Map<Permission, Boolean> getPerm() {
-        return perm;
-    }
+    // public Map<Permission, Boolean> getPerm() {
+    //     return perm;
+    // }
 
-    public boolean hasPermission(Permission permission){
-        if(!perm.containsKey(permission)) return false;
-        return getPerm().get(permission);
-    }
+    // public boolean hasPermission(Permission permission){
+    //     if(!perm.containsKey(permission)) return false;
+    //     return getPerm().get(permission);
+    // }
 
-    public void setPerm(Map<Permission, Boolean> perm) {
-        this.perm = perm;
-    }
+    // public void setPerm(Map<Permission, Boolean> perm) {
+    //     this.perm = perm;
+    // }
 }

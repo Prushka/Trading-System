@@ -73,7 +73,6 @@ class PermanentTradingStrategy implements Tradable{
                 newCartList.remove(item);
                 newInventory.add(item);
                 // if (currTrade.getPrevMeeting().equals(null)) {
-                    currUser.setBorrowCount(currUser.getBorrowCount() + 1);
                     // User other = item.getOwner();
                     // other.setLendCount(other.getLendCount() + 1);
                 // }

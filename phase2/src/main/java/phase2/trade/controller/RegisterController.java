@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import phase2.trade.database.DatabaseResourceBundle;
+import phase2.trade.database.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
@@ -25,8 +26,8 @@ public class RegisterController extends AbstractController implements Initializa
 
     public TextField username, email, password, country, city;
 
-    public RegisterController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager) {
-        super(databaseResourceBundle);
+    public RegisterController(GatewayBundle gatewayBundle, AccountManager accountManager) {
+        super(gatewayBundle);
         this.accountManager = accountManager;
     }
 
@@ -39,7 +40,7 @@ public class RegisterController extends AbstractController implements Initializa
             if (result != null) {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
-                                new DashboardController(databaseResourceBundle, accountManager), actionEvent, true));
+                                new DashboardController(gatewayBundle, accountManager), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
             }
@@ -48,7 +49,7 @@ public class RegisterController extends AbstractController implements Initializa
 
     public void goToSignIn(ActionEvent actionEvent) {
         switchScene("login.fxml",
-                new LoginController(databaseResourceBundle, accountManager), actionEvent);
+                new LoginController(gatewayBundle, accountManager), actionEvent);
     }
 
     @Override

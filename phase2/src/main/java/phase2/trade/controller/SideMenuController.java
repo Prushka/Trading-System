@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import phase2.trade.database.DatabaseResourceBundle;
+import phase2.trade.database.GatewayBundle;
 import phase2.trade.user.AccountManager;
 
 import java.net.URL;
@@ -22,8 +23,8 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private final AccountManager accountManager;
 
-    public SideMenuController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager, GridPane center) {
-        super(databaseResourceBundle);
+    public SideMenuController(GatewayBundle gatewayBundle, AccountManager accountManager, GridPane center) {
+        super(gatewayBundle);
         this.accountManager = accountManager;
         this.center = center;
     }
@@ -33,7 +34,7 @@ public class SideMenuController extends AbstractController implements Initializa
         // Parent confirm = loadPane("confirm_popup.fxml", confirmPopup);
         if (confirmPopup.display("Log out", "Do you really want to log out?")) {
             accountManager.logOut();
-            switchScene("login.fxml", new LoginController(databaseResourceBundle, accountManager), logOut);
+            switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), logOut);
         } else {
             sideList.getSelectionModel().clearAndSelect(1);
             // sideList.getSelectionModel().select(old);

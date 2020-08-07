@@ -47,11 +47,11 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
         threadPool.shutdown();
     }
 
-    public UserDAO getUserDAO() {
+    public UserGateway getUserGateway() {
         return userDAO;
     }
 
-    public ItemDAO getItemDAO() {
+    public ItemGateway getItemGateway() {
         return itemDAO;
     }
 

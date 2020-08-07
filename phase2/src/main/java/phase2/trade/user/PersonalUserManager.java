@@ -4,22 +4,22 @@ package phase2.trade.user;
 import main.java.com.phase2.trade.repository.*;
 import main.java.com.phase2.trade.repository.reflection.*;*/
 import phase2.trade.gateway.Callback;
-import phase2.trade.gateway.database.PersonalUserDAO;
+import phase2.trade.gateway.database.UserDAO;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
 
-@Deprecated
+
 public class PersonalUserManager {
 
-    private final PersonalUserDAO personalUserDAO;
+    private final UserDAO UserDAO;
     private PersonalUser currPersonalUser;
     private ItemManager itemManager;
     private PersonalUser loggedInUser;
 
-    public PersonalUserManager(PersonalUserDAO personalUserdao, ItemManager itemManager) {
-        this.personalUserDAO = personalUserdao;
+    public PersonalUserManager(UserDAO UserDAO, ItemManager itemManager) {
+        this.UserDAO = UserDAO;
         this.itemManager = itemManager;
 
     }

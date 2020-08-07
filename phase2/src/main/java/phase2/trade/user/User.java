@@ -1,6 +1,5 @@
 package phase2.trade.user;
 
-import phase2.trade.address.Address;
 import phase2.trade.address.AddressBook;
 
 import javax.persistence.*;
@@ -25,7 +24,7 @@ public abstract class User {
     private AddressBook addressBook;
 
     @Embedded
-    private UserPermission userPermission;
+    private PermissionSet permissionSet;
 
 
     // using a map may add some polymorphism but will complicate the db structure
@@ -33,6 +32,10 @@ public abstract class User {
     private Integer reputation;
 
     private Integer point;
+
+    private String country;
+
+    private String city;
 
     /**
      * Creates a new User with userName, email, telephone and given password.
@@ -48,6 +51,8 @@ public abstract class User {
         this.addressBook = new AddressBook();
         this.reputation = 0;
         this.point = 0;
+        this.country = country;
+        this.city = city;
     }
 
     public User() {
@@ -110,12 +115,12 @@ public abstract class User {
         this.point = point;
     }
 
-    public UserPermission getUserPermission() {
-        return userPermission;
+    public PermissionSet getUserPermission() {
+        return permissionSet;
     }
 
-    public void setUserPermission(UserPermission permission) {
-        this.userPermission = permission;
+    public void setUserPermission(PermissionSet permission) {
+        this.permissionSet = permission;
     }
 
     public boolean hasPermission(Permission permission) {
@@ -129,5 +134,13 @@ public abstract class User {
     public void setAddressBook(AddressBook addressBook) {
         this.addressBook = addressBook;
     }
+
+    public String getCountry(){ return country;}
+
+    public void setCountry(String country){this.country = country;}
+
+    public String getCity(){ return city;}
+
+    public void setCity(){ this.city = city;}
 }
 

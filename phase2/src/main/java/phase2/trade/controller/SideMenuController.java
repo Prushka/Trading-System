@@ -48,9 +48,23 @@ public class SideMenuController extends AbstractController implements Initializa
         center.getChildren().addAll(userPane);
     }
 
+    private void market() {
+        Parent userPane = loadPane("market.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
+        GridPane.setConstraints(userPane, 0, 0);
+        center.getChildren().clear();
+        center.getChildren().addAll(userPane);
+    }
+
     private void inventory() {
         Parent userPane = loadPane("add_item.fxml", new ItemAddController());
         userPane.setPickOnBounds(false);
+        GridPane.setConstraints(userPane, 0, 0);
+        center.getChildren().clear();
+        center.getChildren().addAll(userPane);
+    }
+
+    private void wishList() {
+        Parent userPane = loadPane("add_wish.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
@@ -65,11 +79,17 @@ public class SideMenuController extends AbstractController implements Initializa
                     case "userInfo":
                         userInfo();
                         break;
-                    case "logOut":
-                        logOut(oldValue);
+                    case "market":
+                        market();
                         break;
                     case "inventory":
                         inventory();
+                        break;
+                    case "wishList":
+                        wishList();
+                        break;
+                    case "logOut":
+                        logOut(oldValue);
                         break;
                 }
             }

@@ -1,5 +1,6 @@
 package phase2.trade.controller;
 
+import javafx.fxml.Initializable;
 import phase2.trade.config.property.TradeProperties;
 import phase2.trade.database.Callback;
 import phase2.trade.database.DatabaseResourceBundle;
@@ -10,11 +11,13 @@ import phase2.trade.trade.TradeManager;
 import phase2.trade.user.Address;
 import phase2.trade.user.User;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ResourceBundle;
 
 
-public class TradeController extends AbstractController {
+public class TradeController extends AbstractController implements Initializable {
 
     private final TradeDAO tradeDAO;
 
@@ -54,6 +57,11 @@ public class TradeController extends AbstractController {
             tradeDAO.update(trade);
             callback.call(trade);
         });
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
     }
 
     // Add getRecentTrades, getFrequentTraders, etc.

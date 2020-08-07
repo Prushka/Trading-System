@@ -129,6 +129,24 @@ public class PersonalUserManager {
         }
     }
 
+    public void depositmoney (PersonalUser user, double amount) {
+        if (amount < 0.00) {
+            return;
+        } else {
+            user.setAccountbalance(user.getAccountbalance() + amount);
+        }
+    }
+
+    public void withdrawmoney (PersonalUser user, double amount) {
+        if (amount < 0.00) {
+            return;
+        } else if (user.getAccountbalance() - amount < 0) {
+            return;
+        } else {
+            user.setAccountbalance(user.getAccountbalance() - amount);
+            }
+        }
+
     public PersonalUser getCurrUser() {
         return currUser;
     }

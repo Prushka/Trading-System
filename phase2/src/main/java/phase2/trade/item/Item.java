@@ -22,6 +22,8 @@ public class Item {
 
     private int quantity;
 
+    private double price;
+
     @ManyToOne
     private ItemList itemList;
 
@@ -87,5 +89,13 @@ public class Item {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

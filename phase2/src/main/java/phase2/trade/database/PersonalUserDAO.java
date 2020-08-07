@@ -6,12 +6,13 @@ import phase2.trade.user.User;
 
 import java.util.List;
 
-public class PersonalUserDAO extends DAO<PersonalUserDAO> implements UserGateway {
+public class PersonalUserDAO extends UserDAO {
 
     public PersonalUserDAO(DatabaseResourceBundle databaseResourceBundle) {
-        super(PersonalUser.class, databaseResourceBundle);
+        super(databaseResourceBundle);
     }
 
+    @Override
     public List<User> findMatches(String usernameOrEmail, String password) {
         Query query = getCurrentSession().createQuery("from PersonalUser where (userName = :usernameOrEmail AND password = :password) OR (email = :usernameOrEmail AND password = :password)");
         query.setParameter("usernameOrEmail", usernameOrEmail);
@@ -19,37 +20,27 @@ public class PersonalUserDAO extends DAO<PersonalUserDAO> implements UserGateway
         return query.list();
     }
 
+    @Override
     public List<User> findByEmail(String email) {
-        Query query = getCurrentSession().createQuery("from User where email = :email");
+        Query query = getCurrentSession().createQuery("from PersonalUser where email = :email");
         query.setParameter("email", email);
         return query.list();
     }
 
+    @Override
     public List<User> findByUserName(String userName) {
-        Query query = getCurrentSession().createQuery("from User where userName = :userName");
+        Query query = getCurrentSession().createQuery("from PersonalUser where userName = :userName");
         query.setParameter("userName", userName);
         return query.list();
     }
 
     @Override
     public List<User> findByCity(String city) {
-        return null;
+        Query query = getCurrentSession().createQuery("from PersonalUser where address.city = :city");
+        query.setParameter("city", city);
+        return query.list();
     }
 
-    @Override
-    public void add(User entity) {
-
-    }
-
-    @Override
-    public void update(User entity) {
-
-    }
-
-    @Override
-    public void delete(User entity) {
-
-    }
 
     /*public List<PersonalUser> findByUserFreeze() {
         return super.findAll();

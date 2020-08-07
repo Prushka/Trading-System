@@ -93,14 +93,6 @@ public class PersonalUserManager {
 //        return user.getWishlist();
 //    }
 
-    /*public boolean getUserIsFrozen(PersonalUser user) {
-        if (user.getIsFrozen()) {
-            return true;//new Response.Builder(true).translatable("true.is.frozen", user.getIsFrozen()).build();
-        } else {
-            return false;//new Response.Builder(false).translatable("false.is.frozen", user.getIsFrozen()).build();
-        }
-    }*/
-
     /*public void suggest (PersonalUser p) {
         for (PersonalUser x : personalUserRepository) {
             for (Item i : x.getInventory()) {

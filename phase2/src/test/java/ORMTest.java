@@ -77,7 +77,7 @@ public class ORMTest {
 
         ItemManager itemManager = new ItemManager(databaseResourceBundle, user);
 
-        itemManager.addItemTo(InventoryType.INVENTORY, new Callback<Item>() {
+        itemManager.createAndAddItemTo(InventoryType.INVENTORY, new Callback<Item>() {
             @Override
             public void call(Item result) {
                 System.out.println(result.getOwnership());

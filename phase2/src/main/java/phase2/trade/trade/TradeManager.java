@@ -18,6 +18,7 @@ public class TradeManager {
     private Integer timeLimit;
     private TradeCreator tc;
     private TradeEditor te;
+    private TradeConfirmer tcc;
 
     public TradeManager(TradeProperties tradeProperties){
         this.tradeProperties = tradeProperties;
@@ -43,6 +44,6 @@ public class TradeManager {
         return te.editLocation(currTrade, editingUser, location);
     }
 
-    public Trade confirmTrade(Trade currTrade, User editingUser) { return currTrade.getStrategy().confirmTrade(editingUser);}
+    public Trade confirmTrade(Trade currTrade, User editingUser) { return tcc.confirmTrade(currTrade, editingUser);}
 }
 

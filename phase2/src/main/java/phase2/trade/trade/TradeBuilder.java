@@ -55,13 +55,9 @@ class TradeBuilder {
     void buildIsPermanent(boolean isPermanent){ this.isPermanent = isPermanent; }
 
     Trade buildTrade() {
-        if (isPermanent) {
-            newTrade = new PermanentTrade();
-            newTrade.setStrategy(new PermanentTradingStrategy(newTrade));
-        } else {
-            newTrade = new TemporaryTrade();
-            newTrade.setStrategy(new TemporaryTradingStrategy(newTrade));
-        }
+        newTrade = new Trade();
+        newTrade.setOrder(order);
+        newTrade.setIsPermanent(isPermanent);
         newTrade.setTradeState(TradeState.IN_PROGRESS);
         return newTrade;
     }

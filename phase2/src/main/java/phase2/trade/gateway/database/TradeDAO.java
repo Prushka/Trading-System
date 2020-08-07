@@ -1,7 +1,14 @@
 package phase2.trade.gateway.database;
 
+import org.hibernate.Criteria;
+import org.hibernate.query.Query;
 import phase2.trade.gateway.TradeGateway;
 import phase2.trade.trade.Trade;
+import phase2.trade.trade.TradeState;
+import phase2.trade.trade.UserOrderBundle;
+import phase2.trade.user.User;
+
+import java.util.List;
 
 public class TradeDAO extends DAO<Trade> implements TradeGateway {
 
@@ -9,24 +16,25 @@ public class TradeDAO extends DAO<Trade> implements TradeGateway {
         super(Trade.class, resource);
     }
 
-    /*
-    public List<Trade> findNumOfTransactions(String usernameOrEmail, String password) {
-        Query query = getCurrentSession().createQuery("from Trade where (userName = :usernameOrEmail AND password = :password) OR (email = :usernameOrEmail AND password = :password)");
-        query.setParameter("usernameOrEmail", usernameOrEmail);
-        query.setParameter("password", password);
-        return query.list();
+    // I'm not sure if these will work or if you can use function calls in query strings
+    public int findNumOfTransactions(User currUser) {
+        Query query = getCurrentSession().createQuery("select count(T.order.getUsers(:currUser)) from Trade as T where tradeState = :tradeState");
+        query.setParameter("tradeState", TradeState.CLOSED);
+        query.setParameter("currUser", currUser);
+        return ((int) query.list().get(0));
     }
 
-    public List<Trade> findNumOfBorrowing(String email) {
-        Query query = getCurrentSession().createQuery("from User where email = :email");
-        query.setParameter("email", email);
-        return query.list();
+    public int findNumOfBorrowing(User currUser) {
+        Query query = getCurrentSession().createQuery("select count(T.order.borrowed(:currUser)) from Trade as T where tradeState = :tradeState");
+        query.setParameter("tradeState", TradeState.CLOSED);
+        query.setParameter("currUser", currUser);
+        return ((int) query.list().get(0));
     }
 
-    public List<Trade> findNumOfLending(String userName) {
-        Query query = getCurrentSession().createQuery("from User where userName = :userName");
-        query.setParameter("userName", userName);
-        return query.list();
+    public int findNumOfLending(User currUser) {
+        Query query = getCurrentSession().createQuery("select count(T.order.lent(:currUser)) from Trade as T where tradeState = :tradeState");
+        query.setParameter("tradeState", TradeState.CLOSED);
+        query.setParameter("currUser", currUser);
+        return ((int) query.list().get(0));
     }
-     */
 }

@@ -1,6 +1,5 @@
 package phase2.trade.user;
 
-import phase2.trade.address.Address;
 import phase2.trade.address.AddressBook;
 
 import javax.persistence.*;
@@ -25,7 +24,7 @@ public abstract class User {
     private AddressBook addressBook;
 
     @Embedded
-    private UserPermission userPermission;
+    private PermissionSet permissionSet;
 
 
     // using a map may add some polymorphism but will complicate the db structure
@@ -110,12 +109,12 @@ public abstract class User {
         this.point = point;
     }
 
-    public UserPermission getUserPermission() {
-        return userPermission;
+    public PermissionSet getUserPermission() {
+        return permissionSet;
     }
 
-    public void setUserPermission(UserPermission permission) {
-        this.userPermission = permission;
+    public void setUserPermission(PermissionSet permission) {
+        this.permissionSet = permission;
     }
 
     public boolean hasPermission(Permission permission) {

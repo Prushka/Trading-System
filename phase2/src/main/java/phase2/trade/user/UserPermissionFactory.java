@@ -10,10 +10,10 @@ public class UserPermissionFactory {
 
     // make this configurable
 
-    public UserPermission getUserPermission(Group type) {
+    public PermissionSet getUserPermission(Group type) {
         switch (type) {
             case ADMIN:
-                return new UserPermission(new HashSet<Permission>() {{
+                return new PermissionSet(new HashSet<Permission>() {{
                     add(Permission.REMOVE_ITEM);
                     add(Permission.REVIEW_ITEM);
                 }});

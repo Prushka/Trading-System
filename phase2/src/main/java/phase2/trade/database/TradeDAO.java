@@ -6,7 +6,7 @@ import phase2.trade.user.User;
 
 import java.util.List;
 
-public class TradeDAO extends  DAO<Trade>{
+public class TradeDAO extends DAO<Trade> implements TradeGateway {
 
     public TradeDAO(DatabaseResourceBundle resource) {
         super(Trade.class, resource);

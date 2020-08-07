@@ -7,8 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import phase2.trade.database.DatabaseResourceBundle;
-import phase2.trade.database.UserDAO;
+import phase2.trade.database.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
@@ -26,12 +25,12 @@ public class LoginController extends AbstractController implements Initializable
 
     private StringProperty submissionResultProperty;
 
-    public LoginController(DatabaseResourceBundle databaseResourceBundle) {
-        this(databaseResourceBundle, new AccountManager(databaseResourceBundle.getUserDAO()));
+    public LoginController(GatewayBundle gatewayBundle) {
+        this(gatewayBundle, new AccountManager(gatewayBundle.getUserGateway()));
     }
 
-    LoginController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager) {
-        super(databaseResourceBundle);
+    LoginController(GatewayBundle gatewayBundle, AccountManager accountManager) {
+        super(gatewayBundle);
         this.accountManager = accountManager;
     }
 
@@ -44,7 +43,7 @@ public class LoginController extends AbstractController implements Initializable
             if (result != null) {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
-                                new DashboardController(databaseResourceBundle, accountManager), actionEvent, true));
+                                new DashboardController(gatewayBundle, accountManager), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
             }
@@ -52,7 +51,7 @@ public class LoginController extends AbstractController implements Initializable
     }
 
     public void goToSignUp(ActionEvent actionEvent) {
-        switchScene("register.fxml", new RegisterController(databaseResourceBundle, accountManager), actionEvent);
+        switchScene("register.fxml", new RegisterController(gatewayBundle, accountManager), actionEvent);
     }
 
     @Override

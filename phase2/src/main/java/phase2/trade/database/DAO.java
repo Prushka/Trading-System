@@ -7,7 +7,7 @@ import org.hibernate.Transaction;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-public class DAO<T> {
+public class DAO<T> implements Gateway<T> {
 
     private Session currentSession;
 
@@ -52,35 +52,43 @@ public class DAO<T> {
         return currentSession;
     }
 
+    @Override
     public void add(T entity) {
         getCurrentSession().save(entity);
     }
 
+    @Override
     public void update(T entity) {
         getCurrentSession().update(entity);
     }
 
+    @Override
     public T findById(String id) {
         return getCurrentSession().get(clazz, id);
     }
 
+    @Override
     public T findById(Long id) {
         return getCurrentSession().get(clazz, id);
     }
 
+    @Override
     public T findById(Integer id) {
         return getCurrentSession().get(clazz, new Long(id));
     }
 
+    @Override
     public void delete(T entity) {
         getCurrentSession().delete(entity);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
         return (List<T>) getCurrentSession().createQuery("from " + clazz.getSimpleName()).list();
     }
 
+    @Override
     public void deleteAll() {
         List<T> entityList = findAll();
         for (T entity : entityList) {
@@ -92,18 +100,21 @@ public class DAO<T> {
         getThreadPool().submit(runnable);
     }
 
+    @Override
     public void submitSessionSync(Runnable runnable) {
         openCurrentSession();
         runnable.run();
         closeCurrentSession();
     }
 
+    @Override
     public void submitSessionWithTransactionSync(Runnable runnable) {
         openCurrentSessionWithTransaction();
         runnable.run();
         closeCurrentSessionWithTransaction();
     }
 
+    @Override
     public void submitSessionAsync(Runnable runnable) {
         getThreadPool().submit(() -> {
             openCurrentSession();
@@ -112,6 +123,7 @@ public class DAO<T> {
         });
     }
 
+    @Override
     public void submitSessionWithTransactionAsync(Runnable runnable) {
         getThreadPool().submit(() -> {
             openCurrentSessionWithTransaction();
@@ -122,6 +134,7 @@ public class DAO<T> {
 
     private boolean async = false;
 
+    @Override
     public void submitSessionWithTransaction(Runnable runnable) {
         if (async) {
             submitSessionWithTransactionAsync(runnable);
@@ -130,6 +143,7 @@ public class DAO<T> {
         }
     }
 
+    @Override
     public void submitSession(Runnable runnable) {
         if (async) {
             submitSessionAsync(runnable);

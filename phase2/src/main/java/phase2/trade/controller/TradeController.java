@@ -4,12 +4,14 @@ import phase2.trade.config.property.TradeProperties;
 import phase2.trade.database.Callback;
 import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.database.TradeDAO;
+import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeManager;
 import phase2.trade.user.Address;
 import phase2.trade.user.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 public class TradeController extends AbstractController {
@@ -25,9 +27,12 @@ public class TradeController extends AbstractController {
         this.tm = new TradeManager(tradeProperties);
     }
 
-    public void addTrade(Callback<Trade> callback) {
+    public void addTrade(Callback<Trade> callback, List<User> users, List<List<Item>> items, String year, String month,
+                         String day, String hour, String minute, String country, String city, String street,
+                         String streetNum, boolean isPermanent) {
         tradeDAO.submitSessionWithTransaction(() -> {
-            Trade newTrade = tm.createTrade();
+            Trade newTrade = tm.createTrade(users, items, year, month, day, hour, minute, country, city, street,
+                    streetNum, isPermanent);
             tradeDAO.add(newTrade);
             callback.call(newTrade);
         });
@@ -42,7 +47,7 @@ public class TradeController extends AbstractController {
     }
 
     public void editMeetingLocation(Callback<Trade> callback, Trade currTrade, User currUser, String
-            country, String city, String street, int streetNumber) {
+            country, String city, String street, String streetNumber) {
         tradeDAO.submitSessionWithTransaction(() -> {
             Address location = new Address(country, city, street, streetNumber);
             Trade trade = tm.editLocation(currTrade, currUser, location);

@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Trade {
+public class Trade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,6 +14,8 @@ public abstract class Trade {
     private Order order;
 
     private TradeState tradeState;
+
+    private boolean isPermanent;
 
     public Trade() {}
 
@@ -33,7 +35,11 @@ public abstract class Trade {
         this.tradeState = tradeState;
     }
 
-    abstract Tradable getStrategy();
+    public boolean getIsPermanent() {
+        return isPermanent;
+    }
 
-    abstract void setStrategy(Tradable newStrategy);
+    public void setIsPermanent(boolean permenant) {
+        isPermanent = permenant;
+    }
 }

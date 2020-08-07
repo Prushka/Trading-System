@@ -7,26 +7,20 @@ import phase2.trade.user.User;
 
 import java.util.List;
 
-/**
- * This strategy describes how permanent trades may be the first meeting for a temporary trade
- * and changing item ownership
- * @author Grace Leung
- */
-class PermanentTradingStrategy implements Tradable{
+public class TradeConfirmer {
+    Integer timeLimit;
 
-    Trade currTrade;
-
-    PermanentTradingStrategy(Trade currTrade){
-        this.currTrade = currTrade;
+    TradeConfirmer(int timeLimit){
+        this.timeLimit = timeLimit;
     }
 
-    @Override
-    public Trade confirmTrade(User editingUser) {
+    public Trade confirmTrade(Trade currTrade, User editingUser){
         boolean canStart = true;
 
         if (currTrade.getTradeState().equals(TradeState.CANCELLED) || currTrade.getTradeState().equals(TradeState.CLOSED)){
             return currTrade;
         }
+
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
             if (user.getUser().equals(editingUser) && !user.getConfirmations()){
                 user.setConfirmations(true);
@@ -37,35 +31,41 @@ class PermanentTradingStrategy implements Tradable{
         }
 
         if (currTrade.getTradeState().equals(TradeState.IN_PROGRESS) && canStart){
-            openTrade();
+            currTrade.setTradeState(TradeState.PENDING_TRADE);
+            resetConfirms(currTrade);
         } else if (currTrade.getTradeState().equals(TradeState.PENDING_TRADE) && canStart){
-            makeTrades();
+            makeTrades(currTrade);
+            if(currTrade.getIsPermanent()){
+                currTrade.setTradeState(TradeState.CLOSED);
+            } else {
+                currTrade.setTradeState(TradeState.PENDING_TRADEBACK);
+                currTrade.getOrder().setDateAndTime(currTrade.getOrder().getDateAndTime().plusMonths(timeLimit));
+                resetConfirms(currTrade);
+            }
+        } else if (currTrade.getTradeState().equals(TradeState.PENDING_TRADEBACK) && canStart){
             currTrade.setTradeState(TradeState.CLOSED);
         }
-
         return currTrade;
     }
 
-    // Opens this trade and closes previous meetings
-    void openTrade(){
-        currTrade.setTradeState(TradeState.PENDING_TRADE);
+    private void resetConfirms(Trade currTrade){
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
             user.setConfirmations(false);
         }
     }
 
-    // Adjusts transaction, borrow, lend counts, and item ownership
-    private void makeTrades() {
-        for (UserOrderBundle user: currTrade.getOrder().getTraders()){
+    private void makeTrades(Trade currTrade) {
+        for (UserOrderBundle user: currTrade.getOrder().getTraders()) {
             PersonalUser currUser = (PersonalUser) user.getUser();
             List<Item> newCartList = currUser.getItemList(InventoryType.CART).getListOfItems();
             List<Item> newInventory = currUser.getItemList(InventoryType.INVENTORY).getListOfItems();
-            // Update that they traded
-            for (Item item: user.getTradeItemHolder().getListOfItems()){
+            for (Item item : user.getTradeItemHolder().getListOfItems()) {
                 newCartList.remove(item);
                 newInventory.add(item);
+                // currItem.setIsAvailable(false);
                 // User other = item.getOwner();
             }
         }
     }
+
 }

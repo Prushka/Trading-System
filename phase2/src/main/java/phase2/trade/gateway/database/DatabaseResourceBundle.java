@@ -1,6 +1,7 @@
-package phase2.trade.database;
+package phase2.trade.gateway.database;
 
 import org.hibernate.SessionFactory;
+import phase2.trade.gateway.GatewayBundle;
 
 import java.util.concurrent.ExecutorService;
 

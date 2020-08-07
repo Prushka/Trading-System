@@ -6,8 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import phase2.trade.database.DatabaseResourceBundle;
-import phase2.trade.database.GatewayBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 
 import java.net.URL;

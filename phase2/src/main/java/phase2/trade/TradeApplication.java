@@ -8,8 +8,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
-import phase2.trade.database.DatabaseResourceBundleImpl;
-import phase2.trade.database.GatewayBundle;
+import phase2.trade.gateway.database.DatabaseResourceBundleImpl;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.view.SceneFactory;
 

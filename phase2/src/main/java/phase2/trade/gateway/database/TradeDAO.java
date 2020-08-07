@@ -1,10 +1,7 @@
-package phase2.trade.database;
+package phase2.trade.gateway.database;
 
-import org.hibernate.query.Query;
+import phase2.trade.gateway.TradeGateway;
 import phase2.trade.trade.Trade;
-import phase2.trade.user.User;
-
-import java.util.List;
 
 public class TradeDAO extends DAO<Trade> implements TradeGateway {
 

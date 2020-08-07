@@ -30,7 +30,7 @@
                    <JFXTextField fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="%input.password.prompt" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
                <children>
-                         <JFXButton buttonType="RAISED" onAction="#goToGuest" prefHeight="40" prefWidth="100" style="-fx-text-fill:WHITE;-fx-background-color:#00695C;-fx-font-size:14px;" text="Guest" />
+                         <JFXButton buttonType="RAISED" onAction="#goToGuest" prefHeight="40" prefWidth="100" style="-fx-text-fill:WHITE;-fx-background-color:#dc5696;-fx-font-size:14px;" text="Guest" />
                   <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" onAction="#loginButtonClicked" prefHeight="40" prefWidth="100" style="-fx-text-fill:WHITE;-fx-background-color:#ba8baf;-fx-font-size:14px;" text="%button.login.text" />
                </children>
             </HBox>

@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import phase2.trade.database.GatewayBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.validator.ValidatorFactory;
 import phase2.trade.view.SceneFactory;
 

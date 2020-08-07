@@ -19,19 +19,21 @@ public class TradeManager {
     private TradeProperties tradeProperties;
     private Integer editLimit;
     private Integer timeLimit;
-    private TradeBuilder tb;
+    private TradeCreator tc;
     private TradeEditor te;
 
     public TradeManager(TradeProperties tradeProperties){
         this.tradeProperties = tradeProperties;
         editLimit = tradeProperties.getInt("editLimit");
         timeLimit = tradeProperties.getInt("timeLimit");
-        tb = new TradeBuilder();
+        tc = new TradeCreator();
         te = new TradeEditor(editLimit);
     }
 
-    public Trade createTrade(){
-        return tb.buildTrade();
+    public Trade createTrade(List<User> users, List<List<Item>> items, String year, String month, String day, String
+            hour, String minute, String country, String city, String street, String streetNum, boolean isPermanent){
+        return tc.createTrade(users, items, year, month, day, hour, minute, country, city, street, streetNum,
+                isPermanent);
     }
 
     public Trade editDateAndTime(Trade currTrade, User editingUser, LocalDateTime dateAndTime) {

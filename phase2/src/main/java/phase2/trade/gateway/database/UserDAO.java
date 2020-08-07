@@ -41,7 +41,7 @@ public class UserDAO extends DAO<User> implements UserGateway {
         return query.list();
     }
 
-    public List<User> findUserNeedToFreeze(String userName) {
+    public List<User> findAllUser() {
        return super.findAll();
     }
 

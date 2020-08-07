@@ -25,6 +25,7 @@ public class PersonalUser extends User {
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
 
+    private int accountbalance;
 
     //private int incompleteTrades;
 
@@ -46,6 +47,8 @@ public class PersonalUser extends User {
 
         cart = new Cart();
         cart.setOwner(this);
+
+        this.accountbalance = 0;
     }
 
     public PersonalUser() {
@@ -89,5 +92,13 @@ public class PersonalUser extends User {
                 return inventory;
         }
         return null;
+    }
+
+    public int getAccountbalance() {
+        return accountbalance;
+    }
+
+    public void setAccountbalance(int accountbalance) {
+        this.accountbalance = accountbalance;
     }
 }

@@ -52,6 +52,11 @@ public class RegisterController extends AbstractController implements Initializa
                 new LoginController(gatewayBundle, accountManager), actionEvent);
     }
 
+    public void goToGuest(ActionEvent actionEvent) {
+        switchScene("guest.fxml",
+                new GuestController(gatewayBundle), actionEvent);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         submissionResultProperty = new SimpleStringProperty("");

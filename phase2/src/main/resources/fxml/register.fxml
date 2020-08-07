@@ -41,6 +41,11 @@
                         <Insets />
                     </VBox.margin>
                 </JFXButton>
+                <JFXButton onAction="#goToGuest" text="%button.guest.text">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </JFXButton>
             </children>
         </VBox>
     </children>

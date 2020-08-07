@@ -1,10 +1,13 @@
 package phase2.trade.trade;
 
+import phase2.trade.inventory.Cart;
+import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TradeConfirmer {
@@ -55,16 +58,28 @@ public class TradeConfirmer {
     }
 
     private void makeTrades(Trade currTrade) {
+        List<Item> tradedItems = new ArrayList<>();
         for (UserOrderBundle user: currTrade.getOrder().getTraders()) {
             PersonalUser currUser = (PersonalUser) user.getUser();
             List<Item> newCartList = currUser.getItemList(InventoryType.CART).getListOfItems();
-            List<Item> newInventory = currUser.getItemList(InventoryType.INVENTORY).getListOfItems();
+            List<Item> newInventoryList = currUser.getItemList(InventoryType.INVENTORY).getListOfItems();
             for (Item item : user.getTradeItemHolder().getListOfItems()) {
                 newCartList.remove(item);
-                newInventory.add(item);
-                // currItem.setIsAvailable(false);
-                // User other = item.getOwner();
+                if (tradedItems.contains(item)){
+                    newInventoryList.remove(item);
+                }
+                if (currTrade.getIsPermanent()){
+                    newInventoryList.add(item);
+                    tradedItems.add(item);
+                }
             }
+            Cart newCart = new Cart();
+            newCart.setListOfItems(newCartList);
+            currUser.setCart(newCart);
+
+            Inventory newInventory = new Inventory();
+            newInventory.setListOfItems(newInventoryList);
+            currUser.setInventory(newInventory);
         }
     }
 

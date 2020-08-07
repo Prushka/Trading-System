@@ -30,25 +30,28 @@ public class ItemManager {
         });
     }
 
-    public void addItemTo(InventoryType inventoryType, Callback<Item> callback, Category category, String name, String description) {
+    public void createAndAddItemTo(InventoryType inventoryType, Callback<Item> callback, Category category, String name, String description) {
         gatewayBundle.getUserGateway().submitSessionWithTransaction(() -> {
             Item item = new Item();
             item.setCategory(category);
             item.setName(name);
             item.setDescription(description);
+            item.setOwnership(Ownership.TO_BE_REVIEWED);
 
             operator.getItemList(inventoryType).addItem(item);
             gatewayBundle.getUserGateway().update(operator);
             callback.call(item);
         });
     }
-    /*public Item createNewItem(Callback<Item> callback, Category category, String name, String description) {
-        Item item = new Item();
-        item.setCategory(category);
-        item.setName(name);
-        item.setDescription(description);
-        return item;
-    }*/
+
+    public void removeItemFrom(InventoryType inventoryType, Callback<Item> callback, Long itemId){
+        gatewayBundle.getItemGateway().submitSessionWithTransaction(() -> {
+            Item item = gatewayBundle.getItemGateway().findById(itemId);
+            operator.getItemList(inventoryType).removeItem(item);
+            callback.call(item);
+        });
+    }
+
 
     public void reviewItem(Callback<Boolean> callback, Ownership ownership, Long itemId) {
         if (operator.hasPermission(Permission.REVIEW_ITEM)) {

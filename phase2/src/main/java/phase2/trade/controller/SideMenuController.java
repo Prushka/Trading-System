@@ -48,7 +48,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void market() {
-        Parent userPane = loadPane("market.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
+        Parent userPane = loadPane("market.fxml", new MarketController(accountManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
@@ -63,7 +63,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void wishList() {
-        Parent userPane = loadPane("add_wish.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
+        Parent userPane = loadPane("add_wish.fxml", new WishItemAddController());
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);

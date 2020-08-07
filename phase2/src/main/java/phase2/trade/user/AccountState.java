@@ -4,6 +4,7 @@ public enum  AccountState {
 
     NORMAL,
     FROZEN,
+    REQUEST_UNFROZEN,
     BANNED,
     ON_VOCATION
 }

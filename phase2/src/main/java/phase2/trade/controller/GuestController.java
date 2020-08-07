@@ -5,9 +5,7 @@ import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import phase2.trade.database.GatewayBundle;
-import phase2.trade.item.ItemManager;
-import phase2.trade.user.AccountManager;
+import phase2.trade.gateway.GatewayBundle;
 
 import java.net.URL;
 import java.util.ResourceBundle;

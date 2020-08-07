@@ -2,13 +2,13 @@ package phase2.trade.controller;
 
 import javafx.fxml.Initializable;
 import phase2.trade.config.property.TradeProperties;
-import phase2.trade.database.Callback;
-import phase2.trade.database.DatabaseResourceBundle;
-import phase2.trade.database.TradeDAO;
+import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.database.DatabaseResourceBundle;
+import phase2.trade.gateway.database.TradeDAO;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeManager;
-import phase2.trade.user.Address;
+import phase2.trade.address.Address;
 import phase2.trade.user.User;
 
 import java.net.URL;

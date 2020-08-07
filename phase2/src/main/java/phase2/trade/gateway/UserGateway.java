@@ -1,4 +1,4 @@
-package phase2.trade.database;
+package phase2.trade.gateway;
 
 import phase2.trade.user.User;
 

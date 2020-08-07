@@ -1,7 +1,7 @@
 package phase2.trade.user;
 
-import phase2.trade.database.Callback;
-import phase2.trade.database.UserGateway;
+import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.UserGateway;
 
 import java.util.List;
 

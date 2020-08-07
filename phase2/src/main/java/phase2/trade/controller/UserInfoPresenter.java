@@ -39,7 +39,8 @@ public class UserInfoPresenter implements Initializable {
         userId.setText("User Id: " + user.getUid());
         userName.setText("User Name: " + user.getUserName());
         email.setText("Email: " + user.getEmail());
-        home.setText("Location: " + user.getAddress().getCity() + ", " + user.getAddress().getCountry());
+        // address book + if user didnt input address
+        // home.setText("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
         bio.setText("Bio: ");
         currentStatus.setText("Current Status: " + user.getUid());
     }

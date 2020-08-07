@@ -1,6 +1,6 @@
 package phase2.trade.trade;
 
-import phase2.trade.user.Address;
+import phase2.trade.address.Address;
 import phase2.trade.user.User;
 
 import java.time.LocalDateTime;

@@ -8,8 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import phase2.trade.database.DatabaseResourceBundle;
-import phase2.trade.database.GatewayBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 
 import java.net.URL;

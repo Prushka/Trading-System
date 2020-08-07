@@ -1,5 +1,6 @@
-package phase2.trade.database;
+package phase2.trade.gateway.database;
 
+import phase2.trade.gateway.ItemGateway;
 import phase2.trade.item.Item;
 
 public class ItemDAO extends DAO<Item> implements ItemGateway {

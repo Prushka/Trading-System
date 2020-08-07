@@ -1,8 +1,6 @@
-package phase2.trade.database;
+package phase2.trade.gateway.database;
 
 import org.hibernate.query.Query;
-import phase2.trade.user.AdministrativeUser;
-import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 import java.util.List;

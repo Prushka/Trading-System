@@ -1,7 +1,7 @@
 package phase2.trade.item;
 
-import phase2.trade.database.Callback;
-import phase2.trade.database.GatewayBundle;
+import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.user.Permission;
@@ -18,11 +18,16 @@ public class ItemManager {
         this.operator = operator;
     }
 
+    private Item findItemByIdSync(Long itemId) {
+        gatewayBundle.getItemGateway().openCurrentSessionWithTransaction();
+        Item item = gatewayBundle.getItemGateway().findById(itemId);
+        gatewayBundle.getItemGateway().closeCurrentSessionWithTransaction();
+        return item;
+    }
+
     public void addItemTo(InventoryType inventoryType, Callback<Item> callback, Long itemId) {
         gatewayBundle.getUserGateway().submitSessionWithTransaction(() -> {
-            gatewayBundle.getItemGateway().openCurrentSessionWithTransaction();
-            Item item = gatewayBundle.getItemGateway().findById(itemId);
-            gatewayBundle.getItemGateway().closeCurrentSessionWithTransaction();
+            Item item = findItemByIdSync(itemId);
 
             operator.getItemList(inventoryType).addItem(item);
             gatewayBundle.getUserGateway().update(operator);
@@ -44,7 +49,7 @@ public class ItemManager {
         });
     }
 
-    public void removeItemFrom(InventoryType inventoryType, Callback<Item> callback, Long itemId){
+    public void removeItemFrom(InventoryType inventoryType, Callback<Item> callback, Long itemId) {
         gatewayBundle.getItemGateway().submitSessionWithTransaction(() -> {
             Item item = gatewayBundle.getItemGateway().findById(itemId);
             operator.getItemList(inventoryType).removeItem(item);

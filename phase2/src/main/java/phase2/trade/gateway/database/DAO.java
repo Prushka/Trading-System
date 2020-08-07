@@ -1,8 +1,9 @@
-package phase2.trade.database;
+package phase2.trade.gateway.database;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import phase2.trade.gateway.Gateway;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

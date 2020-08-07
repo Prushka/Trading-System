@@ -1,5 +1,8 @@
 package phase2.trade.user;
 
+import phase2.trade.address.Address;
+import phase2.trade.address.AddressBook;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,8 +21,8 @@ public abstract class User {
     private String telephone;
     private String password;
 
-    @OneToOne
-    private Address address;
+    @OneToOne(cascade = CascadeType.ALL)
+    private AddressBook addressBook;
 
     @Embedded
     private UserPermission userPermission;
@@ -42,7 +45,7 @@ public abstract class User {
         this.userName = userName;
         this.email = email;
         this.password = password;
-        this.address = new Address(country, city);
+        this.addressBook = new AddressBook();
         this.reputation = 0;
         this.point = 0;
     }
@@ -77,14 +80,6 @@ public abstract class User {
 
     public Long getUid() {
         return uid;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public void setEmail(String email) {
@@ -125,6 +120,14 @@ public abstract class User {
 
     public boolean hasPermission(Permission permission) {
         return true;
+    }
+
+    public AddressBook getAddressBook() {
+        return addressBook;
+    }
+
+    public void setAddressBook(AddressBook addressBook) {
+        this.addressBook = addressBook;
     }
 }
 

@@ -8,7 +8,7 @@ import phase2.trade.database.TradeDAO;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeManager;
-import phase2.trade.user.Address;
+import phase2.trade.address.Address;
 import phase2.trade.user.User;
 
 import java.net.URL;

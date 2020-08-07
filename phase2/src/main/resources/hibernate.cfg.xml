@@ -19,7 +19,8 @@
         <mapping class="phase2.trade.trade.UserOrderBundle" />
         <mapping class="phase2.trade.trade.Trade" />
         <mapping class="phase2.trade.trade.Order" />
-        <mapping class="phase2.trade.user.Address" />
+        <mapping class="phase2.trade.address.Address" />
+        <mapping class="phase2.trade.address.AddressBook" />
         <mapping class="phase2.trade.item.Item" />
         <mapping class="phase2.trade.user.User" />
         <mapping class="phase2.trade.user.UserPermission" />

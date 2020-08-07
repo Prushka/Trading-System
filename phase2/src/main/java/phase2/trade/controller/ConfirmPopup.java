@@ -36,8 +36,8 @@ public class ConfirmPopup {
         Label label = new Label();
         label.setText(message);
 
-        Button yesButton = new Button("yes");
-        Button noButton = new Button("no");
+        Button yesButton = new Button("Yes");
+        Button noButton = new Button("No");
 
         yesButton.setOnAction(e -> {
             answer = true;

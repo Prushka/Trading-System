@@ -1,19 +1,16 @@
 package phase2.trade.database;
 
 import org.hibernate.query.Query;
-import phase2.trade.user.AdministrativeUser;
-import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 import java.util.List;
 
-public class UserDAO extends DAO<User> implements UserGateway {
+public class AdministrativeUserDAO extends UserDAO{
 
-    public UserDAO(DatabaseResourceBundle databaseResourceBundle) {
-        super(User.class, databaseResourceBundle);
+    public AdministrativeUserDAO(DatabaseResourceBundle databaseResourceBundle) {
+        super(databaseResourceBundle);
     }
 
-    @Override
     public List<User> findMatches(String usernameOrEmail, String password) {
         Query query = getCurrentSession().createQuery("from User where (userName = :usernameOrEmail AND password = :password) OR (email = :usernameOrEmail AND password = :password)");
         query.setParameter("usernameOrEmail", usernameOrEmail);
@@ -21,30 +18,21 @@ public class UserDAO extends DAO<User> implements UserGateway {
         return query.list();
     }
 
-    @Override
     public List<User> findByEmail(String email) {
         Query query = getCurrentSession().createQuery("from User where email = :email");
         query.setParameter("email", email);
         return query.list();
     }
 
-    @Override
     public List<User> findByUserName(String userName) {
         Query query = getCurrentSession().createQuery("from User where userName = :userName");
         query.setParameter("userName", userName);
         return query.list();
     }
 
-    @Override
-    public List<User> findByCity(String city) {
-        Query query = getCurrentSession().createQuery("from User where address.city = :city");
-        query.setParameter("city", city);
-        return query.list();
-    }
-
-    public List<User> findUserNeedToFreeze(String userName) {
-       return super.findAll();
-    }
-
+        /*public List<User> findByUserFreeze(String userName) {
+            Query query = getCurrentSession().createQuery("from User where lendCount < :borrowCount");
+            query.setParameter("lendCount", lendCount);
+            query.setParameter("borrowCount", borrowCount);
+            return query.list();*/
 }
-

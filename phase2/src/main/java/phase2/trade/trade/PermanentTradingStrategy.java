@@ -24,7 +24,7 @@ class PermanentTradingStrategy implements Tradable{
     public Trade confirmTrade(User editingUser) {
         boolean canStart = true;
 
-        if (currTrade.getTradeState().equals(TradeState.CANCELLED) || currTrade.getTradeState().equals(TradeState.DEALT)){
+        if (currTrade.getTradeState().equals(TradeState.CANCELLED) || currTrade.getTradeState().equals(TradeState.CLOSED)){
             return currTrade;
         }
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
@@ -40,7 +40,7 @@ class PermanentTradingStrategy implements Tradable{
             openTrade();
         } else if (currTrade.getTradeState().equals(TradeState.PENDING_TRADE) && canStart){
             makeTrades();
-            currTrade.setTradeState(TradeState.DEALT);
+            currTrade.setTradeState(TradeState.CLOSED);
         }
 
         return currTrade;
@@ -52,11 +52,6 @@ class PermanentTradingStrategy implements Tradable{
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
             user.setConfirmations(false);
         }
-
-//    if (!currTrade.getPrevMeeting().equals(null)) {
-//        Trade oldTrade = tradeDAO.findById(currTrade.getPrevMeeting());
-//        oldTrade.closeTrade();
-//        }
     }
 
     // Adjusts transaction, borrow, lend counts, and item ownership
@@ -66,16 +61,10 @@ class PermanentTradingStrategy implements Tradable{
             List<Item> newCartList = currUser.getItemList(InventoryType.CART).getListOfItems();
             List<Item> newInventory = currUser.getItemList(InventoryType.INVENTORY).getListOfItems();
             // Update that they traded
-            // if (currTrade.getPrevMeeting().equals(null)){
-                // user.setNumTransactions(user.getNumTransactions() + 1);
-            // }
             for (Item item: user.getTradeItemHolder().getListOfItems()){
                 newCartList.remove(item);
                 newInventory.add(item);
-                // if (currTrade.getPrevMeeting().equals(null)) {
-                    // User other = item.getOwner();
-                    // other.setLendCount(other.getLendCount() + 1);
-                // }
+                // User other = item.getOwner();
             }
         }
     }

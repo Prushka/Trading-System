@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import phase2.trade.database.DatabaseResourceBundle;
+import phase2.trade.database.GatewayBundle;
 import phase2.trade.user.AccountManager;
 
 import java.net.URL;
@@ -25,15 +26,15 @@ public class DashboardController extends AbstractController implements Initializ
 
     private final AccountManager accountManager;
 
-    public DashboardController(DatabaseResourceBundle databaseResourceBundle, AccountManager accountManager) {
-        super(databaseResourceBundle);
+    public DashboardController(GatewayBundle gatewayBundle, AccountManager accountManager) {
+        super(gatewayBundle);
         this.accountManager = accountManager;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(databaseResourceBundle, accountManager, center)));
+        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, accountManager, center)));
 
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
         transition.setRate(-1);

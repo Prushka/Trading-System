@@ -4,7 +4,7 @@ import org.hibernate.SessionFactory;
 
 import java.util.concurrent.ExecutorService;
 
-public interface DatabaseResourceBundle extends DAOBundle {
+public interface DatabaseResourceBundle extends GatewayBundle {
 
     SessionFactory getSessionFactory();
 

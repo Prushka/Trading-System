@@ -27,7 +27,7 @@ class TemporaryTradingStrategy implements Tradable{
     public Trade confirmTrade(User editingUser) {
         boolean canStart = true;
 
-        if (currTrade.getTradeState().equals(TradeState.CANCELLED) || currTrade.getTradeState().equals(TradeState.DEALT)){
+        if (currTrade.getTradeState().equals(TradeState.CANCELLED) || currTrade.getTradeState().equals(TradeState.CLOSED)){
             return currTrade;
         }
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
@@ -46,7 +46,13 @@ class TemporaryTradingStrategy implements Tradable{
             }
         } else if (currTrade.getTradeState().equals(TradeState.PENDING_TRADE) && canStart){
             makeTrades();
-            scheduleTradeBack();
+            currTrade.setTradeState(TradeState.PENDING_TRADEBACK);
+            // currTrade.getOrder().setDateAndTime(currTrade.getOrder().getDateAndTime().plusMonths(timeLimit));
+            for (UserOrderBundle user: currTrade.getOrder().getTraders()){
+                user.setConfirmations(false);
+            }
+        } else if (currTrade.getTradeState().equals(TradeState.PENDING_TRADEBACK) && canStart){
+            currTrade.setTradeState(TradeState.CLOSED);
         }
         return currTrade;
     }
@@ -64,12 +70,5 @@ class TemporaryTradingStrategy implements Tradable{
                 // User other = item.getOwner();
             }
         }
-    }
-
-    // Schedules a second trade meeting
-    private void scheduleTradeBack() {
-        // LocalDateTime newDateAndTime = currTrade.getDateAndTime().plusMonths(timeLimit);
-        // createTrade(currTrade.getAllUsers(), currTrade.getAllItems(), newDateAndTime,
-                // currTrade.getLocation(), currTrade.getUid());
     }
 }

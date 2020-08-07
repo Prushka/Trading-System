@@ -20,11 +20,12 @@ class TradeBuilder {
     UserOrderBundleBuilder uobb;
 
     // For Order(s)
+    LocalDateTime dateAndTime;
+    Address location;
     Order order;
 
     // For a Trade
     Boolean isPermanent;
-    TradeState type;
 
     TradeBuilder() {}
 
@@ -35,7 +36,16 @@ class TradeBuilder {
         traders.add(newBundle);
     }
 
-    void buildOrder(LocalDateTime dateAndTime, Address location){
+    void buildDateTime(String year, String month, String day, String hour, String minute){
+        this.dateAndTime = LocalDateTime.of(Integer.parseInt(year), Integer.parseInt(month),
+                Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(minute));
+        OnlineOrder newOrder = new OnlineOrder();
+        newOrder.setDateAndTime(dateAndTime);
+        order = newOrder;
+    }
+
+    void buildLocation(String country, String city, String street, String streetNum){
+        this.location = new Address(country, city, street, streetNum);
         MeetUpOrder newOrder = new MeetUpOrder();
         newOrder.setDateAndTime(dateAndTime);
         newOrder.setLocation(location);
@@ -52,6 +62,7 @@ class TradeBuilder {
             newTrade = new TemporaryTrade();
             newTrade.setStrategy(new TemporaryTradingStrategy(newTrade));
         }
+        newTrade.setTradeState(TradeState.IN_PROGRESS);
         return newTrade;
     }
 }

@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import phase2.trade.database.DatabaseResourceBundle;
+import phase2.trade.database.GatewayBundle;
 import phase2.trade.validator.ValidatorFactory;
 import phase2.trade.view.SceneFactory;
 
@@ -18,10 +18,10 @@ public abstract class AbstractController {
 
     ValidatorFactory validatorFactory = new ValidatorFactory();
 
-    DatabaseResourceBundle databaseResourceBundle;
+    GatewayBundle gatewayBundle;
 
-    public AbstractController(DatabaseResourceBundle databaseResourceBundle) {
-        this.databaseResourceBundle = databaseResourceBundle;
+    public AbstractController(GatewayBundle gatewayBundle) {
+        this.gatewayBundle = gatewayBundle;
     }
 
     void switchScene(String fileName, Object controller, Stage stage, boolean applyCSS) {

@@ -143,7 +143,8 @@ public class PersonalUserManager {
         } else if (user.getAccountbalance() - amount < 0) {
             return;
         } else {
-            user.setAccountbalance(user.getAccountbalance() - amount);
+            user.setAccountbalance(user.getAccountbalance() - amount)
+
             }
         }
 

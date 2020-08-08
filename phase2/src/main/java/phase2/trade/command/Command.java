@@ -8,13 +8,14 @@ import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Command<T> {
 
-    enum Type {
+    public enum Type {
         CREATE, READ, UPDATE, DELETE
     }
 
@@ -111,13 +112,8 @@ public abstract class Command<T> {
         return timestamp;
     }
 
-    public void isUndoable(Callback<Boolean> callback){
-        gatewayBundle.getCommandGateway().submitSessionWithTransaction(new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        });
+    public void isUndoable(Callback<List<Command<?>>> callback) {
+        gatewayBundle.getCommandGateway().submitSessionWithTransaction(() -> callback.call(gatewayBundle.getCommandGateway().isUndoable(effectedIds, timestamp)));
     }
 
 

@@ -30,9 +30,13 @@ public class Order {
         this.uid = uid;
     }
 
-    public List<UserOrderBundle> getTraders(){ return traders;}
+    public List<UserOrderBundle> getTraders() {
+        return traders;
+    }
 
-    public void setTraders(List<UserOrderBundle> traders){ this.traders = traders;}
+    public void setTraders(List<UserOrderBundle> traders) {
+        this.traders = traders;
+    }
 
     public LocalDateTime getDateAndTime() {
         return dateAndTime;
@@ -42,28 +46,28 @@ public class Order {
         this.dateAndTime = dateAndTime;
     }
 
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        for (UserOrderBundle user: traders){
+        for (UserOrderBundle user : traders) {
             users.add(user.getUser());
         }
         return users;
     }
 
-    public boolean borrowed(User currUser){
-        for (UserOrderBundle user: traders){
-            if (user.getUser().equals(currUser) && !user.getTradeItemHolder().getListOfItems().isEmpty()){
+    public boolean borrowed(User currUser) {
+        for (UserOrderBundle user : traders) {
+            if (user.getUser().equals(currUser) && !user.getTradeItemHolder().getListOfItems().isEmpty()) {
                 return true;
             }
         }
         return false;
     }
 
-    public  boolean lent(User currUser){
-        for (UserOrderBundle user: traders){
-            if (!user.getUser().equals(currUser)){
-                for (Item item: user.getTradeItemHolder().getListOfItems()){
-                    if (((PersonalUser) currUser).getInventory().getListOfItems().contains(item)){
+    public boolean lent(User currUser) {
+        for (UserOrderBundle user : traders) {
+            if (!user.getUser().equals(currUser)) {
+                for (Item item : user.getTradeItemHolder().getListOfItems()) {
+                    if (((PersonalUser) currUser).getInventory().getListOfItems().contains(item)) {
                         return true;
                     }
                 }

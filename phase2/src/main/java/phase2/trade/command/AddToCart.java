@@ -11,7 +11,7 @@ import phase2.trade.user.PersonalUser;
 import javax.persistence.Entity;
 
 @Entity
-public class MoveItemToItemList extends ItemCommand {
+public class AddToCart extends ItemCommand {
 
     private InventoryType inventoryType;
 
@@ -19,8 +19,8 @@ public class MoveItemToItemList extends ItemCommand {
 
     private transient PersonalUser operator;
 
-    public MoveItemToItemList(GatewayBundle gatewayBundle, PersonalUser operator,
-                              InventoryType inventoryType, Long itemId) {
+    public AddToCart(GatewayBundle gatewayBundle, PersonalUser operator,
+                     InventoryType inventoryType, Long itemId) {
         super(gatewayBundle, operator);
         this.inventoryType = inventoryType;
         this.itemId = itemId;
@@ -28,7 +28,7 @@ public class MoveItemToItemList extends ItemCommand {
         addEffectedId(itemId);
     }
 
-    public MoveItemToItemList() {
+    public AddToCart() {
         super();
     }
 

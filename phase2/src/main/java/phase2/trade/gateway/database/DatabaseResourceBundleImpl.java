@@ -5,6 +5,7 @@ import org.hibernate.cfg.Configuration;
 import phase2.trade.Shutdownable;
 import phase2.trade.gateway.CommandGateway;
 import phase2.trade.gateway.ItemGateway;
+import phase2.trade.gateway.TradeGateway;
 import phase2.trade.gateway.UserGateway;
 
 import java.util.concurrent.ExecutorService;
@@ -61,12 +62,12 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
         return itemDAO;
     }
 
+    public TradeGateway getTradeGateway() {
+        return tradeDAO;
+    }
+
     @Override
     public CommandGateway getCommandGateway() {
         return commandDAO;
-    }
-
-    public TradeDAO getTradeDAO() {
-        return tradeDAO;
     }
 }

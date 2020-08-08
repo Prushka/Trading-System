@@ -61,4 +61,6 @@ public abstract class AbstractController {
         return sceneFactory.getPane(fileName, controller);
     }
 
+    GatewayBundle getGatewayBundle(){ return this.gatewayBundle;}
+
 }

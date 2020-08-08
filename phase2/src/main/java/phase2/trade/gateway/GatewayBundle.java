@@ -6,6 +6,8 @@ public interface GatewayBundle {
 
     ItemGateway getItemGateway();
 
+    TradeGateway getTradeGateway();
+
     CommandGateway getCommandGateway();
 
 }

@@ -51,11 +51,11 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void market() {
-        Pane userPane = (Pane) loadPane("market.fxml", new MarketController(accountManager.getLoggedInUser()));
-        // GridPane.clearConstraints();
-        GridPane.setConstraints(userPane, 0, 2);
+        Parent userPane = loadPane("market.fxml", new MarketController(this.getGatewayBundle(),
+                accountManager.getLoggedInUser()));
+        GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
-        center.getChildren().add(0, userPane);
+        center.getChildren().addAll(userPane);
     }
 
     private void inventory() {

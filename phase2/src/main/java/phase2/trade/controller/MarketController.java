@@ -17,6 +17,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import phase2.trade.config.property.TradeProperties;
+import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.gateway.database.DatabaseResourceBundleImpl;
+import phase2.trade.repository.SaveHook;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
 import phase2.trade.user.User;
@@ -26,41 +30,26 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class MarketController implements Initializable {
-    GridPane grid = new GridPane();
-    TableView<Trade> trades;
-    TextField traders;
-    TextField items;
-    TextField year;
-    TextField month;
-    TextField day;
-    TextField hour;
-    TextField minute;
-    TextField country;
-    TextField city;
-    TextField street;
-    TextField streetNum;
-    JFXComboBox<Boolean> isPermanent;
-    Button submit;
-
+public class MarketController  extends AbstractController implements Initializable {
     User currUser;
-    public MarketController(User currUser){
+    TradeController tc;
+    TableView<Trade> trades;
+    Button submitBorrowTrade = new Button();
+    Button submitLendTrade = new Button();
+    Button submitTwoWayTrade = new Button();
+    Button submitThreeWayTrade = new Button();
+
+    public MarketController(GatewayBundle gatewayBundle, User currUser){
+        super(gatewayBundle);
         this.currUser = currUser;
+        // tc = new TradeController(gatewayBundle, new TradeProperties(new SaveHook())); // need to change trade properties thing
         TableColumn<Trade, TradeState> statusColumn = new TableColumn<>("Trade Status: ");
         statusColumn.setMinWidth(100);
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("tradeState"));
 
-        HBox dateTime = new HBox();
-        dateTime.setSpacing(10);
-
         trades = new TableView<>();
         trades.setItems(getTrades());
         trades.getColumns().setAll(statusColumn);
-
-        grid.setVgap(10); // Adds spacing veritcally
-        grid.setHgap(10); // Adds spacing horizontally
-        GridPane.setConstraints(trades, 0, 0); // adds items to the gridpane at the column and row
-        GridPane.setConstraints(dateTime, 1, 0); // adds items to the gridpane at the column and row
     }
 
     @Override

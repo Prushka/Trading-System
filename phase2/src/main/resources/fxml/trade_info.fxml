@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="phase2.trade.controller.TradeInfoController">
+    <children>
+        <HBox fx:id="dateTime" alignment="BOTTOM_CENTER" spacing="20.0">
+            <padding>
+                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            </padding>
+            <children>
+                <TextField fx:id="year" promptText="YEAR" />
+                <TextField fx:id="month" promptText="MONTH" />
+                <TextField fx:id="day" promptText="DAY" />
+                <TextField fx:id="hour" promptText="HOUR" />
+                <TextField fx:id="minute" promptText="MINUTE" />
+            </children>
+        </HBox>
+        <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+            <padding>
+                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+            </padding>
+            <children>
+                <TextField fx:id="street" promptText="STREET" />
+                <TextField fx:id="streetNum" promptText="STREET NUMBER" />
+                <TextField fx:id="city" promptText="CITY" />
+                <TextField fx:id="country" promptText="COUNTRY" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

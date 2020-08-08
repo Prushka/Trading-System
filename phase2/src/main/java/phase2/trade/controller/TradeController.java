@@ -3,7 +3,10 @@ package phase2.trade.controller;
 import javafx.fxml.Initializable;
 import phase2.trade.config.property.TradeProperties;
 import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.gateway.TradeGateway;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
+import phase2.trade.gateway.database.DatabaseResourceBundleImpl;
 import phase2.trade.gateway.database.TradeDAO;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
@@ -19,14 +22,14 @@ import java.util.ResourceBundle;
 
 public class TradeController extends AbstractController implements Initializable {
 
-    private final TradeDAO tradeDAO;
+    private final TradeGateway tradeDAO;
 
     private final TradeManager tm;
 
-    public TradeController(DatabaseResourceBundle databaseResourceBundle, TradeDAO tradeDAO, TradeProperties
+    public TradeController(GatewayBundle gatewayBundle, TradeProperties
             tradeProperties) {
-        super(databaseResourceBundle);
-        this.tradeDAO = tradeDAO;
+        super(gatewayBundle);
+        this.tradeDAO = gatewayBundle.getTradeGateway();
         this.tm = new TradeManager(tradeProperties);
     }
 

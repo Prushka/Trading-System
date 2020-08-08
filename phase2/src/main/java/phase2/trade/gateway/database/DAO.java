@@ -134,7 +134,7 @@ public abstract class DAO<T> implements Gateway<T> {
         }
     }
 
-    private final boolean async = false;
+    private final boolean async = true;
 
     @Override
     public void submitTransaction(Runnable runnable) {

@@ -13,6 +13,8 @@ import java.util.List;
 @Entity
 public class Register extends UserCommand<User> {
 
+    private Long userId;
+
     public Register(GatewayBundle gatewayBundle) {
         super(gatewayBundle);
     }
@@ -29,11 +31,13 @@ public class Register extends UserCommand<User> {
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new PersonalUser(args[0], args[1], args[2], args[3], args[4]);
                 getUserGateway().add(user);
+                userId = user.getUid();
                 addEffectedId(user.getUid());
                 save();
                 callback.call(user);
+            }else{
+                callback.call(null);
             }
-            callback.call(null);
         });
     }
 

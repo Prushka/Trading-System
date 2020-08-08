@@ -43,7 +43,7 @@ public abstract class Command<T> {
 
     public abstract void undo();
 
-    public abstract void redo();
+    public abstract void redo(); // It seems we don't need to implement redo. Also redo may mess up the uid
 
     public abstract Class<?> getClassToOperateOn();
 

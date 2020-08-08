@@ -4,7 +4,7 @@ import phase2.trade.inventory.Cart;
 import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
-import phase2.trade.user.PersonalUser;
+import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class TradeConfirmer {
     private void makeTrades(Trade currTrade) {
         List<Item> tradedItems = new ArrayList<>();
         for (UserOrderBundle user: currTrade.getOrder().getTraders()) {
-            PersonalUser currUser = (PersonalUser) user.getUser();
+            RegularUser currUser = (RegularUser) user.getUser();
             List<Item> newCartList = currUser.getItemList(InventoryType.CART).getListOfItems();
             List<Item> newInventoryList = currUser.getItemList(InventoryType.INVENTORY).getListOfItems();
             for (Item item : user.getTradeItemHolder().getListOfItems()) {

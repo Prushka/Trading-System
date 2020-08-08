@@ -37,6 +37,6 @@
         <mapping class="phase2.trade.user.User" />
         <mapping class="phase2.trade.user.PermissionSet" />
         <mapping class="phase2.trade.user.AdministrativeUser" />
-        <mapping class="phase2.trade.user.PersonalUser" />
+        <mapping class="phase2.trade.user.RegularUser" />
     </session-factory>
 </hibernate-configuration>

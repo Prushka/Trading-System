@@ -3,6 +3,7 @@ package phase2.trade.item.command;
 import phase2.trade.command.Command;
 import phase2.trade.command.PermissionBased;
 import phase2.trade.command.UserPermissionChecker;
+import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
 import phase2.trade.user.PermissionSet;
@@ -17,8 +18,8 @@ public abstract class ItemCommand extends Command<Item> implements PermissionBas
     @OneToOne
     User operator;
 
-    public ItemCommand(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle);
+    public ItemCommand(EntityBundle entityBundle, User operator) {
+        super(entityBundle);
         this.operator = operator;
     }
 
@@ -27,13 +28,13 @@ public abstract class ItemCommand extends Command<Item> implements PermissionBas
     }
 
     Item findItemByIdSyncInItemGateway(Long itemId) {
-        return gatewayBundle.getItemGateway().findById(itemId);
+        return entityBundle.getItemGateway().findById(itemId);
     }
 
     Item findItemByIdSyncOutsideItemGateway(Long itemId) {
-        gatewayBundle.getItemGateway().openCurrentSession();
-        Item item = gatewayBundle.getItemGateway().findById(itemId);
-        gatewayBundle.getItemGateway().closeCurrentSession();
+        entityBundle.getItemGateway().openCurrentSession();
+        Item item = entityBundle.getItemGateway().findById(itemId);
+        entityBundle.getItemGateway().closeCurrentSession();
         return item;
     }
 

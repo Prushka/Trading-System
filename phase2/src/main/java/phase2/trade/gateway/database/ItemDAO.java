@@ -1,7 +1,6 @@
 package phase2.trade.gateway.database;
 
 import org.hibernate.query.Query;
-import phase2.trade.gateway.Gateway;
 import phase2.trade.gateway.ItemGateway;
 import phase2.trade.item.Item;
 

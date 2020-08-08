@@ -29,12 +29,12 @@ public class ItemAddController implements Initializable {
     }
 
     public void submitItem(ActionEvent actionEvent) {
-        itemManager.createAndAddItemTo(InventoryType.INVENTORY, new Callback<Item>() {
-            @Override
-            public void call(Item result) {
-                System.out.println(result.getOwnership());
-            }
-        }, category.getValue(), name.getText(), description.getText());
+        // itemManager.createAndAddItemTo(InventoryType.INVENTORY, new Callback<Item>() {
+        //     @Override
+        //     public void call(Item result) {
+        //         System.out.println(result.getOwnership());
+        //     }
+        // }, category.getValue(), name.getText(), description.getText());
     }
 
     @Override

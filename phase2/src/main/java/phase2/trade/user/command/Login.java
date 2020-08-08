@@ -2,17 +2,16 @@ package phase2.trade.user.command;
 
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.PermissionSet;
-import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
 import java.util.List;
 
 public class Login extends UserCommand<User> {
 
-    public Login(GatewayBundle gatewayBundle) {
-        super(gatewayBundle);
+    public Login(EntityBundle entityBundle) {
+        super(entityBundle);
     }
 
     @Override

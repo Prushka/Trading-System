@@ -2,7 +2,7 @@ package phase2.trade.gateway;
 
 import java.util.List;
 
-public interface Gateway<T> {
+public interface EntityGateway<T> {
     void add(T entity);
 
     void update(T entity);

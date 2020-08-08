@@ -3,12 +3,12 @@ package phase2.trade.gateway.database;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import phase2.trade.gateway.Gateway;
+import phase2.trade.gateway.EntityGateway;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-public abstract class DAO<T> implements Gateway<T> {
+public abstract class DAO<T> implements EntityGateway<T> {
 
     private Session currentSession;
 

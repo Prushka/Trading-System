@@ -47,12 +47,12 @@ public abstract class Command<T> {
 
     public abstract void execute(Callback<T> callback, String... args);
 
-    public abstract void undo();
+    public abstract void undo(GatewayBundle gatewayBundle);
 
-    public abstract void redo();
+    public abstract void redo(GatewayBundle gatewayBundle);
 
     void save() {
-        gatewayBundle.getCommandGateway().submitSessionWithTransactionAsync(() -> gatewayBundle.getCommandGateway().add(getThis()));
+        gatewayBundle.getCommandGateway().submitSessionWithTransaction(() -> gatewayBundle.getCommandGateway().add(getThis()));
     }
 
     public Command<T> getThis() {
@@ -73,4 +73,27 @@ public abstract class Command<T> {
 
     public abstract Class<?> getClassToOperateOn();
 
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
+    public User getOperator() {
+        return operator;
+    }
+
+    public void setOperator(User operator) {
+        this.operator = operator;
+    }
+
+    public Set<Long> getEffectedIds() {
+        return effectedIds;
+    }
+
+    public void setEffectedIds(Set<Long> effectedIds) {
+        this.effectedIds = effectedIds;
+    }
 }

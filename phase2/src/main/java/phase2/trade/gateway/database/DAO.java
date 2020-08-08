@@ -84,6 +84,11 @@ public class DAO<T> implements Gateway<T> {
     }
 
     @Override
+    public void delete(Long id) {
+        getCurrentSession().delete(findById(id));
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
         return (List<T>) getCurrentSession().createQuery("from " + clazz.getSimpleName()).list();

@@ -14,7 +14,7 @@ import java.util.logging.Level;
 
 public class ORMTest {
 
-    private final DatabaseResourceBundle databaseResourceBundle;
+    private final DatabaseResourceBundle bundle;
 
     private UserDAO userDAO;
     private ItemDAO itemDAO;
@@ -25,11 +25,11 @@ public class ORMTest {
 
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        databaseResourceBundle = new DatabaseResourceBundleImpl();
+        bundle = new DatabaseResourceBundleImpl();
 
-        userDAO = new UserDAO(databaseResourceBundle);
-        itemDAO = new ItemDAO(databaseResourceBundle);
-        itemListDAO = new DAO<>(ItemList.class, databaseResourceBundle);
+        userDAO = new UserDAO(bundle);
+        itemDAO = new ItemDAO(bundle);
+        itemListDAO = new DAO<>(ItemList.class, bundle);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ORMTest {
         item.setName("test item2");
         item.setDescription("test description2");
 
-        UserDAO userDAO = new UserDAO(databaseResourceBundle);
+        UserDAO userDAO = new UserDAO(bundle);
         userDAO.openCurrentSessionWithTransaction();
         User user = userDAO.findById(1L);
         userDAO.update(user);
@@ -63,7 +63,7 @@ public class ORMTest {
     }
 
     private User getTestUser() {
-        UserDAO userDAO = new UserDAO(databaseResourceBundle);
+        UserDAO userDAO = new UserDAO(bundle);
         userDAO.openCurrentSession();
         User user = userDAO.findById(1L);
         userDAO.closeCurrentSession();
@@ -76,7 +76,7 @@ public class ORMTest {
 
         userDAO.submitSessionSync(() -> userDAO.add(user));
 
-        ItemManager itemManager = new ItemManager(databaseResourceBundle, user);
+        ItemManager itemManager = new ItemManager(bundle, user);
 
         itemManager.createAndAddItemTo(InventoryType.INVENTORY, new Callback<Item>() {
             @Override

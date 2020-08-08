@@ -17,7 +17,7 @@ public class AccountManager {
 
     public void register(Callback<User> callback, String username, String email, String password, String country,
                          String city) {
-        userGateway.submitSessionWithTransactionAsync(() -> {
+        userGateway.submitSessionWithTransaction(() -> {
             List<User> usersByEmail = userGateway.findByEmail(email);
             List<User> usersByName = userGateway.findByEmail(email);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
@@ -31,7 +31,7 @@ public class AccountManager {
     }
 
     public void login(Callback<User> callback, String usernameOrEmail, String password) {
-        userGateway.submitSessionAsync(() -> {
+        userGateway.submitSession(() -> {
             List<User> matchedUsers = userGateway.findMatches(usernameOrEmail, password);
             if (matchedUsers.size() > 0) {
                 loggedInUser = matchedUsers.get(0);

@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 public class CommandTest {
 
-    private final DatabaseResourceBundle databaseResourceBundle;
+    private final DatabaseResourceBundle bundle;
 
     private final UserGateway userGateway;
 
@@ -22,8 +22,8 @@ public class CommandTest {
 
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        databaseResourceBundle = new DatabaseResourceBundleImpl();
-        userGateway = databaseResourceBundle.getUserGateway();
+        bundle = new DatabaseResourceBundleImpl();
+        userGateway = bundle.getUserGateway();
     }
 
     private void save() {
@@ -36,8 +36,22 @@ public class CommandTest {
     @Test
     public void testCommand() {
         save();
-        Command<Item> addItem = new AddItemToItemList(databaseResourceBundle,personalUser, InventoryType.INVENTORY);
+        Command<Item> addItem = new AddItemToItemList(bundle,personalUser, InventoryType.INVENTORY);
 
         addItem.execute(null, "testName", "testDescription");
+    }
+
+    @Test
+    public void testUndo() {
+        testCommand();
+
+        bundle.getCommandGateway().submitSessionWithTransaction(new Runnable() {
+            @Override
+            public void run() {
+
+                Command command = bundle.getCommandGateway().findById(1L);
+                command.undo(bundle);
+            }
+        });
     }
 }

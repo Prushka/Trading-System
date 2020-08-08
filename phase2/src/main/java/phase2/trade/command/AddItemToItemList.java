@@ -53,12 +53,17 @@ public class AddItemToItemList extends ItemCommand {
     }
 
     @Override
-    public void undo() {
-
+    public void undo(GatewayBundle gatewayBundle) {
+        gatewayBundle.getItemGateway().submitSessionWithTransaction(new Runnable() {
+            @Override
+            public void run() {
+                gatewayBundle.getItemGateway().delete(itemId);
+            }
+        });
     }
 
     @Override
-    public void redo() {
+    public void redo(GatewayBundle gatewayBundle) {
 
     }
 

@@ -50,12 +50,12 @@ public class MoveItemToItemList extends ItemCommand {
     }
 
     @Override
-    public void undo() {
+    public void undo(GatewayBundle gatewayBundle) {
 
     }
 
     @Override
-    public void redo() {
+    public void redo(GatewayBundle gatewayBundle) {
 
     }
 }

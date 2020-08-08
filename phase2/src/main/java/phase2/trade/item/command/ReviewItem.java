@@ -1,5 +1,6 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.callback.StatusCallback;
@@ -34,7 +35,7 @@ public class ReviewItem extends ItemCommand {
     @Override
     public void execute(StatusCallback<Item> callback, String... args) { //
         if (!checkPermission()) {
-            callback.call(null, StatusCallback.ResultStatus.NO_PERMISSION);
+            callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
         entityBundle.getItemGateway().submitTransaction(() -> {
@@ -46,7 +47,7 @@ public class ReviewItem extends ItemCommand {
             addEffectedId(itemId);
             save();
             if (callback != null)
-                callback.call(item);
+                callback.call(item, ResultStatus.SUCCEEDED);
         });
     }
 

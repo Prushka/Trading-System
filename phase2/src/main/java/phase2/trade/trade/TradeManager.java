@@ -1,6 +1,6 @@
 package phase2.trade.trade;
 
-import phase2.trade.config.property.TradeProperties;
+import phase2.trade.config.TradeConfig;
 import phase2.trade.item.Item;
 import phase2.trade.address.Address;
 import phase2.trade.user.User;
@@ -13,19 +13,15 @@ import java.util.List;
  * @author Grace Leung
  */
 public class TradeManager {
-    private TradeProperties tradeProperties;
-    private Integer editLimit;
-    private Integer timeLimit;
+    private TradeConfig tradeConfig;
     private TradeCreator tc;
     private TradeEditor te;
     private TradeConfirmer tcc;
 
-    public TradeManager(TradeProperties tradeProperties){
-        this.tradeProperties = tradeProperties;
-        editLimit = tradeProperties.getInt("editLimit");
-        timeLimit = tradeProperties.getInt("timeLimit");
+    public TradeManager(TradeConfig tradeConfig){
+        this.tradeConfig = tradeConfig;
         tc = new TradeCreator();
-        te = new TradeEditor(editLimit);
+        te = new TradeEditor(tradeConfig.getEditLimit());
     }
 
     public Trade createTrade(List<User> users, List<List<Item>> items, String year, String month, String day, String
@@ -35,12 +31,12 @@ public class TradeManager {
     }
 
     public Trade editDateAndTime(Trade currTrade, User editingUser, LocalDateTime dateAndTime) {
-        TradeEditor te = new TradeEditor(editLimit);
+        TradeEditor te = new TradeEditor(tradeConfig.getEditLimit());
         return te.editDateAndTime(currTrade, editingUser, dateAndTime);
     }
 
     public Trade editLocation(Trade currTrade, User editingUser, Address location) {
-        TradeEditor te = new TradeEditor(editLimit);
+        TradeEditor te = new TradeEditor(tradeConfig.getEditLimit());
         return te.editLocation(currTrade, editingUser, location);
     }
 

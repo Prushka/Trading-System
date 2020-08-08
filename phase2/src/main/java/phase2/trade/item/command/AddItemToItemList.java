@@ -1,5 +1,7 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
 import phase2.trade.callback.Callback;
 import phase2.trade.gateway.EntityBundle;
@@ -32,7 +34,7 @@ public class AddItemToItemList extends ItemCommand {
     }
 
     @Override
-    public void execute(Callback<Item> callback, String... args) { //
+    public void execute(StatusCallback<Item> callback, String... args) { //
         entityBundle.getUserGateway().submitTransaction(() -> {
             Item item = new Item();
             item.setName(args[0]);
@@ -44,7 +46,7 @@ public class AddItemToItemList extends ItemCommand {
             addEffectedId(itemId);
             save();
             if (callback != null)
-                callback.call(item);
+                callback.call(item, ResultStatus.SUCCEEDED);
         });
     }
 

@@ -1,6 +1,7 @@
 package phase2.trade.gateway;
 
 import phase2.trade.Shutdownable;
+import phase2.trade.config.TradeConfig;
 import phase2.trade.config.yaml.ConfigStrategy;
 import phase2.trade.config.PermissionConfig;
 import phase2.trade.config.yaml.YamlStrategy;
@@ -11,6 +12,8 @@ import java.util.function.Supplier;
 public class ConfigBundle implements Shutdownable {
 
     private PermissionConfig permissionConfig;
+
+    private TradeConfig tradeConfig;
 
     private ConfigStrategy configStrategy;
 
@@ -38,5 +41,13 @@ public class ConfigBundle implements Shutdownable {
     @Override
     public void stop() {
         save(permissionConfig, "permission_group");
+    }
+
+    public PermissionConfig getPermissionConfig() {
+        return permissionConfig;
+    }
+
+    public TradeConfig getTradeConfig() {
+        return tradeConfig;
     }
 }

@@ -1,5 +1,6 @@
 package phase2.trade.user.command;
 
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.callback.StatusCallback;
@@ -33,9 +34,9 @@ public class Register extends UserCommand<User> {
                 userId = user.getUid();
                 addEffectedId(user.getUid());
                 save();
-                callback.call(user, StatusCallback.ResultStatus.SUCCEEDED);
+                callback.call(user, ResultStatus.SUCCEEDED);
             }else{
-                callback.call(null, StatusCallback.ResultStatus.EXIST);
+                callback.call(null, ResultStatus.EXIST);
             }
         });
     }

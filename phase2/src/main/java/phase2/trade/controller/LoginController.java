@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
@@ -39,13 +40,13 @@ public class LoginController extends AbstractController implements Initializable
                 .validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
         if (!validatorBind.isAllPass()) return;
         submissionResultProperty.setValue("Signing in..");
-        accountManager.login(result -> {
-            if (result != null) {
+        accountManager.login((result,status) -> {
+            if (status != ResultStatus.SUCCEEDED) {
+                Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
+            } else {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
                                 new DashboardController(gatewayBundle, accountManager), actionEvent, true));
-            } else {
-                Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
             }
         }, usernameOrEmail.getText(), password.getText());
     }

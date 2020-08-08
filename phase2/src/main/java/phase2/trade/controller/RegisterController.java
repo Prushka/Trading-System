@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
@@ -37,16 +38,18 @@ public class RegisterController extends AbstractController implements Initializa
         registerButton.setDisable(true);
         ValidatorBind validatorBind = new ValidatorBind(submissionResultProperty).validate(ValidatorType.USER_NAME, "Invalid UserName", username.getText())
                 .validate(ValidatorType.EMAIL, "Invalid Email", email.getText()).validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
-        if (!validatorBind.isAllPass()){registerButton.setDisable(false); return;}
+        if (!validatorBind.isAllPass()) {
+            registerButton.setDisable(false);
+            return;
+        }
         submissionResultProperty.setValue("Signing up..");
-        accountManager.register(result -> {
-            if (result != null) {
-                System.out.println("success");
+        accountManager.register((result, status) -> {
+            if (status != ResultStatus.SUCCEEDED) {
+                Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
+            } else {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
                                 new DashboardController(gatewayBundle, accountManager), actionEvent, true));
-            } else {
-                Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
             }
         }, username.getText(), email.getText(), password.getText(), country.getText(), city.getText());
     }

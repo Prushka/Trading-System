@@ -42,7 +42,7 @@ public class AccountManager {
         return loggedInUser;
     }
 
-    public void register(Callback<User> callback, String userName, String email, String password, String country, String city) {
+    public void register(StatusCallback<User> callback, String userName, String email, String password, String country, String city) {
         registerCommand.execute((result, status) -> {
             loggedInUser = result;
             callback.call(result, status);

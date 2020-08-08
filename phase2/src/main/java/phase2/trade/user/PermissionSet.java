@@ -6,7 +6,7 @@ import java.util.*;
 @Embeddable
 public class PermissionSet {
 
-    @ElementCollection(targetClass = Permission.class)
+    @ElementCollection
     private Set<Permission> perm = new HashSet<>();
 
     public PermissionSet() {

@@ -24,6 +24,7 @@ public class AddItemToItemList extends ItemCommand {
         this.inventoryType = inventoryType;
         this.itemId = itemId;
         this.operator = operator;
+        addEffectedId(itemId);
     }
 
     @Override

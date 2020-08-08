@@ -1,7 +1,7 @@
 package phase2.trade.trade;
 
 import phase2.trade.item.Item;
-import phase2.trade.user.PersonalUser;
+import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
@@ -67,7 +67,7 @@ public class Order {
         for (UserOrderBundle user : traders) {
             if (!user.getUser().equals(currUser)) {
                 for (Item item : user.getTradeItemHolder().getListOfItems()) {
-                    if (((PersonalUser) currUser).getInventory().getListOfItems().contains(item)) {
+                    if (((RegularUser) currUser).getInventory().getListOfItems().contains(item)) {
                         return true;
                     }
                 }

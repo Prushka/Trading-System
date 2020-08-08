@@ -2,12 +2,13 @@ package phase2.trade.item.command;
 
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.user.Permission;
 import phase2.trade.user.PermissionSet;
-import phase2.trade.user.PersonalUser;
+import phase2.trade.user.RegularUser;
 
 import javax.persistence.Entity;
 
@@ -18,11 +19,11 @@ public class AddToCart extends ItemCommand {
 
     private Long itemId;
 
-    private transient PersonalUser operator;
+    private transient RegularUser operator;
 
-    public AddToCart(GatewayBundle gatewayBundle, PersonalUser operator,
+    public AddToCart(EntityBundle entityBundle, RegularUser operator,
                      InventoryType inventoryType, Long itemId) {
-        super(gatewayBundle, operator);
+        super(entityBundle, operator);
         this.inventoryType = inventoryType;
         this.itemId = itemId;
         this.operator = operator;
@@ -35,10 +36,10 @@ public class AddToCart extends ItemCommand {
 
     @Override
     public void execute(Callback<Item> callback, String... args) { //
-        gatewayBundle.getUserGateway().submitTransaction(() -> {
+        entityBundle.getUserGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncOutsideItemGateway(itemId);
             operator.getItemList(inventoryType).addItem(item);
-            gatewayBundle.getUserGateway().update(operator);
+            entityBundle.getUserGateway().update(operator);
             callback.call(item);
         });
     }

@@ -8,7 +8,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
-import phase2.trade.gateway.database.DatabaseResourceBundleImpl;
+import phase2.trade.gateway.ConfigBundle;
+import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.database.DatabaseResourceBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.view.SceneFactory;
@@ -22,10 +24,13 @@ public class TradeApplication extends Application {
     private final ShutdownHook shutdownHook;
 
     public TradeApplication() {
-        DatabaseResourceBundleImpl databaseResourceBundleImpl = new DatabaseResourceBundleImpl();
+
+        DatabaseResourceBundle databaseResourceBundle = new DatabaseResourceBundle();
         shutdownHook = new ShutdownHook();
-        shutdownHook.addShutdownable(databaseResourceBundleImpl);
-        this.gatewayBundle = databaseResourceBundleImpl;
+        shutdownHook.addShutdownable(databaseResourceBundle);
+        EntityBundle entityBundle = databaseResourceBundle.getDaoBundle();
+        ConfigBundle configBundle = new ConfigBundle();
+        this.gatewayBundle = new GatewayBundle(entityBundle, configBundle);
     }
 
     @Override
@@ -48,7 +53,7 @@ public class TradeApplication extends Application {
 
     private void mockDashboard(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
-        AccountManager accountManager = new AccountManager(gatewayBundle);
+        AccountManager accountManager = new AccountManager(gatewayBundle.getEntityBundle());
         accountManager.login(result -> {
             DashboardController dashboardController = new DashboardController(gatewayBundle, accountManager);
             Platform.runLater(() -> {

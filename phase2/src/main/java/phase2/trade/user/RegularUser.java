@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class PersonalUser extends User {
+public class RegularUser extends User {
 
     private AccountState accountState;
 
@@ -37,7 +37,7 @@ public class PersonalUser extends User {
      * @param email     email of this user
      * @param password  password of this user
      */
-    public PersonalUser(String userName, String email, String password, String country, String city) {
+    public RegularUser(String userName, String email, String password, String country, String city) {
         super(userName, email, password, country, city);
         accountState = AccountState.NORMAL;
         //incompleteTrades = 0;
@@ -51,7 +51,7 @@ public class PersonalUser extends User {
         this.accountbalance = 0;
     }
 
-    public PersonalUser() {
+    public RegularUser() {
 
     }
 

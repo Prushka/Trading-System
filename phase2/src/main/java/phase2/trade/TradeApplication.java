@@ -10,7 +10,7 @@ import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
 import phase2.trade.gateway.database.DatabaseResourceBundleImpl;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.LoginManager;
+import phase2.trade.user.AccountManager;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
@@ -48,9 +48,9 @@ public class TradeApplication extends Application {
 
     private void mockDashboard(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
-        LoginManager loginManager = new LoginManager(gatewayBundle);
-        loginManager.login(result -> {
-            DashboardController dashboardController = new DashboardController(gatewayBundle, loginManager);
+        AccountManager accountManager = new AccountManager(gatewayBundle);
+        accountManager.login(result -> {
+            DashboardController dashboardController = new DashboardController(gatewayBundle, accountManager);
             Platform.runLater(() -> {
 
                 Parent dashboard = sceneFactory.getPane("personal_dashboard.fxml", dashboardController);

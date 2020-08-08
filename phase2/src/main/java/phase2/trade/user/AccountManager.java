@@ -8,7 +8,7 @@ import phase2.trade.user.command.Register;
 
 import java.util.List;
 
-public class LoginManager {
+public class AccountManager {
 
     private User loggedInUser;
 
@@ -18,9 +18,10 @@ public class LoginManager {
 
     private Register registerCommand;
 
-    public LoginManager(GatewayBundle gatewayBundle) {
+    public AccountManager(GatewayBundle gatewayBundle) {
         this.gatewayBundle = gatewayBundle;
         this.loginCommand = new Login(gatewayBundle);
+        this.registerCommand = new Register(gatewayBundle);
     }
 
     public void login(Callback<User> callback, String usernameOrEmail, String password) {

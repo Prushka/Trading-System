@@ -8,7 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.LoginManager;
+import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
 
@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 public class RegisterController extends AbstractController implements Initializable {
 
-    private final LoginManager loginManager;
+    private final AccountManager accountManager;
 
     private StringProperty submissionResultProperty;
 
@@ -25,9 +25,9 @@ public class RegisterController extends AbstractController implements Initializa
 
     public TextField username, email, password, country, city;
 
-    public RegisterController(GatewayBundle gatewayBundle, LoginManager loginManager) {
+    public RegisterController(GatewayBundle gatewayBundle, AccountManager accountManager) {
         super(gatewayBundle);
-        this.loginManager = loginManager;
+        this.accountManager = accountManager;
     }
 
     public void signUpButtonClicked(ActionEvent actionEvent) {
@@ -35,11 +35,11 @@ public class RegisterController extends AbstractController implements Initializa
                 .validate(ValidatorType.EMAIL, "Invalid Email", email.getText()).validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
         if (!validatorBind.isAllPass()) return;
         submissionResultProperty.setValue("Signing up..");
-        loginManager.register(result -> {
+        accountManager.register(result -> {
             if (result != null) {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
-                                new DashboardController(gatewayBundle, loginManager), actionEvent, true));
+                                new DashboardController(gatewayBundle, accountManager), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
             }
@@ -48,7 +48,7 @@ public class RegisterController extends AbstractController implements Initializa
 
     public void goToSignIn(ActionEvent actionEvent) {
         switchScene("login.fxml",
-                new LoginController(gatewayBundle, loginManager), actionEvent);
+                new LoginController(gatewayBundle, accountManager), actionEvent);
     }
 
     public void goToGuest(ActionEvent actionEvent) {

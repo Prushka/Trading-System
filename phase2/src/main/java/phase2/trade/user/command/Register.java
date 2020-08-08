@@ -7,12 +7,18 @@ import phase2.trade.user.PermissionSet;
 import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
+import javax.persistence.Entity;
 import java.util.List;
 
+@Entity
 public class Register extends UserCommand<User> {
 
     public Register(GatewayBundle gatewayBundle) {
         super(gatewayBundle);
+    }
+
+    public Register() {
+        super();
     }
 
     @Override
@@ -23,6 +29,8 @@ public class Register extends UserCommand<User> {
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new PersonalUser(args[0], args[1], args[2], args[3], args[4]);
                 getUserGateway().add(user);
+                addEffectedId(user.getUid());
+                save();
                 callback.call(user);
             }
             callback.call(null);

@@ -8,7 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.LoginManager;
+import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
 
@@ -21,17 +21,17 @@ public class LoginController extends AbstractController implements Initializable
 
     public TextField usernameOrEmail, password;
 
-    private final LoginManager loginManager;
+    private final AccountManager accountManager;
 
     private StringProperty submissionResultProperty;
 
     public LoginController(GatewayBundle gatewayBundle) {
-        this(gatewayBundle, new LoginManager(gatewayBundle));
+        this(gatewayBundle, new AccountManager(gatewayBundle));
     }
 
-    LoginController(GatewayBundle gatewayBundle, LoginManager loginManager) {
+    LoginController(GatewayBundle gatewayBundle, AccountManager accountManager) {
         super(gatewayBundle);
-        this.loginManager = loginManager;
+        this.accountManager = accountManager;
     }
 
     public void loginButtonClicked(ActionEvent actionEvent) {
@@ -39,11 +39,11 @@ public class LoginController extends AbstractController implements Initializable
                 .validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
         if (!validatorBind.isAllPass()) return;
         submissionResultProperty.setValue("Signing in..");
-        loginManager.login(result -> {
+        accountManager.login(result -> {
             if (result != null) {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
-                                new DashboardController(gatewayBundle, loginManager), actionEvent, true));
+                                new DashboardController(gatewayBundle, accountManager), actionEvent, true));
             } else {
                 Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
             }
@@ -51,7 +51,7 @@ public class LoginController extends AbstractController implements Initializable
     }
 
     public void goToSignUp(ActionEvent actionEvent) {
-        switchScene("register.fxml", new RegisterController(gatewayBundle, loginManager), actionEvent);
+        switchScene("register.fxml", new RegisterController(gatewayBundle, accountManager), actionEvent);
     }
 
 

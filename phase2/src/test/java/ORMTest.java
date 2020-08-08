@@ -7,6 +7,7 @@ import phase2.trade.inventory.ItemList;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
+import phase2.trade.user.AccountManager;
 import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
@@ -32,10 +33,13 @@ public class ORMTest {
 
     @Test
     public void testAccount() {
+        AccountManager accountManager = new AccountManager(bundle);
+        accountManager.register(new Callback<User>() {
+            @Override
+            public void call(User result) {
 
-        PersonalUser user = new PersonalUser("name", "email", "password", "country", "city");
-
-        userDAO.submitSession(() -> userDAO.add(user), false);
+            }
+        }, "username", "email", "password", "country", "city");
     }
 
     @Test

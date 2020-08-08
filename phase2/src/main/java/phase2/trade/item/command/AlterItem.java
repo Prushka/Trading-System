@@ -2,11 +2,12 @@ package phase2.trade.item.command;
 
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
 import phase2.trade.user.Permission;
 import phase2.trade.user.PermissionSet;
-import phase2.trade.user.PersonalUser;
+import phase2.trade.user.RegularUser;
 
 import javax.persistence.Entity;
 
@@ -16,10 +17,10 @@ public class AlterItem extends ItemCommand {
 
     private Long itemId;
 
-    private transient PersonalUser operator;
+    private transient RegularUser operator;
 
-    public AlterItem(GatewayBundle gatewayBundle, PersonalUser operator, Long itemId) {
-        super(gatewayBundle, operator);
+    public AlterItem(EntityBundle entityBundle, RegularUser operator, Long itemId) {
+        super(entityBundle, operator);
         this.itemId = itemId;
         this.operator = operator;
     }
@@ -30,11 +31,11 @@ public class AlterItem extends ItemCommand {
 
     @Override
     public void execute(Callback<Item> callback, String... args) { //
-        gatewayBundle.getItemGateway().submitTransaction(() -> {
+        entityBundle.getItemGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncInItemGateway(itemId);
             item.setName(args[0]);
             item.setDescription(args[1]);
-            gatewayBundle.getItemGateway().update(item);
+            entityBundle.getItemGateway().update(item);
             addEffectedId(itemId);
             save();
             if (callback != null)
@@ -44,8 +45,8 @@ public class AlterItem extends ItemCommand {
 
     @Override
     public void undo() {
-        gatewayBundle.getItemGateway().submitTransaction(() -> {
-            gatewayBundle.getItemGateway().delete(itemId);
+        entityBundle.getItemGateway().submitTransaction(() -> {
+            entityBundle.getItemGateway().delete(itemId);
             updateUndo();
         });
     }

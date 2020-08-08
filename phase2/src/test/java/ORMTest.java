@@ -8,27 +8,27 @@ import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
 import phase2.trade.user.AccountManager;
-import phase2.trade.user.PersonalUser;
+import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import java.util.logging.Level;
 
 public class ORMTest {
 
-    private final DatabaseResourceBundle bundle;
+    private final EntityBundle bundle;
 
-    private UserDAO userDAO;
-    private ItemDAO itemDAO;
+    private UserGateway userDAO;
+    private ItemGateway itemDAO;
 
     public ORMTest() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        bundle = new DatabaseResourceBundleImpl();
+        bundle = new DatabaseResourceBundle().getDaoBundle();
 
-        userDAO = new UserDAO(bundle);
-        itemDAO = new ItemDAO(bundle);
+        userDAO = bundle.getUserGateway();
+        itemDAO = bundle.getItemGateway();
     }
 
     @Test
@@ -49,7 +49,6 @@ public class ORMTest {
         item.setName("test item2");
         item.setDescription("test description2");
 
-        UserDAO userDAO = new UserDAO(bundle);
         userDAO.openCurrentSessionWithTransaction();
         User user = userDAO.findById(1L);
         userDAO.update(user);
@@ -65,7 +64,6 @@ public class ORMTest {
     }
 
     private User getTestUser() {
-        UserDAO userDAO = new UserDAO(bundle);
         userDAO.openCurrentSession();
         User user = userDAO.findById(1L);
         userDAO.closeCurrentSession();
@@ -74,27 +72,9 @@ public class ORMTest {
 
     @Test
     public void getItemFromUser() throws InterruptedException {
-        PersonalUser user = new PersonalUser("name", "email", "password", "country", "city");
+        RegularUser user = new RegularUser("name", "email", "password", "country", "city");
 
         userDAO.submitSession(() -> userDAO.add(user), false);
 
-        ItemManager itemManager = new ItemManager(bundle, user);
-
-        itemManager.createAndAddItemTo(InventoryType.INVENTORY, new Callback<Item>() {
-            @Override
-            public void call(Item result) {
-                System.out.println(result.getOwnership());
-            }
-        }, Category.BOOK, "TestName", "TestDescription");
-
-        itemManager.getInventory(InventoryType.INVENTORY, new Callback<ItemList>() {
-            @Override
-            public void call(ItemList result) {
-                System.out.println(result.size());
-            }
-        });
-        // itemDAO.openCurrentSessionWithTransaction();
-        // System.out.println(user.getItemListMap());
-        // itemDAO.closeCurrentSessionWithTransaction();
     }
 }

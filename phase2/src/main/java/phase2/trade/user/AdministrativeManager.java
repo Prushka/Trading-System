@@ -6,9 +6,9 @@ public class AdministrativeManager {
 
     private final GatewayBundle gatewayBundle;
 
-    private final PersonalUser operator;
+    private final RegularUser operator;
 
-    public AdministrativeManager(GatewayBundle gatewayBundle, PersonalUser operator) {
+    public AdministrativeManager(GatewayBundle gatewayBundle, RegularUser operator) {
         this.gatewayBundle = gatewayBundle;
         this.operator = operator;
     }

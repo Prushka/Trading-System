@@ -1,11 +1,21 @@
 package phase2.trade.gateway;
 
-public interface GatewayBundle {
+public class GatewayBundle {
 
-    UserGateway getUserGateway();
+    EntityBundle entityBundle;
 
-    ItemGateway getItemGateway();
+    ConfigBundle configBundle;
 
-    CommandGateway getCommandGateway();
+    public ConfigBundle getConfigBundle() {
+        return configBundle;
+    }
 
+    public EntityBundle getEntityBundle() {
+        return entityBundle;
+    }
+
+    public GatewayBundle(EntityBundle entityBundle, ConfigBundle configBundle) {
+        this.entityBundle = entityBundle;
+        this.configBundle = configBundle;
+    }
 }

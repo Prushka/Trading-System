@@ -2,18 +2,15 @@ package phase2.trade.user;
 
 
 import phase2.trade.gateway.database.TradeDAO;
-import phase2.trade.user.AdministrativeUser;
 
 import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.database.UserDAO;
 import phase2.trade.inventory.InventoryType;
-import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
 import phase2.trade.item.Ownership;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -22,20 +19,21 @@ public class AdministrativeUserManager {
     private UserDAO userDAO;
     private ItemManager itemManager;
     private TradeDAO tradeDAO;
-    private List<PersonalUser> personalUser = new ArrayList<>();
+    private List<RegularUser> regularUser = new ArrayList<>();
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
-    private List<PersonalUser> needToFreezeUserList;
-    private List<PersonalUser> needToConfirmAddItem;
-    private List<PersonalUser> needToConfirmUnfreeze;
+    private List<RegularUser> needToFreezeUserList;
+    private List<RegularUser> needToConfirmAddItem;
+    private List<RegularUser> needToConfirmUnfreeze;
     //private Repository<Item> itemRepository;
 
 
     /**
      * all administrative user activities happened here
+     *
      * @param userDAO A DAO of all users in the system
      */
-    public void AdministrativeManager(UserDAO userDAO, ItemManager itemManager, TradeDAO tradeDAO){
+    public void AdministrativeManager(UserDAO userDAO, ItemManager itemManager, TradeDAO tradeDAO) {
         this.userDAO = userDAO;
         this.itemManager = itemManager;
         this.tradeDAO = tradeDAO;
@@ -44,27 +42,28 @@ public class AdministrativeUserManager {
         needToConfirmUnfreeze = new ArrayList<>();
     }
 
-    public List<PersonalUser> findAllPersonalUser(){
-         List<User> allUser = userDAO.findAllUser();
-         for (User user : allUser){
-             if (user instanceof PersonalUser){
-                 personalUser.add((PersonalUser) user);
-             }
-         }
-         return personalUser;
+    public List<RegularUser> findAllPersonalUser() {
+        List<User> allUser = userDAO.findAllUser();
+        for (User user : allUser) {
+            if (user instanceof RegularUser) {
+                regularUser.add((RegularUser) user);
+            }
+        }
+        return regularUser;
     }
 
-    public List<PersonalUser> getPersonalUserNeedToFreeze(){
-        for (PersonalUser user: personalUser){
-            if (tradeDAO.findNumOfLending(user) - lendBeforeBorrow < tradeDAO.findNumOfBorrowing(user)){
+    public List<RegularUser> getPersonalUserNeedToFreeze() {
+        for (RegularUser user : regularUser) {
+            if (tradeDAO.findNumOfLending(user) - lendBeforeBorrow < tradeDAO.findNumOfBorrowing(user)) {
                 needToFreezeUserList.add(user);
             }
-        }return needToFreezeUserList;
+        }
+        return needToFreezeUserList;
     }
 
-    public List<PersonalUser> getNeedToConfirmUnfreeze(){
-        for (PersonalUser user: personalUser){
-            if (user.getAccountState() == AccountState.REQUEST_UNFROZEN){
+    public List<RegularUser> getNeedToConfirmUnfreeze() {
+        for (RegularUser user : regularUser) {
+            if (user.getAccountState() == AccountState.REQUEST_UNFROZEN) {
                 needToConfirmUnfreeze.add(user);
             }
         }
@@ -76,9 +75,10 @@ public class AdministrativeUserManager {
 
     /**
      * Freeze a personal user
+     *
      * @param user The personal user that is going to be frozen
      */
-    public void freezeUser(PersonalUser user){
+    public void freezeUser(RegularUser user) {
         user.setAccountState(AccountState.FROZEN);
     }
 
@@ -90,52 +90,57 @@ public class AdministrativeUserManager {
 
     /**
      * Unfreeze a personal user
+     *
      * @param user The personal user that is going to be unfrozen
      */
-    public void unfreezeUser(PersonalUser user){
+    public void unfreezeUser(RegularUser user) {
         user.setAccountState(AccountState.NORMAL);
     }
 
-    public void confirmUnfreezeAllUser(){
-       for (PersonalUser user : getNeedToConfirmUnfreeze()){
-           unfreezeUser(user);
-       }
+    public void confirmUnfreezeAllUser() {
+        for (RegularUser user : getNeedToConfirmUnfreeze()) {
+            unfreezeUser(user);
+        }
     }
 
     /**
      * Remove an item from a personal user inventory
-     * @param user The personal user
+     *
+     * @param user   The personal user
      * @param itemId The id of the item
      * @return true if the item is removed form the user's inventory, otherwise false
      */
-    public void removeItemFromPersonalInventory(Callback<Item> itemCallback, PersonalUser user, Long itemId) {
-        itemManager.removeItemFrom(InventoryType.INVENTORY, itemCallback, itemId);
+    public void removeItemFromPersonalInventory(Callback<Item> itemCallback, RegularUser user, Long itemId) {
+        //itemManager.removeItemFrom(InventoryType.INVENTORY, itemCallback, itemId);
     }
 
 
     /**
      * Undo the personal user add items to wishlist activity
-     //* @param user The user that is going to undo
+     * //* @param user The user that is going to undo
+     *
      * @param itemId Thw item that need to br removed
      */
     public void removeItemFromWishlist(Callback<Item> itemCallback, Long itemId) {
-        itemManager.removeItemFrom(InventoryType.CART, itemCallback, itemId);
+        //itemManager.removeItemFrom(InventoryType.CART, itemCallback, itemId);
     }
 
     /**
      * Confirm to add an item to a personal user's inventory
-     //* @param user The personal user need to confirm add
+     * //* @param user The personal user need to confirm add
+     *
      * @param itemID The item id
      * @return true if successfully added, otherwise false
      */
     public void confirmAddItemToInventory(Callback<Boolean> callback, Callback<Item> itemCallback, Long itemID) {
-        itemManager.reviewItem(callback, Ownership.OWNER, itemID);
+        //itemManager.reviewItem(callback, Ownership.OWNER, itemID);
     }
 
 
     /**
      * Confirm to add all items to a personal user's inventory
-     //* @param user The personal user
+     * //* @param user The personal user
+     *
      * @return true if successfully added all items, otherwise false
      */
     /*public boolean confirmAddAllItemForAUser(PersonalUser user) {
@@ -143,21 +148,19 @@ public class AdministrativeUserManager {
         }
         return true; //translatable("success.confirm.AddItem").build();
     }*/
-
-
-    public int getTransactionLimit(){
+    public int getTransactionLimit() {
         return transactionLimit;
     }
 
-    public void setTransactionLimit(int limit){
+    public void setTransactionLimit(int limit) {
         transactionLimit = limit;
     }
 
-    public int getLendBeforeBorrowLimit(){
+    public int getLendBeforeBorrowLimit() {
         return lendBeforeBorrow;
     }
 
-    public void setLendBeforeBorrowLimit(int limit){
+    public void setLendBeforeBorrowLimit(int limit) {
         lendBeforeBorrow = limit;
     }
 
@@ -209,7 +212,6 @@ public class AdministrativeUserManager {
      * @param password This administrative user's password
      * @return True if correct, otherwise false
      */
-
 
 
     /**
@@ -290,11 +292,6 @@ public class AdministrativeUserManager {
         }
         return stringBuilder.toString();
     }*/
-
-
-
-
-
 
 
 }

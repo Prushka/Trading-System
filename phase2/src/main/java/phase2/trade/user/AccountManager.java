@@ -1,27 +1,25 @@
 package phase2.trade.user;
 
 import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.UserGateway;
 import phase2.trade.user.command.Login;
 import phase2.trade.user.command.Register;
-
-import java.util.List;
 
 public class AccountManager {
 
     private User loggedInUser;
 
-    private GatewayBundle gatewayBundle;
+    private EntityBundle entityBundle;
 
     private Login loginCommand;
 
     private Register registerCommand;
 
-    public AccountManager(GatewayBundle gatewayBundle) {
-        this.gatewayBundle = gatewayBundle;
-        this.loginCommand = new Login(gatewayBundle);
-        this.registerCommand = new Register(gatewayBundle);
+    public AccountManager(EntityBundle entityBundle) {
+        this.entityBundle = entityBundle;
+        this.loginCommand = new Login(entityBundle);
+        this.registerCommand = new Register(entityBundle);
     }
 
     public void login(Callback<User> callback, String usernameOrEmail, String password) {

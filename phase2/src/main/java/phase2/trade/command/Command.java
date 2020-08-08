@@ -1,11 +1,8 @@
 package phase2.trade.command;
 
-import org.hibernate.annotations.Cascade;
 import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.Permission;
-import phase2.trade.user.PermissionSet;
-import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.util.*;
@@ -27,10 +24,10 @@ public abstract class Command<T> {
     @ElementCollection(fetch = FetchType.EAGER)
     Collection<Long> effectedIds;
 
-    protected transient GatewayBundle gatewayBundle;
+    protected transient EntityBundle entityBundle;
 
-    public Command(GatewayBundle gatewayBundle) {
-        this.gatewayBundle = gatewayBundle;
+    public Command(EntityBundle entityBundle) {
+        this.entityBundle = entityBundle;
         this.effectedIds = new HashSet<>();
     }
 
@@ -49,21 +46,21 @@ public abstract class Command<T> {
 
     protected void save() {
         timestamp = System.currentTimeMillis();
-        gatewayBundle.getCommandGateway().submitTransaction(() -> gatewayBundle.getCommandGateway().add(getThis()));
+        entityBundle.getCommandGateway().submitTransaction(() -> entityBundle.getCommandGateway().add(getThis()));
     }
 
     protected void updateUndo() {
         undoTimestamp = System.currentTimeMillis();
         ifUndone = true;
-        gatewayBundle.getCommandGateway().submitTransaction(() -> gatewayBundle.getCommandGateway().update(getThis()));
+        entityBundle.getCommandGateway().submitTransaction(() -> entityBundle.getCommandGateway().update(getThis()));
     }
 
     public Command<T> getThis() {
         return this;
     }
 
-    public void setGatewayBundle(GatewayBundle gatewayBundle) {
-        this.gatewayBundle = gatewayBundle;
+    public void setEntityBundle(EntityBundle entityBundle) {
+        this.entityBundle = entityBundle;
     }
 
     public void addEffectedId(Long id) {
@@ -89,6 +86,6 @@ public abstract class Command<T> {
     }
 
     public void isUndoable(Callback<List<Command<?>>> callback) {
-        gatewayBundle.getCommandGateway().submitSession(() -> callback.call(gatewayBundle.getCommandGateway().isUndoable(effectedIds, timestamp)));
+        entityBundle.getCommandGateway().submitSession(() -> callback.call(entityBundle.getCommandGateway().isUndoable(effectedIds, timestamp)));
     }
 }

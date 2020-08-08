@@ -14,9 +14,9 @@ import phase2.trade.item.ItemManager;
 public class PersonalUserManager {
 
     private final UserDAO UserDAO;
-    private PersonalUser currPersonalUser;
+    private RegularUser currRegularUser;
     private ItemManager itemManager;
-    private PersonalUser loggedInUser;
+    private RegularUser loggedInUser;
 
     public PersonalUserManager(UserDAO UserDAO, ItemManager itemManager) {
         this.UserDAO = UserDAO;
@@ -24,15 +24,16 @@ public class PersonalUserManager {
 
     }
 
-    public void addToBeReviewedItem(Callback<PersonalUser> userCallback, Callback<Item> itemCallback, Category category, String itemName, String description) {
+    /*
+    public void addToBeReviewedItem(Callback<RegularUser> userCallback, Callback<Item> itemCallback, Category category, String itemName, String description) {
         itemManager.createAndAddItemTo(InventoryType.INVENTORY, itemCallback, category, itemName, description);
     }
 
-    public void removeItemFromInventory(Callback<Item> itemCallback, PersonalUser user, Long itemId) {
+    public void removeItemFromInventory(Callback<Item> itemCallback, RegularUser user, Long itemId) {
         itemManager.removeItemFrom(InventoryType.INVENTORY, itemCallback, itemId);
     }
 
-    public void addItemToWishlist(Callback<PersonalUser> userCallback, Callback<Item> itemCallback, Category category, String itemName, String description) {
+    public void addItemToWishlist(Callback<RegularUser> userCallback, Callback<Item> itemCallback, Category category, String itemName, String description) {
         itemManager.createAndAddItemTo(InventoryType.CART, itemCallback, category, itemName, description);
     }
 
@@ -40,7 +41,7 @@ public class PersonalUserManager {
         itemManager.removeItemFrom(InventoryType.CART, itemCallback, itemId);
     }
 
-    public void UnfreezeRequest(PersonalUser user) {
+    public void UnfreezeRequest(RegularUser user) {
         user.setAccountState(AccountState.REQUEST_UNFROZEN);
     }
 

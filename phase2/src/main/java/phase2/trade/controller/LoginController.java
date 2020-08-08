@@ -26,7 +26,7 @@ public class LoginController extends AbstractController implements Initializable
     private StringProperty submissionResultProperty;
 
     public LoginController(GatewayBundle gatewayBundle) {
-        this(gatewayBundle, new AccountManager(gatewayBundle));
+        this(gatewayBundle, new AccountManager(gatewayBundle.getEntityBundle()));
     }
 
     LoginController(GatewayBundle gatewayBundle, AccountManager accountManager) {

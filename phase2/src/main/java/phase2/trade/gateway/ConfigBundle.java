@@ -11,9 +11,9 @@ import java.util.function.Supplier;
 
 public class ConfigBundle implements Shutdownable {
 
-    private PermissionConfig permissionConfig;
+    private final PermissionConfig permissionConfig;
 
-    private TradeConfig tradeConfig;
+    private final TradeConfig tradeConfig;
 
     private ConfigStrategy configStrategy;
 
@@ -21,6 +21,11 @@ public class ConfigBundle implements Shutdownable {
         configStrategy = new YamlStrategy();
 
         permissionConfig = read(PermissionConfig.class, "config/permission_group", PermissionConfig::new);
+        tradeConfig = read(TradeConfig.class, "config/trade", TradeConfig::new);
+    }
+
+    public void changeStrategy(ConfigStrategy configStrategy) {
+        this.configStrategy = configStrategy;
     }
 
     private <T> T read(Class<T> configClass, String fileName, Supplier<T> supplier) {
@@ -41,6 +46,7 @@ public class ConfigBundle implements Shutdownable {
     @Override
     public void stop() {
         save(permissionConfig, "config/permission_group");
+        save(tradeConfig, "config/trade");
     }
 
     public PermissionConfig getPermissionConfig() {

@@ -13,4 +13,12 @@ public class TradeConfig {
     public int getTimeLimit() {
         return timeLimit;
     }
+
+    public void setEditLimit(int editLimit) {
+        this.editLimit = editLimit;
+    }
+
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
+    }
 }

@@ -4,6 +4,8 @@ import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.permission.PermissionGroup;
+import phase2.trade.permission.PermissionGroupFactory;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
@@ -15,8 +17,11 @@ public class Register extends UserCommand<User> {
 
     private Long userId;
 
-    public Register(EntityBundle entityBundle) {
+    private transient PermissionGroupFactory permissionGroupFactory;
+
+    public Register(EntityBundle entityBundle, PermissionGroupFactory permissionGroupFactory) {
         super(entityBundle);
+        this.permissionGroupFactory = permissionGroupFactory;
     }
 
     public Register() {
@@ -30,12 +35,13 @@ public class Register extends UserCommand<User> {
             List<User> usersByName = getUserGateway().findByUserName(args[1]);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new RegularUser(args[0], args[1], args[2], args[3], args[4]);
+                user.setUserPermission(permissionGroupFactory.getUserPermission(PermissionGroup.REGULAR));
                 getUserGateway().add(user);
                 userId = user.getUid();
                 addEffectedId(user.getUid());
                 save();
                 callback.call(user, ResultStatus.SUCCEEDED);
-            }else{
+            } else {
                 callback.call(null, ResultStatus.EXIST);
             }
         });

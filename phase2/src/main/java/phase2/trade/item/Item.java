@@ -18,7 +18,7 @@ public class Item {
 
     private Ownership ownership;
 
-    private Willingness willingness;
+    private Willingness willingness = Willingness.NOPE;
 
     private int quantity;
 

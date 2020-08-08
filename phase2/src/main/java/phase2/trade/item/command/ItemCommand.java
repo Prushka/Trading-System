@@ -1,5 +1,7 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.command.PermissionBased;
 import phase2.trade.command.UserPermissionChecker;
@@ -12,7 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
-public abstract class ItemCommand extends Command<Item> implements PermissionBased {
+public abstract class ItemCommand<T> extends Command<T> implements PermissionBased {
 
     @OneToOne
     User operator;
@@ -26,7 +28,7 @@ public abstract class ItemCommand extends Command<Item> implements PermissionBas
 
     }
 
-    Item findItemByIdSyncInItemGateway(Long itemId) {
+    Item findItemByIdSyncInsideItemGateway(Long itemId) {
         return entityBundle.getItemGateway().findById(itemId);
     }
 
@@ -46,6 +48,14 @@ public abstract class ItemCommand extends Command<Item> implements PermissionBas
     @Override
     public boolean checkPermission() {
         return new UserPermissionChecker(operator, getPermissionRequired()).checkPermission();
+    }
+
+    public boolean checkPermission(StatusCallback<?> statusCallback) {
+        boolean result = checkPermission();
+        if(!result){
+            statusCallback.call(null, ResultStatus.NO_PERMISSION);
+        }
+        return result;
     }
 
     @Override

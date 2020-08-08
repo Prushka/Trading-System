@@ -4,7 +4,6 @@ import javafx.fxml.Initializable;
 import phase2.trade.callback.Callback;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.gateway.TradeGateway;
-import phase2.trade.gateway.database.TradeDAO;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeManager;

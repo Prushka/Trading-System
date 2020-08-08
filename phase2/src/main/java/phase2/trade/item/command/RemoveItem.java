@@ -14,7 +14,7 @@ import phase2.trade.user.RegularUser;
 import javax.persistence.Entity;
 
 @Entity
-public class RemoveItem extends ItemCommand {
+public class RemoveItem extends ItemCommand<Item> {
 
     private Long itemId;
 
@@ -42,7 +42,7 @@ public class RemoveItem extends ItemCommand {
             return;
         }
         entityBundle.getUserGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncInItemGateway(itemId);
+            Item item = findItemByIdSyncInsideItemGateway(itemId);
             operator.getItemList(inventoryType).removeItem(item);
 
             addEffectedId(itemId);

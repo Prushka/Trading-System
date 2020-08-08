@@ -1,47 +1,43 @@
 package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.EntityBundle;
-import phase2.trade.callback.StatusCallback;
 import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemList;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.RegularUser;
 
 import javax.persistence.Entity;
+import java.util.List;
 
 @Entity
-public class AddToCart extends ItemCommand<Item> {
-
-    private Long itemId;
+public class GetItems extends ItemCommand<ItemList> {
 
     private transient RegularUser operator;
 
-    public AddToCart(EntityBundle entityBundle, RegularUser operator, Long itemId) {
+    private InventoryType inventoryType;
+
+    public GetItems(EntityBundle entityBundle, RegularUser operator, InventoryType inventoryType) {
         super(entityBundle, operator);
-        this.itemId = itemId;
         this.operator = operator;
-        addEffectedId(itemId);
+        this.inventoryType = inventoryType;
     }
 
-    public AddToCart() {
+    public GetItems() {
         super();
     }
 
     @Override
-    public void execute(StatusCallback<Item> callback, String... args) {
-        if (!checkPermission()) {
-            callback.call(null, ResultStatus.NO_PERMISSION);
+    public void execute(StatusCallback<ItemList> callback, String... args) {
+        if (!checkPermission(callback)) {
             return;
         }
-        entityBundle.getUserGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncOutsideItemGateway(itemId);
-            operator.getItemList(InventoryType.CART).addItem(item);
-            entityBundle.getUserGateway().update(operator);
-            callback.call(item, ResultStatus.SUCCEEDED);
-        });
+        ItemList itemList = operator.getItemList(inventoryType);
+        callback.call(itemList, ResultStatus.SUCCEEDED);
     }
 
     @Override

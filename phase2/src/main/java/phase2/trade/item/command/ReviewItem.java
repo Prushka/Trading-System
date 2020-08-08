@@ -14,7 +14,7 @@ import phase2.trade.user.User;
 import javax.persistence.Entity;
 
 @Entity
-public class ReviewItem extends ItemCommand {
+public class ReviewItem extends ItemCommand<Item> {
 
     private Long itemId;
 
@@ -39,7 +39,7 @@ public class ReviewItem extends ItemCommand {
             return;
         }
         entityBundle.getItemGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncInItemGateway(itemId);
+            Item item = findItemByIdSyncInsideItemGateway(itemId);
 
             oldOwnership = item.getOwnership();
             item.setOwnership(Ownership.OWNER);
@@ -54,7 +54,7 @@ public class ReviewItem extends ItemCommand {
     @Override
     public void undo() {
         entityBundle.getItemGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncInItemGateway(itemId);
+            Item item = findItemByIdSyncInsideItemGateway(itemId);
             item.setOwnership(oldOwnership);
             updateUndo();
         });

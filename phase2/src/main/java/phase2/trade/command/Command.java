@@ -44,6 +44,8 @@ public abstract class Command<T> {
 
     public abstract Class<?> getClassToOperateOn();
 
+    public abstract CRUDType getCRUDType();
+
     protected void save() {
         timestamp = System.currentTimeMillis();
         entityBundle.getCommandGateway().submitTransaction(() -> entityBundle.getCommandGateway().add(getThis()));
@@ -78,8 +80,6 @@ public abstract class Command<T> {
     public void setUid(Long uid) {
         this.uid = uid;
     }
-
-    public abstract CRUDType getCRUDType();
 
     public Long getTimestamp() {
         return timestamp;

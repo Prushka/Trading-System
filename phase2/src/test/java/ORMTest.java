@@ -4,6 +4,7 @@ import phase2.trade.callback.Callback;
 import phase2.trade.gateway.*;
 import phase2.trade.gateway.database.*;
 import phase2.trade.item.Item;
+import phase2.trade.item.command.GetItems;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
@@ -26,6 +27,11 @@ public class ORMTest {
 
         userDAO = bundle.getUserGateway();
         itemDAO = bundle.getItemGateway();
+    }
+
+    @Test
+    public void testItemCommands() {
+
     }
 
 

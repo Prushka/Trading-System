@@ -67,4 +67,15 @@ public abstract class ItemList {
     public void removeItem(Item item) {
         this.listOfItems.remove(item);
     }
+
+    public Item get(int index) {
+        return getListOfItems().get(index);
+    }
+
+    public Item findByUid(Long uid) {
+        for (Item item : getListOfItems()) {
+            if (item.getUid().equals(uid)) return item;
+        }
+        return null;
+    }
 }

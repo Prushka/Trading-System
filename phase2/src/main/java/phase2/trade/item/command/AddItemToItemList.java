@@ -13,7 +13,7 @@ import phase2.trade.user.RegularUser;
 import javax.persistence.Entity;
 
 @Entity
-public class AddItemToItemList extends ItemCommand {
+public class AddItemToItemList extends ItemCommand<Item> {
 
     private InventoryType inventoryType;
 
@@ -33,11 +33,12 @@ public class AddItemToItemList extends ItemCommand {
     }
 
     @Override
-    public void execute(StatusCallback<Item> callback, String... args) { //
+    public void execute(StatusCallback<Item> callback, String... args) {
         entityBundle.getUserGateway().submitTransaction(() -> {
             Item item = new Item();
             item.setName(args[0]);
             item.setDescription(args[1]);
+            item.setItemList(operator.getItemList(inventoryType));
 
             operator.getItemList(inventoryType).addItem(item);
             entityBundle.getUserGateway().update(operator);

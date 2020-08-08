@@ -12,31 +12,29 @@ import phase2.trade.user.RegularUser;
 import javax.persistence.Entity;
 
 @Entity
-public class AlterItem extends ItemCommand {
-
+public class AlterItemInInventory extends ItemCommand<Item> {
 
     private Long itemId;
 
     private transient RegularUser operator;
 
-    public AlterItem(EntityBundle entityBundle, RegularUser operator, Long itemId) {
+    public AlterItemInInventory(EntityBundle entityBundle, RegularUser operator, Long itemId) {
         super(entityBundle, operator);
         this.itemId = itemId;
         this.operator = operator;
     }
 
-    public AlterItem() {
+    public AlterItemInInventory() {
         super();
     }
 
     @Override
-    public void execute(StatusCallback<Item> callback, String... args) { //
-        if (!checkPermission()) {
-            callback.call(null, ResultStatus.NO_PERMISSION);
+    public void execute(StatusCallback<Item> callback, String... args) {
+        if (!checkPermission(callback)) {
             return;
         }
         entityBundle.getItemGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncInItemGateway(itemId);
+            Item item = operator.getInventory().findByUid(itemId);
             item.setName(args[0]);
             item.setDescription(args[1]);
             entityBundle.getItemGateway().update(item);

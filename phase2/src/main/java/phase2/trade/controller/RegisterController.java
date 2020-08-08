@@ -1,5 +1,6 @@
 package phase2.trade.controller;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -25,18 +26,22 @@ public class RegisterController extends AbstractController implements Initializa
 
     public TextField username, email, password, country, city;
 
+    public JFXButton registerButton;
+
     public RegisterController(GatewayBundle gatewayBundle, AccountManager accountManager) {
         super(gatewayBundle);
         this.accountManager = accountManager;
     }
 
-    public void signUpButtonClicked(ActionEvent actionEvent) {
+    public void registerButtonClicked(ActionEvent actionEvent) {
+        registerButton.setDisable(true);
         ValidatorBind validatorBind = new ValidatorBind(submissionResultProperty).validate(ValidatorType.USER_NAME, "Invalid UserName", username.getText())
                 .validate(ValidatorType.EMAIL, "Invalid Email", email.getText()).validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
-        if (!validatorBind.isAllPass()) return;
+        if (!validatorBind.isAllPass()){registerButton.setDisable(false); return;}
         submissionResultProperty.setValue("Signing up..");
         accountManager.register(result -> {
             if (result != null) {
+                System.out.println("success");
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",
                                 new DashboardController(gatewayBundle, accountManager), actionEvent, true));

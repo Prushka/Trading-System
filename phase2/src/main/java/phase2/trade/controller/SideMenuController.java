@@ -1,10 +1,14 @@
 package phase2.trade.controller;
 
 import com.jfoenix.controls.JFXListView;
+import javafx.embed.swing.JFXPanel;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
@@ -18,6 +22,7 @@ public class SideMenuController extends AbstractController implements Initializa
     public Label userInfo, market, wishList, settings, logOut, inventory;
     public VBox userInfoBox;
 
+    public JFXPanel panel = new JFXPanel();
     private GridPane center;
 
     private final AccountManager accountManager;
@@ -48,10 +53,11 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void market() {
-        Parent userPane = loadPane("market.fxml", new MarketController(accountManager.getLoggedInUser()));
-        GridPane.setConstraints(userPane, 0, 0);
+        Pane userPane = (Pane) loadPane("market.fxml", new MarketController(accountManager.getLoggedInUser()));
+        // GridPane.clearConstraints();
+        GridPane.setConstraints(userPane, 0, 2);
         center.getChildren().clear();
-        center.getChildren().addAll(userPane);
+        center.getChildren().add(0, userPane);
     }
 
     private void inventory() {
@@ -93,6 +99,6 @@ public class SideMenuController extends AbstractController implements Initializa
                 }
             }
         });
-        sideList.getSelectionModel().select(inventory);
+        sideList.getSelectionModel().select(userInfo);
     }
 }

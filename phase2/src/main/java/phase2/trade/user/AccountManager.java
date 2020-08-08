@@ -1,8 +1,8 @@
 package phase2.trade.user;
 
-import phase2.trade.gateway.Callback;
+import phase2.trade.callback.Callback;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.gateway.EntityBundle;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.command.Login;
 import phase2.trade.user.command.Register;
 
@@ -22,10 +22,10 @@ public class AccountManager {
         this.registerCommand = new Register(entityBundle);
     }
 
-    public void login(Callback<User> callback, String usernameOrEmail, String password) {
-        loginCommand.execute(result -> {
+    public void login(StatusCallback<User> callback, String usernameOrEmail, String password) {
+        loginCommand.execute((result, status) -> {
             loggedInUser = result;
-            callback.call(result);
+            callback.call(result, status);
         }, usernameOrEmail, password);
     }
 
@@ -43,9 +43,9 @@ public class AccountManager {
     }
 
     public void register(Callback<User> callback, String userName, String email, String password, String country, String city) {
-        registerCommand.execute(result -> {
+        registerCommand.execute((result, status) -> {
             loggedInUser = result;
-            callback.call(result);
+            callback.call(result, status);
         }, userName, email, password, country, city);
     }
 }

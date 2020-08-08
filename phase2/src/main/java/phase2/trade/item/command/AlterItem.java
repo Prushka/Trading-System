@@ -1,9 +1,9 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.EntityBundle;
-import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
 import phase2.trade.user.Permission;
 import phase2.trade.user.PermissionSet;
@@ -30,7 +30,11 @@ public class AlterItem extends ItemCommand {
     }
 
     @Override
-    public void execute(Callback<Item> callback, String... args) { //
+    public void execute(StatusCallback<Item> callback, String... args) { //
+        if (!checkPermission()) {
+            callback.call(null, ResultStatus.NO_PERMISSION);
+            return;
+        }
         entityBundle.getItemGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncInItemGateway(itemId);
             item.setName(args[0]);
@@ -39,7 +43,7 @@ public class AlterItem extends ItemCommand {
             addEffectedId(itemId);
             save();
             if (callback != null)
-                callback.call(item);
+                callback.call(item, ResultStatus.SUCCEEDED);
         });
     }
 

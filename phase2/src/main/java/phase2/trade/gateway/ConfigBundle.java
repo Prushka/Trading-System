@@ -2,12 +2,10 @@ package phase2.trade.gateway;
 
 import phase2.trade.Shutdownable;
 import phase2.trade.config.yaml.ConfigStrategy;
-import phase2.trade.config.yaml.PermissionConfig;
+import phase2.trade.config.PermissionConfig;
 import phase2.trade.config.yaml.YamlStrategy;
-import phase2.trade.user.Permission;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.function.Supplier;
 
 public class ConfigBundle implements Shutdownable {

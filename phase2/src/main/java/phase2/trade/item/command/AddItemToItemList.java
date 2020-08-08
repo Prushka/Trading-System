@@ -1,9 +1,8 @@
 package phase2.trade.item.command;
 
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
+import phase2.trade.callback.Callback;
 import phase2.trade.gateway.EntityBundle;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.user.Permission;

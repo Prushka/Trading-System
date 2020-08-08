@@ -1,10 +1,8 @@
 package phase2.trade.controller;
 
 import javafx.fxml.Initializable;
-import phase2.trade.config.property.TradeProperties;
-import phase2.trade.gateway.Callback;
+import phase2.trade.callback.Callback;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.database.DatabaseResourceBundle;
 import phase2.trade.gateway.database.TradeDAO;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
@@ -24,8 +22,7 @@ public class TradeController extends AbstractController implements Initializable
 
     private final TradeManager tm;
 
-    public TradeController(GatewayBundle gatewayBundle, TradeDAO tradeDAO, TradeProperties
-            tradeProperties) {
+    public TradeController(GatewayBundle gatewayBundle, TradeDAO tradeDAO) {
         super(gatewayBundle);
         this.tradeDAO = tradeDAO;
         this.tm = new TradeManager(tradeProperties);

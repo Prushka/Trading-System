@@ -5,11 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import phase2.trade.gateway.Callback;
-import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Category;
-import phase2.trade.item.Item;
-import phase2.trade.item.ItemManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,7 +16,6 @@ public class ItemAddController implements Initializable {
     public JFXTextField name;
     public JFXTextArea description;
 
-    private ItemManager itemManager;
 
     public ItemAddController() {
         category = new JFXComboBox<>();

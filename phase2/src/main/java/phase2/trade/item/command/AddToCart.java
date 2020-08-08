@@ -1,9 +1,9 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.EntityBundle;
-import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.user.Permission;
@@ -35,12 +35,16 @@ public class AddToCart extends ItemCommand {
     }
 
     @Override
-    public void execute(Callback<Item> callback, String... args) { //
+    public void execute(StatusCallback<Item> callback, String... args) { //
+        if (!checkPermission()) {
+            callback.call(null, ResultStatus.NO_PERMISSION);
+            return;
+        }
         entityBundle.getUserGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncOutsideItemGateway(itemId);
             operator.getItemList(inventoryType).addItem(item);
             entityBundle.getUserGateway().update(operator);
-            callback.call(item);
+            callback.call(item, ResultStatus.SUCCEEDED);
         });
     }
 
@@ -48,7 +52,6 @@ public class AddToCart extends ItemCommand {
     public PermissionSet getPermissionRequired() {
         return new PermissionSet(Permission.ADD_ITEM);
     }
-
 
 
     @Override

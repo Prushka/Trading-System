@@ -1,4 +1,4 @@
-package phase2.trade.config.yaml;
+package phase2.trade.config;
 
 import phase2.trade.user.Permission;
 

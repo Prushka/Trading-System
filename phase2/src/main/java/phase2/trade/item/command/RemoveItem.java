@@ -1,15 +1,15 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.EntityBundle;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
 import phase2.trade.user.Permission;
 import phase2.trade.user.PermissionSet;
 import phase2.trade.user.RegularUser;
-import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
@@ -36,7 +36,11 @@ public class RemoveItem extends ItemCommand {
     }
 
     @Override
-    public void execute(Callback<Item> callback, String... args) { //
+    public void execute(StatusCallback<Item> callback, String... args) { //
+        if (!checkPermission()) {
+            callback.call(null, ResultStatus.NO_PERMISSION);
+            return;
+        }
         entityBundle.getUserGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncInItemGateway(itemId);
             operator.getItemList(inventoryType).removeItem(item);
@@ -44,7 +48,7 @@ public class RemoveItem extends ItemCommand {
             addEffectedId(itemId);
             save();
             if (callback != null)
-                callback.call(item);
+                callback.call(item, ResultStatus.SUCCEEDED);
         });
     }
 

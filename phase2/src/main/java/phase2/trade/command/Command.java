@@ -1,8 +1,8 @@
 package phase2.trade.command;
 
-import phase2.trade.gateway.Callback;
+import phase2.trade.callback.Callback;
 import phase2.trade.gateway.EntityBundle;
-import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.callback.StatusCallback;
 
 import javax.persistence.*;
 import java.util.*;
@@ -36,7 +36,7 @@ public abstract class Command<T> {
     }
 
 
-    public abstract void execute(Callback<T> callback, String... args);
+    public abstract void execute(StatusCallback<T> callback, String... args);
 
     public abstract void undo();
 

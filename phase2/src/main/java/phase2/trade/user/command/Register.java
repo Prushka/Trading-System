@@ -1,9 +1,8 @@
 package phase2.trade.user.command;
 
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.EntityBundle;
-import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
@@ -24,7 +23,7 @@ public class Register extends UserCommand<User> {
     }
 
     @Override
-    public void execute(Callback<User> callback, String... args) {
+    public void execute(StatusCallback<User> callback, String... args) {
         getUserGateway().submitTransaction(() -> {
             List<User> usersByEmail = getUserGateway().findByEmail(args[0]);
             List<User> usersByName = getUserGateway().findByUserName(args[1]);
@@ -34,9 +33,9 @@ public class Register extends UserCommand<User> {
                 userId = user.getUid();
                 addEffectedId(user.getUid());
                 save();
-                callback.call(user);
+                callback.call(user, StatusCallback.ResultStatus.SUCCEEDED);
             }else{
-                callback.call(null);
+                callback.call(null, StatusCallback.ResultStatus.EXIST);
             }
         });
     }

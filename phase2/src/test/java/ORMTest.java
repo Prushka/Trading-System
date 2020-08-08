@@ -1,10 +1,8 @@
 import org.hibernate.cfg.Configuration;
 import org.junit.Test;
+import phase2.trade.callback.Callback;
 import phase2.trade.gateway.*;
 import phase2.trade.gateway.database.*;
-import phase2.trade.inventory.InventoryType;
-import phase2.trade.inventory.ItemList;
-import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
 import phase2.trade.user.AccountManager;

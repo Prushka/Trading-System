@@ -1,8 +1,8 @@
 package phase2.trade.item.command;
 
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.EntityBundle;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
 import phase2.trade.user.Permission;
@@ -32,7 +32,11 @@ public class ReviewItem extends ItemCommand {
     }
 
     @Override
-    public void execute(Callback<Item> callback, String... args) { //
+    public void execute(StatusCallback<Item> callback, String... args) { //
+        if (!checkPermission()) {
+            callback.call(null, StatusCallback.ResultStatus.NO_PERMISSION);
+            return;
+        }
         entityBundle.getItemGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncInItemGateway(itemId);
 

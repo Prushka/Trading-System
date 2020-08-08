@@ -106,42 +106,30 @@ public class DAO<T> implements Gateway<T> {
         getThreadPool().submit(runnable);
     }
 
-    @Override
     public void submitSessionSync(Runnable runnable) {
         openCurrentSession();
         runnable.run();
         closeCurrentSession();
     }
 
-    @Override
     public void submitSessionWithTransactionSync(Runnable runnable) {
         openCurrentSessionWithTransaction();
         runnable.run();
         closeCurrentSessionWithTransaction();
     }
 
-    @Override
     public void submitSessionAsync(Runnable runnable) {
-        getThreadPool().submit(() -> {
-            openCurrentSession();
-            runnable.run();
-            closeCurrentSession();
-        });
+        getThreadPool().submit(() -> submitSessionSync(runnable));
     }
 
-    @Override
     public void submitSessionWithTransactionAsync(Runnable runnable) {
-        getThreadPool().submit(() -> {
-            openCurrentSessionWithTransaction();
-            runnable.run();
-            closeCurrentSessionWithTransaction();
-        });
+        getThreadPool().submit(() -> submitSessionWithTransactionSync(runnable));
     }
 
     private boolean async = false;
 
     @Override
-    public void submitSessionWithTransaction(Runnable runnable) {
+    public void submitTransaction(Runnable runnable) {
         if (async) {
             submitSessionWithTransactionAsync(runnable);
         } else {

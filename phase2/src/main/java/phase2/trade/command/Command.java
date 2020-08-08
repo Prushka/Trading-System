@@ -16,7 +16,13 @@ import java.util.Set;
 public abstract class Command<T> {
 
     public enum Type {
-        CREATE, READ, UPDATE, DELETE
+        CREATE(true), READ(false), UPDATE(true), DELETE(true);
+
+        public boolean hasEffect;
+
+        Type(boolean hasEffect) {
+            this.hasEffect = hasEffect;
+        }
     }
 
     boolean ifUndone = false;
@@ -26,6 +32,8 @@ public abstract class Command<T> {
     private Long uid;
 
     private Long timestamp;
+
+    private Long undoTimestamp;
 
     @OneToOne
     User operator;
@@ -56,12 +64,19 @@ public abstract class Command<T> {
 
     public abstract void execute(Callback<T> callback, String... args);
 
-    public abstract void undo(GatewayBundle gatewayBundle);
+    public abstract void undo();
 
-    public abstract void redo(GatewayBundle gatewayBundle);
+    public abstract void redo();
 
     void save() {
-        gatewayBundle.getCommandGateway().submitSessionWithTransaction(() -> gatewayBundle.getCommandGateway().add(getThis()));
+        timestamp = System.currentTimeMillis();
+        gatewayBundle.getCommandGateway().submitTransaction(() -> gatewayBundle.getCommandGateway().add(getThis()));
+    }
+
+    void updateUndo() {
+        undoTimestamp = System.currentTimeMillis();
+        ifUndone = true;
+        gatewayBundle.getCommandGateway().submitTransaction(() -> gatewayBundle.getCommandGateway().update(getThis()));
     }
 
     public Command<T> getThis() {
@@ -113,8 +128,26 @@ public abstract class Command<T> {
     }
 
     public void isUndoable(Callback<List<Command<?>>> callback) {
-        gatewayBundle.getCommandGateway().submitSessionWithTransaction(() -> callback.call(gatewayBundle.getCommandGateway().isUndoable(effectedIds, timestamp)));
+        gatewayBundle.getCommandGateway().submitSession(() -> callback.call(gatewayBundle.getCommandGateway().isUndoable(effectedIds, timestamp)));
     }
 
+    public boolean isIfUndone() {
+        return ifUndone;
+    }
 
+    public void setIfUndone(boolean ifUndone) {
+        this.ifUndone = ifUndone;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Long getUndoTimestamp() {
+        return undoTimestamp;
+    }
+
+    public void setUndoTimestamp(Long undoTimestamp) {
+        this.undoTimestamp = undoTimestamp;
+    }
 }

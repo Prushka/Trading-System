@@ -33,7 +33,7 @@ public class TradeController extends AbstractController implements Initializable
     public void addTrade(Callback<Trade> callback, List<User> users, List<List<Item>> items, String year, String month,
                          String day, String hour, String minute, String country, String city, String street,
                          String streetNum, boolean isPermanent) {
-        tradeDAO.submitSessionWithTransaction(() -> {
+        tradeDAO.submitTransaction(() -> {
             Trade newTrade = tm.createTrade(users, items, year, month, day, hour, minute, country, city, street,
                     streetNum, isPermanent);
             tradeDAO.add(newTrade);
@@ -42,7 +42,7 @@ public class TradeController extends AbstractController implements Initializable
     }
 
     public void editMeetingDateAndTime(Callback<Trade> callback, Trade currTrade, User currUser, LocalDateTime dateTime){
-        tradeDAO.submitSessionWithTransaction(() -> {
+        tradeDAO.submitTransaction(() -> {
             Trade trade = tm.editDateAndTime(currTrade, currUser, dateTime);
             tradeDAO.update(trade);
             callback.call(trade);
@@ -51,7 +51,7 @@ public class TradeController extends AbstractController implements Initializable
 
     public void editMeetingLocation(Callback<Trade> callback, Trade currTrade, User currUser, String
             country, String city, String street, String streetNumber) {
-        tradeDAO.submitSessionWithTransaction(() -> {
+        tradeDAO.submitTransaction(() -> {
             Address location = new Address(country, city, street, streetNumber);
             Trade trade = tm.editLocation(currTrade, currUser, location);
             tradeDAO.update(trade);

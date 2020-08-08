@@ -33,7 +33,7 @@ public class AddItemToItemList extends ItemCommand {
 
     @Override
     public void execute(Callback<Item> callback, String... args) { //
-        gatewayBundle.getUserGateway().submitSessionWithTransaction(() -> {
+        gatewayBundle.getUserGateway().submitTransaction(() -> {
             Item item = new Item();
             item.setName(args[0]);
             item.setDescription(args[1]);
@@ -49,23 +49,15 @@ public class AddItemToItemList extends ItemCommand {
     }
 
     @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.ADD_ITEM);
-    }
-
-    @Override
-    public void undo(GatewayBundle gatewayBundle) {
-        gatewayBundle.getItemGateway().submitSessionWithTransaction(new Runnable() {
-            @Override
-            public void run() {
-                gatewayBundle.getItemGateway().delete(itemId);
-                ifUndone = true;
-            }
+    public void undo() {
+        gatewayBundle.getItemGateway().submitTransaction(() -> {
+            gatewayBundle.getItemGateway().delete(itemId);
+            updateUndo();
         });
     }
 
     @Override
-    public void redo(GatewayBundle gatewayBundle) {
+    public void redo() {
 
     }
 
@@ -73,5 +65,10 @@ public class AddItemToItemList extends ItemCommand {
     @Override
     public Type getCommandType() {
         return Type.CREATE;
+    }
+
+    @Override
+    public PermissionSet getPermissionRequired() {
+        return new PermissionSet(Permission.ADD_ITEM);
     }
 }

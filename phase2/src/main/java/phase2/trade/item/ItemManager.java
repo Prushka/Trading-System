@@ -26,7 +26,7 @@ public class ItemManager {
     }
 
     public void addItemTo(InventoryType inventoryType, Callback<Item> callback, Long itemId) {
-        gatewayBundle.getUserGateway().submitSessionWithTransaction(() -> {
+        gatewayBundle.getUserGateway().submitTransaction(() -> {
             Item item = findItemByIdSync(itemId);
 
             operator.getItemList(inventoryType).addItem(item);
@@ -36,7 +36,7 @@ public class ItemManager {
     }
 
     public void createAndAddItemTo(InventoryType inventoryType, Callback<Item> callback, Category category, String name, String description) {
-        gatewayBundle.getUserGateway().submitSessionWithTransaction(() -> {
+        gatewayBundle.getUserGateway().submitTransaction(() -> {
             Item item = new Item();
             item.setCategory(category);
             item.setName(name);
@@ -50,7 +50,7 @@ public class ItemManager {
     }
 
     public void removeItemFrom(InventoryType inventoryType, Callback<Item> callback, Long itemId) {
-        gatewayBundle.getItemGateway().submitSessionWithTransaction(() -> {
+        gatewayBundle.getItemGateway().submitTransaction(() -> {
             Item item = gatewayBundle.getItemGateway().findById(itemId);
             operator.getItemList(inventoryType).removeItem(item);
             callback.call(item);
@@ -60,7 +60,7 @@ public class ItemManager {
 
     public void reviewItem(Callback<Boolean> callback, Ownership ownership, Long itemId) {
         if (operator.hasPermission(Permission.REVIEW_ITEM)) {
-            gatewayBundle.getItemGateway().submitSessionWithTransaction(() -> {
+            gatewayBundle.getItemGateway().submitTransaction(() -> {
                 Item item = gatewayBundle.getItemGateway().findById(itemId);
                 item.setOwnership(ownership);
                 callback.call(true);
@@ -69,7 +69,7 @@ public class ItemManager {
     }
 
     public void getInventory(InventoryType inventoryType, Callback<ItemList> callback) {
-        gatewayBundle.getItemGateway().submitSessionWithTransaction(() -> {
+        gatewayBundle.getItemGateway().submitTransaction(() -> {
             callback.call(operator.getItemList(inventoryType));
         });
     }

@@ -34,7 +34,7 @@ public class AddToCart extends ItemCommand {
 
     @Override
     public void execute(Callback<Item> callback, String... args) { //
-        gatewayBundle.getUserGateway().submitSessionWithTransaction(() -> {
+        gatewayBundle.getUserGateway().submitTransaction(() -> {
             Item item = findItemByIdSync(itemId);
             operator.getItemList(inventoryType).addItem(item);
             gatewayBundle.getUserGateway().update(operator);
@@ -47,13 +47,15 @@ public class AddToCart extends ItemCommand {
         return new PermissionSet(Permission.ADD_ITEM);
     }
 
+
+
     @Override
-    public void undo(GatewayBundle gatewayBundle) {
+    public void undo() {
         ifUndone = true;
     }
 
     @Override
-    public void redo(GatewayBundle gatewayBundle) {
+    public void redo() {
 
     }
 

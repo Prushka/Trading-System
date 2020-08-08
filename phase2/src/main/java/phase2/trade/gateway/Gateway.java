@@ -21,15 +21,15 @@ public interface Gateway<T> {
 
     void deleteAll();
 
-    void submitSessionSync(Runnable runnable);
+    // void submitSessionSync(Runnable runnable);
 
-    void submitSessionWithTransactionSync(Runnable runnable);
+    // void submitSessionWithTransactionSync(Runnable runnable);
 
-    void submitSessionAsync(Runnable runnable);
+    // void submitSessionAsync(Runnable runnable);
 
-    void submitSessionWithTransactionAsync(Runnable runnable);
+    // void submitSessionWithTransactionAsync(Runnable runnable);
 
-    void submitSessionWithTransaction(Runnable runnable);
+    void submitTransaction(Runnable runnable);
 
     void submitSession(Runnable runnable);
 

@@ -17,9 +17,9 @@ public class AccountManager {
 
     public void register(Callback<User> callback, String username, String email, String password, String country,
                          String city) {
-        userGateway.submitSessionWithTransaction(() -> {
+        userGateway.submitTransaction(() -> {
             List<User> usersByEmail = userGateway.findByEmail(email);
-            List<User> usersByName = userGateway.findByEmail(email);
+            List<User> usersByName = userGateway.findByUserName(username);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new PersonalUser(username, email, password, country, city);
                 userGateway.add(user);

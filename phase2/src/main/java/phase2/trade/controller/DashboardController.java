@@ -16,11 +16,10 @@ import java.util.ResourceBundle;
 
 public class DashboardController extends AbstractController implements Initializable {
 
-    public JFXDrawer drawer;
-    public JFXHamburger hamburger;
+    // public JFXDrawer drawer;
+    // public JFXHamburger hamburger;
+    public BorderPane root;
     public GridPane center;
-    public StackPane root;
-    public BorderPane top;
 
 
     private final AccountManager accountManager;
@@ -32,9 +31,9 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        root.setLeft(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, accountManager, center)));
 
-        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, accountManager, center)));
-
+        /*
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
         transition.setRate(-1);
 
@@ -64,6 +63,6 @@ public class DashboardController extends AbstractController implements Initializ
                 drawer.close();
             else
                 drawer.open();
-        });
+        });*/
     }
 }

@@ -12,13 +12,20 @@
         <property name="hibernate.hbm2ddl.auto">create</property>
         <property name="show_sql">true</property>
         <property name="connection.pool_size">10</property>
+
         <mapping class="phase2.trade.inventory.ItemList" />
         <mapping class="phase2.trade.inventory.Inventory" />
         <mapping class="phase2.trade.inventory.Cart" />
         <mapping class="phase2.trade.inventory.TradeItemHolder" />
+
         <mapping class="phase2.trade.trade.UserOrderBundle" />
         <mapping class="phase2.trade.trade.Trade" />
         <mapping class="phase2.trade.trade.Order" />
+
+        <mapping class="phase2.trade.command.Command" />
+        <mapping class="phase2.trade.command.ItemCommand" />
+        <mapping class="phase2.trade.command.AddItemToItemList" />
+
         <mapping class="phase2.trade.address.Address" />
         <mapping class="phase2.trade.address.AddressBook" />
         <mapping class="phase2.trade.item.Item" />

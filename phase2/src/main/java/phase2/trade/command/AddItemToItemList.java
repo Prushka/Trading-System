@@ -21,7 +21,7 @@ public class AddItemToItemList extends ItemCommand {
 
     public AddItemToItemList(GatewayBundle gatewayBundle, PersonalUser operator,
                              InventoryType inventoryType) {
-        super(gatewayBundle, Item.class, operator);
+        super(gatewayBundle, operator);
         this.inventoryType = inventoryType;
         this.operator = operator;
     }
@@ -61,4 +61,5 @@ public class AddItemToItemList extends ItemCommand {
     public void redo() {
 
     }
+
 }

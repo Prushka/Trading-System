@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 @Entity
 public abstract class ItemCommand extends Command<Item> {
 
-    public ItemCommand(GatewayBundle gatewayBundle, Class<Item> clazz, User operator) {
-        super(gatewayBundle, clazz, operator);
+    public ItemCommand(GatewayBundle gatewayBundle, User operator) {
+        super(gatewayBundle, operator);
     }
 
     public ItemCommand() {
@@ -23,6 +23,12 @@ public abstract class ItemCommand extends Command<Item> {
         Item item = gatewayBundle.getItemGateway().findById(itemId);
         gatewayBundle.getItemGateway().closeCurrentSessionWithTransaction();
         return item;
+    }
+
+
+    @Override
+    public Class<Item> getClassToOperateOn() {
+        return Item.class;
     }
 
 }

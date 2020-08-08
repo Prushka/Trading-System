@@ -63,7 +63,7 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
 
     @Override
     public CommandGateway getCommandGateway() {
-        return null;
+        return commandDAO;
     }
 
     public TradeDAO getTradeDAO() {

@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Command<T> {
 
     @Id
@@ -21,15 +21,12 @@ public abstract class Command<T> {
     @OneToOne
     User operator;
 
-    Class<T> clazz;
-
     @ElementCollection
     Set<Long> effectedIds = new HashSet<>();
 
     transient GatewayBundle gatewayBundle;
 
-    public Command(GatewayBundle gatewayBundle, Class<T> clazz, User operator) {
-        this.clazz = clazz;
+    public Command(GatewayBundle gatewayBundle, User operator) {
         this.operator = operator;
         this.gatewayBundle = gatewayBundle;
     }
@@ -73,5 +70,7 @@ public abstract class Command<T> {
     public void addEffectedId(Long id) {
         effectedIds.add(id);
     }
+
+    public abstract Class<?> getClassToOperateOn();
 
 }

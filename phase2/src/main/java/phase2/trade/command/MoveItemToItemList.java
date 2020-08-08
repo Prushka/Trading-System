@@ -23,7 +23,7 @@ public class MoveItemToItemList extends ItemCommand {
 
     public MoveItemToItemList(GatewayBundle gatewayBundle, PersonalUser operator,
                               InventoryType inventoryType, Long itemId) {
-        super(gatewayBundle, Item.class, operator);
+        super(gatewayBundle, operator);
         this.inventoryType = inventoryType;
         this.itemId = itemId;
         this.operator = operator;

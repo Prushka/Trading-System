@@ -4,36 +4,39 @@ package phase2.trade.user;
 import main.java.com.phase2.trade.repository.*;
 import main.java.com.phase2.trade.repository.reflection.*;*/
 import phase2.trade.gateway.Callback;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.gateway.database.UserDAO;
+import phase2.trade.inventory.Cart;
+import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemManager;
 
 
-public class PersonalUserManager {
+public class PersonalUserManager{
 
-    private final UserDAO UserDAO;
-    private RegularUser currRegularUser;
+    private PersonalUser loggedInUser;
+
+    private GatewayBundle gatewayBundle;
+
     private ItemManager itemManager;
-    private RegularUser loggedInUser;
 
-    public PersonalUserManager(UserDAO UserDAO, ItemManager itemManager) {
-        this.UserDAO = UserDAO;
-        this.itemManager = itemManager;
+    public PersonalUserManager(PersonalUser loggedInUser, GatewayBundle gatewayBundle) {
+        this.loggedInUser = loggedInUser;
+        this.itemManager = new ItemManager(gatewayBundle, loggedInUser);
 
     }
 
-    /*
-    public void addToBeReviewedItem(Callback<RegularUser> userCallback, Callback<Item> itemCallback, Category category, String itemName, String description) {
-        itemManager.createAndAddItemTo(InventoryType.INVENTORY, itemCallback, category, itemName, description);
+    public void addToBeReviewedItem(Callback<Item> itemCallback, Category category, String itemName, String description) {
+        itemManager.createAndAddItemToInventory(InventoryType.INVENTORY, itemCallback, category, itemName, description);
     }
 
-    public void removeItemFromInventory(Callback<Item> itemCallback, RegularUser user, Long itemId) {
+    public void removeItemFromInventory(Callback<Item> itemCallback, Long itemId) {
         itemManager.removeItemFrom(InventoryType.INVENTORY, itemCallback, itemId);
     }
 
-    public void addItemToWishlist(Callback<RegularUser> userCallback, Callback<Item> itemCallback, Category category, String itemName, String description) {
+    public void addItemToWishlist(Callback<Item> itemCallback, Category category, String itemName, String description) {
         itemManager.createAndAddItemTo(InventoryType.CART, itemCallback, category, itemName, description);
     }
 
@@ -41,17 +44,17 @@ public class PersonalUserManager {
         itemManager.removeItemFrom(InventoryType.CART, itemCallback, itemId);
     }
 
-    public void UnfreezeRequest(RegularUser user) {
+    public void UnfreezeRequest(PersonalUser user) {
         user.setAccountState(AccountState.REQUEST_UNFROZEN);
     }
 
-//    public List<Integer> getUserInventory(PersonalUser user) {
-//        return user.getInventory();
-//    }
-//
-//    public List<Integer> getUserWishlist(PersonalUser user) {
-//        return user.getWishlist();
-//    }
+    public Inventory getUserInventory(PersonalUser user) {
+        return user.getInventory();
+    }
+
+    public Cart getUserWishlist(PersonalUser user) {
+        return user.getCart();
+    }
 
     /*public void suggest (PersonalUser p) {
         for (PersonalUser x : personalUserRepository) {

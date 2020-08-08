@@ -56,8 +56,8 @@ public class AlterItem extends ItemCommand {
 
 
     @Override
-    public Type getCommandType() {
-        return Type.UPDATE;
+    public CRUDType getCRUDType() {
+        return CRUDType.UPDATE;
     }
 
     @Override

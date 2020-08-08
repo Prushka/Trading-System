@@ -1,5 +1,6 @@
 package phase2.trade.command;
 
+import org.hibernate.annotations.Cascade;
 import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.Permission;
@@ -7,29 +8,17 @@ import phase2.trade.user.PermissionSet;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Command<T> {
 
-    public enum Type {
-        CREATE(true), READ(false), UPDATE(true), DELETE(true);
-
-        public boolean hasEffect;
-
-        Type(boolean hasEffect) {
-            this.hasEffect = hasEffect;
-        }
-    }
-
-    boolean ifUndone = false;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
+
+    boolean ifUndone = false;
 
     private Long timestamp;
 
@@ -38,14 +27,15 @@ public abstract class Command<T> {
     @OneToOne
     User operator;
 
-    @ElementCollection
-    Set<Long> effectedIds = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    Collection<Long> effectedIds;
 
     transient GatewayBundle gatewayBundle;
 
     public Command(GatewayBundle gatewayBundle, User operator) {
         this.operator = operator;
         this.gatewayBundle = gatewayBundle;
+        this.effectedIds = new HashSet<>();
     }
 
     public Command() {
@@ -68,6 +58,8 @@ public abstract class Command<T> {
 
     public abstract void redo();
 
+    public abstract Class<?> getClassToOperateOn();
+
     void save() {
         timestamp = System.currentTimeMillis();
         gatewayBundle.getCommandGateway().submitTransaction(() -> gatewayBundle.getCommandGateway().add(getThis()));
@@ -83,10 +75,6 @@ public abstract class Command<T> {
         return this;
     }
 
-    public GatewayBundle getGatewayBundle() {
-        return gatewayBundle;
-    }
-
     public void setGatewayBundle(GatewayBundle gatewayBundle) {
         this.gatewayBundle = gatewayBundle;
     }
@@ -95,7 +83,9 @@ public abstract class Command<T> {
         effectedIds.add(id);
     }
 
-    public abstract Class<?> getClassToOperateOn();
+    public Collection<Long> getEffectedIds() {
+        return effectedIds;
+    }
 
     public Long getUid() {
         return uid;
@@ -113,15 +103,7 @@ public abstract class Command<T> {
         this.operator = operator;
     }
 
-    public Set<Long> getEffectedIds() {
-        return effectedIds;
-    }
-
-    public void setEffectedIds(Set<Long> effectedIds) {
-        this.effectedIds = effectedIds;
-    }
-
-    public abstract Type getCommandType();
+    public abstract CRUDType getCRUDType();
 
     public Long getTimestamp() {
         return timestamp;
@@ -129,25 +111,5 @@ public abstract class Command<T> {
 
     public void isUndoable(Callback<List<Command<?>>> callback) {
         gatewayBundle.getCommandGateway().submitSession(() -> callback.call(gatewayBundle.getCommandGateway().isUndoable(effectedIds, timestamp)));
-    }
-
-    public boolean isIfUndone() {
-        return ifUndone;
-    }
-
-    public void setIfUndone(boolean ifUndone) {
-        this.ifUndone = ifUndone;
-    }
-
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public Long getUndoTimestamp() {
-        return undoTimestamp;
-    }
-
-    public void setUndoTimestamp(Long undoTimestamp) {
-        this.undoTimestamp = undoTimestamp;
     }
 }

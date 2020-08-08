@@ -63,8 +63,8 @@ public class AddItemToItemList extends ItemCommand {
 
 
     @Override
-    public Type getCommandType() {
-        return Type.CREATE;
+    public CRUDType getCRUDType() {
+        return CRUDType.CREATE;
     }
 
     @Override

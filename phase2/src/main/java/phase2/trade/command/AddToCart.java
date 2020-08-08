@@ -60,7 +60,7 @@ public class AddToCart extends ItemCommand {
     }
 
     @Override
-    public Type getCommandType() {
-        return Type.UPDATE;
+    public CRUDType getCRUDType() {
+        return CRUDType.UPDATE;
     }
 }

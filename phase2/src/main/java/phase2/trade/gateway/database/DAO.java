@@ -130,7 +130,7 @@ public abstract class DAO<T> implements Gateway<T> {
         if(asynchronous) {
             getThreadPool().submit(() -> submitTransactionSync(runnable));
         }else{
-            submitSessionSync(runnable);
+            submitTransactionSync(runnable);
         }
     }
 

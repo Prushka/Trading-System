@@ -13,14 +13,12 @@ public class CommandDAO extends DAO<Command> implements CommandGateway {
     }
 
     @Override
-    public List<Command<?>> isUndoable(Set<Long> effectedIds, Long commandTimestamp) {
+    public List<Command<?>> isUndoable(Collection<Long> effectedIds, Long commandTimestamp) {
         Query<Command<?>> query = getCurrentSession().createQuery("FROM Command WHERE timestamp > :commandTimestamp");
         query.setParameter("commandTimestamp", commandTimestamp);
         List<Command<?>> result = new ArrayList<>();
-        System.out.println(query.getResultList().size());
         for (Command<?> command : query.getResultList()) {
-            System.out.println(!Collections.disjoint(effectedIds, command.getEffectedIds()));
-            if (command.getCommandType().hasEffect && !Collections.disjoint(effectedIds, command.getEffectedIds())) {
+            if (command.getCRUDType().hasEffect && !Collections.disjoint(effectedIds, command.getEffectedIds())) {
                 result.add(command);
             }
         }

@@ -5,6 +5,7 @@ import phase2.trade.command.PermissionBased;
 import phase2.trade.command.UserPermissionChecker;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
+import phase2.trade.user.PermissionSet;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
@@ -46,4 +47,7 @@ public abstract class ItemCommand extends Command<Item> implements PermissionBas
     public boolean checkPermission() {
         return new UserPermissionChecker(operator, getPermissionRequired()).checkPermission();
     }
+
+    @Override
+    public abstract PermissionSet getPermissionRequired();
 }

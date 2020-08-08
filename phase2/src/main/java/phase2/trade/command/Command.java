@@ -39,8 +39,6 @@ public abstract class Command<T> {
     }
 
 
-    public abstract PermissionSet getPermissionRequired();
-
     public abstract void execute(Callback<T> callback, String... args);
 
     public abstract void undo();

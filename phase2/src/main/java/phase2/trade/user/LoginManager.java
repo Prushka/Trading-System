@@ -23,8 +23,13 @@ public class LoginManager {
         this.loginCommand = new Login(gatewayBundle);
     }
 
-    public void login(String usernameOrEmail, String password) {
+    public void login(Callback<User> callback, String usernameOrEmail, String password) {
+        loginCommand.execute(result -> {
+            loggedInUser = result;
+            callback.call(result);
+        }, usernameOrEmail, password);
     }
+
 
     public void logOut() {
         loggedInUser = null;
@@ -36,5 +41,12 @@ public class LoginManager {
 
     public User getLoggedInUser() {
         return loggedInUser;
+    }
+
+    public void register(Callback<User> callback, String userName, String email, String password, String country, String city) {
+        registerCommand.execute(result -> {
+            loggedInUser = result;
+            callback.call(result);
+        }, userName, email, password, country, city);
     }
 }

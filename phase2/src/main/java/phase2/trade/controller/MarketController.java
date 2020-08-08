@@ -19,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
-import phase2.trade.user.AccountManager;
 import phase2.trade.user.User;
 
 import javax.swing.*;

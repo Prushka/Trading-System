@@ -35,13 +35,26 @@ public class ItemManager {
         });
     }
 
-    public void createAndAddItemTo(InventoryType inventoryType, Callback<Item> callback, Category category, String name, String description) {
+    public void createAndAddItemToInventory(InventoryType inventoryType, Callback<Item> callback, Category category, String name, String description) {
         gatewayBundle.getUserGateway().submitTransaction(() -> {
             Item item = new Item();
             item.setCategory(category);
             item.setName(name);
             item.setDescription(description);
             item.setOwnership(Ownership.TO_BE_REVIEWED);
+
+            operator.getItemList(inventoryType).addItem(item);
+            gatewayBundle.getUserGateway().update(operator);
+            callback.call(item);
+        });
+    }
+
+    public void createAndAddItemTo(InventoryType inventoryType, Callback<Item> callback, Category category, String name, String description) {
+        gatewayBundle.getUserGateway().submitTransaction(() -> {
+            Item item = new Item();
+            item.setCategory(category);
+            item.setName(name);
+            item.setDescription(description);
 
             operator.getItemList(inventoryType).addItem(item);
             gatewayBundle.getUserGateway().update(operator);

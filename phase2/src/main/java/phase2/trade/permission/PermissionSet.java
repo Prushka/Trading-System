@@ -1,4 +1,4 @@
-package phase2.trade.user;
+package phase2.trade.permission;
 
 import javax.persistence.*;
 import java.util.*;

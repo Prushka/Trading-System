@@ -1,6 +1,8 @@
 package phase2.trade.user;
 
 import phase2.trade.address.AddressBook;
+import phase2.trade.permission.Permission;
+import phase2.trade.permission.PermissionSet;
 
 import javax.persistence.*;
 

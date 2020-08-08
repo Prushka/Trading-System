@@ -1,4 +1,4 @@
-package phase2.trade.user;
+package phase2.trade.permission;
 
 public enum Permission {
 

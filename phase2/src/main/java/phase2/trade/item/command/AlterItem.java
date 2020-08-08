@@ -5,8 +5,8 @@ import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
-import phase2.trade.user.Permission;
-import phase2.trade.user.PermissionSet;
+import phase2.trade.permission.Permission;
+import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.RegularUser;
 
 import javax.persistence.Entity;

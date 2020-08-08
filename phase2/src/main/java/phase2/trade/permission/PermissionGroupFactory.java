@@ -1,16 +1,15 @@
-package phase2.trade.user;
+package phase2.trade.permission;
+
+import phase2.trade.permission.Permission;
+import phase2.trade.permission.PermissionSet;
 
 import java.util.HashSet;
 
-public class UserPermissionFactory {
-
-    public enum Group {
-        ADMIN, GUEST, OWNER
-    }
+public class PermissionGroupFactory {
 
     // make this configurable
 
-    public PermissionSet getUserPermission(Group type) {
+    public PermissionSet getUserPermission(PermissionGroup type) {
         switch (type) {
             case ADMIN:
                 return new PermissionSet(new HashSet<Permission>() {{

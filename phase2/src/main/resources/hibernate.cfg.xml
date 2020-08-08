@@ -35,7 +35,7 @@
         <mapping class="phase2.trade.address.AddressBook" />
         <mapping class="phase2.trade.item.Item" />
         <mapping class="phase2.trade.user.User" />
-        <mapping class="phase2.trade.user.PermissionSet" />
+        <mapping class="phase2.trade.permission.PermissionSet" />
         <mapping class="phase2.trade.user.AdministrativeUser" />
         <mapping class="phase2.trade.user.RegularUser" />
     </session-factory>

@@ -20,7 +20,7 @@ public class ConfigBundle implements Shutdownable {
     public ConfigBundle() {
         configStrategy = new YamlStrategy();
 
-        permissionConfig = read(PermissionConfig.class, "permission_group", PermissionConfig::new);
+        permissionConfig = read(PermissionConfig.class, "config/permission_group", PermissionConfig::new);
     }
 
     private <T> T read(Class<T> configClass, String fileName, Supplier<T> supplier) {
@@ -40,7 +40,7 @@ public class ConfigBundle implements Shutdownable {
 
     @Override
     public void stop() {
-        save(permissionConfig, "permission_group");
+        save(permissionConfig, "config/permission_group");
     }
 
     public PermissionConfig getPermissionConfig() {

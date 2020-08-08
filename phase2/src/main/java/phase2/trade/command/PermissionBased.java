@@ -1,6 +1,6 @@
 package phase2.trade.command;
 
-import phase2.trade.user.PermissionSet;
+import phase2.trade.permission.PermissionSet;
 
 public interface PermissionBased {
 

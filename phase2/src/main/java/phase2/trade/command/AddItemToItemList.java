@@ -9,6 +9,7 @@ import phase2.trade.user.PermissionSet;
 import phase2.trade.user.PersonalUser;
 
 import javax.persistence.Entity;
+import java.time.LocalDateTime;
 
 @Entity
 public class AddItemToItemList extends ItemCommand {
@@ -58,6 +59,7 @@ public class AddItemToItemList extends ItemCommand {
             @Override
             public void run() {
                 gatewayBundle.getItemGateway().delete(itemId);
+                ifUndone = true;
             }
         });
     }
@@ -67,4 +69,9 @@ public class AddItemToItemList extends ItemCommand {
 
     }
 
+
+    @Override
+    public Type getCommandType() {
+        return Type.CREATE;
+    }
 }

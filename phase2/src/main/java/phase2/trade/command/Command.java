@@ -14,9 +14,17 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Command<T> {
 
+    enum Type {
+        CREATE, READ, UPDATE, DELETE
+    }
+
+    boolean ifUndone = false;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
+
+    private Long timestamp;
 
     @OneToOne
     User operator;
@@ -96,4 +104,21 @@ public abstract class Command<T> {
     public void setEffectedIds(Set<Long> effectedIds) {
         this.effectedIds = effectedIds;
     }
+
+    public abstract Type getCommandType();
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void isUndoable(Callback<Boolean> callback){
+        gatewayBundle.getCommandGateway().submitSessionWithTransaction(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
+    }
+
+
 }

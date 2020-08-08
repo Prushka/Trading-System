@@ -2,13 +2,11 @@ package phase2.trade.command;
 
 import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.user.Permission;
 import phase2.trade.user.PermissionSet;
 import phase2.trade.user.PersonalUser;
-import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
@@ -51,11 +49,16 @@ public class MoveItemToItemList extends ItemCommand {
 
     @Override
     public void undo(GatewayBundle gatewayBundle) {
-
+        ifUndone = true;
     }
 
     @Override
     public void redo(GatewayBundle gatewayBundle) {
 
+    }
+
+    @Override
+    public Type getCommandType() {
+        return Type.UPDATE;
     }
 }

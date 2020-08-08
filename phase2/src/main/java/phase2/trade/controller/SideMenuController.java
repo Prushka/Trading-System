@@ -4,14 +4,12 @@ import com.jfoenix.controls.JFXListView;
 import javafx.embed.swing.JFXPanel;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.AccountManager;
+import phase2.trade.user.LoginManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,11 +23,11 @@ public class SideMenuController extends AbstractController implements Initializa
     public JFXPanel panel = new JFXPanel();
     private GridPane center;
 
-    private final AccountManager accountManager;
+    private final LoginManager loginManager;
 
-    public SideMenuController(GatewayBundle gatewayBundle, AccountManager accountManager, GridPane center) {
+    public SideMenuController(GatewayBundle gatewayBundle, LoginManager loginManager, GridPane center) {
         super(gatewayBundle);
-        this.accountManager = accountManager;
+        this.loginManager = loginManager;
         this.center = center;
     }
 
@@ -37,8 +35,8 @@ public class SideMenuController extends AbstractController implements Initializa
         ConfirmPopup confirmPopup = new ConfirmPopup();
         // Parent confirm = loadPane("confirm_popup.fxml", confirmPopup);
         if (confirmPopup.display("Log out", "Do you really want to log out?")) {
-            accountManager.logOut();
-            switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), logOut);
+            loginManager.logOut();
+            switchScene("login.fxml", new LoginController(gatewayBundle, loginManager), logOut);
         } else {
             sideList.getSelectionModel().clearAndSelect(1);
             // sideList.getSelectionModel().select(old);
@@ -46,14 +44,14 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void userInfo() {
-        Parent userPane = loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
+        Parent userPane = loadPane("user_info.fxml", new UserInfoPresenter(loginManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void market() {
-        Pane userPane = (Pane) loadPane("market.fxml", new MarketController(accountManager.getLoggedInUser()));
+        Pane userPane = (Pane) loadPane("market.fxml", new MarketController(loginManager.getLoggedInUser()));
         // GridPane.clearConstraints();
         GridPane.setConstraints(userPane, 0, 2);
         center.getChildren().clear();
@@ -77,7 +75,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userInfoBox.getChildren().add(loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
+        userInfoBox.getChildren().add(loadPane("user_info_side.fxml", new UserInfoPresenter(loginManager.getLoggedInUser())));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue.getId()) {

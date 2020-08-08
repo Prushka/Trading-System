@@ -10,8 +10,8 @@ import phase2.trade.user.User;
 
 public abstract class UserCommand<T extends User> extends Command<T> {
 
-    public UserCommand(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle, operator);
+    public UserCommand(GatewayBundle gatewayBundle) {
+        super(gatewayBundle);
     }
 
     public UserCommand() {

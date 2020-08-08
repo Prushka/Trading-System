@@ -9,7 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.AccountManager;
+import phase2.trade.user.LoginManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,17 +23,17 @@ public class DashboardController extends AbstractController implements Initializ
     public BorderPane top;
 
 
-    private final AccountManager accountManager;
+    private final LoginManager loginManager;
 
-    public DashboardController(GatewayBundle gatewayBundle, AccountManager accountManager) {
+    public DashboardController(GatewayBundle gatewayBundle, LoginManager loginManager) {
         super(gatewayBundle);
-        this.accountManager = accountManager;
+        this.loginManager = loginManager;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, accountManager, center)));
+        drawer.setSidePane(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, loginManager, center)));
 
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
         transition.setRate(-1);

@@ -24,16 +24,12 @@ public abstract class Command<T> {
 
     private Long undoTimestamp;
 
-    @OneToOne
-    User operator;
-
     @ElementCollection(fetch = FetchType.EAGER)
     Collection<Long> effectedIds;
 
     protected transient GatewayBundle gatewayBundle;
 
-    public Command(GatewayBundle gatewayBundle, User operator) {
-        this.operator = operator;
+    public Command(GatewayBundle gatewayBundle) {
         this.gatewayBundle = gatewayBundle;
         this.effectedIds = new HashSet<>();
     }
@@ -42,13 +38,6 @@ public abstract class Command<T> {
 
     }
 
-    public boolean checkPermission() {
-        boolean all = true;
-        for (Permission permissionRequired : getPermissionRequired().getPerm()) {
-            all = all && operator.hasPermission(permissionRequired);
-        }
-        return all;
-    }
 
     public abstract PermissionSet getPermissionRequired();
 
@@ -93,14 +82,6 @@ public abstract class Command<T> {
 
     public void setUid(Long uid) {
         this.uid = uid;
-    }
-
-    public User getOperator() {
-        return operator;
-    }
-
-    public void setOperator(User operator) {
-        this.operator = operator;
     }
 
     public abstract CRUDType getCRUDType();

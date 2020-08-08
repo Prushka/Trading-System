@@ -54,8 +54,8 @@ public abstract class Command<T> {
 
     public abstract void redo();
 
-    private void save() {
-        gatewayBundle.getCommandGateway().submitSessionWithTransaction(() -> gatewayBundle.getCommandGateway().add(getThis()));
+    void save() {
+        gatewayBundle.getCommandGateway().submitSessionWithTransactionAsync(() -> gatewayBundle.getCommandGateway().add(getThis()));
     }
 
     public Command<T> getThis() {

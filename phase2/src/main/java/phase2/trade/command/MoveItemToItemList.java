@@ -2,16 +2,18 @@ package phase2.trade.command;
 
 import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.user.Permission;
 import phase2.trade.user.PermissionSet;
 import phase2.trade.user.PersonalUser;
+import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
 @Entity
-public class AddItemToItemList extends ItemCommand {
+public class MoveItemToItemList extends ItemCommand {
 
     private InventoryType inventoryType;
 
@@ -19,31 +21,26 @@ public class AddItemToItemList extends ItemCommand {
 
     private transient PersonalUser operator;
 
-    public AddItemToItemList(GatewayBundle gatewayBundle, PersonalUser operator,
-                             InventoryType inventoryType) {
+    public MoveItemToItemList(GatewayBundle gatewayBundle, PersonalUser operator,
+                              InventoryType inventoryType, Long itemId) {
         super(gatewayBundle, Item.class, operator);
         this.inventoryType = inventoryType;
+        this.itemId = itemId;
         this.operator = operator;
+        addEffectedId(itemId);
     }
 
-    public AddItemToItemList() {
+    public MoveItemToItemList() {
         super();
     }
 
     @Override
     public void execute(Callback<Item> callback, String... args) { //
         gatewayBundle.getUserGateway().submitSessionWithTransaction(() -> {
-            Item item = new Item();
-            item.setName(args[0]);
-            item.setDescription(args[1]);
-
+            Item item = findItemByIdSync(itemId);
             operator.getItemList(inventoryType).addItem(item);
             gatewayBundle.getUserGateway().update(operator);
-            this.itemId = item.getUid();
-            addEffectedId(itemId);
-            save();
-            if (callback != null)
-                callback.call(item);
+            callback.call(item);
         });
     }
 

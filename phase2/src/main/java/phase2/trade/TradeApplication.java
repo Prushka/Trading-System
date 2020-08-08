@@ -24,10 +24,11 @@ public class TradeApplication extends Application {
     private final ShutdownHook shutdownHook;
 
     public TradeApplication() {
+
         DatabaseResourceBundle databaseResourceBundle = new DatabaseResourceBundle();
         shutdownHook = new ShutdownHook();
         shutdownHook.addShutdownable(databaseResourceBundle);
-        EntityBundle entityBundle = new DatabaseResourceBundle().getDaoBundle();
+        EntityBundle entityBundle = databaseResourceBundle.getDaoBundle();
         ConfigBundle configBundle = new ConfigBundle();
         this.gatewayBundle = new GatewayBundle(entityBundle, configBundle);
     }

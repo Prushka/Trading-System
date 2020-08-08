@@ -3,6 +3,7 @@ package phase2.trade.gateway.database;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import phase2.trade.Shutdownable;
+import phase2.trade.gateway.CommandGateway;
 import phase2.trade.gateway.ItemGateway;
 import phase2.trade.gateway.UserGateway;
 
@@ -22,6 +23,8 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
 
     private final TradeDAO tradeDAO;
 
+    private final CommandDAO commandDAO;
+
     public DatabaseResourceBundleImpl() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
@@ -33,6 +36,8 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
         itemDAO = new ItemDAO(this);
 
         tradeDAO = new TradeDAO(this);
+
+        commandDAO = new CommandDAO(this);
     }
 
     public SessionFactory getSessionFactory() {
@@ -54,6 +59,11 @@ public class DatabaseResourceBundleImpl implements Shutdownable, DatabaseResourc
 
     public ItemGateway getItemGateway() {
         return itemDAO;
+    }
+
+    @Override
+    public CommandGateway getCommandGateway() {
+        return null;
     }
 
     public TradeDAO getTradeDAO() {

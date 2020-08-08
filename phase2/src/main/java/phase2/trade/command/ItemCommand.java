@@ -7,17 +7,15 @@ import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
+@Entity
 public abstract class ItemCommand extends Command<Item> {
-
-    @Entity
-    static class ItemCommandData extends CommandData<Item> {
-        InventoryType inventoryType;
-
-        Long itemId;
-    }
 
     public ItemCommand(GatewayBundle gatewayBundle, Class<Item> clazz, User operator) {
         super(gatewayBundle, clazz, operator);
+    }
+
+    public ItemCommand() {
+
     }
 
     Item findItemByIdSync(Long itemId) {

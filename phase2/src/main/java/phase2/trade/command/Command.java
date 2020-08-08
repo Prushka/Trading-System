@@ -10,39 +10,27 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Command<T> {
 
-    @Entity
-    @Inheritance(strategy = InheritanceType.JOINED)
-    static class CommandData<T> {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long uid;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long uid;
 
-        @OneToOne
-        User operator;
+    @OneToOne
+    User operator;
 
-        Class<T> clazz;
+    Class<T> clazz;
 
-        @ElementCollection
-        Set<Long> effectedIds = new HashSet<>();
+    @ElementCollection
+    Set<Long> effectedIds = new HashSet<>();
 
-        public CommandData(Class<T> clazz, User operator) {
-            this.operator = operator;
-            this.clazz = clazz;
-        }
-
-        public CommandData() {
-
-        }
-    }
-
-    CommandData<T> commandData;
-
-    GatewayBundle gatewayBundle;
+    transient GatewayBundle gatewayBundle;
 
     public Command(GatewayBundle gatewayBundle, Class<T> clazz, User operator) {
-        this.commandData = new CommandData<>(clazz, operator);
+        this.clazz = clazz;
+        this.operator = operator;
         this.gatewayBundle = gatewayBundle;
     }
 
@@ -53,7 +41,7 @@ public abstract class Command<T> {
     public boolean checkPermission() {
         boolean all = true;
         for (Permission permissionRequired : getPermissionRequired().getPerm()) {
-            all = all && commandData.operator.hasPermission(permissionRequired);
+            all = all && operator.hasPermission(permissionRequired);
         }
         return all;
     }
@@ -67,7 +55,11 @@ public abstract class Command<T> {
     public abstract void redo();
 
     private void save() {
+        gatewayBundle.getCommandGateway().submitSessionWithTransaction(() -> gatewayBundle.getCommandGateway().add(getThis()));
+    }
 
+    public Command<T> getThis() {
+        return this;
     }
 
     public GatewayBundle getGatewayBundle() {
@@ -79,7 +71,7 @@ public abstract class Command<T> {
     }
 
     public void addEffectedId(Long id) {
-        commandData.effectedIds.add(id);
+        effectedIds.add(id);
     }
 
 }

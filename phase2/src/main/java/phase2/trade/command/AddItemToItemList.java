@@ -10,13 +10,16 @@ import phase2.trade.user.PermissionSet;
 import phase2.trade.user.PersonalUser;
 import phase2.trade.user.User;
 
+import javax.persistence.Entity;
+
+@Entity
 public class AddItemToItemList extends ItemCommand {
 
     private InventoryType inventoryType;
 
     private Long itemId;
 
-    private PersonalUser operator;
+    private transient PersonalUser operator;
 
     public AddItemToItemList(GatewayBundle gatewayBundle, PersonalUser operator,
                              InventoryType inventoryType, Long itemId) {
@@ -25,6 +28,10 @@ public class AddItemToItemList extends ItemCommand {
         this.itemId = itemId;
         this.operator = operator;
         addEffectedId(itemId);
+    }
+
+    public AddItemToItemList() {
+        super();
     }
 
     @Override

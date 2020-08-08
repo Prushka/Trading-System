@@ -56,7 +56,7 @@ public class TradeApplication extends Application {
 
     private void mockDashboard(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
-        AccountManager accountManager = new AccountManager(gatewayBundle.getEntityBundle(), gatewayBundle.getConfigBundle());
+        AccountManager accountManager = new AccountManager(gatewayBundle);
         accountManager.login((result, status) -> {
             DashboardController dashboardController = new DashboardController(gatewayBundle, accountManager);
             Platform.runLater(() -> {

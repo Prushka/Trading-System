@@ -49,11 +49,11 @@ public class CommandTest {
     @Test
     public void testCommand() {
         save();
-        Command<Item> addItem = new AddItemToItemList(entityBundle, regularUser, InventoryType.INVENTORY);
+        Command<Item> addItem = new AddItemToItemList(bundle, regularUser, InventoryType.INVENTORY);
 
         addItem.execute(null, "testName", "testDescription");
 
-        Command<Item> alterItem = new AlterItemInInventory(entityBundle, regularUser, 1L);
+        Command<Item> alterItem = new AlterItemInInventory(bundle, regularUser, 1L);
         alterItem.execute(null, "testName2", "testDescription2");
     }
 
@@ -61,7 +61,7 @@ public class CommandTest {
     @Test
     public void testItemCommands() {
         testCommand();
-        Command<ItemList> getInventory = new GetItems(entityBundle, regularUser, InventoryType.INVENTORY);
+        Command<ItemList> getInventory = new GetItems(bundle, regularUser, InventoryType.INVENTORY);
         getInventory.execute(new StatusCallback<ItemList>() {
             @Override
             public void call(ItemList result, ResultStatus resultStatus) {
@@ -78,7 +78,7 @@ public class CommandTest {
         command = entityBundle.getCommandGateway().findById(1L);
         entityBundle.getCommandGateway().closeCurrentSession();
 
-        command.setEntityBundle(entityBundle);
+        command.setGatewayBundle(bundle);
         command.isUndoable(result -> {
             assertEquals(1, result.size());
             assertEquals(result.get(0).getCRUDType(), CRUDType.UPDATE);

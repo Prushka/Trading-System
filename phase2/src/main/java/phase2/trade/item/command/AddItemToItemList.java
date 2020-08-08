@@ -3,7 +3,7 @@ package phase2.trade.item.command;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
@@ -21,9 +21,9 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
     private transient RegularUser operator;
 
-    public AddItemToItemList(EntityBundle entityBundle, RegularUser operator,
+    public AddItemToItemList(GatewayBundle gatewayBundle, RegularUser operator,
                              InventoryType inventoryType) {
-        super(entityBundle, operator);
+        super(gatewayBundle, operator);
         this.inventoryType = inventoryType;
         this.operator = operator;
     }
@@ -34,14 +34,14 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) {
-        entityBundle.getUserGateway().submitTransaction(() -> {
+        getEntityBundle().getUserGateway().submitTransaction(() -> {
             Item item = new Item();
             item.setName(args[0]);
             item.setDescription(args[1]);
             item.setItemList(operator.getItemList(inventoryType));
 
             operator.getItemList(inventoryType).addItem(item);
-            entityBundle.getUserGateway().update(operator);
+            getEntityBundle().getUserGateway().update(operator);
             this.itemId = item.getUid();
             addEffectedId(itemId);
             save();
@@ -52,8 +52,8 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
     @Override
     public void undo() {
-        entityBundle.getItemGateway().submitTransaction(() -> {
-            entityBundle.getItemGateway().delete(itemId);
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
+            getEntityBundle().getItemGateway().delete(itemId);
             updateUndo();
         });
     }

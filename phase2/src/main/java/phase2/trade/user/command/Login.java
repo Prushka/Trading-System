@@ -2,7 +2,7 @@ package phase2.trade.user.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.user.User;
 
@@ -10,8 +10,8 @@ import java.util.List;
 
 public class Login extends UserCommand<User> {
 
-    public Login(EntityBundle entityBundle) {
-        super(entityBundle);
+    public Login(GatewayBundle gatewayBundle) {
+        super(gatewayBundle);
     }
 
     @Override

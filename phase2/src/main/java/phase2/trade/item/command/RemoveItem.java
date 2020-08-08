@@ -2,7 +2,7 @@ package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
@@ -24,8 +24,8 @@ public class RemoveItem extends ItemCommand<Item> {
 
     private InventoryType inventoryType;
 
-    public RemoveItem(EntityBundle entityBundle, RegularUser operator, InventoryType inventoryType, Long itemId) {
-        super(entityBundle, operator);
+    public RemoveItem(GatewayBundle gatewayBundle, RegularUser operator, InventoryType inventoryType, Long itemId) {
+        super(gatewayBundle, operator);
         this.itemId = itemId;
         this.operator = operator;
         this.inventoryType = inventoryType;
@@ -41,7 +41,7 @@ public class RemoveItem extends ItemCommand<Item> {
             callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
-        entityBundle.getUserGateway().submitTransaction(() -> {
+        getEntityBundle().getUserGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncInsideItemGateway(itemId);
             operator.getItemList(inventoryType).removeItem(item);
 
@@ -54,7 +54,7 @@ public class RemoveItem extends ItemCommand<Item> {
 
     @Override
     public void undo() {
-        entityBundle.getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
             updateUndo();
         });
     }

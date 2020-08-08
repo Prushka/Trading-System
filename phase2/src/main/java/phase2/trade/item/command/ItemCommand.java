@@ -5,7 +5,7 @@ import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.command.PermissionBased;
 import phase2.trade.command.UserPermissionChecker;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
@@ -19,8 +19,8 @@ public abstract class ItemCommand<T> extends Command<T> implements PermissionBas
     @OneToOne
     User operator;
 
-    public ItemCommand(EntityBundle entityBundle, User operator) {
-        super(entityBundle);
+    public ItemCommand(GatewayBundle gatewayBundle, User operator) {
+        super(gatewayBundle);
         this.operator = operator;
     }
 
@@ -29,13 +29,13 @@ public abstract class ItemCommand<T> extends Command<T> implements PermissionBas
     }
 
     Item findItemByIdSyncInsideItemGateway(Long itemId) {
-        return entityBundle.getItemGateway().findById(itemId);
+        return getEntityBundle().getItemGateway().findById(itemId);
     }
 
     Item findItemByIdSyncOutsideItemGateway(Long itemId) {
-        entityBundle.getItemGateway().openCurrentSession();
-        Item item = entityBundle.getItemGateway().findById(itemId);
-        entityBundle.getItemGateway().closeCurrentSession();
+        getEntityBundle().getItemGateway().openCurrentSession();
+        Item item = getEntityBundle().getItemGateway().findById(itemId);
+        getEntityBundle().getItemGateway().closeCurrentSession();
         return item;
     }
 

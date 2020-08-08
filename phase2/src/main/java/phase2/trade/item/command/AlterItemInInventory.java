@@ -2,7 +2,7 @@ package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
@@ -18,8 +18,8 @@ public class AlterItemInInventory extends ItemCommand<Item> {
 
     private transient RegularUser operator;
 
-    public AlterItemInInventory(EntityBundle entityBundle, RegularUser operator, Long itemId) {
-        super(entityBundle, operator);
+    public AlterItemInInventory(GatewayBundle gatewayBundle, RegularUser operator, Long itemId) {
+        super(gatewayBundle, operator);
         this.itemId = itemId;
         this.operator = operator;
     }
@@ -33,11 +33,11 @@ public class AlterItemInInventory extends ItemCommand<Item> {
         if (!checkPermission(callback)) {
             return;
         }
-        entityBundle.getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
             Item item = operator.getInventory().findByUid(itemId);
             item.setName(args[0]);
             item.setDescription(args[1]);
-            entityBundle.getItemGateway().update(item);
+            getEntityBundle().getItemGateway().update(item);
             addEffectedId(itemId);
             save();
             if (callback != null)
@@ -47,8 +47,8 @@ public class AlterItemInInventory extends ItemCommand<Item> {
 
     @Override
     public void undo() {
-        entityBundle.getItemGateway().submitTransaction(() -> {
-            entityBundle.getItemGateway().delete(itemId);
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
+            getEntityBundle().getItemGateway().delete(itemId);
             updateUndo();
         });
     }

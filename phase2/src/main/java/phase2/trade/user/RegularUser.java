@@ -4,15 +4,10 @@ import phase2.trade.inventory.Cart;
 import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
-import phase2.trade.item.Item;
-import phase2.trade.trade.Trade;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class RegularUser extends User {
@@ -25,7 +20,7 @@ public class RegularUser extends User {
     @OneToOne(cascade = CascadeType.ALL)
     private Cart cart;
 
-    private int accountbalance;
+    private int accountBalance;
 
     //private int incompleteTrades;
 
@@ -48,7 +43,7 @@ public class RegularUser extends User {
         cart = new Cart();
         cart.setOwner(this);
 
-        this.accountbalance = 0;
+        this.accountBalance = 0;
     }
 
     public RegularUser() {
@@ -94,11 +89,11 @@ public class RegularUser extends User {
         return null;
     }
 
-    public int getAccountbalance() {
-        return accountbalance;
+    public int getAccountBalance() {
+        return accountBalance;
     }
 
-    public void setAccountbalance(int accountbalance) {
-        this.accountbalance = accountbalance;
+    public void setAccountBalance(int accountBalance) {
+        this.accountBalance = accountBalance;
     }
 }

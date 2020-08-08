@@ -22,7 +22,7 @@ public class Item {
 
     private int quantity;
 
-    private double price;
+    private double price = -1;
 
     @ManyToOne
     private ItemList itemList;

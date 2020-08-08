@@ -3,7 +3,8 @@ package phase2.trade.item.command;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.InventoryType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.item.Item;
@@ -21,8 +22,8 @@ public class GetItems extends ItemCommand<ItemList> {
 
     private InventoryType inventoryType;
 
-    public GetItems(EntityBundle entityBundle, RegularUser operator, InventoryType inventoryType) {
-        super(entityBundle, operator);
+    public GetItems(GatewayBundle gatewayBundle, RegularUser operator, InventoryType inventoryType) {
+        super(gatewayBundle, operator);
         this.operator = operator;
         this.inventoryType = inventoryType;
     }

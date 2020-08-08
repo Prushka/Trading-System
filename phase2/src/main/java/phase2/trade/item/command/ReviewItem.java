@@ -2,7 +2,7 @@ package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
@@ -22,8 +22,8 @@ public class ReviewItem extends ItemCommand<Item> {
 
     private Ownership oldOwnership;
 
-    public ReviewItem(EntityBundle entityBundle, RegularUser operator, Long itemId) {
-        super(entityBundle, operator);
+    public ReviewItem(GatewayBundle gatewayBundle, RegularUser operator, Long itemId) {
+        super(gatewayBundle, operator);
         this.itemId = itemId;
         this.operator = operator;
     }
@@ -38,12 +38,12 @@ public class ReviewItem extends ItemCommand<Item> {
             callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
-        entityBundle.getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncInsideItemGateway(itemId);
 
             oldOwnership = item.getOwnership();
             item.setOwnership(Ownership.OWNER);
-            entityBundle.getItemGateway().update(item);
+            getEntityBundle().getItemGateway().update(item);
             addEffectedId(itemId);
             save();
             if (callback != null)
@@ -53,7 +53,7 @@ public class ReviewItem extends ItemCommand<Item> {
 
     @Override
     public void undo() {
-        entityBundle.getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncInsideItemGateway(itemId);
             item.setOwnership(oldOwnership);
             updateUndo();

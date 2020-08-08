@@ -2,7 +2,7 @@ package phase2.trade.user.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionGroupFactory;
@@ -19,9 +19,9 @@ public class Register extends UserCommand<User> {
 
     private transient PermissionGroupFactory permissionGroupFactory;
 
-    public Register(EntityBundle entityBundle, PermissionGroupFactory permissionGroupFactory) {
-        super(entityBundle);
-        this.permissionGroupFactory = permissionGroupFactory;
+    public Register(GatewayBundle gatewayBundle) {
+        super(gatewayBundle);
+        this.permissionGroupFactory = new PermissionGroupFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
     }
 
     public Register() {

@@ -1,7 +1,7 @@
 import org.hibernate.cfg.Configuration;
 import org.junit.Test;
-import phase2.trade.command.AddItemToItemList;
-import phase2.trade.command.AlterItem;
+import phase2.trade.item.command.AddItemToItemList;
+import phase2.trade.item.command.AlterItem;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
 import phase2.trade.gateway.UserGateway;

@@ -30,7 +30,7 @@ public abstract class Command<T> {
     @ElementCollection(fetch = FetchType.EAGER)
     Collection<Long> effectedIds;
 
-    transient GatewayBundle gatewayBundle;
+    protected transient GatewayBundle gatewayBundle;
 
     public Command(GatewayBundle gatewayBundle, User operator) {
         this.operator = operator;
@@ -60,12 +60,12 @@ public abstract class Command<T> {
 
     public abstract Class<?> getClassToOperateOn();
 
-    void save() {
+    protected void save() {
         timestamp = System.currentTimeMillis();
         gatewayBundle.getCommandGateway().submitTransaction(() -> gatewayBundle.getCommandGateway().add(getThis()));
     }
 
-    void updateUndo() {
+    protected void updateUndo() {
         undoTimestamp = System.currentTimeMillis();
         ifUndone = true;
         gatewayBundle.getCommandGateway().submitTransaction(() -> gatewayBundle.getCommandGateway().update(getThis()));

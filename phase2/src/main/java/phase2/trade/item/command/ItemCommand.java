@@ -1,7 +1,7 @@
-package phase2.trade.command;
+package phase2.trade.item.command;
 
+import phase2.trade.command.Command;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
 

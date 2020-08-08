@@ -23,9 +23,9 @@
         <mapping class="phase2.trade.trade.Order" />
 
         <mapping class="phase2.trade.command.Command" />
-        <mapping class="phase2.trade.command.ItemCommand" />
-        <mapping class="phase2.trade.command.AddItemToItemList" />
-        <mapping class="phase2.trade.command.AlterItem" />
+        <mapping class="phase2.trade.item.command.ItemCommand" />
+        <mapping class="phase2.trade.item.command.AddItemToItemList" />
+        <mapping class="phase2.trade.item.command.AlterItem" />
 
         <mapping class="phase2.trade.address.Address" />
         <mapping class="phase2.trade.address.AddressBook" />

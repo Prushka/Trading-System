@@ -1,5 +1,6 @@
-package phase2.trade.command;
+package phase2.trade.item.command;
 
+import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;

@@ -15,21 +15,6 @@ public class AccountManager {
         this.userGateway = userGateway;
     }
 
-    public void register(Callback<User> callback, String username, String email, String password, String country,
-                         String city) {
-        userGateway.submitTransaction(() -> {
-            List<User> usersByEmail = userGateway.findByEmail(email);
-            List<User> usersByName = userGateway.findByUserName(username);
-            if (usersByEmail.size() == 0 && usersByName.size() == 0) {
-                User user = new PersonalUser(username, email, password, country, city);
-                userGateway.add(user);
-                loggedInUser = user;
-                callback.call(user);
-            }
-            callback.call(null);
-        });
-    }
-
     public void login(Callback<User> callback, String usernameOrEmail, String password) {
         userGateway.submitSession(() -> {
             List<User> matchedUsers = userGateway.findMatches(usernameOrEmail, password);

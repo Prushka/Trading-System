@@ -56,6 +56,24 @@ public class PersonalUserManager{
         return user.getCart();
     }
 
+    public List<PersonalUser> suggest(){
+        List<Tuple> ans = new ArrayList<>();
+        List<User> pu = new ArrayList<>();
+        List<User> allUser = userDAO.findAllUser();
+        for (User user : allUser){
+            if (user instanceof PersonalUser){
+                pu.add((PersonalUser) user);
+            }
+        }
+        for (Item i : loggedInUser.getWishList()) {
+             for (PersonalUser p : pu) {
+                if (p.getInventory().contains(i)){
+                    ans.add(new tuple(i,p))
+                }
+            }
+        return ans;
+    }
+
     /*public void suggest (PersonalUser p) {
         for (PersonalUser x : personalUserRepository) {
             for (Item i : x.getInventory()) {

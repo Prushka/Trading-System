@@ -14,14 +14,12 @@ public class ConfigBundle implements Shutdownable {
 
     private PermissionConfig permissionConfig;
 
-    // yaml strategy
-
     private ConfigStrategy configStrategy;
 
     public ConfigBundle() {
         configStrategy = new YamlStrategy();
 
-        permissionConfig = read(PermissionConfig.class, permissionConfig.getFileName(), PermissionConfig::new);
+        permissionConfig = read(PermissionConfig.class, "permission_group", PermissionConfig::new);
     }
 
     private <T> T read(Class<T> configClass, String fileName, Supplier<T> supplier) {

@@ -11,7 +11,4 @@ public class PermissionConfig {
     public List<Permission> regularPermission;
     public List<Permission> guestPermission;
 
-    public String getFileName() {
-        return "permission_config";
-    }
 }

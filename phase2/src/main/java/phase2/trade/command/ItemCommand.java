@@ -18,10 +18,14 @@ public abstract class ItemCommand extends Command<Item> {
 
     }
 
-    Item findItemByIdSync(Long itemId) {
-        gatewayBundle.getItemGateway().openCurrentSessionWithTransaction();
+    Item findItemByIdSyncInItemGateway(Long itemId) {
+        return gatewayBundle.getItemGateway().findById(itemId);
+    }
+
+    Item findItemByIdSyncOutsideItemGateway(Long itemId) {
+        gatewayBundle.getItemGateway().openCurrentSession();
         Item item = gatewayBundle.getItemGateway().findById(itemId);
-        gatewayBundle.getItemGateway().closeCurrentSessionWithTransaction();
+        gatewayBundle.getItemGateway().closeCurrentSession();
         return item;
     }
 

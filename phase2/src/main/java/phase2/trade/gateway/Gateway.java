@@ -29,6 +29,10 @@ public interface Gateway<T> {
 
     // void submitSessionWithTransactionAsync(Runnable runnable);
 
+    void submitTransaction(Runnable runnable, boolean asynchronous);
+
+    void submitSession(Runnable runnable, boolean asynchronous);
+
     void submitTransaction(Runnable runnable);
 
     void submitSession(Runnable runnable);

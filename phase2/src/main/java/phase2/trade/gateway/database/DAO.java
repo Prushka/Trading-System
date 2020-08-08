@@ -8,7 +8,7 @@ import phase2.trade.gateway.Gateway;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-public class DAO<T> implements Gateway<T> {
+public abstract class DAO<T> implements Gateway<T> {
 
     private Session currentSession;
 
@@ -106,43 +106,43 @@ public class DAO<T> implements Gateway<T> {
         getThreadPool().submit(runnable);
     }
 
-    public void submitSessionSync(Runnable runnable) {
+    private void submitSessionSync(Runnable runnable) {
         openCurrentSession();
         runnable.run();
         closeCurrentSession();
     }
 
-    public void submitSessionWithTransactionSync(Runnable runnable) {
+    private void submitTransactionSync(Runnable runnable) {
         openCurrentSessionWithTransaction();
         runnable.run();
         closeCurrentSessionWithTransaction();
     }
 
-    public void submitSessionAsync(Runnable runnable) {
-        getThreadPool().submit(() -> submitSessionSync(runnable));
+    public void submitSession(Runnable runnable, boolean asynchronous) {
+        if(asynchronous) {
+            getThreadPool().submit(() -> submitSessionSync(runnable));
+        }else{
+            submitSessionSync(runnable);
+        }
     }
 
-    public void submitSessionWithTransactionAsync(Runnable runnable) {
-        getThreadPool().submit(() -> submitSessionWithTransactionSync(runnable));
+    public void submitTransaction(Runnable runnable, boolean asynchronous) {
+        if(asynchronous) {
+            getThreadPool().submit(() -> submitTransactionSync(runnable));
+        }else{
+            submitSessionSync(runnable);
+        }
     }
 
-    private boolean async = false;
+    private final boolean async = false;
 
     @Override
     public void submitTransaction(Runnable runnable) {
-        if (async) {
-            submitSessionWithTransactionAsync(runnable);
-        } else {
-            submitSessionWithTransactionSync(runnable);
-        }
+        submitTransaction(runnable, async);
     }
 
     @Override
     public void submitSession(Runnable runnable) {
-        if (async) {
-            submitSessionAsync(runnable);
-        } else {
-            submitSessionSync(runnable);
-        }
+        submitSession(runnable, async);
     }
 }

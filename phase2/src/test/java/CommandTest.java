@@ -1,6 +1,7 @@
 import org.hibernate.cfg.Configuration;
 import org.junit.Test;
 import phase2.trade.command.AddItemToItemList;
+import phase2.trade.command.AlterItem;
 import phase2.trade.command.Command;
 import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.UserGateway;
@@ -44,6 +45,9 @@ public class CommandTest {
         Command<Item> addItem = new AddItemToItemList(bundle, personalUser, InventoryType.INVENTORY);
 
         addItem.execute(null, "testName", "testDescription");
+
+        Command<Item> alterItem = new AlterItem(bundle, personalUser, 1L);
+        alterItem.execute(null, "testName2", "testDescription2");
     }
 
     @Test
@@ -55,7 +59,7 @@ public class CommandTest {
         bundle.getCommandGateway().closeCurrentSession();
 
         command.setGatewayBundle(bundle);
-        command.isUndoable(result -> assertEquals(0, result.size()));
-        command.undo();
+        command.isUndoable(result -> assertEquals(1, result.size()));
+        // command.undo();
     }
 }

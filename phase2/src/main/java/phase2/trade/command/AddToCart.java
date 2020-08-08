@@ -35,7 +35,7 @@ public class AddToCart extends ItemCommand {
     @Override
     public void execute(Callback<Item> callback, String... args) { //
         gatewayBundle.getUserGateway().submitTransaction(() -> {
-            Item item = findItemByIdSync(itemId);
+            Item item = findItemByIdSyncOutsideItemGateway(itemId);
             operator.getItemList(inventoryType).addItem(item);
             gatewayBundle.getUserGateway().update(operator);
             callback.call(item);

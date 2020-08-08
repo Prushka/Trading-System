@@ -18,7 +18,6 @@ public class ORMTest {
 
     private UserDAO userDAO;
     private ItemDAO itemDAO;
-    private DAO<ItemList> itemListDAO;
 
     public ORMTest() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
@@ -29,7 +28,6 @@ public class ORMTest {
 
         userDAO = new UserDAO(bundle);
         itemDAO = new ItemDAO(bundle);
-        itemListDAO = new DAO<>(ItemList.class, bundle);
     }
 
     @Test
@@ -37,7 +35,7 @@ public class ORMTest {
 
         PersonalUser user = new PersonalUser("name", "email", "password", "country", "city");
 
-        userDAO.submitSessionSync(() -> userDAO.add(user));
+        userDAO.submitSession(() -> userDAO.add(user), false);
     }
 
     @Test
@@ -74,7 +72,7 @@ public class ORMTest {
     public void getItemFromUser() throws InterruptedException {
         PersonalUser user = new PersonalUser("name", "email", "password", "country", "city");
 
-        userDAO.submitSessionSync(() -> userDAO.add(user));
+        userDAO.submitSession(() -> userDAO.add(user), false);
 
         ItemManager itemManager = new ItemManager(bundle, user);
 

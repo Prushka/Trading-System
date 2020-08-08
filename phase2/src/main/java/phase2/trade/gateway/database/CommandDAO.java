@@ -17,7 +17,9 @@ public class CommandDAO extends DAO<Command> implements CommandGateway {
         Query<Command<?>> query = getCurrentSession().createQuery("FROM Command WHERE timestamp > :commandTimestamp");
         query.setParameter("commandTimestamp", commandTimestamp);
         List<Command<?>> result = new ArrayList<>();
+        System.out.println(query.getResultList().size());
         for (Command<?> command : query.getResultList()) {
+            System.out.println(!Collections.disjoint(effectedIds, command.getEffectedIds()));
             if (command.getCommandType().hasEffect && !Collections.disjoint(effectedIds, command.getEffectedIds())) {
                 result.add(command);
             }

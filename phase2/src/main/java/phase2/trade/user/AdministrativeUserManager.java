@@ -6,9 +6,12 @@ import phase2.trade.gateway.database.TradeDAO;
 import phase2.trade.callback.Callback;
 import phase2.trade.gateway.database.UserDAO;
 import phase2.trade.item.Item;
+import phase2.trade.item.Ownership;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class AdministrativeUserManager {
@@ -19,7 +22,7 @@ public class AdministrativeUserManager {
     private int transactionLimit = 100; //what is the init limit?
     private int lendBeforeBorrow = 1;
     private List<RegularUser> needToFreezeUserList;
-    private List<RegularUser> needToConfirmAddItem;
+    private Map<RegularUser, List<Item>> needToConfirmAddItem;
     private List<RegularUser> needToConfirmUnfreeze;
     //private Repository<Item> itemRepository;
 
@@ -29,14 +32,13 @@ public class AdministrativeUserManager {
      *
      * @param userDAO A DAO of all users in the system
      */
-    // public void AdministrativeManager(UserDAO userDAO, ItemManager itemManager, TradeDAO tradeDAO) {
-    //     this.userDAO = userDAO;
-    //     this.itemManager = itemManager;
-    //     this.tradeDAO = tradeDAO;
-    //     needToFreezeUserList = new ArrayList<>();
-    //     needToConfirmAddItem = new ArrayList<>();
-    //     needToConfirmUnfreeze = new ArrayList<>();
-    // }
+     public void AdministrativeManager(UserDAO userDAO, TradeDAO tradeDAO) {
+         this.userDAO = userDAO;
+         this.tradeDAO = tradeDAO;
+         needToFreezeUserList = new ArrayList<>();
+         needToConfirmAddItem = new HashMap<>();
+         needToConfirmUnfreeze = new ArrayList<>();
+     }
 
     public List<RegularUser> findAllPersonalUser() {
         List<User> allUser = userDAO.findAllUser();
@@ -66,7 +68,21 @@ public class AdministrativeUserManager {
         return needToConfirmUnfreeze;
     }
 
-    /*public List<PersonalUser> getNeedToConfirmAddItem()*/
+    public Map<RegularUser, List<Item>> getNeedToConfirmAddItem(){
+         for (RegularUser user: regularUser){
+             List<Item> items = user.getInventory().getListOfItems();
+             List<Item> reviewList = new ArrayList<>();
+             for (Item item: items){
+                 if (item.getOwnership() == Ownership.TO_BE_REVIEWED){
+                     reviewList.add(item);
+                 }
+             }
+             if (!reviewList.isEmpty()){
+                 needToConfirmAddItem.put(user, reviewList);
+             }
+         }
+         return needToConfirmAddItem;
+    }
 
 
     /**
@@ -78,11 +94,11 @@ public class AdministrativeUserManager {
         user.setAccountState(AccountState.FROZEN);
     }
 
-    /*public void confirmFreezeAllUser(){
-        for (PersonalUser user : getPersonalUserNeedToFreeze()){
+    public void confirmFreezeAllUser(){
+        for (RegularUser user : getPersonalUserNeedToFreeze()){
             freezeUser(user);
         }
-    }*/
+    }
 
     /**
      * Unfreeze a personal user

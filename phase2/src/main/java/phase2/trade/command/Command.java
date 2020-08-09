@@ -141,6 +141,7 @@ public abstract class Command<T> {
                     blockingCommands.add(command);
                 }
             }
+            blockingCommands.sort(new CommandComparator());
             callback.call(blockingCommands);
         });
     }

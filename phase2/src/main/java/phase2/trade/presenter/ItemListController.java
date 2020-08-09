@@ -57,7 +57,7 @@ public class ItemListController extends AbstractController implements Initializa
 
         ObservableList<Item> displayData = FXCollections.observableArrayList(user.getItemList(itemListType).getListOfItems());
 
-        TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData);
+        TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData, 150);
         tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
                 .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price").addColumn("Willingness", "willingness");
 

@@ -18,8 +18,11 @@ public class TableViewGenerator<T> {
 
     private final List<TableColumn<T, String>> listOfColumns = new ArrayList<>();
 
-    public TableViewGenerator(ObservableList<T> data) {
+    private int defaultMinWidth = 150;
+
+    public TableViewGenerator(ObservableList<T> data, int defaultMinWidth) {
         this.data = data;
+        this.defaultMinWidth = defaultMinWidth;
     }
 
     private TableColumn<T, String> getTableColumn(String name, String fieldName, int minWidth) {
@@ -35,7 +38,7 @@ public class TableViewGenerator<T> {
     }
 
     public TableViewGenerator<T> addColumn(String name, String fieldName) {
-        listOfColumns.add(getTableColumn(name, fieldName, 150));
+        listOfColumns.add(getTableColumn(name, fieldName, defaultMinWidth));
         return this;
     }
 

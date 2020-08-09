@@ -19,12 +19,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import phase2.trade.config.property.TradeProperties;
-import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.GatewayBundle;
 // import phase2.trade.gateway.database.DatabaseResourceBundleImpl;
 import phase2.trade.item.Item;
-import phase2.trade.repository.SaveHook;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
 import phase2.trade.user.User;
@@ -58,18 +55,21 @@ public class MarketController  extends AbstractController implements Initializab
     public MarketController(GatewayBundle gatewayBundle, User currUser){
         super(gatewayBundle);
         this.currUser = currUser;
-        tc = new TradeController(gatewayBundle); // need to change trade properties thing
+        tc = new TradeController(gatewayBundle);
         tic = new TradeInfoController();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        /*
         tradeList.add(tc.addTrade(result -> {
                     if (result != null) {
                         System.out.println("success");
                     }
                 }, new ArrayList<>(), new ArrayList<>(), "2020", "9", "8", "1", "1",
                 "country", "city", "street", "num", true));
+
+         */
     }
 
     public void borrowTradeClicked(){

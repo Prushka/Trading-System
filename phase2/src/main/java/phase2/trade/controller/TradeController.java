@@ -22,21 +22,25 @@ public class TradeController extends AbstractController implements Initializable
 
     private final TradeManager tm;
 
+    Trade newTrade;
+
     public TradeController(GatewayBundle gatewayBundle) {
         super(gatewayBundle);
         this.tradeGateway = gatewayBundle.getEntityBundle().getTradeGateway();
         this.tm = new TradeManager(gatewayBundle.getConfigBundle().getTradeConfig());
     }
 
-    public void addTrade(Callback<Trade> callback, List<User> users, List<List<Item>> items, String year, String month,
+    public Trade addTrade(Callback<Trade> callback, List<User> users, List<List<Item>> items, String year, String month,
                          String day, String hour, String minute, String country, String city, String street,
                          String streetNum, boolean isPermanent) {
         tradeGateway.submitTransaction(() -> {
             Trade newTrade = tm.createTrade(users, items, year, month, day, hour, minute, country, city, street,
                     streetNum, isPermanent);
             tradeGateway.add(newTrade);
+            this.newTrade = newTrade;
             callback.call(newTrade);
         });
+        return newTrade;
     }
 
     public void editMeetingDateAndTime(Callback<Trade> callback, Trade currTrade, User currUser, LocalDateTime dateTime){

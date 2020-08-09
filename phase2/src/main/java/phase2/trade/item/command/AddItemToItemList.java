@@ -41,7 +41,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
             item.setDescription(args[1]);
             item.setCategory(Category.valueOf(args[2]));
             item.setItemList(operator.getItemList(itemListType));
-
+            item.setOwner(operator);
             operator.getItemList(itemListType).addItem(item);
             getEntityBundle().getUserGateway().update(operator);
             this.itemId = item.getUid();

@@ -20,7 +20,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private final VBox right;
     public JFXListView<Label> sideList;
-    public Label userInfo, market, wishList, settings, logOut, inventory;
+    public Label userInfo, market, wishList, settings, inventory;
     public VBox userInfoBox;
 
     public JFXPanel panel = new JFXPanel();
@@ -35,17 +35,6 @@ public class SideMenuController extends AbstractController implements Initializa
         this.right = right;
     }
 
-    private void logOut(Label old) {
-        ConfirmPopup confirmPopup = new ConfirmPopup();
-        // Parent confirm = loadPane("confirm_popup.fxml", confirmPopup);
-        if (confirmPopup.display("Log out", "Do you really want to log out?")) {
-            accountManager.logOut();
-            switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), logOut);
-        } else {
-            sideList.getSelectionModel().clearAndSelect(1);
-            // sideList.getSelectionModel().select(old);
-        }
-    }
 
     private void userInfo() {
         Parent userPane = loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
@@ -94,9 +83,6 @@ public class SideMenuController extends AbstractController implements Initializa
                         break;
                     case "wishList":
                         wishList();
-                        break;
-                    case "logOut":
-                        logOut(oldValue);
                         break;
                 }
             }

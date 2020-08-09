@@ -1,11 +1,14 @@
 package phase2.trade.inventory;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -17,7 +20,7 @@ public abstract class ItemList {
     private Long uid;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Item> listOfItems = new ArrayList<>();
+    private List<Item> listOfItems = FXCollections.observableArrayList();
 
     @OneToOne
     private User owner;

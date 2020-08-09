@@ -1,17 +1,14 @@
 package phase2.trade.controller;
 
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
+import com.jfoenix.controls.JFXButton;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 
+import java.beans.EventHandler;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,6 +26,17 @@ public class DashboardController extends AbstractController implements Initializ
     public DashboardController(GatewayBundle gatewayBundle, AccountManager accountManager) {
         super(gatewayBundle);
         this.accountManager = accountManager;
+    }
+
+
+    public void signOut(ActionEvent actionEvent) {
+        ConfirmWindow confirmWindow = new ConfirmWindow();
+        if (confirmWindow.display("Sign out", "Do you really want to sign out?")) {
+            accountManager.logOut();
+            switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
+        } else {
+            // sideList.getSelectionModel().select(old);
+        }
     }
 
     @Override

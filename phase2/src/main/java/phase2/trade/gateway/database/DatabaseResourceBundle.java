@@ -28,7 +28,7 @@ public class DatabaseResourceBundle implements Shutdownable {
 
         configuration.setProperty("hibernate.dialect", databaseConfig.getConfiguredDialect());
         configuration.setProperty("hibernate.connection.driver_class", databaseConfig.getConfiguredDriver());
-        configuration.setProperty("hibernate.connection.url", databaseConfig.getUrl());
+        configuration.setProperty("hibernate.connection.url", databaseConfig.getConfiguredURL());
         configuration.setProperty("hibernate.connection.username", databaseConfig.getUsername());
         configuration.setProperty("hibernate.connection.password", databaseConfig.getPassword());
         configuration.setProperty("hibernate.hbm2ddl.auto", databaseConfig.getHbm2ddl());

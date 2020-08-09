@@ -2,6 +2,8 @@ package phase2.trade.inventory;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
 import phase2.trade.user.User;
@@ -20,6 +22,7 @@ public abstract class ItemList {
     private Long uid;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Item> listOfItems = FXCollections.observableArrayList();
 
     @OneToOne

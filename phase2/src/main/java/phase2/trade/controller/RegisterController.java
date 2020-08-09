@@ -45,11 +45,15 @@ public class RegisterController extends AbstractController implements Initializa
         submissionResultProperty.setValue("Signing up..");
         accountManager.register((result, status) -> {
             if (status != ResultStatus.SUCCEEDED) {
-                Platform.runLater(() -> submissionResultProperty.setValue("Username / Email already exists"));
+                Platform.runLater(() -> {
+                    registerButton.setDisable(false);
+                    submissionResultProperty.setValue("Username / Email already exists");
+                });
             } else {
-                Platform.runLater(() ->
-                        switchScene("personal_dashboard.fxml",
-                                new DashboardController(gatewayBundle, accountManager), actionEvent, true));
+                Platform.runLater(() -> {
+                    switchScene("personal_dashboard.fxml",
+                            new DashboardController(gatewayBundle, accountManager), actionEvent, true);
+                });
             }
         }, username.getText(), email.getText(), password.getText(), country.getText(), city.getText());
     }

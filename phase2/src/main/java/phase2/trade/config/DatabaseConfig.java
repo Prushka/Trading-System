@@ -1,19 +1,29 @@
 package phase2.trade.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class DatabaseConfig {
 
-    private String database = "mysql";
+    private String databaseType = "mysql";
 
-    private String url = "jdbc:mysql://muddy.ca:3308/group";
+    private String host = "muddy.ca";
+
+    private int port = 3308;
+
+    private String database = "group";
 
     private String dialect = "auto";
 
     private String driver = "auto";
+
+    private String url = "auto";
 
     private String username = "member";
 
@@ -30,24 +40,37 @@ public class DatabaseConfig {
     private final transient Map<String, List<String>> preconfiguredDialect = new HashMap<>();
 
     public DatabaseConfig() {
-        configureDialects("mysql", "org.hibernate.dialect.MySQL5Dialect", "com.mysql.cj.jdbc.Driver");
+        configureDialects("mysql", "org.hibernate.dialect.MySQL5Dialect", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://");
+        configureDialects("mariadb", "org.hibernate.dialect.MariaDB53Dialect", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://"); // mariadb is compatible with mysql
+        configureDialects("postgresql", "org.hibernate.dialect.PostgreSQLDialect", "org.postgresql.Driver", "jdbc:postgresql://"); // schema has to be configured in entity table to support postgresql
+        // mssql
     }
 
-    private void configureDialects(String database, String dialect, String driver) { // the driver library has to be added first
+
+    private void configureDialects(String database, String dialect, String driver, String prefix) { // the driver library has to be added first
         this.preconfiguredDialect.put(database, new ArrayList<String>() {{
             add(dialect);
             add(driver);
+            add(prefix);
         }});
     }
 
-    public String getConfiguredDialect() {
-        if (!getDialect().equals("auto")) return getDialect();
-        return preconfiguredDialect.get(database).get(0);
+    @JsonIgnore
+    public String getConfiguredURL() {
+        if (!getUrl().equals("auto")) return getUrl();
+        return preconfiguredDialect.get(databaseType).get(2) + getHost() + ":" + getPort() + "/" + getDatabase();
     }
 
+    @JsonIgnore
+    public String getConfiguredDialect() {
+        if (!getDialect().equals("auto")) return getDialect();
+        return preconfiguredDialect.get(databaseType).get(0);
+    }
+
+    @JsonIgnore
     public String getConfiguredDriver() {
         if (!getDialect().equals("auto")) return getDialect();
-        return preconfiguredDialect.get(database).get(1);
+        return preconfiguredDialect.get(databaseType).get(1);
     }
 
     public boolean isAutoReconnect() {
@@ -58,12 +81,12 @@ public class DatabaseConfig {
         this.autoReconnect = autoReconnect;
     }
 
-    public String getDatabase() {
-        return database;
+    public String getDatabaseType() {
+        return databaseType;
     }
 
-    public void setDatabase(String database) {
-        this.database = database;
+    public void setDatabaseType(String databaseType) {
+        this.databaseType = databaseType;
     }
 
     public String getUrl() {
@@ -130,8 +153,32 @@ public class DatabaseConfig {
         this.driver = driver;
     }
 
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
     // use this only for debugging
     public String toString() {
-        return String.format("Database: %s\nDialect: %s\nDriver: %s\nUrl: %s\nUserName: %s\nhbm2ddl: %s", database, getConfiguredDialect(), getConfiguredDriver(), getUrl(), getUsername(), getHbm2ddl());
+        return String.format("Database: %s\nDialect: %s\nDriver: %s\nUrl: %s\nUserName: %s\nhbm2ddl: %s", databaseType, getConfiguredDialect(), getConfiguredDriver(), getConfiguredURL(), getUsername(), getHbm2ddl());
     }
 }

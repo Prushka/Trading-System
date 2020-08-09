@@ -32,7 +32,7 @@ public class Register extends UserCommand<User> {
     public void execute(StatusCallback<User> callback, String... args) {
         getUserGateway().submitTransaction(() -> {
             List<User> usersByEmail = getUserGateway().findByEmail(args[0]);
-            List<User> usersByName = getUserGateway().findByUserName(args[1]);
+            List<User> usersByName = getUserGateway().findByUserName(args[0]);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new RegularUser(args[0], args[1], args[2], args[3], args[4]);
                 user.setUserPermission(permissionGroupFactory.getUserPermission(PermissionGroup.REGULAR));

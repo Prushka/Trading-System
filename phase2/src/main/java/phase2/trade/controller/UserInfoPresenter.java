@@ -1,6 +1,5 @@
 package phase2.trade.controller;
 
-import com.j256.ormlite.stmt.query.In;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;

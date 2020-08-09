@@ -60,7 +60,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void wishList() {
-        Parent userPane = loadPane("add_wish.fxml", new WishItemAddController());
+        Parent userPane = loadPane("add_wish.fxml", new WishItemAddController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.CART));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);

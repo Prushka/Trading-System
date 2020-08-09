@@ -25,10 +25,11 @@ import phase2.trade.user.User;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
-public class ItemAddController implements Initializable {
+public class AddItemController implements Initializable {
 
-    public JFXComboBox<Category> category;
+    public JFXComboBox<String> category;
     public JFXTextField name;
     public JFXTextArea description;
     public JFXButton submitButton;
@@ -41,7 +42,7 @@ public class ItemAddController implements Initializable {
 
     private Stage window;
 
-    public ItemAddController(GatewayBundle gatewayBundle, RegularUser user, ItemListType itemListType, ObservableList<Item> display) {
+    public AddItemController(GatewayBundle gatewayBundle, RegularUser user, ItemListType itemListType, ObservableList<Item> display) {
         this.gatewayBundle = gatewayBundle;
         this.operator = user;
         this.itemListType = itemListType;
@@ -60,14 +61,14 @@ public class ItemAddController implements Initializable {
                     window.close();
                 });
             }
-        }, name.getText(), description.getText());
+        }, name.getText(), description.getText(), category.getValue());
         submitButton.setDisable(false);
 
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        category.getItems().addAll(Arrays.asList(Category.values()));
+        category.getItems().addAll(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new)));
         window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);

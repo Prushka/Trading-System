@@ -34,7 +34,7 @@ public class DashboardController extends AbstractController implements Initializ
         ConfirmWindow confirmWindow = new ConfirmWindow();
         if (confirmWindow.display("Sign out", "Do you really want to sign out?")) {
             accountManager.logOut();
-            switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
+            getSceneFactory().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
         } else {
             // sideList.getSelectionModel().select(old);
         }
@@ -42,40 +42,7 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        root.setLeft(loadPane("side_menu_" + accountManager.getPermissionGroup().name().toLowerCase() + ".fxml",
+        root.setLeft(getSceneFactory().loadPane("side_menu_" + accountManager.getPermissionGroup().name().toLowerCase() + ".fxml",
                 new SideMenuController(gatewayBundle, accountManager, center, right)));
-
-
-        /*
-        HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
-        transition.setRate(-1);
-
-        drawer.setOnDrawerOpening(e -> {
-            transition.setRate(1);
-            transition.play();
-        });
-
-        drawer.setOnDrawerClosing(e -> {
-            transition.setRate(-1);
-            transition.play();
-        });
-
-        drawer.setOnDrawerOpened(e -> {
-            top.setPickOnBounds(true);
-        });
-
-        drawer.setOnDrawerClosed(e -> {
-            top.setPickOnBounds(false);
-        });
-
-        hamburger.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
-            transition.setRate(transition.getRate() * -1);
-            transition.play();
-
-            if (drawer.isOpened() || drawer.isOpening())
-                drawer.close();
-            else
-                drawer.open();
-        });*/
     }
 }

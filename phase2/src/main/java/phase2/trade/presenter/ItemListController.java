@@ -126,6 +126,6 @@ public class ItemListController extends AbstractController implements Initializa
 
     public void addWindow(ObservableList<Item> displayData) {
         AddItemController addItemController = new AddItemController(gatewayBundle, user, itemListType, displayData);
-        loadPane("add_item.fxml", addItemController);
+        getSceneFactory().loadPane("add_item.fxml", addItemController);
     }
 }

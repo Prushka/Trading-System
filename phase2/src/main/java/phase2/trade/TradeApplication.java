@@ -64,7 +64,7 @@ public class TradeApplication extends Application {
             DashboardController dashboardController = new DashboardController(gatewayBundle, accountManager);
             Platform.runLater(() -> {
 
-                Parent dashboard = sceneFactory.getPane("dashboard.fxml", dashboardController);
+                Parent dashboard = sceneFactory.loadPane("dashboard.fxml", dashboardController);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");

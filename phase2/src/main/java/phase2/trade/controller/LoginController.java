@@ -48,19 +48,19 @@ public class LoginController extends AbstractController implements Initializable
                 });
             } else {
                 Platform.runLater(() ->
-                        switchScene("dashboard.fxml",
+                        getSceneFactory().switchScene("dashboard.fxml",
                                 new DashboardController(gatewayBundle, accountManager), actionEvent, true));
             }
         }, usernameOrEmail.getText(), password.getText());
     }
 
     public void goToSignUp(ActionEvent actionEvent) {
-        switchScene("register.fxml", new RegisterController(gatewayBundle, accountManager), actionEvent);
+        getSceneFactory().switchScene("register.fxml", new RegisterController(gatewayBundle, accountManager), actionEvent);
     }
 
 
     public void goToGuest(ActionEvent actionEvent) {
-        switchScene("guest.fxml", new GuestController(gatewayBundle), actionEvent);
+        getSceneFactory().switchScene("guest.fxml", new GuestController(gatewayBundle), actionEvent);
     }
 
     @Override

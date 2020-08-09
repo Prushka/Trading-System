@@ -14,9 +14,9 @@ import java.io.IOException;
 
 public abstract class AbstractController {
 
-    SceneFactory sceneFactory = new SceneFactory();
+    private final SceneFactory sceneFactory = new SceneFactory();
 
-    ValidatorFactory validatorFactory = new ValidatorFactory();
+    private final ValidatorFactory validatorFactory = new ValidatorFactory();
 
     GatewayBundle gatewayBundle;
 
@@ -24,43 +24,11 @@ public abstract class AbstractController {
         this.gatewayBundle = gatewayBundle;
     }
 
-    protected void switchScene(String fileName, Object controller, Stage stage, boolean applyCSS) {
-        FXMLLoader loader = sceneFactory.getLoader(fileName);
-        loader.setController(controller);
-        try {
-            Scene scene = new Scene(loader.load());
-            if (applyCSS) {
-                scene.getStylesheets().add("css/trade.css");
-            }
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    GatewayBundle getGatewayBundle() {
+        return this.gatewayBundle;
     }
 
-    protected void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
-        this.switchScene(fileName, controller, actionEvent, false);
+    public SceneFactory getSceneFactory() {
+        return sceneFactory;
     }
-
-    protected void switchScene(String fileName, Object controller, ActionEvent actionEvent, boolean applyCSS) {
-        this.switchScene(fileName, controller,
-                (Stage) ((Node) actionEvent.getSource()).getScene().getWindow(), applyCSS);
-    }
-
-
-    protected void switchScene(String fileName, Object controller, Parent parent) {
-        this.switchScene(fileName, controller, parent, false);
-    }
-
-    protected void switchScene(String fileName, Object controller, Parent parent, boolean applyCSS) {
-        this.switchScene(fileName, controller,
-                (Stage) parent.getScene().getWindow(), applyCSS);
-    }
-
-    protected Parent loadPane(String fileName, Object controller) {
-        return sceneFactory.getPane(fileName, controller);
-    }
-
-    GatewayBundle getGatewayBundle(){ return this.gatewayBundle;}
-
 }

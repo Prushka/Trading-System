@@ -37,14 +37,14 @@ public class SideMenuController extends AbstractController implements Initializa
 
 
     private void userInfo() {
-        Parent userPane = loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
+        Parent userPane = getSceneFactory().loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void market() {
-        Parent userPane = loadPane("market.fxml", new MarketController(getGatewayBundle(),
+        Parent userPane = getSceneFactory().loadPane("market.fxml", new MarketController(getGatewayBundle(),
                 accountManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
@@ -52,7 +52,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void inventory() {
-        Parent userPane = loadPane("item_list.fxml", new ItemListController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.INVENTORY));
+        Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.INVENTORY));
         userPane.setPickOnBounds(false);
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
@@ -60,7 +60,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void wishList() {
-        Parent userPane = loadPane("add_wish.fxml", new WishItemAddController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.CART));
+        Parent userPane = getSceneFactory().loadPane("add_wish.fxml", new WishItemAddController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.CART));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
@@ -68,7 +68,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userInfoBox.getChildren().add(loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
+        userInfoBox.getChildren().add(getSceneFactory().loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue.getId()) {

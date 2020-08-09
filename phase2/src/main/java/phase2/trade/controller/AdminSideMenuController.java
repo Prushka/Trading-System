@@ -36,14 +36,14 @@ public class AdminSideMenuController extends AbstractController implements Initi
     }
 
     private void accounts() {
-        Parent userPane = loadPane("user_accounts.fxml", new UserAccountsController(getGatewayBundle()));
+        Parent userPane = getSceneFactory().loadPane("user_accounts.fxml", new UserAccountsController(getGatewayBundle()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void userLimits() {
-        Parent userPane = loadPane("limits.fxml", new LimitsController(getGatewayBundle()));
+        Parent userPane = getSceneFactory().loadPane("limits.fxml", new LimitsController(getGatewayBundle()));
         userPane.setPickOnBounds(false);
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
@@ -52,7 +52,7 @@ public class AdminSideMenuController extends AbstractController implements Initi
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userInfoBox.getChildren().add(loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
+        userInfoBox.getChildren().add(getSceneFactory().loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue.getId()) {

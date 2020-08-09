@@ -51,7 +51,7 @@ public class RegisterController extends AbstractController implements Initializa
                 });
             } else {
                 Platform.runLater(() -> {
-                    switchScene("dashboard.fxml",
+                    getSceneFactory().switchScene("dashboard.fxml",
                             new DashboardController(gatewayBundle, accountManager), actionEvent, true);
                 });
             }
@@ -59,12 +59,12 @@ public class RegisterController extends AbstractController implements Initializa
     }
 
     public void goToSignIn(ActionEvent actionEvent) {
-        switchScene("login.fxml",
+        getSceneFactory().switchScene("login.fxml",
                 new LoginController(gatewayBundle, accountManager), actionEvent);
     }
 
     public void goToGuest(ActionEvent actionEvent) {
-        switchScene("guest.fxml",
+        getSceneFactory().switchScene("guest.fxml",
                 new GuestController(gatewayBundle), actionEvent);
     }
 

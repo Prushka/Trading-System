@@ -1,9 +1,6 @@
 package phase2.trade.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -178,6 +174,6 @@ public class WishItemAddController extends AbstractController implements Initial
 
     public void addWindow(ObservableList<Item> displayData) {
         AddItemController addItemController = new AddItemController(gatewayBundle, user, itemListType, displayData);
-        loadPane("add_item.fxml", addItemController);
+        getSceneFactory().loadPane("add_item.fxml", addItemController);
     }
 }

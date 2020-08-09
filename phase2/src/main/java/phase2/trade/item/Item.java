@@ -2,6 +2,7 @@ package phase2.trade.item;
 
 
 import phase2.trade.inventory.ItemList;
+import phase2.trade.user.User;
 
 import javax.persistence.*;
 
@@ -11,6 +12,9 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
+
+    @OneToOne
+    private User owner;
 
     private String name;
     private String description;
@@ -97,5 +101,13 @@ public class Item {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

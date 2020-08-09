@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
@@ -12,12 +14,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.AddItemController;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
+import phase2.trade.item.Willingness;
+import phase2.trade.item.command.AlterWillingness;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.user.RegularUser;
 
@@ -25,6 +31,7 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class ItemListController extends AbstractController implements Initializable {
 
@@ -79,25 +86,27 @@ public class ItemListController extends AbstractController implements Initializa
 
         JFXButton addButton = new JFXButton("Add");
         JFXButton deleteButton = new JFXButton("Delete");
+        JFXButton sellButton = new JFXButton("I wanna sell them");
+        JFXButton lendButton = new JFXButton("I wanna lend them");
 
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10, 10, 10, 10)); // padding around entire layout
         hbox.setSpacing(10);
-        hbox.getChildren().addAll(addButton, deleteButton);
+        hbox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton);
+
+        sellButton.setOnAction(getWillingnessHandler(sellButton,Willingness.WISH_TO_SELL));
+
+        lendButton.setOnAction(getWillingnessHandler(sellButton,Willingness.WISH_TO_LEND));
 
         addButton.setOnAction(event -> {
             addWindow(displayData);
         });
         deleteButton.setOnAction(event -> {
+            ObservableList<Item> itemsSelected = getSelected();
+            if (itemsSelected.size() == 0) return;
             deleteButton.setDisable(true);
 
-            ObservableList<Item> itemsSelected;
-            itemsSelected = tableView.getSelectionModel().getSelectedItems();
-            Set<Long> ids = new HashSet<>();
-            for (Item item : itemsSelected) {
-                ids.add(item.getUid());
-            }
-            Command<Long[]> remove = new RemoveItem(gatewayBundle, user, itemListType, ids);
+            Command<Long[]> remove = new RemoveItem(gatewayBundle, user, itemListType, getItemIdsFrom(itemsSelected));
             remove.execute((result, resultStatus) -> {
                 Platform.runLater(() -> {
                     itemsSelected.forEach(displayData::remove);
@@ -107,6 +116,33 @@ public class ItemListController extends AbstractController implements Initializa
         });
 
         root.getChildren().addAll(tableView, hbox);
+    }
+
+    public EventHandler<ActionEvent> getWillingnessHandler(JFXButton button, Willingness willingness) {
+        return event -> {
+            ObservableList<Item> itemsSelected = getSelected();
+            if (itemsSelected.size() == 0) return;
+            button.setDisable(true);
+            Command<Item> command = new AlterWillingness(gatewayBundle, user, willingness, getItemIdsFrom(itemsSelected));
+            command.execute((result, resultStatus) -> Platform.runLater(() -> {
+                itemsSelected.forEach(item -> item.setWillingness(willingness));
+                button.setDisable(false);
+            }));
+        };
+    }
+
+    private Set<Long> getItemIdsFrom(ObservableList<Item> observableList){
+        Set<Long> ids = new HashSet<>();
+        for (Item item : observableList) {
+            ids.add(item.getUid());
+        }
+        return ids;
+    }
+
+    private ObservableList<Item> getSelected() {
+        ObservableList<Item> itemsSelected;
+        itemsSelected = tableView.getSelectionModel().getSelectedItems();
+        return itemsSelected;
     }
 
     public void addWindow(ObservableList<Item> displayData) {

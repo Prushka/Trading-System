@@ -41,8 +41,7 @@ public class RemoveItem extends ItemCommand<Long[]> {
 
     @Override
     public void execute(StatusCallback<Long[]> callback, String... args) { //
-        if (!checkPermission()) {
-            callback.call(null, ResultStatus.NO_PERMISSION);
+        if (!checkPermission(callback)) {
             return;
         }
         getEntityBundle().getUserGateway().submitTransaction(() -> {

@@ -40,10 +40,11 @@ public class LoginController extends AbstractController implements Initializable
                 .validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
         if (!validatorBind.isAllPass()) return;
         submissionResultProperty.setValue("Signing in..");
-        accountManager.login((result,status) -> {
+        accountManager.login((result, status) -> {
             if (status != ResultStatus.SUCCEEDED) {
                 Platform.runLater(() ->
-                {submissionResultProperty.setValue("Invalid Username / Password");
+                {
+                    submissionResultProperty.setValue("Invalid Username / Password");
                 });
             } else {
                 Platform.runLater(() ->

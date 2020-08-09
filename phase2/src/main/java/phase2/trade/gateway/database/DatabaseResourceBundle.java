@@ -21,7 +21,18 @@ public class DatabaseResourceBundle implements Shutdownable {
 
     public DatabaseResourceBundle() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-        Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
+        Configuration configuration = new Configuration().configure("hibernate.cfg.xml");;
+
+        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
+        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://muddy.ca:3308/group");
+        configuration.setProperty("hibernate.connection.username", "member");
+        configuration.setProperty("hibernate.connection.password", "aC4YD6G4J@Y");
+        configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+        configuration.setProperty("hibernate.connection.autoReconnect", "true");
+        configuration.setProperty("hibernate.show_sql", "true");
+        configuration.setProperty("hibernate.connection.pool_size", "10");
+
         sessionFactory = configuration.configure().buildSessionFactory();
         threadPool = Executors.newFixedThreadPool(10); // do we need to configure this
 

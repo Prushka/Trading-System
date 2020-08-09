@@ -49,25 +49,27 @@ public class PersonalUserManager{ //extends UserCommand<User>{
     public void changeCountry(String country){
         loggedInUser.setCountry(country);
     }
-}
 
 
 
-    /*public void addToBeReviewedItem(Callback<Item> itemCallback, Category category, String itemName, String description) {
-        itemManager.createAndAddItemTo(InventoryType.INVENTORY, itemCallback, category, itemName, description);
+    public void addToBeReviewedItem(Category category, String itemName, String description) {
+        Item item = new Item();
+        item.setCategory(category);
+        item.setName(itemName);
+        item.setDescription(description);
+        loggedInUser.getInventory().addItem(item);
     }
 
-    public void removeItemFromInventory(Callback<Item> itemCallback, Long itemId) {
-        itemManager.removeItemFrom(InventoryType.INVENTORY, itemCallback, itemId);
+    public void removeItemFromInventory(Long itemId) {
+        loggedInUser.getInventory().removeItemByUid(itemId);
     }
 
-    public void addItemToWishlist(EntityBundle entityBundle, Long itemID) {
-        new AddToCart(entityBundle, loggedInUser, itemID).execute();
-
+    public void addItemToWishlist(Item item) {
+        loggedInUser.getCart().addItem(item);
     }
 
-    public void removeItemFromWishlist(Callback<Item> itemCallback, Long itemId) {
-        itemManager.removeItemFrom(InventoryType.CART, itemCallback, itemId);
+    public void removeItemFromWishlist(Long itemId) {
+        loggedInUser.getCart().removeItemByUid(itemId);
     }
 
     public void UnfreezeRequest(RegularUser user) {
@@ -110,6 +112,6 @@ public class PersonalUserManager{ //extends UserCommand<User>{
         }
     }*/
 
-//}
+}
 
 

@@ -7,6 +7,7 @@ import phase2.trade.callback.Callback;
 import phase2.trade.gateway.database.UserDAO;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
+import phase2.trade.permission.PermissionGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class AdministrativeUserManager {
     private List<RegularUser> needToFreezeUserList;
     private Map<RegularUser, List<Item>> needToConfirmAddItem;
     private List<RegularUser> needToConfirmUnfreeze;
+    private AdministrativeUser loggedInAdminUser;
     //private Repository<Item> itemRepository;
 
 
@@ -32,13 +34,14 @@ public class AdministrativeUserManager {
      *
      * @param userDAO A DAO of all users in the system
      */
-     public void AdministrativeManager(UserDAO userDAO, TradeDAO tradeDAO) {
-         this.userDAO = userDAO;
-         this.tradeDAO = tradeDAO;
-         needToFreezeUserList = new ArrayList<>();
-         needToConfirmAddItem = new HashMap<>();
-         needToConfirmUnfreeze = new ArrayList<>();
-     }
+    public void AdministrativeManager(UserDAO userDAO, TradeDAO tradeDAO, AdministrativeUser loggedInAdminUser) {
+        this.userDAO = userDAO;
+        this.tradeDAO = tradeDAO;
+        needToFreezeUserList = new ArrayList<>();
+        needToConfirmAddItem = new HashMap<>();
+        needToConfirmUnfreeze = new ArrayList<>();
+        this.loggedInAdminUser = loggedInAdminUser;
+    }
 
     public List<RegularUser> findAllPersonalUser() {
         List<User> allUser = userDAO.findAllUser();
@@ -68,20 +71,20 @@ public class AdministrativeUserManager {
         return needToConfirmUnfreeze;
     }
 
-    public Map<RegularUser, List<Item>> getNeedToConfirmAddItem(){
-         for (RegularUser user: regularUser){
-             List<Item> items = user.getInventory().getListOfItems();
-             List<Item> reviewList = new ArrayList<>();
-             for (Item item: items){
-                 if (item.getOwnership() == Ownership.TO_BE_REVIEWED){
-                     reviewList.add(item);
-                 }
-             }
-             if (!reviewList.isEmpty()){
-                 needToConfirmAddItem.put(user, reviewList);
-             }
-         }
-         return needToConfirmAddItem;
+    public Map<RegularUser, List<Item>> getNeedToConfirmAddItem() {
+        for (RegularUser user : regularUser) {
+            List<Item> items = user.getInventory().getListOfItems();
+            List<Item> reviewList = new ArrayList<>();
+            for (Item item : items) {
+                if (item.getOwnership() == Ownership.TO_BE_REVIEWED) {
+                    reviewList.add(item);
+                }
+            }
+            if (!reviewList.isEmpty()) {
+                needToConfirmAddItem.put(user, reviewList);
+            }
+        }
+        return needToConfirmAddItem;
     }
 
 
@@ -94,8 +97,8 @@ public class AdministrativeUserManager {
         user.setAccountState(AccountState.FROZEN);
     }
 
-    public void confirmFreezeAllUser(){
-        for (RegularUser user : getPersonalUserNeedToFreeze()){
+    public void FreezeAllUser() {
+        for (RegularUser user : getPersonalUserNeedToFreeze()) {
             freezeUser(user);
         }
     }
@@ -109,7 +112,7 @@ public class AdministrativeUserManager {
         user.setAccountState(AccountState.NORMAL);
     }
 
-    public void confirmUnfreezeAllUser() {
+    public void UnfreezeAllUser() {
         for (RegularUser user : getNeedToConfirmUnfreeze()) {
             unfreezeUser(user);
         }
@@ -122,10 +125,9 @@ public class AdministrativeUserManager {
      * @param itemId The id of the item
      * @return true if the item is removed form the user's inventory, otherwise false
      */
-    public void removeItemFromPersonalInventory(Callback<Item> itemCallback, RegularUser user, Long itemId) {
-        //itemManager.removeItemFrom(InventoryType.INVENTORY, itemCallback, itemId);
+    public void removeItemFromPersonalInventory(RegularUser user, Long itemId) {
+        user.getInventory().removeItemByUid(itemId);
     }
-
 
     /**
      * Undo the personal user add items to wishlist activity
@@ -133,19 +135,22 @@ public class AdministrativeUserManager {
      *
      * @param itemId Thw item that need to br removed
      */
-    public void removeItemFromWishlist(Callback<Item> itemCallback, Long itemId) {
-        //itemManager.removeItemFrom(InventoryType.CART, itemCallback, itemId);
+    public void removeItemFromWishlist(RegularUser user, Long itemId) {
+        user.getInventory().removeItemByUid(itemId);
     }
 
     /**
      * Confirm to add an item to a personal user's inventory
      * //* @param user The personal user need to confirm add
      *
-     * @param itemID The item id
+     * @param item The item
      * @return true if successfully added, otherwise false
      */
-    public void confirmAddItemToInventory(Callback<Boolean> callback, Callback<Item> itemCallback, Long itemID) {
-        //itemManager.reviewItem(callback, Ownership.OWNER, itemID);
+    public void confirmAddItemToInventory(RegularUser user, Item item) {
+        List<Item> reviewItem = needToConfirmAddItem.get(user);
+        item.setOwner(user);
+        item.setOwnership(Ownership.OWNER);
+        reviewItem.remove(item);
     }
 
 
@@ -155,11 +160,16 @@ public class AdministrativeUserManager {
      *
      * @return true if successfully added all items, otherwise false
      */
-    /*public boolean confirmAddAllItemForAUser(PersonalUser user) {
-        new ItemManager(,user)
+    public void confirmAddAllItemForAUser(RegularUser user) {
+        List<Item> reviewItem = needToConfirmAddItem.get(user);
+        for (Item item : reviewItem) {
+            item.setOwner(user);
+            item.setOwnership(Ownership.OWNER);
+            reviewItem.remove(item);
         }
-        return true; //translatable("success.confirm.AddItem").build();
-    }*/
+
+    }
+
     public int getTransactionLimit() {
         return transactionLimit;
     }
@@ -174,49 +184,44 @@ public class AdministrativeUserManager {
 
     public void setLendBeforeBorrowLimit(int limit) {
         lendBeforeBorrow = limit;
+
+    }/**
+     * Creates an administrative user, only Head administrative user can create.
+     *
+     * @param username The username of this c
+     * @param email    The email of this administrative user
+     * @param password The password of this administrative user
+     * @return Boolean if this administrative user is successfully created
+     */
+    public void createAdministrator(String username, String email, String password, String country, String city) {
+        AdministrativeUser admin = new AdministrativeUser(username, email, password, country, city);
+        userDAO.add(admin);
     }
 
-
-
-    /*public void incompleteTransactions(){
-        int incomplete = 0;
-        List<Integer> allTrades = currPersonalUser.getTrades();
-        for(Integer i: allTrades){
-            Trade trade = tradeRepository.get(i);
-            if (!trade.getIsClosed() && trade.getPrevMeeting() == null){
-                incomplete++;
-            }
+    /**
+     * Head administrative user creates a subsequent administrative user, only head administrative user can create
+     * subsequent  administrative user
+     *
+     * @param username The username of the subsequent  administrative user
+     * @param email    The email of the subsequent administrative user
+     * @param password The password of the subsequent administrative user
+     * @return Boolean if the subsequent administrative user is successfully created
+     */
+    public boolean addSubAdmin(String username, String email, String password, String country, String city) {
+        if (loggedInAdminUser.getPermissionGroup() == PermissionGroup.HEADADMIN) {
+            createAdministrator(username, email, password, country, city);
+            return true;
+        } else {
+            return false; //not a head admin
         }
     }
-
-
 
     /*
     public void cancelTrade(Trade trade){
     }*///TODO ask to combine the cancel trade method from trade manager
 
-    /**
-     * Creates an administrative user, only Head administrative user can create.
-     * @param username The username of this c
-     * @param email The email of this administrative user
-     * @param telephone The telephone of this administrative user
-     * @param password The password of this administrative user
-     * @param isHead  The boolean if this administrative user is head
-     * @return Boolean if this administrative user is successfully created
-     */
-   /* public boolean createAdministrator(String username, String email, String telephone, String password, boolean isHead){
-        if (adminUserExist(username)){
-            return false; //username existed
-            //existed.username";
-        }
-        if (isHead){
-        AdministrativeUser admin = new AdministrativeUser(username, email, telephone, password, true);
-        administrators.add(admin);
-        return true; //"success.create.newAdmin"
-        }else{
-            return false; // not head can't register, "not.head"
-        }
-    }
+
+}
 
     /**
      * Check if the administrative user gives the correct username and password to login
@@ -256,54 +261,16 @@ public class AdministrativeUserManager {
             return false;
         }
     }
-    /**
-     * Head administrative user creates a subsequent administrative user, only head administrative user can create
-     * subsequent  administrative user
-     * @param head The head administrative user that is creating the subsequent  administrative user
-     * @param username The username of the subsequent  administrative user
-     * @param email The email of the subsequent administrative user
-     * @param telephone The telephone of the subsequent administrative user
-     * @param password The password of the subsequent administrative user
-     * @return Boolean if the subsequent administrative user is successfully created
+
+     /*public void incompleteTransactions(){
+        int incomplete = 0;
+        List<Integer> allTrades = currPersonalUser.getTrades();
+        for(Integer i: allTrades){
+            Trade trade = tradeRepository.get(i);
+            if (!trade.getIsClosed() && trade.getPrevMeeting() == null){
+                incomplete++;
+            }
+        }
+    }
      */
-    /*public boolean addSubAdmin(AdministrativeUser head, String username, String email, String telephone, String password){
-        if (head.getIsHead()){
-            createAdministrator(username, email, telephone, password, false);
-            return true; //"success.add.subadmin"
-        } else{
-            return false; //"failed.add.subadmin
-        }
-    }
 
-    public AdministrativeUser getCurrAdmin(String username, String password){
-        if (adminUserExist(username, password)) {
-            currAdmin = administrators.getFirst(
-                    AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
-                            && AdministrativeUser.getPassword().equals(password));
-        }else {
-            currAdmin = null;
-        }
-        return currAdmin;
-    }
-
-    public PersonalUser getCurrPersonalUser(){
-        currPersonalUser = needToFreezelist.next();
-        return currPersonalUser;
-    }
-
-    public Iterator<PersonalUser> getListUserShouldBeFreezed(){
-        return needToFreezelist;
-    }
-
-    public String getNeedToConfirmAddItemUserList(){
-        StringBuilder stringBuilder = new StringBuilder();
-        while (needToConfirmAddItem.hasNext()) {
-            PersonalUser user = needToConfirmAddItem.next();
-            stringBuilder.append("User ID: ").append(user.getUid()).append(" | Request IDs: ")
-                    .append(user.getAddToInventoryRequest()).append("\n");
-        }
-        return stringBuilder.toString();
-    }*/
-
-
-}

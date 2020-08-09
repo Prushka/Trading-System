@@ -9,22 +9,23 @@ import java.util.List;
 @Entity
 public class AdministrativeUser extends User {
 
-    private AccountState accountState;
+    private PermissionGroup permissionGroup;
 
     public AdministrativeUser(String userName, String email, String password, String country, String city) {
         super(userName, email, password, country, city);
-        //accountState =;
+        this.permissionGroup = PermissionGroup.ADMIN;
     }
 
-    public AdministrativeUser() {
+    public AdministrativeUser(String userName, String email, String password, String country, String city, boolean isHead) {
+        super(userName, email, password, country, city);
+        this.permissionGroup = PermissionGroup.HEADADMIN;
     }
 
-    public AccountState getAccountState() {
-        return accountState;
-    }
+    public AdministrativeUser(){}
+
 
     public PermissionGroup getPermissionGroup() {
-        return PermissionGroup.ADMIN;
+        return permissionGroup;
     }
 
 }

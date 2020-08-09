@@ -18,4 +18,9 @@ public class Inventory extends ItemList {
         item.setOwnership(Ownership.TO_BE_REVIEWED);
         super.addItem(item);
     }
+
+
+    public void removeItem(Item item){
+        super.removeItem(item);
+    }
 }

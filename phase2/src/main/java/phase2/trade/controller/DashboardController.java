@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
+import phase2.trade.user.AdministrativeUser;
 
 import java.beans.EventHandler;
 import java.net.URL;
@@ -41,7 +42,11 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // if (accountManager.getLoggedInUser() instanceof AdministrativeUser){
+            // root.setLeft(loadPane("admin_side_menu.fxml", new AdminSideMenuController(gatewayBundle, accountManager, center, right)));
+        // } else {
         root.setLeft(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, accountManager, center, right)));
+        // }
 
         /*
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);

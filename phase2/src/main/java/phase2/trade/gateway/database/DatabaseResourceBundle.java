@@ -3,6 +3,7 @@ package phase2.trade.gateway.database;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import phase2.trade.Shutdownable;
+import phase2.trade.config.DatabaseConfig;
 import phase2.trade.gateway.CommandGateway;
 import phase2.trade.gateway.ItemGateway;
 import phase2.trade.gateway.UserGateway;
@@ -19,22 +20,22 @@ public class DatabaseResourceBundle implements Shutdownable {
 
     private final DAOBundle daoBundle;
 
-    public DatabaseResourceBundle() {
+    public DatabaseResourceBundle(DatabaseConfig databaseConfig) {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-        Configuration configuration = new Configuration().configure("hibernate.cfg.xml");;
+        Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:mysql://muddy.ca:3308/group");
-        configuration.setProperty("hibernate.connection.username", "member");
-        configuration.setProperty("hibernate.connection.password", "aC4YD6G4J@Y");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "update");
-        configuration.setProperty("hibernate.connection.autoReconnect", "true");
-        configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.connection.pool_size", "10");
+        configuration.setProperty("hibernate.connection.url", databaseConfig.getUrl());
+        configuration.setProperty("hibernate.connection.username", databaseConfig.getUsername());
+        configuration.setProperty("hibernate.connection.password", databaseConfig.getPassword());
+        configuration.setProperty("hibernate.hbm2ddl.auto", databaseConfig.getHbm2ddl());
+        configuration.setProperty("hibernate.connection.autoReconnect", String.valueOf(databaseConfig.isAutoReconnect()));
+        configuration.setProperty("hibernate.show_sql", String.valueOf(databaseConfig.isShowSQL()));
+        configuration.setProperty("hibernate.connection.pool_size", String.valueOf(databaseConfig.getConnection_pool_size()));
 
         sessionFactory = configuration.configure().buildSessionFactory();
-        threadPool = Executors.newFixedThreadPool(10); // do we need to configure this
+        threadPool = Executors.newFixedThreadPool(databaseConfig.getConnection_pool_size()); // do we need to configure this
 
         daoBundle = new DAOBundle(this);
     }

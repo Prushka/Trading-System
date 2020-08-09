@@ -20,10 +20,8 @@ public class ORMTest {
 
     public ORMTest() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
-
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        bundle = new DatabaseResourceBundle().getDaoBundle();
+        ConfigBundle configBundle = new ConfigBundle();
+        bundle = new DatabaseResourceBundle(configBundle.getDatabaseConfig()).getDaoBundle();
 
         userDAO = bundle.getUserGateway();
         itemDAO = bundle.getItemGateway();

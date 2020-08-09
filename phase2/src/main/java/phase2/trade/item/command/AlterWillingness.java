@@ -19,6 +19,13 @@ import java.util.Set;
 @Entity
 public class AlterWillingness extends ItemCommand<Item> {
 
+    protected static class AlterWillingnessData extends CommandData<Item> {
+
+        private Willingness newWillingness;
+
+        private Willingness oldWillingness;
+    }
+
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> itemIds;
 
@@ -33,6 +40,7 @@ public class AlterWillingness extends ItemCommand<Item> {
         this.itemIds = itemIds;
         this.operator = operator;
         this.newWillingness = newWillingness;
+
     }
 
     public AlterWillingness() {

@@ -1,6 +1,7 @@
 package phase2.trade.gateway;
 
 import phase2.trade.Shutdownable;
+import phase2.trade.config.DatabaseConfig;
 import phase2.trade.config.TradeConfig;
 import phase2.trade.config.yaml.ConfigStrategy;
 import phase2.trade.config.PermissionConfig;
@@ -17,11 +18,14 @@ public class ConfigBundle implements Shutdownable {
 
     private ConfigStrategy configStrategy;
 
+    private DatabaseConfig databaseConfig;
+
     public ConfigBundle() {
         configStrategy = new YamlStrategy();
 
         permissionConfig = read(PermissionConfig.class, "config/permission_group", PermissionConfig::new);
         tradeConfig = read(TradeConfig.class, "config/trade", TradeConfig::new);
+        databaseConfig = read(DatabaseConfig.class, "config/database", DatabaseConfig::new);
     }
 
     public void changeStrategy(ConfigStrategy configStrategy) {
@@ -47,6 +51,7 @@ public class ConfigBundle implements Shutdownable {
     public void stop() {
         save(permissionConfig, "config/permission_group");
         save(tradeConfig, "config/trade");
+        save(databaseConfig, "config/database");
     }
 
     public PermissionConfig getPermissionConfig() {
@@ -55,5 +60,9 @@ public class ConfigBundle implements Shutdownable {
 
     public TradeConfig getTradeConfig() {
         return tradeConfig;
+    }
+
+    public DatabaseConfig getDatabaseConfig() {
+        return databaseConfig;
     }
 }

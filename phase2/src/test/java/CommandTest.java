@@ -32,9 +32,8 @@ public class CommandTest {
     public CommandTest() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        bundle = new GatewayBundle(new DatabaseResourceBundle().getDaoBundle(), new ConfigBundle());
+        ConfigBundle configBundle = new ConfigBundle();
+        bundle = new GatewayBundle(new DatabaseResourceBundle(configBundle.getDatabaseConfig()).getDaoBundle(), new ConfigBundle());
         entityBundle = bundle.getEntityBundle();
         userGateway = bundle.getEntityBundle().getUserGateway();
     }

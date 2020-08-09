@@ -13,6 +13,21 @@ import java.util.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Command<T> {
 
+    @Entity
+    protected static class CommandData<Q> {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long uid;
+
+        Class<Q> clazz;
+
+        Long id;
+
+        public CommandData() {
+
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
@@ -24,7 +39,7 @@ public abstract class Command<T> {
     private Long undoTimestamp;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    Collection<Long> effectedIds;
+    protected Collection<Long> effectedIds;
 
     protected transient GatewayBundle gatewayBundle;
 

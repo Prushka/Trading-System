@@ -17,17 +17,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/*public class PersonalUserManager extends UserCommand<User>{
+public class PersonalUserManager{ //extends UserCommand<User>{
 
     private RegularUser loggedInUser;
 
-    private ItemCommand itemCommand;
+    //private ItemCommand itemCommand;
 
-    private EntityBundle entityBundle;
+    //private EntityBundle entityBundle;
 
-    /*public PersonalUserManager(RegularUser loggedInUser, EntityBundle entityBundle, ItemCommand itemCommand) {
-        super((GatewayBundle) entityBundle);
+    public PersonalUserManager(RegularUser loggedInUser, EntityBundle entityBundle, ItemCommand itemCommand) {
+        this.loggedInUser = loggedInUser;
+        //super((GatewayBundle) entityBundle);
     }
+
+    public void changeUsername(String username){
+        loggedInUser.setUserName(username);
+    }
+
+    public void changeEmail(String email){
+        loggedInUser.setEmail(email);
+    }
+
+    public void changePassword(String password){
+        loggedInUser.setPassword(password);
+    }
+
+    public void changeCity(String city){
+        loggedInUser.setCity(city);
+    }
+
+    public void changeCountry(String country){
+        loggedInUser.setCountry(country);
+    }
+}
 
 
 
@@ -87,6 +109,7 @@ import java.util.List;
             }
         }
     }*/
+
 //}
 
 

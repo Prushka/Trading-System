@@ -134,7 +134,7 @@ public abstract class DAO<T> implements EntityGateway<T> {
         }
     }
 
-    private final boolean async = true;
+    private final boolean async = false;
 
     @Override
     public void submitTransaction(Runnable runnable) {

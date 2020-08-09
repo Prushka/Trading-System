@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 
@@ -19,7 +20,8 @@ public class DashboardController extends AbstractController implements Initializ
     // public JFXDrawer drawer;
     // public JFXHamburger hamburger;
     public BorderPane root;
-    public GridPane center;
+    public VBox center;
+    public VBox right;
 
 
     private final AccountManager accountManager;
@@ -31,7 +33,7 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        root.setLeft(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, accountManager, center)));
+        root.setLeft(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, accountManager, center, right)));
 
         /*
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);

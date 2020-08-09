@@ -6,29 +6,33 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.inventory.ItemListType;
+import phase2.trade.presenter.ItemListController;
 import phase2.trade.user.AccountManager;
+import phase2.trade.user.RegularUser;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class SideMenuController extends AbstractController implements Initializable {
 
+    private final VBox right;
     public JFXListView<Label> sideList;
     public Label userInfo, market, wishList, settings, logOut, inventory;
     public VBox userInfoBox;
 
     public JFXPanel panel = new JFXPanel();
-    private GridPane center;
+    private final VBox center;
 
     private final AccountManager accountManager;
 
-    public SideMenuController(GatewayBundle gatewayBundle, AccountManager accountManager, GridPane center) {
+    public SideMenuController(GatewayBundle gatewayBundle, AccountManager accountManager, VBox center, VBox right) {
         super(gatewayBundle);
         this.accountManager = accountManager;
         this.center = center;
+        this.right = right;
     }
 
     private void logOut(Label old) {
@@ -51,7 +55,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void market() {
-        Parent userPane = loadPane("market.fxml", new MarketController(this.getGatewayBundle(),
+        Parent userPane = loadPane("market.fxml", new MarketController(getGatewayBundle(),
                 accountManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
@@ -59,7 +63,7 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void inventory() {
-        Parent userPane = loadPane("add_item.fxml", new ItemAddController());
+        Parent userPane = loadPane("item_list.fxml", new ItemListController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.INVENTORY));
         userPane.setPickOnBounds(false);
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();

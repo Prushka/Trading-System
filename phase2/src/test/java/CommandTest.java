@@ -1,16 +1,20 @@
 import org.hibernate.cfg.Configuration;
 import org.junit.Test;
+import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.inventory.ItemList;
 import phase2.trade.item.command.AddItemToItemList;
-import phase2.trade.item.command.AlterItem;
+import phase2.trade.item.command.AlterItemInInventory;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
 import phase2.trade.gateway.UserGateway;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
-import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
+import phase2.trade.item.command.GetItems;
 import phase2.trade.user.RegularUser;
 
 import static org.junit.Assert.*;
@@ -45,12 +49,25 @@ public class CommandTest {
     @Test
     public void testCommand() {
         save();
-        Command<Item> addItem = new AddItemToItemList(entityBundle, regularUser, InventoryType.INVENTORY);
+        Command<Item> addItem = new AddItemToItemList(bundle, regularUser, ItemListType.INVENTORY);
 
         addItem.execute(null, "testName", "testDescription");
 
-        Command<Item> alterItem = new AlterItem(entityBundle, regularUser, 1L);
+        Command<Item> alterItem = new AlterItemInInventory(bundle, regularUser, 1L);
         alterItem.execute(null, "testName2", "testDescription2");
+    }
+
+
+    @Test
+    public void testItemCommands() {
+        testCommand();
+        Command<ItemList> getInventory = new GetItems(bundle, regularUser, ItemListType.INVENTORY);
+        getInventory.execute(new StatusCallback<ItemList>() {
+            @Override
+            public void call(ItemList result, ResultStatus resultStatus) {
+                System.out.println(result.get(0).getName());
+            }
+        });
     }
 
     @Test
@@ -61,7 +78,7 @@ public class CommandTest {
         command = entityBundle.getCommandGateway().findById(1L);
         entityBundle.getCommandGateway().closeCurrentSession();
 
-        command.setEntityBundle(entityBundle);
+        command.setGatewayBundle(bundle);
         command.isUndoable(result -> {
             assertEquals(1, result.size());
             assertEquals(result.get(0).getCRUDType(), CRUDType.UPDATE);

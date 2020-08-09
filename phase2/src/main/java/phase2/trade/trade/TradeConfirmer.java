@@ -2,7 +2,7 @@ package phase2.trade.trade;
 
 import phase2.trade.inventory.Cart;
 import phase2.trade.inventory.Inventory;
-import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
@@ -61,8 +61,8 @@ public class TradeConfirmer {
         List<Item> tradedItems = new ArrayList<>();
         for (UserOrderBundle user: currTrade.getOrder().getTraders()) {
             RegularUser currUser = (RegularUser) user.getUser();
-            List<Item> newCartList = currUser.getItemList(InventoryType.CART).getListOfItems();
-            List<Item> newInventoryList = currUser.getItemList(InventoryType.INVENTORY).getListOfItems();
+            List<Item> newCartList = currUser.getItemList(ItemListType.CART).getListOfItems();
+            List<Item> newInventoryList = currUser.getItemList(ItemListType.INVENTORY).getListOfItems();
             for (Item item : user.getTradeItemHolder().getListOfItems()) {
                 newCartList.remove(item);
                 if (tradedItems.contains(item)){

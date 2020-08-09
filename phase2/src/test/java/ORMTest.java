@@ -1,12 +1,10 @@
 import org.hibernate.cfg.Configuration;
 import org.junit.Test;
+import phase2.trade.callback.Callback;
 import phase2.trade.gateway.*;
 import phase2.trade.gateway.database.*;
-import phase2.trade.inventory.InventoryType;
-import phase2.trade.inventory.ItemList;
-import phase2.trade.item.Category;
 import phase2.trade.item.Item;
-import phase2.trade.item.ItemManager;
+import phase2.trade.item.command.GetItems;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
@@ -32,15 +30,10 @@ public class ORMTest {
     }
 
     @Test
-    public void testAccount() {
-        AccountManager accountManager = new AccountManager(bundle);
-        accountManager.register(new Callback<User>() {
-            @Override
-            public void call(User result) {
+    public void testItemCommands() {
 
-            }
-        }, "username", "email", "password", "country", "city");
     }
+
 
     @Test
     public void testItemManager() {

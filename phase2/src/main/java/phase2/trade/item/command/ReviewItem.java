@@ -1,19 +1,20 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
-import phase2.trade.user.Permission;
-import phase2.trade.user.PermissionSet;
+import phase2.trade.permission.Permission;
+import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
 @Entity
-public class ReviewItem extends ItemCommand {
+public class ReviewItem extends ItemCommand<Item> {
 
     private Long itemId;
 
@@ -21,8 +22,8 @@ public class ReviewItem extends ItemCommand {
 
     private Ownership oldOwnership;
 
-    public ReviewItem(EntityBundle entityBundle, RegularUser operator, Long itemId) {
-        super(entityBundle, operator);
+    public ReviewItem(GatewayBundle gatewayBundle, RegularUser operator, Long itemId) {
+        super(gatewayBundle, operator);
         this.itemId = itemId;
         this.operator = operator;
     }
@@ -32,24 +33,28 @@ public class ReviewItem extends ItemCommand {
     }
 
     @Override
-    public void execute(Callback<Item> callback, String... args) { //
-        entityBundle.getItemGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncInItemGateway(itemId);
+    public void execute(StatusCallback<Item> callback, String... args) { //
+        if (!checkPermission()) {
+            callback.call(null, ResultStatus.NO_PERMISSION);
+            return;
+        }
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
+            Item item = findItemByIdSyncInsideItemGateway(itemId);
 
             oldOwnership = item.getOwnership();
             item.setOwnership(Ownership.OWNER);
-            entityBundle.getItemGateway().update(item);
+            getEntityBundle().getItemGateway().update(item);
             addEffectedId(itemId);
             save();
             if (callback != null)
-                callback.call(item);
+                callback.call(item, ResultStatus.SUCCEEDED);
         });
     }
 
     @Override
     public void undo() {
-        entityBundle.getItemGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncInItemGateway(itemId);
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
+            Item item = findItemByIdSyncInsideItemGateway(itemId);
             item.setOwnership(oldOwnership);
             updateUndo();
         });

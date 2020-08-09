@@ -16,7 +16,7 @@ public abstract class ItemList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Item> listOfItems = new ArrayList<>();
 
     @OneToOne
@@ -62,9 +62,29 @@ public abstract class ItemList {
         return listOfItems.size();
     }
 
-    public abstract InventoryType getInventoryType();
+    public abstract ItemListType getInventoryType();
 
-    public void removeItem(Item item) {
-        this.listOfItems.remove(item);
+    public void removeItem(Item... items) {
+        for (Item item : items) {
+            this.listOfItems.remove(item);
+        }
+    }
+
+    public void removeItemByUid(Long... uids) {
+        for (Long uid : uids) {
+            Item item = findByUid(uid);
+            if (item != null) removeItem(item);
+        }
+    }
+
+    public Item get(int index) {
+        return getListOfItems().get(index);
+    }
+
+    public Item findByUid(Long uid) {
+        for (Item item : getListOfItems()) {
+            if (item.getUid().equals(uid)) return item;
+        }
+        return null;
     }
 }

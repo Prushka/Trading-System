@@ -18,11 +18,11 @@ public class Item {
 
     private Ownership ownership;
 
-    private Willingness willingness;
+    private Willingness willingness = Willingness.NOPE;
 
     private int quantity;
 
-    private double price;
+    private double price = -1;
 
     @ManyToOne
     private ItemList itemList;

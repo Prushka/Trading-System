@@ -1,10 +1,9 @@
 package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.ItemListType;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
@@ -13,36 +12,32 @@ import phase2.trade.user.RegularUser;
 import javax.persistence.Entity;
 
 @Entity
-public class AddItemToItemList extends ItemCommand<Item> {
-
-    private ItemListType itemListType;
+public class AlterItemInInventory extends ItemCommand<Item> {
 
     private Long itemId;
 
     private transient RegularUser operator;
 
-    public AddItemToItemList(GatewayBundle gatewayBundle, RegularUser operator,
-                             ItemListType itemListType) {
+    public AlterItemInInventory(GatewayBundle gatewayBundle, RegularUser operator, Long itemId) {
         super(gatewayBundle, operator);
-        this.itemListType = itemListType;
+        this.itemId = itemId;
         this.operator = operator;
     }
 
-    public AddItemToItemList() {
+    public AlterItemInInventory() {
         super();
     }
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) {
-        getEntityBundle().getUserGateway().submitTransaction(() -> {
-            Item item = new Item();
+        if (!checkPermission(callback)) {
+            return;
+        }
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
+            Item item = operator.getInventory().findByUid(itemId);
             item.setName(args[0]);
             item.setDescription(args[1]);
-            item.setItemList(operator.getItemList(itemListType));
-
-            operator.getItemList(itemListType).addItem(item);
-            getEntityBundle().getUserGateway().update(operator);
-            this.itemId = item.getUid();
+            getEntityBundle().getItemGateway().update(item);
             addEffectedId(itemId);
             save();
             if (callback != null)
@@ -66,7 +61,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
     @Override
     public CRUDType getCRUDType() {
-        return CRUDType.CREATE;
+        return CRUDType.UPDATE;
     }
 
     @Override

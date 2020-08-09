@@ -1,8 +1,10 @@
 package phase2.trade.command;
 
-import phase2.trade.gateway.Callback;
+import phase2.trade.callback.Callback;
+import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.callback.StatusCallback;
 
 import javax.persistence.*;
 import java.util.*;
@@ -24,10 +26,10 @@ public abstract class Command<T> {
     @ElementCollection(fetch = FetchType.EAGER)
     Collection<Long> effectedIds;
 
-    protected transient EntityBundle entityBundle;
+    protected transient GatewayBundle gatewayBundle;
 
-    public Command(EntityBundle entityBundle) {
-        this.entityBundle = entityBundle;
+    public Command(GatewayBundle gatewayBundle) {
+        this.gatewayBundle = gatewayBundle;
         this.effectedIds = new HashSet<>();
     }
 
@@ -36,7 +38,7 @@ public abstract class Command<T> {
     }
 
 
-    public abstract void execute(Callback<T> callback, String... args);
+    public abstract void execute(StatusCallback<T> callback, String... args);
 
     public abstract void undo();
 
@@ -44,27 +46,29 @@ public abstract class Command<T> {
 
     public abstract Class<?> getClassToOperateOn();
 
+    public abstract CRUDType getCRUDType();
+
     protected void save() {
         timestamp = System.currentTimeMillis();
-        entityBundle.getCommandGateway().submitTransaction(() -> entityBundle.getCommandGateway().add(getThis()));
+        getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().add(getThis()));
     }
 
     protected void updateUndo() {
         undoTimestamp = System.currentTimeMillis();
         ifUndone = true;
-        entityBundle.getCommandGateway().submitTransaction(() -> entityBundle.getCommandGateway().update(getThis()));
+        getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().update(getThis()));
     }
 
     public Command<T> getThis() {
         return this;
     }
 
-    public void setEntityBundle(EntityBundle entityBundle) {
-        this.entityBundle = entityBundle;
+    public void setGatewayBundle(GatewayBundle gatewayBundle) {
+        this.gatewayBundle = gatewayBundle;
     }
 
-    public void addEffectedId(Long id) {
-        effectedIds.add(id);
+    public void addEffectedId(Long... ids) {
+        effectedIds.addAll(Arrays.asList(ids));
     }
 
     public Collection<Long> getEffectedIds() {
@@ -79,13 +83,19 @@ public abstract class Command<T> {
         this.uid = uid;
     }
 
-    public abstract CRUDType getCRUDType();
-
     public Long getTimestamp() {
         return timestamp;
     }
 
     public void isUndoable(Callback<List<Command<?>>> callback) {
-        entityBundle.getCommandGateway().submitSession(() -> callback.call(entityBundle.getCommandGateway().isUndoable(effectedIds, timestamp)));
+        getEntityBundle().getCommandGateway().submitSession(() -> callback.call(getEntityBundle().getCommandGateway().isUndoable(effectedIds, timestamp)));
+    }
+
+    protected EntityBundle getEntityBundle() {
+        return gatewayBundle.getEntityBundle();
+    }
+
+    protected ConfigBundle getConfigBundle() {
+        return gatewayBundle.getConfigBundle();
     }
 }

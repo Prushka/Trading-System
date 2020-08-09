@@ -1,34 +1,38 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
-import phase2.trade.gateway.EntityBundle;
-import phase2.trade.inventory.InventoryType;
+import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.callback.StatusCallback;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
-import phase2.trade.user.Permission;
-import phase2.trade.user.PermissionSet;
+import phase2.trade.permission.Permission;
+import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.RegularUser;
-import phase2.trade.user.User;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import java.util.*;
 
 @Entity
-public class RemoveItem extends ItemCommand {
+public class RemoveItem extends ItemCommand<Long[]> {
 
-    private Long itemId;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> itemIds;
 
     private transient RegularUser operator;
 
     private Ownership oldOwnership;
 
-    private InventoryType inventoryType;
+    private ItemListType itemListType;
 
-    public RemoveItem(EntityBundle entityBundle, RegularUser operator, InventoryType inventoryType, Long itemId) {
-        super(entityBundle, operator);
-        this.itemId = itemId;
+    public RemoveItem(GatewayBundle gatewayBundle, RegularUser operator, ItemListType itemListType, Set<Long> itemIds) {
+        super(gatewayBundle, operator);
+        this.itemIds = itemIds;
         this.operator = operator;
-        this.inventoryType = inventoryType;
+        this.itemListType = itemListType;
     }
 
     public RemoveItem() {
@@ -36,21 +40,25 @@ public class RemoveItem extends ItemCommand {
     }
 
     @Override
-    public void execute(Callback<Item> callback, String... args) { //
-        entityBundle.getUserGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncInItemGateway(itemId);
-            operator.getItemList(inventoryType).removeItem(item);
-
-            addEffectedId(itemId);
+    public void execute(StatusCallback<Long[]> callback, String... args) { //
+        if (!checkPermission()) {
+            callback.call(null, ResultStatus.NO_PERMISSION);
+            return;
+        }
+        getEntityBundle().getUserGateway().submitTransaction(() -> {
+            Long[] ids = itemIds.toArray(new Long[0]);
+            operator.getItemList(itemListType).removeItemByUid(ids);
+            getEntityBundle().getUserGateway().update(operator);
+            addEffectedId(ids);
             save();
             if (callback != null)
-                callback.call(item);
+                callback.call(ids, ResultStatus.SUCCEEDED);
         });
     }
 
     @Override
     public void undo() {
-        entityBundle.getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction(() -> {
             updateUndo();
         });
     }

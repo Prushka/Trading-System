@@ -3,12 +3,9 @@ package phase2.trade.user;
 
 import phase2.trade.gateway.database.TradeDAO;
 
-import phase2.trade.gateway.Callback;
+import phase2.trade.callback.Callback;
 import phase2.trade.gateway.database.UserDAO;
-import phase2.trade.inventory.InventoryType;
 import phase2.trade.item.Item;
-import phase2.trade.item.ItemManager;
-import phase2.trade.item.Ownership;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,6 @@ import java.util.List;
 public class AdministrativeUserManager {
 
     private UserDAO userDAO;
-    private ItemManager itemManager;
     private TradeDAO tradeDAO;
     private List<RegularUser> regularUser = new ArrayList<>();
     private int transactionLimit = 100; //what is the init limit?
@@ -33,14 +29,14 @@ public class AdministrativeUserManager {
      *
      * @param userDAO A DAO of all users in the system
      */
-    public void AdministrativeManager(UserDAO userDAO, ItemManager itemManager, TradeDAO tradeDAO) {
-        this.userDAO = userDAO;
-        this.itemManager = itemManager;
-        this.tradeDAO = tradeDAO;
-        needToFreezeUserList = new ArrayList<>();
-        needToConfirmAddItem = new ArrayList<>();
-        needToConfirmUnfreeze = new ArrayList<>();
-    }
+    // public void AdministrativeManager(UserDAO userDAO, ItemManager itemManager, TradeDAO tradeDAO) {
+    //     this.userDAO = userDAO;
+    //     this.itemManager = itemManager;
+    //     this.tradeDAO = tradeDAO;
+    //     needToFreezeUserList = new ArrayList<>();
+    //     needToConfirmAddItem = new ArrayList<>();
+    //     needToConfirmUnfreeze = new ArrayList<>();
+    // }
 
     public List<RegularUser> findAllPersonalUser() {
         List<User> allUser = userDAO.findAllUser();

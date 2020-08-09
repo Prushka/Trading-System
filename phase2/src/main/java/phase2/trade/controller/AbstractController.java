@@ -24,7 +24,7 @@ public abstract class AbstractController {
         this.gatewayBundle = gatewayBundle;
     }
 
-    void switchScene(String fileName, Object controller, Stage stage, boolean applyCSS) {
+    protected void switchScene(String fileName, Object controller, Stage stage, boolean applyCSS) {
         FXMLLoader loader = sceneFactory.getLoader(fileName);
         loader.setController(controller);
         try {
@@ -38,26 +38,26 @@ public abstract class AbstractController {
         }
     }
 
-    void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
+    protected void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
         this.switchScene(fileName, controller, actionEvent, false);
     }
 
-    void switchScene(String fileName, Object controller, ActionEvent actionEvent, boolean applyCSS) {
+    protected void switchScene(String fileName, Object controller, ActionEvent actionEvent, boolean applyCSS) {
         this.switchScene(fileName, controller,
                 (Stage) ((Node) actionEvent.getSource()).getScene().getWindow(), applyCSS);
     }
 
 
-    void switchScene(String fileName, Object controller, Parent parent) {
+    protected void switchScene(String fileName, Object controller, Parent parent) {
         this.switchScene(fileName, controller, parent, false);
     }
 
-    void switchScene(String fileName, Object controller, Parent parent, boolean applyCSS) {
+    protected void switchScene(String fileName, Object controller, Parent parent, boolean applyCSS) {
         this.switchScene(fileName, controller,
                 (Stage) parent.getScene().getWindow(), applyCSS);
     }
 
-    Parent loadPane(String fileName, Object controller) {
+    protected Parent loadPane(String fileName, Object controller) {
         return sceneFactory.getPane(fileName, controller);
     }
 

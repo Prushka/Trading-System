@@ -1,9 +1,11 @@
 package phase2.trade.user.command;
 
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.Callback;
-import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.callback.StatusCallback;
+import phase2.trade.permission.PermissionGroup;
+import phase2.trade.permission.PermissionGroupFactory;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
@@ -15,8 +17,11 @@ public class Register extends UserCommand<User> {
 
     private Long userId;
 
-    public Register(EntityBundle entityBundle) {
-        super(entityBundle);
+    private transient PermissionGroupFactory permissionGroupFactory;
+
+    public Register(GatewayBundle gatewayBundle) {
+        super(gatewayBundle);
+        this.permissionGroupFactory = new PermissionGroupFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
     }
 
     public Register() {
@@ -24,19 +29,20 @@ public class Register extends UserCommand<User> {
     }
 
     @Override
-    public void execute(Callback<User> callback, String... args) {
+    public void execute(StatusCallback<User> callback, String... args) {
         getUserGateway().submitTransaction(() -> {
             List<User> usersByEmail = getUserGateway().findByEmail(args[0]);
             List<User> usersByName = getUserGateway().findByUserName(args[1]);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new RegularUser(args[0], args[1], args[2], args[3], args[4]);
+                user.setUserPermission(permissionGroupFactory.getUserPermission(PermissionGroup.REGULAR));
                 getUserGateway().add(user);
                 userId = user.getUid();
                 addEffectedId(user.getUid());
                 save();
-                callback.call(user);
-            }else{
-                callback.call(null);
+                callback.call(user, ResultStatus.SUCCEEDED);
+            } else {
+                callback.call(null, ResultStatus.EXIST);
             }
         });
     }

@@ -27,9 +27,12 @@ public class TradeApplication extends Application {
 
         DatabaseResourceBundle databaseResourceBundle = new DatabaseResourceBundle();
         shutdownHook = new ShutdownHook();
-        shutdownHook.addShutdownable(databaseResourceBundle);
+
         EntityBundle entityBundle = databaseResourceBundle.getDaoBundle();
         ConfigBundle configBundle = new ConfigBundle();
+
+        shutdownHook.addShutdownable(databaseResourceBundle, configBundle);
+
         this.gatewayBundle = new GatewayBundle(entityBundle, configBundle);
     }
 
@@ -53,8 +56,8 @@ public class TradeApplication extends Application {
 
     private void mockDashboard(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
-        AccountManager accountManager = new AccountManager(gatewayBundle.getEntityBundle());
-        accountManager.login(result -> {
+        AccountManager accountManager = new AccountManager(gatewayBundle);
+        accountManager.login((result, status) -> {
             DashboardController dashboardController = new DashboardController(gatewayBundle, accountManager);
             Platform.runLater(() -> {
 

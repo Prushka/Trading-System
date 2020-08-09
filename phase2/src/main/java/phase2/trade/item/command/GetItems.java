@@ -1,11 +1,11 @@
 package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.callback.StatusCallback;
 import phase2.trade.inventory.ItemListType;
-import phase2.trade.item.Item;
+import phase2.trade.inventory.ItemList;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.RegularUser;
@@ -13,35 +13,29 @@ import phase2.trade.user.RegularUser;
 import javax.persistence.Entity;
 
 @Entity
-public class AddToCart extends ItemCommand<Item> {
-
-    private Long itemId;
+public class GetItems extends ItemCommand<ItemList> {
 
     private transient RegularUser operator;
 
-    public AddToCart(GatewayBundle gatewayBundle, RegularUser operator, Long itemId) {
+    private ItemListType itemListType;
+
+    public GetItems(GatewayBundle gatewayBundle, RegularUser operator, ItemListType itemListType) {
         super(gatewayBundle, operator);
-        this.itemId = itemId;
         this.operator = operator;
-        addEffectedId(itemId);
+        this.itemListType = itemListType;
     }
 
-    public AddToCart() {
+    public GetItems() {
         super();
     }
 
     @Override
-    public void execute(StatusCallback<Item> callback, String... args) {
-        if (!checkPermission()) {
-            callback.call(null, ResultStatus.NO_PERMISSION);
+    public void execute(StatusCallback<ItemList> callback, String... args) {
+        if (!checkPermission(callback)) {
             return;
         }
-        getEntityBundle().getUserGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncOutsideItemGateway(itemId);
-            operator.getItemList(ItemListType.CART).addItem(item);
-            getEntityBundle().getUserGateway().update(operator);
-            callback.call(item, ResultStatus.SUCCEEDED);
-        });
+        ItemList itemList = operator.getItemList(itemListType);
+        callback.call(itemList, ResultStatus.SUCCEEDED);
     }
 
     @Override

@@ -1,12 +1,9 @@
 package phase2.trade.controller;
 
 import javafx.fxml.Initializable;
-import phase2.trade.config.property.TradeProperties;
-import phase2.trade.gateway.Callback;
+import phase2.trade.callback.Callback;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.gateway.TradeGateway;
-import phase2.trade.gateway.database.DatabaseResourceBundle;
-import phase2.trade.gateway.database.TradeDAO;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeManager;
@@ -21,45 +18,41 @@ import java.util.ResourceBundle;
 
 public class TradeController extends AbstractController implements Initializable {
 
-    private final TradeGateway tradeDAO;
+    private final TradeGateway tradeGateway;
 
     private final TradeManager tm;
 
-    private Trade newTrade;
-
     public TradeController(GatewayBundle gatewayBundle) {
         super(gatewayBundle);
-        this.tradeDAO = gatewayBundle.getEntityBundle().getTradeGateway();
-        this.tm = new TradeManager();
+        this.tradeGateway = gatewayBundle.getEntityBundle().getTradeGateway();
+        this.tm = new TradeManager(gatewayBundle.getConfigBundle().getTradeConfig());
     }
 
-    public Trade addTrade(Callback<Trade> callback, List<User> users, List<List<Item>> items, String year, String month,
+    public void addTrade(Callback<Trade> callback, List<User> users, List<List<Item>> items, String year, String month,
                          String day, String hour, String minute, String country, String city, String street,
                          String streetNum, boolean isPermanent) {
-        tradeDAO.submitTransaction(() -> {
+        tradeGateway.submitTransaction(() -> {
             Trade newTrade = tm.createTrade(users, items, year, month, day, hour, minute, country, city, street,
                     streetNum, isPermanent);
-            tradeDAO.add(newTrade);
-            this.newTrade = newTrade;
+            tradeGateway.add(newTrade);
             callback.call(newTrade);
         });
-        return this.newTrade;
     }
 
     public void editMeetingDateAndTime(Callback<Trade> callback, Trade currTrade, User currUser, LocalDateTime dateTime){
-        tradeDAO.submitTransaction(() -> {
+        tradeGateway.submitTransaction(() -> {
             Trade trade = tm.editDateAndTime(currTrade, currUser, dateTime);
-            tradeDAO.update(trade);
+            tradeGateway.update(trade);
             callback.call(trade);
         });
     }
 
     public void editMeetingLocation(Callback<Trade> callback, Trade currTrade, User currUser, String
             country, String city, String street, String streetNumber) {
-        tradeDAO.submitTransaction(() -> {
+        tradeGateway.submitTransaction(() -> {
             Address location = new Address(country, city, street, streetNumber);
             Trade trade = tm.editLocation(currTrade, currUser, location);
-            tradeDAO.update(trade);
+            tradeGateway.update(trade);
             callback.call(trade);
         });
     }

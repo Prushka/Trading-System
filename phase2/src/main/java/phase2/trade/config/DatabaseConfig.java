@@ -1,10 +1,19 @@
 package phase2.trade.config;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class DatabaseConfig {
 
     private String database = "mysql";
 
     private String url = "jdbc:mysql://muddy.ca:3308/group";
+
+    private String dialect = "auto";
+
+    private String driver = "auto";
 
     private String username = "member";
 
@@ -17,6 +26,29 @@ public class DatabaseConfig {
     private boolean showSQL = true;
 
     private boolean autoReconnect = true;
+
+    private final transient Map<String, List<String>> preconfiguredDialect = new HashMap<>();
+
+    public DatabaseConfig() {
+        configureDialects("mysql", "org.hibernate.dialect.MySQL5Dialect", "com.mysql.cj.jdbc.Driver");
+    }
+
+    private void configureDialects(String database, String dialect, String driver) { // the driver library has to be added first
+        this.preconfiguredDialect.put(database, new ArrayList<String>() {{
+            add(dialect);
+            add(driver);
+        }});
+    }
+
+    public String getConfiguredDialect() {
+        if (!getDialect().equals("auto")) return getDialect();
+        return preconfiguredDialect.get(database).get(0);
+    }
+
+    public String getConfiguredDriver() {
+        if (!getDialect().equals("auto")) return getDialect();
+        return preconfiguredDialect.get(database).get(1);
+    }
 
     public boolean isAutoReconnect() {
         return autoReconnect;
@@ -80,5 +112,26 @@ public class DatabaseConfig {
 
     public void setShowSQL(boolean showSQL) {
         this.showSQL = showSQL;
+    }
+
+    public String getDialect() {
+        return dialect;
+    }
+
+    public void setDialect(String dialect) {
+        this.dialect = dialect;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    // use this only for debugging
+    public String toString() {
+        return String.format("Database: %s\nDialect: %s\nDriver: %s\nUrl: %s\nUserName: %s\nhbm2ddl: %s", database, getConfiguredDialect(), getConfiguredDriver(), getUrl(), getUsername(), getHbm2ddl());
     }
 }

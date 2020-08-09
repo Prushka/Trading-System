@@ -24,8 +24,10 @@ public class DatabaseResourceBundle implements Shutdownable {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 
-        configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
-        configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
+        System.out.println("Configuring Database:\n" + databaseConfig.toString());
+
+        configuration.setProperty("hibernate.dialect", databaseConfig.getConfiguredDialect());
+        configuration.setProperty("hibernate.connection.driver_class", databaseConfig.getConfiguredDriver());
         configuration.setProperty("hibernate.connection.url", databaseConfig.getUrl());
         configuration.setProperty("hibernate.connection.username", databaseConfig.getUsername());
         configuration.setProperty("hibernate.connection.password", databaseConfig.getPassword());

@@ -23,23 +23,5 @@ public class TradeManager {
         tc = new TradeCreator();
         te = new TradeEditor(tradeConfig.getEditLimit());
     }
-
-    public Trade createTrade(List<User> users, List<List<Item>> items, String year, String month, String day, String
-            hour, String minute, String country, String city, String street, String streetNum, boolean isPermanent){
-        return tc.createTrade(users, items, year, month, day, hour, minute, country, city, street, streetNum,
-                isPermanent);
-    }
-
-    public Trade editDateAndTime(Trade currTrade, User editingUser, LocalDateTime dateAndTime) {
-        TradeEditor te = new TradeEditor(tradeConfig.getEditLimit());
-        return te.editDateAndTime(currTrade, editingUser, dateAndTime);
-    }
-
-    public Trade editLocation(Trade currTrade, User editingUser, Address location) {
-        TradeEditor te = new TradeEditor(tradeConfig.getEditLimit());
-        return te.editLocation(currTrade, editingUser, location);
-    }
-
-    public Trade confirmTrade(Trade currTrade, User editingUser) { return tcc.confirmTrade(currTrade, editingUser);}
 }
 

@@ -12,8 +12,10 @@ public class PermissionConfig {
 
     public PermissionConfig() {
         defaultPermissions = new HashMap<>();
-        defaultPermissions.put(PermissionGroup.REGULAR, new PermissionSet(Permission.ADD_ITEM, Permission.REMOVE_ITEM));
-        defaultPermissions.put(PermissionGroup.ADMIN, new PermissionSet(Permission.CHANGE_THRESHOLD));
+        defaultPermissions.put(PermissionGroup.REGULAR, new PermissionSet(Permission.ADD_ITEM, Permission.REMOVE_ITEM,
+                Permission.TRADE, Permission.EDIT_TRADE, Permission.CONFIRM_TRADE));
+        defaultPermissions.put(PermissionGroup.ADMIN, new PermissionSet(Permission.CHANGE_THRESHOLD,
+                Permission.REVIEW_ITEM));
         defaultPermissions.put(PermissionGroup.GUEST, new PermissionSet(Permission.REMOVE_ITEM));
     }
 

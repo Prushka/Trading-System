@@ -19,7 +19,7 @@ public class Trade {
 
     public Trade() {}
 
-    Long getUid() { return uid; }
+    public Long getUid() { return uid; }
 
     void setUid(Long uid) { this.uid = uid; }
 

@@ -13,7 +13,7 @@ import java.util.List;
 public class TradeConfirmer {
     Integer timeLimit;
 
-    TradeConfirmer(int timeLimit){
+    public TradeConfirmer(int timeLimit){
         this.timeLimit = timeLimit;
     }
 

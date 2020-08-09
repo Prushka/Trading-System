@@ -24,6 +24,9 @@ import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
+import phase2.trade.trade.command.CreateTrade;
+import phase2.trade.trade.command.TradeCommand;
+import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import javax.swing.*;
@@ -34,7 +37,6 @@ import java.util.ResourceBundle;
 
 public class MarketController  extends AbstractController implements Initializable {
     User currUser;
-    TradeController tc;
     TradeInfoController tic;
     @FXML
     TableView<Trade> trades;
@@ -47,6 +49,7 @@ public class MarketController  extends AbstractController implements Initializab
     @FXML
     Button submitThreeWayTrade;
     TableColumn<Trade, TradeState> statusColumn;
+    // TradeCommand tc;
 
     private StringProperty submissionResultProperty;
 
@@ -55,7 +58,7 @@ public class MarketController  extends AbstractController implements Initializab
     public MarketController(GatewayBundle gatewayBundle, User currUser){
         super(gatewayBundle);
         this.currUser = currUser;
-        tc = new TradeController(gatewayBundle);
+        // tc = new CreateTrade(gatewayBundle, (RegularUser) currUser);
         tic = new TradeInfoController();
     }
 
@@ -73,32 +76,20 @@ public class MarketController  extends AbstractController implements Initializab
     }
 
     public void borrowTradeClicked(){
-        Trade newTrade = tc.addTrade(result -> {
-                    if (result != null) {
-                        System.out.println("success");
-                    }
-                }, new ArrayList<>(), new ArrayList<>(), tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
-                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), true);
-        trades.getItems().add(newTrade);
+//        Trade newTrade = tc.execute(,tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
+//                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), "true");
+//        trades.getItems().add(newTrade);
     }
 
     public void lendTradeClicked(){
-        Trade newTrade = tc.addTrade(result -> {
-                    if (result != null) {
-                        System.out.println("success");
-                    }
-                }, new ArrayList<>(), new ArrayList<>(), tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
-                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), true);
-        trades.getItems().add(newTrade);
+//        Trade newTrade = tc.execute(, tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
+//                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), "true");
+//        trades.getItems().add(newTrade);
     }
 
     public void threeWayTradeClicked(){
-        Trade newTrade = tc.addTrade(result -> {
-                    if (result != null) {
-                        System.out.println("success");
-                    }
-        }, new ArrayList<>(), new ArrayList<>(), tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
-                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), true);
-        trades.getItems().add(newTrade);
+//        Trade newTrade = tc.execute(, tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
+//                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), "true");
+//        trades.getItems().add(newTrade);
     }
 }

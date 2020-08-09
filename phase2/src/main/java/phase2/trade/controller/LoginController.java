@@ -42,7 +42,9 @@ public class LoginController extends AbstractController implements Initializable
         submissionResultProperty.setValue("Signing in..");
         accountManager.login((result,status) -> {
             if (status != ResultStatus.SUCCEEDED) {
-                Platform.runLater(() -> submissionResultProperty.setValue("Invalid Username / Password"));
+                Platform.runLater(() ->
+                {submissionResultProperty.setValue("Invalid Username / Password");
+                });
             } else {
                 Platform.runLater(() ->
                         switchScene("personal_dashboard.fxml",

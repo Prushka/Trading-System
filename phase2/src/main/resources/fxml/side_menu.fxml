@@ -17,6 +17,5 @@
         <Label fx:id="inventory" styleClass="side-label">Inventory</Label>
         <Label fx:id="wishList" styleClass="side-label">Wishlist</Label>
         <Label fx:id="settings" styleClass="side-label">Settings</Label>
-        <Label fx:id="logOut" styleClass="side-label">Log out</Label>
     </JFXListView>
 </VBox>

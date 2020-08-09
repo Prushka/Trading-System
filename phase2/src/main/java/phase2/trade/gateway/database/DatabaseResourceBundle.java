@@ -36,6 +36,7 @@ public class DatabaseResourceBundle implements Shutdownable {
         configuration.setProperty("hibernate.show_sql", String.valueOf(databaseConfig.isShowSQL()));
         configuration.setProperty("hibernate.connection.pool_size", String.valueOf(databaseConfig.getConnection_pool_size()));
 
+        System.out.println("Connecting");
         sessionFactory = configuration.configure().buildSessionFactory();
         threadPool = Executors.newFixedThreadPool(databaseConfig.getConnection_pool_size()); // do we need to configure this
 

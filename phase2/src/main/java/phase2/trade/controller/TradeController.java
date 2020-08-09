@@ -4,6 +4,7 @@ import javafx.fxml.Initializable;
 import phase2.trade.config.property.TradeProperties;
 import phase2.trade.gateway.Callback;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.gateway.TradeGateway;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
 import phase2.trade.gateway.database.TradeDAO;
 import phase2.trade.item.Item;
@@ -20,26 +21,29 @@ import java.util.ResourceBundle;
 
 public class TradeController extends AbstractController implements Initializable {
 
-    private final TradeDAO tradeDAO;
+    private final TradeGateway tradeDAO;
 
     private final TradeManager tm;
 
-    public TradeController(GatewayBundle gatewayBundle, TradeDAO tradeDAO, TradeProperties
-            tradeProperties) {
+    private Trade newTrade;
+
+    public TradeController(GatewayBundle gatewayBundle) {
         super(gatewayBundle);
-        this.tradeDAO = tradeDAO;
-        this.tm = new TradeManager(tradeProperties);
+        this.tradeDAO = gatewayBundle.getEntityBundle().getTradeGateway();
+        this.tm = new TradeManager();
     }
 
-    public void addTrade(Callback<Trade> callback, List<User> users, List<List<Item>> items, String year, String month,
+    public Trade addTrade(Callback<Trade> callback, List<User> users, List<List<Item>> items, String year, String month,
                          String day, String hour, String minute, String country, String city, String street,
                          String streetNum, boolean isPermanent) {
         tradeDAO.submitTransaction(() -> {
             Trade newTrade = tm.createTrade(users, items, year, month, day, hour, minute, country, city, street,
                     streetNum, isPermanent);
             tradeDAO.add(newTrade);
+            this.newTrade = newTrade;
             callback.call(newTrade);
         });
+        return this.newTrade;
     }
 
     public void editMeetingDateAndTime(Callback<Trade> callback, Trade currTrade, User currUser, LocalDateTime dateTime){

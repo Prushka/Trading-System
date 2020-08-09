@@ -20,10 +20,10 @@ public class TradeManager {
     private TradeEditor te;
     private TradeConfirmer tcc;
 
-    public TradeManager(TradeProperties tradeProperties){
+    public TradeManager(){
         this.tradeProperties = tradeProperties;
-        editLimit = tradeProperties.getInt("editLimit");
-        timeLimit = tradeProperties.getInt("timeLimit");
+        editLimit = 1; //tradeProperties.getInt("editLimit");
+        timeLimit = 3; // tradeProperties.getInt("timeLimit");
         tc = new TradeCreator();
         te = new TradeEditor(editLimit);
     }

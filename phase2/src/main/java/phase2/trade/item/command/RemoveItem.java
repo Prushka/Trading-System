@@ -11,12 +11,16 @@ import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.RegularUser;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import java.util.*;
 
 @Entity
-public class RemoveItem extends ItemCommand<Item> {
+public class RemoveItem extends ItemCommand<Long[]> {
 
-    private Long itemId;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Long> itemIds;
 
     private transient RegularUser operator;
 
@@ -24,9 +28,9 @@ public class RemoveItem extends ItemCommand<Item> {
 
     private ItemListType itemListType;
 
-    public RemoveItem(GatewayBundle gatewayBundle, RegularUser operator, ItemListType itemListType, Long itemId) {
+    public RemoveItem(GatewayBundle gatewayBundle, RegularUser operator, ItemListType itemListType, Set<Long> itemIds) {
         super(gatewayBundle, operator);
-        this.itemId = itemId;
+        this.itemIds = itemIds;
         this.operator = operator;
         this.itemListType = itemListType;
     }
@@ -36,19 +40,19 @@ public class RemoveItem extends ItemCommand<Item> {
     }
 
     @Override
-    public void execute(StatusCallback<Item> callback, String... args) { //
+    public void execute(StatusCallback<Long[]> callback, String... args) { //
         if (!checkPermission()) {
             callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
         getEntityBundle().getUserGateway().submitTransaction(() -> {
-            Item item = findItemByIdSyncInsideItemGateway(itemId);
-            operator.getItemList(itemListType).removeItem(item);
-
-            addEffectedId(itemId);
+            Long[] ids = itemIds.toArray(new Long[0]);
+            operator.getItemList(itemListType).removeItemByUid(ids);
+            getEntityBundle().getUserGateway().update(operator);
+            addEffectedId(ids);
             save();
             if (callback != null)
-                callback.call(item, ResultStatus.SUCCEEDED);
+                callback.call(ids, ResultStatus.SUCCEEDED);
         });
     }
 

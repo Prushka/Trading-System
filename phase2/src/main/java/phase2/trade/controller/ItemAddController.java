@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -22,6 +23,7 @@ import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class ItemAddController implements Initializable {
@@ -53,8 +55,10 @@ public class ItemAddController implements Initializable {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
 
             } else {
-                display.add(result);
-                window.close();
+                Platform.runLater(() -> {
+                    display.add(result);
+                    window.close();
+                });
             }
         }, name.getText(), description.getText());
         submitButton.setDisable(false);
@@ -63,11 +67,10 @@ public class ItemAddController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        category.getItems().addAll(Category.BOOK, Category.ELECTRONIC, Category.EQUIPMENT, Category.FURNITURE,
-                Category.MOVIE, Category.VIDEO_GAME, Category.MISCELLANEOUS);
+        category.getItems().addAll(Arrays.asList(Category.values()));
         window = new Stage();
 
-        window.initModality(Modality.APPLICATION_MODAL); // block input events
+        window.initModality(Modality.APPLICATION_MODAL);
         window.setMinWidth(250);
 
         Scene scene = new Scene(root);

@@ -67,8 +67,8 @@ public abstract class Command<T> {
         this.gatewayBundle = gatewayBundle;
     }
 
-    public void addEffectedId(Long id) {
-        effectedIds.add(id);
+    public void addEffectedId(Long... ids) {
+        effectedIds.addAll(Arrays.asList(ids));
     }
 
     public Collection<Long> getEffectedIds() {

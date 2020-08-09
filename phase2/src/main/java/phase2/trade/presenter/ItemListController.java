@@ -1,5 +1,6 @@
 package phase2.trade.presenter;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,11 +24,14 @@ import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
+import phase2.trade.item.command.RemoveItem;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import java.net.URL;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class ItemListController extends AbstractController implements Initializable {
 
@@ -89,9 +93,21 @@ public class ItemListController extends AbstractController implements Initializa
             addWindow(displayData);
         });
         deleteButton.setOnAction(event -> {
+            deleteButton.setDisable(true);
+
             ObservableList<Item> itemsSelected;
             itemsSelected = tableView.getSelectionModel().getSelectedItems();
-            itemsSelected.forEach(displayData::remove);
+            Set<Long> ids = new HashSet<>();
+            for (Item item : itemsSelected) {
+                ids.add(item.getUid());
+            }
+            Command<Long[]> remove = new RemoveItem(gatewayBundle, user, itemListType, ids);
+            remove.execute((result, resultStatus) -> {
+                Platform.runLater(() -> {
+                    itemsSelected.forEach(displayData::remove);
+                    deleteButton.setDisable(false);
+                });
+            });
         });
 
         root.getChildren().addAll(tableView, hbox);

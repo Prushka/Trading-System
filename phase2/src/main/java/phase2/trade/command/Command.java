@@ -5,28 +5,19 @@ import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.gateway.database.DatabaseResourceBundle;
+import phase2.trade.item.Item;
+import phase2.trade.item.command.AlterWillingness;
+import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Command<T> {
-
-    @Entity
-    protected static class CommandData<Q> {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long uid;
-
-        Class<Q> clazz;
-
-        Long id;
-
-        public CommandData() {
-
-        }
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,18 +29,68 @@ public abstract class Command<T> {
 
     private Long undoTimestamp;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    protected Collection<Long> effectedIds;
+
+    // this one is to be persisted for effected entities and to be deserialized
+    protected String effectedEntitiesToPersist;
+
+    // this map is basically Class<?> -> A set of effected ids
+    // the reason why this is not persisted in its native form is because doing so would potentially mess up the db structure
+    // the String part has to be a class's name and the set has to contain all effected ids
+    // maybe it would be possible to benefit from sql statements to figure out the overlapping records, but I don't know how to query all mapped columns of such a nested set inside a map
+    protected transient Map<String, Set<String>> effectedEntities;
 
     protected transient GatewayBundle gatewayBundle;
 
     public Command(GatewayBundle gatewayBundle) {
         this.gatewayBundle = gatewayBundle;
-        this.effectedIds = new HashSet<>();
+        this.effectedEntities = new HashMap<>();
     }
 
     public Command() {
+    }
 
+    private void putOrAdd(Map<String, Set<String>> map, String key, String value) {
+        if (map.containsKey(key)) {
+            map.get(key).add(value);
+        } else {
+            map.put(key, new HashSet<String>() {{
+                add(value);
+            }});
+        }
+    }
+
+    protected void addEffectedEntity(Class<?> clazz, Long... ids) {
+        for (Long id : ids) {
+            putOrAdd(effectedEntities, clazz.getName(), id.toString());
+        }
+    }
+
+    private String translateEffectedEntitiesToPersist(Map<String, Set<String>> map) {
+        StringBuilder temp = new StringBuilder();
+        for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
+            temp.append(entry.getKey()).append("!").append(String.join(",", entry.getValue())).append(";");
+        }
+        return temp.toString();
+    }
+
+    private Map<String, Set<String>> retrieveEffectedEntities(String effected) {
+        Map<String, Set<String>> temp = new HashMap<>();
+        Pattern classNamePattern = Pattern.compile("(.*)!");
+        Pattern idsPattern = Pattern.compile("(\\d+)([,]|$)");
+        for (String record : effected.split(";")) {
+            Matcher matcher = classNamePattern.matcher(record);
+            String clazz = "undefined";
+            Set<String> ids = new HashSet<>();
+            if (matcher.find()) {
+                clazz = matcher.group(1);
+            }
+            Matcher idsMatcher = idsPattern.matcher(record);
+            while (idsMatcher.find()) {
+                ids.add(idsMatcher.group(1));
+            }
+            temp.put(clazz, ids);
+        }
+        return temp;
     }
 
 
@@ -65,6 +106,7 @@ public abstract class Command<T> {
 
     protected void save() {
         timestamp = System.currentTimeMillis();
+        effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
         getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().add(getThis()));
     }
 
@@ -82,14 +124,6 @@ public abstract class Command<T> {
         this.gatewayBundle = gatewayBundle;
     }
 
-    public void addEffectedId(Long... ids) {
-        effectedIds.addAll(Arrays.asList(ids));
-    }
-
-    public Collection<Long> getEffectedIds() {
-        return effectedIds;
-    }
-
     public Long getUid() {
         return uid;
     }
@@ -103,7 +137,7 @@ public abstract class Command<T> {
     }
 
     public void isUndoable(Callback<List<Command<?>>> callback) {
-        getEntityBundle().getCommandGateway().submitSession(() -> callback.call(getEntityBundle().getCommandGateway().isUndoable(effectedIds, timestamp)));
+        // getEntityBundle().getCommandGateway().submitSession(() -> callback.call(getEntityBundle().getCommandGateway().isUndoable(effectedIds, timestamp)));
     }
 
     protected EntityBundle getEntityBundle() {
@@ -112,5 +146,14 @@ public abstract class Command<T> {
 
     protected ConfigBundle getConfigBundle() {
         return gatewayBundle.getConfigBundle();
+    }
+
+    public String translateEffectedEntitiesToPersist() {
+        return effectedEntitiesToPersist;
+    }
+
+    public void setEffectedEntitiesToPersist(String effectedEntitiesToPersist) {
+        this.effectedEntitiesToPersist = effectedEntitiesToPersist;
+        this.effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
     }
 }

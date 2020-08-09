@@ -19,13 +19,6 @@ import java.util.Set;
 @Entity
 public class AlterWillingness extends ItemCommand<Item> {
 
-    protected static class AlterWillingnessData extends CommandData<Item> {
-
-        private Willingness newWillingness;
-
-        private Willingness oldWillingness;
-    }
-
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> itemIds;
 
@@ -60,7 +53,7 @@ public class AlterWillingness extends ItemCommand<Item> {
                 }
             }
             getEntityBundle().getUserGateway().update(operator);
-            addEffectedId(ids);
+            addEffectedEntity(Item.class, ids);
             save();
             if (callback != null)
                 callback.call(null, ResultStatus.SUCCEEDED);

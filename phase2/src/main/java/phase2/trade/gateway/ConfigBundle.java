@@ -11,9 +11,10 @@ public class ConfigBundle implements Shutdownable {
 
     private final TradeConfig tradeConfig;
 
+    private final DatabaseConfig databaseConfig;
+
     private ConfigStrategy configStrategy;
 
-    private DatabaseConfig databaseConfig;
 
     public ConfigBundle() {
         configStrategy = new LocalStrategy(new YamlStrategy());

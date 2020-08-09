@@ -4,6 +4,7 @@ import phase2.trade.inventory.Cart;
 import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.inventory.ItemList;
+import phase2.trade.permission.PermissionGroup;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,9 +29,9 @@ public class RegularUser extends User {
      * Creates a PersonalUser with the given userName, email, telephone, password
      * and initializes all other instance variables.
      *
-     * @param userName  username of this user
-     * @param email     email of this user
-     * @param password  password of this user
+     * @param userName username of this user
+     * @param email    email of this user
+     * @param password password of this user
      */
     public RegularUser(String userName, String email, String password, String country, String city) {
         super(userName, email, password, country, city);
@@ -95,5 +96,9 @@ public class RegularUser extends User {
 
     public void setAccountBalance(int accountBalance) {
         this.accountBalance = accountBalance;
+    }
+
+    public PermissionGroup getPermissionGroup() {
+        return PermissionGroup.REGULAR;
     }
 }

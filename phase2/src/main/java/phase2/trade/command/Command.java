@@ -112,25 +112,6 @@ public abstract class Command<T> {
         getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().update(getThis()));
     }
 
-    public Command<T> getThis() {
-        return this;
-    }
-
-    public void setGatewayBundle(GatewayBundle gatewayBundle) {
-        this.gatewayBundle = gatewayBundle;
-    }
-
-    public Long getUid() {
-        return uid;
-    }
-
-    public void setUid(Long uid) {
-        this.uid = uid;
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
-    }
 
     public void isUndoable(Callback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
         getEntityBundle().getCommandGateway().submitSession(() -> {
@@ -164,5 +145,25 @@ public abstract class Command<T> {
 
     protected ConfigBundle getConfigBundle() {
         return gatewayBundle.getConfigBundle();
+    }
+
+    public Command<T> getThis() {
+        return this;
+    }
+
+    public void setGatewayBundle(GatewayBundle gatewayBundle) {
+        this.gatewayBundle = gatewayBundle;
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
     }
 }

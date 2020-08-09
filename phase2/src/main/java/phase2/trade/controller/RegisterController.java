@@ -51,7 +51,7 @@ public class RegisterController extends AbstractController implements Initializa
                 });
             } else {
                 Platform.runLater(() -> {
-                    switchScene("personal_dashboard.fxml",
+                    switchScene("dashboard.fxml",
                             new DashboardController(gatewayBundle, accountManager), actionEvent, true);
                 });
             }

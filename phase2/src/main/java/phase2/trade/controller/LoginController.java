@@ -48,7 +48,7 @@ public class LoginController extends AbstractController implements Initializable
                 });
             } else {
                 Platform.runLater(() ->
-                        switchScene("personal_dashboard.fxml",
+                        switchScene("dashboard.fxml",
                                 new DashboardController(gatewayBundle, accountManager), actionEvent, true));
             }
         }, usernameOrEmail.getText(), password.getText());

@@ -42,11 +42,9 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // if (accountManager.getLoggedInUser() instanceof AdministrativeUser){
-            // root.setLeft(loadPane("admin_side_menu.fxml", new AdminSideMenuController(gatewayBundle, accountManager, center, right)));
-        // } else {
-        root.setLeft(loadPane("side_menu.fxml", new SideMenuController(gatewayBundle, accountManager, center, right)));
-        // }
+        root.setLeft(loadPane("side_menu_" + accountManager.getPermissionGroup().name().toLowerCase() + ".fxml",
+                new SideMenuController(gatewayBundle, accountManager, center, right)));
+
 
         /*
         HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);

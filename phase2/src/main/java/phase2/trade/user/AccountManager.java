@@ -5,6 +5,7 @@ import phase2.trade.callback.StatusCallback;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionGroupFactory;
 import phase2.trade.user.command.Login;
 import phase2.trade.user.command.Register;
@@ -42,6 +43,10 @@ public class AccountManager {
 
     public User getLoggedInUser() {
         return loggedInUser;
+    }
+
+    public PermissionGroup getPermissionGroup() {
+        return loggedInUser.getPermissionGroup();
     }
 
     public void register(StatusCallback<User> callback, String userName, String email, String password, String country, String city) {

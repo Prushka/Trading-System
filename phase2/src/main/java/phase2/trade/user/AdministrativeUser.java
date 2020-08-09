@@ -1,6 +1,8 @@
 package phase2.trade.user;
 
 
+import phase2.trade.permission.PermissionGroup;
+
 import javax.persistence.Entity;
 import java.util.List;
 
@@ -14,10 +16,15 @@ public class AdministrativeUser extends User {
         //accountState =;
     }
 
-    public AdministrativeUser() {}
+    public AdministrativeUser() {
+    }
 
     public AccountState getAccountState() {
         return accountState;
+    }
+
+    public PermissionGroup getPermissionGroup() {
+        return PermissionGroup.ADMIN;
     }
 
 }

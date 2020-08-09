@@ -16,7 +16,9 @@ import javax.persistence.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * all activities of a personal user happens here
+ */
 public class PersonalUserManager{ //extends UserCommand<User>{
 
     private RegularUser loggedInUser;
@@ -51,7 +53,12 @@ public class PersonalUserManager{ //extends UserCommand<User>{
     }
 
 
-
+    /**
+     * create and add an item to the inventory, the item state is to be reviewed
+     * @param category the category of the item
+     * @param itemName the name of the item
+     * @param description the description of the item
+     */
     public void addToBeReviewedItem(Category category, String itemName, String description) {
         Item item = new Item();
         item.setCategory(category);
@@ -60,28 +67,47 @@ public class PersonalUserManager{ //extends UserCommand<User>{
         loggedInUser.getInventory().addItem(item);
     }
 
+    /**
+     * remove an item from the inventory if the item is in the inventory
+     * @param itemId The id of the item
+     */
     public void removeItemFromInventory(Long itemId) {
-        loggedInUser.getInventory().removeItemByUid(itemId);
+        if (loggedInUser.getInventory().findByUid(itemId) != null){
+            loggedInUser.getInventory().removeItemByUid(itemId);
+        }
     }
 
+    /**
+     * add an item to the wishlist
+     * @param item The item
+     */
     public void addItemToWishlist(Item item) {
         loggedInUser.getCart().addItem(item);
     }
 
+    /**
+     * remove an item from the wishlist if the item is in the wishlist
+     * @param itemId The ID of the item
+     */
     public void removeItemFromWishlist(Long itemId) {
-        loggedInUser.getCart().removeItemByUid(itemId);
+        if (loggedInUser.getCart().findByUid(itemId) != null){
+            loggedInUser.getCart().removeItemByUid(itemId);
+        }
     }
 
-    public void UnfreezeRequest(RegularUser user) {
-        user.setAccountState(AccountState.REQUEST_UNFROZEN);
+    /**
+     * request to unfreeze the account
+     */
+    public void UnfreezeRequest() {
+        loggedInUser.setAccountState(AccountState.REQUEST_UNFROZEN);
     }
 
-    public Inventory getUserInventory(RegularUser user) {
-        return user.getInventory();
+    public Inventory getUserInventory() {
+        return loggedInUser.getInventory();
     }
 
-    public Cart getUserWishlist(RegularUser user) {
-        return user.getCart();
+    public Cart getUserWishlist() {
+        return loggedInUser.getCart();
     }
 
     /*public List<RegularUser> suggest(){
@@ -102,7 +128,7 @@ public class PersonalUserManager{ //extends UserCommand<User>{
         return ans;
     }
 
-    /*public void suggest (PersonalUser p) {
+    public void suggest (PersonalUser p) {
         for (PersonalUser x : personalUserRepository) {
             for (Item i : x.getInventory()) {
                 if (p.getWishlist().contains(i)) {

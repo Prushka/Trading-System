@@ -14,7 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * All activities of an administrative user happens here
+ */
 public class AdministrativeUserManager {
 
     private UserDAO userDAO;
@@ -120,13 +122,14 @@ public class AdministrativeUserManager {
 
     /**
      * Remove an item from a personal user inventory
-     *
      * @param user   The personal user
      * @param itemId The id of the item
      * @return true if the item is removed form the user's inventory, otherwise false
      */
     public void removeItemFromPersonalInventory(RegularUser user, Long itemId) {
-        user.getInventory().removeItemByUid(itemId);
+        if (user.getInventory().findByUid(itemId) != null){
+            user.getInventory().removeItemByUid(itemId);
+        }
     }
 
     /**
@@ -136,15 +139,15 @@ public class AdministrativeUserManager {
      * @param itemId Thw item that need to br removed
      */
     public void removeItemFromWishlist(RegularUser user, Long itemId) {
-        user.getInventory().removeItemByUid(itemId);
+        if (user.getCart().findByUid(itemId) != null){
+            user.getCart().removeItemByUid(itemId);
+        }
     }
 
     /**
      * Confirm to add an item to a personal user's inventory
-     * //* @param user The personal user need to confirm add
-     *
+     * @param user The personal user need to confirm add
      * @param item The item
-     * @return true if successfully added, otherwise false
      */
     public void confirmAddItemToInventory(RegularUser user, Item item) {
         List<Item> reviewItem = needToConfirmAddItem.get(user);
@@ -155,10 +158,8 @@ public class AdministrativeUserManager {
 
 
     /**
-     * Confirm to add all items to a personal user's inventory
-     * //* @param user The personal user
-     *
-     * @return true if successfully added all items, otherwise false
+     * Confirm to add all items requested to a personal user's inventory
+     * @param user The personal user
      */
     public void confirmAddAllItemForAUser(RegularUser user) {
         List<Item> reviewItem = needToConfirmAddItem.get(user);
@@ -223,29 +224,6 @@ public class AdministrativeUserManager {
 
 }
 
-    /**
-     * Check if the administrative user gives the correct username and password to login
-     * @param username This administrative user's username
-     * @param password This administrative user's password
-     * @return True if correct, otherwise false
-     */
-
-
-    /**
-     * helper method to check if the administrative user gaven username and password exists
-     * @param username This administrative user's username
-     * @param password This administrative user's password
-     * @return True if exists, otherwise false
-     */
-    /*private boolean adminUserExist(String username, String password){
-        if (administrators.ifExists(
-                AdministrativeUser -> AdministrativeUser.getUserName().equals(username)
-                        && AdministrativeUser.getPassword().equals(password))){
-            return true;
-        }else{
-            return false;
-        }
-    }*/
 
     /**
      * helper method, checks if the administrative user exist with the given username

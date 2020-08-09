@@ -5,10 +5,6 @@ import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
-import phase2.trade.gateway.database.DatabaseResourceBundle;
-import phase2.trade.item.Item;
-import phase2.trade.item.command.AlterWillingness;
-import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.util.*;
@@ -136,8 +132,29 @@ public abstract class Command<T> {
         return timestamp;
     }
 
-    public void isUndoable(Callback<List<Command<?>>> callback) {
-        // getEntityBundle().getCommandGateway().submitSession(() -> callback.call(getEntityBundle().getCommandGateway().isUndoable(effectedIds, timestamp)));
+    public void isUndoable(Callback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
+        getEntityBundle().getCommandGateway().submitSession(() -> {
+            List<Command<?>> futureCommands = getEntityBundle().getCommandGateway().getFutureCommands(timestamp);
+            List<Command<?>> blockingCommands = new ArrayList<>();
+            for (Command<?> command : futureCommands) {
+                if (command.getCRUDType().hasEffect && ifOverlaps(command.effectedEntitiesToPersist)) {
+                    blockingCommands.add(command);
+                }
+            }
+            callback.call(blockingCommands);
+        });
+    }
+
+
+    public boolean ifOverlaps(String otherEffectedEntitiesToPersist) {
+        Map<String, Set<String>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);
+        Map<String, Set<String>> effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
+        for (Map.Entry<String, Set<String>> entry : otherEffectedEntities.entrySet()) {
+            if (effectedEntities.containsKey(entry.getKey())) {
+                if (!Collections.disjoint(effectedEntities.get(entry.getKey()), entry.getValue())) return true;
+            }
+        }
+        return false;
     }
 
     protected EntityBundle getEntityBundle() {
@@ -146,14 +163,5 @@ public abstract class Command<T> {
 
     protected ConfigBundle getConfigBundle() {
         return gatewayBundle.getConfigBundle();
-    }
-
-    public String translateEffectedEntitiesToPersist() {
-        return effectedEntitiesToPersist;
-    }
-
-    public void setEffectedEntitiesToPersist(String effectedEntitiesToPersist) {
-        this.effectedEntitiesToPersist = effectedEntitiesToPersist;
-        this.effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
     }
 }

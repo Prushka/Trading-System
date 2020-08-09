@@ -50,10 +50,10 @@ public class CommandTest {
         save();
         Command<Item> addItem = new AddItemToItemList(bundle, regularUser, ItemListType.INVENTORY);
 
-        addItem.execute(null, "testName", "testDescription");
+        addItem.execute(null, "testName", "testDescription", "MOVIE");
 
         Command<Item> alterItem = new AlterItemInInventory(bundle, regularUser, 1L);
-        alterItem.execute(null, "testName2", "testDescription2");
+        alterItem.execute(null, "testName2", "testDescription2", "MOVIE");
     }
 
 

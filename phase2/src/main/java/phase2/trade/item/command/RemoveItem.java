@@ -40,7 +40,7 @@ public class RemoveItem extends ItemCommand<Long[]> {
     }
 
     @Override
-    public void execute(StatusCallback<Long[]> callback, String... args) { //
+    public void execute(StatusCallback<Long[]> callback, String... args) {
         if (!checkPermission(callback)) {
             return;
         }

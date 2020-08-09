@@ -5,6 +5,7 @@ import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
+import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
@@ -38,6 +39,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
             Item item = new Item();
             item.setName(args[0]);
             item.setDescription(args[1]);
+            item.setCategory(Category.valueOf(args[2]));
             item.setItemList(operator.getItemList(itemListType));
 
             operator.getItemList(itemListType).addItem(item);

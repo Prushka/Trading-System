@@ -1,32 +1,25 @@
 package phase2.trade.presenter;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
-import phase2.trade.controller.ItemAddController;
+import phase2.trade.controller.AddItemController;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
-import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.user.RegularUser;
-import phase2.trade.user.User;
 
 import java.net.URL;
 import java.util.HashSet;
@@ -51,25 +44,28 @@ public class ItemListController extends AbstractController implements Initializa
         this.itemListType = itemListType;
     }
 
+    private TableColumn<Item, String> getTableColumn(String name, String fieldName) {
+        TableColumn<Item, String> column = new TableColumn<>(name);
+        column.setMinWidth(100);
+        column.setCellValueFactory(new PropertyValueFactory<>(fieldName));
+        return column;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TableColumn<Item, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setMinWidth(200);
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Item, String> descriptionColumn = new TableColumn<>("Description");
-        descriptionColumn.setMinWidth(100);
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-
-        TableColumn<Item, String> quantityColumn = new TableColumn<>("Quantity");
-        quantityColumn.setMinWidth(100);
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        TableColumn<Item, String> nameColumn = getTableColumn("Name", "name");
+        TableColumn<Item, String> descriptionColumn = getTableColumn("Description", "description");
+        TableColumn<Item, String> categoryColumn = getTableColumn("Category", "category");
+        TableColumn<Item, String> ownershipColumn = getTableColumn("Ownership", "ownership");
+        TableColumn<Item, String> quantityColumn = getTableColumn("Quantity", "quantity");
+        TableColumn<Item, String> priceColumn = getTableColumn("Price", "price");
+        TableColumn<Item, String> willingnessColumn = getTableColumn("Willingness", "willingness");
 
         ObservableList<Item> displayData = FXCollections.observableArrayList(user.getItemList(itemListType).getListOfItems());
 
         tableView = new TableView<>();
         tableView.setItems(displayData);
-        tableView.getColumns().addAll(FXCollections.observableArrayList(nameColumn, descriptionColumn, quantityColumn));
+        tableView.getColumns().addAll(FXCollections.observableArrayList(nameColumn, descriptionColumn, categoryColumn, ownershipColumn, quantityColumn, willingnessColumn, priceColumn));
 
         TextField nameInput = new TextField();
         nameInput.setPromptText("Name");
@@ -81,13 +77,13 @@ public class ItemListController extends AbstractController implements Initializa
         TextField quantityInput = new TextField();
         quantityInput.setPromptText("Quantity");
 
-        Button addButton = new Button("Add");
-        Button deleteButton = new Button("Delete");
+        JFXButton addButton = new JFXButton("Add");
+        JFXButton deleteButton = new JFXButton("Delete");
 
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10, 10, 10, 10)); // padding around entire layout
         hbox.setSpacing(10);
-        hbox.getChildren().addAll(nameInput, priceInput, quantityInput, addButton, deleteButton);
+        hbox.getChildren().addAll(addButton, deleteButton);
 
         addButton.setOnAction(event -> {
             addWindow(displayData);
@@ -114,7 +110,7 @@ public class ItemListController extends AbstractController implements Initializa
     }
 
     public void addWindow(ObservableList<Item> displayData) {
-        ItemAddController itemAddController = new ItemAddController(gatewayBundle, user, itemListType, displayData);
-        loadPane("add_item.fxml", itemAddController);
+        AddItemController addItemController = new AddItemController(gatewayBundle, user, itemListType, displayData);
+        loadPane("add_item.fxml", addItemController);
     }
 }

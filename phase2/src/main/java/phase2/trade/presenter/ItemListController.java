@@ -51,38 +51,17 @@ public class ItemListController extends AbstractController implements Initializa
         this.itemListType = itemListType;
     }
 
-    private TableColumn<Item, String> getTableColumn(String name, String fieldName) {
-        TableColumn<Item, String> column = new TableColumn<>(name);
-        column.setMinWidth(100);
-        column.setCellValueFactory(new PropertyValueFactory<>(fieldName));
-        return column;
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TableColumn<Item, String> nameColumn = getTableColumn("Name", "name");
-        TableColumn<Item, String> descriptionColumn = getTableColumn("Description", "description");
-        TableColumn<Item, String> categoryColumn = getTableColumn("Category", "category");
-        TableColumn<Item, String> ownershipColumn = getTableColumn("Ownership", "ownership");
-        TableColumn<Item, String> quantityColumn = getTableColumn("Quantity", "quantity");
-        TableColumn<Item, String> priceColumn = getTableColumn("Price", "price");
-        TableColumn<Item, String> willingnessColumn = getTableColumn("Willingness", "willingness");
 
         ObservableList<Item> displayData = FXCollections.observableArrayList(user.getItemList(itemListType).getListOfItems());
 
-        tableView = new TableView<>();
-        tableView.setItems(displayData);
-        tableView.getColumns().addAll(FXCollections.observableArrayList(nameColumn, descriptionColumn, categoryColumn, ownershipColumn, quantityColumn, willingnessColumn, priceColumn));
+        TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData);
+        tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
+                .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price").addColumn("Willingness", "willingness");
 
-        TextField nameInput = new TextField();
-        nameInput.setPromptText("Name");
-        nameInput.setMinWidth(100);
-
-        TextField priceInput = new TextField();
-        priceInput.setPromptText("Description");
-
-        TextField quantityInput = new TextField();
-        quantityInput.setPromptText("Quantity");
+        tableView = tableViewGenerator.build();
 
         JFXButton addButton = new JFXButton("Add");
         JFXButton deleteButton = new JFXButton("Delete");
@@ -94,9 +73,9 @@ public class ItemListController extends AbstractController implements Initializa
         hbox.setSpacing(10);
         hbox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton);
 
-        sellButton.setOnAction(getWillingnessHandler(sellButton,Willingness.WISH_TO_SELL));
+        sellButton.setOnAction(getWillingnessHandler(sellButton, Willingness.WISH_TO_SELL));
 
-        lendButton.setOnAction(getWillingnessHandler(sellButton,Willingness.WISH_TO_LEND));
+        lendButton.setOnAction(getWillingnessHandler(sellButton, Willingness.WISH_TO_LEND));
 
         addButton.setOnAction(event -> {
             addWindow(displayData);
@@ -131,7 +110,7 @@ public class ItemListController extends AbstractController implements Initializa
         };
     }
 
-    private Set<Long> getItemIdsFrom(ObservableList<Item> observableList){
+    private Set<Long> getItemIdsFrom(ObservableList<Item> observableList) {
         Set<Long> ids = new HashSet<>();
         for (Item item : observableList) {
             ids.add(item.getUid());

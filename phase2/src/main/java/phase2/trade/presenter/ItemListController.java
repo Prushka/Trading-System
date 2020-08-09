@@ -16,6 +16,8 @@ import javafx.scene.layout.VBox;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
+import phase2.trade.controller.AbstractController;
+import phase2.trade.controller.ItemAddController;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.ItemListType;
@@ -27,7 +29,7 @@ import phase2.trade.user.User;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ItemListController implements Initializable {
+public class ItemListController extends AbstractController implements Initializable {
 
     private final ItemListType itemListType;
     private RegularUser user;
@@ -39,6 +41,7 @@ public class ItemListController implements Initializable {
     private GatewayBundle gatewayBundle;
 
     public ItemListController(GatewayBundle gatewayBundle, RegularUser user, ItemListType itemListType) {
+        super(gatewayBundle);
         this.user = user;
         this.gatewayBundle = gatewayBundle;
         this.itemListType = itemListType;
@@ -76,27 +79,14 @@ public class ItemListController implements Initializable {
 
         Button addButton = new Button("Add");
         Button deleteButton = new Button("Delete");
-        Button saveButton = new Button("Save");
 
         HBox hbox = new HBox();
         hbox.setPadding(new Insets(10, 10, 10, 10)); // padding around entire layout
         hbox.setSpacing(10);
-        hbox.getChildren().addAll(nameInput, priceInput, quantityInput, addButton, deleteButton, saveButton);
+        hbox.getChildren().addAll(nameInput, priceInput, quantityInput, addButton, deleteButton);
 
         addButton.setOnAction(event -> {
-            addButton.setDisable(true);
-            Command<Item> itemCommand = new AddItemToItemList(gatewayBundle, user, itemListType);
-            itemCommand.execute((result, resultStatus) -> {
-                if (resultStatus == ResultStatus.NO_PERMISSION) {
-
-                } else {
-                    tableView.getItems().add(result);
-                }
-            }, nameInput.getText(), descriptionColumn.getText(), quantityColumn.getText());
-            nameInput.clear();
-            priceInput.clear();
-            quantityInput.clear();
-            addButton.setDisable(false);
+            addWindow(displayData);
         });
         deleteButton.setOnAction(event -> {
             ObservableList<Item> itemsSelected;
@@ -105,5 +95,10 @@ public class ItemListController implements Initializable {
         });
 
         root.getChildren().addAll(tableView, hbox);
+    }
+
+    public void addWindow(ObservableList<Item> displayData) {
+        ItemAddController itemAddController = new ItemAddController(gatewayBundle, user, itemListType, displayData);
+        loadPane("add_item.fxml", itemAddController);
     }
 }

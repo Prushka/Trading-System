@@ -23,7 +23,7 @@ public class AddToCart extends ItemCommand<Item> {
         super(gatewayBundle, operator);
         this.itemId = itemId;
         this.operator = operator;
-        addEffectedId(itemId);
+        addEffectedEntity(Item.class, itemId);
     }
 
     public AddToCart() {

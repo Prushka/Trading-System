@@ -6,9 +6,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.io.IOException;
 
-public class YamlStrategy implements ConfigStrategy {
+public class YamlStrategy implements FormatStrategy {
 
-    @Override
     public <T> T read(Class<T> configClass, File file) {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         mapper.findAndRegisterModules();
@@ -20,7 +19,6 @@ public class YamlStrategy implements ConfigStrategy {
         }
     }
 
-    @Override
     public <T> void save(T entity, File file) {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
@@ -29,6 +27,7 @@ public class YamlStrategy implements ConfigStrategy {
             e.printStackTrace();
         }
     }
+
 
     public String getExtension() {
         return ".yaml";

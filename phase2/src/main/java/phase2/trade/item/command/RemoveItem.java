@@ -48,7 +48,7 @@ public class RemoveItem extends ItemCommand<Long[]> {
             Long[] ids = itemIds.toArray(new Long[0]);
             operator.getItemList(itemListType).removeItemByUid(ids);
             getEntityBundle().getUserGateway().update(operator);
-            addEffectedId(ids);
+            addEffectedEntity(Item.class, ids);
             save();
             if (callback != null)
                 callback.call(ids, ResultStatus.SUCCEEDED);

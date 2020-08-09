@@ -44,7 +44,7 @@ public class ReviewItem extends ItemCommand<Item> {
             oldOwnership = item.getOwnership();
             item.setOwnership(Ownership.OWNER);
             getEntityBundle().getItemGateway().update(item);
-            addEffectedId(itemId);
+            addEffectedEntity(Item.class, itemId);
             save();
             if (callback != null)
                 callback.call(item, ResultStatus.SUCCEEDED);

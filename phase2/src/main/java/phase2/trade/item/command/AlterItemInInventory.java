@@ -38,7 +38,7 @@ public class AlterItemInInventory extends ItemCommand<Item> {
             item.setName(args[0]);
             item.setDescription(args[1]);
             getEntityBundle().getItemGateway().update(item);
-            addEffectedId(itemId);
+            addEffectedEntity(Item.class, itemId);
             save();
             if (callback != null)
                 callback.call(item, ResultStatus.SUCCEEDED);

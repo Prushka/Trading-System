@@ -38,7 +38,7 @@ public class Register extends UserCommand<User> {
                 user.setUserPermission(permissionGroupFactory.getUserPermission(PermissionGroup.REGULAR));
                 getUserGateway().add(user);
                 userId = user.getUid();
-                addEffectedId(user.getUid());
+                addEffectedEntity(User.class, user.getUid());
                 save();
                 callback.call(user, ResultStatus.SUCCEEDED);
             } else {

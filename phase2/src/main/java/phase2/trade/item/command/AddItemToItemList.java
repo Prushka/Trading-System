@@ -45,7 +45,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
             operator.getItemList(itemListType).addItem(item);
             getEntityBundle().getUserGateway().update(operator);
             this.itemId = item.getUid();
-            addEffectedId(itemId);
+            addEffectedEntity(Item.class, itemId);
             save();
             if (callback != null)
                 callback.call(item, ResultStatus.SUCCEEDED);

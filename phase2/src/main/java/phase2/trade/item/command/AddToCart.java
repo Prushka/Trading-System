@@ -4,7 +4,7 @@ import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
-import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
@@ -38,7 +38,7 @@ public class AddToCart extends ItemCommand<Item> {
         }
         getEntityBundle().getUserGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncOutsideItemGateway(itemId);
-            operator.getItemList(InventoryType.CART).addItem(item);
+            operator.getItemList(ItemListType.CART).addItem(item);
             getEntityBundle().getUserGateway().update(operator);
             callback.call(item, ResultStatus.SUCCEEDED);
         });

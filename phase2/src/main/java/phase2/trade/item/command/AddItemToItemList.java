@@ -4,7 +4,7 @@ import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
@@ -15,16 +15,16 @@ import javax.persistence.Entity;
 @Entity
 public class AddItemToItemList extends ItemCommand<Item> {
 
-    private InventoryType inventoryType;
+    private ItemListType itemListType;
 
     private Long itemId;
 
     private transient RegularUser operator;
 
     public AddItemToItemList(GatewayBundle gatewayBundle, RegularUser operator,
-                             InventoryType inventoryType) {
+                             ItemListType itemListType) {
         super(gatewayBundle, operator);
-        this.inventoryType = inventoryType;
+        this.itemListType = itemListType;
         this.operator = operator;
     }
 
@@ -38,9 +38,9 @@ public class AddItemToItemList extends ItemCommand<Item> {
             Item item = new Item();
             item.setName(args[0]);
             item.setDescription(args[1]);
-            item.setItemList(operator.getItemList(inventoryType));
+            item.setItemList(operator.getItemList(itemListType));
 
-            operator.getItemList(inventoryType).addItem(item);
+            operator.getItemList(itemListType).addItem(item);
             getEntityBundle().getUserGateway().update(operator);
             this.itemId = item.getUid();
             addEffectedId(itemId);

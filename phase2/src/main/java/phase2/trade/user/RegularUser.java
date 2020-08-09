@@ -2,7 +2,7 @@ package phase2.trade.user;
 
 import phase2.trade.inventory.Cart;
 import phase2.trade.inventory.Inventory;
-import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.inventory.ItemList;
 
 import javax.persistence.CascadeType;
@@ -79,8 +79,8 @@ public class RegularUser extends User {
         this.cart = cart;
     }
 
-    public ItemList getItemList(InventoryType inventoryType) {
-        switch (inventoryType) {
+    public ItemList getItemList(ItemListType itemListType) {
+        switch (itemListType) {
             case CART:
                 return cart;
             case INVENTORY:

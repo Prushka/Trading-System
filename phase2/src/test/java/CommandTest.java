@@ -12,7 +12,7 @@ import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
 import phase2.trade.gateway.UserGateway;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
-import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetItems;
 import phase2.trade.user.RegularUser;
@@ -49,7 +49,7 @@ public class CommandTest {
     @Test
     public void testCommand() {
         save();
-        Command<Item> addItem = new AddItemToItemList(bundle, regularUser, InventoryType.INVENTORY);
+        Command<Item> addItem = new AddItemToItemList(bundle, regularUser, ItemListType.INVENTORY);
 
         addItem.execute(null, "testName", "testDescription");
 
@@ -61,7 +61,7 @@ public class CommandTest {
     @Test
     public void testItemCommands() {
         testCommand();
-        Command<ItemList> getInventory = new GetItems(bundle, regularUser, InventoryType.INVENTORY);
+        Command<ItemList> getInventory = new GetItems(bundle, regularUser, ItemListType.INVENTORY);
         getInventory.execute(new StatusCallback<ItemList>() {
             @Override
             public void call(ItemList result, ResultStatus resultStatus) {

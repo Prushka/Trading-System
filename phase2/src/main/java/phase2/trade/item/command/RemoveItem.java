@@ -4,7 +4,7 @@ import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
-import phase2.trade.inventory.InventoryType;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
 import phase2.trade.permission.Permission;
@@ -22,13 +22,13 @@ public class RemoveItem extends ItemCommand<Item> {
 
     private Ownership oldOwnership;
 
-    private InventoryType inventoryType;
+    private ItemListType itemListType;
 
-    public RemoveItem(GatewayBundle gatewayBundle, RegularUser operator, InventoryType inventoryType, Long itemId) {
+    public RemoveItem(GatewayBundle gatewayBundle, RegularUser operator, ItemListType itemListType, Long itemId) {
         super(gatewayBundle, operator);
         this.itemId = itemId;
         this.operator = operator;
-        this.inventoryType = inventoryType;
+        this.itemListType = itemListType;
     }
 
     public RemoveItem() {
@@ -43,7 +43,7 @@ public class RemoveItem extends ItemCommand<Item> {
         }
         getEntityBundle().getUserGateway().submitTransaction(() -> {
             Item item = findItemByIdSyncInsideItemGateway(itemId);
-            operator.getItemList(inventoryType).removeItem(item);
+            operator.getItemList(itemListType).removeItem(item);
 
             addEffectedId(itemId);
             save();

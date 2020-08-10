@@ -27,7 +27,4 @@ public abstract class TradeCommand<T> extends Command<T> {
         return trade;
     }
 
-
-    @Override
-    public abstract PermissionSet getPermissionRequired();
 }

@@ -37,9 +37,6 @@ public class EditTrade extends TradeCommand<Trade> {
     }
 
     @Override
-    public PermissionSet getPermissionRequired() { return new PermissionSet(Permission.EDIT_TRADE); }
-
-    @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
         // TO DO: Implement cancelling after limit
         if (!checkPermission()) {
@@ -62,14 +59,5 @@ public class EditTrade extends TradeCommand<Trade> {
             getEntityBundle().getTradeGateway().delete(tradeId);
             updateUndo();
         });
-    }
-
-    @Override
-    public void redo() {
-    }
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.UPDATE;
     }
 }

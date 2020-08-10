@@ -64,15 +64,4 @@ public class ReviewItem extends ItemCommand<Item> {
     public void redo() {
 
     }
-
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.UPDATE;
-    }
-
-    @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.ADD_ITEM);
-    }
 }

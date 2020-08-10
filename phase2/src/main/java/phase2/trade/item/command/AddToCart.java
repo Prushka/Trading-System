@@ -45,22 +45,6 @@ public class AddToCart extends ItemCommand<Item> {
     }
 
     @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.ADD_ITEM);
-    }
-
-
-    @Override
     public void undo() {
-    }
-
-    @Override
-    public void redo() {
-
-    }
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.UPDATE;
     }
 }

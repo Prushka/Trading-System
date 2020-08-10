@@ -16,23 +16,22 @@ import java.util.regex.Pattern;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-
 @CommandProperty(crudType = CRUDType.READ, isUndoable = true, persistent = true)
-// please annotate your own in subclasses
+// please annotate CommandProperty in subclasses, otherwise this will be used
 public abstract class Command<T> implements PermissionBased {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    boolean ifUndone = false;
+    @OneToOne
+    protected User operator;
+
+    private boolean ifUndone = false;
 
     private Long timestamp;
 
     private Long undoTimestamp;
-
-    @OneToOne
-    protected User operator;
 
     // this one is to be persisted for effected entities and to be deserialized
     protected String effectedEntitiesToPersist;
@@ -45,7 +44,7 @@ public abstract class Command<T> implements PermissionBased {
 
     protected transient GatewayBundle gatewayBundle;
 
-    private boolean asynchronous;
+    private transient boolean asynchronous = true;
 
     private transient CommandProperty commandPropertyAnnotation;
 

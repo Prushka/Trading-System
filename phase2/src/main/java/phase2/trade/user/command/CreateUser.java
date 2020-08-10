@@ -3,6 +3,7 @@ package phase2.trade.user.command;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
@@ -13,6 +14,8 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
+
+@CommandProperty(crudType = CRUDType.UPDATE, isUndoable = false, persistent = false)
 public class CreateUser extends UserCommand<User> {
 
     private Long userId;
@@ -21,9 +24,12 @@ public class CreateUser extends UserCommand<User> {
         super(gatewayBundle, operator);
     }
 
-    public CreateUser() {
-        super();
+    public CreateUser(GatewayBundle gatewayBundle) {
+        super(gatewayBundle);
     }
+
+    public CreateUser() {}
+
 
     @Override
     public void execute(StatusCallback<User> callback, String... args) { // username, email, password, permission_group
@@ -49,20 +55,5 @@ public class CreateUser extends UserCommand<User> {
     @Override
     public void undo() {
 
-    }
-
-    @Override
-    public void redo() {
-
-    }
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.CREATE;
-    }
-
-    @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.CREATE_USER);
     }
 }

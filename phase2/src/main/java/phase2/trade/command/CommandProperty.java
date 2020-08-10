@@ -17,6 +17,6 @@ public @Inherited
 
     boolean persistent();
 
-    Permission[] permissionSet() default {}; // well annotation doesn't allow PermissionSet as an object
+    Permission[] permissionSet() default {}; // well annotation doesn't allow PermissionSet, but allows array of Permissions
 
 }

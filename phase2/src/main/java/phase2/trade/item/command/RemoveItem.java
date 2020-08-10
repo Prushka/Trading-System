@@ -66,15 +66,4 @@ public class RemoveItem extends ItemCommand<Long[]> {
     public void redo() {
 
     }
-
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.UPDATE;
-    }
-
-    @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.ADD_ITEM);
-    }
 }

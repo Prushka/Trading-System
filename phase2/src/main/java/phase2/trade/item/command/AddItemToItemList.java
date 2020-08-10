@@ -59,20 +59,4 @@ public class AddItemToItemList extends ItemCommand<Item> {
             updateUndo();
         });
     }
-
-    @Override
-    public void redo() {
-
-    }
-
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.CREATE;
-    }
-
-    @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.ADD_ITEM);
-    }
 }

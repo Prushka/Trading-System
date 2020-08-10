@@ -2,16 +2,27 @@ package phase2.trade.user.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.user.User;
 
+import javax.persistence.Entity;
 import java.util.List;
 
+@Entity
 public class Login extends UserCommand<User> {
 
     public Login(GatewayBundle gatewayBundle, User operator) {
         super(gatewayBundle, operator);
+    }
+
+    public Login(GatewayBundle gatewayBundle) {
+        super(gatewayBundle);
+    }
+
+    public Login() {
+
     }
 
     @Override
@@ -32,13 +43,5 @@ public class Login extends UserCommand<User> {
 
     }
 
-    @Override
-    public void redo() {
 
-    }
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.READ;
-    }
 }

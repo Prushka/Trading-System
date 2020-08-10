@@ -29,11 +29,6 @@ public class CreateTrade extends TradeCommand<Trade>{
     }
 
     @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.TRADE);
-    }
-
-    @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
         if (!checkPermission()) {
             callback.call(null, ResultStatus.NO_PERMISSION);
@@ -52,12 +47,4 @@ public class CreateTrade extends TradeCommand<Trade>{
     // Unreasonable to do for this action
     @Override
     public void undo() {}
-
-    @Override
-    public void redo() {}
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.CREATE;
-    }
 }

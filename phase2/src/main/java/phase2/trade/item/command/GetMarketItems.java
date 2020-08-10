@@ -24,6 +24,10 @@ public class GetMarketItems extends ItemCommand<List<Item>> {
         this.operator = operator;
     }
 
+    public GetMarketItems(GatewayBundle gatewayBundle) {
+        super(gatewayBundle);
+    }
+
     public GetMarketItems() {
     }
 
@@ -37,10 +41,6 @@ public class GetMarketItems extends ItemCommand<List<Item>> {
 
     @Override
     public void undo() {
-    }
 
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.READ;
     }
 }

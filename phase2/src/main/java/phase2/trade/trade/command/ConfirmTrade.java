@@ -35,11 +35,6 @@ public class ConfirmTrade extends TradeCommand<Trade> {
     }
 
     @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.CONFIRM_TRADE);
-    }
-
-    @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
         if (!checkPermission()) {
             callback.call(null, ResultStatus.NO_PERMISSION);
@@ -63,15 +58,5 @@ public class ConfirmTrade extends TradeCommand<Trade> {
     @Override
     public void undo() {
 
-    }
-
-    @Override
-    public void redo() {
-
-    }
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.UPDATE;
     }
 }

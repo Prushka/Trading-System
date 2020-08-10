@@ -15,6 +15,7 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
+@CommandProperty(crudType = CRUDType.READ, isUndoable = false, persistent = false)
 public class GetCommands extends Command<List<Command>> {
 
     public GetCommands(GatewayBundle gatewayBundle, User operator) {
@@ -26,6 +27,10 @@ public class GetCommands extends Command<List<Command>> {
         super();
     }
 
+    public GetCommands(GatewayBundle gatewayBundle) {
+        super(gatewayBundle);
+    }
+
     @Override
     public void execute(StatusCallback<List<Command>> callback, String... args) {
         if (!checkPermission(callback)) {
@@ -34,23 +39,9 @@ public class GetCommands extends Command<List<Command>> {
         getEntityBundle().getCommandGateway().submitSession(() -> callback.call(getEntityBundle().getCommandGateway().findAll(), ResultStatus.SUCCEEDED));
     }
 
-    @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet(Permission.ADD_ITEM);
-    }
-
 
     @Override
     public void undo() {
     }
 
-    @Override
-    public void redo() {
-
-    }
-
-    @Override
-    public CRUDType getCRUDType() {
-        return CRUDType.UPDATE;
-    }
 }

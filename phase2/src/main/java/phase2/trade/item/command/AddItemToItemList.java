@@ -3,23 +3,24 @@ package phase2.trade.item.command;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
 @Entity
+@CommandProperty(crudType = CRUDType.CREATE, undoable = true,
+        persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class AddItemToItemList extends ItemCommand<Item> {
 
     private ItemListType itemListType;
 
     private Long itemId;
-
 
     public AddItemToItemList(GatewayBundle gatewayBundle, User operator,
                              ItemListType itemListType) {
@@ -27,9 +28,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
         this.itemListType = itemListType;
     }
 
-    public AddItemToItemList() {
-        super();
-    }
+    public AddItemToItemList() {}
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) { // name, description, category, quantity, price

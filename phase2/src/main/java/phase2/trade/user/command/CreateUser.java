@@ -6,7 +6,6 @@ import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
 import phase2.trade.user.UserFactory;
 
@@ -14,8 +13,8 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
-
-@CommandProperty(crudType = CRUDType.UPDATE, isUndoable = false, persistent = false)
+@CommandProperty(crudType = CRUDType.CREATE, undoable = true,
+        persistent = true, permissionSet = {Permission.CREATE_USER})
 public class CreateUser extends UserCommand<User> {
 
     private Long userId;
@@ -29,7 +28,6 @@ public class CreateUser extends UserCommand<User> {
     }
 
     public CreateUser() {}
-
 
     @Override
     public void execute(StatusCallback<User> callback, String... args) { // username, email, password, permission_group

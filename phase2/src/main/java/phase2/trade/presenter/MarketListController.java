@@ -19,7 +19,6 @@ import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetMarketItems;
 import phase2.trade.view.NoSelectionModel;
-import phase2.trade.view.PopupWindow;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,11 +31,8 @@ public class MarketListController extends AbstractController implements Initiali
 
     public JFXTextField searchName;
 
-    private Stage parent;
-
-    public MarketListController(GatewayBundle gatewayBundle, Stage parent) {
-        super(gatewayBundle);
-        this.parent = parent;
+    public MarketListController(GatewayBundle gatewayBundle, SceneManager sceneManager) {
+        super(gatewayBundle,sceneManager);
     }
 
     private List<String> populate(int count) {
@@ -96,24 +92,17 @@ public class MarketListController extends AbstractController implements Initiali
         return hBox;
     }
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listView.setSelectionModel(new NoSelectionModel<>());
         Command<List<Item>> getMarket = new GetMarketItems(gatewayBundle);
 
-
-        JFXSnackbar snackbar = new JFXSnackbar((Pane) parent.getScene().getRoot());
-        snackbar.setPrefWidth(300);
-        JFXButton button = new JFXButton("CLOSE");
-        button.setOnAction(action -> snackbar.close());
-        snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(
-                new JFXSnackbarLayout("Snackbar Message Persistent ", "CLOSE", action -> snackbar.close()),
-                Duration.INDEFINITE, null));
+        getPopupFactory().toast(Duration.seconds(5), "AHA", "CLOSE");
 
         getMarket.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
-                PopupWindow popupWindow = new PopupWindow(parent, "Operation Not Allowed", "You do not have permission to perform such operation");
-                popupWindow.display();
+                getPopupFactory().popupWindow("No Permission","").display();
             } else {
                 for (Item item : result) {
                     listView.getItems().add(generateItemPreview(item));

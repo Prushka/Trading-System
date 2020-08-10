@@ -1,6 +1,7 @@
 package phase2.trade.user;
 
 import phase2.trade.address.AddressBook;
+import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.permission.Permission;
@@ -142,19 +143,19 @@ public abstract class User {
         this.addressBook = addressBook;
     }
 
-    public String getCountry(){
+    public String getCountry() {
         return country;
     }
 
-    public void  setCountry(String country){
+    public void setCountry(String country) {
         this.country = country;
     }
 
-    public String getCity(){
+    public String getCity() {
         return city;
     }
 
-    public void  setCity(String city){
+    public void setCity(String city) {
         this.city = city;
     }
 
@@ -167,7 +168,15 @@ public abstract class User {
     }
 
     public ItemList getItemList(ItemListType itemListType) { // this should not happen!
-        throw new IllegalArgumentException("User: "+ userName + " is not a Regular User but is trying to get his/her ItemList");
+        throw new IllegalArgumentException("User: " + userName + " is not a Regular User but is trying to get his/her ItemList");
+    }
+
+    public ItemList getInventory() { // this should not happen!
+        return getItemList(ItemListType.INVENTORY);
+    }
+
+    public ItemList getCart() { // this should not happen!
+        return getItemList(ItemListType.CART);
     }
 }
 

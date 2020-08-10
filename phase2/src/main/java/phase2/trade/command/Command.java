@@ -14,9 +14,14 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+/**
+ * @param <T> The entity this command handles (supposed to return), this will be used to define the callback type
+ * @author Dan Lyu
+ */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@CommandProperty(crudType = CRUDType.READ, isUndoable = true, persistent = true)
+@CommandProperty(crudType = CRUDType.READ, undoable = true, persistent = true)
 // please annotate CommandProperty in subclasses, otherwise this will be used
 public abstract class Command<T> implements PermissionBased {
 
@@ -76,8 +81,11 @@ public abstract class Command<T> implements PermissionBased {
     public void redo() {
     } // It seems we don't need to implement redo. Also redo may mess up the uid
 
-    // override this one if your command is not undoable, call FAILED
     public void isUndoable(StatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
+        if (!commandPropertyAnnotation.undoable()) {
+            callback.call(null, ResultStatus.FAILED);
+            return;
+        }
         getEntityBundle().getCommandGateway().submitSession(() -> {
             List<Command<?>> futureCommands = getEntityBundle().getCommandGateway().getFutureCommands(timestamp);
             List<Command<?>> blockingCommands = new ArrayList<>();
@@ -102,6 +110,7 @@ public abstract class Command<T> implements PermissionBased {
     }
 
     protected void save() {
+        if (!commandPropertyAnnotation.persistent()) return;
         if (operator.getPermissionGroup().equals(PermissionGroup.SYSTEM))
             operator = null; // still the system user should be null
         timestamp = System.currentTimeMillis();
@@ -110,6 +119,7 @@ public abstract class Command<T> implements PermissionBased {
     }
 
     protected void updateUndo() {
+        if (!commandPropertyAnnotation.persistent()) return;
         undoTimestamp = System.currentTimeMillis();
         ifUndone = true;
         getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().update(getThis()));
@@ -117,7 +127,7 @@ public abstract class Command<T> implements PermissionBased {
 
     @Override
     public boolean checkPermission() {
-        return new UserPermissionChecker(operator, commandPropertyAnnotation.permissionSet()).checkPermission();
+        return new UserPermissionChecker(operator, commandPropertyAnnotation.permissionSet(), commandPropertyAnnotation.permissionGroup()).checkPermission();
     }
 
     public boolean checkPermission(StatusCallback<?> statusCallback) {

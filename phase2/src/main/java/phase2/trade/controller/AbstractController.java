@@ -1,31 +1,40 @@
 package phase2.trade.controller;
 
+import javafx.scene.Node;
 import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.validator.ValidatorFactory;
+import phase2.trade.presenter.PopupFactory;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.view.SceneFactory;
 
 public abstract class AbstractController {
 
-    private final SceneFactory sceneFactory = new SceneFactory();
+    private PopupFactory popupFactory;
 
-    private final ValidatorFactory validatorFactory = new ValidatorFactory();
+    private SceneManager sceneManager;
 
     protected final GatewayBundle gatewayBundle;
 
-    protected Stage parentWindow;
-
-    public AbstractController(GatewayBundle gatewayBundle) {
+    public AbstractController(GatewayBundle gatewayBundle, SceneManager sceneManager) {
         this.gatewayBundle = gatewayBundle;
+        this.sceneManager = sceneManager;
+        initializeAbstractController(sceneManager.getWindow());
     }
 
-    public AbstractController(GatewayBundle gatewayBundle, Stage parentWindow) {
-        // some controllers are instantiated within other controllers, which means they need a reference to the current scene / window
-        this.gatewayBundle = gatewayBundle;
-        this.parentWindow = parentWindow;
+    private void initializeAbstractController(Stage window) {
+        sceneManager = new SceneManager(window);
+        popupFactory = new PopupFactory(window);
     }
 
     public SceneFactory getSceneFactory() {
-        return sceneFactory;
+        return sceneManager.getSceneFactory();
+    }
+
+    public SceneManager getSceneManager() {
+        return sceneManager;
+    }
+
+    public PopupFactory getPopupFactory() {
+        return popupFactory;
     }
 }

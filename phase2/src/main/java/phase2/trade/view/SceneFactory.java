@@ -27,39 +27,6 @@ public class SceneFactory {
         return new FXMLLoader(clazz.getResource("/fxml/" + fileName), en);
     }
 
-    public void switchScene(String fileName, Object controller, Stage stage, boolean applyCSS) {
-        FXMLLoader loader = getLoader(fileName);
-        loader.setController(controller);
-        try {
-            Scene scene = new Scene(loader.load());
-            if (applyCSS) {
-                scene.getStylesheets().add("css/trade.css");
-            }
-            stage.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void switchScene(String fileName, Object controller, ActionEvent actionEvent) {
-        this.switchScene(fileName, controller, actionEvent, false);
-    }
-
-    public void switchScene(String fileName, Object controller, ActionEvent actionEvent, boolean applyCSS) {
-        this.switchScene(fileName, controller,
-                (Stage) ((Node) actionEvent.getSource()).getScene().getWindow(), applyCSS);
-    }
-
-
-    public void switchScene(String fileName, Object controller, Parent parent) {
-        this.switchScene(fileName, controller, parent, false);
-    }
-
-    public void switchScene(String fileName, Object controller, Parent parent, boolean applyCSS) {
-        this.switchScene(fileName, controller,
-                (Stage) parent.getScene().getWindow(), applyCSS);
-    }
-
     public FXMLLoader getLoader(String fileName) {
         return getLoader(fileName, Main.class);
     }

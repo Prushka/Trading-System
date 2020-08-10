@@ -2,21 +2,17 @@ package phase2.trade.controller;
 
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.ItemListController;
 import phase2.trade.presenter.MarketListController;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.RegularUser;
 import phase2.trade.view.ConfirmWindow;
@@ -38,8 +34,8 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private final AccountManager accountManager;
 
-    public SideMenuController(GatewayBundle gatewayBundle, AccountManager accountManager, VBox center, VBox right) {
-        super(gatewayBundle);
+    public SideMenuController(GatewayBundle gatewayBundle, SceneManager sceneManager, AccountManager accountManager, VBox center, VBox right) {
+        super(gatewayBundle, sceneManager);
         this.accountManager = accountManager;
         this.center = center;
         this.right = right;
@@ -53,13 +49,13 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void market() {
-        Parent userPane = getSceneFactory().loadPane("market_list.fxml", new MarketListController(gatewayBundle,(Stage) bottomSideList.getScene().getWindow()));
+        Parent userPane = getSceneFactory().loadPane("market_list.fxml", new MarketListController(gatewayBundle,getSceneManager()));
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void inventory() {
-        Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, accountManager.getLoggedInUser().getItemList(ItemListType.INVENTORY)));
+        Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, getSceneManager(), accountManager.getLoggedInUser().getItemList(ItemListType.INVENTORY)));
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
@@ -82,7 +78,7 @@ public class SideMenuController extends AbstractController implements Initializa
         bottomSideList.getSelectionModel().clearSelection();
         if (confirmWindow.display()) {
             accountManager.logOut();
-            getSceneFactory().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
+            getSceneManager().switchScene("login.fxml", new LoginController(gatewayBundle, getSceneManager(),accountManager));
         } else {
         }
     }

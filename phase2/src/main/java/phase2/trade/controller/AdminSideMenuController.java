@@ -26,11 +26,8 @@ public class AdminSideMenuController extends AbstractController implements Initi
     public JFXPanel panel = new JFXPanel();
     private final VBox center;
 
-    private final AccountManager accountManager;
-
     public AdminSideMenuController(GatewayBundle gatewayBundle, AccountManager accountManager, VBox center, VBox right) {
         super(gatewayBundle);
-        this.accountManager = accountManager;
         this.center = center;
         this.right = right;
     }

@@ -24,7 +24,7 @@ public class Item {
 
     private Willingness willingness = Willingness.NOPE;
 
-    private int quantity;
+    private int quantity = 1;
 
     private double price = -1;
 

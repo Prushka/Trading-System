@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.ItemListController;
+import phase2.trade.presenter.MarketListController;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.RegularUser;
 import phase2.trade.view.ConfirmWindow;
@@ -44,7 +45,7 @@ public class SideMenuController extends AbstractController implements Initializa
         this.right = right;
     }
 
-    // TODO: drop down sub menu & exit
+    // TODO: drop down sub menu
     private void userInfo() {
         Parent userPane = getSceneFactory().loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
         center.getChildren().clear();
@@ -52,14 +53,14 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void market() {
-        Parent userPane = getSceneFactory().loadPane("market.fxml", new MarketController(getGatewayBundle(),
-                accountManager.getLoggedInUser()));
+        Parent userPane = getSceneFactory().loadPane("market_list.fxml", new MarketListController(gatewayBundle,
+                ((RegularUser) accountManager.getLoggedInUser()).getItemList(ItemListType.INVENTORY)));
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void inventory() {
-        Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.INVENTORY));
+        Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()).getItemList(ItemListType.INVENTORY)));
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }

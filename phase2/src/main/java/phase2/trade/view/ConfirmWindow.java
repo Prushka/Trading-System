@@ -1,5 +1,6 @@
 package phase2.trade.view;
 
+import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -21,22 +22,11 @@ public class ConfirmWindow {
 
     boolean answer;
 
-    JFXAlert alert;
-
-    private void setCenterPosition(Stage window, Stage parent) {
-        double centerXPosition = parent.getX() + parent.getWidth() / 2d;
-        double centerYPosition = parent.getY() + parent.getHeight() / 2d;
-        window.setOnShown(ev -> {
-            window.setX(centerXPosition - window.getWidth() / 2d);
-            window.setY(centerYPosition - window.getHeight() / 2d);
-            window.show();
-        });
-    }
-
     public boolean display(String title, String message, Stage parent) {
-        alert = new JFXAlert(parent);
+        JFXAlert alert = new JFXAlert(parent);
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(true);
+        alert.setAnimation(JFXAlertAnimation.NO_ANIMATION);
         JFXDialogLayout layout = new JFXDialogLayout();
         layout.setHeading(new Label(title));
         layout.setBody(new Label(message));

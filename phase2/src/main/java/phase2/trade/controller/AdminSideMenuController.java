@@ -36,14 +36,14 @@ public class AdminSideMenuController extends AbstractController implements Initi
     }
 
     private void accounts() {
-        Parent userPane = getSceneFactory().loadPane("user_accounts.fxml", new UserAccountsController(getGatewayBundle()));
+        Parent userPane = getSceneFactory().loadPane("user_accounts.fxml", new UserAccountsController(gatewayBundle));
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void userLimits() {
-        Parent userPane = getSceneFactory().loadPane("limits.fxml", new LimitsController(getGatewayBundle()));
+        Parent userPane = getSceneFactory().loadPane("limits.fxml", new LimitsController(gatewayBundle));
         userPane.setPickOnBounds(false);
         GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();

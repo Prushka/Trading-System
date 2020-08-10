@@ -19,6 +19,7 @@ import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.AddItemController;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
@@ -36,32 +37,26 @@ import java.util.function.Predicate;
 
 public class ItemListController extends AbstractController implements Initializable {
 
-    private final ItemListType itemListType;
-    private RegularUser user;
+    private final ItemList itemList;
 
-    public Pane tablePane;
-    private TableView<Item> tableView;
+    public TableView<Item> tableView;
 
     public HBox buttons;
 
-    private GatewayBundle gatewayBundle;
-
     public JFXTextField searchName;
 
-    public ItemListController(GatewayBundle gatewayBundle, RegularUser user, ItemListType itemListType) {
+    public ItemListController(GatewayBundle gatewayBundle, ItemList itemList) {
         super(gatewayBundle);
-        this.user = user;
-        this.gatewayBundle = gatewayBundle;
-        this.itemListType = itemListType;
+        this.itemList = itemList;
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        ObservableList<Item> displayData = FXCollections.observableArrayList(user.getItemList(itemListType).getListOfItems());
+        ObservableList<Item> displayData = FXCollections.observableArrayList(itemList.getListOfItems());
 
-        TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData, 150);
+        TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
         tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
                 .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price").addColumn("Willingness", "willingness");
 
@@ -82,7 +77,7 @@ public class ItemListController extends AbstractController implements Initializa
             if (itemsSelected.size() == 0) return;
             deleteButton.setDisable(true);
 
-            Command<Long[]> remove = new RemoveItem(gatewayBundle, user, itemListType, getItemIdsFrom(itemsSelected));
+            Command<Long[]> remove = new RemoveItem(gatewayBundle, (RegularUser) itemList.getOwner(), itemList.getInventoryType(), getItemIdsFrom(itemsSelected)); // TODO: avoid casting
             remove.execute((result, resultStatus) -> {
                 Platform.runLater(() -> {
                     itemsSelected.forEach(displayData::remove);
@@ -100,7 +95,7 @@ public class ItemListController extends AbstractController implements Initializa
             addWindow(displayData);
         });
 
-        tablePane.getChildren().addAll(tableViewGenerator.build());
+        tableViewGenerator.build();
     }
 
 
@@ -109,7 +104,7 @@ public class ItemListController extends AbstractController implements Initializa
             ObservableList<Item> itemsSelected = getSelected();
             if (itemsSelected.size() == 0) return;
             button.setDisable(true);
-            Command<Item> command = new AlterWillingness(gatewayBundle, user, willingness, getItemIdsFrom(itemsSelected));
+            Command<Item> command = new AlterWillingness(gatewayBundle, (RegularUser) itemList.getOwner(), willingness, getItemIdsFrom(itemsSelected));
             command.execute((result, resultStatus) -> Platform.runLater(() -> {
                 itemsSelected.forEach(item -> item.setWillingness(willingness));
                 button.setDisable(false);
@@ -132,7 +127,7 @@ public class ItemListController extends AbstractController implements Initializa
     }
 
     public void addWindow(ObservableList<Item> displayData) {
-        AddItemController addItemController = new AddItemController(gatewayBundle, user, itemListType, displayData);
+        AddItemController addItemController = new AddItemController(gatewayBundle, (RegularUser) itemList.getOwner(), itemList.getInventoryType(), displayData);
         getSceneFactory().loadPane("add_item.fxml", addItemController);
     }
 }

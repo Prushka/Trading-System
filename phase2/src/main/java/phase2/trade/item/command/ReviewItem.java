@@ -2,6 +2,7 @@ package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
@@ -14,6 +15,8 @@ import phase2.trade.user.User;
 import javax.persistence.Entity;
 
 @Entity
+@CommandProperty(crudType = CRUDType.UPDATE, isUndoable = true,
+        persistent = true, permissionSet = {Permission.REVIEW_ITEM})
 public class ReviewItem extends ItemCommand<Item> {
 
     private Long itemId;

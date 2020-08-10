@@ -15,7 +15,7 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
-@CommandProperty(crudType = CRUDType.READ, isUndoable = false, persistent = false)
+@CommandProperty(crudType = CRUDType.READ, isUndoable = false, persistent = false, permissionSet = {Permission.BROWSE_USER_OPERATIONS})
 public class GetCommands extends Command<List<Command>> {
 
     public GetCommands(GatewayBundle gatewayBundle, User operator) {

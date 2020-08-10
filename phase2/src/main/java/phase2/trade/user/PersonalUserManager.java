@@ -6,6 +6,7 @@ import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.gateway.database.UserDAO;
 import phase2.trade.inventory.Cart;
 import phase2.trade.inventory.Inventory;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddToCart;
@@ -100,14 +101,6 @@ public class PersonalUserManager{ //extends UserCommand<User>{
      */
     public void UnfreezeRequest() {
         //loggedInUser.setAccountState(AccountState.REQUEST_UNFROZEN);
-    }
-
-    public Inventory getUserInventory() {
-        return loggedInUser.getInventory();
-    }
-
-    public Cart getUserWishlist() {
-        return loggedInUser.getCart();
     }
 
     /*public List<RegularUser> suggest(){

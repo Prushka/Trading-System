@@ -3,6 +3,7 @@ package phase2.trade.item.command;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
@@ -17,6 +18,8 @@ import javax.persistence.FetchType;
 import java.util.Set;
 
 @Entity
+@CommandProperty(crudType = CRUDType.UPDATE, isUndoable = true,
+        persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class AlterWillingness extends ItemCommand<Item> {
 
     @ElementCollection(fetch = FetchType.EAGER)

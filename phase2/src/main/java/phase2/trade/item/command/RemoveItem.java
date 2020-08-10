@@ -2,6 +2,7 @@ package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.inventory.ItemListType;
@@ -17,6 +18,8 @@ import javax.persistence.FetchType;
 import java.util.*;
 
 @Entity
+@CommandProperty(crudType = CRUDType.DELETE, isUndoable = true,
+        persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class RemoveItem extends ItemCommand<Long[]> {
 
     @ElementCollection(fetch = FetchType.EAGER)

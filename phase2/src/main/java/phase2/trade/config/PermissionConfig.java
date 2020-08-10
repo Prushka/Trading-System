@@ -12,11 +12,14 @@ public class PermissionConfig {
 
     public PermissionConfig() {
         defaultPermissions = new HashMap<>();
-        defaultPermissions.put(PermissionGroup.REGULAR, new PermissionSet(Permission.ADD_ITEM, Permission.REMOVE_ITEM,
+
+        defaultPermissions.put(PermissionGroup.REGULAR, new PermissionSet(Permission.MANAGE_PERSONAL_ITEMS,
                 Permission.TRADE, Permission.EDIT_TRADE, Permission.CONFIRM_TRADE));
+
         defaultPermissions.put(PermissionGroup.ADMIN, new PermissionSet(Permission.CHANGE_THRESHOLD,
                 Permission.REVIEW_ITEM));
-        defaultPermissions.put(PermissionGroup.GUEST, new PermissionSet(Permission.REMOVE_ITEM));
+
+        defaultPermissions.put(PermissionGroup.GUEST, new PermissionSet(Permission.BROWSE_MARKET));
 
         defaultPermissions.put(PermissionGroup.SYSTEM, new PermissionSet(Permission.CHANGE_THRESHOLD, Permission.CREATE_USER));
     }

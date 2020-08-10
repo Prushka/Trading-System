@@ -3,6 +3,7 @@ package phase2.trade.item.command;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.inventory.ItemList;
@@ -13,6 +14,8 @@ import phase2.trade.user.RegularUser;
 import javax.persistence.Entity;
 
 @Entity
+@CommandProperty(crudType = CRUDType.READ, isUndoable = true,
+        persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class GetItems extends ItemCommand<ItemList> {
 
     private transient RegularUser operator;

@@ -14,8 +14,8 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
-
-@CommandProperty(crudType = CRUDType.UPDATE, isUndoable = false, persistent = false)
+@CommandProperty(crudType = CRUDType.CREATE, isUndoable = true,
+        persistent = true, permissionSet = {Permission.CREATE_USER})
 public class CreateUser extends UserCommand<User> {
 
     private Long userId;
@@ -29,7 +29,6 @@ public class CreateUser extends UserCommand<User> {
     }
 
     public CreateUser() {}
-
 
     @Override
     public void execute(StatusCallback<User> callback, String... args) { // username, email, password, permission_group

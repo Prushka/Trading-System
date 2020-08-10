@@ -23,10 +23,6 @@ public class CreateUser extends UserCommand<User> {
         super(gatewayBundle, operator);
     }
 
-    public CreateUser(GatewayBundle gatewayBundle) {
-        super(gatewayBundle);
-    }
-
     public CreateUser() {}
 
     @Override

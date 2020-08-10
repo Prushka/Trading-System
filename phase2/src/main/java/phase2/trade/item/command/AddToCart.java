@@ -28,9 +28,7 @@ public class AddToCart extends ItemCommand<Item> {
         addEffectedEntity(Item.class, itemId);
     }
 
-    public AddToCart() {
-        super();
-    }
+    public AddToCart() {}
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) {

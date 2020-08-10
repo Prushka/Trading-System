@@ -19,13 +19,7 @@ public class Login extends UserCommand<User> {
         super(gatewayBundle, operator);
     }
 
-    public Login(GatewayBundle gatewayBundle) {
-        super(gatewayBundle);
-    }
-
-    public Login() {
-
-    }
+    public Login() {}
 
     @Override
     public void execute(StatusCallback<User> callback, String... args) {

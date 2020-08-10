@@ -29,9 +29,12 @@ public class UserPermissionChecker {
     // 2. If not, check all permissions in PermissionSet
     public boolean checkPermission() {
         if (!permissionGroup.equals(PermissionGroup.UNDEFINED)) {
+            System.out.println("DEFINED GROUP");
             return operator.getPermissionGroup().equals(permissionGroup);
         }
         for (Permission permissionRequired : permissionSet.getPerm()) {
+            System.out.println(permissionRequired);
+            System.out.println(operator.getPermissionSet().getPerm().toString());
             if (!operator.hasPermission(permissionRequired)) return false;
         }
         return true;

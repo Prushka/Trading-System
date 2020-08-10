@@ -25,9 +25,7 @@ public class AlterItemInInventory extends ItemCommand<Item> {
         this.operator = operator;
     }
 
-    public AlterItemInInventory() {
-        super();
-    }
+    public AlterItemInInventory() {}
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) {

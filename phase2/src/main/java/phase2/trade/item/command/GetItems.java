@@ -27,9 +27,7 @@ public class GetItems extends ItemCommand<ItemList> {
         this.itemListType = itemListType;
     }
 
-    public GetItems() {
-        super();
-    }
+    public GetItems() {}
 
     @Override
     public void execute(StatusCallback<ItemList> callback, String... args) {

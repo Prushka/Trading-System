@@ -1,6 +1,8 @@
 package phase2.trade.presenter;
 
-import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -10,12 +12,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.stage.Stage;
-import javafx.util.Duration;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetMarketItems;
 import phase2.trade.view.NoSelectionModel;
@@ -96,13 +95,11 @@ public class MarketListController extends AbstractController implements Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listView.setSelectionModel(new NoSelectionModel<>());
-        Command<List<Item>> getMarket = new GetMarketItems(getGatewayBundle());
-
-        getPopupFactory().toast(Duration.seconds(5), "AHA", "CLOSE");
+        Command<List<Item>> getMarket = new GetMarketItems(getGatewayBundle(),getAccountManager().getLoggedInUser());
 
         getMarket.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
-                getPopupFactory().popupWindow("No Permission","").display();
+                getPopupFactory().noPermission();
             } else {
                 for (Item item : result) {
                     listView.getItems().add(generateItemPreview(item));

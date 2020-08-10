@@ -68,11 +68,11 @@ public class TradeApplication extends Application {
 
         new CreateHeadIfNotExist(gatewayBundle); // this is a use case class, is trade application a controller
         // mockDashboardLogin(primaryStage);
-        login(primaryStage);
+        mockDashboardLogin(primaryStage);
     }
 
     private void login(Stage primaryStage) {
-        sceneManager.switchScene("login.fxml",LoginController::new);
+        sceneManager.switchScene("login.fxml", LoginController::new);
         primaryStage.setTitle("Trade");
         primaryStage.show();
     }

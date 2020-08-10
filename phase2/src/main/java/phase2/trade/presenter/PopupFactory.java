@@ -28,6 +28,10 @@ public class PopupFactory {
                 duration, null));
     }
 
+    public void noPermission() {
+        toast(Duration.seconds(4), "Permission Denied", "CLOSE");
+    }
+
     public PopupWindow popupWindow(String title, String header) {
         return new PopupWindow(window, title, header);
     }

@@ -1,18 +1,16 @@
 package phase2.trade.presenter;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
-import java.util.function.Supplier;
 
 public class SceneManager {
 
@@ -26,11 +24,14 @@ public class SceneManager {
 
     private final AccountManager accountManager;
 
+    private final CommandFactory commandFactory;
+
     public SceneManager(GatewayBundle gatewayBundle, Stage window, AccountManager accountManager) {
         this.gatewayBundle = gatewayBundle;
         this.window = window;
         this.accountManager = accountManager;
         popupFactory = new PopupFactory(window);
+        commandFactory = new CommandFactory(gatewayBundle, accountManager);
     }
 
     public void switchScene(String fileName, Object controller, boolean applyCSS) {
@@ -90,5 +91,9 @@ public class SceneManager {
 
     public PopupFactory getPopupFactory() {
         return popupFactory;
+    }
+
+    public CommandFactory getCommandFactory() {
+        return commandFactory;
     }
 }

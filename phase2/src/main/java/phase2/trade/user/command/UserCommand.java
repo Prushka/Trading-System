@@ -17,10 +17,6 @@ public abstract class UserCommand<T extends User> extends Command<T> {
 
     public UserCommand() {}
 
-    public UserCommand(GatewayBundle gatewayBundle) {
-        super(gatewayBundle);
-    }
-
     protected UserGateway getUserGateway() {
         return getEntityBundle().getUserGateway();
     }

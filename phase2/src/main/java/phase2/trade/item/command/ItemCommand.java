@@ -17,10 +17,6 @@ public abstract class ItemCommand<T> extends Command<T>  {
 
     public ItemCommand() {}
 
-    public ItemCommand(GatewayBundle gatewayBundle) {
-        super(gatewayBundle);
-    }
-
     Item findItemByIdSyncInsideItemGateway(Long itemId) {
         return getEntityBundle().getItemGateway().findById(itemId);
     }

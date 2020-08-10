@@ -20,19 +20,14 @@ public class ReviewItem extends ItemCommand<Item> {
 
     private Long itemId;
 
-    private transient User operator;
-
     private Ownership oldOwnership;
 
-    public ReviewItem(GatewayBundle gatewayBundle, RegularUser operator, Long itemId) {
+    public ReviewItem(GatewayBundle gatewayBundle, User operator, Long itemId) {
         super(gatewayBundle, operator);
         this.itemId = itemId;
-        this.operator = operator;
     }
 
-    public ReviewItem() {
-        super();
-    }
+    public ReviewItem() {}
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) { //

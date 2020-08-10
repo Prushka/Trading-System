@@ -8,20 +8,25 @@ import java.util.*;
 
 public class PermissionConfig {
 
-    private Map<PermissionGroup, PermissionSet> defaultPermissions;
+    private Map<PermissionGroup, PermissionSet> defaultPermissions = new HashMap<>();
 
     public PermissionConfig() {
-        defaultPermissions = new HashMap<>();
 
-        defaultPermissions.put(PermissionGroup.REGULAR, new PermissionSet(Permission.MANAGE_PERSONAL_ITEMS,
-                Permission.TRADE, Permission.EDIT_TRADE, Permission.CONFIRM_TRADE));
+        addPermissions(PermissionGroup.GUEST, Permission.BROWSE_MARKET);
 
-        defaultPermissions.put(PermissionGroup.ADMIN, new PermissionSet(Permission.CHANGE_THRESHOLD,
-                Permission.REVIEW_ITEM));
+        addPermissions(PermissionGroup.REGULAR,
+                Permission.MANAGE_PERSONAL_ITEMS,
+                Permission.TRADE, Permission.EDIT_TRADE, Permission.CONFIRM_TRADE,
+                Permission.BROWSE_MARKET);
 
-        defaultPermissions.put(PermissionGroup.GUEST, new PermissionSet(Permission.BROWSE_MARKET));
+        addPermissions(PermissionGroup.ADMIN, Permission.CHANGE_THRESHOLD, Permission.REVIEW_ITEM);
 
-        defaultPermissions.put(PermissionGroup.SYSTEM, new PermissionSet(Permission.CHANGE_THRESHOLD, Permission.CREATE_USER));
+        addPermissions(PermissionGroup.SYSTEM, Permission.CHANGE_THRESHOLD, Permission.CREATE_USER);
+
+    }
+
+    private void addPermissions(PermissionGroup permissionGroup, Permission... permissions){
+        defaultPermissions.put(permissionGroup, new PermissionSet(permissions));
     }
 
     public Map<PermissionGroup, PermissionSet> getDefaultPermissions() {

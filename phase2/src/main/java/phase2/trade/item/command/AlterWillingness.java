@@ -38,9 +38,7 @@ public class AlterWillingness extends ItemCommand<Item> {
 
     }
 
-    public AlterWillingness() {
-        super();
-    }
+    public AlterWillingness() {}
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) {

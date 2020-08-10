@@ -2,6 +2,7 @@ package phase2.trade.user;
 
 import phase2.trade.callback.Callback;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
@@ -26,9 +27,10 @@ public class AccountManager {
 
     public AccountManager(GatewayBundle gatewayBundle) {
         userFactory = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
+        CommandFactory commandFactory = new CommandFactory(gatewayBundle, this);
         system = userFactory.configureSystemUser();
-        this.loginCommand = new Login(gatewayBundle);
-        this.registerCommand = new CreateUser(gatewayBundle);
+        this.loginCommand = commandFactory.getCommand(Login::new, false);
+        this.registerCommand = commandFactory.getCommand(CreateUser::new, true);
     }
 
     public void loginAsGuest() {

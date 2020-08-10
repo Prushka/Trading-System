@@ -6,13 +6,11 @@ import javafx.embed.swing.JFXPanel;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.ControllerSupplier;
 import phase2.trade.presenter.ItemListController;
 import phase2.trade.presenter.MarketListController;
 import phase2.trade.presenter.SceneManager;
-import phase2.trade.view.ConfirmWindow;
 
 import java.net.URL;
 import java.util.ResourceBundle;

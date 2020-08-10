@@ -19,6 +19,7 @@ import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
@@ -27,7 +28,7 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
-public class AddItemController implements Initializable {
+public class AddItemController extends AbstractController implements Initializable {
 
     public JFXComboBox<String> category;
     public JFXTextField name;
@@ -42,7 +43,8 @@ public class AddItemController implements Initializable {
 
     private Stage window;
 
-    public AddItemController(GatewayBundle gatewayBundle, RegularUser user, ItemListType itemListType, ObservableList<Item> display) {
+    public AddItemController(SceneManager sceneManager, GatewayBundle gatewayBundle, RegularUser user, ItemListType itemListType, ObservableList<Item> display) {
+        super(sceneManager);
         this.gatewayBundle = gatewayBundle;
         this.operator = user;
         this.itemListType = itemListType;
@@ -54,15 +56,18 @@ public class AddItemController implements Initializable {
         Command<Item> itemCommand = new AddItemToItemList(gatewayBundle, operator, itemListType);
         itemCommand.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
-
+                System.out.println("nor permission");
+                getPopupFactory().noPermission();
             } else {
                 Platform.runLater(() -> {
                     display.add(result);
-                    window.close();
                 });
             }
+            Platform.runLater(() -> {
+                submitButton.setDisable(false);
+                window.close();
+            });
         }, name.getText(), description.getText(), category.getValue());
-        submitButton.setDisable(false);
 
     }
 

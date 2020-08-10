@@ -60,10 +60,6 @@ public abstract class Command<T> implements PermissionBased {
         this.operator = operator;
     }
 
-    public Command(GatewayBundle gatewayBundle) {
-        this(gatewayBundle, new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).configureSystemUser());
-    }
-
     public Command() {
         loadAnnotation();
     }

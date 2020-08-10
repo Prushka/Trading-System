@@ -101,6 +101,7 @@ public class Item {
     }
 
     public User getOwner() {
+        if(itemList == null) return null;
         return itemList.getOwner();
     }
 }

@@ -1,8 +1,6 @@
 package phase2.trade.presenter;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -13,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
@@ -100,17 +99,24 @@ public class MarketListController extends AbstractController implements Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listView.setSelectionModel(new NoSelectionModel<>());
-        Command<List<Item>> getMarket = new GetMarketItems(gatewayBundle, gatewayBundle.getSystem());
+        Command<List<Item>> getMarket = new GetMarketItems(gatewayBundle);
+
+
+        JFXSnackbar snackbar = new JFXSnackbar((Pane) parent.getScene().getRoot());
+        snackbar.setPrefWidth(300);
+        JFXButton button = new JFXButton("CLOSE");
+        button.setOnAction(action -> snackbar.close());
+        snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(
+                new JFXSnackbarLayout("Snackbar Message Persistent ", "CLOSE", action -> snackbar.close()),
+                Duration.INDEFINITE, null));
+
         getMarket.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
                 PopupWindow popupWindow = new PopupWindow(parent, "Operation Not Allowed", "You do not have permission to perform such operation");
                 popupWindow.display();
             } else {
                 for (Item item : result) {
-
-                    for (int i = 0; i < 5; i++) {
-                        listView.getItems().add(generateItemPreview(item));
-                    }
+                    listView.getItems().add(generateItemPreview(item));
                 }
             }
         });

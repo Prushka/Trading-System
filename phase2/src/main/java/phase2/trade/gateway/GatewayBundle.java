@@ -21,8 +21,4 @@ public class GatewayBundle {
         this.entityBundle = entityBundle;
         this.configBundle = configBundle;
     }
-
-    public User getSystem() {
-        return new UserFactory(getConfigBundle().getPermissionConfig()).configureSystemUser();
-    }
 }

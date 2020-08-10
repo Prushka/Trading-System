@@ -60,26 +60,23 @@ public class TradeApplication extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         loadFont("OpenSans");
         loadFont("OpenSansM");
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
 
         new CreateHeadIfNotExist(gatewayBundle); // this is a use case class, is trade application a controller
-        mockDashboardLogin(primaryStage);
-        // login(primaryStage);
+        // mockDashboardLogin(primaryStage);
+        login(primaryStage);
     }
 
-    private void login(Stage primaryStage) throws IOException {
+    private void login(Stage primaryStage) {
 
         SceneFactory sceneFactory = new SceneFactory();
-        FXMLLoader login = sceneFactory.getLoader("login.fxml");
-
-        LoginController loginController = new LoginController(gatewayBundle);
-        login.setController(loginController);
         primaryStage.setTitle("Trade");
-        primaryStage.setScene(new Scene(login.load()));
+        primaryStage.setScene(new Scene(sceneFactory.loadPane("login.fxml",
+                new LoginController(gatewayBundle))));
         primaryStage.show();
     }
 
@@ -127,10 +124,10 @@ public class TradeApplication extends Application {
 
                 primaryStage.setScene(scene);
 
-                addExampleItems(accountManager.getLoggedInUser(), "Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE, 4,-1);
-                addExampleItems(accountManager.getLoggedInUser(), "Ulysses", "Ulysses is a modernist novel by Irish writer James Joyce.", Category.BOOK, 2,-1);
-                addExampleItems(accountManager.getLoggedInUser(), "Broken iPad", "An ipad that's melted.", Category.ELECTRONIC, 1,1000);
-                addExampleItems(accountManager.getLoggedInUser(), "Queen Bed", "No description", Category.FURNITURE, 2,1000);
+                addExampleItems(accountManager.getLoggedInUser(), "Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE, 4, -1);
+                addExampleItems(accountManager.getLoggedInUser(), "Ulysses", "Ulysses is a modernist novel by Irish writer James Joyce.", Category.BOOK, 2, -1);
+                addExampleItems(accountManager.getLoggedInUser(), "Broken iPad", "An ipad that's melted.", Category.ELECTRONIC, 1, 1000);
+                addExampleItems(accountManager.getLoggedInUser(), "Queen Bed", "No description", Category.FURNITURE, 2, 1000);
                 primaryStage.show();
             });
 

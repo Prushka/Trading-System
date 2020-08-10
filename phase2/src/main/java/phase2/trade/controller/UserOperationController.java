@@ -20,7 +20,7 @@ public class UserOperationController extends AbstractController implements Initi
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Command<List<Command>> getCommands = new GetCommands(gatewayBundle, gatewayBundle.getSystem());
+        Command<List<Command>> getCommands = new GetCommands(gatewayBundle);
 
         getCommands.execute(new StatusCallback<List<Command>>() {
             @Override

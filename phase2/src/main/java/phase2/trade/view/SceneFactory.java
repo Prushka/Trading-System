@@ -64,35 +64,6 @@ public class SceneFactory {
         return getLoader(fileName, Main.class);
     }
 
-    private List<String> getResourceFiles(String path) {
-        List<String> filenames = new ArrayList<>();
-
-        try (
-                InputStream in = getResourceAsStream(path);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
-            String resource;
-
-            while ((resource = br.readLine()) != null) {
-                filenames.add(resource);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return filenames;
-    }
-
-    private InputStream getResourceAsStream(String resource) {
-        final InputStream in
-                = getContextClassLoader().getResourceAsStream(resource);
-
-        return in == null ? getClass().getResourceAsStream(resource) : in;
-    }
-
-    private ClassLoader getContextClassLoader() {
-        return Thread.currentThread().getContextClassLoader();
-    }
-
     public Parent loadPane(String fileName) {
         try {
             return getLoader(fileName).load();

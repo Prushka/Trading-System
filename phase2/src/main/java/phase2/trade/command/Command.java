@@ -1,13 +1,13 @@
 package phase2.trade.command;
 
 import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.callback.StatusCallback;
 import phase2.trade.permission.PermissionGroup;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
+import phase2.trade.user.UserFactory;
 
 import javax.persistence.*;
 import java.util.*;
@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
+@CommandProperty(crudType = CRUDType.READ, isUndoable = true, persistent = true)
+// please annotate your own in subclasses
 public abstract class Command<T> implements PermissionBased {
 
     @Id
@@ -27,8 +30,6 @@ public abstract class Command<T> implements PermissionBased {
     private Long timestamp;
 
     private Long undoTimestamp;
-
-    private transient boolean asynchronous;
 
     @OneToOne
     protected User operator;
@@ -44,22 +45,37 @@ public abstract class Command<T> implements PermissionBased {
 
     protected transient GatewayBundle gatewayBundle;
 
+    private boolean asynchronous;
+
+    private transient CommandProperty commandPropertyAnnotation;
+
     public Command(GatewayBundle gatewayBundle, User operator) {
+        this();
         this.gatewayBundle = gatewayBundle;
         this.effectedEntities = new HashMap<>();
         this.operator = operator;
     }
 
+    public Command(GatewayBundle gatewayBundle) {
+        this(gatewayBundle, new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).configureSystemUser());
+    }
+
     public Command() {
+        loadAnnotation();
+    }
+
+    public void loadAnnotation() {
+        if (this.getClass().isAnnotationPresent(CommandProperty.class)) {
+            commandPropertyAnnotation = this.getClass().getAnnotation(CommandProperty.class);
+        }
     }
 
     public abstract void execute(StatusCallback<T> callback, String... args);
 
     public abstract void undo();
 
-    public void redo(){} // It seems we don't need to implement redo. Also redo may mess up the uid
-
-    public abstract CRUDType getCRUDType();
+    public void redo() {
+    } // It seems we don't need to implement redo. Also redo may mess up the uid
 
     // override this one if your command is not undoable, call FAILED
     public void isUndoable(StatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
@@ -67,7 +83,7 @@ public abstract class Command<T> implements PermissionBased {
             List<Command<?>> futureCommands = getEntityBundle().getCommandGateway().getFutureCommands(timestamp);
             List<Command<?>> blockingCommands = new ArrayList<>();
             for (Command<?> command : futureCommands) {
-                if (command.getCRUDType().hasEffect && ifOverlaps(command.effectedEntitiesToPersist)) {
+                if (command.commandPropertyAnnotation.crudType().hasEffect && ifOverlaps(command.effectedEntitiesToPersist)) {
                     blockingCommands.add(command);
                 }
             }
@@ -87,7 +103,8 @@ public abstract class Command<T> implements PermissionBased {
     }
 
     protected void save() {
-        if (operator.getPermissionGroup().equals(PermissionGroup.SYSTEM)) operator = null; // still the system user should be null
+        if (operator.getPermissionGroup().equals(PermissionGroup.SYSTEM))
+            operator = null; // still the system user should be null
         timestamp = System.currentTimeMillis();
         effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
         getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().add(getThis()));
@@ -101,7 +118,7 @@ public abstract class Command<T> implements PermissionBased {
 
     @Override
     public boolean checkPermission() {
-        return new UserPermissionChecker(operator, getPermissionRequired()).checkPermission();
+        return new UserPermissionChecker(operator, commandPropertyAnnotation.permissionSet()).checkPermission();
     }
 
     public boolean checkPermission(StatusCallback<?> statusCallback) {
@@ -111,12 +128,6 @@ public abstract class Command<T> implements PermissionBased {
         }
         return result;
     }
-
-    @Override
-    public PermissionSet getPermissionRequired() {
-        return new PermissionSet();
-    }
-
 
     private boolean ifOverlaps(String otherEffectedEntitiesToPersist) {
         Map<String, Set<String>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);

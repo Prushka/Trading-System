@@ -7,6 +7,4 @@ public interface PermissionBased {
 
     boolean checkPermission();
 
-    PermissionSet getPermissionRequired();
-
 }

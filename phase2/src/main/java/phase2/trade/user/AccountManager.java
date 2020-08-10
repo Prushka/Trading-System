@@ -27,8 +27,8 @@ public class AccountManager {
     public AccountManager(GatewayBundle gatewayBundle) {
         userFactory = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
         system = userFactory.configureSystemUser();
-        this.loginCommand = new Login(gatewayBundle, system);
-        this.registerCommand = new CreateUser(gatewayBundle, system);
+        this.loginCommand = new Login(gatewayBundle);
+        this.registerCommand = new CreateUser(gatewayBundle);
     }
 
     public void loginAsGuest() {

@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
 // import phase2.trade.gateway.database.DatabaseResourceBundleImpl;
 import phase2.trade.item.Item;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
 import phase2.trade.trade.command.CreateTrade;
@@ -55,9 +56,8 @@ public class MarketController  extends AbstractController implements Initializab
 
     public Label submissionResult;
 
-    public MarketController(GatewayBundle gatewayBundle, User currUser){
-        super(gatewayBundle);
-        this.currUser = currUser;
+    public MarketController(SceneManager sceneManager){
+        super(sceneManager);
         // tc = new CreateTrade(gatewayBundle, (RegularUser) currUser);
         tic = new TradeInfoController();
     }

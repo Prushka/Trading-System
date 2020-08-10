@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 public class SideMenuController extends AbstractController implements Initializable {
 
-    private final VBox right;
+    private VBox right;
     public JFXListView<Label> sideList;
     public Label userInfo, market, wishList, settings, inventory;
     public VBox userInfoBox;
@@ -30,44 +30,40 @@ public class SideMenuController extends AbstractController implements Initializa
     public JFXListView<Label> bottomSideList;
 
     public JFXPanel panel = new JFXPanel();
-    private final VBox center;
+    private VBox center;
 
-    private final AccountManager accountManager;
-
-    public SideMenuController(GatewayBundle gatewayBundle, SceneManager sceneManager, AccountManager accountManager, VBox center, VBox right) {
-        super(gatewayBundle, sceneManager);
-        this.accountManager = accountManager;
-        this.center = center;
-        this.right = right;
+    //, VBox center, VBox right
+    public SideMenuController(SceneManager sceneManager) {
+        super(sceneManager);
     }
 
     // TODO: drop down sub menu
     private void userInfo() {
-        Parent userPane = getSceneFactory().loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
+        Parent userPane = getSceneFactory().loadPane("user_info.fxml", UserInfoPresenter::new);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void market() {
-        Parent userPane = getSceneFactory().loadPane("market_list.fxml", new MarketListController(gatewayBundle,getSceneManager()));
+        Parent userPane = getSceneFactory().loadPane("market_list.fxml", MarketController::new);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void inventory() {
-        Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, getSceneManager(), accountManager.getLoggedInUser().getItemList(ItemListType.INVENTORY)));
+        Parent userPane = getSceneFactory().loadPane("item_list.fxml", ItemListController::new);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void wishList() {
-        Parent userPane = getSceneFactory().loadPane("add_wish.fxml", new WishItemAddController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.CART));
+        Parent userPane = getSceneFactory().loadPane("add_wish.fxml", ItemListController::new);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void userOperation() {
-        Parent userPane = getSceneFactory().loadPane("operation_list.fxml", new UserOperationController(gatewayBundle));
+        Parent userPane = getSceneFactory().loadPane("operation_list.fxml", UserOperationController::new);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
@@ -77,8 +73,8 @@ public class SideMenuController extends AbstractController implements Initializa
         ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(),"Sign out", "Do you really want to sign out?");
         bottomSideList.getSelectionModel().clearSelection();
         if (confirmWindow.display()) {
-            accountManager.logOut();
-            getSceneManager().switchScene("login.fxml", new LoginController(gatewayBundle, getSceneManager(),accountManager));
+            getAccountManager().logOut();
+            getSceneManager().switchScene("login.fxml",LoginController::new);
         } else {
         }
     }
@@ -96,7 +92,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userInfoBox.getChildren().add(getSceneFactory().loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
+        userInfoBox.getChildren().add(getSceneFactory().loadPane("user_info_side.fxml", UserInfoPresenter::new));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue.getId()) {

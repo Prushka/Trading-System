@@ -23,19 +23,16 @@ public class DashboardController extends AbstractController implements Initializ
     public VBox right;
 
 
-    private final AccountManager accountManager;
-
-    public DashboardController(GatewayBundle gatewayBundle, SceneManager sceneManager, AccountManager accountManager) {
-        super(gatewayBundle, sceneManager);
-        this.accountManager = accountManager;
+    public DashboardController(SceneManager sceneManager) {
+        super(sceneManager);
     }
 
 
     public void signOut(ActionEvent actionEvent) {
-        CustomWindow<Boolean> confirmWindow = new ConfirmWindow((Stage) center.getScene().getWindow(),"Sign out", "Do you really want to sign out?");
+        CustomWindow<Boolean> confirmWindow = new ConfirmWindow((Stage) center.getScene().getWindow(), "Sign out", "Do you really want to sign out?");
         if (confirmWindow.display()) {
-            accountManager.logOut();
-            getSceneManager().switchScene("login.fxml", new LoginController(gatewayBundle,getSceneManager(), accountManager));
+            getAccountManager().logOut();
+            getSceneManager().switchScene("login.fxml", LoginController::new);
         } else {
             // sideList.getSelectionModel().select(old);
         }
@@ -43,7 +40,8 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        root.setLeft(getSceneFactory().loadPane("side_menu_" + accountManager.getPermissionGroup().name().toLowerCase() + ".fxml",
-                new SideMenuController(gatewayBundle,getSceneManager(), accountManager, center, right)));
+        root.setLeft(getSceneFactory().loadPane("side_menu_" + getAccountManager().getPermissionGroup().name().toLowerCase() + ".fxml",
+                SideMenuController::new));
     }
+
 }

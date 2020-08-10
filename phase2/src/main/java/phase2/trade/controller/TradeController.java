@@ -5,6 +5,7 @@ import phase2.trade.callback.Callback;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.gateway.TradeGateway;
 import phase2.trade.item.Item;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeManager;
 import phase2.trade.address.Address;
@@ -24,10 +25,10 @@ public class TradeController extends AbstractController implements Initializable
 
     Trade newTrade;
 
-    public TradeController(GatewayBundle gatewayBundle) {
-        super(gatewayBundle);
-        this.tradeGateway = gatewayBundle.getEntityBundle().getTradeGateway();
-        this.tm = new TradeManager(gatewayBundle.getConfigBundle().getTradeConfig());
+    public TradeController(SceneManager sceneManager) {
+        super(sceneManager);
+        this.tradeGateway = getGatewayBundle().getEntityBundle().getTradeGateway();
+        this.tm = new TradeManager(getGatewayBundle().getConfigBundle().getTradeConfig());
     }
 
     @Override

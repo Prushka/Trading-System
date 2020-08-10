@@ -7,6 +7,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import phase2.trade.Main;
+import phase2.trade.presenter.ControllerSupplier;
+import phase2.trade.presenter.SceneManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +21,12 @@ import java.util.ResourceBundle;
 
 // the resource files have a very small chance not to be indexed, cleaning build cache could solve it
 public class SceneFactory {
+
+    private final SceneManager sceneManager;
+
+    public SceneFactory(SceneManager sceneManager){
+        this.sceneManager = sceneManager;
+    }
 
     public FXMLLoader getLoader(String fileName, Class<?> clazz) {
         Locale locale = new Locale("en", "US");
@@ -49,5 +57,9 @@ public class SceneFactory {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public <T> Parent loadPane(String fileName, ControllerSupplier<T> controller) {
+        return this.loadPane(fileName, controller.get(sceneManager));
     }
 }

@@ -8,12 +8,13 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.User;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class UserInfoPresenter implements Initializable {
+public class UserInfoPresenter extends AbstractController implements Initializable {
 
     // the reason why they are initialized here is because many user info fxml share one presenter and some labels may not exist there
 
@@ -27,8 +28,9 @@ public class UserInfoPresenter implements Initializable {
 
     private final User user;
 
-    public UserInfoPresenter(User user) {
-        this.user = user;
+    public UserInfoPresenter(SceneManager sceneManager) {
+        super(sceneManager);
+        this.user = getAccountManager().getLoggedInUser();
     }
 
     @Override

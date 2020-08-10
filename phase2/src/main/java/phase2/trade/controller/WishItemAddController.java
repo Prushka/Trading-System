@@ -28,6 +28,7 @@ import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.AlterWillingness;
 import phase2.trade.item.command.GetItems;
 import phase2.trade.item.command.RemoveItem;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
@@ -39,7 +40,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 public class WishItemAddController extends AbstractController implements Initializable {
-    private final ItemListType itemListType;
+    private ItemListType itemListType;
     private RegularUser user;
 
     public TableView<Item> tableView;
@@ -50,11 +51,8 @@ public class WishItemAddController extends AbstractController implements Initial
 
     private GatewayBundle gatewayBundle;
 
-    public WishItemAddController(GatewayBundle gatewayBundle, RegularUser user, ItemListType itemListType) {
-        super(gatewayBundle);
-        this.user = user;
-        this.gatewayBundle = gatewayBundle;
-        this.itemListType = itemListType;
+    public WishItemAddController(SceneManager sceneManager) {
+        super(sceneManager);
     }
 
     private TableColumn<Item, String> getTableColumn(String name, String fieldName) {

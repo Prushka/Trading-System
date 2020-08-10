@@ -6,7 +6,7 @@ import phase2.trade.user.AccountManager;
 @FunctionalInterface
 public interface ControllerSupplier<T> {
 
-    T get(GatewayBundle gatewayBundle, SceneManager sceneManager, AccountManager accountManager);
+    T get(SceneManager sceneManager);
 
     // This account manager is injected everywhere since it holds a reference to the current logged in user,
     // and I suppose we shouldn't pass that User around since it's an entity

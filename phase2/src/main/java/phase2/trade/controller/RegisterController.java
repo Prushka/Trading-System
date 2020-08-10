@@ -20,8 +20,6 @@ import java.util.ResourceBundle;
 
 public class RegisterController extends AbstractController implements Initializable {
 
-    private final AccountManager accountManager;
-
     private StringProperty submissionResultProperty;
 
     public Label submissionResult;
@@ -30,9 +28,8 @@ public class RegisterController extends AbstractController implements Initializa
 
     public JFXButton registerButton;
 
-    public RegisterController(GatewayBundle gatewayBundle, SceneManager sceneManager, AccountManager accountManager) {
-        super(gatewayBundle, sceneManager);
-        this.accountManager = accountManager;
+    public RegisterController(SceneManager sceneManager) {
+        super(sceneManager);
     }
 
     public void registerButtonClicked(ActionEvent actionEvent) {
@@ -44,7 +41,7 @@ public class RegisterController extends AbstractController implements Initializa
             return;
         }
         submissionResultProperty.setValue("Signing up..");
-        accountManager.register((result, status) -> {
+        getAccountManager().register((result, status) -> {
             if (status != ResultStatus.SUCCEEDED) {
                 Platform.runLater(() -> {
                     registerButton.setDisable(false);
@@ -52,22 +49,19 @@ public class RegisterController extends AbstractController implements Initializa
                 });
             } else {
                 Platform.runLater(() -> {
-                    getSceneManager().switchScene("dashboard.fxml",
-                            new DashboardController(gatewayBundle,getSceneManager(), accountManager));
+                    getSceneManager().switchScene("dashboard.fxml", DashboardController::new);
                 });
             }
         }, username.getText(), email.getText(), password.getText(), country.getText(), city.getText());
     }
 
     public void goToSignIn(ActionEvent actionEvent) {
-        getSceneManager().switchScene("login.fxml",
-                new LoginController(gatewayBundle,getSceneManager(), accountManager));
+        getSceneManager().switchScene("login.fxml", LoginController::new);
     }
 
     public void goToGuest(ActionEvent actionEvent) {
-        accountManager.loginAsGuest();
-        getSceneManager().switchScene("dashboard.fxml",
-                new DashboardController(gatewayBundle,getSceneManager(), accountManager));
+        getAccountManager().loginAsGuest();
+        getSceneManager().switchScene("dashboard.fxml", DashboardController::new);
     }
 
     @Override

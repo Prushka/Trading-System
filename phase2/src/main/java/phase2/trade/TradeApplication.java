@@ -20,6 +20,7 @@ import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.CreateHeadIfNotExist;
 import phase2.trade.user.User;
@@ -73,10 +74,10 @@ public class TradeApplication extends Application {
 
     private void login(Stage primaryStage) {
 
-        SceneFactory sceneFactory = new SceneFactory();
+        SceneManager sceneManager = new SceneManager(gatewayBundle, primaryStage, new AccountManager(gatewayBundle));
+
+        sceneManager.switchScene("login.fxml",LoginController::new);
         primaryStage.setTitle("Trade");
-        primaryStage.setScene(new Scene(sceneFactory.loadPane("login.fxml",
-                new LoginController(gatewayBundle))));
         primaryStage.show();
     }
 
@@ -92,13 +93,12 @@ public class TradeApplication extends Application {
     }
 
     private void mockDashboardRegister(Stage primaryStage) {
-        SceneFactory sceneFactory = new SceneFactory();
-        AccountManager accountManager = new AccountManager(gatewayBundle);
-        accountManager.register((result, status) -> {
-            DashboardController dashboardController = new DashboardController(gatewayBundle, accountManager);
+        SceneManager sceneManager = new SceneManager(gatewayBundle, primaryStage, new AccountManager(gatewayBundle));
+
+        sceneManager.getAccountManager().register((result, status) -> {
             Platform.runLater(() -> {
 
-                Parent dashboard = sceneFactory.loadPane("dashboard.fxml", dashboardController);
+                Parent dashboard = sceneManager.getSceneFactory().loadPane("dashboard.fxml", DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");
@@ -111,23 +111,22 @@ public class TradeApplication extends Application {
     }
 
     private void mockDashboardLogin(Stage primaryStage) {
-        SceneFactory sceneFactory = new SceneFactory();
-        AccountManager accountManager = new AccountManager(gatewayBundle);
-        accountManager.login((result, status) -> {
-            DashboardController dashboardController = new DashboardController(gatewayBundle, accountManager);
+        SceneManager sceneManager = new SceneManager(gatewayBundle, primaryStage, new AccountManager(gatewayBundle));
+
+        sceneManager.getAccountManager().login((result, status) -> {
             Platform.runLater(() -> {
 
-                Parent dashboard = sceneFactory.loadPane("dashboard.fxml", dashboardController);
+                Parent dashboard = sceneManager.getSceneFactory().loadPane("dashboard.fxml", DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");
 
                 primaryStage.setScene(scene);
 
-                addExampleItems(accountManager.getLoggedInUser(), "Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE, 4, -1);
-                addExampleItems(accountManager.getLoggedInUser(), "Ulysses", "Ulysses is a modernist novel by Irish writer James Joyce.", Category.BOOK, 2, -1);
-                addExampleItems(accountManager.getLoggedInUser(), "Broken iPad", "An ipad that's melted.", Category.ELECTRONIC, 1, 1000);
-                addExampleItems(accountManager.getLoggedInUser(), "Queen Bed", "No description", Category.FURNITURE, 2, 1000);
+                addExampleItems(sceneManager.getAccountManager().getLoggedInUser(), "Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE, 4, -1);
+                addExampleItems(sceneManager.getAccountManager().getLoggedInUser(), "Ulysses", "Ulysses is a modernist novel by Irish writer James Joyce.", Category.BOOK, 2, -1);
+                addExampleItems(sceneManager.getAccountManager().getLoggedInUser(), "Broken iPad", "An ipad that's melted.", Category.ELECTRONIC, 1, 1000);
+                addExampleItems(sceneManager.getAccountManager().getLoggedInUser(), "Queen Bed", "No description", Category.FURNITURE, 2, 1000);
                 primaryStage.show();
             });
 

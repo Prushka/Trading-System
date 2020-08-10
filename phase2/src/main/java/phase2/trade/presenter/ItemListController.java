@@ -5,22 +5,16 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.AddItemController;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemList;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AlterWillingness;
@@ -37,7 +31,7 @@ import java.util.function.Predicate;
 
 public class ItemListController extends AbstractController implements Initializable {
 
-    private final ItemList itemList;
+    private ItemList itemList;
 
     public TableView<Item> tableView;
 
@@ -45,9 +39,8 @@ public class ItemListController extends AbstractController implements Initializa
 
     public JFXTextField searchName;
 
-    public ItemListController(GatewayBundle gatewayBundle, SceneManager sceneManager, ItemList itemList) {
-        super(gatewayBundle, sceneManager);
-        this.itemList = itemList;
+    public ItemListController(SceneManager sceneManager) {
+        super(sceneManager);
     }
 
 
@@ -76,7 +69,7 @@ public class ItemListController extends AbstractController implements Initializa
             if (itemsSelected.size() == 0) return;
             deleteButton.setDisable(true);
 
-            Command<Long[]> remove = new RemoveItem(gatewayBundle, (RegularUser) itemList.getOwner(), itemList.getInventoryType(), getItemIdsFrom(itemsSelected)); // TODO: avoid casting
+            Command<Long[]> remove = new RemoveItem(getGatewayBundle(), (RegularUser) itemList.getOwner(), itemList.getInventoryType(), getItemIdsFrom(itemsSelected)); // TODO: avoid casting
             remove.execute((result, resultStatus) -> {
                 Platform.runLater(() -> {
                     itemsSelected.forEach(displayData::remove);
@@ -103,7 +96,7 @@ public class ItemListController extends AbstractController implements Initializa
             ObservableList<Item> itemsSelected = getSelected();
             if (itemsSelected.size() == 0) return;
             button.setDisable(true);
-            Command<Item> command = new AlterWillingness(gatewayBundle, (RegularUser) itemList.getOwner(), willingness, getItemIdsFrom(itemsSelected));
+            Command<Item> command = new AlterWillingness(getGatewayBundle(), (RegularUser) itemList.getOwner(), willingness, getItemIdsFrom(itemsSelected));
             command.execute((result, resultStatus) -> Platform.runLater(() -> {
                 itemsSelected.forEach(item -> item.setWillingness(willingness));
                 button.setDisable(false);
@@ -126,7 +119,7 @@ public class ItemListController extends AbstractController implements Initializa
     }
 
     public void addWindow(ObservableList<Item> displayData) {
-        AddItemController addItemController = new AddItemController(gatewayBundle, (RegularUser) itemList.getOwner(), itemList.getInventoryType(), displayData);
+        AddItemController addItemController = new AddItemController(getGatewayBundle(), (RegularUser) itemList.getOwner(), itemList.getInventoryType(), displayData);
         getSceneFactory().loadPane("add_item.fxml", addItemController);
     }
 }

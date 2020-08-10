@@ -31,8 +31,8 @@ public class MarketListController extends AbstractController implements Initiali
 
     public JFXTextField searchName;
 
-    public MarketListController(GatewayBundle gatewayBundle, SceneManager sceneManager) {
-        super(gatewayBundle,sceneManager);
+    public MarketListController(SceneManager sceneManager) {
+        super(sceneManager);
     }
 
     private List<String> populate(int count) {
@@ -96,7 +96,7 @@ public class MarketListController extends AbstractController implements Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listView.setSelectionModel(new NoSelectionModel<>());
-        Command<List<Item>> getMarket = new GetMarketItems(gatewayBundle);
+        Command<List<Item>> getMarket = new GetMarketItems(getGatewayBundle());
 
         getPopupFactory().toast(Duration.seconds(5), "AHA", "CLOSE");
 

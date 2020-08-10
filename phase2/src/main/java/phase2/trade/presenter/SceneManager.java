@@ -17,7 +17,7 @@ public class SceneManager {
 
     private final Stage window;
 
-    private final SceneFactory sceneFactory = new SceneFactory();
+    private final SceneFactory sceneFactory = new SceneFactory(this);
 
     private final GatewayBundle gatewayBundle;
 
@@ -47,8 +47,10 @@ public class SceneManager {
         this.switchScene(fileName, controller, true);
     }
 
-    public <T> void switchScene(String fileName, Class<T> controllerClass, ControllerSupplier<T> controller) {
-        this.switchScene(fileName, controller.get(gatewayBundle, this, accountManager), true);
+    public <T> T switchScene(String fileName, ControllerSupplier<T> controller) {
+        T instantiated = controller.get(this);
+        this.switchScene(fileName, controller.get(this), true);
+        return instantiated;
     }
 
     public Stage getWindow() {
@@ -57,5 +59,13 @@ public class SceneManager {
 
     public SceneFactory getSceneFactory() {
         return sceneFactory;
+    }
+
+    public AccountManager getAccountManager() {
+        return accountManager;
+    }
+
+    public GatewayBundle getGatewayBundle() {
+        return gatewayBundle;
     }
 }

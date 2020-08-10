@@ -3,14 +3,15 @@ package phase2.trade.controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.Initializable;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.presenter.SceneManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class UserAccountsController extends AbstractController implements Initializable {
 
-    public UserAccountsController(GatewayBundle gatewayBundle){
-        super(gatewayBundle);
+    public UserAccountsController(SceneManager sceneManager){
+        super(sceneManager);
     }
 
     @Override

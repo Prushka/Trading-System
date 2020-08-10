@@ -9,7 +9,6 @@ import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
 import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.RegularUser;
 
 import javax.persistence.ElementCollection;
@@ -18,7 +17,7 @@ import javax.persistence.FetchType;
 import java.util.Set;
 
 @Entity
-@CommandProperty(crudType = CRUDType.UPDATE, isUndoable = true,
+@CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class AlterWillingness extends ItemCommand<Item> {
 

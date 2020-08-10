@@ -8,14 +8,13 @@ import phase2.trade.callback.StatusCallback;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
 import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
 @Entity
-@CommandProperty(crudType = CRUDType.UPDATE, isUndoable = true,
+@CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {Permission.REVIEW_ITEM})
 public class ReviewItem extends ItemCommand<Item> {
 

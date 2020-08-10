@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@CommandProperty(crudType = CRUDType.READ, isUndoable = true, persistent = true)
+@CommandProperty(crudType = CRUDType.READ, undoable = true, persistent = true)
 // please annotate CommandProperty in subclasses, otherwise this will be used
 public abstract class Command<T> implements PermissionBased {
 
@@ -82,7 +82,7 @@ public abstract class Command<T> implements PermissionBased {
     } // It seems we don't need to implement redo. Also redo may mess up the uid
 
     public void isUndoable(StatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
-        if (!commandPropertyAnnotation.isUndoable()) {
+        if (!commandPropertyAnnotation.undoable()) {
             callback.call(null, ResultStatus.FAILED);
             return;
         }

@@ -9,13 +9,12 @@ import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
 @Entity
-@CommandProperty(crudType = CRUDType.CREATE, isUndoable = true,
+@CommandProperty(crudType = CRUDType.CREATE, undoable = true,
         persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class AddItemToItemList extends ItemCommand<Item> {
 

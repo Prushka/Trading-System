@@ -5,19 +5,15 @@ import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.ItemList;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
-import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
-@CommandProperty(crudType = CRUDType.READ, isUndoable = false,
+@CommandProperty(crudType = CRUDType.READ, undoable = false,
         persistent = false, permissionSet = {Permission.BROWSE_MARKET})
 public class GetMarketItems extends ItemCommand<List<Item>> {
 

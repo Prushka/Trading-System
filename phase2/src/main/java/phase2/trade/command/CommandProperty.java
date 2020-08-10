@@ -14,7 +14,7 @@ public @Inherited
 
     CRUDType crudType();
 
-    boolean isUndoable();
+    boolean undoable();
 
     boolean persistent();
 

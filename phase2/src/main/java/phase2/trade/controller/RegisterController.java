@@ -51,26 +51,27 @@ public class RegisterController extends AbstractController implements Initializa
                 });
             } else {
                 Platform.runLater(() -> {
-                    getSceneFactory().switchScene("dashboard.fxml",
-                            new DashboardController(gatewayBundle, accountManager), actionEvent, true);
+                    getSceneSwitcher().switchScene("dashboard.fxml",
+                            new DashboardController(gatewayBundle, accountManager));
                 });
             }
         }, username.getText(), email.getText(), password.getText(), country.getText(), city.getText());
     }
 
     public void goToSignIn(ActionEvent actionEvent) {
-        getSceneFactory().switchScene("login.fxml",
-                new LoginController(gatewayBundle, accountManager), actionEvent);
+        getSceneSwitcher().switchScene("login.fxml",
+                new LoginController(gatewayBundle, accountManager));
     }
 
     public void goToGuest(ActionEvent actionEvent) {
         accountManager.loginAsGuest();
-        getSceneFactory().switchScene("dashboard.fxml",
-                new DashboardController(gatewayBundle, accountManager), actionEvent, true);
+        getSceneSwitcher().switchScene("dashboard.fxml",
+                new DashboardController(gatewayBundle, accountManager));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeAbstractController(submissionResult);
         submissionResultProperty = new SimpleStringProperty("");
         submissionResult.textProperty().bind(submissionResultProperty);
     }

@@ -2,15 +2,10 @@ package phase2.trade.controller;
 
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.embed.swing.JFXPanel;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
@@ -82,7 +77,7 @@ public class SideMenuController extends AbstractController implements Initializa
         bottomSideList.getSelectionModel().clearSelection();
         if (confirmWindow.display()) {
             accountManager.logOut();
-            getSceneFactory().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
+            getSceneSwitcher().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager));
         } else {
         }
     }
@@ -100,6 +95,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeAbstractController(center);
         userInfoBox.getChildren().add(getSceneFactory().loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {

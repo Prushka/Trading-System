@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
-import phase2.trade.user.CreateHeadIfNotExist;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
 
@@ -49,25 +48,26 @@ public class LoginController extends AbstractController implements Initializable
                 });
             } else {
                 Platform.runLater(() ->
-                        getSceneFactory().switchScene("dashboard.fxml",
-                                new DashboardController(gatewayBundle, accountManager), actionEvent, true));
+                        getSceneSwitcher().switchScene("dashboard.fxml",
+                                new DashboardController(gatewayBundle, accountManager)));
             }
         }, usernameOrEmail.getText(), password.getText());
     }
 
     public void goToSignUp(ActionEvent actionEvent) {
-        getSceneFactory().switchScene("register.fxml", new RegisterController(gatewayBundle, accountManager), actionEvent);
+        getSceneSwitcher().switchScene("register.fxml", new RegisterController(gatewayBundle, accountManager));
     }
 
 
     public void goToGuest(ActionEvent actionEvent) {
         accountManager.loginAsGuest();
-        getSceneFactory().switchScene("dashboard.fxml",
-                new DashboardController(gatewayBundle, accountManager), actionEvent, true);
+        getSceneSwitcher().switchScene("dashboard.fxml",
+                new DashboardController(gatewayBundle, accountManager));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initializeAbstractController(usernameOrEmail);
         submissionResultProperty = new SimpleStringProperty("");
         submissionResult.textProperty().bind(submissionResultProperty);
     }

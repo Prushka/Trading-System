@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 
 public class TradeInfoPresenter implements Initializable {
 
-    //have not done xml yet
+    // have not done xml yet
     public Label userId = new Label();
     public Label tradeState = new Label();
     public Label isPermanent = new Label();

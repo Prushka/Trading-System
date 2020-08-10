@@ -7,7 +7,7 @@ import phase2.trade.gateway.database.UserDAO;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class UserController extends AbstractController implements Initializable {
+public class UserController implements Initializable {
 
     private final UserDAO userDAO;
 

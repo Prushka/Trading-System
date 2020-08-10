@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
@@ -26,12 +27,12 @@ public class LoginController extends AbstractController implements Initializable
 
     private StringProperty submissionResultProperty;
 
-    public LoginController(GatewayBundle gatewayBundle) {
-        this(gatewayBundle, new AccountManager(gatewayBundle));
+    public LoginController(GatewayBundle gatewayBundle, SceneManager sceneManager) {
+        this(gatewayBundle,sceneManager, new AccountManager(gatewayBundle));
     }
 
-    LoginController(GatewayBundle gatewayBundle, AccountManager accountManager) {
-        super(gatewayBundle);
+    LoginController(GatewayBundle gatewayBundle, SceneManager sceneManager, AccountManager accountManager) {
+        super(gatewayBundle, sceneManager);
         this.accountManager = accountManager;
     }
 
@@ -48,26 +49,25 @@ public class LoginController extends AbstractController implements Initializable
                 });
             } else {
                 Platform.runLater(() ->
-                        getSceneSwitcher().switchScene("dashboard.fxml",
-                                new DashboardController(gatewayBundle, accountManager)));
+                        getSceneManager().switchScene("dashboard.fxml",
+                                new DashboardController(gatewayBundle, getSceneManager(),accountManager)));
             }
         }, usernameOrEmail.getText(), password.getText());
     }
 
     public void goToSignUp(ActionEvent actionEvent) {
-        getSceneSwitcher().switchScene("register.fxml", new RegisterController(gatewayBundle, accountManager));
+        getSceneManager().switchScene("register.fxml", new RegisterController(gatewayBundle,getSceneManager(), accountManager));
     }
 
 
     public void goToGuest(ActionEvent actionEvent) {
         accountManager.loginAsGuest();
-        getSceneSwitcher().switchScene("dashboard.fxml",
-                new DashboardController(gatewayBundle, accountManager));
+        getSceneManager().switchScene("dashboard.fxml",
+                new DashboardController(gatewayBundle,getSceneManager(), accountManager));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeAbstractController(usernameOrEmail);
         submissionResultProperty = new SimpleStringProperty("");
         submissionResult.textProperty().bind(submissionResultProperty);
     }

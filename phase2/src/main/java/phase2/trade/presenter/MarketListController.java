@@ -31,9 +31,8 @@ public class MarketListController extends AbstractController implements Initiali
 
     public JFXTextField searchName;
 
-    public MarketListController(GatewayBundle gatewayBundle, Stage rootWindow) {
-        super(gatewayBundle);
-        initializeAbstractController(rootWindow);
+    public MarketListController(GatewayBundle gatewayBundle, SceneManager sceneManager) {
+        super(gatewayBundle,sceneManager);
     }
 
     private List<String> populate(int count) {

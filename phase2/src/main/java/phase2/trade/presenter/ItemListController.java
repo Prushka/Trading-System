@@ -45,15 +45,14 @@ public class ItemListController extends AbstractController implements Initializa
 
     public JFXTextField searchName;
 
-    public ItemListController(GatewayBundle gatewayBundle, ItemList itemList) {
-        super(gatewayBundle);
+    public ItemListController(GatewayBundle gatewayBundle, SceneManager sceneManager, ItemList itemList) {
+        super(gatewayBundle, sceneManager);
         this.itemList = itemList;
     }
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initializeAbstractController(tableView);
         ObservableList<Item> displayData = FXCollections.observableArrayList(itemList.getListOfItems());
 
         TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);

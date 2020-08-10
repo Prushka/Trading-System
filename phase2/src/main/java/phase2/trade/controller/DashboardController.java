@@ -6,6 +6,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.AccountManager;
 import phase2.trade.view.ConfirmWindow;
 import phase2.trade.view.CustomWindow;
@@ -24,8 +25,8 @@ public class DashboardController extends AbstractController implements Initializ
 
     private final AccountManager accountManager;
 
-    public DashboardController(GatewayBundle gatewayBundle, AccountManager accountManager) {
-        super(gatewayBundle);
+    public DashboardController(GatewayBundle gatewayBundle, SceneManager sceneManager, AccountManager accountManager) {
+        super(gatewayBundle, sceneManager);
         this.accountManager = accountManager;
     }
 
@@ -34,7 +35,7 @@ public class DashboardController extends AbstractController implements Initializ
         CustomWindow<Boolean> confirmWindow = new ConfirmWindow((Stage) center.getScene().getWindow(),"Sign out", "Do you really want to sign out?");
         if (confirmWindow.display()) {
             accountManager.logOut();
-            getSceneSwitcher().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager));
+            getSceneManager().switchScene("login.fxml", new LoginController(gatewayBundle,getSceneManager(), accountManager));
         } else {
             // sideList.getSelectionModel().select(old);
         }
@@ -43,6 +44,6 @@ public class DashboardController extends AbstractController implements Initializ
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         root.setLeft(getSceneFactory().loadPane("side_menu_" + accountManager.getPermissionGroup().name().toLowerCase() + ".fxml",
-                new SideMenuController(gatewayBundle, accountManager, center, right)));
+                new SideMenuController(gatewayBundle,getSceneManager(), accountManager, center, right)));
     }
 }

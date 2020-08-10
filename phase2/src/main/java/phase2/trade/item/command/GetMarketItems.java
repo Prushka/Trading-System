@@ -36,11 +36,6 @@ public class GetMarketItems extends ItemCommand<List<Item>> {
     }
 
     @Override
-    public boolean checkPermission() {
-        return false;
-    }
-
-    @Override
     public void undo() {
     }
 

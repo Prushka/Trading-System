@@ -32,12 +32,15 @@ public class AddItemToItemList extends ItemCommand<Item> {
     }
 
     @Override
-    public void execute(StatusCallback<Item> callback, String... args) {
+    public void execute(StatusCallback<Item> callback, String... args) { // name, description, category, quantity, price
         getEntityBundle().getUserGateway().submitTransaction(() -> {
             Item item = new Item();
             item.setName(args[0]);
             item.setDescription(args[1]);
             item.setCategory(Category.valueOf(args[2]));
+            item.setQuantity(Integer.parseInt(args[3]));
+            item.setPrice(Double.parseDouble(args[3]));
+
             item.setItemList(operator.getItemList(itemListType));
             operator.getItemList(itemListType).addItem(item);
             getEntityBundle().getUserGateway().update(operator);

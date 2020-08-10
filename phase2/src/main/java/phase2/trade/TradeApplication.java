@@ -83,14 +83,14 @@ public class TradeApplication extends Application {
         primaryStage.show();
     }
 
-    private void addExampleItems(User operator, String name, String description, Category category) {
+    private void addExampleItems(User operator, String name, String description, Category category, int quantity, double price) {
         Command<Item> itemCommand = new AddItemToItemList(gatewayBundle, operator, ItemListType.INVENTORY);
         itemCommand.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
 
             } else {
             }
-        }, name, description, category.name());
+        }, name, description, category.name(), String.valueOf(quantity), String.valueOf(price));
     }
 
     private void mockDashboardRegister(Stage primaryStage) {
@@ -126,7 +126,10 @@ public class TradeApplication extends Application {
 
                 primaryStage.setScene(scene);
 
-                addExampleItems(accountManager.getLoggedInUser(), "Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE);
+                addExampleItems(accountManager.getLoggedInUser(), "Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE, 4,-1);
+                addExampleItems(accountManager.getLoggedInUser(), "Ulysses", "Ulysses is a modernist novel by Irish writer James Joyce.", Category.BOOK, 2,-1);
+                addExampleItems(accountManager.getLoggedInUser(), "Broken iPad", "An ipad that's melted.", Category.ELECTRONIC, 1,1000);
+                addExampleItems(accountManager.getLoggedInUser(), "Queen Bed", "No description", Category.FURNITURE, 2,1000);
                 primaryStage.show();
             });
 

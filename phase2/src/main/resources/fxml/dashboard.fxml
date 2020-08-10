@@ -9,36 +9,41 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="root" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1">
     <left>
-        <JFXDrawer fx:id="drawer" defaultDrawerSize="250.0" layoutY="-6.0" prefWidth="250.0" />
+        <JFXDrawer fx:id="drawer" defaultDrawerSize="250.0" layoutY="-6.0" prefWidth="250.0"/>
     </left>
     <center>
-        <VBox fx:id="center">
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-        </VBox>
+        <BorderPane>
+            <top>
+                <JFXToolbar BorderPane.alignment="CENTER">
+                    <center>
+                        <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #ba8baf;"
+                              BorderPane.alignment="CENTER">
+                            <padding>
+                                <Insets bottom="10.0" left="10.0" right="20.0" top="10.0"/>
+                            </padding>
+                            <children>
+                                <JFXButton style="-fx-text-fill: WHITE;-fx-font-size: 18px" onAction="#signOut"
+                                           text="Sign Out" focusTraversable="false" textAlignment="CENTER"
+                                           fx:id="signOutButton"/>
+                            </children>
+                        </HBox>
+                    </center>
+                </JFXToolbar>
+            </top>
+            <center>
+                <VBox fx:id="center">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    </padding>
+                </VBox>
+            </center>
+        </BorderPane>
     </center>
     <right>
         <VBox fx:id="right">
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
         </VBox>
     </right>
-    <top>
-        <JFXToolbar BorderPane.alignment="CENTER">
-            <center>
-                <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #ba8baf;" BorderPane.alignment="CENTER">
-                    <padding>
-                        <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
-                    </padding>
-               <children>
-                  <JFXButton style="-fx-text-fill: WHITE;-fx-font-size: 18px" onAction="#signOut" text="Sign Out" focusTraversable="false" textAlignment="CENTER" fx:id="signOutButton" />
-               </children>
-                </HBox>
-            </center>
-        </JFXToolbar>
-    </top>
 </BorderPane>

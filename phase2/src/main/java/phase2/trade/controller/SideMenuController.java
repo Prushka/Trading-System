@@ -1,7 +1,9 @@
 package phase2.trade.controller;
 
 import com.jfoenix.controls.JFXListView;
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -12,6 +14,7 @@ import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.ItemListController;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.RegularUser;
+import phase2.trade.view.ConfirmWindow;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +25,8 @@ public class SideMenuController extends AbstractController implements Initializa
     public JFXListView<Label> sideList;
     public Label userInfo, market, wishList, settings, inventory;
     public VBox userInfoBox;
+
+    public JFXListView<Label> bottomSideList;
 
     public JFXPanel panel = new JFXPanel();
     private final VBox center;
@@ -35,7 +40,7 @@ public class SideMenuController extends AbstractController implements Initializa
         this.right = right;
     }
 
-
+    // TODO: drop down sub menu & exit
     private void userInfo() {
         Parent userPane = getSceneFactory().loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
         GridPane.setConstraints(userPane, 0, 0);
@@ -66,6 +71,28 @@ public class SideMenuController extends AbstractController implements Initializa
         center.getChildren().addAll(userPane);
     }
 
+    // make a factory for this
+    public void signOut() {
+        ConfirmWindow confirmWindow = new ConfirmWindow();
+        if (confirmWindow.display("Sign out", "Do you really want to sign out?")) {
+            accountManager.logOut();
+            getSceneFactory().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
+        } else {
+            // sideList.getSelectionModel().select(old);
+        }
+    }
+
+    // make a factory for this
+    public void exit() {
+        ConfirmWindow confirmWindow = new ConfirmWindow();
+        if (confirmWindow.display("Sign out", "Do you really want to exit?")) {
+            Platform.exit();
+        } else {
+            // sideList.getSelectionModel().select(old);
+        }
+    }
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         userInfoBox.getChildren().add(getSceneFactory().loadPane("user_info_side.fxml", new UserInfoPresenter(accountManager.getLoggedInUser())));
@@ -83,6 +110,19 @@ public class SideMenuController extends AbstractController implements Initializa
                         break;
                     case "wishList":
                         wishList();
+                        break;
+                }
+            }
+        });
+
+        bottomSideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                switch (newValue.getId()) {
+                    case "signOut":
+                        signOut();
+                        break;
+                    case "exit":
+                        exit();
                         break;
                 }
             }

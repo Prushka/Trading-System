@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import java.lang.String?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
 <VBox styleClass="side-vbox" fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
       prefWidth="250" prefHeight="1000">
     <styleClass>
@@ -17,5 +18,11 @@
         <Label fx:id="inventory">Inventory</Label>
         <Label fx:id="wishList">Wishlist</Label>
         <Label fx:id="settings">Settings</Label>
+    </JFXListView>
+    <Region VBox.vgrow="ALWAYS"/>
+    <Separator />
+    <JFXListView fx:id="bottomSideList">
+        <Label fx:id="signOut">Sign Out</Label>
+        <Label fx:id="exit">Exit</Label>
     </JFXListView>
 </VBox>

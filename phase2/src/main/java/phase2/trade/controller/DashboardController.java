@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.AdministrativeUser;
@@ -33,7 +34,7 @@ public class DashboardController extends AbstractController implements Initializ
 
     public void signOut(ActionEvent actionEvent) {
         ConfirmWindow confirmWindow = new ConfirmWindow();
-        if (confirmWindow.display("Sign out", "Do you really want to sign out?")) {
+        if (confirmWindow.display("Sign out", "Do you really want to sign out?",(Stage) center.getScene().getWindow())) {
             accountManager.logOut();
             getSceneFactory().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
         } else {

@@ -1,63 +1,62 @@
 package phase2.trade.view;
 
+import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ConfirmWindow {
 
     boolean answer;
 
-    public boolean display(String title, String message) {
-        Stage window = new Stage();
+    JFXAlert alert;
 
-        window.initModality(Modality.APPLICATION_MODAL); // block input events
-        window.setTitle(title);
-        window.setMinWidth(250);
+    private void setCenterPosition(Stage window, Stage parent) {
+        double centerXPosition = parent.getX() + parent.getWidth() / 2d;
+        double centerYPosition = parent.getY() + parent.getHeight() / 2d;
+        window.setOnShown(ev -> {
+            window.setX(centerXPosition - window.getWidth() / 2d);
+            window.setY(centerYPosition - window.getHeight() / 2d);
+            window.show();
+        });
+    }
 
-        Label label = new Label();
-        label.setText(message);
-
+    public boolean display(String title, String message, Stage parent) {
+        alert = new JFXAlert(parent);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setOverlayClose(true);
+        JFXDialogLayout layout = new JFXDialogLayout();
+        layout.setHeading(new Label(title));
+        layout.setBody(new Label(message));
         JFXButton yesButton = new JFXButton("Yes");
-        yesButton.setButtonType(JFXButton.ButtonType.RAISED);
-        yesButton.setStyle("-fx-background-color: #db4437;-fx-text-fill:WHITE;");
         JFXButton noButton = new JFXButton("No");
-
-        noButton.setButtonType(JFXButton.ButtonType.RAISED);
-        noButton.setStyle("-fx-background-color: #1b5e20;-fx-text-fill:WHITE;");
-
-        yesButton.setOnAction(e -> {
+        yesButton.setOnAction(event -> {
             answer = true;
-            window.close();
+            alert.hideWithAnimation();
         });
-
-        noButton.setOnAction(e -> {
+        noButton.setOnAction(event -> {
             answer = false;
-            window.close();
+            alert.hideWithAnimation();
         });
-
-        VBox root = new VBox(20);
-        root.setPrefHeight(150);
-
-        HBox layout = new HBox(20);
-        layout.getChildren().addAll(yesButton, noButton);
-        layout.setAlignment(Pos.CENTER);
-
-        root.getChildren().addAll(label, layout);
-
-        root.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(root);
-        window.setScene(scene);
-        window.showAndWait();
+        yesButton.setFocusTraversable(false);
+        noButton.setFocusTraversable(false);
+        layout.setActions(yesButton, noButton);
+        alert.setContent(layout);
+        alert.showAndWait();
 
         return answer;
     }
+
 }

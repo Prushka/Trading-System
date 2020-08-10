@@ -2,13 +2,17 @@ package phase2.trade.controller;
 
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.ItemListController;
@@ -74,21 +78,21 @@ public class SideMenuController extends AbstractController implements Initializa
     // make a factory for this
     public void signOut() {
         ConfirmWindow confirmWindow = new ConfirmWindow();
-        if (confirmWindow.display("Sign out", "Do you really want to sign out?")) {
+        bottomSideList.getSelectionModel().clearSelection();
+        if (confirmWindow.display("Sign out", "Do you really want to sign out?", (Stage) bottomSideList.getScene().getWindow())) {
             accountManager.logOut();
             getSceneFactory().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
         } else {
-            // sideList.getSelectionModel().select(old);
         }
     }
 
     // make a factory for this
     public void exit() {
         ConfirmWindow confirmWindow = new ConfirmWindow();
-        if (confirmWindow.display("Sign out", "Do you really want to exit?")) {
+        bottomSideList.getSelectionModel().clearSelection();
+        if (confirmWindow.display("Exit", "Do you really want to exit?", (Stage) bottomSideList.getScene().getWindow())) {
             Platform.exit();
         } else {
-            // sideList.getSelectionModel().select(old);
         }
     }
 
@@ -115,18 +119,18 @@ public class SideMenuController extends AbstractController implements Initializa
             }
         });
 
-        bottomSideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                switch (newValue.getId()) {
-                    case "signOut":
-                        signOut();
-                        break;
-                    case "exit":
-                        exit();
-                        break;
+        sideList.getSelectionModel().select(0);
+        bottomSideList.setOnMouseClicked(event -> {
+                    switch (bottomSideList.getSelectionModel().getSelectedItem().getId()) {
+                        case "signOut":
+                            signOut();
+                            break;
+                        case "exit":
+                            exit();
+                            break;
+                    }
                 }
-            }
-        });
-        sideList.getSelectionModel().select(userInfo);
+        );
+
     }
 }

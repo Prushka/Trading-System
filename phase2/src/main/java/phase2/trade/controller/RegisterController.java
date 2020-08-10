@@ -64,8 +64,9 @@ public class RegisterController extends AbstractController implements Initializa
     }
 
     public void goToGuest(ActionEvent actionEvent) {
-        getSceneFactory().switchScene("guest.fxml",
-                new GuestController(gatewayBundle), actionEvent);
+        accountManager.loginAsGuest();
+        getSceneFactory().switchScene("dashboard.fxml",
+                new DashboardController(gatewayBundle, accountManager), actionEvent, true);
     }
 
     @Override

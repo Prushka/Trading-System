@@ -1,6 +1,5 @@
 package phase2.trade.command;
 
-import phase2.trade.callback.Callback;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;

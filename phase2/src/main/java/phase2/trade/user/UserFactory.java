@@ -29,7 +29,7 @@ public class UserFactory {
                 break;
 
             default:
-                user = new Guest();
+                user = new Guest(userName, email, password, country, city);
                 break;
         }
         user.setPermissionGroup(permissionGroup);
@@ -39,5 +39,9 @@ public class UserFactory {
 
     public User configureSystemUser() { // system user will not be persistent
         return createByPermissionGroup("SYSTEM", "SYSTEM", "", "MARS", "", PermissionGroup.SYSTEM.name());
+    }
+
+    public User configureGuest() { // system user will not be persistent
+        return createByPermissionGroup("Guest", "guest@example.com", "", "MARS", "", PermissionGroup.GUEST.name());
     }
 }

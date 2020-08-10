@@ -47,7 +47,6 @@ public class SideMenuController extends AbstractController implements Initializa
     // TODO: drop down sub menu & exit
     private void userInfo() {
         Parent userPane = getSceneFactory().loadPane("user_info.fxml", new UserInfoPresenter(accountManager.getLoggedInUser()));
-        GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
@@ -55,7 +54,6 @@ public class SideMenuController extends AbstractController implements Initializa
     private void market() {
         Parent userPane = getSceneFactory().loadPane("market.fxml", new MarketController(getGatewayBundle(),
                 accountManager.getLoggedInUser()));
-        GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
@@ -63,19 +61,23 @@ public class SideMenuController extends AbstractController implements Initializa
     private void inventory() {
         Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.INVENTORY));
         userPane.setPickOnBounds(false);
-        GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void wishList() {
         Parent userPane = getSceneFactory().loadPane("add_wish.fxml", new WishItemAddController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.CART));
-        GridPane.setConstraints(userPane, 0, 0);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
-    // make a factory for this
+    private void userOperation() {
+        Parent userPane = getSceneFactory().loadPane("operation_list.fxml", new UserOperationController(gatewayBundle));
+        center.getChildren().clear();
+        center.getChildren().addAll(userPane);
+    }
+
+    // TODO: make a factory for this and extend for different users
     public void signOut() {
         ConfirmWindow confirmWindow = new ConfirmWindow();
         bottomSideList.getSelectionModel().clearSelection();
@@ -114,6 +116,9 @@ public class SideMenuController extends AbstractController implements Initializa
                         break;
                     case "wishList":
                         wishList();
+                        break;
+                    case "userOperation":
+                        userOperation();
                         break;
                 }
             }

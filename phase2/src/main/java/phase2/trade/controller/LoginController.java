@@ -62,7 +62,9 @@ public class LoginController extends AbstractController implements Initializable
 
 
     public void goToGuest(ActionEvent actionEvent) {
-        getSceneFactory().switchScene("guest.fxml", new GuestController(gatewayBundle), actionEvent);
+        accountManager.loginAsGuest();
+        getSceneFactory().switchScene("dashboard.fxml",
+                new DashboardController(gatewayBundle, accountManager), actionEvent, true);
     }
 
     @Override

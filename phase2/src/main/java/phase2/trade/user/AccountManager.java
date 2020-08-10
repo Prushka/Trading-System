@@ -22,10 +22,17 @@ public class AccountManager {
 
     private final User system;
 
+    private final UserFactory userFactory;
+
     public AccountManager(GatewayBundle gatewayBundle) {
-        system = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).configureSystemUser();
+        userFactory = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
+        system = userFactory.configureSystemUser();
         this.loginCommand = new Login(gatewayBundle, system);
         this.registerCommand = new CreateUser(gatewayBundle, system);
+    }
+
+    public void loginAsGuest() {
+        loggedInUser = userFactory.configureGuest();
     }
 
     public void login(StatusCallback<User> callback, String usernameOrEmail, String password) {

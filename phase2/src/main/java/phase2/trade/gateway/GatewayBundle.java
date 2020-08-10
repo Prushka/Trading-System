@@ -1,5 +1,8 @@
 package phase2.trade.gateway;
 
+import phase2.trade.user.User;
+import phase2.trade.user.UserFactory;
+
 public class GatewayBundle {
 
     EntityBundle entityBundle;
@@ -17,5 +20,9 @@ public class GatewayBundle {
     public GatewayBundle(EntityBundle entityBundle, ConfigBundle configBundle) {
         this.entityBundle = entityBundle;
         this.configBundle = configBundle;
+    }
+
+    public User getSystem() {
+        return new UserFactory(getConfigBundle().getPermissionConfig()).configureSystemUser();
     }
 }

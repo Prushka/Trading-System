@@ -1,8 +1,10 @@
 package phase2.trade.trade.command;
 
+import phase2.trade.callback.Callback;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.Command;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.gateway.TradeGateway;
 import phase2.trade.item.Item;
@@ -15,6 +17,7 @@ import phase2.trade.trade.TradeManager;
 import phase2.trade.user.RegularUser;
 
 import javax.persistence.Entity;
+import java.util.List;
 
 @Entity
 public class ConfirmTrade extends TradeCommand<Trade> {
@@ -25,14 +28,16 @@ public class ConfirmTrade extends TradeCommand<Trade> {
 
     private TradeConfirmer tcc;
 
-    public ConfirmTrade(GatewayBundle gatewayBundle, RegularUser operator, Long tradeId, Integer timeLimit){
+    public ConfirmTrade(GatewayBundle gatewayBundle, RegularUser operator, Long tradeId, Integer timeLimit) {
         super(gatewayBundle, operator);
         this.tradeGateway = gatewayBundle.getEntityBundle().getTradeGateway();
         tcc = new TradeConfirmer(timeLimit);
     }
 
     @Override
-    public PermissionSet getPermissionRequired() { return new PermissionSet(Permission.CONFIRM_TRADE); }
+    public PermissionSet getPermissionRequired() {
+        return new PermissionSet(Permission.CONFIRM_TRADE);
+    }
 
     @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
@@ -49,6 +54,10 @@ public class ConfirmTrade extends TradeCommand<Trade> {
         });
     }
 
+    @Override
+    public void isUndoable(StatusCallback<List<Command<?>>> callback) {
+        callback.call(null, ResultStatus.FAILED);
+    }
 
     // Unreasonable to do for this action
     @Override

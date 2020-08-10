@@ -1,6 +1,7 @@
 package phase2.trade.command;
 
 import phase2.trade.callback.Callback;
+import phase2.trade.callback.ResultStatus;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
@@ -25,7 +26,6 @@ public abstract class Command<T> {
 
     private Long undoTimestamp;
 
-
     // this one is to be persisted for effected entities and to be deserialized
     protected String effectedEntitiesToPersist;
 
@@ -45,6 +45,65 @@ public abstract class Command<T> {
     public Command() {
     }
 
+    public abstract void execute(StatusCallback<T> callback, String... args);
+
+    public abstract void undo();
+
+    public abstract void redo(); // It seems we don't need to implement redo. Also redo may mess up the uid
+
+    public abstract Class<?> getClassToOperateOn();
+
+    public abstract CRUDType getCRUDType();
+
+    // override this one if your command is not undoable, call FAILED
+    public void isUndoable(StatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
+        getEntityBundle().getCommandGateway().submitSession(() -> {
+            List<Command<?>> futureCommands = getEntityBundle().getCommandGateway().getFutureCommands(timestamp);
+            List<Command<?>> blockingCommands = new ArrayList<>();
+            for (Command<?> command : futureCommands) {
+                if (command.getCRUDType().hasEffect && ifOverlaps(command.effectedEntitiesToPersist)) {
+                    blockingCommands.add(command);
+                }
+            }
+            blockingCommands.sort(new CommandComparator());
+            if (blockingCommands.size() > 0) {
+                callback.call(blockingCommands, ResultStatus.FAILED);
+            } else {
+                callback.call(blockingCommands, ResultStatus.SUCCEEDED);
+            }
+        });
+    }
+
+    protected void addEffectedEntity(Class<?> clazz, Long... ids) {
+        for (Long id : ids) {
+            putOrAdd(effectedEntities, clazz.getName(), id.toString());
+        }
+    }
+
+    protected void save() {
+        timestamp = System.currentTimeMillis();
+        effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
+        getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().add(getThis()));
+    }
+
+    protected void updateUndo() {
+        undoTimestamp = System.currentTimeMillis();
+        ifUndone = true;
+        getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().update(getThis()));
+    }
+
+
+    private boolean ifOverlaps(String otherEffectedEntitiesToPersist) {
+        Map<String, Set<String>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);
+        Map<String, Set<String>> effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
+        for (Map.Entry<String, Set<String>> entry : otherEffectedEntities.entrySet()) {
+            if (effectedEntities.containsKey(entry.getKey())) {
+                if (!Collections.disjoint(effectedEntities.get(entry.getKey()), entry.getValue())) return true;
+            }
+        }
+        return false;
+    }
+
     private void putOrAdd(Map<String, Set<String>> map, String key, String value) {
         if (map.containsKey(key)) {
             map.get(key).add(value);
@@ -52,12 +111,6 @@ public abstract class Command<T> {
             map.put(key, new HashSet<String>() {{
                 add(value);
             }});
-        }
-    }
-
-    protected void addEffectedEntity(Class<?> clazz, Long... ids) {
-        for (Long id : ids) {
-            putOrAdd(effectedEntities, clazz.getName(), id.toString());
         }
     }
 
@@ -87,56 +140,6 @@ public abstract class Command<T> {
             temp.put(clazz, ids);
         }
         return temp;
-    }
-
-
-    public abstract void execute(StatusCallback<T> callback, String... args);
-
-    public abstract void undo();
-
-    public abstract void redo(); // It seems we don't need to implement redo. Also redo may mess up the uid
-
-    public abstract Class<?> getClassToOperateOn();
-
-    public abstract CRUDType getCRUDType();
-
-    protected void save() {
-        timestamp = System.currentTimeMillis();
-        effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
-        getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().add(getThis()));
-    }
-
-    protected void updateUndo() {
-        undoTimestamp = System.currentTimeMillis();
-        ifUndone = true;
-        getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().update(getThis()));
-    }
-
-
-    public void isUndoable(Callback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
-        getEntityBundle().getCommandGateway().submitSession(() -> {
-            List<Command<?>> futureCommands = getEntityBundle().getCommandGateway().getFutureCommands(timestamp);
-            List<Command<?>> blockingCommands = new ArrayList<>();
-            for (Command<?> command : futureCommands) {
-                if (command.getCRUDType().hasEffect && ifOverlaps(command.effectedEntitiesToPersist)) {
-                    blockingCommands.add(command);
-                }
-            }
-            blockingCommands.sort(new CommandComparator());
-            callback.call(blockingCommands);
-        });
-    }
-
-
-    public boolean ifOverlaps(String otherEffectedEntitiesToPersist) {
-        Map<String, Set<String>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);
-        Map<String, Set<String>> effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
-        for (Map.Entry<String, Set<String>> entry : otherEffectedEntities.entrySet()) {
-            if (effectedEntities.containsKey(entry.getKey())) {
-                if (!Collections.disjoint(effectedEntities.get(entry.getKey()), entry.getValue())) return true;
-            }
-        }
-        return false;
     }
 
     protected EntityBundle getEntityBundle() {

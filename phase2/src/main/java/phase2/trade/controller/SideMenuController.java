@@ -60,7 +60,6 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private void inventory() {
         Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()), ItemListType.INVENTORY));
-        userPane.setPickOnBounds(false);
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
@@ -124,7 +123,7 @@ public class SideMenuController extends AbstractController implements Initializa
             }
         });
 
-        sideList.getSelectionModel().select(0);
+        sideList.getSelectionModel().select(2);
         bottomSideList.setOnMouseClicked(event -> {
                     switch (bottomSideList.getSelectionModel().getSelectedItem().getId()) {
                         case "signOut":

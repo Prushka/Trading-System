@@ -1,8 +1,11 @@
 package phase2.trade.view;
 
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import java.util.List;
 
 public class TableViewGenerator<T> {
 
-    private final ObservableList<T> data;
+    private final ObservableList<T> original;
 
     private final TableView<T> tableView = new TableView<>();
 
@@ -19,9 +22,12 @@ public class TableViewGenerator<T> {
 
     private int defaultMinWidth = 150;
 
-    public TableViewGenerator(ObservableList<T> data, int defaultMinWidth) {
-        this.data = data;
+    private final FilteredList<T> filteredList;
+
+    public TableViewGenerator(ObservableList<T> original, int defaultMinWidth) {
+        this.original = original;
         this.defaultMinWidth = defaultMinWidth;
+        filteredList = new FilteredList<>(original, p -> true);
     }
 
     private TableColumn<T, String> getTableColumn(String name, String fieldName, int minWidth) {
@@ -41,8 +47,24 @@ public class TableViewGenerator<T> {
         return this;
     }
 
+
+    public TableViewGenerator<T> addSearch(TextField textField, TextFieldPredicate<T> predicate) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(t -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                return predicate.test(t, textField.getText());
+            });
+        });
+        return this;
+    }
+
     public TableView<T> build() {
-        tableView.setItems(data);
+        SortedList<T> sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(tableView.comparatorProperty());
+        tableView.setItems(sortedList);
+
         tableView.getColumns().addAll(listOfColumns);
         return tableView;
     }

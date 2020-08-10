@@ -34,7 +34,6 @@ public class LoginController extends AbstractController implements Initializable
     LoginController(GatewayBundle gatewayBundle, AccountManager accountManager) {
         super(gatewayBundle);
         this.accountManager = accountManager;
-        new CreateHeadIfNotExist(gatewayBundle);
     }
 
     public void loginButtonClicked(ActionEvent actionEvent) {

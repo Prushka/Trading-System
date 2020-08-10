@@ -50,11 +50,14 @@ public class TradeApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // mockDashboard(primaryStage);
         loadFont("OpenSans");
         loadFont("OpenSansM");
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
-        login(primaryStage);
+
+
+        new CreateHeadIfNotExist(gatewayBundle); // this is a use case class, is trade application a controller
+        mockDashboardLogin(primaryStage);
+        // login(primaryStage);
     }
 
     private void login(Stage primaryStage) throws IOException {
@@ -69,7 +72,26 @@ public class TradeApplication extends Application {
         primaryStage.show();
     }
 
-    private void mockDashboard(Stage primaryStage) {
+    private void mockDashboardRegister(Stage primaryStage) {
+        SceneFactory sceneFactory = new SceneFactory();
+        AccountManager accountManager = new AccountManager(gatewayBundle);
+        accountManager.register((result, status) -> {
+            DashboardController dashboardController = new DashboardController(gatewayBundle, accountManager);
+            Platform.runLater(() -> {
+
+                Parent dashboard = sceneFactory.loadPane("dashboard.fxml", dashboardController);
+                Scene scene = new Scene(dashboard);
+
+                scene.getStylesheets().add("css/trade.css");
+
+                primaryStage.setScene(scene);
+                primaryStage.show();
+            });
+
+        }, "someuser", "a@b.ccc", "12345678", "country", "city");
+    }
+
+    private void mockDashboardLogin(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
         AccountManager accountManager = new AccountManager(gatewayBundle);
         accountManager.login((result, status) -> {
@@ -85,7 +107,7 @@ public class TradeApplication extends Application {
                 primaryStage.show();
             });
 
-        }, "aaa@bbb.ccc", "12345678");
+        }, "a@b.ccc", "12345678");
     }
 
     @Override

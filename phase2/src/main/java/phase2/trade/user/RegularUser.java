@@ -45,15 +45,13 @@ public class RegularUser extends User {
         cart.setOwner(this);
 
         this.accountBalance = 0;
+
+        setPermissionGroup(PermissionGroup.ADMIN);
     }
 
     public RegularUser() {
 
     }
-
-    //public int getIncompleteTrades() {
-    //return incompleteTrades;
-    //}
 
 
     public AccountState getAccountState() {
@@ -96,9 +94,5 @@ public class RegularUser extends User {
 
     public void setAccountBalance(int accountBalance) {
         this.accountBalance = accountBalance;
-    }
-
-    public PermissionGroup getPermissionGroup() {
-        return PermissionGroup.REGULAR;
     }
 }

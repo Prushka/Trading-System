@@ -10,8 +10,8 @@ import java.util.List;
 
 public class Login extends UserCommand<User> {
 
-    public Login(GatewayBundle gatewayBundle) {
-        super(gatewayBundle);
+    public Login(GatewayBundle gatewayBundle, User operator) {
+        super(gatewayBundle, operator);
     }
 
     @Override

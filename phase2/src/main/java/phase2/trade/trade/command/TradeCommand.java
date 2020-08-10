@@ -14,14 +14,11 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
-public abstract class TradeCommand<T> extends Command<T> implements PermissionBased {
+public abstract class TradeCommand<T> extends Command<T> {
 
-    @OneToOne
-    User operator;
 
     public TradeCommand(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle);
-        this.operator = operator;
+        super(gatewayBundle, operator);
     }
 
     public TradeCommand() {}
@@ -39,19 +36,6 @@ public abstract class TradeCommand<T> extends Command<T> implements PermissionBa
     @Override
     public Class<Trade> getClassToOperateOn() {
         return Trade.class;
-    }
-
-    @Override
-    public boolean checkPermission() {
-        return new UserPermissionChecker(operator, getPermissionRequired()).checkPermission();
-    }
-
-    public boolean checkPermission(StatusCallback<?> statusCallback) {
-        boolean result = checkPermission();
-        if(!result){
-            statusCallback.call(null, ResultStatus.NO_PERMISSION);
-        }
-        return result;
     }
 
     @Override

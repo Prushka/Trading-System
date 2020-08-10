@@ -29,6 +29,7 @@ public abstract class User {
     @Embedded
     private PermissionSet permissionSet;
 
+    private PermissionGroup permissionGroup;
 
     // using a map may add some polymorphism but will complicate the db structure
 
@@ -155,6 +156,12 @@ public abstract class User {
         this.city = city;
     }
 
-    public abstract PermissionGroup getPermissionGroup();
+    public PermissionGroup getPermissionGroup() {
+        return permissionGroup;
+    }
+
+    public void setPermissionGroup(PermissionGroup permissionGroup) {
+        this.permissionGroup = permissionGroup;
+    }
 }
 

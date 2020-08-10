@@ -14,14 +14,10 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 
 @Entity
-public abstract class ItemCommand<T> extends Command<T> implements PermissionBased {
-
-    @OneToOne
-    User operator;
+public abstract class ItemCommand<T> extends Command<T>  {
 
     public ItemCommand(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle);
-        this.operator = operator;
+        super(gatewayBundle, operator);
     }
 
     public ItemCommand() {
@@ -45,18 +41,6 @@ public abstract class ItemCommand<T> extends Command<T> implements PermissionBas
         return Item.class;
     }
 
-    @Override
-    public boolean checkPermission() {
-        return new UserPermissionChecker(operator, getPermissionRequired()).checkPermission();
-    }
-
-    public boolean checkPermission(StatusCallback<?> statusCallback) {
-        boolean result = checkPermission();
-        if(!result){
-            statusCallback.call(null, ResultStatus.NO_PERMISSION);
-        }
-        return result;
-    }
 
     @Override
     public abstract PermissionSet getPermissionRequired();

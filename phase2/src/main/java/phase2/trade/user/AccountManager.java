@@ -21,8 +21,8 @@ public class AccountManager {
     private Register registerCommand;
 
     public AccountManager(GatewayBundle gatewayBundle) {
-        this.loginCommand = new Login(gatewayBundle);
-        this.registerCommand = new Register(gatewayBundle);
+        this.loginCommand = new Login(gatewayBundle, new System());
+        this.registerCommand = new Register(gatewayBundle, new System());
     }
 
     public void login(StatusCallback<User> callback, String usernameOrEmail, String password) {

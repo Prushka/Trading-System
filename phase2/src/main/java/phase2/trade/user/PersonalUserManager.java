@@ -99,7 +99,7 @@ public class PersonalUserManager{ //extends UserCommand<User>{
      * request to unfreeze the account
      */
     public void UnfreezeRequest() {
-        loggedInUser.setAccountState(AccountState.REQUEST_UNFROZEN);
+        //loggedInUser.setAccountState(AccountState.REQUEST_UNFROZEN);
     }
 
     public Inventory getUserInventory() {

@@ -5,18 +5,25 @@
 <?import javafx.scene.layout.StackPane?>
 <?import java.lang.String?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
-           prefWidth="250" prefHeight="1000">
+<?import javafx.scene.layout.Region?>
+<VBox styleClass="side-vbox" fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+      prefWidth="250" prefHeight="1000">
     <styleClass>
         <String fx:value="side-menu"/>
     </styleClass>
     <VBox fx:id="userInfoBox"/>
     <JFXListView fx:id="sideList">
-        <Label fx:id="userInfo" styleClass="side-label">User Info</Label>
-        <Label fx:id="userManage" styleClass="side-label">Manage Users</Label>
-        <Label fx:id="userOperation" styleClass="side-label">User Operations</Label>
-        <Label fx:id="supportTicket" styleClass="side-label">Support Tickets</Label>
-        <Label fx:id="itemReview" styleClass="side-label">Review Items</Label>
-        <Label fx:id="settings" styleClass="side-label">Settings</Label>
+        <Label fx:id="userInfo">User Info</Label>
+        <Label fx:id="userManage">Manage Users</Label>
+        <Label fx:id="userOperation">User Operations</Label>
+        <Label fx:id="supportTicket">Support Tickets</Label>
+        <Label fx:id="itemReview">Review Items</Label>
+        <Label fx:id="settings">Settings</Label>
+    </JFXListView>
+    <Region VBox.vgrow="ALWAYS"/>
+    <Separator/>
+    <JFXListView fx:id="bottomSideList">
+        <Label fx:id="signOut">Sign Out</Label>
+        <Label fx:id="exit">Exit</Label>
     </JFXListView>
 </VBox>

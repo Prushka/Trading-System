@@ -3,7 +3,6 @@ package phase2.trade.user;
 
 import phase2.trade.gateway.database.TradeDAO;
 
-import phase2.trade.callback.Callback;
 import phase2.trade.gateway.database.UserDAO;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
@@ -66,9 +65,9 @@ public class AdministrativeUserManager {
 
     public List<RegularUser> getNeedToConfirmUnfreeze() {
         for (RegularUser user : regularUser) {
-            if (user.getAccountState() == AccountState.REQUEST_UNFROZEN) {
-                needToConfirmUnfreeze.add(user);
-            }
+            // if (user.getAccountState() == AccountState.REQUEST_UNFROZEN) {
+            //     needToConfirmUnfreeze.add(user);
+            // }
         }
         return needToConfirmUnfreeze;
     }
@@ -96,7 +95,7 @@ public class AdministrativeUserManager {
      * @param user The personal user that is going to be frozen
      */
     public void freezeUser(RegularUser user) {
-        user.setAccountState(AccountState.FROZEN);
+        // user.setAccountState(AccountState.FROZEN);
     }
 
     public void FreezeAllUser() {
@@ -209,7 +208,7 @@ public class AdministrativeUserManager {
      * @return Boolean if the subsequent administrative user is successfully created
      */
     public boolean addSubAdmin(String username, String email, String password, String country, String city) {
-        if (loggedInAdminUser.getPermissionGroup() == PermissionGroup.HEADADMIN) {
+        if (loggedInAdminUser.getPermissionGroup() == PermissionGroup.HEAD_ADMIN) {
             createAdministrator(username, email, password, country, city);
             return true;
         } else {

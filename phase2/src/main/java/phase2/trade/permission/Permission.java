@@ -9,6 +9,7 @@ public enum Permission {
     CONFIRM_TRADE,
 
     REMOVE_ITEM,
-    REVIEW_ITEM
+    REVIEW_ITEM,
 
+    CREATE_USER;
 }

@@ -1,5 +1,5 @@
 package phase2.trade.permission;
 
 public enum PermissionGroup {
-    ADMIN, GUEST, HEADADMIN, REGULAR
+    SYSTEM, HEAD_ADMIN, ADMIN, GUEST, REGULAR, FROZEN, BANNED
 }

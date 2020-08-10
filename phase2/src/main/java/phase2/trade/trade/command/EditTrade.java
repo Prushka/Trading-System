@@ -22,11 +22,11 @@ import java.time.LocalDateTime;
 public class EditTrade extends TradeCommand<Trade> {
     private Long tradeId;
 
-    private final TradeGateway tradeGateway;
+    private transient final TradeGateway tradeGateway;
 
     private Integer editLimit;
 
-    private TradeEditor te;
+    private transient TradeEditor te;
 
     public EditTrade(GatewayBundle gatewayBundle, RegularUser operator, Long tradeId, int editLimit){
         super(gatewayBundle, operator);

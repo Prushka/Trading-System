@@ -6,6 +6,8 @@ import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.permission.PermissionSet;
+import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,7 +16,7 @@ import java.util.regex.Pattern;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Command<T> {
+public abstract class Command<T> implements PermissionBased {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,9 @@ public abstract class Command<T> {
     private Long timestamp;
 
     private Long undoTimestamp;
+
+    @OneToOne
+    protected User operator;
 
     // this one is to be persisted for effected entities and to be deserialized
     protected String effectedEntitiesToPersist;
@@ -37,7 +42,7 @@ public abstract class Command<T> {
 
     protected transient GatewayBundle gatewayBundle;
 
-    public Command(GatewayBundle gatewayBundle) {
+    public Command(GatewayBundle gatewayBundle, User operator) {
         this.gatewayBundle = gatewayBundle;
         this.effectedEntities = new HashMap<>();
     }
@@ -90,6 +95,24 @@ public abstract class Command<T> {
         undoTimestamp = System.currentTimeMillis();
         ifUndone = true;
         getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().update(getThis()));
+    }
+
+    @Override
+    public boolean checkPermission() {
+        return new UserPermissionChecker(operator, getPermissionRequired()).checkPermission();
+    }
+
+    public boolean checkPermission(StatusCallback<?> statusCallback) {
+        boolean result = checkPermission();
+        if(!result){
+            statusCallback.call(null, ResultStatus.NO_PERMISSION);
+        }
+        return result;
+    }
+
+    @Override
+    public PermissionSet getPermissionRequired() {
+        return new PermissionSet();
     }
 
 

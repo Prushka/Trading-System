@@ -50,7 +50,8 @@ public class TradeApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         // mockDashboard(primaryStage);
-        loadFont("RobotoM");
+        loadFont("OpenSans");
+        loadFont("OpenSansM");
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
         login(primaryStage);
     }

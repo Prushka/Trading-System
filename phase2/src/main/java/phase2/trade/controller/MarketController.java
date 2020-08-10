@@ -59,7 +59,7 @@ public class MarketController  extends AbstractController implements Initializab
     public MarketController(SceneManager sceneManager){
         super(sceneManager);
         // tc = new CreateTrade(gatewayBundle, (RegularUser) currUser);
-        tic = new TradeInfoController();
+        // tic = new TradeInfoController(gatewayBundle);
     }
 
     @Override

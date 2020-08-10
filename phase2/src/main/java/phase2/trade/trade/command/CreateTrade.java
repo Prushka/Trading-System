@@ -11,6 +11,7 @@ import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeCreator;
 import phase2.trade.trade.TradeManager;
 import phase2.trade.user.RegularUser;
+import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class CreateTrade extends TradeCommand<Trade>{
 
     private TradeCreator tc;
 
-    public CreateTrade(GatewayBundle gatewayBundle, RegularUser operator){
+    public CreateTrade(GatewayBundle gatewayBundle, User operator){
         super(gatewayBundle, operator);
         this.tradeGateway = gatewayBundle.getEntityBundle().getTradeGateway();
         tc = new TradeCreator();

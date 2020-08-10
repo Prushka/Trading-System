@@ -20,6 +20,8 @@ public class SceneManager {
 
     private final SceneFactory sceneFactory = new SceneFactory(this);
 
+    private final PopupFactory popupFactory;
+
     private final GatewayBundle gatewayBundle;
 
     private final AccountManager accountManager;
@@ -28,6 +30,7 @@ public class SceneManager {
         this.gatewayBundle = gatewayBundle;
         this.window = window;
         this.accountManager = accountManager;
+        popupFactory = new PopupFactory(window);
     }
 
     public void switchScene(String fileName, Object controller, boolean applyCSS) {
@@ -83,5 +86,9 @@ public class SceneManager {
 
     public GatewayBundle getGatewayBundle() {
         return gatewayBundle;
+    }
+
+    public PopupFactory getPopupFactory() {
+        return popupFactory;
     }
 }

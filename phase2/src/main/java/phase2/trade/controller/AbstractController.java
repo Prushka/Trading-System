@@ -10,25 +10,14 @@ import phase2.trade.view.SceneFactory;
 
 public abstract class AbstractController {
 
-    private PopupFactory popupFactory;
-
     private SceneManager sceneManager;
 
     public AbstractController(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
-        initializeAbstractController(sceneManager.getWindow());
-    }
-
-    private void initializeAbstractController(Stage window) {
-        popupFactory = new PopupFactory(window);
     }
 
     public SceneManager getSceneManager() {
         return sceneManager;
-    }
-
-    public PopupFactory getPopupFactory() {
-        return popupFactory;
     }
 
     protected AccountManager getAccountManager() {
@@ -37,5 +26,9 @@ public abstract class AbstractController {
 
     protected GatewayBundle getGatewayBundle() {
         return sceneManager.getGatewayBundle();
+    }
+
+    protected PopupFactory getPopupFactory() {
+        return sceneManager.getPopupFactory();
     }
 }

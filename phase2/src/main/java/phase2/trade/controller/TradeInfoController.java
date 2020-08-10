@@ -25,6 +25,7 @@ import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
+import phase2.trade.presenter.SceneManager;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.command.CreateTrade;
 import phase2.trade.trade.command.TradeCommand;
@@ -72,9 +73,9 @@ public class TradeInfoController extends AbstractController  implements Initiali
     private JFXButton tradeButton;
     private JFXComboBox<String> isPermanent;
 
-    public TradeInfoController(GatewayBundle gatewayBundle, RegularUser operator){
-        super(gatewayBundle);
-        tc = new CreateTrade(gatewayBundle, operator);
+    public TradeInfoController(SceneManager sceneManager){
+        super(sceneManager);
+        tc = new CreateTrade(getGatewayBundle(), getAccountManager().getLoggedInUser());
     }
 
     @Override

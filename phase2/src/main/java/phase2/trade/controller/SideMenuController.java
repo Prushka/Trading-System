@@ -59,22 +59,19 @@ public class SideMenuController extends AbstractController implements Initializa
         getSceneManager().addPane("item_list.fxml", controller, center);
     }
 
-    // TODO: make a factory for this and extend for different users
+    // TODO: extend for different users
     public void signOut() {
-        ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(), "Sign out", "Do you really want to sign out?");
         bottomSideList.getSelectionModel().clearSelection();
-        if (confirmWindow.display()) {
+        if (getPopupFactory().confirmWindow("Sign out", "Do you really want to sign out?").display()) {
             getAccountManager().logOut();
             getSceneManager().switchScene("login.fxml", LoginController::new);
         } else {
         }
     }
 
-    // make a factory for this
     public void exit() {
-        ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(), "Exit", "Do you really want to exit?");
         bottomSideList.getSelectionModel().clearSelection();
-        if (confirmWindow.display()) {
+        if (getPopupFactory().confirmWindow("Exit", "Do you really want to exit?").display()) {
             Platform.exit();
         } else {
         }
@@ -88,10 +85,10 @@ public class SideMenuController extends AbstractController implements Initializa
             if (newValue != null) {
                 switch (newValue.getId()) {
                     case "userInfo":
-                        loadSide("user_info.fxml",UserInfoPresenter::new);
+                        loadSide("user_info.fxml", UserInfoPresenter::new);
                         break;
                     case "market":
-                        loadSide("market_list.fxml",MarketListController::new);
+                        loadSide("market_list.fxml", MarketListController::new);
                         break;
                     case "inventory":
                         inventory();

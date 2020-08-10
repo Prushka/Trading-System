@@ -28,6 +28,8 @@ public abstract class Command<T> implements PermissionBased {
 
     private Long undoTimestamp;
 
+    private transient boolean asynchronous;
+
     @OneToOne
     protected User operator;
 
@@ -191,5 +193,13 @@ public abstract class Command<T> implements PermissionBased {
 
     public Long getTimestamp() {
         return timestamp;
+    }
+
+    public boolean isAsynchronous() {
+        return asynchronous;
+    }
+
+    public void setAsynchronous(boolean asynchronous) {
+        this.asynchronous = asynchronous;
     }
 }

@@ -49,7 +49,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
             save();
             if (callback != null)
                 callback.call(item, ResultStatus.SUCCEEDED);
-        });
+        }, isAsynchronous());
     }
 
     @Override

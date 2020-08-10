@@ -85,6 +85,7 @@ public class TradeApplication extends Application {
 
     private void addExampleItems(User operator, String name, String description, Category category, int quantity, double price) {
         Command<Item> itemCommand = new AddItemToItemList(gatewayBundle, operator, ItemListType.INVENTORY);
+        itemCommand.setAsynchronous(false);
         itemCommand.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
 

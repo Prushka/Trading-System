@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.AdministrativeUser;
+import phase2.trade.view.ConfirmWindow;
 
 import java.beans.EventHandler;
 import java.net.URL;

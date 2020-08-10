@@ -8,14 +8,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.AddItemController;
@@ -26,12 +21,12 @@ import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AlterWillingness;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.user.RegularUser;
+import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.function.Consumer;
 
 public class ItemListController extends AbstractController implements Initializable {
 

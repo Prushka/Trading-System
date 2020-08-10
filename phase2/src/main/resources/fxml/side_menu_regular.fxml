@@ -5,17 +5,17 @@
 <?import javafx.scene.layout.StackPane?>
 <?import java.lang.String?>
 <?import javafx.scene.layout.VBox?>
-<VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
-           prefWidth="250" prefHeight="1000">
+<VBox styleClass="side-vbox" fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
+      prefWidth="250" prefHeight="1000">
     <styleClass>
         <String fx:value="side-menu"/>
     </styleClass>
     <VBox fx:id="userInfoBox"/>
     <JFXListView fx:id="sideList">
-        <Label fx:id="userInfo" styleClass="side-label">User Info</Label>
-        <Label fx:id="market" styleClass="side-label">Market</Label>
-        <Label fx:id="inventory" styleClass="side-label">Inventory</Label>
-        <Label fx:id="wishList" styleClass="side-label">Wishlist</Label>
-        <Label fx:id="settings" styleClass="side-label">Settings</Label>
+        <Label fx:id="userInfo">User Info</Label>
+        <Label fx:id="market">Market</Label>
+        <Label fx:id="inventory">Inventory</Label>
+        <Label fx:id="wishList">Wishlist</Label>
+        <Label fx:id="settings">Settings</Label>
     </JFXListView>
 </VBox>

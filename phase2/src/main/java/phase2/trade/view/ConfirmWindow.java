@@ -1,14 +1,10 @@
-package phase2.trade.controller;
+package phase2.trade.view;
 
-import com.jfoenix.animation.alert.JFXAlertAnimation;
-import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -17,13 +13,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ConfirmWindow {
-
-
-    @FXML
-    private JFXDialog dialog;
-
-    @FXML
-    private StackPane root;
 
     boolean answer;
 

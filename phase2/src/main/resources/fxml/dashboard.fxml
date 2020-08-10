@@ -32,10 +32,10 @@
             <center>
                 <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #ba8baf;" BorderPane.alignment="CENTER">
                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="10.0" left="10.0" right="20.0" top="10.0" />
                     </padding>
                <children>
-                  <JFXButton style="-fx-text-fill: WHITE;" onAction="#signOut" text="Sign Out" focusTraversable="false" textAlignment="CENTER" fx:id="signOutButton" />
+                  <JFXButton style="-fx-text-fill: WHITE;-fx-font-size: 18px" onAction="#signOut" text="Sign Out" focusTraversable="false" textAlignment="CENTER" fx:id="signOutButton" />
                </children>
                 </HBox>
             </center>

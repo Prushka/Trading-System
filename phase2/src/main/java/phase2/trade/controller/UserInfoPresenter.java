@@ -15,17 +15,15 @@ import java.util.ResourceBundle;
 
 public class UserInfoPresenter implements Initializable {
 
-    public Label userId = new Label("");
+    // the reason why they are initialized here is because many user info fxml share one presenter and some labels may not exist there
 
-    public Label userName = new Label("");
-
-    public Label email = new Label("");
-
-    public Label home = new Label("");
-
-    public Label bio = new Label("");
-
-    public Label currentStatus = new Label("");
+    public Label userId = new Label();
+    public Label userName = new Label();
+    public Label email = new Label();
+    public Label home = new Label();
+    public Label bio = new Label();
+    public Label currentStatus = new Label();
+    public Label permissionGroup = new Label();
 
     private final User user;
 
@@ -38,6 +36,7 @@ public class UserInfoPresenter implements Initializable {
         userId.setText("User Id: " + user.getUid());
         userName.setText("User Name: " + user.getUserName());
         email.setText("Email: " + user.getEmail());
+        permissionGroup.setText("PermissionGroup: " + user.getPermissionGroup());
         // address book + if user didnt input address
         // home.setText("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
         bio.setText("Bio: ");

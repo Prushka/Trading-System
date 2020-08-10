@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
@@ -38,9 +39,18 @@ public class TradeApplication extends Application {
         this.gatewayBundle = new GatewayBundle(entityBundle, configBundle);
     }
 
+    private void loadFont(String name) {
+        Font font = Font.loadFont(
+                this.getClass().getResource("/font/" + name + ".ttf").toExternalForm(),
+                10
+        );
+        System.out.println(font.getFamily());
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         // mockDashboard(primaryStage);
+        loadFont("RobotoM");
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
         login(primaryStage);
     }

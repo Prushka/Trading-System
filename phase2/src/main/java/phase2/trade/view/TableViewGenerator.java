@@ -1,10 +1,9 @@
-package phase2.trade.presenter;
+package phase2.trade.view;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import phase2.trade.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;

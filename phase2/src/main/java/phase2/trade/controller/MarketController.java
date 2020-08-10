@@ -59,7 +59,7 @@ public class MarketController  extends AbstractController implements Initializab
         super(gatewayBundle);
         this.currUser = currUser;
         // tc = new CreateTrade(gatewayBundle, (RegularUser) currUser);
-        tic = new TradeInfoController();
+        // tic = new TradeInfoController(gatewayBundle);
     }
 
     @Override

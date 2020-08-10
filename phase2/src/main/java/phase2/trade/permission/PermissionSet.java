@@ -26,8 +26,6 @@ public class PermissionSet {
     }
 
     public boolean hasPermission(Permission permission) {
-        System.out.println(permission);
-        System.out.println(getPerm().toString());
         return perm.contains(permission);
     }
 

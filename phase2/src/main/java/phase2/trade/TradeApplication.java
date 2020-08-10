@@ -15,6 +15,7 @@ import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
+import phase2.trade.user.CreateHeadIfNotExist;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;

@@ -16,6 +16,7 @@ public class UserFactory {
         User user;
         switch (permissionGroup) {
             case ADMIN:
+            case HEAD_ADMIN:
                 user = new AdministrativeUser(userName, email, password, country, city);
                 break;
 

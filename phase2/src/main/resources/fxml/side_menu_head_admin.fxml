@@ -14,13 +14,14 @@
     <VBox fx:id="userInfoBox"/>
     <JFXListView fx:id="sideList">
         <Label fx:id="userInfo">User Info</Label>
-        <Label fx:id="market">Market</Label>
-        <Label fx:id="inventory">Inventory</Label>
-        <Label fx:id="wishList">Wishlist</Label>
+        <Label fx:id="userManage">Manage Users</Label>
+        <Label fx:id="userOperation">User Operations</Label>
+        <Label fx:id="supportTicket">Support Tickets</Label>
+        <Label fx:id="itemReview">Review Items</Label>
         <Label fx:id="settings">Settings</Label>
     </JFXListView>
     <Region VBox.vgrow="ALWAYS"/>
-    <Separator />
+    <Separator/>
     <JFXListView fx:id="bottomSideList">
         <Label fx:id="exit">Exit</Label>
         <Label fx:id="signOut">Sign Out</Label>

@@ -19,8 +19,6 @@ public class CreateUser extends UserCommand<User> {
 
     public CreateUser(GatewayBundle gatewayBundle, User operator) {
         super(gatewayBundle, operator);
-        System.out.println(operator.getPermissionGroup());
-        System.out.println(operator.getPermissionSet().getPerm().toString());
     }
 
     public CreateUser() {

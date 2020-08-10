@@ -5,9 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.presenter.SceneManager;
-import phase2.trade.user.AccountManager;
 import phase2.trade.view.ConfirmWindow;
 import phase2.trade.view.CustomWindow;
 
@@ -40,8 +38,11 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        root.setLeft(getSceneFactory().loadPane("side_menu_" + getAccountManager().getPermissionGroup().name().toLowerCase() + ".fxml",
-                SideMenuController::new));
+        SideMenuController sideMenuController = new SideMenuController(getSceneManager());
+        sideMenuController.setCenter(center);
+        root.setLeft(getSceneManager().loadPane("side_menu_" + getAccountManager().getPermissionGroup().name().toLowerCase() + ".fxml",
+                sideMenuController));
+
     }
 
 }

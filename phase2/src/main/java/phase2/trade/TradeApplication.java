@@ -30,6 +30,8 @@ import java.io.IOException;
 
 public class TradeApplication extends Application {
 
+    private SceneManager sceneManager;
+
     private final GatewayBundle gatewayBundle;
 
     private final ShutdownHook shutdownHook;
@@ -39,17 +41,11 @@ public class TradeApplication extends Application {
         shutdownHook = new ShutdownHook();
 
         ConfigBundle configBundle = new ConfigBundle();
-
         DatabaseResourceBundle databaseResourceBundle = new DatabaseResourceBundle(configBundle.getDatabaseConfig());
-        EntityBundle entityBundle = databaseResourceBundle.getDaoBundle();
 
         shutdownHook.addShutdownable(databaseResourceBundle, configBundle);
 
-        this.gatewayBundle = new GatewayBundle(entityBundle, configBundle);
-    }
-
-    private void initializeGateway() {
-
+        gatewayBundle = new GatewayBundle(databaseResourceBundle.getDaoBundle(), configBundle);
     }
 
     private void loadFont(String name) {
@@ -64,6 +60,9 @@ public class TradeApplication extends Application {
     public void start(Stage primaryStage) {
         loadFont("OpenSans");
         loadFont("OpenSansM");
+
+        sceneManager = new SceneManager(gatewayBundle, primaryStage, new AccountManager(gatewayBundle));
+
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
 
@@ -73,9 +72,6 @@ public class TradeApplication extends Application {
     }
 
     private void login(Stage primaryStage) {
-
-        SceneManager sceneManager = new SceneManager(gatewayBundle, primaryStage, new AccountManager(gatewayBundle));
-
         sceneManager.switchScene("login.fxml",LoginController::new);
         primaryStage.setTitle("Trade");
         primaryStage.show();
@@ -93,12 +89,10 @@ public class TradeApplication extends Application {
     }
 
     private void mockDashboardRegister(Stage primaryStage) {
-        SceneManager sceneManager = new SceneManager(gatewayBundle, primaryStage, new AccountManager(gatewayBundle));
-
         sceneManager.getAccountManager().register((result, status) -> {
             Platform.runLater(() -> {
 
-                Parent dashboard = sceneManager.getSceneFactory().loadPane("dashboard.fxml", DashboardController::new);
+                Parent dashboard = sceneManager.loadPane("dashboard.fxml", DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");
@@ -111,12 +105,10 @@ public class TradeApplication extends Application {
     }
 
     private void mockDashboardLogin(Stage primaryStage) {
-        SceneManager sceneManager = new SceneManager(gatewayBundle, primaryStage, new AccountManager(gatewayBundle));
-
         sceneManager.getAccountManager().login((result, status) -> {
             Platform.runLater(() -> {
 
-                Parent dashboard = sceneManager.getSceneFactory().loadPane("dashboard.fxml", DashboardController::new);
+                Parent dashboard = sceneManager.loadPane("dashboard.fxml", DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");

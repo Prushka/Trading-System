@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
@@ -57,8 +58,23 @@ public class SceneManager {
         return window;
     }
 
-    public SceneFactory getSceneFactory() {
-        return sceneFactory;
+    public <T> T addPane(String fileName, ControllerSupplier<T> controller, Pane pane) {
+        T instantiated = controller.get(this);
+        pane.getChildren().addAll(sceneFactory.loadPane(fileName, instantiated));
+        return instantiated;
+    }
+
+    public void addPane(String fileName, Object controller, Pane pane) {
+        pane.getChildren().addAll(sceneFactory.loadPane(fileName, controller));
+    }
+
+
+    public Parent loadPane(String fileName, Object controller) {
+        return sceneFactory.loadPane(fileName, controller);
+    }
+
+    public <T> Parent loadPane(String fileName, ControllerSupplier<T> controller) {
+        return sceneFactory.loadPane(fileName, controller);
     }
 
     public AccountManager getAccountManager() {

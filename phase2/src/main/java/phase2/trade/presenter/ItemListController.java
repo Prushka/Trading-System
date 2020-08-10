@@ -43,6 +43,9 @@ public class ItemListController extends AbstractController implements Initializa
         super(sceneManager);
     }
 
+    public void setItemList(ItemList itemList) {
+        this.itemList = itemList;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -120,6 +123,6 @@ public class ItemListController extends AbstractController implements Initializa
 
     public void addWindow(ObservableList<Item> displayData) {
         AddItemController addItemController = new AddItemController(getGatewayBundle(), (RegularUser) itemList.getOwner(), itemList.getInventoryType(), displayData);
-        getSceneFactory().loadPane("add_item.fxml", addItemController);
+        getSceneManager().loadPane("add_item.fxml", addItemController);
     }
 }

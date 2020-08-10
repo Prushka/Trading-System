@@ -172,6 +172,6 @@ public class WishItemAddController extends AbstractController implements Initial
 
     public void addWindow(ObservableList<Item> displayData) {
         AddItemController addItemController = new AddItemController(gatewayBundle, user, itemListType, displayData);
-        getSceneFactory().loadPane("add_item.fxml", addItemController);
+        getSceneManager().loadPane("add_item.fxml", addItemController);
     }
 }

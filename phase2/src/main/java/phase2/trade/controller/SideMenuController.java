@@ -4,17 +4,14 @@ import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
+import phase2.trade.presenter.ControllerSupplier;
 import phase2.trade.presenter.ItemListController;
 import phase2.trade.presenter.MarketListController;
 import phase2.trade.presenter.SceneManager;
-import phase2.trade.user.AccountManager;
-import phase2.trade.user.RegularUser;
 import phase2.trade.view.ConfirmWindow;
 
 import java.net.URL;
@@ -37,51 +34,45 @@ public class SideMenuController extends AbstractController implements Initializa
         super(sceneManager);
     }
 
-    // TODO: drop down sub menu
-    private void userInfo() {
-        Parent userPane = getSceneFactory().loadPane("user_info.fxml", UserInfoPresenter::new);
-        center.getChildren().clear();
-        center.getChildren().addAll(userPane);
+    public void setCenter(VBox center) {
+        this.center = center;
     }
 
-    private void market() {
-        Parent userPane = getSceneFactory().loadPane("market_list.fxml", MarketController::new);
+    // TODO: drop down sub menu
+
+    private <T> void loadSide(String fileName, ControllerSupplier<T> supplier) {
         center.getChildren().clear();
-        center.getChildren().addAll(userPane);
+        getSceneManager().addPane(fileName, supplier, center);
     }
 
     private void inventory() {
-        Parent userPane = getSceneFactory().loadPane("item_list.fxml", ItemListController::new);
         center.getChildren().clear();
-        center.getChildren().addAll(userPane);
+        ItemListController controller = new ItemListController(getSceneManager());
+        controller.setItemList(getAccountManager().getLoggedInUser().getItemList(ItemListType.INVENTORY));
+        getSceneManager().addPane("item_list.fxml", controller, center);
     }
 
     private void wishList() {
-        Parent userPane = getSceneFactory().loadPane("add_wish.fxml", ItemListController::new);
         center.getChildren().clear();
-        center.getChildren().addAll(userPane);
-    }
-
-    private void userOperation() {
-        Parent userPane = getSceneFactory().loadPane("operation_list.fxml", UserOperationController::new);
-        center.getChildren().clear();
-        center.getChildren().addAll(userPane);
+        ItemListController controller = new ItemListController(getSceneManager());
+        controller.setItemList(getAccountManager().getLoggedInUser().getItemList(ItemListType.CART));
+        getSceneManager().addPane("item_list.fxml", controller, center);
     }
 
     // TODO: make a factory for this and extend for different users
     public void signOut() {
-        ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(),"Sign out", "Do you really want to sign out?");
+        ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(), "Sign out", "Do you really want to sign out?");
         bottomSideList.getSelectionModel().clearSelection();
         if (confirmWindow.display()) {
             getAccountManager().logOut();
-            getSceneManager().switchScene("login.fxml",LoginController::new);
+            getSceneManager().switchScene("login.fxml", LoginController::new);
         } else {
         }
     }
 
     // make a factory for this
     public void exit() {
-        ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(),"Exit", "Do you really want to exit?");
+        ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(), "Exit", "Do you really want to exit?");
         bottomSideList.getSelectionModel().clearSelection();
         if (confirmWindow.display()) {
             Platform.exit();
@@ -92,15 +83,15 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userInfoBox.getChildren().add(getSceneFactory().loadPane("user_info_side.fxml", UserInfoPresenter::new));
+        getSceneManager().addPane("user_info_side.fxml", UserInfoPresenter::new, userInfoBox);
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue.getId()) {
                     case "userInfo":
-                        userInfo();
+                        loadSide("user_info.fxml",UserInfoPresenter::new);
                         break;
                     case "market":
-                        market();
+                        loadSide("market_list.fxml",MarketListController::new);
                         break;
                     case "inventory":
                         inventory();
@@ -109,7 +100,7 @@ public class SideMenuController extends AbstractController implements Initializa
                         wishList();
                         break;
                     case "userOperation":
-                        userOperation();
+                        loadSide("user_info.fxml", UserOperationController::new);
                         break;
                 }
             }

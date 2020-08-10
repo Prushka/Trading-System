@@ -23,10 +23,6 @@ public abstract class AbstractController {
         popupFactory = new PopupFactory(window);
     }
 
-    public SceneFactory getSceneFactory() {
-        return sceneManager.getSceneFactory();
-    }
-
     public SceneManager getSceneManager() {
         return sceneManager;
     }

@@ -15,6 +15,8 @@
 
         <mapping class="phase2.trade.command.Command" />
         <mapping class="phase2.trade.item.command.ItemCommand" />
+        <mapping class="phase2.trade.item.command.GetItems" />
+        <mapping class="phase2.trade.item.command.GetMarketItems" />
         <mapping class="phase2.trade.item.command.AddItemToItemList" />
         <mapping class="phase2.trade.item.command.AlterItemInInventory" />
         <mapping class="phase2.trade.item.command.AlterWillingness" />

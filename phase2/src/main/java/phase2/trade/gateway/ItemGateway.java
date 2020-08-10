@@ -7,7 +7,5 @@ import java.util.List;
 public interface ItemGateway extends EntityGateway<Item> {
     List<Item> findByName(String itemName);
 
-    List<Item> findByCategory(String category);
-
-
+    List<Item> findMarketItems();
 }

@@ -30,7 +30,4 @@ public abstract class ItemCommand<T> extends Command<T>  {
         return item;
     }
 
-
-    @Override
-    public abstract PermissionSet getPermissionRequired();
 }

@@ -9,7 +9,7 @@ import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
-import phase2.trade.user.RegularUser;
+import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
@@ -20,13 +20,11 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
     private Long itemId;
 
-    private transient RegularUser operator;
 
-    public AddItemToItemList(GatewayBundle gatewayBundle, RegularUser operator,
+    public AddItemToItemList(GatewayBundle gatewayBundle, User operator,
                              ItemListType itemListType) {
         super(gatewayBundle, operator);
         this.itemListType = itemListType;
-        this.operator = operator;
     }
 
     public AddItemToItemList() {
@@ -41,7 +39,6 @@ public class AddItemToItemList extends ItemCommand<Item> {
             item.setDescription(args[1]);
             item.setCategory(Category.valueOf(args[2]));
             item.setItemList(operator.getItemList(itemListType));
-            item.setOwner(operator);
             operator.getItemList(itemListType).addItem(item);
             getEntityBundle().getUserGateway().update(operator);
             this.itemId = item.getUid();

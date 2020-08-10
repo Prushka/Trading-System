@@ -55,7 +55,7 @@ public abstract class Command<T> implements PermissionBased {
 
     public abstract void undo();
 
-    public abstract void redo(); // It seems we don't need to implement redo. Also redo may mess up the uid
+    public void redo(){} // It seems we don't need to implement redo. Also redo may mess up the uid
 
     public abstract CRUDType getCRUDType();
 

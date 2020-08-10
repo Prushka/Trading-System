@@ -4,38 +4,40 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import phase2.trade.callback.ResultStatus;
+import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.ItemList;
 import phase2.trade.item.Item;
-
-import javafx.scene.image.Image;
+import phase2.trade.item.command.GetMarketItems;
 import phase2.trade.view.NoSelectionModel;
+import phase2.trade.view.PopupWindow;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class MarketListController extends AbstractController implements Initializable {
 
-    private final ItemList itemList;
-
     public ListView<Pane> listView;
-
-    public VBox root;
 
     public JFXTextField searchName;
 
-    public MarketListController(GatewayBundle gatewayBundle, ItemList itemList) {
+    private Stage parent;
+
+    public MarketListController(GatewayBundle gatewayBundle, Stage parent) {
         super(gatewayBundle);
-        this.itemList = itemList;
+        this.parent = parent;
     }
 
     private List<String> populate(int count) {
@@ -98,22 +100,21 @@ public class MarketListController extends AbstractController implements Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listView.setSelectionModel(new NoSelectionModel<>());
-        for (Item item : itemList.getListOfItems()) {
+        Command<List<Item>> getMarket = new GetMarketItems(gatewayBundle, gatewayBundle.getSystem());
+        getMarket.execute((result, resultStatus) -> {
+            if (resultStatus == ResultStatus.NO_PERMISSION) {
+                PopupWindow popupWindow = new PopupWindow(parent, "Operation Not Allowed", "You do not have permission to perform such operation");
+                popupWindow.display();
+            } else {
+                for (Item item : result) {
 
-
-            for (int i = 0; i < 5; i++) {
-                listView.getItems().add(generateItemPreview(item));
+                    for (int i = 0; i < 5; i++) {
+                        listView.getItems().add(generateItemPreview(item));
+                    }
+                }
             }
-        }
-    }
+        });
 
-
-    private Set<Long> getItemIdsFrom(ObservableList<Item> observableList) {
-        Set<Long> ids = new HashSet<>();
-        for (Item item : observableList) {
-            ids.add(item.getUid());
-        }
-        return ids;
     }
 
 }

@@ -18,18 +18,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class ConfirmWindow {
+public class ConfirmWindow extends AlertWindow<Boolean> {
 
-    boolean answer;
+    public ConfirmWindow(Stage parent, String title, String header) {
+        super(parent, title, header);
+    }
 
-    public boolean display(String title, String message, Stage parent) {
-        JFXAlert alert = new JFXAlert(parent);
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.setOverlayClose(true);
-        alert.setAnimation(JFXAlertAnimation.NO_ANIMATION);
-        JFXDialogLayout layout = new JFXDialogLayout();
-        layout.setHeading(new Label(title));
-        layout.setBody(new Label(message));
+    private Boolean answer;
+
+    public Boolean display(String... args) {
         JFXButton yesButton = new JFXButton("Yes");
         JFXButton noButton = new JFXButton("No");
         yesButton.setOnAction(event -> {

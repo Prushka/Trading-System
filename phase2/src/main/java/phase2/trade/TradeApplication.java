@@ -8,14 +8,21 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import phase2.trade.callback.ResultStatus;
+import phase2.trade.command.Command;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.inventory.ItemListType;
+import phase2.trade.item.Category;
+import phase2.trade.item.Item;
+import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.CreateHeadIfNotExist;
+import phase2.trade.user.User;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
@@ -38,6 +45,10 @@ public class TradeApplication extends Application {
         shutdownHook.addShutdownable(databaseResourceBundle, configBundle);
 
         this.gatewayBundle = new GatewayBundle(entityBundle, configBundle);
+    }
+
+    private void initializeGateway() {
+
     }
 
     private void loadFont(String name) {
@@ -72,6 +83,16 @@ public class TradeApplication extends Application {
         primaryStage.show();
     }
 
+    private void addExampleItems(User operator, String name, String description, Category category) {
+        Command<Item> itemCommand = new AddItemToItemList(gatewayBundle, operator, ItemListType.INVENTORY);
+        itemCommand.execute((result, resultStatus) -> {
+            if (resultStatus == ResultStatus.NO_PERMISSION) {
+
+            } else {
+            }
+        }, name, description, category.name());
+    }
+
     private void mockDashboardRegister(Stage primaryStage) {
         SceneFactory sceneFactory = new SceneFactory();
         AccountManager accountManager = new AccountManager(gatewayBundle);
@@ -104,6 +125,8 @@ public class TradeApplication extends Application {
                 scene.getStylesheets().add("css/trade.css");
 
                 primaryStage.setScene(scene);
+
+                addExampleItems(accountManager.getLoggedInUser(), "Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE);
                 primaryStage.show();
             });
 

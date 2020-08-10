@@ -1,6 +1,8 @@
 package phase2.trade.user;
 
 import phase2.trade.address.AddressBook;
+import phase2.trade.inventory.ItemList;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
@@ -162,6 +164,10 @@ public abstract class User {
 
     public void setPermissionGroup(PermissionGroup permissionGroup) {
         this.permissionGroup = permissionGroup;
+    }
+
+    public ItemList getItemList(ItemListType itemListType) { // this should not happen!
+        throw new IllegalArgumentException("User: "+ userName + " is not a Regular User but is trying to get his/her ItemList");
     }
 }
 

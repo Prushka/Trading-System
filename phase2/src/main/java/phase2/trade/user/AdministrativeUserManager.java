@@ -150,7 +150,7 @@ public class AdministrativeUserManager {
      */
     public void confirmAddItemToInventory(RegularUser user, Item item) {
         List<Item> reviewItem = needToConfirmAddItem.get(user);
-        item.setOwner(user);
+        // item.setOwner(user);
         item.setOwnership(Ownership.OWNER);
         reviewItem.remove(item);
     }
@@ -163,7 +163,7 @@ public class AdministrativeUserManager {
     public void confirmAddAllItemForAUser(RegularUser user) {
         List<Item> reviewItem = needToConfirmAddItem.get(user);
         for (Item item : reviewItem) {
-            item.setOwner(user);
+            // item.setOwner(user);
             item.setOwnership(Ownership.OWNER);
             reviewItem.remove(item);
         }

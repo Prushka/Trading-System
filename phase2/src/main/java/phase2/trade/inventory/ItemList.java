@@ -21,9 +21,8 @@ public abstract class ItemList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
-    private List<Item> listOfItems = FXCollections.observableArrayList();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+    private List<Item> listOfItems = new ArrayList<>();
 
     @OneToOne
     private User owner;

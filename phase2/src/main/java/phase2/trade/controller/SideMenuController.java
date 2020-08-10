@@ -53,14 +53,13 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private void market() {
-        Parent userPane = getSceneFactory().loadPane("market_list.fxml", new MarketListController(gatewayBundle,
-                ((RegularUser) accountManager.getLoggedInUser()).getItemList(ItemListType.INVENTORY)));
+        Parent userPane = getSceneFactory().loadPane("market_list.fxml", new MarketListController(gatewayBundle,(Stage) bottomSideList.getScene().getWindow()));
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
 
     private void inventory() {
-        Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, ((RegularUser) accountManager.getLoggedInUser()).getItemList(ItemListType.INVENTORY)));
+        Parent userPane = getSceneFactory().loadPane("item_list.fxml", new ItemListController(gatewayBundle, accountManager.getLoggedInUser().getItemList(ItemListType.INVENTORY)));
         center.getChildren().clear();
         center.getChildren().addAll(userPane);
     }
@@ -79,9 +78,9 @@ public class SideMenuController extends AbstractController implements Initializa
 
     // TODO: make a factory for this and extend for different users
     public void signOut() {
-        ConfirmWindow confirmWindow = new ConfirmWindow();
+        ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(),"Sign out", "Do you really want to sign out?");
         bottomSideList.getSelectionModel().clearSelection();
-        if (confirmWindow.display("Sign out", "Do you really want to sign out?", (Stage) bottomSideList.getScene().getWindow())) {
+        if (confirmWindow.display()) {
             accountManager.logOut();
             getSceneFactory().switchScene("login.fxml", new LoginController(gatewayBundle, accountManager), center);
         } else {
@@ -90,9 +89,9 @@ public class SideMenuController extends AbstractController implements Initializa
 
     // make a factory for this
     public void exit() {
-        ConfirmWindow confirmWindow = new ConfirmWindow();
+        ConfirmWindow confirmWindow = new ConfirmWindow((Stage) bottomSideList.getScene().getWindow(),"Exit", "Do you really want to exit?");
         bottomSideList.getSelectionModel().clearSelection();
-        if (confirmWindow.display("Exit", "Do you really want to exit?", (Stage) bottomSideList.getScene().getWindow())) {
+        if (confirmWindow.display()) {
             Platform.exit();
         } else {
         }

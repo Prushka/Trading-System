@@ -13,9 +13,6 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToOne
-    private User owner;
-
     private String name;
     private String description;
     private Category category;
@@ -104,10 +101,6 @@ public class Item {
     }
 
     public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
+        return itemList.getOwner();
     }
 }

@@ -46,7 +46,7 @@ public class RegularUser extends User {
 
         this.accountBalance = 0;
 
-        setPermissionGroup(PermissionGroup.ADMIN);
+        setPermissionGroup(PermissionGroup.REGULAR);
     }
 
     public RegularUser() {

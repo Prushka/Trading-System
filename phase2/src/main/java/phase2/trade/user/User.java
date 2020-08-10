@@ -120,7 +120,7 @@ public abstract class User {
         this.point = point;
     }
 
-    public PermissionSet getUserPermission() {
+    public PermissionSet getPermissionSet() {
         return permissionSet;
     }
 
@@ -129,7 +129,7 @@ public abstract class User {
     }
 
     public boolean hasPermission(Permission permission) {
-        return true;
+        return getPermissionSet().hasPermission(permission);
     }
 
     public AddressBook getAddressBook() {

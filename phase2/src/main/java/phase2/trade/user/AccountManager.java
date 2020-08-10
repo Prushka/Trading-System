@@ -7,8 +7,8 @@ import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionGroupFactory;
+import phase2.trade.user.command.CreateUser;
 import phase2.trade.user.command.Login;
-import phase2.trade.user.command.Register;
 
 public class AccountManager {
 
@@ -16,13 +16,16 @@ public class AccountManager {
 
     private EntityBundle entityBundle;
 
-    private Login loginCommand;
+    private final Login loginCommand;
 
-    private Register registerCommand;
+    private final CreateUser registerCommand;
+
+    private final User system;
 
     public AccountManager(GatewayBundle gatewayBundle) {
-        this.loginCommand = new Login(gatewayBundle, new System());
-        this.registerCommand = new Register(gatewayBundle, new System());
+        system = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).configureSystemUser();
+        this.loginCommand = new Login(gatewayBundle, system);
+        this.registerCommand = new CreateUser(gatewayBundle, system);
     }
 
     public void login(StatusCallback<User> callback, String usernameOrEmail, String password) {
@@ -53,6 +56,6 @@ public class AccountManager {
         registerCommand.execute((result, status) -> {
             loggedInUser = result;
             callback.call(result, status);
-        }, userName, email, password, country, city);
+        }, userName, email, password, country, city, PermissionGroup.REGULAR.name());
     }
 }

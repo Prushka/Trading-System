@@ -17,6 +17,8 @@ public class PermissionConfig {
         defaultPermissions.put(PermissionGroup.ADMIN, new PermissionSet(Permission.CHANGE_THRESHOLD,
                 Permission.REVIEW_ITEM));
         defaultPermissions.put(PermissionGroup.GUEST, new PermissionSet(Permission.REMOVE_ITEM));
+
+        defaultPermissions.put(PermissionGroup.SYSTEM, new PermissionSet(Permission.CHANGE_THRESHOLD, Permission.CREATE_USER));
     }
 
     public Map<PermissionGroup, PermissionSet> getDefaultPermissions() {

@@ -6,6 +6,7 @@ import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
 
@@ -45,6 +46,7 @@ public abstract class Command<T> implements PermissionBased {
     public Command(GatewayBundle gatewayBundle, User operator) {
         this.gatewayBundle = gatewayBundle;
         this.effectedEntities = new HashMap<>();
+        this.operator = operator;
     }
 
     public Command() {
@@ -55,8 +57,6 @@ public abstract class Command<T> implements PermissionBased {
     public abstract void undo();
 
     public abstract void redo(); // It seems we don't need to implement redo. Also redo may mess up the uid
-
-    public abstract Class<?> getClassToOperateOn();
 
     public abstract CRUDType getCRUDType();
 
@@ -86,6 +86,7 @@ public abstract class Command<T> implements PermissionBased {
     }
 
     protected void save() {
+        if (operator.getPermissionGroup().equals(PermissionGroup.SYSTEM)) operator = null; // still the system user should be null
         timestamp = System.currentTimeMillis();
         effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
         getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().add(getThis()));
@@ -104,7 +105,7 @@ public abstract class Command<T> implements PermissionBased {
 
     public boolean checkPermission(StatusCallback<?> statusCallback) {
         boolean result = checkPermission();
-        if(!result){
+        if (!result) {
             statusCallback.call(null, ResultStatus.NO_PERMISSION);
         }
         return result;

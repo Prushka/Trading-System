@@ -38,11 +38,6 @@ public class Login extends UserCommand<User> {
     }
 
     @Override
-    public Class<?> getClassToOperateOn() {
-        return User.class;
-    }
-
-    @Override
     public CRUDType getCRUDType() {
         return CRUDType.READ;
     }

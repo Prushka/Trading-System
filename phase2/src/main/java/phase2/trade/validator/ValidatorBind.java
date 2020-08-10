@@ -35,7 +35,6 @@ public class ValidatorBind {
     }
 
     public boolean isAllPass() {
-        System.out.println(allPass);
         return allPass;
     }
 }

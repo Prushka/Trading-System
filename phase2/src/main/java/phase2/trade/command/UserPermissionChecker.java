@@ -10,16 +10,15 @@ public class UserPermissionChecker {
 
     private final PermissionSet permissionSet;
 
-    public UserPermissionChecker(User operator, PermissionSet permissionSet){
+    public UserPermissionChecker(User operator, PermissionSet permissionSet) {
         this.operator = operator;
         this.permissionSet = permissionSet;
     }
 
     public boolean checkPermission() {
-        boolean all = true;
         for (Permission permissionRequired : permissionSet.getPerm()) {
-            all = all && operator.hasPermission(permissionRequired);
+            if (!operator.hasPermission(permissionRequired)) return false;
         }
-        return all;
+        return true;
     }
 }

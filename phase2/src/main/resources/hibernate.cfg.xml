@@ -22,7 +22,7 @@
         <mapping class="phase2.trade.item.command.ReviewItem" />
 
         <mapping class="phase2.trade.user.command.UserCommand" />
-        <mapping class="phase2.trade.user.command.Register" />
+        <mapping class="phase2.trade.user.command.CreateUser" />
         <mapping class="phase2.trade.user.command.Login" />
 
         <mapping class="phase2.trade.address.Address" />
@@ -32,5 +32,6 @@
         <mapping class="phase2.trade.permission.PermissionSet" />
         <mapping class="phase2.trade.user.AdministrativeUser" />
         <mapping class="phase2.trade.user.RegularUser" />
+        <mapping class="phase2.trade.user.System" />
     </session-factory>
 </hibernate-configuration>

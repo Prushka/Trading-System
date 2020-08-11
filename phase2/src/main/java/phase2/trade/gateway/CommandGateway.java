@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface CommandGateway extends EntityGateway<Command> { // wildcard cannot be used here, since mapping would be impossible otherwise
+public interface CommandGateway extends EntityGateway<Command, CommandGateway> { // wildcard cannot be used here, since mapping would be impossible otherwise
 
     List<Command<?>> getFutureCommands(Long commandTimestamp);
 

@@ -4,7 +4,7 @@ import phase2.trade.user.User;
 
 import java.util.List;
 
-public interface UserGateway extends EntityGateway<User> {
+public interface UserGateway extends EntityGateway<User, UserGateway> {
     List<User> findMatches(String usernameOrEmail, String password);
 
     List<User> findByEmail(String email);

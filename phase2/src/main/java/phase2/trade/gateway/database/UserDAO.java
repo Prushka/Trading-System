@@ -6,7 +6,7 @@ import phase2.trade.user.User;
 
 import java.util.List;
 
-public class UserDAO extends DAO<User> implements UserGateway {
+public class UserDAO extends DAO<User, UserGateway> implements UserGateway {
 
     public UserDAO(DatabaseResourceBundle databaseResourceBundle) {
         super(User.class, databaseResourceBundle);
@@ -45,5 +45,9 @@ public class UserDAO extends DAO<User> implements UserGateway {
        return super.findAll();
     }
 
+    @Override
+    protected UserGateway getThis() {
+        return this;
+    }
 }
 

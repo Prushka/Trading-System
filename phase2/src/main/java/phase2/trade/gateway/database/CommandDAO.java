@@ -6,7 +6,7 @@ import phase2.trade.gateway.CommandGateway;
 
 import java.util.*;
 
-public class CommandDAO extends DAO<Command> implements CommandGateway {
+public class CommandDAO extends DAO<Command, CommandGateway> implements CommandGateway {
 
     public CommandDAO(DatabaseResourceBundle databaseResourceBundle) {
         super(Command.class, databaseResourceBundle);
@@ -18,5 +18,10 @@ public class CommandDAO extends DAO<Command> implements CommandGateway {
         query.setParameter("commandTimestamp", commandTimestamp);
         List<Command<?>> result = query.getResultList();
         return result;
+    }
+
+    @Override
+    protected CommandGateway getThis() {
+        return this;
     }
 }

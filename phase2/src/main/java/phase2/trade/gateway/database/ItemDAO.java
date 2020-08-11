@@ -7,7 +7,7 @@ import phase2.trade.item.Willingness;
 
 import java.util.List;
 
-public class ItemDAO extends DAO<Item> implements ItemGateway {
+public class ItemDAO extends DAO<Item, ItemGateway> implements ItemGateway {
 
 
     public ItemDAO(DatabaseResourceBundle resource) {
@@ -28,4 +28,8 @@ public class ItemDAO extends DAO<Item> implements ItemGateway {
         return query.list();
     }
 
+    @Override
+    protected ItemDAO getThis() {
+        return this;
+    }
 }

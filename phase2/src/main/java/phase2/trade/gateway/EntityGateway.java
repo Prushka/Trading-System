@@ -1,8 +1,9 @@
 package phase2.trade.gateway;
 
 import java.util.List;
+import java.util.function.Consumer;
 
-public interface EntityGateway<T> {
+public interface EntityGateway<T, S extends EntityGateway<T, S>> {
     void add(T entity);
 
     void update(T entity);
@@ -21,21 +22,21 @@ public interface EntityGateway<T> {
 
     void deleteAll();
 
-    // void submitSessionSync(Runnable runnable);
+    // void submitSessionSync(Consumer<EntityGateway<T>> consumer);
 
-    // void submitSessionWithTransactionSync(Runnable runnable);
+    // void submitSessionWithTransactionSync(Consumer<EntityGateway<T>> consumer);
 
-    // void submitSessionAsync(Runnable runnable);
+    // void submitSessionAsync(Consumer<EntityGateway<T>> consumer);
 
-    // void submitSessionWithTransactionAsync(Runnable runnable);
+    // void submitSessionWithTransactionAsync(Consumer<EntityGateway<T>> consumer);
 
-    void submitTransaction(Runnable runnable, boolean asynchronous);
+    void submitTransaction(Consumer<S> consumer, boolean asynchronous);
 
-    void submitSession(Runnable runnable, boolean asynchronous);
+    void submitSession(Consumer<S> consumer, boolean asynchronous);
 
-    void submitTransaction(Runnable runnable);
+    void submitTransaction(Consumer<S> consumer);
 
-    void submitSession(Runnable runnable);
+    void submitSession(Consumer<S> consumer);
 
     void openCurrentSessionWithTransaction();
 

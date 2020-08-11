@@ -10,7 +10,7 @@ import phase2.trade.user.User;
 
 import java.util.List;
 
-public class TradeDAO extends DAO<Trade> implements TradeGateway {
+public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
 
     public TradeDAO(DatabaseResourceBundle resource) {
         super(Trade.class, resource);
@@ -36,5 +36,10 @@ public class TradeDAO extends DAO<Trade> implements TradeGateway {
         query.setParameter("tradeState", TradeState.CLOSED);
         query.setParameter("currUser", currUser);
         return ((int) query.list().get(0));
+    }
+
+    @Override
+    protected TradeGateway getThis() {
+        return this;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
-public abstract class DAO<T> implements EntityGateway<T> {
+public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGateway<T, S> {
 
     private Session currentSession;
 
@@ -103,47 +103,49 @@ public abstract class DAO<T> implements EntityGateway<T> {
         }
     }
 
-    public void submit(Runnable runnable) {
-        getThreadPool().submit(runnable);
+    public void submit(Consumer<S> consumer) {
+        getThreadPool().submit(() -> consumer.accept(getThis()));
     }
 
-    private void submitSessionSync(Runnable runnable) {
+    private void submitSessionSync(Consumer<S> consumer) {
         openCurrentSession();
-        runnable.run();
+        consumer.accept(getThis());
         closeCurrentSession();
     }
 
-    private void submitTransactionSync(Runnable runnable) {
+    private void submitTransactionSync(Consumer<S> consumer) {
         openCurrentSessionWithTransaction();
-        runnable.run();
+        consumer.accept(getThis());
         closeCurrentSessionWithTransaction();
     }
 
-    public void submitSession(Runnable runnable, boolean asynchronous) {
-        if(asynchronous) {
-            getThreadPool().submit(() -> submitSessionSync(runnable));
-        }else{
-            submitSessionSync(runnable);
+    public void submitSession(Consumer<S> consumer, boolean asynchronous) {
+        if (asynchronous) {
+            getThreadPool().submit(() -> submitSessionSync(consumer));
+        } else {
+            submitSessionSync(consumer);
         }
     }
 
-    public void submitTransaction(Runnable runnable, boolean asynchronous) {
-        if(asynchronous) {
-            getThreadPool().submit(() -> submitTransactionSync(runnable));
-        }else{
-            submitTransactionSync(runnable);
+    public void submitTransaction(Consumer<S> consumer, boolean asynchronous) {
+        if (asynchronous) {
+            getThreadPool().submit(() -> submitTransactionSync(consumer));
+        } else {
+            submitTransactionSync(consumer);
         }
     }
 
     private final boolean async = false;
 
     @Override
-    public void submitTransaction(Runnable runnable) {
-        submitTransaction(runnable, async);
+    public void submitTransaction(Consumer<S> consumer) {
+        submitTransaction(consumer, async);
     }
 
     @Override
-    public void submitSession(Runnable runnable) {
-        submitSession(runnable, async);
+    public void submitSession(Consumer<S> consumer) {
+        submitSession(consumer, async);
     }
+
+    protected abstract S getThis();
 }

@@ -28,26 +28,19 @@ public class AlterWillingness extends ItemCommand<Item> {
 
     // private Willingness oldWillingness;
 
-    public AlterWillingness(Willingness newWillingness, Set<Long> itemIds) {
-        this.itemIds = itemIds;
-        this.newWillingness = newWillingness;
-    }
-
-    public AlterWillingness() {}
-
     @Override
     public void execute(StatusCallback<Item> callback, String... args) {
         if (!checkPermission(callback)) {
             return;
         }
-        getEntityBundle().getUserGateway().submitTransaction(() -> {
+        getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             Long[] ids = itemIds.toArray(new Long[0]);
             for (Item item : operator.getItemList(ItemListType.INVENTORY).getListOfItems()) {
                 if (itemIds.contains(item.getUid())) {
                     item.setWillingness(newWillingness);
                 }
             }
-            getEntityBundle().getUserGateway().update(operator);
+            gateway.update(operator);
             addEffectedEntity(Item.class, ids);
             save();
             if (callback != null)
@@ -58,5 +51,13 @@ public class AlterWillingness extends ItemCommand<Item> {
 
     @Override
     public void undo() {
+    }
+
+    public void setNewWillingness(Willingness newWillingness) {
+        this.newWillingness = newWillingness;
+    }
+
+    public void setItemIds(Set<Long> itemIds) {
+        this.itemIds = itemIds;
     }
 }

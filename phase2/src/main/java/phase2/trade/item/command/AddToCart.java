@@ -32,10 +32,10 @@ public class AddToCart extends ItemCommand<Item> {
             callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
-        getEntityBundle().getUserGateway().submitTransaction(() -> {
+        getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             Item item = findItemByIdSyncOutsideItemGateway(itemId);
             operator.getItemList(ItemListType.CART).addItem(item);
-            getEntityBundle().getUserGateway().update(operator);
+            gateway.update(operator);
             callback.call(item, ResultStatus.SUCCEEDED);
         });
     }

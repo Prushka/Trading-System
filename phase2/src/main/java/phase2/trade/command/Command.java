@@ -81,8 +81,8 @@ public abstract class Command<T> implements PermissionBased {
             callback.call(null, ResultStatus.FAILED);
             return;
         }
-        getEntityBundle().getCommandGateway().submitSession(() -> {
-            List<Command<?>> futureCommands = getEntityBundle().getCommandGateway().getFutureCommands(timestamp);
+        getEntityBundle().getCommandGateway().submitSession((gateway) -> {
+            List<Command<?>> futureCommands = gateway.getFutureCommands(timestamp);
             List<Command<?>> blockingCommands = new ArrayList<>();
             for (Command<?> command : futureCommands) {
                 if (command.commandPropertyAnnotation.crudType().hasEffect && ifOverlaps(command.effectedEntitiesToPersist)) {
@@ -110,14 +110,14 @@ public abstract class Command<T> implements PermissionBased {
             operator = null; // still the system user should be null
         timestamp = System.currentTimeMillis();
         effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
-        getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().add(getThis()));
+        getEntityBundle().getCommandGateway().submitTransaction((gateway) -> gateway.add(getThis()));
     }
 
     protected void updateUndo() {
         if (!commandPropertyAnnotation.persistent()) return;
         undoTimestamp = System.currentTimeMillis();
         ifUndone = true;
-        getEntityBundle().getCommandGateway().submitTransaction(() -> getEntityBundle().getCommandGateway().update(getThis()));
+        getEntityBundle().getCommandGateway().submitTransaction((gateway) -> gateway.update(getThis()));
     }
 
     @Override

@@ -18,7 +18,8 @@ public class GetCommands extends Command<List<Command>> {
         if (!checkPermission(callback)) {
             return;
         }
-        getEntityBundle().getCommandGateway().submitSession(() -> callback.call(getEntityBundle().getCommandGateway().findAll(), ResultStatus.SUCCEEDED));
+        getEntityBundle().getCommandGateway().submitSession((gateway) ->
+                callback.call(gateway.findAll(), ResultStatus.SUCCEEDED));
     }
 
 

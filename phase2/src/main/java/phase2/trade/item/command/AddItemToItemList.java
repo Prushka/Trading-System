@@ -25,7 +25,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) { // name, description, category, quantity, price
-        getEntityBundle().getUserGateway().submitTransaction(() -> {
+        getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             Item item = new Item();
             item.setName(args[0]);
             item.setDescription(args[1]);
@@ -35,7 +35,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
             item.setItemList(operator.getItemList(itemListType));
             operator.getItemList(itemListType).addItem(item);
-            getEntityBundle().getUserGateway().update(operator);
+            gateway.update(operator);
             this.itemId = item.getUid();
             addEffectedEntity(Item.class, itemId);
             save();
@@ -46,8 +46,8 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
     @Override
     public void undo() {
-        getEntityBundle().getItemGateway().submitTransaction(() -> {
-            getEntityBundle().getItemGateway().delete(itemId);
+        getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
+            gateway.delete(itemId);
             updateUndo();
         });
     }

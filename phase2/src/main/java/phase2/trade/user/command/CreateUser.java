@@ -24,12 +24,12 @@ public class CreateUser extends UserCommand<User> {
         if (!checkPermission(callback)) {
             return;
         }
-        getUserGateway().submitTransaction(() -> {
-            List<User> usersByName = getUserGateway().findByUserName(args[0]);
-            List<User> usersByEmail = getUserGateway().findByEmail(args[1]);
+        getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
+            List<User> usersByName = gateway.findByUserName(args[0]);
+            List<User> usersByEmail = gateway.findByEmail(args[1]);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).createByPermissionGroup(args[0], args[1], args[2], args[3], args[4], args[5]);
-                getUserGateway().add(user);
+                gateway.add(user);
                 userId = user.getUid();
                 addEffectedEntity(User.class, user.getUid());
                 save();

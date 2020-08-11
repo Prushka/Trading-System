@@ -12,8 +12,4 @@ import javax.persistence.Entity;
 public abstract class UserCommand<T extends User> extends Command<T> {
 
     public UserCommand() {}
-
-    protected UserGateway getUserGateway() {
-        return getEntityBundle().getUserGateway();
-    }
 }

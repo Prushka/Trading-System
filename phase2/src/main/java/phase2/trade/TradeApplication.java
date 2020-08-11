@@ -10,6 +10,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.Command;
+import phase2.trade.command.CommandFactory;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
 import phase2.trade.gateway.ConfigBundle;
@@ -27,6 +28,7 @@ import phase2.trade.user.User;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 public class TradeApplication extends Application {
 
@@ -66,7 +68,7 @@ public class TradeApplication extends Application {
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
 
-        new CreateHeadIfNotExist(gatewayBundle); // this is a use case class, is trade application a controller
+        new CreateHeadIfNotExist(sceneManager.getCommandFactory()); // this is a use case class, is trade application a controller
         // mockDashboardLogin(primaryStage);
         mockDashboardLogin(primaryStage);
     }
@@ -78,7 +80,7 @@ public class TradeApplication extends Application {
     }
 
     private void addExampleItems(User operator, String name, String description, Category category, int quantity, double price) {
-        Command<Item> itemCommand = new AddItemToItemList(gatewayBundle, operator, ItemListType.INVENTORY);
+        Command<Item> itemCommand = sceneManager.getCommandFactory().getCommand(AddItemToItemList::new, addItemToItemList -> addItemToItemList.setItemListType(ItemListType.INVENTORY));
         itemCommand.setAsynchronous(false);
         itemCommand.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {

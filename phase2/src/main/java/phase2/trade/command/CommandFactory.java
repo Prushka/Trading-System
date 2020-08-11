@@ -29,4 +29,13 @@ public class CommandFactory {
     public <T extends Command<?>> T getCommand(CommandSupplier<T> commandSupplier, Consumer<T> commandConsumer) {
         return this.getCommand(commandSupplier, commandConsumer, false);
     }
+
+    public <T extends Command<?>> T getCommand(CommandSupplier<T> commandSupplier, boolean useSystem) {
+        return this.getCommand(commandSupplier, t -> {}, useSystem);
+    }
+
+
+    public <T extends Command<?>> T getCommand(CommandSupplier<T> commandSupplier) {
+        return this.getCommand(commandSupplier,false);
+    }
 }

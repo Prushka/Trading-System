@@ -17,8 +17,8 @@ public class Login extends UserCommand<User> {
 
     @Override
     public void execute(StatusCallback<User> callback, String... args) {
-        getUserGateway().submitSession(() -> {
-            List<User> matchedUsers = getUserGateway().findMatches(args[0], args[1]);
+        getEntityBundle().getUserGateway().submitSession((gateway) -> {
+            List<User> matchedUsers = gateway.findMatches(args[0], args[1]);
             if (matchedUsers.size() > 0) {
                 User user = matchedUsers.get(0);
                 callback.call(user, ResultStatus.SUCCEEDED);

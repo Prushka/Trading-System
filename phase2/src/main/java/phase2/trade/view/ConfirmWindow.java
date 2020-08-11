@@ -24,7 +24,7 @@ public class ConfirmWindow extends AlertWindow<Boolean> {
         super(parent, title, header);
     }
 
-    private Boolean answer;
+    private Boolean answer = false;
 
     public Boolean display(String... args) {
         JFXButton yesButton = new JFXButton("Yes");

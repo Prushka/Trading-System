@@ -11,7 +11,9 @@ import javax.persistence.Entity;
 @Entity
 public abstract class TradeCommand<T> extends Command<T> {
 
-    Trade findTradeByIdSyncInsideTradeGateway(Long tradeId) { return getEntityBundle().getTradeGateway().findById(tradeId);}
+    Trade findTradeByIdSyncInsideTradeGateway(Long tradeId) {
+        return getEntityBundle().getTradeGateway().findById(tradeId);
+    }
 
     Trade findTradeByIdSyncOutsideTradeGateway(Long tradeId) {
         getEntityBundle().getTradeGateway().openCurrentSession();

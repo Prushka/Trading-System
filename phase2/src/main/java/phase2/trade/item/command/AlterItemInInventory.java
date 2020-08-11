@@ -19,10 +19,8 @@ public class AlterItemInInventory extends ItemCommand<Item> {
 
     private Long itemId;
 
-    public AlterItemInInventory(GatewayBundle gatewayBundle, User operator, Long itemId) {
-        super(gatewayBundle, operator);
+    public AlterItemInInventory( Long itemId) {
         this.itemId = itemId;
-        this.operator = operator;
     }
 
     public AlterItemInInventory() {}

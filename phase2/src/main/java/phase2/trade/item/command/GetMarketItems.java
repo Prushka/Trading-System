@@ -17,12 +17,6 @@ import java.util.List;
         persistent = false, permissionSet = {Permission.BROWSE_MARKET})
 public class GetMarketItems extends ItemCommand<List<Item>> {
 
-
-    public GetMarketItems(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle, operator);
-        this.operator = operator;
-    }
-
     public GetMarketItems() {}
 
     @Override

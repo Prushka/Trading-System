@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 public class Inventory extends ItemList {
 
     @Override
-    public ItemListType getInventoryType() {
+    public ItemListType getItemListType() {
         return ItemListType.INVENTORY;
     }
 

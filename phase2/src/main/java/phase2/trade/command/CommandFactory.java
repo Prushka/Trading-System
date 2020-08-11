@@ -5,6 +5,8 @@ import phase2.trade.user.AccountManager;
 import phase2.trade.user.User;
 import phase2.trade.user.UserFactory;
 
+import java.util.function.Consumer;
+
 public class CommandFactory {
 
     private final GatewayBundle gatewayBundle;
@@ -16,12 +18,15 @@ public class CommandFactory {
         this.accountManager = accountManager;
     }
 
-    public <T> T getCommand(CommandSupplier<T> commandSupplier, boolean useSystem) {
+    public <T extends Command<?>> T getCommand(CommandSupplier<T> commandSupplier, Consumer<T> commandConsumer, boolean useSystem) {
         User operator = useSystem ? new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).configureSystemUser() : accountManager.getLoggedInUser();
-        return commandSupplier.get(gatewayBundle, operator);
+        T command = commandSupplier.get();
+        command.injectByFactory(gatewayBundle, operator);
+        commandConsumer.accept(command);
+        return command;
     }
 
-    public <T> T getCommand(CommandSupplier<T> commandSupplier) {
-        return this.getCommand(commandSupplier,false);
+    public <T extends Command<?>> T getCommand(CommandSupplier<T> commandSupplier, Consumer<T> commandConsumer) {
+        return this.getCommand(commandSupplier, commandConsumer, false);
     }
 }

@@ -70,7 +70,7 @@ public class ItemListController extends AbstractController implements Initializa
             if (itemsSelected.size() == 0) return;
             deleteButton.setDisable(true);
 
-            Command<Long[]> remove = new RemoveItem(getGatewayBundle(), (RegularUser) itemList.getOwner(), itemList.getInventoryType(), getItemIdsFrom(itemsSelected)); // TODO: avoid casting
+            Command<Long[]> remove = new RemoveItem(itemListType, getItemIdsFrom(itemsSelected));
             remove.execute((result, resultStatus) -> {
                 Platform.runLater(() -> {
                     itemsSelected.forEach(displayData::remove);
@@ -97,7 +97,7 @@ public class ItemListController extends AbstractController implements Initializa
             ObservableList<Item> itemsSelected = getSelected();
             if (itemsSelected.size() == 0) return;
             button.setDisable(true);
-            Command<Item> command = new AlterWillingness(getGatewayBundle(), (RegularUser) itemList.getOwner(), willingness, getItemIdsFrom(itemsSelected));
+            Command<Item> command = new AlterWillingness(willingness, getItemIdsFrom(itemsSelected));
             command.execute((result, resultStatus) -> Platform.runLater(() -> {
                 itemsSelected.forEach(item -> item.setWillingness(willingness));
                 button.setDisable(false);

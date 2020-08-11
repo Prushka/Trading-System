@@ -28,14 +28,9 @@ public class AlterWillingness extends ItemCommand<Item> {
 
     // private Willingness oldWillingness;
 
-    private transient RegularUser operator;
-
-    public AlterWillingness(GatewayBundle gatewayBundle, RegularUser operator, Willingness newWillingness, Set<Long> itemIds) {
-        super(gatewayBundle, operator);
+    public AlterWillingness(Willingness newWillingness, Set<Long> itemIds) {
         this.itemIds = itemIds;
-        this.operator = operator;
         this.newWillingness = newWillingness;
-
     }
 
     public AlterWillingness() {}

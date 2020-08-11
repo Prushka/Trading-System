@@ -7,6 +7,7 @@ import phase2.trade.gateway.EntityGateway;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.function.Consumer;
 
 public abstract class DAO<T> implements EntityGateway<T> {
 

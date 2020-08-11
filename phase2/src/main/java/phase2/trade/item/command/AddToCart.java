@@ -19,12 +19,8 @@ public class AddToCart extends ItemCommand<Item> {
 
     private Long itemId;
 
-    private transient RegularUser operator;
-
-    public AddToCart(GatewayBundle gatewayBundle, RegularUser operator, Long itemId) {
-        super(gatewayBundle, operator);
+    public AddToCart(Long itemId) {
         this.itemId = itemId;
-        this.operator = operator;
         addEffectedEntity(Item.class, itemId);
     }
 

@@ -15,12 +15,6 @@ import java.util.List;
         persistent = false)
 public class Login extends UserCommand<User> {
 
-    public Login(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle, operator);
-    }
-
-    public Login() {}
-
     @Override
     public void execute(StatusCallback<User> callback, String... args) {
         getUserGateway().submitSession(() -> {

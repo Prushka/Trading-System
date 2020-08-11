@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 @Entity
 public class Cart extends ItemList {
     @Override
-    public ItemListType getInventoryType() {
+    public ItemListType getItemListType() {
         return ItemListType.CART;
     }
 }

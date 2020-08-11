@@ -53,15 +53,14 @@ public abstract class Command<T> implements PermissionBased {
 
     private transient CommandProperty commandPropertyAnnotation;
 
-    public Command(GatewayBundle gatewayBundle, User operator) {
-        this();
+    void injectByFactory(GatewayBundle gatewayBundle, User operator) {
         this.gatewayBundle = gatewayBundle;
-        this.effectedEntities = new HashMap<>();
         this.operator = operator;
     }
 
     public Command() {
         loadAnnotation();
+        this.effectedEntities = new HashMap<>();
     }
 
     public void loadAnnotation() {

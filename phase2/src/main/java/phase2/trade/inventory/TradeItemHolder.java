@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 public class TradeItemHolder extends ItemList {
 
     @Override
-    public ItemListType getInventoryType() {
+    public ItemListType getItemListType() {
         return ItemListType.TRADE_ITEM_HOLDER;
     }
 }

@@ -19,12 +19,6 @@ public class CreateUser extends UserCommand<User> {
 
     private Long userId;
 
-    public CreateUser(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle, operator);
-    }
-
-    public CreateUser() {}
-
     @Override
     public void execute(StatusCallback<User> callback, String... args) { // username, email, password, permission_group
         if (!checkPermission(callback)) {

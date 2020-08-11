@@ -67,7 +67,7 @@ public abstract class ItemList {
         return listOfItems.size();
     }
 
-    public abstract ItemListType getInventoryType();
+    public abstract ItemListType getItemListType();
 
     public void removeItem(Item... items) {
         for (Item item : items) {

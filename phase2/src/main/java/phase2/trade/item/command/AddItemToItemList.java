@@ -3,6 +3,7 @@ package phase2.trade.item.command;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandData;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
@@ -21,16 +22,6 @@ public class AddItemToItemList extends ItemCommand<Item> {
     private ItemListType itemListType;
 
     private Long itemId;
-
-    public AddItemToItemList(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle, operator);
-    }
-
-    public AddItemToItemList() {}
-
-    public void setItemListType(ItemListType itemListType) {
-        this.itemListType = itemListType;
-    }
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) { // name, description, category, quantity, price
@@ -59,5 +50,9 @@ public class AddItemToItemList extends ItemCommand<Item> {
             getEntityBundle().getItemGateway().delete(itemId);
             updateUndo();
         });
+    }
+
+    public void setItemListType(ItemListType itemListType) {
+        this.itemListType = itemListType;
     }
 }

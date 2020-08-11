@@ -22,8 +22,7 @@ public class ReviewItem extends ItemCommand<Item> {
 
     private Ownership oldOwnership;
 
-    public ReviewItem(GatewayBundle gatewayBundle, User operator, Long itemId) {
-        super(gatewayBundle, operator);
+    public ReviewItem(Long itemId) {
         this.itemId = itemId;
     }
 

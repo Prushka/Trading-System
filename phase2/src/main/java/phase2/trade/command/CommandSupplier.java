@@ -4,7 +4,8 @@ import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.User;
 
 @FunctionalInterface
-public interface CommandSupplier<T> {
+public interface CommandSupplier<T extends Command<?>> {
 
-    T get(GatewayBundle gatewayBundle, User operator);
+    T get();
+    // hmm
 }

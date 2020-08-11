@@ -21,9 +21,7 @@ public class GetItems extends ItemCommand<ItemList> {
 
     private ItemListType itemListType;
 
-    public GetItems(GatewayBundle gatewayBundle, RegularUser operator, ItemListType itemListType) {
-        super(gatewayBundle, operator);
-        this.operator = operator;
+    public GetItems(ItemListType itemListType) {
         this.itemListType = itemListType;
     }
 

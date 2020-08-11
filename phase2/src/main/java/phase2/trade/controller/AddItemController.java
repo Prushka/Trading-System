@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class AddItemController extends AbstractController implements Initializable {
@@ -49,8 +50,9 @@ public class AddItemController extends AbstractController implements Initializab
 
     public void submitItem(ActionEvent actionEvent) {
         submitButton.setDisable(true);
-        AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new, false);
-        itemCommand.setItemListType(itemListType);
+        AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new,
+                command -> command.setItemListType(itemListType));
+
         itemCommand.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
                 System.out.println("nor permission");

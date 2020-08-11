@@ -11,10 +11,6 @@ import javax.persistence.Entity;
 @Entity
 public abstract class ItemCommand<T> extends Command<T>  {
 
-    public ItemCommand(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle, operator);
-    }
-
     public ItemCommand() {}
 
     Item findItemByIdSyncInsideItemGateway(Long itemId) {

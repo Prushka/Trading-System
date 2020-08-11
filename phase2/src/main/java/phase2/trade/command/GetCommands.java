@@ -13,14 +13,6 @@ import java.util.List;
 @CommandProperty(crudType = CRUDType.READ, undoable = false, persistent = false, permissionSet = {Permission.BROWSE_USER_OPERATIONS})
 public class GetCommands extends Command<List<Command>> {
 
-    public GetCommands(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle, operator);
-        this.operator = operator;
-    }
-
-    public GetCommands() {
-    }
-
     @Override
     public void execute(StatusCallback<List<Command>> callback, String... args) {
         if (!checkPermission(callback)) {

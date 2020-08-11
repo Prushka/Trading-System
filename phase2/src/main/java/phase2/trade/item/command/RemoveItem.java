@@ -24,22 +24,16 @@ public class RemoveItem extends ItemCommand<Long[]> {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> itemIds;
 
-    private transient RegularUser operator;
-
     private Ownership oldOwnership;
 
     private ItemListType itemListType;
 
-    public RemoveItem(GatewayBundle gatewayBundle, RegularUser operator, ItemListType itemListType, Set<Long> itemIds) {
-        super(gatewayBundle, operator);
+    public RemoveItem(ItemListType itemListType, Set<Long> itemIds) {
         this.itemIds = itemIds;
-        this.operator = operator;
         this.itemListType = itemListType;
     }
 
-    public RemoveItem() {
-        super();
-    }
+    public RemoveItem() {}
 
     @Override
     public void execute(StatusCallback<Long[]> callback, String... args) {

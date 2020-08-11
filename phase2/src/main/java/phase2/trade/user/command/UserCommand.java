@@ -11,10 +11,6 @@ import javax.persistence.Entity;
 @Entity
 public abstract class UserCommand<T extends User> extends Command<T> {
 
-    public UserCommand(GatewayBundle gatewayBundle, User operator) {
-        super(gatewayBundle, operator);
-    }
-
     public UserCommand() {}
 
     protected UserGateway getUserGateway() {

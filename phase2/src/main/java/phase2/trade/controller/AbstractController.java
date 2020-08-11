@@ -25,10 +25,6 @@ public abstract class AbstractController {
         return sceneManager.getAccountManager();
     }
 
-    protected GatewayBundle getGatewayBundle() {
-        return sceneManager.getGatewayBundle();
-    }
-
     protected PopupFactory getPopupFactory() {
         return sceneManager.getPopupFactory();
     }

@@ -1,45 +1,7 @@
 package phase2.trade.controller;
 
-import com.jfoenix.controls.JFXButton;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.command.Command;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.ItemListType;
-import phase2.trade.item.Category;
-import phase2.trade.item.Item;
-import phase2.trade.item.Willingness;
-import phase2.trade.item.command.AddItemToItemList;
-import phase2.trade.item.command.AlterWillingness;
-import phase2.trade.item.command.GetItems;
-import phase2.trade.item.command.RemoveItem;
-import phase2.trade.presenter.SceneManager;
-import phase2.trade.user.RegularUser;
-import phase2.trade.user.User;
-
-import java.net.URL;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.stream.Stream;
-
-public class WishItemAddController extends AbstractController implements Initializable {
+public class WishItemAddController {
+    /*
     private ItemListType itemListType;
     private RegularUser user;
 
@@ -51,8 +13,8 @@ public class WishItemAddController extends AbstractController implements Initial
 
     private GatewayBundle gatewayBundle;
 
-    public WishItemAddController(SceneManager sceneManager) {
-        super(sceneManager);
+    public WishItemAddController(ControllerResources controllerResources) {
+        super(controllerResources);
     }
 
     private TableColumn<Item, String> getTableColumn(String name, String fieldName) {
@@ -173,5 +135,5 @@ public class WishItemAddController extends AbstractController implements Initial
     public void addWindow(ObservableList<Item> displayData) {
         // AddItemController addItemController = new AddItemController(gatewayBundle, user, itemListType, displayData);
         // getSceneManager().loadPane("add_item.fxml", addItemController);
-    }
+    }*/
 }

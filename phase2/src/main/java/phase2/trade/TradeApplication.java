@@ -18,7 +18,7 @@ import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
-import phase2.trade.presenter.ControllerResources;
+import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.CreateHeadIfNotExist;
 import phase2.trade.user.User;
@@ -67,7 +67,7 @@ public class TradeApplication extends Application {
     }
 
     private void login(Stage primaryStage) {
-        controllerResources.switchScene("login.fxml", LoginController::new);
+        controllerResources.getSceneManager().switchScene("login.fxml", LoginController::new);
         primaryStage.setTitle("Trade");
         primaryStage.show();
     }
@@ -87,7 +87,7 @@ public class TradeApplication extends Application {
         controllerResources.getAccountManager().register((result, status) -> {
             Platform.runLater(() -> {
 
-                Parent dashboard = controllerResources.loadPane("dashboard.fxml", DashboardController::new);
+                Parent dashboard = controllerResources.getSceneManager().loadPane("dashboard.fxml", DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");
@@ -103,7 +103,7 @@ public class TradeApplication extends Application {
         controllerResources.getAccountManager().login((result, status) -> {
             Platform.runLater(() -> {
 
-                Parent dashboard = controllerResources.loadPane("dashboard.fxml", DashboardController::new);
+                Parent dashboard = controllerResources.getSceneManager().loadPane("dashboard.fxml", DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");

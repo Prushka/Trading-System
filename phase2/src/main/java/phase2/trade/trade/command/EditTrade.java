@@ -22,32 +22,21 @@ import java.time.LocalDateTime;
 public class EditTrade extends TradeCommand<Trade> {
     private Long tradeId;
 
-    private transient final TradeGateway tradeGateway;
-
-    private Integer editLimit;
-
     private transient TradeEditor te;
-
-    public EditTrade(GatewayBundle gatewayBundle, RegularUser operator, Long tradeId, int editLimit){
-        super(gatewayBundle, operator);
-        this.tradeGateway = gatewayBundle.getEntityBundle().getTradeGateway();
-        this.editLimit = editLimit;
-        te = new TradeEditor(editLimit);
-        this.tradeId = tradeId;
-    }
 
     @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
         // TO DO: Implement cancelling after limit
+        te = new TradeEditor(getConfigBundle().getTradeConfig().getEditLimit());
         if (!checkPermission()) {
             callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
-        getEntityBundle().getTradeGateway().submitTransaction(() -> {
+        getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade currTrade = findTradeByIdSyncOutsideTradeGateway(tradeId);
             getEntityBundle().getUserGateway().update(operator);
             Trade trade = te.edit(currTrade, operator, args);
-            tradeGateway.update(trade);
+            gateway.update(trade);
             this.tradeId = trade.getUid();
             callback.call(trade, ResultStatus.SUCCEEDED);
         });
@@ -55,9 +44,13 @@ public class EditTrade extends TradeCommand<Trade> {
 
     @Override
     public void undo() {
-        getEntityBundle().getTradeGateway().submitTransaction(() -> {
-            getEntityBundle().getTradeGateway().delete(tradeId);
+        getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
+            gateway.delete(tradeId);
             updateUndo();
         });
+    }
+
+    public void setTradeId(Long tradeId) {
+        this.tradeId = tradeId;
     }
 }

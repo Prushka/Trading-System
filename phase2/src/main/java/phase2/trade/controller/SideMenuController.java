@@ -10,7 +10,6 @@ import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.ControllerSupplier;
 import phase2.trade.presenter.ItemListController;
 import phase2.trade.presenter.MarketListController;
-import phase2.trade.presenter.SceneManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,8 +27,8 @@ public class SideMenuController extends AbstractController implements Initializa
     private VBox center;
 
     //, VBox center, VBox right
-    public SideMenuController(SceneManager sceneManager) {
-        super(sceneManager);
+    public SideMenuController(ControllerResources controllerResources) {
+        super(controllerResources);
     }
 
     public void setCenter(VBox center) {
@@ -45,13 +44,13 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private void inventory() {
         center.getChildren().clear();
-        ItemListController controller = new ItemListController(getSceneManager(), ItemListType.INVENTORY);
+        ItemListController controller = new ItemListController(getControllerResources(), ItemListType.INVENTORY);
         getSceneManager().addPane("item_list.fxml", controller, center);
     }
 
     private void wishList() {
         center.getChildren().clear();
-        ItemListController controller = new ItemListController(getSceneManager(), ItemListType.INVENTORY);
+        ItemListController controller = new ItemListController(getControllerResources(), ItemListType.INVENTORY);
         getSceneManager().addPane("item_list.fxml", controller, center);
     }
 

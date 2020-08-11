@@ -15,6 +15,7 @@ import javafx.scene.layout.*;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
+import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetMarketItems;
 import phase2.trade.view.NoSelectionModel;
@@ -30,8 +31,8 @@ public class MarketListController extends AbstractController implements Initiali
 
     public JFXTextField searchName;
 
-    public MarketListController(SceneManager sceneManager) {
-        super(sceneManager);
+    public MarketListController(ControllerResources controllerResources) {
+        super(controllerResources);
     }
 
     private List<String> populate(int count) {
@@ -95,7 +96,7 @@ public class MarketListController extends AbstractController implements Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listView.setSelectionModel(new NoSelectionModel<>());
-        Command<List<Item>> getMarket = new GetMarketItems(getGatewayBundle(),getAccountManager().getLoggedInUser());
+        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
 
         getMarket.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {

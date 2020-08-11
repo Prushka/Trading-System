@@ -9,9 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import phase2.trade.callback.ResultStatus;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.presenter.SceneManager;
-import phase2.trade.user.AccountManager;
 import phase2.trade.validator.ValidatorBind;
 import phase2.trade.validator.ValidatorType;
 
@@ -28,8 +25,8 @@ public class RegisterController extends AbstractController implements Initializa
 
     public JFXButton registerButton;
 
-    public RegisterController(SceneManager sceneManager) {
-        super(sceneManager);
+    public RegisterController(ControllerResources controllerResources) {
+        super(controllerResources);
     }
 
     public void registerButtonClicked(ActionEvent actionEvent) {

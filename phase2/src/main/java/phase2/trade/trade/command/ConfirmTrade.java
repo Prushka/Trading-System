@@ -24,28 +24,21 @@ public class ConfirmTrade extends TradeCommand<Trade> {
 
     private Long tradeId;
 
-    private final TradeGateway tradeGateway;
-
     private TradeConfirmer tcc;
-
-    public ConfirmTrade(GatewayBundle gatewayBundle, RegularUser operator, Long tradeId, Integer timeLimit) {
-        super(gatewayBundle, operator);
-        this.tradeGateway = gatewayBundle.getEntityBundle().getTradeGateway();
-        tcc = new TradeConfirmer(timeLimit);
-    }
 
     @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
+        tcc = new TradeConfirmer(getConfigBundle().getTradeConfig().getTimeLimit());
         if (!checkPermission()) {
             callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
-        getEntityBundle().getTradeGateway().submitTransaction(() -> {
+        getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade currTrade = findTradeByIdSyncOutsideTradeGateway(tradeId);
             Trade trade = tcc.confirmTrade(currTrade, operator);
             if (callback != null)
                 callback.call(trade, ResultStatus.SUCCEEDED);
-            getEntityBundle().getTradeGateway().update(trade);
+            gateway.update(trade);
         });
     }
 

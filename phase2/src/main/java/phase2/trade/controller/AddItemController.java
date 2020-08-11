@@ -13,20 +13,14 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import phase2.trade.callback.ResultStatus;
-import phase2.trade.command.Command;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
-import phase2.trade.presenter.SceneManager;
-import phase2.trade.user.RegularUser;
 
 import java.net.URL;
 import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class AddItemController extends AbstractController implements Initializable {
@@ -42,8 +36,8 @@ public class AddItemController extends AbstractController implements Initializab
 
     private Stage window;
 
-    public AddItemController(SceneManager sceneManager, ItemListType itemListType, ObservableList<Item> display) {
-        super(sceneManager);
+    public AddItemController(ControllerResources controllerResources, ItemListType itemListType, ObservableList<Item> display) {
+        super(controllerResources);
         this.itemListType = itemListType;
         this.display = display;
     }

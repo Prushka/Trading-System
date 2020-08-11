@@ -3,36 +3,22 @@ package phase2.trade.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import com.sun.deploy.panel.TextFieldProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
-import phase2.trade.presenter.SceneManager;
-import phase2.trade.trade.Trade;
 import phase2.trade.trade.command.CreateTrade;
 import phase2.trade.trade.command.TradeCommand;
-import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
-import javax.swing.text.LabelView;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +59,9 @@ public class TradeInfoController extends AbstractController  implements Initiali
     private JFXButton tradeButton;
     private JFXComboBox<String> isPermanent;
 
-    public TradeInfoController(SceneManager sceneManager){
-        super(sceneManager);
-        tc = new CreateTrade(getGatewayBundle(), getAccountManager().getLoggedInUser());
+    public TradeInfoController(ControllerResources controllerResources){
+        super(controllerResources);
+        tc = getCommandFactory().getCommand(CreateTrade::new);
     }
 
     @Override

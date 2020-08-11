@@ -1,19 +1,14 @@
-import org.hibernate.cfg.Configuration;
 import org.junit.Test;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.ConfigBundle;
-import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.AlterItemInInventory;
-import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
-import phase2.trade.gateway.UserGateway;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetItems;
 import phase2.trade.user.AccountManager;
@@ -25,24 +20,22 @@ import java.util.logging.Level;
 
 public class CommandTest {
 
-    private final GatewayBundle bundle;
+    private final GatewayBundle gatewayBundle;
 
-    private final EntityBundle entityBundle;
-
-    private final UserGateway userGateway;
+    private final CommandFactory commandFactory;
 
     public CommandTest() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
         ConfigBundle configBundle = new ConfigBundle();
-        bundle = new GatewayBundle(new DatabaseResourceBundle(configBundle.getDatabaseConfig()).getDaoBundle(), new ConfigBundle());
-        entityBundle = bundle.getEntityBundle();
-        userGateway = bundle.getEntityBundle().getUserGateway();
+        gatewayBundle = new GatewayBundle(new DatabaseResourceBundle(configBundle.getDatabaseConfig()).getDaoBundle(), new ConfigBundle());
+
+        AccountManager accountManager = new AccountManager(gatewayBundle);
+        commandFactory = new CommandFactory(gatewayBundle, accountManager);
     }
 
     private void save() {
-
-        userGateway.submitSession(() -> userGateway.add(regularUser));
+        gatewayBundle.getEntityBundle().getUserGateway().submitSession((gateway) -> gateway.add(regularUser));
     }
 
     RegularUser regularUser = new RegularUser("name", "email", "password", "country", "city");
@@ -50,13 +43,11 @@ public class CommandTest {
     @Test
     public void testCommand() {
         save();
-        AccountManager accountManager = new AccountManager(bundle);
-        CommandFactory commandFactory = new CommandFactory(bundle, accountManager);
         Command<Item> addItem = commandFactory.getCommand(AddItemToItemList::new);
 
         addItem.execute(null, "testName", "testDescription", "MOVIE");
 
-        Command<Item> alterItem = new AlterItemInInventory(bundle, regularUser, 1L);
+        Command<Item> alterItem = commandFactory.getCommand(AlterItemInInventory::new, c -> {c.setItemId(1L);});
         alterItem.execute(null, "testName2", "testDescription2", "MOVIE");
     }
 
@@ -64,7 +55,7 @@ public class CommandTest {
     @Test
     public void testItemCommands() {
         testCommand();
-        Command<ItemList> getInventory = new GetItems(bundle, regularUser, ItemListType.INVENTORY);
+        Command<ItemList> getInventory = commandFactory.getCommand(GetItems::new);
         getInventory.execute(new StatusCallback<ItemList>() {
             @Override
             public void call(ItemList result, ResultStatus resultStatus) {
@@ -77,11 +68,11 @@ public class CommandTest {
     public void testUndo() {
         testCommand();
         final Command<?> command;
-        entityBundle.getCommandGateway().openCurrentSession();
-        command = entityBundle.getCommandGateway().findById(1L);
-        entityBundle.getCommandGateway().closeCurrentSession();
+        gatewayBundle.getEntityBundle().getCommandGateway().openCurrentSession();
+        command = gatewayBundle.getEntityBundle().getCommandGateway().findById(1L);
+        gatewayBundle.getEntityBundle().getCommandGateway().closeCurrentSession();
 
-        command.setGatewayBundle(bundle);
+        command.setGatewayBundle(gatewayBundle);
         command.isUndoable((result, status) -> {
             assertEquals(1, result.size());
             // assertEquals(result.get(0).getCRUDType(), CRUDType.UPDATE);

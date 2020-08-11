@@ -19,26 +19,19 @@ import java.util.ArrayList;
 @Entity
 public class CreateTrade extends TradeCommand<Trade>{
 
-    private final TradeGateway tradeGateway;
-
-    private TradeCreator tc;
-
-    public CreateTrade(GatewayBundle gatewayBundle, User operator){
-        super(gatewayBundle, operator);
-        this.tradeGateway = gatewayBundle.getEntityBundle().getTradeGateway();
-        tc = new TradeCreator();
-    }
+    private transient TradeCreator tc;
 
     @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
+        tc = new TradeCreator();
         if (!checkPermission()) {
             callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
-        getEntityBundle().getTradeGateway().submitTransaction(() -> {
+        getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade newTrade = tc.createTrade(new ArrayList<>(), new ArrayList<>(), args[0], args[1], args[2], args[3],
                     args[4], args[5], args[6], args[7], args[8], args[9]);
-            tradeGateway.add(newTrade);
+            gateway.add(newTrade);
             if (callback != null)
                 callback.call(newTrade, ResultStatus.SUCCEEDED);
         });

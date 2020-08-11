@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import phase2.trade.presenter.SceneManager;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,8 +21,8 @@ public class AdminSideMenuController extends AbstractController implements Initi
     public JFXPanel panel = new JFXPanel();
     private VBox center;
 
-    public AdminSideMenuController(SceneManager sceneManager) {
-        super(sceneManager);
+    public AdminSideMenuController(ControllerResources controllerResources) {
+        super(controllerResources);
         // this.center = center;
         // this.right = right;
     }

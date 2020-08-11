@@ -34,12 +34,12 @@ public class ReviewItem extends ItemCommand<Item> {
             callback.call(null, ResultStatus.NO_PERMISSION);
             return;
         }
-        getEntityBundle().getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             Item item = findItemByIdSyncInsideItemGateway(itemId);
 
             oldOwnership = item.getOwnership();
             item.setOwnership(Ownership.OWNER);
-            getEntityBundle().getItemGateway().update(item);
+            gateway.update(item);
             addEffectedEntity(Item.class, itemId);
             save();
             if (callback != null)
@@ -49,7 +49,7 @@ public class ReviewItem extends ItemCommand<Item> {
 
     @Override
     public void undo() {
-        getEntityBundle().getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             Item item = findItemByIdSyncInsideItemGateway(itemId);
             item.setOwnership(oldOwnership);
             updateUndo();

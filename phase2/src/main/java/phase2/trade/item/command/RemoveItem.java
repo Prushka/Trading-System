@@ -40,10 +40,10 @@ public class RemoveItem extends ItemCommand<Long[]> {
         if (!checkPermission(callback)) {
             return;
         }
-        getEntityBundle().getUserGateway().submitTransaction(() -> {
+        getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             Long[] ids = itemIds.toArray(new Long[0]);
             operator.getItemList(itemListType).removeItemByUid(ids);
-            getEntityBundle().getUserGateway().update(operator);
+            gateway.update(operator);
             addEffectedEntity(Item.class, ids);
             save();
             if (callback != null)
@@ -53,7 +53,7 @@ public class RemoveItem extends ItemCommand<Long[]> {
 
     @Override
     public void undo() {
-        getEntityBundle().getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             updateUndo();
         });
     }

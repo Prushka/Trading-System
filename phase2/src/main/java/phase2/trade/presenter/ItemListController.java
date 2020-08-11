@@ -8,27 +8,23 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.AddItemController;
-import phase2.trade.inventory.ItemList;
+import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AlterWillingness;
 import phase2.trade.item.command.RemoveItem;
-import phase2.trade.user.RegularUser;
 import phase2.trade.view.TableViewGenerator;
-import phase2.trade.view.TextFieldPredicate;
 
 import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.function.Predicate;
 
 public class ItemListController extends AbstractController implements Initializable {
 
@@ -40,8 +36,8 @@ public class ItemListController extends AbstractController implements Initializa
 
     public JFXTextField searchName;
 
-    public ItemListController(SceneManager sceneManager, ItemListType itemListType) {
-        super(sceneManager);
+    public ItemListController(ControllerResources controllerResources, ItemListType itemListType) {
+        super(controllerResources);
         this.itemListType = itemListType;
     }
 
@@ -97,7 +93,10 @@ public class ItemListController extends AbstractController implements Initializa
             ObservableList<Item> itemsSelected = getSelected();
             if (itemsSelected.size() == 0) return;
             button.setDisable(true);
-            Command<Item> command = new AlterWillingness(willingness, getItemIdsFrom(itemsSelected));
+            Command<Item> command = getCommandFactory().getCommand(AlterWillingness::new, c -> {
+                c.setItemIds(getItemIdsFrom(itemsSelected));
+                c.setNewWillingness(willingness);
+            });
             command.execute((result, resultStatus) -> Platform.runLater(() -> {
                 itemsSelected.forEach(item -> item.setWillingness(willingness));
                 button.setDisable(false);
@@ -120,7 +119,7 @@ public class ItemListController extends AbstractController implements Initializa
     }
 
     public void addWindow(ObservableList<Item> displayData) {
-        AddItemController addItemController = new AddItemController(getSceneManager(), itemList.getOwner(), itemList.getInventoryType(), displayData);
+        AddItemController addItemController = new AddItemController(getControllerResources(), itemListType, displayData);
         getSceneManager().loadPane("add_item.fxml", addItemController);
     }
 }

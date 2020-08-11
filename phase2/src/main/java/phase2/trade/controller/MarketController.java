@@ -1,39 +1,17 @@
 package phase2.trade.controller;
 
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXTreeTableView;
-import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import phase2.trade.gateway.GatewayBundle;
 // import phase2.trade.gateway.database.DatabaseResourceBundleImpl;
-import phase2.trade.item.Item;
-import phase2.trade.presenter.SceneManager;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
-import phase2.trade.trade.command.CreateTrade;
-import phase2.trade.trade.command.TradeCommand;
-import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
-import javax.swing.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class MarketController  extends AbstractController implements Initializable {
@@ -56,8 +34,8 @@ public class MarketController  extends AbstractController implements Initializab
 
     public Label submissionResult;
 
-    public MarketController(SceneManager sceneManager){
-        super(sceneManager);
+    public MarketController(ControllerResources controllerResources){
+        super(controllerResources);
         // tc = new CreateTrade(gatewayBundle, (RegularUser) currUser);
         // tic = new TradeInfoController(gatewayBundle);
     }

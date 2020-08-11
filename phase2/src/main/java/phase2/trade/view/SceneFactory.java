@@ -1,31 +1,22 @@
 package phase2.trade.view;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import phase2.trade.Main;
 import phase2.trade.presenter.ControllerSupplier;
-import phase2.trade.presenter.SceneManager;
+import phase2.trade.controller.ControllerResources;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 // the resource files have a very small chance not to be indexed, cleaning build cache could solve it
 public class SceneFactory {
 
-    private final SceneManager sceneManager;
+    private final ControllerResources controllerResources;
 
-    public SceneFactory(SceneManager sceneManager){
-        this.sceneManager = sceneManager;
+    public SceneFactory(ControllerResources controllerResources){
+        this.controllerResources = controllerResources;
     }
 
     public FXMLLoader getLoader(String fileName, Class<?> clazz) {
@@ -60,6 +51,6 @@ public class SceneFactory {
     }
 
     public <T> Parent loadPane(String fileName, ControllerSupplier<T> controller) {
-        return this.loadPane(fileName, controller.get(sceneManager));
+        return this.loadPane(fileName, controller.get(controllerResources));
     }
 }

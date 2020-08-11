@@ -24,7 +24,7 @@ public class GetMarketItems extends ItemCommand<List<Item>> {
         if (!checkPermission(callback)) {
             return;
         }
-        getEntityBundle().getItemGateway().submitSession(() -> callback.call(getEntityBundle().getItemGateway().findMarketItems(), ResultStatus.SUCCEEDED));
+        getEntityBundle().getItemGateway().submitSession((gateway) -> callback.call(gateway.findMarketItems(), ResultStatus.SUCCEEDED));
     }
 
     @Override

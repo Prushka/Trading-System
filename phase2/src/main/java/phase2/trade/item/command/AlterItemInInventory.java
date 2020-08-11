@@ -19,22 +19,16 @@ public class AlterItemInInventory extends ItemCommand<Item> {
 
     private Long itemId;
 
-    public AlterItemInInventory( Long itemId) {
-        this.itemId = itemId;
-    }
-
-    public AlterItemInInventory() {}
-
     @Override
     public void execute(StatusCallback<Item> callback, String... args) {
         if (!checkPermission(callback)) {
             return;
         }
-        getEntityBundle().getItemGateway().submitTransaction(() -> {
+        getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             Item item = operator.getItemList(ItemListType.INVENTORY).findByUid(itemId);
             item.setName(args[0]);
             item.setDescription(args[1]);
-            getEntityBundle().getItemGateway().update(item);
+            gateway.update(item);
             addEffectedEntity(Item.class, itemId);
             save();
             if (callback != null)
@@ -44,14 +38,13 @@ public class AlterItemInInventory extends ItemCommand<Item> {
 
     @Override
     public void undo() {
-        getEntityBundle().getItemGateway().submitTransaction(() -> {
-            getEntityBundle().getItemGateway().delete(itemId);
+        getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
+            gateway.delete(itemId);
             updateUndo();
         });
     }
 
-    @Override
-    public void redo() {
-
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
     }
 }

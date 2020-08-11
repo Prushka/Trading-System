@@ -1,14 +1,7 @@
 package phase2.trade.controller;
 
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.User;
 
 import java.net.URL;
@@ -28,8 +21,8 @@ public class UserInfoPresenter extends AbstractController implements Initializab
 
     private final User user;
 
-    public UserInfoPresenter(SceneManager sceneManager) {
-        super(sceneManager);
+    public UserInfoPresenter(ControllerResources controllerResources) {
+        super(controllerResources);
         this.user = getAccountManager().getLoggedInUser();
     }
 

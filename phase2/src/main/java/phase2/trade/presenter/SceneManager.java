@@ -5,9 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import phase2.trade.command.CommandFactory;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.AccountManager;
+import phase2.trade.controller.ControllerResources;
 import phase2.trade.view.SceneFactory;
 
 import java.io.IOException;
@@ -15,23 +13,13 @@ import java.io.IOException;
 public class SceneManager {
 
     private final Stage window;
+    private final SceneFactory sceneFactory;
+    private final ControllerResources controllerResources;
 
-    private final SceneFactory sceneFactory = new SceneFactory(this);
-
-    private final PopupFactory popupFactory;
-
-    private final GatewayBundle gatewayBundle;
-
-    private final AccountManager accountManager;
-
-    private final CommandFactory commandFactory;
-
-    public SceneManager(GatewayBundle gatewayBundle, Stage window, AccountManager accountManager) {
-        this.gatewayBundle = gatewayBundle;
-        this.window = window;
-        this.accountManager = accountManager;
-        popupFactory = new PopupFactory(window);
-        commandFactory = new CommandFactory(gatewayBundle, accountManager);
+    public SceneManager(ControllerResources controllerResources) {
+        this.controllerResources = controllerResources;
+        this.window = controllerResources.getWindow();
+        sceneFactory = new SceneFactory(controllerResources);
     }
 
     public void switchScene(String fileName, Object controller, boolean applyCSS) {
@@ -53,8 +41,8 @@ public class SceneManager {
     }
 
     public <T> T switchScene(String fileName, ControllerSupplier<T> controller) {
-        T instantiated = controller.get(this);
-        this.switchScene(fileName, controller.get(this), true);
+        T instantiated = controller.get(controllerResources);
+        this.switchScene(fileName, controller.get(controllerResources), true);
         return instantiated;
     }
 
@@ -63,7 +51,7 @@ public class SceneManager {
     }
 
     public <T> T addPane(String fileName, ControllerSupplier<T> controller, Pane pane) {
-        T instantiated = controller.get(this);
+        T instantiated = controller.get(controllerResources);
         pane.getChildren().addAll(sceneFactory.loadPane(fileName, instantiated));
         return instantiated;
     }
@@ -81,19 +69,4 @@ public class SceneManager {
         return sceneFactory.loadPane(fileName, controller);
     }
 
-    public AccountManager getAccountManager() {
-        return accountManager;
-    }
-
-    public GatewayBundle getGatewayBundle() {
-        return gatewayBundle;
-    }
-
-    public PopupFactory getPopupFactory() {
-        return popupFactory;
-    }
-
-    public CommandFactory getCommandFactory() {
-        return commandFactory;
-    }
 }

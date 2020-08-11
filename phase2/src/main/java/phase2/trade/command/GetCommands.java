@@ -19,11 +19,6 @@ public class GetCommands extends Command<List<Command>> {
     }
 
     public GetCommands() {
-        super();
-    }
-
-    public GetCommands(GatewayBundle gatewayBundle) {
-        super(gatewayBundle);
     }
 
     @Override

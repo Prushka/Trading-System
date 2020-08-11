@@ -15,6 +15,7 @@ import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.AddItemController;
 import phase2.trade.inventory.ItemList;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AlterWillingness;
@@ -31,7 +32,7 @@ import java.util.function.Predicate;
 
 public class ItemListController extends AbstractController implements Initializable {
 
-    private ItemList itemList;
+    private ItemListType itemListType;
 
     public TableView<Item> tableView;
 
@@ -39,17 +40,14 @@ public class ItemListController extends AbstractController implements Initializa
 
     public JFXTextField searchName;
 
-    public ItemListController(SceneManager sceneManager) {
+    public ItemListController(SceneManager sceneManager, ItemListType itemListType) {
         super(sceneManager);
-    }
-
-    public void setItemList(ItemList itemList) {
-        this.itemList = itemList;
+        this.itemListType = itemListType;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ObservableList<Item> displayData = FXCollections.observableArrayList(itemList.getListOfItems());
+        ObservableList<Item> displayData = FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getListOfItems());
 
         TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
         tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
@@ -122,7 +120,7 @@ public class ItemListController extends AbstractController implements Initializa
     }
 
     public void addWindow(ObservableList<Item> displayData) {
-        AddItemController addItemController = new AddItemController(getSceneManager(), getGatewayBundle(), (RegularUser) itemList.getOwner(), itemList.getInventoryType(), displayData);
+        AddItemController addItemController = new AddItemController(getSceneManager(), itemList.getOwner(), itemList.getInventoryType(), displayData);
         getSceneManager().loadPane("add_item.fxml", addItemController);
     }
 }

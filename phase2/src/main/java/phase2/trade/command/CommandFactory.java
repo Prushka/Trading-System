@@ -20,4 +20,8 @@ public class CommandFactory {
         User operator = useSystem ? new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).configureSystemUser() : accountManager.getLoggedInUser();
         return commandSupplier.get(gatewayBundle, operator);
     }
+
+    public <T> T getCommand(CommandSupplier<T> commandSupplier) {
+        return this.getCommand(commandSupplier,false);
+    }
 }

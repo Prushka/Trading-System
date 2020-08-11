@@ -2,6 +2,7 @@ import org.hibernate.cfg.Configuration;
 import org.junit.Test;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
@@ -15,6 +16,7 @@ import phase2.trade.gateway.database.DatabaseResourceBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetItems;
+import phase2.trade.user.AccountManager;
 import phase2.trade.user.RegularUser;
 
 import static org.junit.Assert.*;
@@ -48,7 +50,9 @@ public class CommandTest {
     @Test
     public void testCommand() {
         save();
-        Command<Item> addItem = new AddItemToItemList(bundle, regularUser, ItemListType.INVENTORY);
+        AccountManager accountManager = new AccountManager(bundle);
+        CommandFactory commandFactory = new CommandFactory(bundle, accountManager);
+        Command<Item> addItem = commandFactory.getCommand(AddItemToItemList::new);
 
         addItem.execute(null, "testName", "testDescription", "MOVIE");
 

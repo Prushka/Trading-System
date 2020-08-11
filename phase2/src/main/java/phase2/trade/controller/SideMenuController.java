@@ -45,15 +45,13 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private void inventory() {
         center.getChildren().clear();
-        ItemListController controller = new ItemListController(getSceneManager());
-        controller.setItemList(getAccountManager().getLoggedInUser().getItemList(ItemListType.INVENTORY));
+        ItemListController controller = new ItemListController(getSceneManager(), ItemListType.INVENTORY);
         getSceneManager().addPane("item_list.fxml", controller, center);
     }
 
     private void wishList() {
         center.getChildren().clear();
-        ItemListController controller = new ItemListController(getSceneManager());
-        controller.setItemList(getAccountManager().getLoggedInUser().getItemList(ItemListType.CART));
+        ItemListController controller = new ItemListController(getSceneManager(), ItemListType.INVENTORY);
         getSceneManager().addPane("item_list.fxml", controller, center);
     }
 

@@ -15,20 +15,15 @@ public class AccountManager {
 
     private User loggedInUser;
 
-    private EntityBundle entityBundle;
-
     private final Login loginCommand;
 
     private final CreateUser registerCommand;
-
-    private final User system;
 
     private final UserFactory userFactory;
 
     public AccountManager(GatewayBundle gatewayBundle) {
         userFactory = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
         CommandFactory commandFactory = new CommandFactory(gatewayBundle, this);
-        system = userFactory.configureSystemUser();
         this.loginCommand = commandFactory.getCommand(Login::new, false);
         this.registerCommand = commandFactory.getCommand(CreateUser::new, true);
     }

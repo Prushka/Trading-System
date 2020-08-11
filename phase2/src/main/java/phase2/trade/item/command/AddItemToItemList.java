@@ -22,13 +22,15 @@ public class AddItemToItemList extends ItemCommand<Item> {
 
     private Long itemId;
 
-    public AddItemToItemList(GatewayBundle gatewayBundle, User operator,
-                             ItemListType itemListType) {
+    public AddItemToItemList(GatewayBundle gatewayBundle, User operator) {
         super(gatewayBundle, operator);
-        this.itemListType = itemListType;
     }
 
     public AddItemToItemList() {}
+
+    public void setItemListType(ItemListType itemListType) {
+        this.itemListType = itemListType;
+    }
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) { // name, description, category, quantity, price

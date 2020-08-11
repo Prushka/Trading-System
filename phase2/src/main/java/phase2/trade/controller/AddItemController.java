@@ -21,10 +21,10 @@ import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.RegularUser;
-import phase2.trade.user.User;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
@@ -36,24 +36,21 @@ public class AddItemController extends AbstractController implements Initializab
     public JFXButton submitButton;
     public GridPane root;
 
-    private GatewayBundle gatewayBundle;
-    private RegularUser operator;
-    private ItemListType itemListType;
-    private ObservableList<Item> display;
+    private final ItemListType itemListType;
+    private final ObservableList<Item> display;
 
     private Stage window;
 
-    public AddItemController(SceneManager sceneManager, GatewayBundle gatewayBundle, RegularUser user, ItemListType itemListType, ObservableList<Item> display) {
+    public AddItemController(SceneManager sceneManager, ItemListType itemListType, ObservableList<Item> display) {
         super(sceneManager);
-        this.gatewayBundle = gatewayBundle;
-        this.operator = user;
         this.itemListType = itemListType;
         this.display = display;
     }
 
     public void submitItem(ActionEvent actionEvent) {
         submitButton.setDisable(true);
-        Command<Item> itemCommand = new AddItemToItemList(gatewayBundle, operator, itemListType);
+        AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new, false);
+        itemCommand.setItemListType(itemListType);
         itemCommand.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
                 System.out.println("nor permission");

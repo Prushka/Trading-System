@@ -23,17 +23,11 @@ public class SceneManager {
     }
 
     public void switchScene(String fileName, Object controller, boolean applyCSS) {
-        FXMLLoader loader = sceneFactory.getLoader(fileName);
-        loader.setController(controller);
-        try {
-            Scene scene = new Scene(loader.load());
-            if (applyCSS) {
-                scene.getStylesheets().add("css/trade.css");
-            }
-            window.setScene(scene);
-        } catch (IOException e) {
-            e.printStackTrace();
+        Scene scene = new Scene(sceneFactory.loadPane(fileName, controller));
+        if (applyCSS) {
+            scene.getStylesheets().add("css/trade.css");
         }
+        window.setScene(scene);
     }
 
     public void switchScene(String fileName, Object controller) {

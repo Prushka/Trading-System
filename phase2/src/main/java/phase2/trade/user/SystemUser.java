@@ -5,10 +5,10 @@ import phase2.trade.permission.PermissionGroup;
 import javax.persistence.Entity;
 
 @Entity
-public class System extends User {
+public class SystemUser extends User {
 
 
-    public System() {
+    public SystemUser() {
         setPermissionGroup(PermissionGroup.SYSTEM);
         setUserName("system");
     }

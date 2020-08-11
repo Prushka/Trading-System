@@ -25,7 +25,7 @@ public class UserFactory {
                 break;
 
             case SYSTEM:
-                user = new System();
+                user = new SystemUser();
                 break;
 
             default:

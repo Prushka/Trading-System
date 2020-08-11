@@ -61,9 +61,10 @@ public class TradeApplication extends Application {
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
 
-        new CreateHeadIfNotExist(controllerResources.getCommandFactory()); // this is a use case class, is trade application a controller
+        new CreateHeadIfNotExist(controllerResources.getCommandFactory());
+        mockDashboardRegister(primaryStage);
         // mockDashboardLogin(primaryStage);
-        mockDashboardLogin(primaryStage);
+        // login(primaryStage);
     }
 
     private void login(Stage primaryStage) {
@@ -72,9 +73,8 @@ public class TradeApplication extends Application {
         primaryStage.show();
     }
 
-    private void addExampleItems(User operator, String name, String description, Category category, int quantity, double price) {
-        Command<Item> itemCommand = controllerResources.getCommandFactory().getCommand(AddItemToItemList::new, addItemToItemList -> addItemToItemList.setItemListType(ItemListType.INVENTORY));
-        itemCommand.setAsynchronous(false);
+    private void addExampleItems(String name, String description, Category category, int quantity, double price) {
+        Command<Item> itemCommand = controllerResources.getCommandFactory().getCommand(AddItemToItemList::new, c -> {c.setItemListType(ItemListType.INVENTORY);c.setAsynchronous(false);});
         itemCommand.execute((result, resultStatus) -> {
             if (resultStatus == ResultStatus.NO_PERMISSION) {
 
@@ -86,7 +86,7 @@ public class TradeApplication extends Application {
     private void mockDashboardRegister(Stage primaryStage) {
         controllerResources.getAccountManager().register((result, status) -> {
             Platform.runLater(() -> {
-
+                addExample();
                 Parent dashboard = controllerResources.getSceneManager().loadPane("dashboard.fxml", DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
@@ -102,22 +102,26 @@ public class TradeApplication extends Application {
     private void mockDashboardLogin(Stage primaryStage) {
         controllerResources.getAccountManager().login((result, status) -> {
             Platform.runLater(() -> {
-
+                addExample();
                 Parent dashboard = controllerResources.getSceneManager().loadPane("dashboard.fxml", DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");
 
                 primaryStage.setScene(scene);
-
-                addExampleItems(controllerResources.getAccountManager().getLoggedInUser(), "Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE, 4, -1);
-                addExampleItems(controllerResources.getAccountManager().getLoggedInUser(), "Ulysses", "Ulysses is a modernist novel by Irish writer James Joyce.", Category.BOOK, 2, -1);
-                addExampleItems(controllerResources.getAccountManager().getLoggedInUser(), "Broken iPad", "An ipad that's melted.", Category.ELECTRONIC, 1, 1000);
-                addExampleItems(controllerResources.getAccountManager().getLoggedInUser(), "Queen Bed", "No description", Category.FURNITURE, 2, 1000);
                 primaryStage.show();
             });
 
         }, "a@b.ccc", "12345678");
+    }
+
+    private void addExample() {
+
+        addExampleItems("Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE, 4, -1);
+        addExampleItems("Ulysses", "Ulysses is a modernist novel by Irish writer James Joyce.", Category.BOOK, 2, -1);
+        addExampleItems("Broken iPad", "An ipad that's melted.", Category.ELECTRONIC, 1, 1000);
+        addExampleItems("Queen Bed", "No description", Category.FURNITURE, 2, 1000);
+
     }
 
     @Override

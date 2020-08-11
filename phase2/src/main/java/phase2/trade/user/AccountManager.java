@@ -1,13 +1,9 @@
 package phase2.trade.user;
 
-import phase2.trade.callback.Callback;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.CommandFactory;
-import phase2.trade.gateway.ConfigBundle;
-import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.PermissionGroup;
-import phase2.trade.permission.PermissionGroupFactory;
 import phase2.trade.user.command.CreateUser;
 import phase2.trade.user.command.Login;
 

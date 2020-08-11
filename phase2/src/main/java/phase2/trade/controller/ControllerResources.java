@@ -19,7 +19,6 @@ public class ControllerResources {
 
     private final Stage window;
 
-
     private final PopupFactory popupFactory;
 
     private final GatewayBundle gatewayBundle;

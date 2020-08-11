@@ -32,13 +32,10 @@ public class LoginController extends AbstractController implements Initializable
         if (!validatorBind.isAllPass()) return;
         submissionResultProperty.setValue("Signing in..");
         getAccountManager().login((result, status) -> {
-            if (status != ResultStatus.SUCCEEDED) {
-                Platform.runLater(() ->
-                        submissionResultProperty.setValue("Invalid Username / Password"));
-            } else {
-                Platform.runLater(() ->
-                        getSceneManager().switchScene("dashboard.fxml", DashboardController::new));
-            }
+            status.handle(getPopupFactory(),
+                    () -> submissionResultProperty.setValue("Invalid Username / Password"),
+                    () -> getSceneManager().switchScene("dashboard.fxml", DashboardController::new)
+            );
         }, usernameOrEmail.getText(), password.getText());
     }
 

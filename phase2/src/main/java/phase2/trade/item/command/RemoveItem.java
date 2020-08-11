@@ -47,7 +47,7 @@ public class RemoveItem extends ItemCommand<Long[]> {
             addEffectedEntity(Item.class, ids);
             save();
             if (callback != null)
-                callback.call(ids, ResultStatus.SUCCEEDED);
+                callback.call(ids, new StatusSucceeded());
         });
     }
 

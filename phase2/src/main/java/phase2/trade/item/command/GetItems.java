@@ -2,6 +2,7 @@ package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
@@ -33,7 +34,7 @@ public class GetItems extends ItemCommand<ItemList> {
             return;
         }
         ItemList itemList = operator.getItemList(itemListType);
-        callback.call(itemList, ResultStatus.SUCCEEDED);
+        callback.call(itemList, new StatusSucceeded());
     }
 
 

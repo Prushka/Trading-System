@@ -1,11 +1,11 @@
 package phase2.trade.command;
 
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.*;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.PermissionGroup;
+import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
 import phase2.trade.user.UserFactory;
 
@@ -78,7 +78,7 @@ public abstract class Command<T> implements PermissionBased {
 
     public void isUndoable(StatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
         if (!commandPropertyAnnotation.undoable()) {
-            callback.call(null, ResultStatus.FAILED);
+            callback.call(null, new StatusFailed());
             return;
         }
         getEntityBundle().getCommandGateway().submitSession((gateway) -> {
@@ -91,9 +91,9 @@ public abstract class Command<T> implements PermissionBased {
             }
             blockingCommands.sort(new CommandComparator());
             if (blockingCommands.size() > 0) {
-                callback.call(blockingCommands, ResultStatus.FAILED);
+                callback.call(blockingCommands, new StatusFailed());
             } else {
-                callback.call(blockingCommands, ResultStatus.SUCCEEDED);
+                callback.call(blockingCommands, new StatusSucceeded());
             }
         });
     }
@@ -128,7 +128,7 @@ public abstract class Command<T> implements PermissionBased {
     public boolean checkPermission(StatusCallback<?> statusCallback) {
         boolean result = checkPermission();
         if (!result) {
-            statusCallback.call(null, ResultStatus.NO_PERMISSION);
+            statusCallback.call(null, new StatusNoPermission(new PermissionSet(commandPropertyAnnotation.permissionSet())));
         }
         return result;
     }

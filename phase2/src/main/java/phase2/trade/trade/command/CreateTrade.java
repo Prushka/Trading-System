@@ -2,6 +2,7 @@ package phase2.trade.trade.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.gateway.TradeGateway;
@@ -24,8 +25,7 @@ public class CreateTrade extends TradeCommand<Trade>{
     @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
         tc = new TradeCreator();
-        if (!checkPermission()) {
-            callback.call(null, ResultStatus.NO_PERMISSION);
+        if (!checkPermission(callback)) {
             return;
         }
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
@@ -33,7 +33,7 @@ public class CreateTrade extends TradeCommand<Trade>{
                     args[4], args[5], args[6], args[7], args[8], args[9]);
             gateway.add(newTrade);
             if (callback != null)
-                callback.call(newTrade, ResultStatus.SUCCEEDED);
+                callback.call(newTrade, new StatusSucceeded());
         });
     }
 

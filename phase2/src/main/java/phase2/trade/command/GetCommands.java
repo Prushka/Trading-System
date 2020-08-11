@@ -19,7 +19,7 @@ public class GetCommands extends Command<List<Command>> {
             return;
         }
         getEntityBundle().getCommandGateway().submitSession((gateway) ->
-                callback.call(gateway.findAll(), ResultStatus.SUCCEEDED));
+                callback.call(gateway.findAll(), new StatusSucceeded()));
     }
 
 

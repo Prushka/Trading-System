@@ -2,6 +2,7 @@ package phase2.trade.user;
 
 import phase2.trade.config.PermissionConfig;
 import phase2.trade.permission.PermissionGroup;
+import phase2.trade.permission.PermissionSet;
 
 public class UserFactory {
 
@@ -33,7 +34,7 @@ public class UserFactory {
                 break;
         }
         user.setPermissionGroup(permissionGroup);
-        user.setUserPermission(permissionConfig.getDefaultPermissions().get(permissionGroup));
+        user.setUserPermission(new PermissionSet(permissionConfig.getDefaultPermissions().get(permissionGroup).getPerm()));
         return user;
     }
 

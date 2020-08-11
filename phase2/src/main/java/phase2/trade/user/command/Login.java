@@ -2,6 +2,8 @@ package phase2.trade.user.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.StatusFailed;
+import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
@@ -21,9 +23,9 @@ public class Login extends UserCommand<User> {
             List<User> matchedUsers = gateway.findMatches(args[0], args[1]);
             if (matchedUsers.size() > 0) {
                 User user = matchedUsers.get(0);
-                callback.call(user, ResultStatus.SUCCEEDED);
+                callback.call(user, new StatusSucceeded());
             } else {
-                callback.call(null, ResultStatus.FAILED);
+                callback.call(null, new StatusFailed());
             }
         });
     }

@@ -39,7 +39,7 @@ public class RegisterController extends AbstractController implements Initializa
         }
         submissionResultProperty.setValue("Signing up..");
         getAccountManager().register((result, status) -> {
-            if (status != ResultStatus.SUCCEEDED) {
+            if (status != new StatusSucceeded()) {
                 Platform.runLater(() -> {
                     registerButton.setDisable(false);
                     submissionResultProperty.setValue("Username / Email already exists");

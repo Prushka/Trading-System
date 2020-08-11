@@ -37,7 +37,7 @@ public class ConfirmTrade extends TradeCommand<Trade> {
             Trade currTrade = findTradeByIdSyncOutsideTradeGateway(tradeId);
             Trade trade = tcc.confirmTrade(currTrade, operator);
             if (callback != null)
-                callback.call(trade, ResultStatus.SUCCEEDED);
+                callback.call(trade, new StatusSucceeded());
             gateway.update(trade);
         });
     }

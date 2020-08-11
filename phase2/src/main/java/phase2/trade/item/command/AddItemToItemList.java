@@ -2,6 +2,7 @@ package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandData;
 import phase2.trade.command.CommandProperty;
@@ -40,7 +41,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
             addEffectedEntity(Item.class, itemId);
             save();
             if (callback != null)
-                callback.call(item, ResultStatus.SUCCEEDED);
+                callback.call(item, new StatusSucceeded());
         }, isAsynchronous());
     }
 

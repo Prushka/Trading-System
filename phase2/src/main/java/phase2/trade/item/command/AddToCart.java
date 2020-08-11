@@ -1,6 +1,7 @@
 package phase2.trade.item.command;
 
 import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.gateway.GatewayBundle;
@@ -28,15 +29,14 @@ public class AddToCart extends ItemCommand<Item> {
 
     @Override
     public void execute(StatusCallback<Item> callback, String... args) {
-        if (!checkPermission()) {
-            callback.call(null, ResultStatus.NO_PERMISSION);
+        if (!checkPermission(callback)) {
             return;
         }
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             Item item = findItemByIdSyncOutsideItemGateway(itemId);
             operator.getItemList(ItemListType.CART).addItem(item);
             gateway.update(operator);
-            callback.call(item, ResultStatus.SUCCEEDED);
+            callback.call(item, new StatusSucceeded());
         });
     }
 

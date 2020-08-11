@@ -23,6 +23,8 @@ import phase2.trade.user.AccountManager;
 import phase2.trade.user.CreateHeadIfNotExist;
 import phase2.trade.user.User;
 
+import java.util.Locale;
+
 public class TradeApplication extends Application {
 
     private ControllerResources controllerResources;
@@ -75,11 +77,7 @@ public class TradeApplication extends Application {
 
     private void addExampleItems(String name, String description, Category category, int quantity, double price) {
         Command<Item> itemCommand = controllerResources.getCommandFactory().getCommand(AddItemToItemList::new, c -> {c.setItemListType(ItemListType.INVENTORY);c.setAsynchronous(false);});
-        itemCommand.execute((result, resultStatus) -> {
-            if (resultStatus == ResultStatus.NO_PERMISSION) {
-
-            } else {
-            }
+        itemCommand.execute((result, status) -> {
         }, name, description, category.name(), String.valueOf(quantity), String.valueOf(price));
     }
 

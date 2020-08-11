@@ -44,7 +44,7 @@ public class AlterWillingness extends ItemCommand<Item> {
             addEffectedEntity(Item.class, ids);
             save();
             if (callback != null)
-                callback.call(null, ResultStatus.SUCCEEDED);
+                callback.call(null, new StatusSucceeded());
         });
     }
 

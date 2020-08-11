@@ -38,7 +38,7 @@ public class EditTrade extends TradeCommand<Trade> {
             Trade trade = te.edit(currTrade, operator, args);
             gateway.update(trade);
             this.tradeId = trade.getUid();
-            callback.call(trade, ResultStatus.SUCCEEDED);
+            callback.call(trade, new StatusSucceeded());
         });
     }
 

@@ -32,7 +32,7 @@ public class AlterItemInInventory extends ItemCommand<Item> {
             addEffectedEntity(Item.class, itemId);
             save();
             if (callback != null)
-                callback.call(item, ResultStatus.SUCCEEDED);
+                callback.call(item, new StatusSucceeded());
         });
     }
 

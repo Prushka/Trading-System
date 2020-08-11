@@ -1,6 +1,10 @@
 package phase2.trade.callback;
 
-public enum ResultStatus {
+import phase2.trade.presenter.PopupFactory;
 
-    NO_PERMISSION, FAILED, SUCCEEDED, EXIST
+public abstract class ResultStatus {
+
+    public abstract void handle(PopupFactory popupFactory, Runnable succeed, Runnable failed);
+
+    public abstract boolean ifPass();
 }

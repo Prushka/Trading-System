@@ -99,13 +99,15 @@ public class MarketListController extends AbstractController implements Initiali
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
 
         getMarket.execute((result, resultStatus) -> {
-            if (resultStatus == ResultStatus.NO_PERMISSION) {
-                getPopupFactory().noPermission();
-            } else {
-                for (Item item : result) {
-                    listView.getItems().add(generateItemPreview(item));
+            resultStatus.handle(getPopupFactory(), new Runnable() {
+                @Override
+                public void run() {
+                    for (Item item : result) {
+                        listView.getItems().add(generateItemPreview(item));
+                    }
                 }
-            }
+            }, () -> {
+            });
         });
 
     }

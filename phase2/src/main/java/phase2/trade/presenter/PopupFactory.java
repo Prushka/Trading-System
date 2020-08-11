@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import phase2.trade.permission.Permission;
+import phase2.trade.permission.PermissionSet;
 import phase2.trade.view.ConfirmWindow;
 import phase2.trade.view.PopupWindow;
 
@@ -26,6 +28,14 @@ public class PopupFactory {
         snackbar.fireEvent(new JFXSnackbar.SnackbarEvent(
                 new JFXSnackbarLayout(message, actionText, action -> snackbar.close()),
                 duration, null));
+    }
+
+    public void noPermission(PermissionSet permissionRequired) {
+        StringBuilder perm = new StringBuilder();
+        for (Permission permission : permissionRequired.getPerm()) {
+            perm.append(permission).append(" ");
+        }
+        toast(Duration.seconds(4), "Permission Denied | " + perm, "CLOSE");
     }
 
     public void noPermission() {

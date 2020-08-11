@@ -34,7 +34,10 @@ public class UserFactory {
                 break;
         }
         user.setPermissionGroup(permissionGroup);
-        user.setUserPermission(new PermissionSet(permissionConfig.getDefaultPermissions().get(permissionGroup).getPerm()));
+        PermissionSet fromConfig = permissionConfig.getDefaultPermissions().get(permissionGroup);
+        if (fromConfig != null) {
+            user.setUserPermission(new PermissionSet(fromConfig.getPerm()));
+        }
         return user;
     }
 

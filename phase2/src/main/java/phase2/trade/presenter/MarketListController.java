@@ -104,7 +104,7 @@ public class MarketListController extends AbstractController implements Initiali
                     listView.getItems().add(generateItemPreview(item));
                 }
             });
-            resultStatus.handle();
+            resultStatus.handle(getPopupFactory());
         });
 
     }

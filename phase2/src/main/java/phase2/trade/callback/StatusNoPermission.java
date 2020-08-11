@@ -13,15 +13,11 @@ public class StatusNoPermission extends StatusFailed {
     }
 
     @Override
-    public void handle() {
-        run(new Runnable() {
-            @Override
-            public void run() {
-
-                popupFactory.noPermission();
-                failed.run();
-                after.run();
-            }
+    public void handle(PopupFactory popupFactory) {
+        run(() -> {
+            popupFactory.noPermission(permissionRequired);
+            failed.run();
+            after.run();
         });
     }
 

@@ -5,9 +5,7 @@ import phase2.trade.presenter.PopupFactory;
 
 public abstract class ResultStatus {
 
-    StatusRunnable succeeded, failed, after;
-
-    PopupFactory popupFactory;
+    Runnable succeeded, failed, after;
 
     public ResultStatus() {
         succeeded = () -> {};
@@ -19,22 +17,18 @@ public abstract class ResultStatus {
         Platform.runLater(runnable);
     }
 
-    public abstract void handle();
+    public abstract void handle(PopupFactory popupFactory);
 
-    public void setSucceeded(StatusRunnable succeeded) {
+    public void setSucceeded(Runnable succeeded) {
         this.succeeded = succeeded;
     }
 
-    public void setFailed(StatusRunnable failed) {
+    public void setFailed(Runnable failed) {
         this.failed = failed;
     }
 
-    public void setAfter(StatusRunnable after) {
+    public void setAfter(Runnable after) {
         this.after = after;
-    }
-
-    public void setPopupFactory(PopupFactory popupFactory) {
-        this.popupFactory = popupFactory;
     }
 
     public abstract boolean ifPass();

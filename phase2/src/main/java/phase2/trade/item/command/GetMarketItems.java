@@ -15,10 +15,11 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false,
-        persistent = false, permissionSet = {Permission.BROWSE_MARKET})
+        persistent = false, permissionSet = {Permission.CREATE_USER})
 public class GetMarketItems extends ItemCommand<List<Item>> {
 
-    public GetMarketItems() {}
+    public GetMarketItems() {
+    }
 
     @Override
     public void execute(StatusCallback<List<Item>> callback, String... args) {

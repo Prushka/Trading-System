@@ -1,10 +1,6 @@
 package phase2.trade.permission;
 
 import phase2.trade.config.PermissionConfig;
-import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
-
-import java.util.HashSet;
 
 public class PermissionGroupFactory {
 

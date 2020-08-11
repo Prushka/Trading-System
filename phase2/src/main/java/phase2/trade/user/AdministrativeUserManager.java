@@ -21,7 +21,7 @@ public class AdministrativeUserManager {
     private UserDAO userDAO;
     private TradeDAO tradeDAO;
     private List<RegularUser> regularUser = new ArrayList<>();
-    private int transactionLimit = 100; //what is the init limit?
+    private int transactionLimit = 100; //what is the initDefault limit?
     private int lendBeforeBorrow = 1;
     private List<RegularUser> needToFreezeUserList;
     private Map<RegularUser, List<Item>> needToConfirmAddItem;

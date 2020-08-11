@@ -13,7 +13,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusRunnable;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;

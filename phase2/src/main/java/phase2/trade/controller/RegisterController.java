@@ -46,7 +46,7 @@ public class RegisterController extends AbstractController implements Initializa
                 registerButton.setDisable(false);
                 submissionResultProperty.setValue("Username / Email already exists");
             });
-            resultStatus.handle();
+            resultStatus.handle(getPopupFactory());
         }, username.getText(), email.getText(), password.getText(), country.getText(), city.getText());
     }
 

@@ -6,8 +6,15 @@ import phase2.trade.presenter.PopupFactory;
 public class StatusSucceeded extends ResultStatus {
 
     @Override
-    public void handle(PopupFactory popupFactory, Runnable succeed, Runnable failed) {
-        Platform.runLater(succeed);
+    public void handle() {
+        run(new Runnable() {
+            @Override
+            public void run() {
+
+                succeeded.run();
+                after.run();
+            }
+        });
     }
 
 

@@ -1,8 +1,6 @@
 package phase2.trade.trade.command;
 
-import phase2.trade.callback.Callback;
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.*;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
 import phase2.trade.gateway.GatewayBundle;
@@ -29,8 +27,7 @@ public class ConfirmTrade extends TradeCommand<Trade> {
     @Override
     public void execute(StatusCallback<Trade> callback, String... args) {
         tcc = new TradeConfirmer(getConfigBundle().getTradeConfig().getTimeLimit());
-        if (!checkPermission()) {
-            callback.call(null, ResultStatus.NO_PERMISSION);
+        if (!checkPermission(callback)) {
             return;
         }
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
@@ -44,7 +41,7 @@ public class ConfirmTrade extends TradeCommand<Trade> {
 
     @Override
     public void isUndoable(StatusCallback<List<Command<?>>> callback) {
-        callback.call(null, ResultStatus.FAILED);
+        callback.call(null, new StatusFailed());
     }
 
     // Unreasonable to do for this action

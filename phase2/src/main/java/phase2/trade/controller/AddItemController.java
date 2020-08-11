@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.StatusRunnable;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -48,15 +49,8 @@ public class AddItemController extends AbstractController implements Initializab
                 command -> command.setItemListType(itemListType));
 
         itemCommand.execute((result, resultStatus) -> {
-            if (resultStatus == ResultStatus.NO_PERMISSION) {
-                System.out.println("nor permission");
-                getPopupFactory().noPermission();
-            } else {
-                Platform.runLater(() -> {
-                    display.add(result);
-                });
-            }
-            Platform.runLater(() -> {
+            resultStatus.setSucceeded(() -> display.add(result));
+            resultStatus.setAfter(() -> {
                 submitButton.setDisable(false);
                 window.close();
             });

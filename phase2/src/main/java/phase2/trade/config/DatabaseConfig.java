@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DatabaseConfig {
+public class DatabaseConfig implements ConfigDefaultable {
 
     private String databaseType = "mysql";
 
@@ -38,13 +38,6 @@ public class DatabaseConfig {
     private boolean autoReconnect = true;
 
     private final transient Map<String, List<String>> preconfiguredDialect = new HashMap<>();
-
-    public DatabaseConfig() {
-        configureDialects("mysql", "org.hibernate.dialect.MySQL5Dialect", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://");
-        configureDialects("mariadb", "org.hibernate.dialect.MariaDB53Dialect", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://"); // mariadb is compatible with mysql
-        configureDialects("postgresql", "org.hibernate.dialect.PostgreSQLDialect", "org.postgresql.Driver", "jdbc:postgresql://"); // schema has to be configured in entity table to support postgresql
-        // mssql
-    }
 
 
     private void configureDialects(String database, String dialect, String driver, String prefix) { // the driver library has to be added first
@@ -180,5 +173,17 @@ public class DatabaseConfig {
     // use this only for debugging
     public String toString() {
         return String.format("Database: %s\nDialect: %s\nDriver: %s\nUrl: %s\nUserName: %s\nhbm2ddl: %s", databaseType, getConfiguredDialect(), getConfiguredDriver(), getConfiguredURL(), getUsername(), getHbm2ddl());
+    }
+
+    public DatabaseConfig() {
+        configureDialects("mysql", "org.hibernate.dialect.MySQL5Dialect", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://");
+        configureDialects("mariadb", "org.hibernate.dialect.MariaDB53Dialect", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://"); // mariadb is compatible with mysql
+        configureDialects("postgresql", "org.hibernate.dialect.PostgreSQLDialect", "org.postgresql.Driver", "jdbc:postgresql://"); // schema has to be configured in entity table to support postgresql
+        // mssql
+    }
+
+    @Override
+    public void initDefault() {
+
     }
 }

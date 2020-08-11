@@ -3,6 +3,7 @@ package phase2.trade.trade.command;
 import phase2.trade.address.Address;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.gateway.TradeGateway;
@@ -28,8 +29,7 @@ public class EditTrade extends TradeCommand<Trade> {
     public void execute(StatusCallback<Trade> callback, String... args) {
         // TO DO: Implement cancelling after limit
         te = new TradeEditor(getConfigBundle().getTradeConfig().getEditLimit());
-        if (!checkPermission()) {
-            callback.call(null, ResultStatus.NO_PERMISSION);
+        if (!checkPermission(callback)) {
             return;
         }
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {

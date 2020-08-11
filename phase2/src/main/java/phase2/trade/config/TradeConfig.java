@@ -1,6 +1,6 @@
 package phase2.trade.config;
 
-public class TradeConfig {
+public class TradeConfig implements ConfigDefaultable {
 
     private int editLimit;
 
@@ -20,5 +20,10 @@ public class TradeConfig {
 
     public void setTimeLimit(int timeLimit) {
         this.timeLimit = timeLimit;
+    }
+
+    @Override
+    public void initDefault() {
+
     }
 }

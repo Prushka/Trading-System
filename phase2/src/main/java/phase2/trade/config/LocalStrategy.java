@@ -18,9 +18,13 @@ public class LocalStrategy implements ConfigStrategy {
     }
 
     @Override
-    public <T> T read(Class<T> configClass, String fileName, Supplier<T> supplier) { // These two methods could fit in ConfigBundle since all other strategies shall save and read local files
+    public <T extends ConfigDefaultable> T read(Class<T> configClass, String fileName, Supplier<T> supplier) { // These two methods could fit in ConfigBundle since all other strategies shall save and read local files
         File file = new File(fileName + formatStrategy.getExtension());
-        if (!file.exists()) return supplier.get();
+        if (!file.exists()) {
+            T instantiated = supplier.get();
+            instantiated.initDefault();
+            return supplier.get();
+        }
         return formatStrategy.read(configClass, file);
     }
 

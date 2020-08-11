@@ -2,6 +2,7 @@ package phase2.trade.command;
 
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.Permission;
 import phase2.trade.user.User;

@@ -14,6 +14,6 @@ public class ShutdownHook {
 
     public void shutdown() {
         shutdownableList.forEach(Shutdownable::stop);
-        System.exit(0);
+        // System.exit(0);
     }
 }

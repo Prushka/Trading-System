@@ -6,12 +6,11 @@ import phase2.trade.permission.PermissionSet;
 
 import java.util.*;
 
-public class PermissionConfig {
+public class PermissionConfig implements ConfigDefaultable {
 
     private Map<PermissionGroup, PermissionSet> defaultPermissions = new HashMap<>();
 
-    public PermissionConfig() {
-
+    public void initDefault() {
         addPermissions(PermissionGroup.GUEST, Permission.BROWSE_MARKET);
 
         addPermissions(PermissionGroup.REGULAR,
@@ -22,7 +21,6 @@ public class PermissionConfig {
         addPermissions(PermissionGroup.ADMIN, Permission.CHANGE_THRESHOLD, Permission.REVIEW_ITEM);
 
         addPermissions(PermissionGroup.SYSTEM, Permission.CHANGE_THRESHOLD, Permission.CREATE_USER);
-
     }
 
     private void addPermissions(PermissionGroup permissionGroup, Permission... permissions){

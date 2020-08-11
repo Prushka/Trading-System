@@ -99,15 +99,12 @@ public class MarketListController extends AbstractController implements Initiali
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
 
         getMarket.execute((result, resultStatus) -> {
-            resultStatus.handle(getPopupFactory(), new Runnable() {
-                @Override
-                public void run() {
-                    for (Item item : result) {
-                        listView.getItems().add(generateItemPreview(item));
-                    }
+            resultStatus.setSucceeded(() -> {
+                for (Item item : result) {
+                    listView.getItems().add(generateItemPreview(item));
                 }
-            }, () -> {
             });
+            resultStatus.handle();
         });
 
     }

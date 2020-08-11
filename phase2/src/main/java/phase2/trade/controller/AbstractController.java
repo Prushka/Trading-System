@@ -34,7 +34,7 @@ public abstract class AbstractController {
         return controllerResources.getCommandFactory();
     }
 
-    protected GatewayBundle getGatewayBundle(){
+    protected GatewayBundle getGatewayBundle() {
         return controllerResources.getGatewayBundle();
     }
 }

@@ -14,7 +14,7 @@ import phase2.trade.user.User;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MarketController  extends AbstractController implements Initializable {
+public class MarketController extends AbstractController implements Initializable {
     User currUser;
     TradeInfoController tic;
     @FXML
@@ -34,7 +34,7 @@ public class MarketController  extends AbstractController implements Initializab
 
     public Label submissionResult;
 
-    public MarketController(ControllerResources controllerResources){
+    public MarketController(ControllerResources controllerResources) {
         super(controllerResources);
         // tc = new CreateTrade(gatewayBundle, (RegularUser) currUser);
         // tic = new TradeInfoController(gatewayBundle);
@@ -53,19 +53,19 @@ public class MarketController  extends AbstractController implements Initializab
          */
     }
 
-    public void borrowTradeClicked(){
+    public void borrowTradeClicked() {
 //        Trade newTrade = tc.execute(,tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
 //                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), "true");
 //        trades.getItems().add(newTrade);
     }
 
-    public void lendTradeClicked(){
+    public void lendTradeClicked() {
 //        Trade newTrade = tc.execute(, tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
 //                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), "true");
 //        trades.getItems().add(newTrade);
     }
 
-    public void threeWayTradeClicked(){
+    public void threeWayTradeClicked() {
 //        Trade newTrade = tc.execute(, tic.getYear(), tic.getCity(), tic.getDay(), tic.getHour(),
 //                tic.getMinute(), tic.getCountry(), tic.getCity(), tic.getStreet(), tic.getStreetNum(), "true");
 //        trades.getItems().add(newTrade);

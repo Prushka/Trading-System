@@ -64,9 +64,9 @@ public class TradeApplication extends Application {
 
 
         new CreateHeadIfNotExist(controllerResources.getCommandFactory());
-        mockDashboardRegister(primaryStage);
+        // mockDashboardRegister(primaryStage);
         // mockDashboardLogin(primaryStage);
-        // login(primaryStage);
+        login(primaryStage);
     }
 
     private void login(Stage primaryStage) {
@@ -76,7 +76,10 @@ public class TradeApplication extends Application {
     }
 
     private void addExampleItems(String name, String description, Category category, int quantity, double price) {
-        Command<Item> itemCommand = controllerResources.getCommandFactory().getCommand(AddItemToItemList::new, c -> {c.setItemListType(ItemListType.INVENTORY);c.setAsynchronous(false);});
+        Command<Item> itemCommand = controllerResources.getCommandFactory().getCommand(AddItemToItemList::new, c -> {
+            c.setItemListType(ItemListType.INVENTORY);
+            c.setAsynchronous(false);
+        });
         itemCommand.execute((result, status) -> {
         }, name, description, category.name(), String.valueOf(quantity), String.valueOf(price));
     }

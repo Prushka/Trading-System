@@ -15,34 +15,31 @@ import phase2.trade.user.RegularUser;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
-public class AlterWillingness extends ItemCommand<Item> {
+public class UpdateInventoryItems extends ItemCommand<Void> {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> itemIds;
+
+    private transient List<Item> itemsToUpdate;
 
     private Willingness newWillingness;
 
     // private Willingness oldWillingness;
 
     @Override
-    public void execute(StatusCallback<Item> callback, String... args) {
-        if (!checkPermission(callback)) {
-            return;
-        }
-        getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
-            Long[] ids = itemIds.toArray(new Long[0]);
-            for (Item item : operator.getItemList(ItemListType.INVENTORY).getListOfItems()) {
-                if (itemIds.contains(item.getUid())) {
-                    item.setWillingness(newWillingness);
-                }
+    public void execute(StatusCallback<Void> callback, String... args) {
+        if (!checkPermission(callback)) return;
+        getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
+            for (Item item : itemsToUpdate) {
+                gateway.update(item);
+                addEffectedEntity(Item.class, item.getUid());
             }
-            gateway.update(operator);
-            addEffectedEntity(Item.class, ids);
             save();
             if (callback != null)
                 callback.call(null, new StatusSucceeded());
@@ -58,7 +55,7 @@ public class AlterWillingness extends ItemCommand<Item> {
         this.newWillingness = newWillingness;
     }
 
-    public void setItemIds(Set<Long> itemIds) {
-        this.itemIds = itemIds;
+    public void setItemsToUpdate(List<Item> itemsToUpdate) {
+        this.itemsToUpdate = itemsToUpdate;
     }
 }

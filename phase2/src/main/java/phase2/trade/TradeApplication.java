@@ -64,8 +64,8 @@ public class TradeApplication extends Application {
 
 
         new CreateHeadIfNotExist(controllerResources.getCommandFactory());
-        // mockDashboardRegister(primaryStage);
-        mockDashboardLogin(primaryStage);
+        mockDashboardRegister(primaryStage);
+        // mockDashboardLogin(primaryStage);
         // login(primaryStage);
     }
 

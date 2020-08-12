@@ -12,12 +12,9 @@ public class SceneManager {
 
     private final Stage window;
     private final ParentLoader parentLoader;
-    private final ControllerResources controllerResources;
-
     private final ControllerFactory controllerFactory;
 
     public SceneManager(ControllerResources controllerResources) {
-        this.controllerResources = controllerResources;
         this.window = controllerResources.getWindow();
         parentLoader = new ParentLoader();
         controllerFactory = new ControllerFactory(controllerResources);

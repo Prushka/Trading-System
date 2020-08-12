@@ -40,10 +40,6 @@ public class Item {
         return uid;
     }
 
-    public void setUid(Long uid) {
-        this.uid = uid;
-    }
-
     public String getName() {
         return name;
     }

@@ -43,12 +43,17 @@ public class AddItemController extends AbstractController implements Initializab
         this.display = display;
     }
 
+    // this action does not reside in the ListChangeListener since
+    // the unique id can only be set from database, which means an Item has to be created first
+    // So if the item has to be created first using Command, then it's unnecessary to put this in listener
+    // The listener is supposed to bind the change in display data to the Command
     public void submitItem(ActionEvent actionEvent) {
         submitButton.setDisable(true);
         AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new,
                 command -> command.setItemListType(itemListType));
 
         itemCommand.execute((result, resultStatus) -> {
+            System.out.println("executed");
             resultStatus.setSucceeded(() -> display.add(result));
             resultStatus.setAfter(() -> {
                 submitButton.setDisable(false);

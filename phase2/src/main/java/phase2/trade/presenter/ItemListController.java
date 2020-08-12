@@ -4,10 +4,13 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import phase2.trade.command.Command;
@@ -17,15 +20,14 @@ import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
+import phase2.trade.item.ItemEditor;
 import phase2.trade.item.Willingness;
-import phase2.trade.item.command.AlterWillingness;
+import phase2.trade.item.command.UpdateInventoryItems;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 @ControllerProperty(viewFile = "item_list.fxml")
 public class ItemListController extends AbstractController implements Initializable {
@@ -38,6 +40,10 @@ public class ItemListController extends AbstractController implements Initializa
 
     public JFXTextField searchName;
 
+    private List<Button> buttonsToDisable;
+
+    private ObservableList<Item> displayData;
+
     public ItemListController(ControllerResources controllerResources, ItemListType itemListType) {
         super(controllerResources);
         this.itemListType = itemListType;
@@ -45,12 +51,13 @@ public class ItemListController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ObservableList<Item> displayData = FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getListOfItems());
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        displayData = FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getListOfItems());
+
 
         TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
         tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
-                .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price").addColumn("Willingness", "willingness");
-
+                .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price").addColumn("Willingness", "willingness").addColumn("UID", "uid");
 
         JFXButton addButton = new JFXButton("Add");
         JFXButton deleteButton = new JFXButton("Delete");
@@ -59,26 +66,37 @@ public class ItemListController extends AbstractController implements Initializa
 
         buttons.getChildren().addAll(addButton, deleteButton, sellButton, lendButton);
 
-        sellButton.setOnAction(getWillingnessHandler(sellButton, Willingness.WISH_TO_SELL));
+        sellButton.setOnAction(getWillingnessHandler(Willingness.WISH_TO_SELL));
 
-        lendButton.setOnAction(getWillingnessHandler(sellButton, Willingness.WISH_TO_LEND));
+        lendButton.setOnAction(getWillingnessHandler(Willingness.WISH_TO_LEND));
+
+        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton);
+
+        displayData.addListener(new ListChangeListener<Item>() {
+            @Override
+            public void onChanged(Change<? extends Item> c) {
+                while (c.next()) {
+                    if (c.wasRemoved()) {
+                        disableButtons(true);
+                        Command<Long[]> remove = getCommandFactory().getCommand(RemoveItem::new, command -> {
+                            command.setItemListType(itemListType);
+                            command.setItemIds(getItemIdsFrom(
+                                    c.getRemoved()));
+                        });
+                        remove.execute((result, resultStatus) -> {
+                            Platform.runLater(() -> {
+                                resultStatus.setAfter(() -> disableButtons(false));
+                                resultStatus.handle(getPopupFactory());
+                            });
+                        });
+                    }
+                }
+            }
+        });
 
         deleteButton.setOnAction(event -> {
             ObservableList<Item> itemsSelected = getSelected();
-            if (itemsSelected.size() == 0) return;
-            deleteButton.setDisable(true);
-
-            Command<Long[]> remove = getCommandFactory().getCommand(RemoveItem::new, c -> {
-                c.setItemListType(itemListType);
-                c.setItemIds(getItemIdsFrom(itemsSelected));
-            });
-            remove.execute((result, resultStatus) -> {
-                Platform.runLater(() -> {
-                    resultStatus.setAfter(() -> deleteButton.setDisable(false));
-                    resultStatus.setSucceeded(() -> itemsSelected.forEach(displayData::remove));
-                    resultStatus.handle(getPopupFactory());
-                });
-            });
+            displayData.removeAll(itemsSelected);
         });
 
         tableViewGenerator.addSearch(searchName, (entity, textField) -> {
@@ -94,26 +112,31 @@ public class ItemListController extends AbstractController implements Initializa
     }
 
 
-    public EventHandler<ActionEvent> getWillingnessHandler(JFXButton button, Willingness willingness) {
+    public EventHandler<ActionEvent> getWillingnessHandler(Willingness willingness) {
         return event -> {
             ObservableList<Item> itemsSelected = getSelected();
             if (itemsSelected.size() == 0) return;
-            button.setDisable(true);
-            Command<Item> command = getCommandFactory().getCommand(AlterWillingness::new, c -> {
-                c.setItemIds(getItemIdsFrom(itemsSelected));
+            ItemEditor itemEditor = new ItemEditor(itemsSelected);
+            itemEditor.alterWillingness(willingness);
+            disableButtons(true);
+            Command<?> command = getCommandFactory().getCommand(UpdateInventoryItems::new, c -> {
+                c.setItemsToUpdate(itemsSelected);
                 c.setNewWillingness(willingness);
             });
             command.execute((result, resultStatus) -> {
-                resultStatus.setAfter(() -> button.setDisable(false));
+                resultStatus.setAfter(() -> {
+                    disableButtons(false);
+                    tableView.refresh();
+                });
                 resultStatus.setSucceeded(() -> itemsSelected.forEach(item -> item.setWillingness(willingness)));
                 resultStatus.handle(getPopupFactory());
             });
         };
     }
 
-    private Set<Long> getItemIdsFrom(ObservableList<Item> observableList) {
+    private Set<Long> getItemIdsFrom(List<? extends Item> list) {
         Set<Long> ids = new HashSet<>();
-        for (Item item : observableList) {
+        for (Item item : list) {
             ids.add(item.getUid());
         }
         return ids;
@@ -128,5 +151,11 @@ public class ItemListController extends AbstractController implements Initializa
     public void addWindow(ObservableList<Item> displayData) {
         AddItemController addItemController = new AddItemController(getControllerResources(), itemListType, displayData);
         getSceneManager().loadPane(addItemController);
+    }
+
+    private void disableButtons(boolean value) {
+        for (Button button : buttonsToDisable) {
+            button.setDisable(value);
+        }
     }
 }

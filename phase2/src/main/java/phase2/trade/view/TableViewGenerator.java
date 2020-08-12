@@ -2,11 +2,14 @@ package phase2.trade.view;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import phase2.trade.item.Item;
 
 import javax.swing.event.ChangeEvent;
@@ -57,6 +60,14 @@ public class TableViewGenerator<T> {
 
     public TableViewGenerator<T> addColumn(String name, String fieldName) {
         listOfColumns.add(getTableColumn(name, fieldName, defaultMinWidth));
+        return this;
+    }
+
+    public TableViewGenerator<T> addColumn(String name,
+                                           Callback<TableColumn.CellDataFeatures<T, String>, ObservableValue<String>> cellValueFactory) {
+        TableColumn<T, String> column = new TableColumn<>(name);
+        column.setCellValueFactory(cellValueFactory);
+        listOfColumns.add(column);
         return this;
     }
 

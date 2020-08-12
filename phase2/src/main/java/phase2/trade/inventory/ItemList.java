@@ -9,6 +9,11 @@ import java.util.*;
 @MappedSuperclass
 public abstract class ItemList {
 
+    // I don't know why the subclasses are complaining about the missing primary key
+    // This is a standard implementation according to JPA documentation to have this primary key in a MappedSuperClass
+    // There are related questions in stackoverflow but none has come up with a solution
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;

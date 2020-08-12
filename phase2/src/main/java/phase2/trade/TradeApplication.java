@@ -2,12 +2,9 @@ package phase2.trade;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.Command;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.controller.LoginController;
@@ -20,10 +17,7 @@ import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.AccountManager;
-import phase2.trade.user.CreateHeadIfNotExist;
-import phase2.trade.user.User;
-
-import java.util.Locale;
+import phase2.trade.user.FirstCheck;
 
 public class TradeApplication extends Application {
 
@@ -63,7 +57,7 @@ public class TradeApplication extends Application {
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
 
-        new CreateHeadIfNotExist(controllerResources.getCommandFactory());
+        new FirstCheck(controllerResources.getCommandFactory());
         mockDashboardRegister(primaryStage);
         // mockDashboardLogin(primaryStage);
         // login(primaryStage);
@@ -88,12 +82,7 @@ public class TradeApplication extends Application {
         controllerResources.getAccountManager().register((result, status) -> {
             Platform.runLater(() -> {
                 addExample();
-                Parent dashboard = controllerResources.getSceneManager().loadPane(DashboardController::new);
-                Scene scene = new Scene(dashboard);
-
-                scene.getStylesheets().add("css/trade.css");
-
-                primaryStage.setScene(scene);
+                controllerResources.getSceneManager().switchScene(DashboardController::new);
                 primaryStage.show();
             });
 
@@ -103,12 +92,7 @@ public class TradeApplication extends Application {
     private void mockDashboardLogin(Stage primaryStage) {
         controllerResources.getAccountManager().login((result, status) -> {
             Platform.runLater(() -> {
-                Parent dashboard = controllerResources.getSceneManager().loadPane(DashboardController::new);
-                Scene scene = new Scene(dashboard);
-
-                scene.getStylesheets().add("css/trade.css");
-
-                primaryStage.setScene(scene);
+                controllerResources.getSceneManager().switchScene(DashboardController::new);
                 primaryStage.show();
             });
 

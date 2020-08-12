@@ -27,9 +27,7 @@ public class ReviewItem extends ItemCommand<Item> {
 
     @Override
     public void execute(ResultStatusCallback<Item> callback, String... args) { //
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             Item item = findItemByIdSyncInsideItemGateway(itemId);
 

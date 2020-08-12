@@ -85,8 +85,8 @@ public class MarketListController extends AbstractController implements Initiali
         search.setGraphic(arrow);
         search.setRipplerFill(Color.WHITE);
 
-        getPane("topDashboard").getChildren().clear();
-        getPane("topDashboard").getChildren().addAll(vBox, category, includeMine, priceMinInclusive, label, priceMaxInclusive, search);
+        getPane("topBar").getChildren().clear();
+        getPane("topBar").getChildren().addAll(vBox, category, includeMine, priceMinInclusive, label, priceMaxInclusive, search);
         getMarket.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
                 for (Item item : result) {

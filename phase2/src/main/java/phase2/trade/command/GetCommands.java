@@ -13,9 +13,7 @@ public class GetCommands extends Command<List<Command>> {
 
     @Override
     public void execute(ResultStatusCallback<List<Command>> callback, String... args) {
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getCommandGateway().submitSession((gateway) ->
                 callback.call(gateway.findAll(), new StatusSucceeded()));
     }

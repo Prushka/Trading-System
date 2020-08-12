@@ -28,9 +28,7 @@ public class GetItems extends ItemCommand<ItemList> {
 
     @Override
     public void execute(ResultStatusCallback<ItemList> callback, String... args) {
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         ItemList itemList = operator.getItemList(itemListType);
         callback.call(itemList, new StatusSucceeded());
     }

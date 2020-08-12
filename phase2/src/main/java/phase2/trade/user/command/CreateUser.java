@@ -21,9 +21,7 @@ public class CreateUser extends UserCommand<User> {
 
     @Override
     public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             List<User> usersByName = gateway.findByUserName(args[0]);
             List<User> usersByEmail = gateway.findByEmail(args[1]);

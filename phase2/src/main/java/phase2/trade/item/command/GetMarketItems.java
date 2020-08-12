@@ -20,9 +20,7 @@ public class GetMarketItems extends ItemCommand<List<Item>> {
 
     @Override
     public void execute(ResultStatusCallback<List<Item>> callback, String... args) {
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getItemGateway().submitSession((gateway) -> callback.call(gateway.findMarketItems(), new StatusSucceeded()));
     }
 

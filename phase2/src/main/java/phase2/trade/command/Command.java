@@ -28,8 +28,10 @@ public abstract class Command<T> implements PermissionBased {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
+    protected transient User operator;
+
     @OneToOne
-    protected User operator;
+    protected User userToPersist;
 
     private boolean ifUndone = false;
 
@@ -55,6 +57,8 @@ public abstract class Command<T> implements PermissionBased {
     void injectByFactory(GatewayBundle gatewayBundle, User operator) {
         this.gatewayBundle = gatewayBundle;
         this.operator = operator;
+        persistUserIfNotSystem();
+        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getUserName());
     }
 
     public Command() {
@@ -112,18 +116,27 @@ public abstract class Command<T> implements PermissionBased {
 
     protected void save() {
         if (!commandPropertyAnnotation.persistent()) return;
-        if (operator.getPermissionGroup().equals(PermissionGroup.SYSTEM))
-            operator = null; // still the system user should be null
         timestamp = System.currentTimeMillis();
         effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
-        getEntityBundle().getCommandGateway().submitTransaction((gateway) -> gateway.add(getThis()));
+        getEntityBundle().getCommandGateway().submitTransaction((gateway) -> {
+            gateway.add(getThis());
+        });
+    }
+
+    // only used to avoid storing System as a user into database, this won't succeed also because System was not persistent as a User
+    private void persistUserIfNotSystem(){
+        if(operator.getPermissionGroup()!=PermissionGroup.SYSTEM){
+            userToPersist = operator;
+        }
     }
 
     protected void updateUndo() {
         if (!commandPropertyAnnotation.persistent()) return;
         undoTimestamp = System.currentTimeMillis();
         ifUndone = true;
-        getEntityBundle().getCommandGateway().submitTransaction((gateway) -> gateway.update(getThis()));
+        getEntityBundle().getCommandGateway().submitTransaction((gateway) -> {
+            gateway.update(getThis());
+        });
     }
 
     @Override

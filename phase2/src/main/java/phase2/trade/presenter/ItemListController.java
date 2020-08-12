@@ -32,13 +32,11 @@ import java.util.*;
 @ControllerProperty(viewFile = "item_list.fxml")
 public class ItemListController extends AbstractController implements Initializable {
 
-    private ItemListType itemListType;
+    private final ItemListType itemListType;
 
     public TableView<Item> tableView;
 
     public HBox buttons;
-
-    public JFXTextField searchName;
 
     private List<Button> buttonsToDisable;
 
@@ -95,6 +93,16 @@ public class ItemListController extends AbstractController implements Initializa
             ObservableList<Item> itemsSelected = getSelected();
             displayData.removeAll(itemsSelected);
         });
+
+        JFXTextField searchName = new JFXTextField();
+        searchName.setPromptText("Search Name");
+        searchName.setLabelFloat(true);
+
+        JFXTextField searchDescription = new JFXTextField();
+        searchDescription.setPromptText("Search Description");
+        searchDescription.setLabelFloat(true);
+
+        getPane("topBar").getChildren().addAll(searchName, searchDescription);
 
         tableViewGenerator.addSearch(searchName, (entity, textField) -> {
             String lowerCaseFilter = textField.toLowerCase();

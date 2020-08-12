@@ -20,7 +20,7 @@ public class AccountManager {
     public AccountManager(GatewayBundle gatewayBundle) {
         userFactory = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
         CommandFactory commandFactory = new CommandFactory(gatewayBundle, this);
-        this.loginCommand = commandFactory.getCommand(Login::new, false);
+        this.loginCommand = commandFactory.getCommand(Login::new, true);
         this.registerCommand = commandFactory.getCommand(CreateUser::new, true);
     }
 

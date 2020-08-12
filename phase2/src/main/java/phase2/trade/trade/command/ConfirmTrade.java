@@ -18,9 +18,7 @@ public class ConfirmTrade extends TradeCommand<Trade> {
     @Override
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
         tcc = new TradeConfirmer(getConfigBundle().getTradeConfig().getTimeLimit());
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade currTrade = findTradeByIdSyncOutsideTradeGateway(tradeId);
             Trade trade = tcc.confirmTrade(currTrade, operator);

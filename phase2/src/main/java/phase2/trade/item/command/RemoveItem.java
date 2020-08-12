@@ -28,9 +28,7 @@ public class RemoveItem extends ItemCommand<Long[]> {
 
     @Override
     public void execute(ResultStatusCallback<Long[]> callback, String... args) {
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             Long[] ids = itemIds.toArray(new Long[0]);
             operator.getItemList(itemListType).removeItemByUid(ids);

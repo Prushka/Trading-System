@@ -12,12 +12,6 @@
 <?import javafx.scene.layout.Pane?>
 <VBox fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
       prefWidth="250" prefHeight="1000" spacing="15">
-    <HBox spacing="15" alignment="CENTER_LEFT">
-        <Label text="Search Name: "/>
-        <JFXTextField prefWidth="250" fx:id="searchName"/>
-        <Label text="Search Quantity: "/>
-        <JFXTextField prefWidth="250" fx:id="searchQuantity"/>
-    </HBox>
     <TableView fx:id="tableView"/>
     <HBox fx:id="buttons" spacing="10">
         <padding>

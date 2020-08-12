@@ -17,9 +17,7 @@ public class EditTrade extends TradeCommand<Trade> {
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
         // TO DO: Implement cancelling after limit
         te = new TradeEditor(getConfigBundle().getTradeConfig().getEditLimit());
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade currTrade = findTradeByIdSyncOutsideTradeGateway(tradeId);
             getEntityBundle().getUserGateway().update(operator);

@@ -26,9 +26,7 @@ public class AddToCart extends ItemCommand<Item> {
 
     @Override
     public void execute(ResultStatusCallback<Item> callback, String... args) {
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             Item item = findItemByIdSyncOutsideItemGateway(itemId);
             operator.getItemList(ItemListType.CART).addItem(item);

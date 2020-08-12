@@ -2,6 +2,7 @@ package phase2.trade.command;
 
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.AccountManager;
+import phase2.trade.user.SystemUser;
 import phase2.trade.user.User;
 import phase2.trade.user.UserFactory;
 
@@ -31,8 +32,7 @@ public class CommandFactory {
     }
 
     public <T extends Command<?>> T getCommand(CommandSupplier<T> commandSupplier, boolean useSystem) {
-        return this.getCommand(commandSupplier, t -> {
-        }, useSystem);
+        return this.getCommand(commandSupplier, t -> {}, useSystem);
     }
 
 

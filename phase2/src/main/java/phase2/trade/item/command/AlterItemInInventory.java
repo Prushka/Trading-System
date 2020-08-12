@@ -19,9 +19,7 @@ public class AlterItemInInventory extends ItemCommand<Item> {
 
     @Override
     public void execute(ResultStatusCallback<Item> callback, String... args) {
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             Item item = operator.getItemList(ItemListType.INVENTORY).findByUid(itemId);
             item.setName(args[0]);

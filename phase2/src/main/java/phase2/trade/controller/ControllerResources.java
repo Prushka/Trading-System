@@ -8,6 +8,7 @@ import phase2.trade.presenter.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ControllerResources {
@@ -24,7 +25,7 @@ public class ControllerResources {
 
     private final SceneManager sceneManager;
 
-    private Map<String, Pane> panes;
+    private final Map<String, Pane> panes = new HashMap<>();
 
     public ControllerResources(GatewayBundle gatewayBundle, Stage window, AccountManager accountManager) {
         this.gatewayBundle = gatewayBundle;
@@ -51,11 +52,11 @@ public class ControllerResources {
         return popupFactory;
     }
 
-    protected CommandFactory getCommandFactory() {
+    public CommandFactory getCommandFactory() {
         return commandFactory;
     }
 
-    protected SceneManager getSceneManager() {
+    public SceneManager getSceneManager() {
         return sceneManager;
     }
 

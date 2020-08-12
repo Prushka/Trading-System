@@ -16,9 +16,7 @@ public class CreateTrade extends TradeCommand<Trade>{
     @Override
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
         tc = new TradeCreator();
-        if (!checkPermission(callback)) {
-            return;
-        }
+        if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade newTrade = tc.createTrade(new ArrayList<>(), new ArrayList<>(), args[0], args[1], args[2], args[3],
                     args[4], args[5], args[6], args[7], args[8], args[9]);

@@ -158,8 +158,4 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
     }
 
     protected abstract S getThis();
-
-    public EntityManager getEntityManager() {
-        return getSessionFactory().createEntityManager();
-    }
 }

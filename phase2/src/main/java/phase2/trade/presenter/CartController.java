@@ -6,65 +6,43 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
 import phase2.trade.command.Command;
-import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.AddItemController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
-import phase2.trade.item.ItemEditor;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.RemoveItem;
-import phase2.trade.item.command.UpdateInventoryItems;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Stream;
 
-@ControllerProperty(viewFile = "item_list.fxml")
-public class CartController extends AbstractController implements Initializable {
+@ControllerProperty(viewFile = "general_table_view.fxml")
+public class CartController extends GeneralTableViewController<Item> implements Initializable {
 
     private final ItemListType itemListType;
 
-    public TableView<Item> tableView;
-
-    public HBox buttons;
-
-    private List<Button> buttonsToDisable;
-
-    private ObservableList<Item> displayData;
-
     public CartController(ControllerResources controllerResources, ItemListType itemListType) {
-        super(controllerResources);
+        super(controllerResources, true, false);
         this.itemListType = itemListType;
+        setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        displayData = FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems());
-
-
-        tableView.setEditable(true);
-
-
-        TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
+        super.initialize(location,resources);
         tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
                 .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price")
                 .addColumn("Willingness", "willingness").addColumn("Owner", param -> {
@@ -81,6 +59,11 @@ public class CartController extends AbstractController implements Initializable 
         buttons.getChildren().addAll(deleteButton, trade);
 
         buttonsToDisable = FXCollections.observableArrayList(deleteButton, trade);
+
+        hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
+            command.setItemListType(itemListType);
+            command.setItemIds(idsRemoved);
+        }), Item::getUid);
 
         deleteButton.setOnAction(event -> {
             ObservableList<Item> itemsSelected = getSelected();
@@ -124,30 +107,5 @@ public class CartController extends AbstractController implements Initializable 
         privateCheckBox.setSelected(true);
 
         tableViewGenerator.build();
-    }
-
-    private Set<Long> getItemIdsFrom(List<? extends Item> list) {
-        Set<Long> ids = new HashSet<>();
-        for (Item item : list) {
-            ids.add(item.getUid());
-        }
-        return ids;
-    }
-
-    private ObservableList<Item> getSelected() {
-        ObservableList<Item> itemsSelected;
-        itemsSelected = tableView.getSelectionModel().getSelectedItems();
-        return itemsSelected;
-    }
-
-    public void addWindow(ObservableList<Item> displayData) {
-        AddItemController addItemController = new AddItemController(getControllerResources(), itemListType, displayData);
-        getSceneManager().loadPane(addItemController);
-    }
-
-    private void disableButtons(boolean value) {
-        for (Button button : buttonsToDisable) {
-            button.setDisable(value);
-        }
     }
 }

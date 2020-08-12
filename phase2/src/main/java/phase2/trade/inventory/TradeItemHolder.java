@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 public class TradeItemHolder extends ItemList {
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.MERGE)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = {CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.REFRESH})
     protected Set<Item> setOfItems = new HashSet<>();
 
     @Override

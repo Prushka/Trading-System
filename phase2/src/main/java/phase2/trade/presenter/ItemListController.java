@@ -27,7 +27,6 @@ import phase2.trade.item.ItemEditor;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.UpdateInventoryItems;
 import phase2.trade.item.command.RemoveItem;
-import phase2.trade.view.FilterPredicate;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
@@ -112,9 +111,9 @@ public class ItemListController extends AbstractController implements Initializa
 
         JFXComboBox<String> category = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))));
         category.setPromptText("Category");
+        category.getItems().add("ALL");
         category.setLabelFloat(true);
 
-        tableViewGenerator.addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
         JFXCheckBox lend = new JFXCheckBox("Wish To Lend");
         JFXCheckBox sell = new JFXCheckBox("Wish To Sell");
@@ -123,9 +122,8 @@ public class ItemListController extends AbstractController implements Initializa
         tableViewGenerator.addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND));
         tableViewGenerator.addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL));
         tableViewGenerator.addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE));
-        tableViewGenerator.groupCheckBoxes();
 
-        getPane("topBar").getChildren().setAll(searchName, searchDescription, category, lend, sell, privateCheckBox);
+        tableViewGenerator.addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
         tableViewGenerator.addSearch(searchName, (entity, toMatch) -> {
             String lowerCaseFilter = toMatch.toLowerCase();
@@ -136,6 +134,13 @@ public class ItemListController extends AbstractController implements Initializa
             String lowerCaseFilter = textField.toLowerCase();
             return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
         });
+
+        tableViewGenerator.group();
+
+        getPane("topBar").getChildren().setAll(searchName, searchDescription, category, lend, sell, privateCheckBox);
+        lend.setSelected(true);
+        sell.setSelected(true);
+        privateCheckBox.setSelected(true);
 
         addButton.setOnAction(event -> {
             addWindow(displayData);
@@ -148,7 +153,10 @@ public class ItemListController extends AbstractController implements Initializa
     public EventHandler<ActionEvent> getWillingnessHandler(Willingness willingness) {
         return event -> {
             ObservableList<Item> itemsSelected = getSelected();
-            if (itemsSelected.size() == 0) return;
+            if (itemsSelected.size() == 0) {
+                getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
+                return;
+            }
 
             ItemEditor itemEditor = new ItemEditor(itemsSelected);
             itemEditor.alterWillingness(willingness, resultStatus -> {

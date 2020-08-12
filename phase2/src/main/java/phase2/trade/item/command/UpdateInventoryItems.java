@@ -23,14 +23,7 @@ import java.util.Set;
         persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class UpdateInventoryItems extends ItemCommand<Void> {
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Set<Long> itemIds;
-
     private transient List<Item> itemsToUpdate;
-
-    private Willingness newWillingness;
-
-    // private Willingness oldWillingness;
 
     @Override
     public void execute(StatusCallback<Void> callback, String... args) {
@@ -49,10 +42,6 @@ public class UpdateInventoryItems extends ItemCommand<Void> {
 
     @Override
     public void undo() {
-    }
-
-    public void setNewWillingness(Willingness newWillingness) {
-        this.newWillingness = newWillingness;
     }
 
     public void setItemsToUpdate(List<Item> itemsToUpdate) {

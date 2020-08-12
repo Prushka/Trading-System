@@ -66,30 +66,27 @@ public class ItemListController extends AbstractController implements Initializa
 
         buttons.getChildren().addAll(addButton, deleteButton, sellButton, lendButton);
 
-        sellButton.setOnAction(getWillingnessHandler(Willingness.WISH_TO_SELL));
+        sellButton.setOnAction(getWillingnessHandler(Willingness.SELL));
 
-        lendButton.setOnAction(getWillingnessHandler(Willingness.WISH_TO_LEND));
+        lendButton.setOnAction(getWillingnessHandler(Willingness.LEND));
 
         buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton);
 
-        displayData.addListener(new ListChangeListener<Item>() {
-            @Override
-            public void onChanged(Change<? extends Item> c) {
-                while (c.next()) {
-                    if (c.wasRemoved()) {
-                        disableButtons(true);
-                        Command<Long[]> remove = getCommandFactory().getCommand(RemoveItem::new, command -> {
-                            command.setItemListType(itemListType);
-                            command.setItemIds(getItemIdsFrom(
-                                    c.getRemoved()));
+        displayData.addListener((ListChangeListener<Item>) c -> {
+            while (c.next()) {
+                if (c.wasRemoved()) {
+                    disableButtons(true);
+                    Command<?> remove = getCommandFactory().getCommand(RemoveItem::new, command -> {
+                        command.setItemListType(itemListType);
+                        command.setItemIds(getItemIdsFrom(
+                                c.getRemoved()));
+                    });
+                    remove.execute((result, resultStatus) -> {
+                        Platform.runLater(() -> {
+                            resultStatus.setAfter(() -> disableButtons(false));
+                            resultStatus.handle(getPopupFactory());
                         });
-                        remove.execute((result, resultStatus) -> {
-                            Platform.runLater(() -> {
-                                resultStatus.setAfter(() -> disableButtons(false));
-                                resultStatus.handle(getPopupFactory());
-                            });
-                        });
-                    }
+                    });
                 }
             }
         });
@@ -121,7 +118,6 @@ public class ItemListController extends AbstractController implements Initializa
             disableButtons(true);
             Command<?> command = getCommandFactory().getCommand(UpdateInventoryItems::new, c -> {
                 c.setItemsToUpdate(itemsSelected);
-                c.setNewWillingness(willingness);
             });
             command.execute((result, resultStatus) -> {
                 resultStatus.setAfter(() -> {

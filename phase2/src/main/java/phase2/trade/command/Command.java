@@ -7,7 +7,6 @@ import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
-import phase2.trade.user.UserFactory;
 
 import javax.persistence.*;
 import java.util.*;
@@ -45,7 +44,7 @@ public abstract class Command<T> implements PermissionBased {
     // the reason why this is not persisted in its native form is because doing so would potentially mess up the db structure
     // the String part has to be a class's name and the set has to contain all effected ids
     // maybe it would be possible to benefit from sql statements to figure out the overlapping records, but I don't know how to query all mapped columns of such a nested set inside a map
-    protected transient Map<String, Set<String>> effectedEntities;
+    protected transient Map<String, Set<Long>> effectedEntities;
 
     protected transient GatewayBundle gatewayBundle;
 
@@ -60,6 +59,7 @@ public abstract class Command<T> implements PermissionBased {
 
     public Command() {
         loadAnnotation();
+        retrieveEffectedEntities(effectedEntitiesToPersist);
         this.effectedEntities = new HashMap<>();
     }
 
@@ -101,8 +101,13 @@ public abstract class Command<T> implements PermissionBased {
 
     protected void addEffectedEntity(Class<?> clazz, Long... ids) {
         for (Long id : ids) {
-            putOrAdd(effectedEntities, clazz.getName(), id.toString());
+            putOrAdd(effectedEntities, clazz.getName(), id);
         }
+    }
+
+    protected Set<Long> getEffectedEntities(Class<?> clazz) {
+        if(effectedEntities == null) retrieveEffectedEntities(effectedEntitiesToPersist);
+        return effectedEntities.get(clazz.getName());
     }
 
     protected void save() {
@@ -145,20 +150,20 @@ public abstract class Command<T> implements PermissionBased {
         return false;
     }
 
-    private void putOrAdd(Map<String, Set<String>> map, String key, String value) {
+    private void putOrAdd(Map<String, Set<Long>> map, String key, Long value) {
         if (map.containsKey(key)) {
             map.get(key).add(value);
         } else {
-            map.put(key, new HashSet<String>() {{
+            map.put(key, new HashSet<Long>() {{
                 add(value);
             }});
         }
     }
 
-    private String translateEffectedEntitiesToPersist(Map<String, Set<String>> map) {
+    private String translateEffectedEntitiesToPersist(Map<String, Set<Long>> map) {
         StringBuilder temp = new StringBuilder();
-        for (Map.Entry<String, Set<String>> entry : map.entrySet()) {
-            temp.append(entry.getKey()).append("!").append(String.join(",", entry.getValue())).append(";");
+        for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
+            temp.append(entry.getKey()).append("!").append(String.join(",", String.valueOf(entry.getValue()))).append(";");
         }
         return temp.toString();
     }

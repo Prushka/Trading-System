@@ -46,11 +46,9 @@ public class MarketListController extends AbstractController implements Initiali
     }
 
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listView.setSelectionModel(new NoSelectionModel<>());
-        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
 
         listView.setCellFactory(new MarketItemCellFactory());
         JFXButton search = new JFXButton();
@@ -90,6 +88,8 @@ public class MarketListController extends AbstractController implements Initiali
 
         getPane("topBar").getChildren().clear();
         getPane("topBar").getChildren().addAll(vBox, category, includeMine, priceMinInclusive, label, priceMaxInclusive, search);
+
+        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
                 for (Item item : result) {

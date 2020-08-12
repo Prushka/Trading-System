@@ -92,7 +92,7 @@ public class SideMenuController extends AbstractController implements Initializa
             }
         });
 
-        sideList.getSelectionModel().select(1);
+        sideList.getSelectionModel().select(2);
         bottomSideList.setOnMouseClicked(event -> {
                     switch (bottomSideList.getSelectionModel().getSelectedItem()) {
                         case "Sign Out":

@@ -3,13 +3,13 @@ package phase2.trade.view;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class TableViewGenerator<T> {
@@ -53,15 +53,53 @@ public class TableViewGenerator<T> {
     }
 
 
-    public TableViewGenerator<T> addSearch(TextField textField, TextFieldPredicate<T> predicate) {
+    public TableViewGenerator<T> addSearch(TextField textField, FilterPredicate<T, String> filterPredicate) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredList.setPredicate(t -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
-                return predicate.test(t, textField.getText());
+                return filterPredicate.test(t, textField.getText());
             });
         });
+        return this;
+    }
+
+    public <E> TableViewGenerator<T> addComboBox(ComboBox<E> comboBox, FilterPredicate<T, E> filterPredicate) {
+        comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            filteredList.setPredicate(t -> {
+                if (newValue == null) {
+                    return true;
+                }
+                return filterPredicate.test(t, comboBox.getValue());
+            });
+        });
+        return this;
+    }
+
+    private Map<CheckBox, FilterPredicate<T, Boolean>> checkBoxGroup = new HashMap<>();
+
+    public TableViewGenerator<T> addCheckBox(CheckBox checkBox, FilterPredicate<T, Boolean> filterPredicate) {
+        checkBoxGroup.put(checkBox,filterPredicate);
+        return this;
+    }
+
+    public TableViewGenerator<T> groupCheckBoxes() {
+        for(Map.Entry<CheckBox, FilterPredicate<T,Boolean>> entry : checkBoxGroup.entrySet()) {
+            entry.getKey().selectedProperty().addListener((observable, oldValue, newValue) -> {
+                filteredList.setPredicate(t -> {
+                    if (newValue == null) {
+                        return true;
+                    }
+                    boolean result = false;
+                    for(Map.Entry<CheckBox, FilterPredicate<T,Boolean>> entry2 : checkBoxGroup.entrySet()) {
+                        if(entry2.getKey().isSelected())
+                        result = entry2.getValue().test(t, entry2.getKey().isSelected()) || result;
+                    }
+                    return result;
+                });
+            });
+        }
         return this;
     }
 

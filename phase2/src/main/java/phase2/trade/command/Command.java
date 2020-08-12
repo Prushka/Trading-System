@@ -58,7 +58,7 @@ public abstract class Command<T> implements PermissionBased {
         this.gatewayBundle = gatewayBundle;
         this.operator = operator;
         persistUserIfNotSystem();
-        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getUserName());
+        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getUserName() + "  |  "+operator.getPermissionGroup()+ "  |  "+operator.getPermissionSet().getPerm().toString());
     }
 
     public Command() {

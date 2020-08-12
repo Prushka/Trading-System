@@ -1,6 +1,8 @@
 package phase2.trade.presenter;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -19,15 +21,18 @@ import phase2.trade.controller.AddItemController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
+import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemEditor;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.UpdateInventoryItems;
 import phase2.trade.item.command.RemoveItem;
+import phase2.trade.view.FilterPredicate;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "item_list.fxml")
 public class ItemListController extends AbstractController implements Initializable {
@@ -51,6 +56,9 @@ public class ItemListController extends AbstractController implements Initializa
     public void initialize(URL location, ResourceBundle resources) {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         displayData = FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getListOfItems());
+
+
+        tableView.setEditable(true);
 
 
         TableViewGenerator<Item> tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
@@ -102,10 +110,25 @@ public class ItemListController extends AbstractController implements Initializa
         searchDescription.setPromptText("Search Description");
         searchDescription.setLabelFloat(true);
 
-        getPane("topBar").getChildren().setAll(searchName, searchDescription);
+        JFXComboBox<String> category = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))));
+        category.setPromptText("Category");
+        category.setLabelFloat(true);
 
-        tableViewGenerator.addSearch(searchName, (entity, textField) -> {
-            String lowerCaseFilter = textField.toLowerCase();
+        tableViewGenerator.addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
+
+        JFXCheckBox lend = new JFXCheckBox("Wish To Lend");
+        JFXCheckBox sell = new JFXCheckBox("Wish To Sell");
+        JFXCheckBox privateCheckBox = new JFXCheckBox("Private");
+
+        tableViewGenerator.addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND));
+        tableViewGenerator.addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL));
+        tableViewGenerator.addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE));
+        tableViewGenerator.groupCheckBoxes();
+
+        getPane("topBar").getChildren().setAll(searchName, searchDescription, category, lend, sell, privateCheckBox);
+
+        tableViewGenerator.addSearch(searchName, (entity, toMatch) -> {
+            String lowerCaseFilter = toMatch.toLowerCase();
             return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
         });
 

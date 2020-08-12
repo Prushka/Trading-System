@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DatabaseConfig implements ConfigDefaultable {
+public class DatabaseConfig {
 
     private String databaseType = "mysql";
 
@@ -180,10 +180,5 @@ public class DatabaseConfig implements ConfigDefaultable {
         configureDialects("mariadb", "org.hibernate.dialect.MariaDB53Dialect", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://"); // mariadb is compatible with mysql
         configureDialects("postgresql", "org.hibernate.dialect.PostgreSQLDialect", "org.postgresql.Driver", "jdbc:postgresql://"); // schema has to be configured in entity table to support postgresql
         // mssql
-    }
-
-    @Override
-    public void initDefault() {
-
     }
 }

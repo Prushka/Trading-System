@@ -37,6 +37,8 @@ public class UserFactory {
         PermissionSet fromConfig = permissionConfig.getDefaultPermissions().get(permissionGroup);
         if (fromConfig != null) {
             user.setUserPermission(new PermissionSet(fromConfig.getPerm()));
+        } else{
+            System.err.println("Permission Not Set For Group: "+permissionGroup);
         }
         return user;
     }

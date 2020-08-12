@@ -8,18 +8,24 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import phase2.trade.command.Command;
 import phase2.trade.item.Item;
+import phase2.trade.item.command.AddToCart;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MarketItemCell extends JFXListCell<Item> {
+
+    private final AddToCart addToCartCommand;
+
+    public MarketItemCell(AddToCart addToCartCommand) {
+        this.addToCartCommand = addToCartCommand;
+    }
 
     @Override
     public void startEdit() {
@@ -66,6 +72,14 @@ public class MarketItemCell extends JFXListCell<Item> {
         Label ownerLabel = new Label(item.getOwner().getUserName());
 
         JFXButton addToCart = new JFXButton("Add To Cart");
+        addToCart.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                addToCartCommand.setItemIds(item.getUid());
+                addToCartCommand.execute((result,status)->{
+                });
+            }
+        });
 
         leftVBox.getChildren().addAll(categoryLabel, nameLabel, descriptionLabel);
 

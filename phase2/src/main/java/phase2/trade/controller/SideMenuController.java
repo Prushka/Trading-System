@@ -38,9 +38,9 @@ public class SideMenuController extends AbstractController implements Initializa
         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(controller));
     }
 
-    private void wishList() {
+    private void cart() {
         getPane("centerDashboard").getChildren().clear();
-        ItemListController controller = new ItemListController(getControllerResources(), ItemListType.INVENTORY);
+        ItemListController controller = new ItemListController(getControllerResources(), ItemListType.CART);
         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(controller));
     }
 
@@ -65,7 +65,7 @@ public class SideMenuController extends AbstractController implements Initializa
     public void initialize(URL location, ResourceBundle resources) {
         userInfoBox.getChildren().add(getSceneManager().loadPane(UserInfoPresenter::new));
 
-        sideList.setItems(FXCollections.observableArrayList("userInfo", "market", "inventory", "wishlist"));
+        sideList.setItems(FXCollections.observableArrayList("userInfo", "market", "inventory", "cart"));
 
 
         bottomSideList.setItems(FXCollections.observableArrayList("Exit", "Sign Out"));
@@ -82,8 +82,8 @@ public class SideMenuController extends AbstractController implements Initializa
                     case "inventory":
                         inventory();
                         break;
-                    case "wishList":
-                        wishList();
+                    case "cart":
+                        cart();
                         break;
                     case "userOperation":
                         loadCenter("user_info.fxml", UserOperationController::new);

@@ -8,12 +8,14 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.util.Callback;
 import phase2.trade.Main;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.Command;
@@ -23,10 +25,10 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
+import phase2.trade.item.command.AddToCart;
 import phase2.trade.item.command.GetMarketItems;
 import phase2.trade.view.ListViewGenerator;
 import phase2.trade.view.MarketItemCell;
-import phase2.trade.view.MarketItemCellFactory;
 import phase2.trade.view.NoSelectionModel;
 
 import java.io.IOException;
@@ -73,7 +75,8 @@ public class MarketListController extends AbstractController implements Initiali
 
     private void afterFetch() {
         listView.setSelectionModel(new NoSelectionModel<>());
-        listView.setCellFactory(new MarketItemCellFactory());
+        AddToCart addToCartCommand = getCommandFactory().getCommand(AddToCart::new);
+        listView.setCellFactory(param -> new MarketItemCell(addToCartCommand));
         JFXButton search = new JFXButton();
         JFXCheckBox lend = new JFXCheckBox("Lend");
         JFXCheckBox sell = new JFXCheckBox("Sell");

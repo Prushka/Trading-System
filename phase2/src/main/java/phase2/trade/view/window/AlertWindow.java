@@ -1,4 +1,4 @@
-package phase2.trade.view;
+package phase2.trade.view.window;
 
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXAlert;

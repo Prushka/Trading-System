@@ -42,19 +42,19 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private <T> void loadCenter(String fileName, ControllerSupplier<T> supplier) {
         center.getChildren().clear();
-        getSceneManager().addPane(fileName, supplier, center);
+        center.getChildren().add(getSceneManager().loadPane(fileName, supplier));
     }
 
     private void inventory() {
         center.getChildren().clear();
         ItemListController controller = new ItemListController(getControllerResources(), ItemListType.INVENTORY);
-        getSceneManager().addPane(controller, center);
+        center.getChildren().add(getSceneManager().loadPane(controller));
     }
 
     private void wishList() {
         center.getChildren().clear();
         ItemListController controller = new ItemListController(getControllerResources(), ItemListType.INVENTORY);
-        getSceneManager().addPane(controller, center);
+        center.getChildren().add(getSceneManager().loadPane(controller));
     }
 
     // TODO: extend for different users
@@ -76,7 +76,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        getSceneManager().addPane(UserInfoPresenter::new, userInfoBox);
+        userInfoBox.getChildren().add(getSceneManager().loadPane(UserInfoPresenter::new));
 
         sideList.setItems(FXCollections.observableArrayList("userInfo", "market", "inventory", "wishlist"));
 
@@ -90,7 +90,7 @@ public class SideMenuController extends AbstractController implements Initializa
                         break;
                     case "market":
                         center.getChildren().clear();
-                        getSceneManager().addPane("market_list.fxml", new MarketListController(getControllerResources(), top), center);
+                        center.getChildren().add(getSceneManager().loadPane(new MarketListController(getControllerResources(), top)));
                         break;
                     case "inventory":
                         inventory();

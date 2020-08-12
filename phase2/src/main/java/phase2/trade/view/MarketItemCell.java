@@ -21,10 +21,6 @@ import java.util.List;
 
 public class MarketItemCell extends JFXListCell<Item> {
 
-    public MarketItemCell() {
-        super();
-    }
-
     private Pane generateItemPreview(Item item) {
         HBox hBox = new HBox(15);
         hBox.setPadding(new Insets(15, 20, 15, 20));

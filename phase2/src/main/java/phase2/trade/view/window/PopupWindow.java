@@ -1,7 +1,8 @@
-package phase2.trade.view;
+package phase2.trade.view.window;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.stage.Stage;
+import phase2.trade.view.window.AlertWindow;
 
 public class PopupWindow extends AlertWindow<Void> {
 

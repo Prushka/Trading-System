@@ -9,8 +9,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
-import phase2.trade.view.ConfirmWindow;
-import phase2.trade.view.PopupWindow;
+import phase2.trade.view.window.ConfirmWindow;
+import phase2.trade.view.window.PopupWindow;
 
 public class PopupFactory {
 

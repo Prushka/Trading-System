@@ -11,13 +11,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 // the resource files have a very small chance not to be indexed, cleaning build cache could solve it
-public class SceneLoader {
+public class ParentLoader {
 
-    private final ControllerResources controllerResources;
-
-    public SceneLoader(ControllerResources controllerResources) {
-        this.controllerResources = controllerResources;
-    }
+    public ParentLoader(){}
 
     public FXMLLoader getLoader(String fileName, Class<?> clazz) {
         Locale locale = new Locale("en", "US");
@@ -30,7 +26,7 @@ public class SceneLoader {
         return getLoader(fileName, Main.class);
     }
 
-    public Parent loadPane(String fileName) {
+    public Parent loadParent(String fileName) {
         try {
             return getLoader(fileName).load();
         } catch (IOException e) {
@@ -39,7 +35,7 @@ public class SceneLoader {
         return null;
     }
 
-    public Parent loadPane(String fileName, Object controller) {
+    public Parent loadParent(String fileName, Object controller) {
         FXMLLoader loader = getLoader(fileName, controller.getClass());
         loader.setController(controller);
         try {
@@ -48,9 +44,5 @@ public class SceneLoader {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public <T> Parent loadPane(String fileName, ControllerSupplier<T> controller) {
-        return this.loadPane(fileName, controller.get(controllerResources));
     }
 }

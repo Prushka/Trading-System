@@ -116,3 +116,7 @@
 .market-list-view .jfx-list-cell .jfx-rippler {
     -jfx-rippler-fill: rgb(180, 180, 180);
 }
+
+.market-list-view .jfx-list-cell:hover {
+    -fx-border-color: BLACK;
+}

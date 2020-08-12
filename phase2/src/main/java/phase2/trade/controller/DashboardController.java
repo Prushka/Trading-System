@@ -1,12 +1,9 @@
 package phase2.trade.controller;
 
-import com.jfoenix.controls.JFXToolbar;
-import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import phase2.trade.view.CustomWindow;
 
 import java.net.URL;
 import java.util.ResourceBundle;

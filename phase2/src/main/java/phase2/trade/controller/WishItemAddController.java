@@ -134,6 +134,6 @@ public class WishItemAddController {
 
     public void addWindow(ObservableList<Item> displayData) {
         // AddItemController addItemController = new AddItemController(gatewayBundle, user, itemListType, displayData);
-        // getSceneManager().loadPane("add_item.fxml", addItemController);
+        // getSceneManager().loadParent("add_item.fxml", addItemController);
     }*/
 }

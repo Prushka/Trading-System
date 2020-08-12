@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.presenter.PopupFactory;
-import phase2.trade.presenter.SceneManager;
+import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
 
 public class ControllerResources {

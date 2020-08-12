@@ -11,11 +11,11 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 // the resource files have a very small chance not to be indexed, cleaning build cache could solve it
-public class SceneFactory {
+public class SceneLoader {
 
     private final ControllerResources controllerResources;
 
-    public SceneFactory(ControllerResources controllerResources){
+    public SceneLoader(ControllerResources controllerResources) {
         this.controllerResources = controllerResources;
     }
 

@@ -2,10 +2,14 @@ package phase2.trade.controller;
 
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
+import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.ControllerSupplier;
 import phase2.trade.presenter.ItemListController;
@@ -16,28 +20,26 @@ import java.util.ResourceBundle;
 
 public class SideMenuController extends AbstractController implements Initializable {
 
-    private VBox right;
-    public JFXListView<Label> sideList;
+    private VBox center, right;
+    private HBox top;
+
+    public JFXListView<String> sideList, bottomSideList;
     public Label userInfo, market, wishList, settings, inventory;
     public VBox userInfoBox;
 
-    public JFXListView<Label> bottomSideList;
-
-    public JFXPanel panel = new JFXPanel();
-    private VBox center;
-
-    //, VBox center, VBox right
     public SideMenuController(ControllerResources controllerResources) {
         super(controllerResources);
     }
 
-    public void setCenter(VBox center) {
+    public void loadDashboardElements(VBox center, VBox right, HBox top) {
         this.center = center;
+        this.right = right;
+        this.top = top;
     }
 
     // TODO: drop down sub menu
 
-    private <T> void loadSide(String fileName, ControllerSupplier<T> supplier) {
+    private <T> void loadCenter(String fileName, ControllerSupplier<T> supplier) {
         center.getChildren().clear();
         getSceneManager().addPane(fileName, supplier, center);
     }
@@ -60,7 +62,6 @@ public class SideMenuController extends AbstractController implements Initializa
         if (getPopupFactory().confirmWindow("Sign out", "Do you really want to sign out?").display()) {
             getAccountManager().logOut();
             getSceneManager().switchScene("login.fxml", LoginController::new);
-        } else {
         }
     }
 
@@ -68,7 +69,6 @@ public class SideMenuController extends AbstractController implements Initializa
         bottomSideList.getSelectionModel().clearSelection();
         if (getPopupFactory().confirmWindow("Exit", "Do you really want to exit?").display()) {
             Platform.exit();
-        } else {
         }
     }
 
@@ -76,14 +76,20 @@ public class SideMenuController extends AbstractController implements Initializa
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         getSceneManager().addPane("user_info_side.fxml", UserInfoPresenter::new, userInfoBox);
+
+        sideList.setItems(FXCollections.observableArrayList("userInfo", "market", "inventory", "wishlist"));
+
+
+        bottomSideList.setItems(FXCollections.observableArrayList("Exit", "Sign Out"));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                switch (newValue.getId()) {
+                switch (newValue) {
                     case "userInfo":
-                        loadSide("user_info.fxml", UserInfoPresenter::new);
+                        loadCenter("user_info.fxml", UserInfoPresenter::new);
                         break;
                     case "market":
-                        loadSide("market_list.fxml", MarketListController::new);
+                        center.getChildren().clear();
+                        getSceneManager().addPane("market_list.fxml", new MarketListController(getControllerResources(), top), center);
                         break;
                     case "inventory":
                         inventory();
@@ -92,19 +98,19 @@ public class SideMenuController extends AbstractController implements Initializa
                         wishList();
                         break;
                     case "userOperation":
-                        loadSide("user_info.fxml", UserOperationController::new);
+                        loadCenter("user_info.fxml", UserOperationController::new);
                         break;
                 }
             }
         });
 
-        sideList.getSelectionModel().select(2);
+        sideList.getSelectionModel().select(1);
         bottomSideList.setOnMouseClicked(event -> {
-                    switch (bottomSideList.getSelectionModel().getSelectedItem().getId()) {
-                        case "signOut":
+                    switch (bottomSideList.getSelectionModel().getSelectedItem()) {
+                        case "Sign Out":
                             signOut();
                             break;
-                        case "exit":
+                        case "Exit":
                             exit();
                             break;
                     }

@@ -71,10 +71,11 @@ public abstract class Command<T> implements PermissionBased {
 
     public abstract void execute(StatusCallback<T> callback, String... args);
 
-    public abstract void undo();
+    public void undo() {}
+    // do nothing here, isUndoable is supposed to be used by the outer world. So undo should no be directly called. Override this if undoable
 
     public void redo() {
-    } // It seems we don't need to implement redo. Also redo may mess up the uid
+    } // It seems we don't need to implement redo. Also redo may mess up the uid. Unless we store undo as new commands
 
     public void isUndoable(StatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
         if (!commandPropertyAnnotation.undoable()) {

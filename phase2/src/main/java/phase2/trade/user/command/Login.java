@@ -30,10 +30,5 @@ public class Login extends UserCommand<User> {
         });
     }
 
-    @Override
-    public void undo() {
-
-    }
-
 
 }

@@ -1,41 +1,39 @@
+/*
+ * SIDE
+ */
+
 .side-menu {
     -fx-padding: 10.0, 10.0;
     -fx-font-size: 15.0;
     -fx-font-weight: NORMAL;
-
 }
 
-.title-label {
-    -fx-font-size: 16.0px;
-    -fx-padding: 14.0px;
-    -fx-text-fill: rgba(0.0, 0.0, 0.0, 0.87);
-}
-
-.jfx-list-view, .jfx-list-cell {
+.side-list-view {
     -fx-background-color: rgba(0, 0, 0, 0);
     -fx-spacing: 20;
 }
+.side-list-view .jfx-list-cell {
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-spacing: 20;
 
-
-.jfx-list-cell > .label {
     -fx-text-fill: rgb(180, 210, 210);
     -fx-font-size: 20px;
     -fx-font-family: "Open Sans";
 }
 
 
-.jfx-list-cell:filled:selected:focused > .label, .jfx-list-cell:filled:selected > .label {
+.side-list-view .jfx-list-cell:filled:selected:focused, .side-list-view .jfx-list-cell:filled:selected {
     -fx-background-color: rgba(0, 0, 0, 0);
     -fx-text-fill: white;
     -fx-font-family: "Open Sans SemiBold";
 }
 
-.jfx-list-cell:filled:hover, .jfx-list-cell:hover {
+.side-list-view .jfx-list-cell:filled:hover, .side-list-view .jfx-list-cell:hover {
     -fx-background-color: #293841;
     -fx-text-fill: white;
 }
 
-.jfx-list-cell .jfx-rippler {
+.side-list-view .jfx-list-cell .side-rippler {
     -jfx-rippler-fill: rgb(40, 80, 80);
 }
 
@@ -86,14 +84,6 @@
     -fx-background-color: rgb(40, 80, 80);
 }
 
-.transparent-list-view {
-    -fx-background-color: transparent;
-}
-.transparent-list-view .list-cell {
-    -fx-background-color: transparent;
-    -fx-padding: 10 0 10 0;
-}
-
 
 .jfx-snackbar-content {
     -fx-background-color: #323232;
@@ -105,4 +95,17 @@
 
 .jfx-snackbar-action {
     -fx-text-fill: #ff4081;
+}
+
+/* check box */
+
+.jfx-check-box {
+    -fx-font-weight: BOLD;
+    -jfx-checked-color: rgb(40, 80, 80);
+    -fx-text-fill: WHITE;
+
+}
+
+.jfx-toggle-button {
+    -jfx-toggle-color: rgb(40, 80, 80);
 }

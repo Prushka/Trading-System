@@ -4,11 +4,13 @@ import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
 public @Inherited
 @interface CommandProperty {
 

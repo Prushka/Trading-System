@@ -10,7 +10,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.Pane?>
+<?import com.jfoenix.controls.JFXScrollPane?>
 <VBox fx:id="root" prefHeight="1500" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
       spacing="15">
-    <ListView styleClass="transparent-list-view" VBox.vgrow="ALWAYS" fx:id="listView"/>
+
+    <JFXListView styleClass="transparent-list-view" VBox.vgrow="ALWAYS" fx:id="listView"/>
+
 </VBox>

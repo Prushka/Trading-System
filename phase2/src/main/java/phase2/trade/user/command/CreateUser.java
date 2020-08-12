@@ -44,6 +44,8 @@ public class CreateUser extends UserCommand<User> {
 
     @Override
     public void undo() {
-
+        getEntityBundle().getUserGateway().submitTransaction(gateway -> {
+            gateway.delete(userId);
+        });
     }
 }

@@ -66,11 +66,15 @@ public class ItemListController extends AbstractController implements Initializa
             if (itemsSelected.size() == 0) return;
             deleteButton.setDisable(true);
 
-            Command<Long[]> remove = new RemoveItem(itemListType, getItemIdsFrom(itemsSelected));
+            Command<Long[]> remove = getCommandFactory().getCommand(RemoveItem::new, c -> {
+                c.setItemListType(itemListType);
+                c.setItemIds(getItemIdsFrom(itemsSelected));
+            });
             remove.execute((result, resultStatus) -> {
                 Platform.runLater(() -> {
-                    itemsSelected.forEach(displayData::remove);
-                    deleteButton.setDisable(false);
+                    resultStatus.setAfter(() -> deleteButton.setDisable(false));
+                    resultStatus.setSucceeded(() -> itemsSelected.forEach(displayData::remove));
+                    resultStatus.handle(getPopupFactory());
                 });
             });
         });
@@ -97,10 +101,11 @@ public class ItemListController extends AbstractController implements Initializa
                 c.setItemIds(getItemIdsFrom(itemsSelected));
                 c.setNewWillingness(willingness);
             });
-            command.execute((result, resultStatus) -> Platform.runLater(() -> {
-                itemsSelected.forEach(item -> item.setWillingness(willingness));
-                button.setDisable(false);
-            }));
+            command.execute((result, resultStatus) -> {
+                resultStatus.setAfter(() -> button.setDisable(false));
+                resultStatus.setSucceeded(() -> itemsSelected.forEach(item -> item.setWillingness(willingness)));
+                resultStatus.handle(getPopupFactory());
+            });
         };
     }
 

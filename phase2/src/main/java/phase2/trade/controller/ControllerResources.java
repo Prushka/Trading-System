@@ -1,19 +1,11 @@
 package phase2.trade.controller;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.presenter.ControllerSupplier;
 import phase2.trade.presenter.PopupFactory;
 import phase2.trade.presenter.SceneManager;
 import phase2.trade.user.AccountManager;
-import phase2.trade.view.SceneFactory;
-
-import java.io.IOException;
 
 public class ControllerResources {
 

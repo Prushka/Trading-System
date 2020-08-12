@@ -29,13 +29,6 @@ public class RemoveItem extends ItemCommand<Long[]> {
 
     private ItemListType itemListType;
 
-    public RemoveItem(ItemListType itemListType, Set<Long> itemIds) {
-        this.itemIds = itemIds;
-        this.itemListType = itemListType;
-    }
-
-    public RemoveItem() {}
-
     @Override
     public void execute(StatusCallback<Long[]> callback, String... args) {
         if (!checkPermission(callback)) {
@@ -59,8 +52,11 @@ public class RemoveItem extends ItemCommand<Long[]> {
         });
     }
 
-    @Override
-    public void redo() {
+    public void setItemListType(ItemListType itemListType) {
+        this.itemListType = itemListType;
+    }
 
+    public void setItemIds(Set<Long> itemIds) {
+        this.itemIds = itemIds;
     }
 }

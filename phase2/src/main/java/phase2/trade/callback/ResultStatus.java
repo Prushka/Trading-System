@@ -3,7 +3,7 @@ package phase2.trade.callback;
 import javafx.application.Platform;
 import phase2.trade.presenter.PopupFactory;
 
-public abstract class ResultStatus {
+public abstract class ResultStatus { // the whole thing may still need to be improved
 
     Runnable succeeded, failed, after;
 

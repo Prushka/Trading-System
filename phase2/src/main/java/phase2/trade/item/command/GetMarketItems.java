@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false,
-        persistent = false, permissionSet = {Permission.CREATE_USER})
+        persistent = false, permissionSet = {Permission.BROWSE_MARKET})
 public class GetMarketItems extends ItemCommand<List<Item>> {
 
     public GetMarketItems() {

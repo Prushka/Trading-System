@@ -6,11 +6,11 @@ import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.user.command.CreateUser;
 
-public class FirstCheck {
+public class CreatePrerequisiteIfNotExist {
 
     private final CommandFactory commandFactory;
 
-    public FirstCheck(CommandFactory commandFactory) {
+    public CreatePrerequisiteIfNotExist(CommandFactory commandFactory) {
         this.commandFactory = commandFactory;
         createHeadIfNotExist();
     }

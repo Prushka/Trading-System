@@ -17,7 +17,7 @@ import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.AccountManager;
-import phase2.trade.user.FirstCheck;
+import phase2.trade.user.CreatePrerequisiteIfNotExist;
 
 public class TradeApplication extends Application {
 
@@ -57,9 +57,9 @@ public class TradeApplication extends Application {
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
 
-        new FirstCheck(controllerResources.getCommandFactory());
-        mockDashboardRegister(primaryStage);
-        // mockDashboardLogin(primaryStage);
+        new CreatePrerequisiteIfNotExist(controllerResources.getCommandFactory());
+        // mockDashboardRegister(primaryStage);
+        mockDashboardLogin(primaryStage);
         // login(primaryStage);
     }
 

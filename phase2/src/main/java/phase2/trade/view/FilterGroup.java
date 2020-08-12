@@ -4,6 +4,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +16,14 @@ public class FilterGroup<T> {
 
     private final FilteredList<T> filteredList;
 
-    private Map<ComboBox<String>, FilterPredicate<T, String>> comboBoxGroup = new HashMap<>();
+    private final Map<ComboBox<String>, FilterPredicate<T, String>> comboBoxGroup = new HashMap<>();
 
-    private Map<CheckBox, FilterPredicate<T, Boolean>> checkBoxGroup = new HashMap<>();
+    private final Map<CheckBox, FilterPredicate<T, Boolean>> checkBoxGroup = new HashMap<>();
 
-    private Map<TextField, FilterPredicate<T, String>> textFieldGroup = new HashMap<>();
+    private final Map<TextField, FilterPredicate<T, String>> textFieldGroup = new HashMap<>();
+
+    private final Map<ToggleButton, FilterPredicate<T, Boolean>> toggleGroup = new HashMap<>();
+
 
     public FilterGroup(FilteredList<T> filteredList) {
         this.filteredList = filteredList;
@@ -40,6 +44,11 @@ public class FilterGroup<T> {
         return this;
     }
 
+    public FilterGroup<T> addToggleButton(ToggleButton toggleButton, FilterPredicate<T, Boolean> filterPredicate) {
+        toggleGroup.put(toggleButton, filterPredicate);
+        return this;
+    }
+
 
     public FilterGroup<T> group() {
         for (Map.Entry<CheckBox, FilterPredicate<T, Boolean>> entry : checkBoxGroup.entrySet()) {
@@ -54,7 +63,11 @@ public class FilterGroup<T> {
         }
         for (Map.Entry<TextField, FilterPredicate<T, String>> textField : textFieldGroup.entrySet()) {
             textField.getKey().textProperty().addListener((observable, oldValue, newValue) -> {
-                System.out.println("123");
+                filteredList.setPredicate(this::bind);
+            });
+        }
+        for (Map.Entry<ToggleButton, FilterPredicate<T, Boolean>>  toggleButton: toggleGroup.entrySet()) {
+            toggleButton.getKey().selectedProperty().addListener((observable, oldValue, newValue) -> {
                 filteredList.setPredicate(this::bind);
             });
         }
@@ -82,6 +95,11 @@ public class FilterGroup<T> {
                 // result = true || result;
             } else {
                 result = textField.getValue().test(entity, textField.getKey().getText()) && result;
+            }
+        }
+        for (Map.Entry<ToggleButton, FilterPredicate<T, Boolean>> toggleButton : toggleGroup.entrySet()) {
+            if (!toggleButton.getKey().isSelected()) {
+                result = result && !toggleButton.getValue().test(entity, toggleButton.getKey().isSelected());
             }
         }
         return result;

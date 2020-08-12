@@ -11,6 +11,7 @@ import phase2.trade.view.CustomWindow;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@ControllerProperty(viewFile = "dashboard.fxml")
 public class DashboardController extends AbstractController implements Initializable {
 
     // public JFXDrawer drawer;
@@ -28,8 +29,7 @@ public class DashboardController extends AbstractController implements Initializ
     public void initialize(URL location, ResourceBundle resources) {
         SideMenuController sideMenuController = new SideMenuController(getControllerResources());
         sideMenuController.loadDashboardElements(center, right, top);
-        root.setLeft(getSceneManager().loadPane("side_menu.fxml",
-                sideMenuController));
+        root.setLeft(getSceneManager().loadPane(sideMenuController));
 
     }
 

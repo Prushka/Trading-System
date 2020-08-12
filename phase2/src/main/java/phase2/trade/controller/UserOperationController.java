@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+@ControllerProperty(viewFile = "a.fxml")
 public class UserOperationController extends AbstractController implements Initializable {
 
 

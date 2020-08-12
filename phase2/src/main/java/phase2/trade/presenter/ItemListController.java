@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.AddItemController;
+import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
@@ -26,6 +27,7 @@ import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+@ControllerProperty(viewFile = "item_list.fxml")
 public class ItemListController extends AbstractController implements Initializable {
 
     private ItemListType itemListType;
@@ -125,6 +127,6 @@ public class ItemListController extends AbstractController implements Initializa
 
     public void addWindow(ObservableList<Item> displayData) {
         AddItemController addItemController = new AddItemController(getControllerResources(), itemListType, displayData);
-        getSceneManager().loadPane("add_item.fxml", addItemController);
+        getSceneManager().loadPane(addItemController);
     }
 }

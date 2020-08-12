@@ -70,7 +70,7 @@ public class TradeApplication extends Application {
     }
 
     private void login(Stage primaryStage) {
-        controllerResources.getSceneManager().switchScene("login.fxml", LoginController::new);
+        controllerResources.getSceneManager().switchScene(LoginController::new);
         primaryStage.setTitle("Trade");
         primaryStage.show();
     }
@@ -88,7 +88,7 @@ public class TradeApplication extends Application {
         controllerResources.getAccountManager().register((result, status) -> {
             Platform.runLater(() -> {
                 addExample();
-                Parent dashboard = controllerResources.getSceneManager().loadPane("dashboard.fxml", DashboardController::new);
+                Parent dashboard = controllerResources.getSceneManager().loadPane(DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");
@@ -103,7 +103,7 @@ public class TradeApplication extends Application {
     private void mockDashboardLogin(Stage primaryStage) {
         controllerResources.getAccountManager().login((result, status) -> {
             Platform.runLater(() -> {
-                Parent dashboard = controllerResources.getSceneManager().loadPane("dashboard.fxml", DashboardController::new);
+                Parent dashboard = controllerResources.getSceneManager().loadPane(DashboardController::new);
                 Scene scene = new Scene(dashboard);
 
                 scene.getStylesheets().add("css/trade.css");

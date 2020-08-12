@@ -18,6 +18,7 @@ import phase2.trade.Main;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
+import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
+@ControllerProperty(viewFile = "market_list.fxml")
 public class MarketListController extends AbstractController implements Initializable {
 
     public JFXListView<Item> listView;

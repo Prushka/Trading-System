@@ -14,6 +14,7 @@ import phase2.trade.validator.ValidatorType;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@ControllerProperty(viewFile = "login.fxml")
 public class LoginController extends AbstractController implements Initializable {
 
     public Label submissionResult;
@@ -33,19 +34,19 @@ public class LoginController extends AbstractController implements Initializable
         submissionResultProperty.setValue("Signing in..");
         getAccountManager().login((result, status) -> {
             status.setFailed(() -> submissionResultProperty.setValue("Invalid Username / Password"));
-            status.setSucceeded(() -> getSceneManager().switchScene("dashboard.fxml", DashboardController::new));
+            status.setSucceeded(() -> getSceneManager().switchScene(DashboardController::new));
             status.handle(getPopupFactory());
         }, usernameOrEmail.getText(), password.getText());
     }
 
     public void goToSignUp(ActionEvent actionEvent) {
-        getSceneManager().switchScene("register.fxml", RegisterController::new);
+        getSceneManager().switchScene(RegisterController::new);
     }
 
 
     public void goToGuest(ActionEvent actionEvent) {
         getAccountManager().loginAsGuest();
-        getSceneManager().switchScene("dashboard.fxml", DashboardController::new);
+        getSceneManager().switchScene(DashboardController::new);
     }
 
     @Override

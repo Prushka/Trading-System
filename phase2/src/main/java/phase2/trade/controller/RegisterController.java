@@ -15,6 +15,7 @@ import phase2.trade.validator.ValidatorType;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@ControllerProperty(viewFile = "register.fxml")
 public class RegisterController extends AbstractController implements Initializable {
 
     private StringProperty submissionResultProperty;
@@ -40,7 +41,7 @@ public class RegisterController extends AbstractController implements Initializa
         submissionResultProperty.setValue("Signing up..");
         getAccountManager().register((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
-                getSceneManager().switchScene("dashboard.fxml", DashboardController::new);
+                getSceneManager().switchScene(DashboardController::new);
             });
             resultStatus.setFailed(() -> {
                 registerButton.setDisable(false);
@@ -51,12 +52,12 @@ public class RegisterController extends AbstractController implements Initializa
     }
 
     public void goToSignIn(ActionEvent actionEvent) {
-        getSceneManager().switchScene("login.fxml", LoginController::new);
+        getSceneManager().switchScene(LoginController::new);
     }
 
     public void goToGuest(ActionEvent actionEvent) {
         getAccountManager().loginAsGuest();
-        getSceneManager().switchScene("dashboard.fxml", DashboardController::new);
+        getSceneManager().switchScene(DashboardController::new);
     }
 
     @Override

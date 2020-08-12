@@ -14,6 +14,6 @@
 <VBox fx:id="root" prefHeight="1500" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2"
       spacing="15">
 
-    <JFXListView styleClass="transparent-list-view" VBox.vgrow="ALWAYS" fx:id="listView"/>
+    <JFXListView styleClass="market-list-view" VBox.vgrow="ALWAYS" fx:id="listView"/>
 
 </VBox>

@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
+@ControllerProperty(viewFile = "add_item.fxml")
 public class AddItemController extends AbstractController implements Initializable {
 
     public JFXComboBox<String> category;

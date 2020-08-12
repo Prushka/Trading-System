@@ -7,6 +7,7 @@ import phase2.trade.user.User;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@ControllerProperty(viewFile = "user_info_side.fxml")
 public class UserInfoPresenter extends AbstractController implements Initializable {
 
     // the reason why they are initialized here is because many user info fxml share one presenter and some labels may not exist there

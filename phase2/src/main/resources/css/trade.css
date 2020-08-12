@@ -8,17 +8,16 @@
     -fx-font-weight: NORMAL;
 }
 
-.side-list-view {
-    -fx-background-color: rgba(0, 0, 0, 0);
-    -fx-spacing: 20;
-}
-.side-list-view .jfx-list-cell {
-    -fx-background-color: rgba(0, 0, 0, 0);
-    -fx-spacing: 20;
 
+.side-list-view, .side-list-view .jfx-list-cell {
+    -fx-background-color: rgba(0, 0, 0, 0);
     -fx-text-fill: rgb(180, 210, 210);
     -fx-font-size: 20px;
     -fx-font-family: "Open Sans";
+}
+
+.side-list-view .jfx-list-cell .jfx-rippler {
+    -jfx-rippler-fill: #293841;
 }
 
 
@@ -31,10 +30,6 @@
 .side-list-view .jfx-list-cell:filled:hover, .side-list-view .jfx-list-cell:hover {
     -fx-background-color: #293841;
     -fx-text-fill: white;
-}
-
-.side-list-view .jfx-list-cell .side-rippler {
-    -jfx-rippler-fill: rgb(40, 80, 80);
 }
 
 .side-vbox {
@@ -108,4 +103,16 @@
 
 .jfx-toggle-button {
     -jfx-toggle-color: rgb(40, 80, 80);
+}
+
+/*
+ * Market
+ */
+.market-list-view, .market-list-view .jfx-list-cell {
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-text-fill: rgb(180, 210, 210);
+}
+
+.market-list-view .jfx-list-cell .jfx-rippler {
+    -jfx-rippler-fill: rgb(180, 180, 180);
 }

@@ -18,6 +18,7 @@ import phase2.trade.presenter.MarketListController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+@ControllerProperty(viewFile = "side_menu.fxml")
 public class SideMenuController extends AbstractController implements Initializable {
 
     private VBox center, right;
@@ -47,13 +48,13 @@ public class SideMenuController extends AbstractController implements Initializa
     private void inventory() {
         center.getChildren().clear();
         ItemListController controller = new ItemListController(getControllerResources(), ItemListType.INVENTORY);
-        getSceneManager().addPane("item_list.fxml", controller, center);
+        getSceneManager().addPane(controller, center);
     }
 
     private void wishList() {
         center.getChildren().clear();
         ItemListController controller = new ItemListController(getControllerResources(), ItemListType.INVENTORY);
-        getSceneManager().addPane("item_list.fxml", controller, center);
+        getSceneManager().addPane(controller, center);
     }
 
     // TODO: extend for different users
@@ -61,7 +62,7 @@ public class SideMenuController extends AbstractController implements Initializa
         bottomSideList.getSelectionModel().clearSelection();
         if (getPopupFactory().confirmWindow("Sign out", "Do you really want to sign out?").display()) {
             getAccountManager().logOut();
-            getSceneManager().switchScene("login.fxml", LoginController::new);
+            getSceneManager().switchScene(LoginController::new);
         }
     }
 
@@ -75,7 +76,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        getSceneManager().addPane("user_info_side.fxml", UserInfoPresenter::new, userInfoBox);
+        getSceneManager().addPane(UserInfoPresenter::new, userInfoBox);
 
         sideList.setItems(FXCollections.observableArrayList("userInfo", "market", "inventory", "wishlist"));
 

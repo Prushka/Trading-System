@@ -1,40 +1,24 @@
 package phase2.trade.inventory;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import phase2.trade.item.Item;
-import phase2.trade.item.Ownership;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@MappedSuperclass
 public abstract class ItemList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<Item> listOfItems = new ArrayList<>();
-
     @OneToOne
     private User owner;
 
-    public ItemList(List<Item> listOfItems, User owner, Ownership ownership) {
-        this.listOfItems = listOfItems;
-        this.owner = owner;
-    }
+    public abstract Set<Item> getSetOfItems();
 
-    public ItemList() {
-    }
+    public abstract void setSetOfItems(Set<Item> items);
 
     public User getOwner() {
         return owner;
@@ -44,20 +28,12 @@ public abstract class ItemList {
         this.owner = owner;
     }
 
-    public List<Item> getListOfItems() {
-        return listOfItems;
-    }
-
-    public void setListOfItems(List<Item> inventory) {
-        this.listOfItems = inventory;
-    }
-
     public void addItem(Item... items) {
-        addItem(Arrays.asList(items));
+        getSetOfItems().addAll(Arrays.asList(items));
     }
 
-    public void addItem(List<Item> items) {
-        this.listOfItems.addAll(items);
+    public void addItem(Set<Item> items) {
+        this.getSetOfItems().addAll(items);
     }
 
     public Long getUid() {
@@ -69,14 +45,12 @@ public abstract class ItemList {
     }
 
     public int size() {
-        return listOfItems.size();
+        return getSetOfItems().size();
     }
-
-    public abstract ItemListType getItemListType();
 
     public void removeItem(Item... items) {
         for (Item item : items) {
-            this.listOfItems.remove(item);
+            this.getSetOfItems().remove(item);
         }
     }
 
@@ -87,12 +61,8 @@ public abstract class ItemList {
         }
     }
 
-    public Item get(int index) {
-        return getListOfItems().get(index);
-    }
-
     public Item findByUid(Long uid) {
-        for (Item item : getListOfItems()) {
+        for (Item item : getSetOfItems()) {
             if (item.getUid().equals(uid)) return item;
         }
         return null;

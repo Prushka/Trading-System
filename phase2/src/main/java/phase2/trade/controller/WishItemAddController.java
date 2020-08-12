@@ -40,7 +40,7 @@ public class WishItemAddController {
         TableColumn<Item, String> suggestedCategoryColumn = getTableColumn("Category", "category");
         TableColumn<Item, String> suggestedPriceColumn = getTableColumn("Price", "price");
 
-        ObservableList<Item> displayData = FXCollections.observableArrayList(user.getItemList(itemListType).getListOfItems());
+        ObservableList<Item> displayData = FXCollections.observableArrayList(user.getItemList(itemListType).getSetOfItems());
 
         tableView = new TableView<>();
         tableView.setItems(displayData);

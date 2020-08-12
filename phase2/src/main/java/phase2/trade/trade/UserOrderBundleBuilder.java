@@ -19,8 +19,8 @@ public class UserOrderBundleBuilder {
         desiredItems.addItem(item);
     }
 
-    void buildDesiredItems(List<Item> items){
-        desiredItems.setListOfItems(items);
+    void buildDesiredItems(Set<Item> items){
+        desiredItems.setSetOfItems(items);
     }
 
     UserOrderBundle buildUserOrderBundle() {

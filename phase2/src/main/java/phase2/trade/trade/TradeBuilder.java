@@ -6,6 +6,7 @@ import phase2.trade.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a trade between users at a specific date and place
@@ -29,7 +30,7 @@ class TradeBuilder {
 
     TradeBuilder() {}
 
-    void buildUserOrderBundle(User user, List<Item> items){
+    void buildUserOrderBundle(User user, Set<Item> items){
         uobb.buildUser(user);
         uobb.buildDesiredItems(items);
         UserOrderBundle newBundle = uobb.buildUserOrderBundle();

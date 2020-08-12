@@ -59,7 +59,6 @@ public class CommandTest {
         getInventory.execute(new ResultStatusCallback<ItemList>() {
             @Override
             public void call(ItemList result, ResultStatus resultStatus) {
-                System.out.println(result.get(0).getName());
             }
         });
     }

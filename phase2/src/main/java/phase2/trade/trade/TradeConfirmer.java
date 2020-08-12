@@ -9,6 +9,7 @@ import phase2.trade.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class TradeConfirmer {
     Integer timeLimit;
@@ -61,9 +62,9 @@ public class TradeConfirmer {
         List<Item> tradedItems = new ArrayList<>();
         for (UserOrderBundle user: currTrade.getOrder().getTraders()) {
             RegularUser currUser = (RegularUser) user.getUser();
-            List<Item> newCartList = currUser.getItemList(ItemListType.CART).getListOfItems();
-            List<Item> newInventoryList = currUser.getItemList(ItemListType.INVENTORY).getListOfItems();
-            for (Item item : user.getTradeItemHolder().getListOfItems()) {
+            Set<Item> newCartList = currUser.getItemList(ItemListType.CART).getSetOfItems();
+            Set<Item> newInventoryList = currUser.getItemList(ItemListType.INVENTORY).getSetOfItems();
+            for (Item item : user.getTradeItemHolder().getSetOfItems()) {
                 newCartList.remove(item);
                 if (tradedItems.contains(item)){
                     newInventoryList.remove(item);
@@ -74,11 +75,11 @@ public class TradeConfirmer {
                 }
             }
             Cart newCart = new Cart();
-            newCart.setListOfItems(newCartList);
+            newCart.setSetOfItems(newCartList);
             currUser.setCart(newCart);
 
             Inventory newInventory = new Inventory();
-            newInventory.setListOfItems(newInventoryList);
+            newInventory.setSetOfItems(newInventoryList);
             currUser.setInventory(newInventory);
         }
     }

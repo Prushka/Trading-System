@@ -56,7 +56,7 @@ public class Order {
 
     public boolean borrowed(User currUser) {
         for (UserOrderBundle user : traders) {
-            if (user.getUser().equals(currUser) && !user.getTradeItemHolder().getListOfItems().isEmpty()) {
+            if (user.getUser().equals(currUser) && !user.getTradeItemHolder().getSetOfItems().isEmpty()) {
                 return true;
             }
         }
@@ -66,8 +66,8 @@ public class Order {
     public boolean lent(User currUser) {
         for (UserOrderBundle user : traders) {
             if (!user.getUser().equals(currUser)) {
-                for (Item item : user.getTradeItemHolder().getListOfItems()) {
-                    if (((RegularUser) currUser).getInventory().getListOfItems().contains(item)) {
+                for (Item item : user.getTradeItemHolder().getSetOfItems()) {
+                    if (((RegularUser) currUser).getInventory().getSetOfItems().contains(item)) {
                         return true;
                     }
                 }

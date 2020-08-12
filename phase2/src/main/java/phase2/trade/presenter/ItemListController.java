@@ -54,7 +54,7 @@ public class ItemListController extends AbstractController implements Initializa
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        displayData = FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getListOfItems());
+        displayData = FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems());
 
 
         tableView.setEditable(true);

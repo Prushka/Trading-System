@@ -103,6 +103,9 @@
 
 .jfx-toggle-button {
     -jfx-toggle-color: rgb(40, 80, 80);
+
+    -fx-text-fill: WHITE;
+    -fx-font-weight: BOLD;
 }
 
 /*
@@ -119,4 +122,52 @@
 
 .market-list-view .jfx-list-cell:hover {
     -fx-background-color: rgb(235, 235, 235);
+}
+
+.dashboard-top-tool-bar {
+    -fx-background-color: #BA8BAF;
+}
+
+.dashboard-top-tool-bar .jfx-text-field {
+
+    -fx-text-fill: WHITE;
+    -fx-font-weight: BOLD;
+    -fx-prompt-text-fill: WHITE;
+    -fx-prompt-text-weight: BOLD;
+
+    -jfx-unfocus-color: rgb(230, 230, 230);
+    -jfx-focus-color: WHITE;
+}
+
+.dashboard-top-tool-bar .label {
+    -fx-text-fill: WHITE;
+}
+
+.dashboard-top-tool-bar .jfx-combo-box {
+    -jfx-unfocus-color: rgb(230, 230, 230);
+    -jfx-focus-color: WHITE;
+    -fx-prompt-text-fill: WHITE;
+    -fx-prompt-text-weight: BOLD;
+
+    -fx-font-weight: BOLD;
+    -fx-text-fill: WHITE;
+}
+
+.dashboard-top-tool-bar .jfx-combo-box .cell {
+
+    -fx-font-weight: BOLD;
+    -fx-text-fill: WHITE;
+}
+
+.dashboard-top-tool-bar .jfx-combo-box .jfx-list-cell {
+    -fx-background: #BA8BAF;
+    -fx-text-fill: WHITE;
+}
+
+.dashboard-top-tool-bar .combo-box-popup .list-cell:hover {
+    -fx-background-color: rgb(40, 80, 80);
+}
+
+.dashboard-top-tool-bar .combo-box-popup .list-view .list-cell .jfx-rippler {
+    -jfx-rippler-fill: rgb(70, 70, 70);
 }

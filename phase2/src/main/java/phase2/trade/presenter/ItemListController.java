@@ -102,11 +102,16 @@ public class ItemListController extends AbstractController implements Initializa
         searchDescription.setPromptText("Search Description");
         searchDescription.setLabelFloat(true);
 
-        getPane("topBar").getChildren().addAll(searchName, searchDescription);
+        getPane("topBar").getChildren().setAll(searchName, searchDescription);
 
         tableViewGenerator.addSearch(searchName, (entity, textField) -> {
             String lowerCaseFilter = textField.toLowerCase();
             return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
+        });
+
+        tableViewGenerator.addSearch(searchDescription, (entity, textField) -> {
+            String lowerCaseFilter = textField.toLowerCase();
+            return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
         });
 
         addButton.setOnAction(event -> {

@@ -62,6 +62,9 @@ public class MarketListController extends AbstractController implements Initiali
         vBox.getChildren().addAll(lend, sell);
 
         JFXComboBox<String> category = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))));
+        category.setPromptText("Category");
+        category.setLabelFloat(true);
+
         JFXToggleButton includeMine = new JFXToggleButton();
         includeMine.setText("includeMine");
 

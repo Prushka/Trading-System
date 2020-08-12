@@ -7,6 +7,7 @@ import phase2.trade.command.CommandProperty;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
+import phase2.trade.item.Ownership;
 import phase2.trade.permission.Permission;
 
 import javax.persistence.Entity;
@@ -30,7 +31,8 @@ public class AddItemToItemList extends ItemCommand<Item> {
             item.setQuantity(Integer.parseInt(args[3]));
             item.setPrice(Double.parseDouble(args[3]));
 
-            item.setItemList(operator.getItemList(itemListType));
+            item.setOwner(operator);
+            item.setOwnership(Ownership.TO_BE_REVIEWED);
             operator.getItemList(itemListType).addItem(item);
             gateway.update(operator);
             this.itemId = item.getUid();

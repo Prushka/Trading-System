@@ -10,6 +10,7 @@ import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public abstract class ItemList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Item> listOfItems = new ArrayList<>();
 
     @OneToOne
@@ -51,8 +52,12 @@ public abstract class ItemList {
         this.listOfItems = inventory;
     }
 
-    public void addItem(Item item) {
-        this.listOfItems.add(item);
+    public void addItem(Item... items) {
+        addItem(Arrays.asList(items));
+    }
+
+    public void addItem(List<Item> items) {
+        this.listOfItems.addAll(items);
     }
 
     public Long getUid() {

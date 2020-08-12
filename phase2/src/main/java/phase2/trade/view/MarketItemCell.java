@@ -75,7 +75,7 @@ public class MarketItemCell extends JFXListCell<Item> {
         addToCart.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                addToCartCommand.setItemIds(item.getUid());
+                addToCartCommand.setItems(item);
                 addToCartCommand.execute((result,status)->{
                 });
             }

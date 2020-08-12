@@ -58,9 +58,9 @@ public class TradeApplication extends Application {
 
 
         new CreatePrerequisiteIfNotExist(controllerResources.getCommandFactory());
-        // mockDashboardRegister(primaryStage);
-        mockDashboardLogin(primaryStage);
-        // login(primaryStage);
+        mockDashboardRegister(primaryStage);
+        //mockDashboardLogin(primaryStage);
+        //login(primaryStage);
     }
 
     private void login(Stage primaryStage) {

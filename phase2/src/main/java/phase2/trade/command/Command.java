@@ -58,7 +58,7 @@ public abstract class Command<T> implements PermissionBased {
         this.gatewayBundle = gatewayBundle;
         this.operator = operator;
         persistUserIfNotSystem();
-        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getUserName() + "  |  "+operator.getPermissionGroup()+ "  |  "+operator.getPermissionSet().getPerm().toString());
+        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getUserName() + "  |  " + operator.getPermissionGroup() + "  |  " + operator.getPermissionSet().getPerm().toString());
     }
 
     public Command() {
@@ -124,8 +124,8 @@ public abstract class Command<T> implements PermissionBased {
     }
 
     // only used to avoid storing System as a user into database, this won't succeed also because System was not persistent as a User
-    private void persistUserIfNotSystem(){
-        if(operator.getPermissionGroup()!=PermissionGroup.SYSTEM){
+    private void persistUserIfNotSystem() {
+        if (operator.getPermissionGroup() != PermissionGroup.SYSTEM) {
             userToPersist = operator;
         }
     }
@@ -147,6 +147,7 @@ public abstract class Command<T> implements PermissionBased {
     public boolean checkPermission(ResultStatusCallback<?> statusCallback) {
         boolean result = checkPermission();
         if (!result) {
+            System.out.println("[No Permission] User: " + operator + " | " + Arrays.toString(commandPropertyAnnotation.permissionSet()) + " -> " + operator.getPermissionSet().getPerm().toString());
             statusCallback.call(null, new StatusNoPermission(new PermissionSet(commandPropertyAnnotation.permissionSet())));
         }
         return result;

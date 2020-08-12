@@ -5,6 +5,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import phase2.trade.gateway.EntityGateway;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
@@ -62,6 +64,14 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
     @Override
     public void update(T entity) {
         getCurrentSession().update(entity);
+    }
+
+    public void merge(T entity) {
+        getCurrentSession().merge(entity);
+    }
+
+    public void persist(T entity) {
+        getCurrentSession().persist(entity);
     }
 
     @Override
@@ -148,4 +158,8 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
     }
 
     protected abstract S getThis();
+
+    public EntityManager getEntityManager() {
+        return getSessionFactory().createEntityManager();
+    }
 }

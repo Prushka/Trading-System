@@ -9,21 +9,24 @@ import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
 
 import javax.persistence.Entity;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {Permission.MANAGE_WISH_LIST})
 public class AddToCart extends ItemCommand<Void> {
 
+    private transient List<Item> items;
+
     @Override
     public void execute(ResultStatusCallback<Void> callback, String... args) {
         if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
-            for (Long itemId : getEffectedEntities(Item.class)) {
-                Item item = findItemByIdSyncOutsideItemGateway(itemId);
-                operator.getItemList(ItemListType.CART).addItem(item);
-                gateway.update(operator);
-            }
+            System.out.println(items.get(0).getUid());
+            System.out.println(gateway.getEntityManager());
+            operator.getItemList(ItemListType.CART).addItem(gateway.getEntityManager().getReference(Item.class, items.get(0).getUid()));
+            gateway.merge(operator);
             callback.call(null, new StatusSucceeded());
         });
     }
@@ -32,9 +35,10 @@ public class AddToCart extends ItemCommand<Void> {
     public void undo() {
     }
 
-    public void setItemIds(Long... itemIds) {
-        for (Long itemId : itemIds) {
-            addEffectedEntity(Item.class, itemId);
+    public void setItems(Item... items) {
+        for (Item item : items) {
+            addEffectedEntity(Item.class, item.getUid());
         }
+        this.items = Arrays.asList(items);
     }
 }

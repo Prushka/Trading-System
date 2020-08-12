@@ -1,5 +1,6 @@
 package phase2.trade.gateway;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -7,6 +8,10 @@ public interface EntityGateway<T, S extends EntityGateway<T, S>> {
     void add(T entity);
 
     void update(T entity);
+
+    void merge(T entity);
+
+    void persist(T entity);
 
     T findById(String id);
 
@@ -21,6 +26,8 @@ public interface EntityGateway<T, S extends EntityGateway<T, S>> {
     List<T> findAll();
 
     void deleteAll();
+
+    EntityManager getEntityManager();
 
     // void submitSessionSync(Consumer<EntityGateway<T>> consumer);
 

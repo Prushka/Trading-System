@@ -18,5 +18,6 @@
 
     <Separator />
 
-    <JFXListView styleClass="side-list-view" fx:id="bottomSideList"/>
+    <JFXListView fx:id="bottomSideList" styleClass="side-list-view, bottom-list-view">
+    </JFXListView>
 </VBox>

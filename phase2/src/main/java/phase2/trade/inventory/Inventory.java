@@ -13,13 +13,6 @@ public class Inventory extends ItemList {
         return ItemListType.INVENTORY;
     }
 
-    @Override
-    public void addItem(Item item) {
-        item.setOwnership(Ownership.TO_BE_REVIEWED);
-        super.addItem(item);
-    }
-
-
     public void removeItem(Item item){
         super.removeItem(item);
     }

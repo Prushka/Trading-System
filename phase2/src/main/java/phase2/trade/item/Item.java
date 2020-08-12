@@ -25,16 +25,8 @@ public class Item {
 
     private double price = -1;
 
-    @ManyToOne
-    private ItemList itemList;
-
-    public ItemList getItemList() {
-        return itemList;
-    }
-
-    public void setItemList(ItemList inventory) {
-        this.itemList = inventory;
-    }
+    @OneToOne
+    private User owner;
 
     public Long getUid() {
         return uid;
@@ -97,7 +89,10 @@ public class Item {
     }
 
     public User getOwner() {
-        if(itemList == null) return null;
-        return itemList.getOwner();
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 }

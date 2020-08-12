@@ -14,7 +14,6 @@ import java.util.List;
 
 public class ListViewGenerator<T> {
 
-    /*
     private final ListView<T> ListView;
 
     private final List<T> listOfElements = new ArrayList<>();
@@ -60,5 +59,5 @@ public class ListViewGenerator<T> {
         SortedList<T> sortedList = new SortedList<>(filteredList);
         ListView.setItems(sortedList);
         return ListView;
-    }*/
+    }
 }

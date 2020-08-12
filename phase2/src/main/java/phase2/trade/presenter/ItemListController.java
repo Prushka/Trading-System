@@ -119,23 +119,18 @@ public class ItemListController extends AbstractController implements Initializa
         JFXCheckBox sell = new JFXCheckBox("Wish To Sell");
         JFXCheckBox privateCheckBox = new JFXCheckBox("Private");
 
-        tableViewGenerator.addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND));
-        tableViewGenerator.addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL));
-        tableViewGenerator.addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE));
-
-        tableViewGenerator.addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
-
-        tableViewGenerator.addSearch(searchName, (entity, toMatch) -> {
+        tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
+                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
+                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE))
+                .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch))
+                .addSearch(searchName, (entity, toMatch) -> {
             String lowerCaseFilter = toMatch.toLowerCase();
             return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
-        });
-
-        tableViewGenerator.addSearch(searchDescription, (entity, textField) -> {
+        })
+                .addSearch(searchDescription, (entity, textField) -> {
             String lowerCaseFilter = textField.toLowerCase();
             return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
         });
-
-        tableViewGenerator.group();
 
         getPane("topBar").getChildren().setAll(searchName, searchDescription, category, lend, sell, privateCheckBox);
         lend.setSelected(true);

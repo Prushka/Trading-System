@@ -1,5 +1,6 @@
 package phase2.trade.controller;
 
+import javafx.scene.layout.Pane;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.presenter.PopupFactory;
@@ -36,5 +37,13 @@ public abstract class AbstractController {
 
     protected GatewayBundle getGatewayBundle() {
         return controllerResources.getGatewayBundle();
+    }
+
+    protected Pane getPane(String name) {
+        return controllerResources.getPanes().get(name);
+    }
+
+    protected void putPane(String name, Pane pane){
+        controllerResources.getPanes().put(name, pane);
     }
 }

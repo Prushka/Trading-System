@@ -41,11 +41,8 @@ public class MarketListController extends AbstractController implements Initiali
 
     public JFXTextField searchName;
 
-    private final HBox top;
-
-    public MarketListController(ControllerResources controllerResources, HBox top) {
+    public MarketListController(ControllerResources controllerResources) {
         super(controllerResources);
-        this.top = top;
     }
 
 
@@ -56,7 +53,6 @@ public class MarketListController extends AbstractController implements Initiali
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
 
         listView.setCellFactory(new MarketItemCellFactory());
-        top.setSpacing(20);
         JFXButton search = new JFXButton();
         JFXCheckBox lend = new JFXCheckBox("Lend");
         JFXCheckBox sell = new JFXCheckBox("Sell");
@@ -89,8 +85,8 @@ public class MarketListController extends AbstractController implements Initiali
         search.setGraphic(arrow);
         search.setRipplerFill(Color.WHITE);
 
-        top.getChildren().clear();
-        top.getChildren().addAll(vBox, category, includeMine, priceMinInclusive, label, priceMaxInclusive, search);
+        getPane("topDashboard").getChildren().clear();
+        getPane("topDashboard").getChildren().addAll(vBox, category, includeMine, priceMinInclusive, label, priceMaxInclusive, search);
         getMarket.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
                 for (Item item : result) {

@@ -24,9 +24,10 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        SideMenuController sideMenuController = new SideMenuController(getControllerResources());
-        sideMenuController.loadDashboardElements(center, right, top);
-        root.setLeft(getSceneManager().loadPane(sideMenuController));
+        putPane("topDashboard", top);
+        putPane("centerDashboard", top);
+        putPane("rightDashboard", top);
+        root.setLeft(getSceneManager().loadPane(SideMenuController::new));
 
     }
 

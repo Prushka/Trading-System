@@ -1,12 +1,10 @@
 package phase2.trade.user.command;
 
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.StatusExist;
 import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.Permission;
 import phase2.trade.user.User;
 import phase2.trade.user.UserFactory;
@@ -22,7 +20,7 @@ public class CreateUser extends UserCommand<User> {
     private Long userId;
 
     @Override
-    public void execute(StatusCallback<User> callback, String... args) { // username, email, password, permission_group
+    public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group
         if (!checkPermission(callback)) {
             return;
         }

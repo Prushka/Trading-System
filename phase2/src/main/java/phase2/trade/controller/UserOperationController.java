@@ -1,8 +1,6 @@
 package phase2.trade.controller;
 
 import javafx.fxml.Initializable;
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
 

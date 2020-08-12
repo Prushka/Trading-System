@@ -1,18 +1,9 @@
 package phase2.trade.trade.command;
 
 import phase2.trade.callback.*;
-import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.TradeGateway;
-import phase2.trade.item.Item;
-import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeConfirmer;
-import phase2.trade.trade.TradeCreator;
-import phase2.trade.trade.TradeManager;
-import phase2.trade.user.RegularUser;
 
 import javax.persistence.Entity;
 import java.util.List;
@@ -25,7 +16,7 @@ public class ConfirmTrade extends TradeCommand<Trade> {
     private TradeConfirmer tcc;
 
     @Override
-    public void execute(StatusCallback<Trade> callback, String... args) {
+    public void execute(ResultStatusCallback<Trade> callback, String... args) {
         tcc = new TradeConfirmer(getConfigBundle().getTradeConfig().getTimeLimit());
         if (!checkPermission(callback)) {
             return;
@@ -40,7 +31,7 @@ public class ConfirmTrade extends TradeCommand<Trade> {
     }
 
     @Override
-    public void isUndoable(StatusCallback<List<Command<?>>> callback) {
+    public void isUndoable(ResultStatusCallback<List<Command<?>>> callback) {
         callback.call(null, new StatusFailed());
     }
 

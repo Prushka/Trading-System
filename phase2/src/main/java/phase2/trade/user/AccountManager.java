@@ -1,6 +1,6 @@
 package phase2.trade.user;
 
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.PermissionGroup;
@@ -28,7 +28,7 @@ public class AccountManager {
         loggedInUser = userFactory.configureGuest();
     }
 
-    public void login(StatusCallback<User> callback, String usernameOrEmail, String password) {
+    public void login(ResultStatusCallback<User> callback, String usernameOrEmail, String password) {
         loginCommand.execute((result, status) -> {
             loggedInUser = result;
             callback.call(result, status);
@@ -52,7 +52,7 @@ public class AccountManager {
         return loggedInUser.getPermissionGroup();
     }
 
-    public void register(StatusCallback<User> callback, String userName, String email, String password, String country, String city) {
+    public void register(ResultStatusCallback<User> callback, String userName, String email, String password, String country, String city) {
         registerCommand.execute((result, status) -> {
             loggedInUser = result;
             callback.call(result, status);

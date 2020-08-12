@@ -1,23 +1,11 @@
 package phase2.trade.trade.command;
 
-import phase2.trade.address.Address;
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.StatusSucceeded;
-import phase2.trade.command.CRUDType;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.TradeGateway;
-import phase2.trade.item.Item;
-import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeEditor;
-import phase2.trade.trade.TradeManager;
-import phase2.trade.trade.TradeState;
-import phase2.trade.user.RegularUser;
 
 import javax.persistence.Entity;
-import java.time.LocalDateTime;
 
 @Entity
 public class EditTrade extends TradeCommand<Trade> {
@@ -26,7 +14,7 @@ public class EditTrade extends TradeCommand<Trade> {
     private transient TradeEditor te;
 
     @Override
-    public void execute(StatusCallback<Trade> callback, String... args) {
+    public void execute(ResultStatusCallback<Trade> callback, String... args) {
         // TO DO: Implement cancelling after limit
         te = new TradeEditor(getConfigBundle().getTradeConfig().getEditLimit());
         if (!checkPermission(callback)) {

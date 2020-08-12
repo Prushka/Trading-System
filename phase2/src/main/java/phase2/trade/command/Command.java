@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @CommandProperty(crudType = CRUDType.READ, undoable = true, persistent = true)
-// please annotate CommandProperty in subclasses, otherwise this will be used
+// please annotate CommandProperty in subclasses, otherwise the one above will be used
 public abstract class Command<T> implements PermissionBased {
 
     @Id
@@ -59,8 +59,7 @@ public abstract class Command<T> implements PermissionBased {
 
     public Command() {
         loadAnnotation();
-        retrieveEffectedEntities(effectedEntitiesToPersist);
-        this.effectedEntities = new HashMap<>();
+        effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
     }
 
     public void loadAnnotation() {
@@ -69,15 +68,16 @@ public abstract class Command<T> implements PermissionBased {
         }
     }
 
-    public abstract void execute(StatusCallback<T> callback, String... args);
+    public abstract void execute(ResultStatusCallback<T> callback, String... args);
 
-    public void undo() {}
+    public void undo() {
+    }
     // do nothing here, isUndoable is supposed to be used by the outer world. So undo should no be directly called. Override this if undoable
 
     public void redo() {
     } // It seems we don't need to implement redo. Also redo may mess up the uid. Unless we store undo as new commands
 
-    public void isUndoable(StatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
+    public void isUndoable(ResultStatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
         if (!commandPropertyAnnotation.undoable()) {
             callback.call(null, new StatusFailed());
             return;
@@ -106,7 +106,7 @@ public abstract class Command<T> implements PermissionBased {
     }
 
     protected Set<Long> getEffectedEntities(Class<?> clazz) {
-        if(effectedEntities == null) retrieveEffectedEntities(effectedEntitiesToPersist);
+        if (effectedEntities == null) retrieveEffectedEntities(effectedEntitiesToPersist);
         return effectedEntities.get(clazz.getName());
     }
 
@@ -131,7 +131,7 @@ public abstract class Command<T> implements PermissionBased {
         return new UserPermissionChecker(operator, commandPropertyAnnotation.permissionSet(), commandPropertyAnnotation.permissionGroup()).checkPermission();
     }
 
-    public boolean checkPermission(StatusCallback<?> statusCallback) {
+    public boolean checkPermission(ResultStatusCallback<?> statusCallback) {
         boolean result = checkPermission();
         if (!result) {
             statusCallback.call(null, new StatusNoPermission(new PermissionSet(commandPropertyAnnotation.permissionSet())));
@@ -140,9 +140,9 @@ public abstract class Command<T> implements PermissionBased {
     }
 
     private boolean ifOverlaps(String otherEffectedEntitiesToPersist) {
-        Map<String, Set<String>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);
-        Map<String, Set<String>> effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
-        for (Map.Entry<String, Set<String>> entry : otherEffectedEntities.entrySet()) {
+        Map<String, Set<Long>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);
+        Map<String, Set<Long>> effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
+        for (Map.Entry<String, Set<Long>> entry : otherEffectedEntities.entrySet()) {
             if (effectedEntities.containsKey(entry.getKey())) {
                 if (!Collections.disjoint(effectedEntities.get(entry.getKey()), entry.getValue())) return true;
             }
@@ -168,20 +168,21 @@ public abstract class Command<T> implements PermissionBased {
         return temp.toString();
     }
 
-    private Map<String, Set<String>> retrieveEffectedEntities(String effected) {
-        Map<String, Set<String>> temp = new HashMap<>();
+    private Map<String, Set<Long>> retrieveEffectedEntities(String effected) {
+        if (effected == null) return new HashMap<>();
+        Map<String, Set<Long>> temp = new HashMap<>();
         Pattern classNamePattern = Pattern.compile("(.*)!");
         Pattern idsPattern = Pattern.compile("(\\d+)([,]|$)");
         for (String record : effected.split(";")) {
             Matcher matcher = classNamePattern.matcher(record);
             String clazz = "undefined";
-            Set<String> ids = new HashSet<>();
+            Set<Long> ids = new HashSet<>();
             if (matcher.find()) {
                 clazz = matcher.group(1);
             }
             Matcher idsMatcher = idsPattern.matcher(record);
             while (idsMatcher.find()) {
-                ids.add(idsMatcher.group(1));
+                ids.add(Long.valueOf(idsMatcher.group(1)));
             }
             temp.put(clazz, ids);
         }

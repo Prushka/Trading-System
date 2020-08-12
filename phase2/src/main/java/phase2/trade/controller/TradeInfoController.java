@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.item.Item;
 import phase2.trade.trade.command.CreateTrade;
 import phase2.trade.trade.command.TradeCommand;
@@ -148,7 +148,7 @@ public class TradeInfoController extends AbstractController  implements Initiali
         List<User> allUsers = new ArrayList<>();
         List<List<Item>> allItems = new ArrayList<>();
         if (isPermanent.getSelectionModel().getSelectedItem() == "PERMANENT"){
-            tc.execute(new StatusCallback() { @Override
+            tc.execute(new ResultStatusCallback() { @Override
                                             public void call(Object result, ResultStatus resultStatus) {
                                                 System.out.println("success");
                                             }

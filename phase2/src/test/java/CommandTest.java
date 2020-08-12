@@ -1,6 +1,6 @@
 import org.junit.Test;
 import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.ConfigBundle;
 import phase2.trade.gateway.GatewayBundle;
@@ -56,7 +56,7 @@ public class CommandTest {
     public void testItemCommands() {
         testCommand();
         Command<ItemList> getInventory = commandFactory.getCommand(GetItems::new);
-        getInventory.execute(new StatusCallback<ItemList>() {
+        getInventory.execute(new ResultStatusCallback<ItemList>() {
             @Override
             public void call(ItemList result, ResultStatus resultStatus) {
                 System.out.println(result.get(0).getName());

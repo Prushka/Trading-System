@@ -1,16 +1,13 @@
 package phase2.trade.item.command;
 
-import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
 import phase2.trade.permission.Permission;
-import phase2.trade.user.RegularUser;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -30,7 +27,7 @@ public class RemoveItem extends ItemCommand<Long[]> {
     private ItemListType itemListType;
 
     @Override
-    public void execute(StatusCallback<Long[]> callback, String... args) {
+    public void execute(ResultStatusCallback<Long[]> callback, String... args) {
         if (!checkPermission(callback)) {
             return;
         }

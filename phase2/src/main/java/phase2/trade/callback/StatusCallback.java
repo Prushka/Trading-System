@@ -1,7 +1,7 @@
 package phase2.trade.callback;
 
 @FunctionalInterface
-public interface StatusCallback<T> {
+public interface StatusCallback {
 
-    void call(T result, ResultStatus resultStatus);
+    void call(ResultStatus resultStatus);
 }

@@ -1,22 +1,14 @@
 package phase2.trade.item.command;
 
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
-import phase2.trade.item.Willingness;
 import phase2.trade.permission.Permission;
-import phase2.trade.user.RegularUser;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
@@ -26,7 +18,7 @@ public class UpdateInventoryItems extends ItemCommand<Void> {
     private transient List<Item> itemsToUpdate;
 
     @Override
-    public void execute(StatusCallback<Void> callback, String... args) {
+    public void execute(ResultStatusCallback<Void> callback, String... args) {
         if (!checkPermission(callback)) return;
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             for (Item item : itemsToUpdate) {

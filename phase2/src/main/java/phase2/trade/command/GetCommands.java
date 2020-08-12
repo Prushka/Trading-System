@@ -1,11 +1,8 @@
 package phase2.trade.command;
 
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.StatusSucceeded;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.Permission;
-import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 import java.util.List;
@@ -15,7 +12,7 @@ import java.util.List;
 public class GetCommands extends Command<List<Command>> {
 
     @Override
-    public void execute(StatusCallback<List<Command>> callback, String... args) {
+    public void execute(ResultStatusCallback<List<Command>> callback, String... args) {
         if (!checkPermission(callback)) {
             return;
         }

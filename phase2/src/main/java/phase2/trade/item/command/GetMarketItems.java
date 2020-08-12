@@ -1,14 +1,11 @@
 package phase2.trade.item.command;
 
-import phase2.trade.callback.ResultStatus;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
-import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 import java.util.List;
@@ -22,7 +19,7 @@ public class GetMarketItems extends ItemCommand<List<Item>> {
     }
 
     @Override
-    public void execute(StatusCallback<List<Item>> callback, String... args) {
+    public void execute(ResultStatusCallback<List<Item>> callback, String... args) {
         if (!checkPermission(callback)) {
             return;
         }

@@ -1,5 +1,8 @@
 package phase2.trade.item;
 
+import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.StatusFailed;
+
 import java.util.List;
 
 public class ItemEditor {
@@ -10,7 +13,12 @@ public class ItemEditor {
         this.items = items;
     }
 
-    public void alterWillingness(Willingness willingness){
+    public void alterWillingness(Willingness willingness, StatusCallback statusCallback){
+        for(Item item:items){
+            if(item.getOwnership()!=Ownership.OWNER) {
+                statusCallback.call(new StatusFailed("You do not own this product yet!"));
+            }
+        }
         items.forEach(item -> item.setWillingness(willingness));
     }
 

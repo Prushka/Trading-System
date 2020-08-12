@@ -113,21 +113,28 @@ public class ItemListController extends AbstractController implements Initializa
         return event -> {
             ObservableList<Item> itemsSelected = getSelected();
             if (itemsSelected.size() == 0) return;
+
             ItemEditor itemEditor = new ItemEditor(itemsSelected);
-            itemEditor.alterWillingness(willingness);
-            disableButtons(true);
-            Command<?> command = getCommandFactory().getCommand(UpdateInventoryItems::new, c -> {
-                c.setItemsToUpdate(itemsSelected);
-            });
-            command.execute((result, resultStatus) -> {
-                resultStatus.setAfter(() -> {
-                    disableButtons(false);
-                    tableView.refresh();
-                });
-                resultStatus.setSucceeded(() -> itemsSelected.forEach(item -> item.setWillingness(willingness)));
+            itemEditor.alterWillingness(willingness, resultStatus -> {
+                resultStatus.setSucceeded(() -> updateItem(itemsSelected));
                 resultStatus.handle(getPopupFactory());
             });
+
         };
+    }
+
+    private void updateItem(List<Item> items) {
+        disableButtons(true);
+        Command<?> command = getCommandFactory().getCommand(UpdateInventoryItems::new, c -> {
+            c.setItemsToUpdate(items);
+        });
+        command.execute((result, resultStatus) -> {
+            resultStatus.setAfter(() -> {
+                disableButtons(false);
+                tableView.refresh();
+            });
+            resultStatus.handle(getPopupFactory());
+        });
     }
 
     private Set<Long> getItemIdsFrom(List<? extends Item> list) {

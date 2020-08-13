@@ -15,6 +15,8 @@ public class ConfigBundle implements Shutdownable {
 
     private final DatabaseConfig databaseConfig;
 
+    private final UIConfig uiConfig;
+
     private ConfigStrategy configStrategy;
 
 
@@ -24,6 +26,7 @@ public class ConfigBundle implements Shutdownable {
         permissionConfig = configStrategy.read(PermissionConfig.class, "config/permission_group", PermissionConfig::new);
         tradeConfig = configStrategy.read(TradeConfig.class, "config/trade", TradeConfig::new);
         databaseConfig = configStrategy.read(DatabaseConfig.class, "config/database", DatabaseConfig::new);
+        uiConfig = configStrategy.read(UIConfig.class, "config/ui", UIConfig::new);
     }
 
     public void changeStrategy(ConfigStrategy configStrategy) {
@@ -36,6 +39,7 @@ public class ConfigBundle implements Shutdownable {
         configStrategy.save(permissionConfig, "config/permission_group");
         configStrategy.save(tradeConfig, "config/trade");
         configStrategy.save(databaseConfig, "config/database");
+        configStrategy.save(uiConfig, "config/ui");
     }
 
     public PermissionConfig getPermissionConfig() {
@@ -48,5 +52,9 @@ public class ConfigBundle implements Shutdownable {
 
     public DatabaseConfig getDatabaseConfig() {
         return databaseConfig;
+    }
+
+    public UIConfig getUiConfig() {
+        return uiConfig;
     }
 }

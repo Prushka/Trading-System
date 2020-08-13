@@ -64,7 +64,7 @@ public class MarketListController extends AbstractController implements Initiali
     private void afterFetch() {
         listView.setSelectionModel(new NoSelectionModel<>());
         AddToCart addToCartCommand = getCommandFactory().getCommand(AddToCart::new);
-        listView.setCellFactory(param -> new MarketItemCell(addToCartCommand));
+        listView.setCellFactory(param -> new MarketItemCell(addToCartCommand, getPopupFactory()));
         JFXButton search = new JFXButton();
         JFXCheckBox lend = new JFXCheckBox("Lend");
         JFXCheckBox sell = new JFXCheckBox("Sell");

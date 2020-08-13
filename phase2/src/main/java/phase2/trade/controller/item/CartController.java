@@ -86,7 +86,7 @@ public class CartController extends GeneralTableViewController<Item> implements 
                 .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE))
                 .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
-        getPane("topBar").getChildren().setAll(category, lend, sell, privateCheckBox);
+        getPane("topBar").getChildren().addAll(category, lend, sell, privateCheckBox);
         lend.setSelected(true);
         sell.setSelected(true);
         privateCheckBox.setSelected(true);

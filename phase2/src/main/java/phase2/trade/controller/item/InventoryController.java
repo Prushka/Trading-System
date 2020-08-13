@@ -43,7 +43,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         super.initialize(location, resources);
         setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
 
-        tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
+        tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description",200).addColumn("Category", "category")
                 .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price").addColumn("Willingness", "willingness").addColumn("UID", "uid");
 
         JFXButton addButton = new JFXButton("Add");
@@ -77,7 +77,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
 
         addComboBox(
                 FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))),
-                "Category","ALL",
+                "Category", "ALL",
                 (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
 
@@ -89,7 +89,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
                 .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
                 .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE));
 
-        getPane("topBar").getChildren().setAll(lend, sell, privateCheckBox);
+        getPane("topBar").getChildren().addAll(lend, sell, privateCheckBox);
         lend.setSelected(true);
         sell.setSelected(true);
         privateCheckBox.setSelected(true);

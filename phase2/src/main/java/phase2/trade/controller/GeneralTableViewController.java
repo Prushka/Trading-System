@@ -39,6 +39,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
         super(controllerResources);
         this.ifMultipleSelection = ifMultipleSelection;
         this.ifEditable = ifEditable;
+        if (getPane("topBar") != null) getPane("topBar").getChildren().clear();
     }
 
     public void setDisplayData(ObservableList<T> displayData) {

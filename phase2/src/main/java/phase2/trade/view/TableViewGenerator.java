@@ -48,9 +48,15 @@ public class TableViewGenerator<T> {
 
     private TableColumn<T, String> getTableColumn(String name, String fieldName) {
         TableColumn<T, String> column = new TableColumn<>(name);
-        // column.setMinWidth(minWidth);
         column.setCellValueFactory(new PropertyValueFactory<>(fieldName));
         return column;
+    }
+
+    public TableViewGenerator<T> addColumn(String name, String fieldName, int maxWidth) {
+        TableColumn<T, String> column = getTableColumn(name, fieldName);
+        listOfColumns.add(column);
+        column.setMaxWidth(maxWidth);
+        return this;
     }
 
     public TableViewGenerator<T> addColumn(String name, String fieldName) {

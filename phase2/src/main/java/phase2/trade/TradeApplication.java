@@ -62,7 +62,7 @@ public class TradeApplication extends Application {
 
 
         new CreatePrerequisiteIfNotExist(controllerResources.getCommandFactory());
-        mockDashboardRegister(primaryStage,"every-one-hates-me","password");
+        mockDashboardRegister(primaryStage,"would-it-be-better-if-I-were-dead-soon","password");
         // mockDashboardLogin(primaryStage, "admin", "admin???");
         //login(primaryStage);
     }

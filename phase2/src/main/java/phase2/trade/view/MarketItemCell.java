@@ -22,8 +22,11 @@ public class MarketItemCell extends JFXListCell<Item> {
 
     private final AddToCart addToCartCommand;
 
-    public MarketItemCell(AddToCart addToCartCommand) {
+    private final PopupFactory popupFactory;
+
+    public MarketItemCell(AddToCart addToCartCommand, PopupFactory popupFactory) {
         this.addToCartCommand = addToCartCommand;
+        this.popupFactory = popupFactory;
     }
 
     @Override
@@ -84,6 +87,8 @@ public class MarketItemCell extends JFXListCell<Item> {
         addToCart.setOnAction(event -> {
             addToCartCommand.setItems(item);
             addToCartCommand.execute((result, status) -> {
+                status.setSucceeded(() -> getPopupFactory().toast(3, "Successfully added to cart"));
+                status.handle(getPopupFactory());
             });
         });
 
@@ -118,5 +123,9 @@ public class MarketItemCell extends JFXListCell<Item> {
             setGraphic(generateItemPreview(item));
             setText("");
         }
+    }
+
+    private PopupFactory getPopupFactory() {
+        return popupFactory;
     }
 }

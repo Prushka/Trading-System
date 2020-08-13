@@ -3,6 +3,7 @@ package phase2.trade.view;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListCell;
+import com.jfoenix.svg.SVGGlyph;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import phase2.trade.command.Command;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddToCart;
@@ -72,13 +74,10 @@ public class MarketItemCell extends JFXListCell<Item> {
         Label ownerLabel = new Label(item.getOwner().getUserName());
 
         JFXButton addToCart = new JFXButton("Add To Cart");
-        addToCart.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                addToCartCommand.setItems(item);
-                addToCartCommand.execute((result,status)->{
-                });
-            }
+        addToCart.setOnAction(event -> {
+            addToCartCommand.setItems(item);
+            addToCartCommand.execute((result,status)->{
+            });
         });
 
         leftVBox.getChildren().addAll(categoryLabel, nameLabel, descriptionLabel);

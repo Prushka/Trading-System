@@ -4,13 +4,18 @@ import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.CartController;
 import phase2.trade.presenter.ControllerSupplier;
 import phase2.trade.presenter.ItemTableController;
 import phase2.trade.presenter.MarketListController;
+import phase2.trade.view.SideListCell;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -64,6 +69,8 @@ public class SideMenuController extends AbstractController implements Initializa
     public void initialize(URL location, ResourceBundle resources) {
         userInfoBox.getChildren().add(getSceneManager().loadPane(UserInfoPresenter::new));
 
+        sideList.setCellFactory(param -> new SideListCell());
+        bottomSideList.setCellFactory(param -> new SideListCell());
         sideList.setItems(FXCollections.observableArrayList("userInfo", "market", "inventory", "cart"));
 
 

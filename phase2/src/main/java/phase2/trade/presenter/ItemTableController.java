@@ -46,16 +46,17 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
 
         JFXButton addButton = new JFXButton("Add");
         JFXButton deleteButton = new JFXButton("Delete");
+        JFXButton privateButton = new JFXButton("I wanna this item to be private");
         JFXButton sellButton = new JFXButton("I wanna sell them");
         JFXButton lendButton = new JFXButton("I wanna lend them");
 
-        buttons.getChildren().addAll(addButton, deleteButton, sellButton, lendButton);
+        buttons.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
+        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
         sellButton.setOnAction(getWillingnessHandler(Willingness.SELL));
-
+        privateButton.setOnAction(getWillingnessHandler(Willingness.NOPE));
         lendButton.setOnAction(getWillingnessHandler(Willingness.LEND));
 
-        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton);
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
             command.setItemListType(itemListType);

@@ -3,18 +3,15 @@ package phase2.trade.view;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListCell;
-import com.jfoenix.svg.SVGGlyph;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import phase2.trade.command.Command;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddToCart;
 
@@ -84,9 +81,9 @@ public class MarketItemCell extends JFXListCell<Item> {
 
         rightVBox.getChildren().addAll(priceLabel, uidLabel, ownerLabel);
 
-        Pane svg = new SVGFactory().generateSVG(item.getCategory(), Color.BLACK, 120, 120);
+        Node svg = new ImageFactory().generateSVG(item.getCategory().resourcePath, Color.BLACK, 120, 120);
         if (svg != null) {
-            hBox.getChildren().add(svg);
+            hBox.getChildren().addAll(svg);
         }
         hBox.getChildren().addAll(leftVBox, region, comboBox, rightVBox, addToCart);
         hBox.getStyleClass().add("market-item-cell");

@@ -10,10 +10,10 @@ import phase2.trade.controller.*;
 import phase2.trade.controller.item.CartController;
 import phase2.trade.controller.item.InventoryController;
 import phase2.trade.controller.market.MarketListController;
-import phase2.trade.controller.user.LoginController;
-import phase2.trade.controller.user.UserInfoPresenter;
-import phase2.trade.controller.user.UserManageController;
-import phase2.trade.controller.user.UserOperationController;
+import phase2.trade.user.controller.LoginController;
+import phase2.trade.user.controller.UserInfoPresenter;
+import phase2.trade.user.controller.UserManageController;
+import phase2.trade.user.controller.UserOperationController;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.view.SideListCell;
 

@@ -10,8 +10,8 @@ import javafx.scene.layout.VBox;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.LimitsController;
-import phase2.trade.controller.user.UserAccountsController;
-import phase2.trade.controller.user.UserInfoPresenter;
+import phase2.trade.user.controller.UserAccountsController;
+import phase2.trade.user.controller.UserInfoPresenter;
 
 import java.net.URL;
 import java.util.ResourceBundle;

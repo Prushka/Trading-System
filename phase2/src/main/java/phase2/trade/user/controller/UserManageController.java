@@ -1,4 +1,4 @@
-package phase2.trade.controller.user;
+package phase2.trade.user.controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;

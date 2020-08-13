@@ -1,5 +1,6 @@
-package phase2.trade.controller.user;
+package phase2.trade.user.controller;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import phase2.trade.controller.AbstractController;
@@ -10,10 +11,8 @@ import phase2.trade.user.User;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@ControllerProperty(viewFile = "user_info_side.fxml")
-public class UserInfoPresenter extends AbstractController implements Initializable {
-
-    // the reason why they are initialized here is because many user info fxml share one presenter and some labels may not exist there
+@ControllerProperty(viewFile = "user_info.fxml")
+public class UserInfoController extends AbstractController implements Initializable {
 
     public Label userId = new Label();
     public Label userName = new Label();
@@ -23,22 +22,21 @@ public class UserInfoPresenter extends AbstractController implements Initializab
     public Label currentStatus = new Label();
     public Label permissionGroup = new Label();
 
-    private final User user;
-
-    public UserInfoPresenter(ControllerResources controllerResources) {
+    public UserInfoController(ControllerResources controllerResources) {
         super(controllerResources);
-        this.user = getAccountManager().getLoggedInUser();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userId.setText("User Id: " + user.getUid());
-        userName.setText("User Name: " + user.getName());
-        email.setText("Email: " + user.getEmail());
-        permissionGroup.setText("PermissionGroup: " + user.getPermissionGroup());
+        userId.setText("User Id: " + getAccountManager().getLoggedInUser().getUid());
+        userName.setText("User Name: " + getAccountManager().getLoggedInUser().getName());
+        email.setText("Email: " + getAccountManager().getLoggedInUser().getEmail());
+        permissionGroup.setText("PermissionGroup: " + getAccountManager().getLoggedInUser().getPermissionGroup());
         // address book + if user didnt input address
         // home.setText("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
         bio.setText("Bio: ");
-        currentStatus.setText("Current Status: " + user.getUid());
+        currentStatus.setText("Current Status: " + getAccountManager().getLoggedInUser().getUid());
+
+        JFXButton changePassword = new JFXButton();
     }
 }

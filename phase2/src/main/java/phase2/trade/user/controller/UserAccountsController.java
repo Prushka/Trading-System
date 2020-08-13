@@ -1,4 +1,4 @@
-package phase2.trade.controller.user;
+package phase2.trade.user.controller;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.fxml.Initializable;

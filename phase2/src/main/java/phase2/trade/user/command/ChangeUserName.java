@@ -1,0 +1,44 @@
+package phase2.trade.user.command;
+
+import phase2.trade.callback.ResultStatusCallback;
+import phase2.trade.callback.status.StatusExist;
+import phase2.trade.callback.status.StatusSucceeded;
+import phase2.trade.command.CRUDType;
+import phase2.trade.command.CommandProperty;
+import phase2.trade.permission.Permission;
+import phase2.trade.user.User;
+
+import javax.persistence.Entity;
+import java.util.List;
+
+@Entity
+@CommandProperty(crudType = CRUDType.CREATE, undoable = true,
+        persistent = true, permissionSet = {Permission.CREATE_USER})
+public class ChangeUserName extends UserCommand<User> {
+
+    private String oldName;
+
+    @Override
+    public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group
+        if (!checkPermission(callback)) return;
+        getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
+            List<User> usersByName = gateway.findByUserName(args[0]);
+            if (usersByName.size() > 0) {
+                callback.call(null, new StatusExist());
+                return;
+            }
+            oldName = operator.getName();
+            operator.setName(args[0]);
+            save();
+            gateway.update(operator);
+            callback.call(operator, new StatusSucceeded());
+        });
+    }
+
+    @Override
+    public void undo() {
+        getEntityBundle().getUserGateway().submitTransaction(gateway -> {
+            // gateway.delete(userId);
+        });
+    }
+}

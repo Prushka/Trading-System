@@ -7,7 +7,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import phase2.trade.command.Command;
 import phase2.trade.controller.DashboardController;
-import phase2.trade.controller.user.LoginController;
+import phase2.trade.user.controller.LoginController;
 import phase2.trade.config.ConfigBundle;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
 import phase2.trade.gateway.GatewayBundle;

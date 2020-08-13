@@ -40,7 +40,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
 
     public void setDisplayData(ObservableList<T> displayData) {
         this.displayData = displayData;
-        tableViewGenerator.setOriginal(displayData);
+        tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
     }
 
     @Override
@@ -49,7 +49,6 @@ public class GeneralTableViewController<T> extends AbstractController implements
             tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         }
         tableView.setEditable(ifEditable);
-        tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
     }
 
     protected ObservableList<T> getSelected() {

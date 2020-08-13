@@ -37,12 +37,12 @@ public class CartController extends GeneralTableViewController<Item> implements 
     public CartController(ControllerResources controllerResources, ItemListType itemListType) {
         super(controllerResources, true, false);
         this.itemListType = itemListType;
-        setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
+        setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
         tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
                 .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price")
                 .addColumn("Willingness", "willingness").addColumn("Owner", param -> {

@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
 import phase2.trade.presenter.GeneralTableViewController;
+import phase2.trade.user.User;
 
 import java.net.URL;
 import java.text.Format;
@@ -22,7 +23,7 @@ public class UserOperationController extends GeneralTableViewController<Command>
         super(controllerResources, false, false);
     }
 
-    private String convertTime(long time){
+    private String convertTime(long time) {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
         return format.format(date);
@@ -45,6 +46,13 @@ public class UserOperationController extends GeneralTableViewController<Command>
         System.out.println(result.size());
         setDisplayData(FXCollections.observableArrayList(result));
         tableViewGenerator
+                .addColumn("Type", param -> {
+                    if (param.getValue() != null) {
+                        return new SimpleStringProperty(param.getValue().getClass().getSimpleName());
+                    } else {
+                        return new SimpleStringProperty("null");
+                    }
+                })
                 .addColumn("Time", param -> {
                     if (param.getValue() != null) {
                         return new SimpleStringProperty(convertTime(param.getValue().getTimestamp()));
@@ -54,12 +62,16 @@ public class UserOperationController extends GeneralTableViewController<Command>
                 })
                 .addColumn("Operator", param -> {
                     if (param.getValue() != null) {
+                        User operator = param.getValue().getOperator();
+                        if (operator == null) {
+                            return new SimpleStringProperty("SYSTEM");
+                        }
                         return new SimpleStringProperty(param.getValue().getOperator().getUserName());
                     } else {
                         return new SimpleStringProperty("null");
                     }
                 });
-
+        tableViewGenerator.build();
     }
 
 }

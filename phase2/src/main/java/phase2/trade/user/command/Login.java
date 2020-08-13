@@ -1,8 +1,8 @@
 package phase2.trade.user.command;
 
 import phase2.trade.callback.ResultStatusCallback;
-import phase2.trade.callback.StatusFailed;
-import phase2.trade.callback.StatusSucceeded;
+import phase2.trade.callback.status.StatusFailed;
+import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.user.User;

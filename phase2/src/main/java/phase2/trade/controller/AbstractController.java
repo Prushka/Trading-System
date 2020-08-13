@@ -3,7 +3,7 @@ package phase2.trade.controller;
 import javafx.scene.layout.Pane;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.presenter.PopupFactory;
+import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
 

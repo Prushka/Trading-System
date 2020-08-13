@@ -1,7 +1,6 @@
 import org.junit.Test;
 import phase2.trade.ShutdownHook;
-import phase2.trade.config.yaml.YamlStrategy;
-import phase2.trade.gateway.ConfigBundle;
+import phase2.trade.config.ConfigBundle;
 
 public class ConfigTest {
 

@@ -4,7 +4,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.presenter.PopupFactory;
+import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
 
@@ -19,6 +19,10 @@ public class ControllerResources {
 
     private final GatewayBundle gatewayBundle;
 
+    // This account manager is injected everywhere since it holds a reference to the current logged in user,
+    // and I suppose we shouldn't pass that User around since it's an entity
+    // And it's also responsible for logout and some 'account' related operations and helper methods
+    // Please don't put anything else into this AccountManager, it's only supposed to handle login / register / logout
     private final AccountManager accountManager;
 
     private final CommandFactory commandFactory;

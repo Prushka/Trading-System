@@ -1,7 +1,7 @@
 package phase2.trade.trade.command;
 
 import phase2.trade.callback.ResultStatusCallback;
-import phase2.trade.callback.StatusSucceeded;
+import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeCreator;
 

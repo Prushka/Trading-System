@@ -3,10 +3,12 @@ package phase2.trade.database;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import phase2.trade.gateway.EntityGateway;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
@@ -105,11 +107,25 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         return (List<T>) getCurrentSession().createQuery("from " + clazz.getSimpleName()).list();
     }
 
-    protected CriteriaBuilder getCriteriaBuilder() {
+    protected void criteria(QuadConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>, Query<T>> quadConsumer) {
+        CriteriaQuery<T> criteriaQuery = createCriteriaQuery(clazz);
+        Root<T> root = criteriaQuery.from(clazz);
+        criteriaQuery.select(root);
+        quadConsumer.consume(getCriteriaBuilder(), criteriaQuery, root, getCurrentSession().createQuery(criteriaQuery));
+    }
+
+    protected void criteria(Class<T> clazz, QuadConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>, Query<T>> quadConsumer) {
+        CriteriaQuery<T> criteriaQuery = createCriteriaQuery(clazz);
+        Root<T> root = criteriaQuery.from(clazz);
+        criteriaQuery.select(root);
+        quadConsumer.consume(getCriteriaBuilder(), criteriaQuery, root, getCurrentSession().createQuery(criteriaQuery));
+    }
+
+    private CriteriaBuilder getCriteriaBuilder() {
         return getCurrentSession().getCriteriaBuilder();
     }
 
-    protected CriteriaQuery<T> createCriteriaQuery(Class<T> clazz) {
+    private CriteriaQuery<T> createCriteriaQuery(Class<T> clazz) {
         return getCriteriaBuilder().createQuery(clazz);
     }
 

@@ -1,14 +1,12 @@
 package phase2.trade;
 
-import javafx.application.Platform;
 import javafx.stage.Stage;
 import phase2.trade.command.Command;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.config.ConfigBundle;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.DashboardController;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.database.DatabaseResourceBundle;
+import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -78,7 +76,6 @@ public class Configurer {
 
     public void mockDashboardRegister(String username, String password) {
         accountManager.register((result, status) -> {
-            getControllerResources().getSceneManager().switchScene(DashboardController::new);
 
         }, username, password, "12345678", "country", "city");
 
@@ -87,7 +84,6 @@ public class Configurer {
 
     public void mockDashboardLogin(String userName, String password) {
         accountManager.login((result, status) -> {
-            getControllerResources().getSceneManager().switchScene(DashboardController::new);
 
         }, userName, password);
     }

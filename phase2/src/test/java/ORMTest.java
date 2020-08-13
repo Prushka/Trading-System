@@ -1,7 +1,7 @@
 import org.junit.Test;
 import phase2.trade.config.ConfigBundle;
 import phase2.trade.gateway.*;
-import phase2.trade.gateway.database.*;
+import phase2.trade.database.*;
 import phase2.trade.item.Item;
 import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;

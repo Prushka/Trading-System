@@ -1,11 +1,9 @@
-package phase2.trade.gateway.database;
+package phase2.trade.database;
 
-import org.hibernate.Criteria;
 import org.hibernate.query.Query;
 import phase2.trade.gateway.TradeGateway;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
-import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
 import java.util.List;

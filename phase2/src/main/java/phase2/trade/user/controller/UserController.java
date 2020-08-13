@@ -1,8 +1,6 @@
 package phase2.trade.user.controller;
 
 import javafx.fxml.Initializable;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.database.UserDAO;
 
 import java.net.URL;
 import java.util.ResourceBundle;

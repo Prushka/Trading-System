@@ -1,12 +1,12 @@
-package phase2.trade.gateway.database;
+package phase2.trade.database;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import phase2.trade.gateway.EntityGateway;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
@@ -103,6 +103,14 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
         return (List<T>) getCurrentSession().createQuery("from " + clazz.getSimpleName()).list();
+    }
+
+    protected CriteriaBuilder getCriteriaBuilder() {
+        return getCurrentSession().getCriteriaBuilder();
+    }
+
+    protected CriteriaQuery<T> createCriteriaQuery(Class<T> clazz) {
+        return getCriteriaBuilder().createQuery(clazz);
     }
 
     @Override

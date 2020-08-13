@@ -8,7 +8,7 @@ import phase2.trade.inventory.ItemList;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.AlterItemInInventory;
 import phase2.trade.command.Command;
-import phase2.trade.gateway.database.DatabaseResourceBundle;
+import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetItems;
 import phase2.trade.user.AccountManager;

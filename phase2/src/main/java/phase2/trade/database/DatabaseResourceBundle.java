@@ -1,12 +1,9 @@
-package phase2.trade.gateway.database;
+package phase2.trade.database;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import phase2.trade.Shutdownable;
 import phase2.trade.config.DatabaseConfig;
-import phase2.trade.gateway.CommandGateway;
-import phase2.trade.gateway.ItemGateway;
-import phase2.trade.gateway.UserGateway;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

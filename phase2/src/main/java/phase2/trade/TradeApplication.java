@@ -1,22 +1,11 @@
 package phase2.trade;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import phase2.trade.command.Command;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.user.controller.LoginController;
-import phase2.trade.config.ConfigBundle;
-import phase2.trade.gateway.database.DatabaseResourceBundle;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.ItemListType;
-import phase2.trade.item.Category;
-import phase2.trade.item.Item;
-import phase2.trade.item.command.AddItemToItemList;
-import phase2.trade.controller.ControllerResources;
-import phase2.trade.user.AccountManager;
 
 public class TradeApplication extends Application {
 
@@ -45,6 +34,8 @@ public class TradeApplication extends Application {
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
         configurer.mockDashboardRegister("cannot-catch-any-hope", "password");
+
+        configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
         // mockDashboardLogin(primaryStage, "admin", "admin???");
         //login(primaryStage);
         primaryStage.show();

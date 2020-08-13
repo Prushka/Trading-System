@@ -1,4 +1,4 @@
-package phase2.trade.gateway.database;
+package phase2.trade.database;
 
 import org.hibernate.query.Query;
 import phase2.trade.command.Command;

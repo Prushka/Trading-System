@@ -3,9 +3,9 @@ package phase2.trade.view.window;
 import com.jfoenix.controls.JFXButton;
 import javafx.stage.Stage;
 
-public class ConfirmWindow extends AlertWindow<Boolean> {
+public class ConfirmAlert extends AlertWindow<Boolean> {
 
-    public ConfirmWindow(Stage parent, String title, String header) {
+    public ConfirmAlert(Stage parent, String title, String header) {
         super(parent, title, header);
     }
 

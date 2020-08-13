@@ -14,7 +14,7 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
-@CommandProperty(crudType = CRUDType.CREATE, undoable = true,
+@CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {Permission.CREATE_USER})
 public class ChangePassword extends UserCommand<User> {
 

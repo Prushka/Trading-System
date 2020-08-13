@@ -7,6 +7,7 @@ import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
 
+@ControllerProperty(viewFile = "abstract.fxml")
 public abstract class AbstractController {
 
     private final ControllerResources controllerResources;

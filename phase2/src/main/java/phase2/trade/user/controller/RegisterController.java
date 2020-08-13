@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -20,13 +21,16 @@ import java.util.ResourceBundle;
 @ControllerProperty(viewFile = "register.fxml")
 public class RegisterController extends AbstractController implements Initializable {
 
-    private StringProperty submissionResultProperty;
-
+    @FXML
     public Label submissionResult;
 
+    @FXML
     public TextField username, email, password, country, city;
 
+    @FXML
     public JFXButton registerButton;
+
+    private StringProperty submissionResultProperty;
 
     public RegisterController(ControllerResources controllerResources) {
         super(controllerResources);

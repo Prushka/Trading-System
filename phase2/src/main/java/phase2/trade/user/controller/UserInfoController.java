@@ -1,26 +1,26 @@
 package phase2.trade.user.controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextField;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.User;
+import phase2.trade.view.window.TextFieldAlert;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@ControllerProperty(viewFile = "user_info.fxml")
 public class UserInfoController extends AbstractController implements Initializable {
 
-    public Label userId = new Label();
-    public Label userName = new Label();
-    public Label email = new Label();
-    public Label home = new Label();
-    public Label bio = new Label();
-    public Label currentStatus = new Label();
-    public Label permissionGroup = new Label();
+    @FXML
+    private GridPane root;
 
     public UserInfoController(ControllerResources controllerResources) {
         super(controllerResources);
@@ -28,15 +28,25 @@ public class UserInfoController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userId.setText("User Id: " + getAccountManager().getLoggedInUser().getUid());
-        userName.setText("User Name: " + getAccountManager().getLoggedInUser().getName());
-        email.setText("Email: " + getAccountManager().getLoggedInUser().getEmail());
-        permissionGroup.setText("PermissionGroup: " + getAccountManager().getLoggedInUser().getPermissionGroup());
+        Label userId = new Label("User Id: " + getAccountManager().getLoggedInUser().getUid());
+        Label userName = new Label("User Name: " + getAccountManager().getLoggedInUser().getName());
+        Label email = new Label("Email: " + getAccountManager().getLoggedInUser().getEmail());
+        Label permissionGroup = new Label("PermissionGroup: " + getAccountManager().getLoggedInUser().getPermissionGroup());
         // address book + if user didnt input address
-        // home.setText("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
-        bio.setText("Bio: ");
-        currentStatus.setText("Current Status: " + getAccountManager().getLoggedInUser().getUid());
+        // home = new Label("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
+        Label bio = new Label("Bio: ");
+        Label currentStatus = new Label("Current Status: " + getAccountManager().getLoggedInUser().getUid());
 
-        JFXButton changePassword = new JFXButton();
+        JFXButton changePassword = new JFXButton("Change Password");
+
+        JFXTextField oldPassword = new JFXTextField();
+
+        root.getChildren().addAll(changePassword);
+
+        TextFieldAlert textFieldAlert = getPopupFactory().textFieldAlert("Change Password","");
+        textFieldAlert.addTextField(oldPassword);
+
+        changePassword.setOnAction(event -> textFieldAlert.display());
+
     }
 }

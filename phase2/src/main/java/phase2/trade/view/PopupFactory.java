@@ -9,8 +9,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
-import phase2.trade.view.window.ConfirmWindow;
-import phase2.trade.view.window.PopupWindow;
+import phase2.trade.view.window.ConfirmAlert;
+import phase2.trade.view.window.PopupAlert;
+import phase2.trade.view.window.TextFieldAlert;
 
 public class PopupFactory {
 
@@ -46,12 +47,16 @@ public class PopupFactory {
         toast(Duration.seconds(4), "Permission Denied", "CLOSE");
     }
 
-    public PopupWindow popupWindow(String title, String header) {
-        return new PopupWindow(window, title, header);
+    public PopupAlert popupWindow(String title, String header) {
+        return new PopupAlert(window, title, header);
     }
 
-    public ConfirmWindow confirmWindow(String title, String header) {
-        return new ConfirmWindow(window, title, header);
+    public ConfirmAlert confirmWindow(String title, String header) {
+        return new ConfirmAlert(window, title, header);
+    }
+
+    public TextFieldAlert textFieldAlert(String title, String header) {
+        return new TextFieldAlert(window, title, header);
     }
 
     protected Scene getRootScene() {

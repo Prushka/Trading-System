@@ -13,6 +13,9 @@ public class ControllerFactory {
     }
 
     public String getViewFileFromController(Object controllerClass) {
+        if(!controllerClass.getClass().isAnnotationPresent(ControllerProperty.class)){
+            return null;
+        }
         return controllerClass.getClass().getAnnotation(ControllerProperty.class).viewFile();
     }
 }

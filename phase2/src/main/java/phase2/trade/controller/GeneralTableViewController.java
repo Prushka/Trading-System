@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
@@ -20,9 +21,11 @@ import java.util.*;
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class GeneralTableViewController<T> extends AbstractController implements Initializable {
 
-    public TableView<T> tableView;
+    @FXML
+    protected TableView<T> tableView;
 
-    public HBox buttons;
+    @FXML
+    protected HBox buttons;
 
     protected List<Button> buttonsToDisable = new ArrayList<>();
 

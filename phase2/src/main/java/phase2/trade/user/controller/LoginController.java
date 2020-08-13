@@ -3,6 +3,7 @@ package phase2.trade.user.controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,9 +20,11 @@ import java.util.ResourceBundle;
 @ControllerProperty(viewFile = "login.fxml")
 public class LoginController extends AbstractController implements Initializable {
 
-    public Label submissionResult;
+    @FXML
+    private Label submissionResult;
 
-    public TextField usernameOrEmail, password;
+    @FXML
+    private TextField usernameOrEmail, password;
 
     private StringProperty submissionResultProperty;
 

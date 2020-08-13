@@ -39,6 +39,9 @@ public abstract class Command<T> implements PermissionBased {
 
     private Long undoTimestamp;
 
+    @Column(insertable = false, updatable = false)
+    private String dType;
+
     // this one is to be persisted for effected entities and to be deserialized
     protected String effectedEntitiesToPersist;
 
@@ -241,5 +244,9 @@ public abstract class Command<T> implements PermissionBased {
 
     public User getOperator() {
         return operatorToPersist;
+    }
+
+    public String getDType() {
+        return dType;
     }
 }

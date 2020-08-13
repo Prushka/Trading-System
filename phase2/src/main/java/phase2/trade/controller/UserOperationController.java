@@ -48,7 +48,7 @@ public class UserOperationController extends GeneralTableViewController<Command>
         tableViewGenerator
                 .addColumn("Type", param -> {
                     if (param.getValue() != null) {
-                        return new SimpleStringProperty(param.getValue().getClass().getSimpleName());
+                        return new SimpleStringProperty(param.getValue().getDType());
                     } else {
                         return new SimpleStringProperty("null");
                     }

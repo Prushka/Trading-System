@@ -11,4 +11,5 @@ public interface CommandGateway extends EntityGateway<Command, CommandGateway> {
 
     List<Command<?>> getFutureCommands(Long commandTimestamp);
 
+    <C> List<Command<C>> findByDType(Class<C> clazz);
 }

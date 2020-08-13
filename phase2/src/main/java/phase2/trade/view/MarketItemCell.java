@@ -40,10 +40,6 @@ public class MarketItemCell extends JFXListCell<Item> {
         hBox.setAlignment(Pos.CENTER_LEFT);
         leftVBox.setAlignment(Pos.CENTER_LEFT);
         rightVBox.setAlignment(Pos.CENTER_RIGHT);
-        ImageView imageView = new ImageView(new
-                Image(getClass().getResourceAsStream("/test.png")));
-        imageView.setFitWidth(120);
-        imageView.setFitHeight(120);
 
         Region region = new Region();
         HBox.setHgrow(region, Priority.ALWAYS);
@@ -54,6 +50,7 @@ public class MarketItemCell extends JFXListCell<Item> {
         nameLabel.setStyle("-fx-font-weight: bold;-fx-font-size: 20");
 
         Label descriptionLabel = new Label(item.getDescription());
+        descriptionLabel.setMaxWidth(350);
 
         JFXComboBox<String> comboBox = new JFXComboBox<>();
         comboBox.setStyle("-fx-text-fill: #293841;");
@@ -63,12 +60,25 @@ public class MarketItemCell extends JFXListCell<Item> {
         String price = "Lend";
 
         if (item.getPrice() != -1) {
-            price = String.valueOf(item.getPrice());
+            price = String.valueOf(String.format("%.2f", item.getPrice()));
         }
 
-        Label priceLabel = new Label(price);
-        Label uidLabel = new Label(String.valueOf(item.getUid()));
-        Label ownerLabel = new Label(item.getOwner().getName());
+        Label sellOrLendLabel = null;
+        switch (item.getWillingness()) {
+            case LEND:
+                sellOrLendLabel = new Label("For LEND");
+                sellOrLendLabel.setStyle("-fx-text-fill: rgb(223,121,145);-fx-font-weight: BOLD");
+                break;
+            case SELL:
+                sellOrLendLabel = new Label("Sell: " + price + "$"); // TODO: currency system?
+                sellOrLendLabel.setStyle("-fx-text-fill: rgb(227,98,9);-fx-font-weight: BOLD");
+                break;
+        }
+
+        Label uidLabel = new Label("UID: " + item.getUid());
+        Label ownerLabel = new Label("Owner: " + item.getOwner().getName());
+        ownerLabel.setStyle("-fx-text-fill: rgb(92,141,152);-fx-font-weight: BOLD");
+
 
         JFXButton addToCart = new JFXButton("Add To Cart");
         addToCart.setOnAction(event -> {
@@ -77,9 +87,9 @@ public class MarketItemCell extends JFXListCell<Item> {
             });
         });
 
-        leftVBox.getChildren().addAll(categoryLabel, nameLabel, descriptionLabel);
+        leftVBox.getChildren().addAll(categoryLabel, nameLabel, descriptionLabel, ownerLabel);
 
-        rightVBox.getChildren().addAll(priceLabel, uidLabel, ownerLabel);
+        rightVBox.getChildren().addAll(uidLabel, sellOrLendLabel);
 
         Node svg = new ImageFactory().generateSVG(item.getCategory().resourcePath, Color.BLACK, 120, 120);
         if (svg != null) {

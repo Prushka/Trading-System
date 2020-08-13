@@ -95,18 +95,18 @@ public class MarketListController extends AbstractController implements Initiali
                 .addToggleButton(includeMine, ((entity, toMatch) -> entity.getOwner().getUid().
                         equals(getAccountManager().getLoggedInUser().getUid())))
                 .addSearch(priceMinInclusive, ((entity, toMatch) -> {
-                    if(!doublePattern.matcher(toMatch).matches()){
-                        getPopupFactory().toast(3, "Please enter a double in Price Min","CLOSE");
+                    if (!doublePattern.matcher(toMatch).matches()) {
+                        getPopupFactory().toast(3, "Please enter a double in Price Min", "CLOSE");
                         return true;
-                    }else{
+                    } else {
                         return entity.getPrice() >= Double.parseDouble(toMatch);
                     }
                 }))
                 .addSearch(priceMaxInclusive, ((entity, toMatch) -> {
-                    if(!doublePattern.matcher(toMatch).matches()){
-                        getPopupFactory().toast(3, "Please enter a double in Price Max","CLOSE");
+                    if (!doublePattern.matcher(toMatch).matches()) {
+                        getPopupFactory().toast(3, "Please enter a double in Price Max", "CLOSE");
                         return true;
-                    }else{
+                    } else {
                         return entity.getPrice() <= Double.parseDouble(toMatch);
                     }
                 }));

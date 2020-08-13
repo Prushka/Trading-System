@@ -83,6 +83,7 @@ public class UserInfoController extends AbstractController implements Initializa
         passwordAlert.addTextField(oldPassword, newPassword);
 
         changeUserName.setOnAction(event -> userNameAlert.display());
+        changePassword.setOnAction(event -> passwordAlert.display());
 
     }
 }

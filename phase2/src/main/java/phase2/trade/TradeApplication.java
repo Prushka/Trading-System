@@ -46,6 +46,11 @@ public class TradeApplication extends Application {
         System.out.println(font.getFamily());
     }
 
+    // TODO:
+    //  VALIDATION!
+    //  Avoid SQL injection
+    //  Avoid spaces
+
     @Override
     public void start(Stage primaryStage) {
         loadFont("OpenSans");
@@ -57,8 +62,8 @@ public class TradeApplication extends Application {
 
 
         new CreatePrerequisiteIfNotExist(controllerResources.getCommandFactory());
-        // mockDashboardRegister(primaryStage);
-        mockDashboardLogin(primaryStage, "admin", "admin???");
+        mockDashboardRegister(primaryStage,"every-one-hates-me","password");
+        // mockDashboardLogin(primaryStage, "admin", "admin???");
         //login(primaryStage);
     }
 

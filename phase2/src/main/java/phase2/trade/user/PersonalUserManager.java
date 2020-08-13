@@ -2,20 +2,9 @@ package phase2.trade.user;
 
 
 import phase2.trade.gateway.EntityBundle;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.database.UserDAO;
-import phase2.trade.inventory.Cart;
-import phase2.trade.inventory.Inventory;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
-import phase2.trade.item.command.AddToCart;
 import phase2.trade.item.command.ItemCommand;
-import phase2.trade.user.command.UserCommand;
-
-import javax.persistence.Tuple;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * all activities of a personal user happens here
@@ -34,7 +23,7 @@ public class PersonalUserManager{ //extends UserCommand<User>{
     }
 
     public void changeUsername(String username){
-        loggedInUser.setUserName(username);
+        loggedInUser.setName(username);
     }
 
     public void changeEmail(String email){

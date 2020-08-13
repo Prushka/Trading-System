@@ -10,7 +10,7 @@ public class SystemUser extends User {
 
     public SystemUser() {
         setPermissionGroup(PermissionGroup.SYSTEM);
-        setUserName("system");
+        setName("system");
     }
 
 }

@@ -9,13 +9,18 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false, persistent = false, permissionSet = {Permission.BROWSE_USER_OPERATIONS})
-public class GetCommands extends Command<List<Command>> {
+public class GetCommandsByType<T> extends Command<List<Command<T>>> {
+
+    private Class<T> commandClass;
 
     @Override
-    public void execute(ResultStatusCallback<List<Command>> callback, String... args) {
+    public void execute(ResultStatusCallback<List<Command<T>>> callback, String... args) {
         if (!checkPermission(callback)) return;
         getEntityBundle().getCommandGateway().submitSession((gateway) ->
-                callback.call(gateway.findAll(), new StatusSucceeded()));
+                callback.call(gateway.findByDType(commandClass), new StatusSucceeded()));
     }
 
+    public void setCommandClass(Class<T> commandClass) {
+        this.commandClass = commandClass;
+    }
 }

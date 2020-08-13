@@ -58,8 +58,8 @@ public class TradeApplication extends Application {
 
 
         new CreatePrerequisiteIfNotExist(controllerResources.getCommandFactory());
-        mockDashboardRegister(primaryStage);
-        //mockDashboardLogin(primaryStage);
+        // mockDashboardRegister(primaryStage);
+        mockDashboardLogin(primaryStage, "admin", "admin???");
         //login(primaryStage);
     }
 
@@ -78,7 +78,7 @@ public class TradeApplication extends Application {
         }, name, description, category.name(), String.valueOf(quantity), String.valueOf(price));
     }
 
-    private void mockDashboardRegister(Stage primaryStage) {
+    private void mockDashboardRegister(Stage primaryStage, String username, String password) {
         controllerResources.getAccountManager().register((result, status) -> {
             Platform.runLater(() -> {
                 addExample();
@@ -86,17 +86,17 @@ public class TradeApplication extends Application {
                 primaryStage.show();
             });
 
-        }, "someuser", "a@b.ccc", "12345678", "country", "city");
+        }, username, password, "12345678", "country", "city");
     }
 
-    private void mockDashboardLogin(Stage primaryStage) {
+    private void mockDashboardLogin(Stage primaryStage, String userName, String password) {
         controllerResources.getAccountManager().login((result, status) -> {
             Platform.runLater(() -> {
                 controllerResources.getSceneManager().switchScene(DashboardController::new);
                 primaryStage.show();
             });
 
-        }, "a@b.ccc", "12345678");
+        }, userName, password);
     }
 
     private void addExample() {

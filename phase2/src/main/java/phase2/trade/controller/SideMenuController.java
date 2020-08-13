@@ -4,13 +4,18 @@ import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.presenter.CartController;
 import phase2.trade.presenter.ControllerSupplier;
 import phase2.trade.presenter.ItemTableController;
 import phase2.trade.presenter.MarketListController;
+import phase2.trade.view.SideListCell;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -31,6 +36,11 @@ public class SideMenuController extends AbstractController implements Initializa
     private <T> void loadCenter(String fileName, ControllerSupplier<T> supplier) {
         getPane("centerDashboard").getChildren().clear();
         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(fileName, supplier));
+    }
+
+    private <T> void loadCenter(ControllerSupplier<T> supplier) {
+        getPane("centerDashboard").getChildren().clear();
+        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(supplier));
     }
 
     private void inventory() {
@@ -64,28 +74,45 @@ public class SideMenuController extends AbstractController implements Initializa
     public void initialize(URL location, ResourceBundle resources) {
         userInfoBox.getChildren().add(getSceneManager().loadPane(UserInfoPresenter::new));
 
-        sideList.setItems(FXCollections.observableArrayList("userInfo", "market", "inventory", "cart"));
+        sideList.setCellFactory(param -> new SideListCell());
+        bottomSideList.setCellFactory(param -> new SideListCell());
+
+        switch (getAccountManager().getPermissionGroup()) {
+            case REGULAR:
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart", "side.order"));
+                break;
+            case ADMIN:
+            case HEAD_ADMIN:
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.m.users", "side.m.user.ops"));
+                break;
+        }
 
 
         bottomSideList.setItems(FXCollections.observableArrayList("Exit", "Sign Out"));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue) {
-                    case "userInfo":
+                    case "side.user.info":
                         loadCenter("user_info.fxml", UserInfoPresenter::new);
                         break;
-                    case "market":
+                    case "side.market":
                         getPane("centerDashboard").getChildren().clear();
                         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(new MarketListController(getControllerResources())));
                         break;
-                    case "inventory":
+                    case "side.inventory":
                         inventory();
                         break;
-                    case "cart":
+                    case "side.cart":
                         cart();
                         break;
-                    case "userOperation":
-                        loadCenter("user_info.fxml", UserOperationController::new);
+                    case "side.m.users.ops":
+                        loadCenter(UserOperationController::new);
+                        break;
+                    case "side.m.users":
+                        loadCenter(UserManageController::new);
+                        break;
+                    case "side.order":
+
                         break;
                 }
             }

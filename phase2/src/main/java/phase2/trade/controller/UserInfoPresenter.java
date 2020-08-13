@@ -30,7 +30,7 @@ public class UserInfoPresenter extends AbstractController implements Initializab
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         userId.setText("User Id: " + user.getUid());
-        userName.setText("User Name: " + user.getUserName());
+        userName.setText("User Name: " + user.getName());
         email.setText("Email: " + user.getEmail());
         permissionGroup.setText("PermissionGroup: " + user.getPermissionGroup());
         // address book + if user didnt input address

@@ -21,6 +21,14 @@ public class CommandDAO extends DAO<Command, CommandGateway> implements CommandG
     }
 
     @Override
+    public <C> List<Command<C>> findByDType(Class<C> clazz) {
+        Query<Command<C>> query = getCurrentSession().createQuery("FROM Command WHERE dType = :dType");
+        query.setParameter("dType", clazz.getSimpleName());
+        List<Command<C>> result = query.getResultList();
+        return result;
+    }
+
+    @Override
     protected CommandGateway getThis() {
         return this;
     }

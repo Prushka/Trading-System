@@ -35,36 +35,44 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
     public ItemTableController(ControllerResources controllerResources, ItemListType itemListType) {
         super(controllerResources, true, false);
         this.itemListType = itemListType;
-        setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
+        setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
+
         tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
                 .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price").addColumn("Willingness", "willingness").addColumn("UID", "uid");
 
         JFXButton addButton = new JFXButton("Add");
         JFXButton deleteButton = new JFXButton("Delete");
+        JFXButton privateButton = new JFXButton("I wanna this item to be private");
         JFXButton sellButton = new JFXButton("I wanna sell them");
         JFXButton lendButton = new JFXButton("I wanna lend them");
 
-        buttons.getChildren().addAll(addButton, deleteButton, sellButton, lendButton);
+        buttons.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
+        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
         sellButton.setOnAction(getWillingnessHandler(Willingness.SELL));
-
+        privateButton.setOnAction(getWillingnessHandler(Willingness.NOPE));
         lendButton.setOnAction(getWillingnessHandler(Willingness.LEND));
 
-        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton);
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
             command.setItemListType(itemListType);
             command.setItemIds(idsRemoved);
         }), Item::getUid);
 
-        JFXTextField searchName = new JFXTextField();
-        searchName.setPromptText("Search Name");
-        searchName.setLabelFloat(true);
+        addSearchField("Search Name", (entity, toMatch) -> {
+            String lowerCaseFilter = toMatch.toLowerCase();
+            return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
+        });
+
+        addSearchField("Search Description", (entity, textField) -> {
+            String lowerCaseFilter = textField.toLowerCase();
+            return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
+        });
 
         JFXTextField searchDescription = new JFXTextField();
         searchDescription.setPromptText("Search Description");
@@ -83,17 +91,9 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
         tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
                 .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
                 .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE))
-                .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch))
-                .addSearch(searchName, (entity, toMatch) -> {
-                    String lowerCaseFilter = toMatch.toLowerCase();
-                    return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
-                })
-                .addSearch(searchDescription, (entity, textField) -> {
-                    String lowerCaseFilter = textField.toLowerCase();
-                    return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
-                });
+                .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
-        getPane("topBar").getChildren().setAll(searchName, searchDescription, category, lend, sell, privateCheckBox);
+        getPane("topBar").getChildren().setAll(category, lend, sell, privateCheckBox);
         lend.setSelected(true);
         sell.setSelected(true);
         privateCheckBox.setSelected(true);

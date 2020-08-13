@@ -14,6 +14,7 @@ public enum Permission {
     MANAGE_PERSONAL_ITEMS,
     MANAGE_WISH_LIST,
 
+    MANAGE_USER,
     BROWSE_USER_OPERATIONS,
 
 

@@ -14,7 +14,7 @@ public class UserDAO extends DAO<User, UserGateway> implements UserGateway {
 
     @Override
     public List<User> findMatches(String usernameOrEmail, String password) {
-        Query query = getCurrentSession().createQuery("from User where (userName = :usernameOrEmail AND password = :password) OR (email = :usernameOrEmail AND password = :password)");
+        Query query = getCurrentSession().createQuery("from User where (name = :usernameOrEmail AND password = :password) OR (email = :usernameOrEmail AND password = :password)");
         query.setParameter("usernameOrEmail", usernameOrEmail);
         query.setParameter("password", password);
         return query.list();
@@ -29,7 +29,7 @@ public class UserDAO extends DAO<User, UserGateway> implements UserGateway {
 
     @Override
     public List<User> findByUserName(String userName) {
-        Query query = getCurrentSession().createQuery("from User where userName = :userName");
+        Query query = getCurrentSession().createQuery("from User where name = :userName");
         query.setParameter("userName", userName);
         return query.list();
     }

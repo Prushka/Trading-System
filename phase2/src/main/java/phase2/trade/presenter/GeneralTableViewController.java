@@ -1,5 +1,7 @@
 package phase2.trade.presenter;
 
+import com.jfoenix.controls.JFXTextField;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -11,6 +13,8 @@ import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.user.User;
+import phase2.trade.view.FilterPredicate;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
@@ -25,7 +29,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
 
     protected List<Button> buttonsToDisable = new ArrayList<>();
 
-    protected ObservableList<T> displayData;
+    protected ObservableList<T> displayData = FXCollections.observableArrayList();
 
     private final boolean ifMultipleSelection, ifEditable;
 
@@ -39,6 +43,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
 
     public void setDisplayData(ObservableList<T> displayData) {
         this.displayData = displayData;
+        tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
     }
 
     @Override
@@ -47,7 +52,6 @@ public class GeneralTableViewController<T> extends AbstractController implements
             tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         }
         tableView.setEditable(ifEditable);
-        tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
     }
 
     protected ObservableList<T> getSelected() {
@@ -81,6 +85,14 @@ public class GeneralTableViewController<T> extends AbstractController implements
                 }
             }
         });
+    }
+
+    protected void addSearchField(String promptText, FilterPredicate<T, String> predicate) {
+        JFXTextField textField = new JFXTextField();
+        textField.setPromptText(promptText);
+        textField.setLabelFloat(true);
+        tableViewGenerator.getFilterGroup().addSearch(textField, predicate);
+        getPane("topBar").getChildren().addAll(textField);
     }
 
 }

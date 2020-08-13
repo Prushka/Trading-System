@@ -4,15 +4,14 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListCell;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import phase2.trade.command.Command;
+import javafx.scene.paint.Color;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddToCart;
 
@@ -69,23 +68,24 @@ public class MarketItemCell extends JFXListCell<Item> {
 
         Label priceLabel = new Label(price);
         Label uidLabel = new Label(String.valueOf(item.getUid()));
-        Label ownerLabel = new Label(item.getOwner().getUserName());
+        Label ownerLabel = new Label(item.getOwner().getName());
 
         JFXButton addToCart = new JFXButton("Add To Cart");
-        addToCart.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                addToCartCommand.setItems(item);
-                addToCartCommand.execute((result,status)->{
-                });
-            }
+        addToCart.setOnAction(event -> {
+            addToCartCommand.setItems(item);
+            addToCartCommand.execute((result, status) -> {
+            });
         });
 
         leftVBox.getChildren().addAll(categoryLabel, nameLabel, descriptionLabel);
 
         rightVBox.getChildren().addAll(priceLabel, uidLabel, ownerLabel);
 
-        hBox.getChildren().addAll(imageView, leftVBox, region, comboBox, rightVBox, addToCart);
+        Node svg = new ImageFactory().generateSVG(item.getCategory().resourcePath, Color.BLACK, 120, 120);
+        if (svg != null) {
+            hBox.getChildren().addAll(svg);
+        }
+        hBox.getChildren().addAll(leftVBox, region, comboBox, rightVBox, addToCart);
         hBox.getStyleClass().add("market-item-cell");
         return hBox;
     }

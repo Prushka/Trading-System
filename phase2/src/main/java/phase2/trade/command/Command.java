@@ -31,13 +31,16 @@ public abstract class Command<T> implements PermissionBased {
     protected transient User operator;
 
     @OneToOne
-    protected User userToPersist;
+    protected User operatorToPersist;
 
     private boolean ifUndone = false;
 
     private Long timestamp;
 
     private Long undoTimestamp;
+
+    @Column(insertable = false, updatable = false)
+    private String dType;
 
     // this one is to be persisted for effected entities and to be deserialized
     protected String effectedEntitiesToPersist;
@@ -58,7 +61,7 @@ public abstract class Command<T> implements PermissionBased {
         this.gatewayBundle = gatewayBundle;
         this.operator = operator;
         persistUserIfNotSystem();
-        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getUserName() + "  |  " + operator.getPermissionGroup() + "  |  " + operator.getPermissionSet().getPerm().toString());
+        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getName() + "  |  " + operator.getPermissionGroup() + "  |  " + operator.getPermissionSet().getPerm().toString());
     }
 
     public Command() {
@@ -103,17 +106,6 @@ public abstract class Command<T> implements PermissionBased {
         });
     }
 
-    protected void addEffectedEntity(Class<?> clazz, Long... ids) {
-        for (Long id : ids) {
-            putOrAdd(effectedEntities, clazz.getName(), id);
-        }
-    }
-
-    protected Set<Long> getEffectedEntities(Class<?> clazz) {
-        if (effectedEntities == null) retrieveEffectedEntities(effectedEntitiesToPersist);
-        return effectedEntities.get(clazz.getName());
-    }
-
     protected void save() {
         if (!commandPropertyAnnotation.persistent()) return;
         timestamp = System.currentTimeMillis();
@@ -126,7 +118,7 @@ public abstract class Command<T> implements PermissionBased {
     // only used to avoid storing System as a user into database, this won't succeed also because System was not persistent as a User
     private void persistUserIfNotSystem() {
         if (operator.getPermissionGroup() != PermissionGroup.SYSTEM) {
-            userToPersist = operator;
+            operatorToPersist = operator;
         }
     }
 
@@ -203,6 +195,21 @@ public abstract class Command<T> implements PermissionBased {
         return temp;
     }
 
+    protected void addEffectedEntity(Class<?> clazz, Long... ids) {
+        for (Long id : ids) {
+            putOrAdd(effectedEntities, clazz.getName(), id);
+        }
+    }
+
+    protected Set<Long> getEffectedEntities(Class<?> clazz) {
+        if (effectedEntities == null) retrieveEffectedEntities(effectedEntitiesToPersist);
+        return effectedEntities.get(clazz.getName());
+    }
+
+    protected Long getOneEntity(Class<?> clazz) {
+        return getEffectedEntities(clazz).iterator().next();
+    }
+
     protected EntityBundle getEntityBundle() {
         return gatewayBundle.getEntityBundle();
     }
@@ -237,5 +244,13 @@ public abstract class Command<T> implements PermissionBased {
 
     public void setAsynchronous(boolean asynchronous) {
         this.asynchronous = asynchronous;
+    }
+
+    public User getOperator() {
+        return operatorToPersist;
+    }
+
+    public String getDType() {
+        return dType;
     }
 }

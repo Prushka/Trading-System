@@ -64,9 +64,15 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
             command.setItemIds(idsRemoved);
         }), Item::getUid);
 
-        JFXTextField searchName = new JFXTextField();
-        searchName.setPromptText("Search Name");
-        searchName.setLabelFloat(true);
+        addSearchField("Search Name", (entity, toMatch) -> {
+            String lowerCaseFilter = toMatch.toLowerCase();
+            return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
+        });
+
+        addSearchField("Search Description", (entity, textField) -> {
+            String lowerCaseFilter = textField.toLowerCase();
+            return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
+        });
 
         JFXTextField searchDescription = new JFXTextField();
         searchDescription.setPromptText("Search Description");
@@ -85,17 +91,9 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
         tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
                 .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
                 .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE))
-                .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch))
-                .addSearch(searchName, (entity, toMatch) -> {
-                    String lowerCaseFilter = toMatch.toLowerCase();
-                    return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
-                })
-                .addSearch(searchDescription, (entity, textField) -> {
-                    String lowerCaseFilter = textField.toLowerCase();
-                    return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
-                });
+                .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
-        getPane("topBar").getChildren().setAll(searchName, searchDescription, category, lend, sell, privateCheckBox);
+        getPane("topBar").getChildren().setAll(category, lend, sell, privateCheckBox);
         lend.setSelected(true);
         sell.setSelected(true);
         privateCheckBox.setSelected(true);

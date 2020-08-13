@@ -36,4 +36,9 @@ public class PermissionSet {
     public void removePerm(Permission perm) {
         this.perm.remove(perm);
     }
+
+    @Override
+    public String toString() {
+        return getPerm().toString();
+    }
 }

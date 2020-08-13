@@ -61,7 +61,7 @@ public abstract class Command<T> implements PermissionBased {
         this.gatewayBundle = gatewayBundle;
         this.operator = operator;
         persistUserIfNotSystem();
-        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getUserName() + "  |  " + operator.getPermissionGroup() + "  |  " + operator.getPermissionSet().getPerm().toString());
+        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getName() + "  |  " + operator.getPermissionGroup() + "  |  " + operator.getPermissionSet().getPerm().toString());
     }
 
     public Command() {
@@ -104,17 +104,6 @@ public abstract class Command<T> implements PermissionBased {
                 callback.call(blockingCommands, new StatusSucceeded());
             }
         });
-    }
-
-    protected void addEffectedEntity(Class<?> clazz, Long... ids) {
-        for (Long id : ids) {
-            putOrAdd(effectedEntities, clazz.getName(), id);
-        }
-    }
-
-    protected Set<Long> getEffectedEntities(Class<?> clazz) {
-        if (effectedEntities == null) retrieveEffectedEntities(effectedEntitiesToPersist);
-        return effectedEntities.get(clazz.getName());
     }
 
     protected void save() {
@@ -204,6 +193,21 @@ public abstract class Command<T> implements PermissionBased {
             temp.put(clazz, ids);
         }
         return temp;
+    }
+
+    protected void addEffectedEntity(Class<?> clazz, Long... ids) {
+        for (Long id : ids) {
+            putOrAdd(effectedEntities, clazz.getName(), id);
+        }
+    }
+
+    protected Set<Long> getEffectedEntities(Class<?> clazz) {
+        if (effectedEntities == null) retrieveEffectedEntities(effectedEntitiesToPersist);
+        return effectedEntities.get(clazz.getName());
+    }
+
+    protected Long getOneEntity(Class<?> clazz) {
+        return getEffectedEntities(clazz).iterator().next();
     }
 
     protected EntityBundle getEntityBundle() {

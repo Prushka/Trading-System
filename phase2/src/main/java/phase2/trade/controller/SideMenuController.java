@@ -79,7 +79,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
         switch (getAccountManager().getPermissionGroup()) {
             case REGULAR:
-                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart"));
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart", "side.order"));
                 break;
             case ADMIN:
             case HEAD_ADMIN:
@@ -105,11 +105,14 @@ public class SideMenuController extends AbstractController implements Initializa
                     case "side.cart":
                         cart();
                         break;
-                    case "side.m.users":
+                    case "side.m.users.ops":
                         loadCenter(UserOperationController::new);
                         break;
-                    case "side.m.user.ops":
-                        loadCenter(UserOperationController::new);
+                    case "side.m.users":
+                        loadCenter(UserManageController::new);
+                        break;
+                    case "side.order":
+
                         break;
                 }
             }

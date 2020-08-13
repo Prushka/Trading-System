@@ -2,11 +2,16 @@ package phase2.trade.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
+import phase2.trade.command.GetCommandsByType;
 import phase2.trade.presenter.GeneralTableViewController;
 import phase2.trade.user.User;
+import phase2.trade.user.command.CreateUser;
 
 import java.net.URL;
 import java.text.Format;
@@ -66,12 +71,32 @@ public class UserOperationController extends GeneralTableViewController<Command>
                         if (operator == null) {
                             return new SimpleStringProperty("SYSTEM");
                         }
-                        return new SimpleStringProperty(param.getValue().getOperator().getUserName());
+                        return new SimpleStringProperty(param.getValue().getOperator().getName());
                     } else {
                         return new SimpleStringProperty("null");
                     }
                 });
         tableViewGenerator.build();
+
+        ComboBox<Class<?>> comboBox = new ComboBox<>();
+        comboBox.setItems(FXCollections.observableArrayList(CreateUser.class));
+        comboBox.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                getCommand(comboBox.getSelectionModel().getSelectedItem());
+            }
+        });
+        getPane("topBar").getChildren().addAll();
+    }
+
+    public <C> List<Command<C>> getCommand(Class<C> clazz){
+        GetCommandsByType<C> getCommandsByType = getCommandFactory().getCommand(GetCommandsByType::new, c -> {
+            c.setCommandClass(clazz);
+        });
+        // getCommandsByType.execute(((result, status) -> {
+        //     TableViewGenerator<>
+        // }));
+        return null;
     }
 
 }

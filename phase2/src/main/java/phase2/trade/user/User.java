@@ -1,7 +1,6 @@
 package phase2.trade.user;
 
 import phase2.trade.address.AddressBook;
-import phase2.trade.inventory.Inventory;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.permission.Permission;
@@ -19,7 +18,7 @@ public abstract class User {
     private Long uid;
 
     @Column(unique = true, length = 40)
-    private String userName;
+    private String name;
 
     @Column(unique = true, length = 40)
     private String email;
@@ -34,8 +33,6 @@ public abstract class User {
 
     private PermissionGroup permissionGroup;
 
-    // using a map may add some polymorphism but will complicate the db structure
-
     private Integer reputation;
 
     private Integer point;
@@ -47,12 +44,12 @@ public abstract class User {
     /**
      * Creates a new User with userName, email, telephone and given password.
      *
-     * @param userName the username of this Person.
+     * @param name the username of this Person.
      * @param email    the email this Person.
      * @param password the password this user set to
      */
-    public User(String userName, String email, String password, String country, String city) {
-        this.userName = userName;
+    public User(String name, String email, String password, String country, String city) {
+        this.name = name;
         this.email = email;
         this.password = password;
         this.addressBook = new AddressBook();
@@ -99,12 +96,12 @@ public abstract class User {
         this.email = email;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String userName) {
+        this.name = userName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
     public Integer getReputation() {
@@ -168,7 +165,7 @@ public abstract class User {
     }
 
     public ItemList getItemList(ItemListType itemListType) { // this should not happen!
-        throw new IllegalArgumentException("User: " + userName + " is not a Regular User but is trying to get his/her ItemList");
+        throw new IllegalArgumentException("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
     }
 
     public ItemList getInventory() { // this should not happen!

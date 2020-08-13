@@ -15,32 +15,30 @@ import javax.persistence.Entity;
         persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class AlterItemInInventory extends ItemCommand<Item> {
 
-    private Long itemId;
-
     @Override
     public void execute(ResultStatusCallback<Item> callback, String... args) {
         if (!checkPermission(callback)) return;
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
-            Item item = operator.getItemList(ItemListType.INVENTORY).findByUid(itemId);
-            item.setName(args[0]);
-            item.setDescription(args[1]);
-            gateway.update(item);
-            addEffectedEntity(Item.class, itemId);
-            save();
-            if (callback != null)
-                callback.call(item, new StatusSucceeded());
+            // Item item = operator.getItemList(ItemListType.INVENTORY).findByUid(itemId);
+            // item.setName(args[0]);
+            // item.setDescription(args[1]);
+            // gateway.update(item);
+            // addEffectedEntity(Item.class, itemId);
+            // save();
+            // if (callback != null)
+            //     callback.call(item, new StatusSucceeded());
         });
     }
 
     @Override
     public void undo() {
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
-            gateway.delete(itemId);
+           getEffectedEntities(Item.class).forEach(gateway::delete);
             updateUndo();
         });
     }
 
     public void setItemId(Long itemId) {
-        this.itemId = itemId;
+        addEffectedEntity(Item.class, itemId);
     }
 }

@@ -1,5 +1,6 @@
 package phase2.trade.presenter;
 
+import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -12,6 +13,8 @@ import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.user.User;
+import phase2.trade.view.FilterPredicate;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
@@ -82,6 +85,14 @@ public class GeneralTableViewController<T> extends AbstractController implements
                 }
             }
         });
+    }
+
+    protected void addSearchField(String promptText, FilterPredicate<T, String> predicate) {
+        JFXTextField textField = new JFXTextField();
+        textField.setPromptText(promptText);
+        textField.setLabelFloat(true);
+        tableViewGenerator.getFilterGroup().addSearch(textField, predicate);
+        getPane("topBar").getChildren().addAll(textField);
     }
 
 }

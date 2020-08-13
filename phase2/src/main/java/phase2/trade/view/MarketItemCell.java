@@ -68,7 +68,7 @@ public class MarketItemCell extends JFXListCell<Item> {
 
         Label priceLabel = new Label(price);
         Label uidLabel = new Label(String.valueOf(item.getUid()));
-        Label ownerLabel = new Label(item.getOwner().getUserName());
+        Label ownerLabel = new Label(item.getOwner().getName());
 
         JFXButton addToCart = new JFXButton("Add To Cart");
         addToCart.setOnAction(event -> {

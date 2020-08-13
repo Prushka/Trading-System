@@ -8,7 +8,7 @@ public class ShutdownHook {
 
     private List<Shutdownable> shutdownableList = new ArrayList<>();
 
-    public void addShutdownable(Shutdownable... shutdownable) {
+    public void addShutdownables(Shutdownable... shutdownable) {
         shutdownableList.addAll(Arrays.asList(shutdownable));
     }
 

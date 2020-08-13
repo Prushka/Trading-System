@@ -43,8 +43,14 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         super.initialize(location, resources);
         setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
 
-        tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description",200).addColumn("Category", "category")
-                .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price").addColumn("Willingness", "willingness").addColumn("UID", "uid");
+        tableViewGenerator.addColumn("Name", "name")
+                .addColumn("Description", "description",
+                getConfigBundle().getUiConfig().getItemDescriptionMaxWidth()).addColumn("Category", "category")
+                .addColumn("Ownership", "ownership")
+                .addColumn("Quantity", "quantity")
+                .addColumn("Price", "price")
+                .addColumn("Willingness", "willingness")
+                .addColumn("UID", "uid");
 
         JFXButton addButton = new JFXButton("Add");
         JFXButton deleteButton = new JFXButton("Delete");

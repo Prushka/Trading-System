@@ -9,6 +9,6 @@ public class ConfigTest {
         ShutdownHook shutdownHook = new ShutdownHook();
         ConfigBundle configBundle = new ConfigBundle();
 
-        shutdownHook.addShutdownable(configBundle);
+        shutdownHook.addShutdownables(configBundle);
     }
 }

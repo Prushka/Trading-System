@@ -20,23 +20,7 @@ import phase2.trade.user.AccountManager;
 
 public class TradeApplication extends Application {
 
-    private ControllerResources controllerResources;
-
-    private final GatewayBundle gatewayBundle;
-
-    private final ShutdownHook shutdownHook;
-
-    public TradeApplication() {
-
-        shutdownHook = new ShutdownHook();
-
-        ConfigBundle configBundle = new ConfigBundle();
-        DatabaseResourceBundle databaseResourceBundle = new DatabaseResourceBundle(configBundle.getDatabaseConfig());
-
-        shutdownHook.addShutdownable(databaseResourceBundle, configBundle);
-
-        gatewayBundle = new GatewayBundle(databaseResourceBundle.getDaoBundle(), configBundle);
-    }
+    private final Configurer configurer = new Configurer();
 
     private void loadFont(String name) {
         Font font = Font.loadFont(
@@ -56,25 +40,23 @@ public class TradeApplication extends Application {
         loadFont("OpenSans");
         loadFont("OpenSansM");
 
-        controllerResources = new ControllerResources(gatewayBundle, primaryStage, new AccountManager(gatewayBundle));
+        configurer.configure(primaryStage);
 
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
-
-        new CreatePrerequisiteIfNotExist(controllerResources.getCommandFactory());
-        mockDashboardRegister(primaryStage,"would-it-be-better-if-I-were-dead-soon","password");
+        mockDashboardRegister(primaryStage, "cannot-catch-any-hope", "password");
         // mockDashboardLogin(primaryStage, "admin", "admin???");
         //login(primaryStage);
     }
 
     private void login(Stage primaryStage) {
-        controllerResources.getSceneManager().switchScene(LoginController::new);
+        configurer.getControllerResources().getSceneManager().switchScene(LoginController::new);
         primaryStage.setTitle("Trade");
         primaryStage.show();
     }
 
     private void addExampleItems(String name, String description, Category category, int quantity, double price) {
-        Command<Item> itemCommand = controllerResources.getCommandFactory().getCommand(AddItemToItemList::new, c -> {
+        Command<Item> itemCommand = configurer.getControllerResources().getCommandFactory().getCommand(AddItemToItemList::new, c -> {
             c.setItemListType(ItemListType.INVENTORY);
             c.setAsynchronous(false);
         });
@@ -83,10 +65,10 @@ public class TradeApplication extends Application {
     }
 
     private void mockDashboardRegister(Stage primaryStage, String username, String password) {
-        controllerResources.getAccountManager().register((result, status) -> {
+        configurer.getControllerResources().getAccountManager().register((result, status) -> {
             Platform.runLater(() -> {
                 addExample();
-                controllerResources.getSceneManager().switchScene(DashboardController::new);
+                configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
                 primaryStage.show();
             });
 
@@ -94,9 +76,9 @@ public class TradeApplication extends Application {
     }
 
     private void mockDashboardLogin(Stage primaryStage, String userName, String password) {
-        controllerResources.getAccountManager().login((result, status) -> {
+        configurer.getControllerResources().getAccountManager().login((result, status) -> {
             Platform.runLater(() -> {
-                controllerResources.getSceneManager().switchScene(DashboardController::new);
+                configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
                 primaryStage.show();
             });
 
@@ -114,7 +96,7 @@ public class TradeApplication extends Application {
 
     @Override
     public void stop() {
-        shutdownHook.shutdown();
+        configurer.getShutdownHook().shutdown();
     }
 
 }

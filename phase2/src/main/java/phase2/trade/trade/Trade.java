@@ -3,7 +3,6 @@ package phase2.trade.trade;
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Trade {
 
     @Id

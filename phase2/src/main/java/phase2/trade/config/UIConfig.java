@@ -2,7 +2,7 @@ package phase2.trade.config;
 
 public class UIConfig {
 
-    private int itemDescriptionMaxWidth = 200;
+    private int itemDescriptionMaxWidth = 250;
 
     public int getItemDescriptionMaxWidth() {
         return itemDescriptionMaxWidth;

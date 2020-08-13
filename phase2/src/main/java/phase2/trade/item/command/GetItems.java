@@ -16,15 +16,7 @@ import javax.persistence.Entity;
         persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
 public class GetItems extends ItemCommand<ItemList> {
 
-    private transient RegularUser operator;
-
     private ItemListType itemListType;
-
-    public GetItems(ItemListType itemListType) {
-        this.itemListType = itemListType;
-    }
-
-    public GetItems() {}
 
     @Override
     public void execute(ResultStatusCallback<ItemList> callback, String... args) {

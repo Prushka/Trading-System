@@ -34,9 +34,13 @@ public class CartController extends GeneralTableViewController<Item> implements 
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
         setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
-        tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
-                .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price")
-                .addColumn("Willingness", "willingness").addColumn("Owner", param -> {
+        tableViewGenerator.addColumn("Name", "name")
+                .addColumn("Description", "description",getConfigBundle().getUiConfig().getItemDescriptionMaxWidth())
+                .addColumn("Category", "category")
+                .addColumn("Ownership", "ownership")
+                .addColumn("Quantity", "quantity").addColumn("Price", "price")
+                .addColumn("Willingness", "willingness")
+                .addColumn("Owner", param -> {
             if (param.getValue() != null) {
                 return new SimpleStringProperty(param.getValue().getOwner().getName());
             } else {

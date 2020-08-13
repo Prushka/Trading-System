@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class TableViewGenerator<T> {
 
-    private final ObservableList<T> original;
+    private ObservableList<T> original;
 
     private final TableView<T> tableView;
 
@@ -40,6 +40,10 @@ public class TableViewGenerator<T> {
         filteredList = new FilteredList<>(original, p -> true);
         this.tableView = tableView;
         this.filterGroup = new FilterGroup<>(filteredList);
+    }
+
+    public void setOriginal(ObservableList<T> original) {
+        this.original = original;
     }
 
     public TableViewGenerator(ObservableList<T> original, int defaultMinWidth) {

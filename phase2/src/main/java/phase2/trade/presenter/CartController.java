@@ -42,16 +42,16 @@ public class CartController extends GeneralTableViewController<Item> implements 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        super.initialize(location,resources);
+        super.initialize(location, resources);
         tableViewGenerator.addColumn("Name", "name").addColumn("Description", "description").addColumn("Category", "category")
                 .addColumn("Ownership", "ownership").addColumn("Quantity", "quantity").addColumn("Price", "price")
                 .addColumn("Willingness", "willingness").addColumn("Owner", param -> {
-                    if (param.getValue() != null) {
-                        return new SimpleStringProperty(param.getValue().getOwner().getUserName());
-                    } else {
-                        return new SimpleStringProperty("null");
-                    }
-                });
+            if (param.getValue() != null) {
+                return new SimpleStringProperty(param.getValue().getOwner().getUserName());
+            } else {
+                return new SimpleStringProperty("null");
+            }
+        });
 
         JFXButton deleteButton = new JFXButton("Delete");
         JFXButton trade = new JFXButton("Trade");

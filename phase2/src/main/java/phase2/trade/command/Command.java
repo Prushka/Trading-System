@@ -31,7 +31,7 @@ public abstract class Command<T> implements PermissionBased {
     protected transient User operator;
 
     @OneToOne
-    protected User userToPersist;
+    protected User operatorToPersist;
 
     private boolean ifUndone = false;
 
@@ -126,7 +126,7 @@ public abstract class Command<T> implements PermissionBased {
     // only used to avoid storing System as a user into database, this won't succeed also because System was not persistent as a User
     private void persistUserIfNotSystem() {
         if (operator.getPermissionGroup() != PermissionGroup.SYSTEM) {
-            userToPersist = operator;
+            operatorToPersist = operator;
         }
     }
 
@@ -237,5 +237,9 @@ public abstract class Command<T> implements PermissionBased {
 
     public void setAsynchronous(boolean asynchronous) {
         this.asynchronous = asynchronous;
+    }
+
+    public User getOperator() {
+        return operatorToPersist;
     }
 }

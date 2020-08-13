@@ -2,10 +2,10 @@ package phase2.trade.item;
 
 public enum Category {
     BOOK("/svg/book.svg"),
-    MOVIE("/svg/movie.svg"),
-    ELECTRONIC("/svg/electronic.svg"),
+    MOVIE("/image/video-camera.png"),
+    ELECTRONIC("/image/plug.png"),
     VIDEO_GAME("/svg/book.svg"),
-    FURNITURE("/svg/furniture.svg"),
+    FURNITURE("/image/pouf.png"),
     EQUIPMENT("/svg/book.svg"),
     MISCELLANEOUS("/svg/book.svg");
 

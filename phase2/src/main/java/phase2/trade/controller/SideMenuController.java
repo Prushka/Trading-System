@@ -38,6 +38,11 @@ public class SideMenuController extends AbstractController implements Initializa
         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(fileName, supplier));
     }
 
+    private <T> void loadCenter(ControllerSupplier<T> supplier) {
+        getPane("centerDashboard").getChildren().clear();
+        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(supplier));
+    }
+
     private void inventory() {
         getPane("centerDashboard").getChildren().clear();
         ItemTableController controller = new ItemTableController(getControllerResources(), ItemListType.INVENTORY);
@@ -71,7 +76,16 @@ public class SideMenuController extends AbstractController implements Initializa
 
         sideList.setCellFactory(param -> new SideListCell());
         bottomSideList.setCellFactory(param -> new SideListCell());
-        sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart"));
+
+        switch (getAccountManager().getPermissionGroup()) {
+            case REGULAR:
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart"));
+                break;
+            case ADMIN:
+            case HEAD_ADMIN:
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.m.users", "side.m.user.ops"));
+                break;
+        }
 
 
         bottomSideList.setItems(FXCollections.observableArrayList("Exit", "Sign Out"));
@@ -91,8 +105,11 @@ public class SideMenuController extends AbstractController implements Initializa
                     case "side.cart":
                         cart();
                         break;
-                    case "userOperation":
-                        loadCenter("user_info.fxml", UserOperationController::new);
+                    case "side.m.users":
+                        loadCenter(UserOperationController::new);
+                        break;
+                    case "side.m.user.ops":
+                        loadCenter(UserOperationController::new);
                         break;
                 }
             }

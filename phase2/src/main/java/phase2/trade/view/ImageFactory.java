@@ -28,11 +28,13 @@ public class ImageFactory {
         return generateSVG(Main.class.getResource(filePath), color, width, height);
     }
 
+    // The reason why svg is not widely used is because the color and multiple paths don't render correctly.
+    // And I do not have the time to find an appropriate library.
+    // Currently single path svg can be used without problem.
     public Node generateSVG(URL url, Paint color, double width, double height) {
         try {
             if (url != null) {
                 String extension = url.getPath().substring(url.getPath().lastIndexOf(".")).toLowerCase();
-                System.out.println(extension);
                 switch (extension) {
                     case ".svg":
                         SVGGlyph svgGlyph = extract(url, color);

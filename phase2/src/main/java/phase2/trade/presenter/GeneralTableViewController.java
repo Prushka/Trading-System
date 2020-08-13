@@ -1,5 +1,6 @@
 package phase2.trade.presenter;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
@@ -25,7 +26,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
 
     protected List<Button> buttonsToDisable = new ArrayList<>();
 
-    protected ObservableList<T> displayData;
+    protected ObservableList<T> displayData = FXCollections.observableArrayList();
 
     private final boolean ifMultipleSelection, ifEditable;
 
@@ -39,6 +40,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
 
     public void setDisplayData(ObservableList<T> displayData) {
         this.displayData = displayData;
+        tableViewGenerator.setOriginal(displayData);
     }
 
     @Override

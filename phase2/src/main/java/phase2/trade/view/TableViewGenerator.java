@@ -9,6 +9,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import phase2.trade.item.Item;
 
@@ -34,32 +35,26 @@ public class TableViewGenerator<T> {
 
     private final FilterGroup<T> filterGroup;
 
-    public TableViewGenerator(ObservableList<T> original, int defaultMinWidth, TableView<T> tableView) {
+    public TableViewGenerator(ObservableList<T> original, TableView<T> tableView) {
         this.original = original;
-        this.defaultMinWidth = defaultMinWidth;
         filteredList = new FilteredList<>(original, p -> true);
         this.tableView = tableView;
         this.filterGroup = new FilterGroup<>(filteredList);
     }
 
-    public TableViewGenerator(ObservableList<T> original, int defaultMinWidth) {
-        this(original, defaultMinWidth, new TableView<>());
+    public TableViewGenerator(ObservableList<T> original) {
+        this(original, new TableView<>());
     }
 
-    private TableColumn<T, String> getTableColumn(String name, String fieldName, int minWidth) {
+    private TableColumn<T, String> getTableColumn(String name, String fieldName) {
         TableColumn<T, String> column = new TableColumn<>(name);
-        column.setMinWidth(minWidth);
+        // column.setMinWidth(minWidth);
         column.setCellValueFactory(new PropertyValueFactory<>(fieldName));
         return column;
     }
 
-    public TableViewGenerator<T> addColumn(String name, String fieldName, int minWidth) {
-        listOfColumns.add(getTableColumn(name, fieldName, minWidth));
-        return this;
-    }
-
     public TableViewGenerator<T> addColumn(String name, String fieldName) {
-        listOfColumns.add(getTableColumn(name, fieldName, defaultMinWidth));
+        listOfColumns.add(getTableColumn(name, fieldName));
         return this;
     }
 
@@ -71,12 +66,38 @@ public class TableViewGenerator<T> {
         return this;
     }
 
+    // https://stackoverflow.com/questions/14650787/javafx-column-in-tableview-auto-fit-size
+    public void autoResizeColumns() {
+        //Set the right policy
+        tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+        tableView.getColumns().stream().forEach((column) ->
+        {
+            //Minimal width = columnheader
+            Text t = new Text(column.getText());
+            double max = t.getLayoutBounds().getWidth();
+            for (int i = 0; i < tableView.getItems().size(); i++) {
+                //cell must not be empty
+                if (column.getCellData(i) != null) {
+                    t = new Text(column.getCellData(i).toString());
+                    double calcwidth = t.getLayoutBounds().getWidth();
+                    //remember new max-width
+                    if (calcwidth > max) {
+                        max = calcwidth;
+                    }
+                }
+            }
+            //set the new max-widht with some extra space
+            column.setPrefWidth(max + 10.0d);
+        });
+    }
+
     public TableView<T> build() {
         filterGroup.group();
         SortedList<T> sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(tableView.comparatorProperty());
         tableView.setItems(sortedList);
 
+        autoResizeColumns();
         tableView.getColumns().addAll(listOfColumns);
         return tableView;
     }

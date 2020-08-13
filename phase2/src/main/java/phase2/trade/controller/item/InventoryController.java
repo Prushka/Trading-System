@@ -75,14 +75,10 @@ public class InventoryController extends GeneralTableViewController<Item> implem
             return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
         });
 
-        JFXTextField searchDescription = new JFXTextField();
-        searchDescription.setPromptText("Search Description");
-        searchDescription.setLabelFloat(true);
-
-        JFXComboBox<String> category = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))));
-        category.setPromptText("Category");
-        category.getItems().add("ALL");
-        category.setLabelFloat(true);
+        addComboBox(
+                FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))),
+                "Category","ALL",
+                (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
 
         JFXCheckBox lend = new JFXCheckBox("Wish To Lend");
@@ -91,10 +87,9 @@ public class InventoryController extends GeneralTableViewController<Item> implem
 
         tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
                 .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
-                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE))
-                .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
+                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE));
 
-        getPane("topBar").getChildren().setAll(category, lend, sell, privateCheckBox);
+        getPane("topBar").getChildren().setAll(lend, sell, privateCheckBox);
         lend.setSelected(true);
         sell.setSelected(true);
         privateCheckBox.setSelected(true);

@@ -1,5 +1,6 @@
 package phase2.trade.controller;
 
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -39,7 +40,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
 
     public void setDisplayData(ObservableList<T> displayData) {
         this.displayData = displayData;
-        tableViewGenerator = new TableViewGenerator<>(displayData, 100, tableView);
+        tableViewGenerator = new TableViewGenerator<>(displayData, tableView);
     }
 
     @Override
@@ -89,6 +90,15 @@ public class GeneralTableViewController<T> extends AbstractController implements
         textField.setLabelFloat(true);
         tableViewGenerator.getFilterGroup().addSearch(textField, predicate);
         getPane("topBar").getChildren().addAll(textField);
+    }
+
+    protected void addComboBox(ObservableList<String> observableList, String promptText, String allText, FilterPredicate<T, String> predicate) {
+        JFXComboBox<String> combo = new JFXComboBox<>(observableList);
+        combo.setPromptText(promptText);
+        combo.getItems().add(allText);
+        combo.setLabelFloat(true);
+        tableViewGenerator.getFilterGroup().addComboBox(combo, predicate);
+        getPane("topBar").getChildren().addAll(combo);
     }
 
 }

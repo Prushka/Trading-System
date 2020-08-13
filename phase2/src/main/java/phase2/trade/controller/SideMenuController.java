@@ -71,24 +71,24 @@ public class SideMenuController extends AbstractController implements Initializa
 
         sideList.setCellFactory(param -> new SideListCell());
         bottomSideList.setCellFactory(param -> new SideListCell());
-        sideList.setItems(FXCollections.observableArrayList("userInfo", "market", "inventory", "cart"));
+        sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart"));
 
 
         bottomSideList.setItems(FXCollections.observableArrayList("Exit", "Sign Out"));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue) {
-                    case "userInfo":
+                    case "side.user.info":
                         loadCenter("user_info.fxml", UserInfoPresenter::new);
                         break;
-                    case "market":
+                    case "side.market":
                         getPane("centerDashboard").getChildren().clear();
                         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(new MarketListController(getControllerResources())));
                         break;
-                    case "inventory":
+                    case "side.inventory":
                         inventory();
                         break;
-                    case "cart":
+                    case "side.cart":
                         cart();
                         break;
                     case "userOperation":

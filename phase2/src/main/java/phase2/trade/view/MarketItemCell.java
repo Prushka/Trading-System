@@ -76,7 +76,7 @@ public class MarketItemCell extends JFXListCell<Item> {
         JFXButton addToCart = new JFXButton("Add To Cart");
         addToCart.setOnAction(event -> {
             addToCartCommand.setItems(item);
-            addToCartCommand.execute((result,status)->{
+            addToCartCommand.execute((result, status) -> {
             });
         });
 
@@ -84,7 +84,11 @@ public class MarketItemCell extends JFXListCell<Item> {
 
         rightVBox.getChildren().addAll(priceLabel, uidLabel, ownerLabel);
 
-        hBox.getChildren().addAll(imageView, leftVBox, region, comboBox, rightVBox, addToCart);
+        Pane svg = new SVGFactory().generateSVG(item.getCategory(), Color.BLACK, 120, 120);
+        if (svg != null) {
+            hBox.getChildren().add(svg);
+        }
+        hBox.getChildren().addAll(leftVBox, region, comboBox, rightVBox, addToCart);
         hBox.getStyleClass().add("market-item-cell");
         return hBox;
     }

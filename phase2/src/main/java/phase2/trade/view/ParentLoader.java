@@ -3,8 +3,6 @@ package phase2.trade.view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import phase2.trade.Main;
-import phase2.trade.presenter.ControllerSupplier;
-import phase2.trade.controller.ControllerResources;
 
 import java.io.IOException;
 import java.util.Locale;

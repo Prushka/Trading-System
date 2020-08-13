@@ -1,8 +1,8 @@
 import org.junit.Test;
-import phase2.trade.callback.ResultStatus;
+import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.CommandFactory;
-import phase2.trade.gateway.ConfigBundle;
+import phase2.trade.config.ConfigBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.item.command.AddItemToItemList;

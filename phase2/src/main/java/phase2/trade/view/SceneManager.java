@@ -2,11 +2,10 @@ package phase2.trade.view;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import phase2.trade.controller.ControllerFactory;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.presenter.ControllerSupplier;
+import phase2.trade.controller.ControllerSupplier;
 
 public class SceneManager {
 

@@ -1,11 +1,8 @@
 package phase2.trade.command;
 
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.user.User;
-
 @FunctionalInterface
 public interface CommandSupplier<T extends Command<?>> {
 
     T get();
-    // hmm
+    // a general supplier will do the job, but maybe in the future we need more params to be passed into the controller
 }

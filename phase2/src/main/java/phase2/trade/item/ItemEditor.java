@@ -1,8 +1,7 @@
 package phase2.trade.item;
 
 import phase2.trade.callback.StatusCallback;
-import phase2.trade.callback.StatusFailed;
-import phase2.trade.callback.StatusSucceeded;
+import phase2.trade.callback.status.StatusSucceeded;
 
 import java.util.List;
 

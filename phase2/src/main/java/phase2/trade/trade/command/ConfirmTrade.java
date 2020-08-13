@@ -1,6 +1,8 @@
 package phase2.trade.trade.command;
 
 import phase2.trade.callback.*;
+import phase2.trade.callback.status.StatusFailed;
+import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.Command;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeConfirmer;

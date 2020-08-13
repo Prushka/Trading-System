@@ -7,8 +7,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import phase2.trade.command.Command;
 import phase2.trade.controller.DashboardController;
-import phase2.trade.controller.LoginController;
-import phase2.trade.gateway.ConfigBundle;
+import phase2.trade.controller.user.LoginController;
+import phase2.trade.config.ConfigBundle;
 import phase2.trade.gateway.database.DatabaseResourceBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.inventory.ItemListType;
@@ -17,7 +17,6 @@ import phase2.trade.item.Item;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.AccountManager;
-import phase2.trade.user.CreatePrerequisiteIfNotExist;
 
 public class TradeApplication extends Application {
 

@@ -44,9 +44,10 @@ public class TradeApplication extends Application {
 
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
-        mockDashboardRegister(primaryStage, "cannot-catch-any-hope", "password");
+        configurer.mockDashboardRegister("cannot-catch-any-hope", "password");
         // mockDashboardLogin(primaryStage, "admin", "admin???");
         //login(primaryStage);
+        primaryStage.show();
     }
 
     private void login(Stage primaryStage) {
@@ -55,44 +56,6 @@ public class TradeApplication extends Application {
         primaryStage.show();
     }
 
-    private void addExampleItems(String name, String description, Category category, int quantity, double price) {
-        Command<Item> itemCommand = configurer.getControllerResources().getCommandFactory().getCommand(AddItemToItemList::new, c -> {
-            c.setItemListType(ItemListType.INVENTORY);
-            c.setAsynchronous(false);
-        });
-        itemCommand.execute((result, status) -> {
-        }, name, description, category.name(), String.valueOf(quantity), String.valueOf(price));
-    }
-
-    private void mockDashboardRegister(Stage primaryStage, String username, String password) {
-        configurer.getControllerResources().getAccountManager().register((result, status) -> {
-            Platform.runLater(() -> {
-                addExample();
-                configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
-                primaryStage.show();
-            });
-
-        }, username, password, "12345678", "country", "city");
-    }
-
-    private void mockDashboardLogin(Stage primaryStage, String userName, String password) {
-        configurer.getControllerResources().getAccountManager().login((result, status) -> {
-            Platform.runLater(() -> {
-                configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
-                primaryStage.show();
-            });
-
-        }, userName, password);
-    }
-
-    private void addExample() {
-
-        addExampleItems("Weathering With You", "A boy runs away to Tokyo and befriends a girl who appears to be able to manipulate the weather.", Category.MOVIE, 4, -1);
-        addExampleItems("Ulysses", "Ulysses is a modernist novel by Irish writer James Joyce.", Category.BOOK, 2, -1);
-        addExampleItems("Broken iPad", "An ipad that's melted.", Category.ELECTRONIC, 1, 1000);
-        addExampleItems("Queen Bed", "No description", Category.FURNITURE, 2, 1000);
-
-    }
 
     @Override
     public void stop() {

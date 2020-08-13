@@ -3,7 +3,9 @@ package phase2.trade.view.window;
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXDialogLayout;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -14,6 +16,8 @@ public abstract class AlertWindow<T> extends CustomWindow<T> {
     protected JFXAlert alert;
 
     protected JFXDialogLayout layout;
+
+    protected VBox body;
 
     public AlertWindow(Stage parent, String title, String content) {
         super(parent);
@@ -29,7 +33,11 @@ public abstract class AlertWindow<T> extends CustomWindow<T> {
         alert.setAnimation(JFXAlertAnimation.NO_ANIMATION);
         layout = new JFXDialogLayout();
         layout.setHeading(new Label(title));
-        layout.setBody(new Label(content));
+        body = new VBox(15);
+        if (content != null && !content.isEmpty()) {
+            body.getChildren().addAll(new Label(content));
+        }
+        layout.setBody(body);
     }
 
 }

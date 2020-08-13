@@ -7,6 +7,7 @@ public class StatusExist extends StatusFailed {
     @Override
     public void handle(PopupFactory popupFactory) {
         run(() -> {
+            exist.run();
             failed.run();
             after.run();
         });

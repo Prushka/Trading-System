@@ -5,12 +5,17 @@ import phase2.trade.view.PopupFactory;
 
 public abstract class ResultStatus { // the whole thing may still need to be improved
 
-    Runnable succeeded, failed, after;
+    Runnable succeeded, failed, exist, after;
 
     public ResultStatus() {
         succeeded = () -> {};
         failed = () -> {};
         after = () -> {};
+        exist = () -> {};
+    }
+
+    public void setExist(Runnable exist) {
+        this.exist = exist;
     }
 
     void run(Runnable runnable){

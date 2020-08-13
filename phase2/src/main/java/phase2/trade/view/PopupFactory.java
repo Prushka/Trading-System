@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -33,6 +34,10 @@ public class PopupFactory {
 
     public void toast(int seconds, String message, String actionText) {
         toast(Duration.seconds(seconds), message, actionText);
+    }
+
+    public void toast(int seconds, String message) {
+        toast(Duration.seconds(seconds), message, "CLOSE");
     }
 
     public void noPermission(PermissionSet permissionRequired) {

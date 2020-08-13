@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
-        persistent = true, permissionSet = {Permission.CREATE_USER})
+        persistent = true, permissionSet = {})
 public class ChangePassword extends UserCommand<User> {
 
     private String oldPassword;
@@ -31,7 +31,7 @@ public class ChangePassword extends UserCommand<User> {
             oldPassword = operator.getPassword();
             operator.setPassword(args[1]);
             save();
-            gateway.update(operator);
+            gateway.merge(operator);
             callback.call(operator, new StatusSucceeded());
         });
     }

@@ -3,6 +3,7 @@ package phase2.trade.controller;
 import javafx.scene.layout.Pane;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.view.NodeFactory;
 import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
@@ -11,6 +12,8 @@ import phase2.trade.user.AccountManager;
 public abstract class AbstractController {
 
     private final ControllerResources controllerResources;
+
+    private final NodeFactory nodeFactory = new NodeFactory();
 
     public AbstractController(ControllerResources controllerResources) {
         this.controllerResources = controllerResources;
@@ -46,5 +49,9 @@ public abstract class AbstractController {
 
     protected void putPane(String name, Pane pane){
         controllerResources.getPanes().put(name, pane);
+    }
+
+    protected NodeFactory getNodeFactory(){
+        return nodeFactory;
     }
 }

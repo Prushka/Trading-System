@@ -2,6 +2,7 @@ package phase2.trade.user.command;
 
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusExist;
+import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
@@ -13,24 +14,29 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
-        persistent = true, permissionSet = {Permission.CREATE_USER})
+        persistent = true, permissionSet = {})
 public class ChangeUserName extends UserCommand<User> {
 
     private String oldName;
 
     @Override
-    public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group
+    public void execute(ResultStatusCallback<User> callback, String... args) { // old user name, old password, new user name
         if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
-            List<User> usersByName = gateway.findByUserName(args[0]);
+            if (gateway.findMatches(args[0], args[1]).size() == 0) {
+                callback.call(null, new StatusFailed());
+                return;
+            }
+
+            List<User> usersByName = gateway.findByUserName(args[2]);
             if (usersByName.size() > 0) {
                 callback.call(null, new StatusExist());
                 return;
             }
             oldName = operator.getName();
-            operator.setName(args[0]);
+            operator.setName(args[2]);
             save();
-            gateway.update(operator);
+            gateway.merge(operator);
             callback.call(operator, new StatusSucceeded());
         });
     }

@@ -20,8 +20,11 @@ import javafx.stage.Stage;
 import phase2.trade.callback.ResultStatus;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.item.Item;
+import phase2.trade.presenter.GeneralTableViewController;
 import phase2.trade.trade.Trade;
+import phase2.trade.trade.command.ConfirmTrade;
 import phase2.trade.trade.command.CreateTrade;
+import phase2.trade.trade.command.EditTrade;
 import phase2.trade.trade.command.TradeCommand;
 import phase2.trade.user.User;
 
@@ -30,9 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class MarketController extends AbstractController  implements Initializable {
+public class MarketController extends GeneralTableViewController implements Initializable {
 
-    private TradeCommand tc;
+    private TradeCommand tc, edit, confirm;
 
     @FXML
     private VBox root;
@@ -77,8 +80,10 @@ public class MarketController extends AbstractController  implements Initializab
     private JFXComboBox<String> isPermanent;
 
     public MarketController(ControllerResources controllerResources){
-        super(controllerResources);
+        super(controllerResources, false, false);
         tc = getCommandFactory().getCommand(CreateTrade::new);
+        edit = getCommandFactory().getCommand(EditTrade::new);
+        confirm = getCommandFactory().getCommand(ConfirmTrade::new);
     }
 
     @Override
@@ -98,11 +103,14 @@ public class MarketController extends AbstractController  implements Initializab
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("tradeStatus"));
         trades = new TableView<>();
         tradesList = FXCollections.observableArrayList();
-        // tradesList.addAll(getGatewayBundle().getEntityBundle().getTradeGateway().findAll());
+        // tradesList.addAll(getControllerResources().getGatewayBundle().getEntityBundle().getTradeGateway()
+           //     .findByUser(getControllerResources().getAccountManager().getLoggedInUser().getUid()));
         trades.setItems(tradesList);
         trades.getColumns().addAll(statusColumn);
         editButton = new JFXButton("Edit Trade");
+        editButton.setOnAction(e -> editButtonClicked());
         confirmButton = new JFXButton("Confirm Button");
+        confirmButton.setOnAction(e -> confirmButtonClicked());
         buttonBar.getChildren().addAll(editButton, confirmButton);
         buttonBar.setSpacing(20);
         buttonBar.setAlignment(Pos.BOTTOM_LEFT);
@@ -187,6 +195,17 @@ public class MarketController extends AbstractController  implements Initializab
         meeting.getChildren().addAll(tradeTabs);
         root.getChildren().add(meeting);
     }
+
+    public void editButtonClicked(){
+        Trade currTrade = trades.getSelectionModel().getSelectedItem();
+        edit.setUid(currTrade.getUid());
+    }
+
+    public void confirmButtonClicked(){
+        Trade currTrade = trades.getSelectionModel().getSelectedItem();
+        confirm.setUid(currTrade.getUid());
+    }
+
 
     public void tradeButtonClicked(){
         List<User> allUsers = new ArrayList<>();

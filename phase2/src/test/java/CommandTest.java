@@ -71,7 +71,6 @@ public class CommandTest {
         command = gatewayBundle.getEntityBundle().getCommandGateway().findById(1L);
         gatewayBundle.getEntityBundle().getCommandGateway().closeCurrentSession();
 
-        command.setGatewayBundle(gatewayBundle);
         command.isUndoable((result, status) -> {
             assertEquals(1, result.size());
             // assertEquals(result.get(0).getCRUDType(), CRUDType.UPDATE);

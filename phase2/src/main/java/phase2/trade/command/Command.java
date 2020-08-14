@@ -71,12 +71,11 @@ public abstract class Command<T> implements PermissionBased {
 
     public abstract void execute(ResultStatusCallback<T> callback, String... args);
 
-    public void undo() {
-    }
+    public void undo() {}
     // do nothing here, isUndoable is supposed to be used by the outer world. So undo should no be directly called. Override this if undoable
 
-    public void redo() {
-    } // It seems we don't need to implement redo. Also redo may mess up the uid. Unless we store undo as new commands
+    public void redo() {}
+    // It seems we don't need to implement redo. Also redo may mess up the uid. Unless we store undo as new commands
 
     public void isUndoable(ResultStatusCallback<List<Command>> callback) { // get all future commands that have an impact on the current one
         if (!commandPropertyAnnotation.undoable()) {
@@ -132,10 +131,8 @@ public abstract class Command<T> implements PermissionBased {
         return result;
     }
 
-    private boolean ifOverlaps(Map<String, Set<Long>> otherEffectedEntitiesToPersist) {
-        // Map<String, Set<Long>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);
-        // Map<String, Set<Long>> effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
-        for (Map.Entry<String, Set<Long>> entry : otherEffectedEntitiesToPersist.entrySet()) {
+    private boolean ifOverlaps(Map<String, Set<Long>> otherEffectedEntities) {
+        for (Map.Entry<String, Set<Long>> entry : otherEffectedEntities.entrySet()) {
             if (effectedEntities.containsKey(entry.getKey())) {
                 if (!Collections.disjoint(effectedEntities.get(entry.getKey()), entry.getValue())) return true;
             }
@@ -153,7 +150,7 @@ public abstract class Command<T> implements PermissionBased {
         }
     }
 
-    private String translateEffectedEntitiesToPersist(Map<String, Set<Long>> map) {
+    private static String translateEffectedEntitiesToPersist(Map<String, Set<Long>> map) {
         StringBuilder temp = new StringBuilder();
         for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
             temp.append(entry.getKey()).append("!").append(String.join(",", String.valueOf(entry.getValue()))).append(";");
@@ -161,11 +158,11 @@ public abstract class Command<T> implements PermissionBased {
         return temp.toString();
     }
 
-    private Map<String, Set<Long>> retrieveEffectedEntities(String effected) {
+    private static Map<String, Set<Long>> retrieveEffectedEntities(String effected) {
         if (effected == null) return new HashMap<>();
         Map<String, Set<Long>> temp = new HashMap<>();
         Pattern classNamePattern = Pattern.compile("(.*)!");
-        Pattern idsPattern = Pattern.compile("(\\d+)([,]|$)");
+        Pattern idsPattern = Pattern.compile("(\\d+)([,]|[]]|$)");
         for (String record : effected.split(";")) {
             Matcher matcher = classNamePattern.matcher(record);
             String clazz = "undefined";
@@ -188,9 +185,6 @@ public abstract class Command<T> implements PermissionBased {
         }
     }
 
-    // This exists because constructor is called before the set of effectedEntitiesToPersist
-    // But it's possible to ask hibernate to use setter. This would however lead to the use
-
     public Set<Long> getEffectedEntities(Class<?> clazz) {
         return effectedEntities.get(clazz.getName());
     }
@@ -212,10 +206,6 @@ public abstract class Command<T> implements PermissionBased {
     @Transient
     public Command<T> getThis() {
         return this;
-    }
-
-    public void setGatewayBundle(GatewayBundle gatewayBundle) {
-        this.gatewayBundle = gatewayBundle;
     }
 
     @Id
@@ -266,9 +256,9 @@ public abstract class Command<T> implements PermissionBased {
 
     public void setEffectedEntitiesToPersist(String toPersist) {
         this.effectedEntities = retrieveEffectedEntities(toPersist);
+        System.out.println(toPersist);
     }
 
-    // this one is to be persisted for effected entities and to be deserialized
     public String getEffectedEntitiesToPersist() {
         return translateEffectedEntitiesToPersist(effectedEntities);
     }

@@ -20,12 +20,12 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
 
     @Override
     public List<Trade> findByUser(User currUser){
-        CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Trade> criteria = builder.createQuery(Trade.class);
-
-        Root<Trade> root = criteria.from(Trade.class);
-        criteria.select(root);
-        Query<Trade> query = getCurrentSession().createQuery(criteria);
+//        CriteriaBuilder builder = getCriteriaBuilder();
+//        CriteriaQuery<Trade> criteria = builder.createQuery(Trade.class);
+//
+//        Root<Trade> root = criteria.from(Trade.class);
+//        criteria.select(root);
+        Query<Trade> query = getCurrentSession().createQuery("from Trade");
         return query.list();
     }
 

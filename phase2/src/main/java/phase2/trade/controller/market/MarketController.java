@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,13 +28,9 @@ import phase2.trade.trade.command.CreateTrade;
 import phase2.trade.trade.command.EditTrade;
 import phase2.trade.trade.command.TradeCommand;
 import phase2.trade.user.User;
-import phase2.trade.user.command.ChangePassword;
-import phase2.trade.user.command.ChangeUserName;
 import phase2.trade.view.ListViewGenerator;
-import phase2.trade.view.PopupFactory;
-import phase2.trade.view.window.CustomWindow;
+import phase2.trade.view.window.GeneralHBoxAlert;
 import phase2.trade.view.window.PopupAlert;
-import phase2.trade.view.window.TextFieldAlert;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -183,7 +178,7 @@ public class MarketController extends GeneralTableViewController implements Init
     }
 
     public void items1Clicked(){
-        PopupAlert popup = getPopupFactory().popupWindow("Available Items for Trader 2", "");
+        GeneralHBoxAlert popup = getPopupFactory().textFieldAlert("Available Items for Trader 2", "");
         ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
@@ -194,11 +189,12 @@ public class MarketController extends GeneralTableViewController implements Init
             });
             resultStatus.handle(getPopupFactory());
         });
+        popup.addNodes(availableItems.build());
         popup.display();
     }
 
     public void items2Clicked(){
-        PopupAlert popup = getPopupFactory().popupWindow("Available Items for Trader 3", "");
+        GeneralHBoxAlert popup = getPopupFactory().textFieldAlert("Available Items for Trader 3", "");
         ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
@@ -209,6 +205,7 @@ public class MarketController extends GeneralTableViewController implements Init
             });
             resultStatus.handle(getPopupFactory());
         });
+        popup.addNodes(availableItems.build());
         popup.display();
     }
 
@@ -224,7 +221,7 @@ public class MarketController extends GeneralTableViewController implements Init
         TextField newMinute = new TextField();
         newMinute.setPromptText("MINUTE");
 
-        TextFieldAlert popup = getPopupFactory().textFieldAlert("Edit Trade Date and Time", "");
+        GeneralHBoxAlert popup = getPopupFactory().textFieldAlert("Edit Trade Date and Time", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setUid(currTrade.getUid());
@@ -235,7 +232,7 @@ public class MarketController extends GeneralTableViewController implements Init
                     newDay.getText(), newHour.getText(), newMinute.getText());
         });
 
-        popup.addTextField(newYear, newMonth, newDay, newHour, newMinute);
+        popup.addNodes(newYear, newMonth, newDay, newHour, newMinute);
         popup.display();
     }
 
@@ -249,7 +246,7 @@ public class MarketController extends GeneralTableViewController implements Init
         TextField newStreetNum = new TextField();
         newStreetNum.setPromptText("STREET NUMBER");
 
-        TextFieldAlert popup = getPopupFactory().textFieldAlert("Edit Trade Location", "");
+        GeneralHBoxAlert popup = getPopupFactory().textFieldAlert("Edit Trade Location", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setUid(currTrade.getUid());
@@ -260,7 +257,7 @@ public class MarketController extends GeneralTableViewController implements Init
                     newStreetNum.getText(), "false");
         });
 
-        popup.addTextField(newCountry, newCity, newStreet, newStreetNum);
+        popup.addNodes(newCountry, newCity, newStreet, newStreetNum);
         popup.display();
     }
 

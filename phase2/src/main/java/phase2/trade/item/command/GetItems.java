@@ -27,6 +27,6 @@ public class GetItems extends ItemCommand<ItemList> {
 
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
     }
 }

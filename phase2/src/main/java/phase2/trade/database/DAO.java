@@ -3,10 +3,12 @@ package phase2.trade.database;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import phase2.trade.gateway.EntityGateway;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
@@ -66,10 +68,12 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         getCurrentSession().update(entity);
     }
 
+    @Override
     public void merge(T entity) {
         getCurrentSession().merge(entity);
     }
 
+    @Override
     public void persist(T entity) {
         getCurrentSession().persist(entity);
     }
@@ -105,13 +109,22 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         return (List<T>) getCurrentSession().createQuery("from " + clazz.getSimpleName()).list();
     }
 
-    protected CriteriaBuilder getCriteriaBuilder() {
-        return getCurrentSession().getCriteriaBuilder();
+    protected void criteria(TriConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>> triConsumer) {
+        this.criteria(clazz, triConsumer);
     }
 
-    protected CriteriaQuery<T> createCriteriaQuery(Class<T> clazz) {
-        return getCriteriaBuilder().createQuery(clazz);
+    protected void criteria(Class<T> clazz, TriConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>> triConsumer) {
+        CriteriaBuilder criteriaBuilder = getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);
+        Root<T> root = criteriaQuery.from(clazz);
+        criteriaQuery.select(root);
+        triConsumer.consume(criteriaBuilder, criteriaQuery, root);
     }
+
+    protected void executeCriteriaQuery(List<T> result, CriteriaQuery<T> criteria){
+        result.addAll(getCurrentSession().createQuery(criteria).getResultList());
+    }
+
 
     @Override
     public void deleteAll() {

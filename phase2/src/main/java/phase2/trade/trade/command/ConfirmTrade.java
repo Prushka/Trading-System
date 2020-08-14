@@ -10,12 +10,9 @@ import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeConfirmer;
 
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import java.util.List;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = false, persistent = true)
 public class ConfirmTrade extends TradeCommand<Trade> {
 
@@ -36,14 +33,9 @@ public class ConfirmTrade extends TradeCommand<Trade> {
         });
     }
 
-    @Override
-    public void isUndoable(ResultStatusCallback<List<Command<?>>> callback) {
-        callback.call(null, new StatusFailed());
-    }
-
     // Unreasonable to do for this action
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
 
     }
 }

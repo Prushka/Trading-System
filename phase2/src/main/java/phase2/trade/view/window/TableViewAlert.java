@@ -1,31 +1,28 @@
 package phase2.trade.view.window;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXTextField;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextFieldAlert extends AlertWindow<Void> {
+public class TableViewAlert<T> extends AlertWindow<Void> {
 
     private Map<TextField, StringProperty> results = new HashMap<>();
 
-    public TextFieldAlert(Stage parent, String title, String header) {
+    public TableViewAlert(Stage parent, String title, String header) {
         super(parent, title, header);
         body.setSpacing(35);
     }
 
-    public void addTextField(TextField... textFields) {
-        body.getChildren().addAll(textFields);
+    public void addTableView(TableView<T> tableView) {
+        body.getChildren().addAll(tableView);
     }
 
     private EventHandler<ActionEvent> confirmHandler;
@@ -46,7 +43,7 @@ public class TextFieldAlert extends AlertWindow<Void> {
         confirmButton.setFocusTraversable(false);
 
         layout.setActions(confirmButton);
-
+        layout.setPrefWidth(1000);
         alert.setContent(layout);
 
 

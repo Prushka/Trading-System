@@ -33,7 +33,7 @@ public class UpdateInventoryItems extends ItemCommand<Void> {
 
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
     }
 
     public void setItemsToUpdate(List<Item> itemsToUpdate) {

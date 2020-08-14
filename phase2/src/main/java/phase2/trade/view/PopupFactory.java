@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSnackbar;
 import com.jfoenix.controls.JFXSnackbarLayout;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -12,7 +11,8 @@ import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.view.window.ConfirmAlert;
 import phase2.trade.view.window.PopupAlert;
-import phase2.trade.view.window.TextFieldAlert;
+import phase2.trade.view.window.TableViewAlert;
+import phase2.trade.view.window.GeneralHBoxAlert;
 
 public class PopupFactory {
 
@@ -40,6 +40,10 @@ public class PopupFactory {
         toast(Duration.seconds(seconds), message, "CLOSE");
     }
 
+    public void toast(String message) {
+        toast(Duration.seconds(5), message, "CLOSE");
+    }
+
     public void noPermission(PermissionSet permissionRequired) {
         StringBuilder perm = new StringBuilder();
         for (Permission permission : permissionRequired.getPerm()) {
@@ -60,8 +64,12 @@ public class PopupFactory {
         return new ConfirmAlert(window, title, header);
     }
 
-    public TextFieldAlert textFieldAlert(String title, String header) {
-        return new TextFieldAlert(window, title, header);
+    public <T> TableViewAlert<T> tableViewAlert(Class<T> clazz, String title, String header) {
+        return new TableViewAlert<>(window, title, header);
+    }
+
+    public GeneralHBoxAlert textFieldAlert(String title, String header) {
+        return new GeneralHBoxAlert(window, title, header);
     }
 
     protected Scene getRootScene() {

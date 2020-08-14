@@ -44,7 +44,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             gateway.delete(itemId);
             updateUndo();

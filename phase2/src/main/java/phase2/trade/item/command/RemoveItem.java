@@ -41,7 +41,7 @@ public class RemoveItem extends ItemCommand<Long[]> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             updateUndo();
         });

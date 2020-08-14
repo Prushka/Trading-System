@@ -2,13 +2,23 @@ package phase2.trade.config;
 
 public class UIConfig {
 
-    private int itemDescriptionMaxWidth = 250;
+    private int itemDescriptionPrefWidth = 250;
 
-    public int getItemDescriptionMaxWidth() {
-        return itemDescriptionMaxWidth;
+    private int permissionPrefWidth = 250;
+
+    public int getItemDescriptionPrefWidth() {
+        return itemDescriptionPrefWidth;
     }
 
-    public void setItemDescriptionMaxWidth(int itemDescriptionMaxWidth) {
-        this.itemDescriptionMaxWidth = itemDescriptionMaxWidth;
+    public void setItemDescriptionPrefWidth(int itemDescriptionPrefWidth) {
+        this.itemDescriptionPrefWidth = itemDescriptionPrefWidth;
+    }
+
+    public int getPermissionPrefWidth() {
+        return permissionPrefWidth;
+    }
+
+    public void setPermissionPrefWidth(int permissionPrefWidth) {
+        this.permissionPrefWidth = permissionPrefWidth;
     }
 }

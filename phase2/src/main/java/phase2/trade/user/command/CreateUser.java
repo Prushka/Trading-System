@@ -13,11 +13,9 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
-@CommandProperty(crudType = CRUDType.CREATE, undoable = true,
+@CommandProperty(crudType = CRUDType.CREATE, undoable = false,
         persistent = true, permissionSet = {Permission.CREATE_USER})
 public class CreateUser extends UserCommand<User> {
-
-    private Long userId;
 
     @Override
     public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group
@@ -28,7 +26,6 @@ public class CreateUser extends UserCommand<User> {
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
                 User user = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).createByPermissionGroup(args[0], args[1], args[2], args[3], args[4], args[5]);
                 gateway.add(user);
-                userId = user.getUid();
                 addEffectedEntity(User.class, user.getUid());
                 save();
                 callback.call(user, new StatusSucceeded());
@@ -39,9 +36,10 @@ public class CreateUser extends UserCommand<User> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
-            gateway.delete(userId);
+            gateway.delete(getOneEntity(User.class));
+            updateUndo();
         });
     }
 }

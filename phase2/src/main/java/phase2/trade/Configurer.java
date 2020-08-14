@@ -74,12 +74,13 @@ public class Configurer {
         }, name, description, category.name(), String.valueOf(quantity), String.valueOf(price));
     }
 
-    public void mockDashboardRegister(String username, String password) {
+    public void mockDashboardRegister(String username, String email) {
         accountManager.register((result, status) -> {
 
-        }, username, password, "12345678", "country", "city");
+        }, username, email, "12345678", "country", "city");
 
         addExample();
+
     }
 
     public void mockDashboardLogin(String userName, String password) {

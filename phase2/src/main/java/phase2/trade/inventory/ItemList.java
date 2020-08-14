@@ -13,6 +13,7 @@ public abstract class ItemList {
     // This is a standard implementation according to JPA documentation to have this primary key in a MappedSuperClass
     // There are related questions in stackoverflow but none has come up with a solution
 
+    // TODO: iterator for this, and don't use the underlying collection
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -37,7 +37,7 @@ public class ChangePassword extends UserCommand<User> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
             // gateway.delete(userId);
         });

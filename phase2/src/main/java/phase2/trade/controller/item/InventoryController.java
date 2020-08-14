@@ -2,8 +2,6 @@ package phase2.trade.controller.item;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +11,6 @@ import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.GeneralTableViewController;
-import phase2.trade.controller.item.AddItemController;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -38,6 +35,10 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         this.itemListType = itemListType;
     }
 
+    // TODO: if view is updated first, then even if the execution fails, the item would disappear. It would reappear if user refreshes this tableview
+    //  Also it's not possible to bind the entity to the view since the entity is in database and I don't think it's a good idea to replace all fields in entities to be Properties and Observable
+    //  1. We can update entity first without taking benefit from Observable List. So that the ResultStatus can be checked in first place
+    //  2. Maybe we can also retrieve necessary elements from the database and store it as a cache. But I don't have time for this. It can take time to implement the caching system
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
@@ -45,7 +46,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
 
         tableViewGenerator.addColumn("Name", "name")
                 .addColumn("Description", "description",
-                getConfigBundle().getUiConfig().getItemDescriptionMaxWidth()).addColumn("Category", "category")
+                getConfigBundle().getUiConfig().getItemDescriptionPrefWidth()).addColumn("Category", "category")
                 .addColumn("Ownership", "ownership")
                 .addColumn("Quantity", "quantity")
                 .addColumn("Price", "price")
@@ -58,7 +59,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         JFXButton sellButton = new JFXButton("I wanna sell them");
         JFXButton lendButton = new JFXButton("I wanna lend them");
 
-        buttons.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
+        hBox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
         buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
         sellButton.setOnAction(getWillingnessHandler(Willingness.SELL));

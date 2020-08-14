@@ -40,6 +40,10 @@ public class PopupFactory {
         toast(Duration.seconds(seconds), message, "CLOSE");
     }
 
+    public void toast(String message) {
+        toast(Duration.seconds(5), message, "CLOSE");
+    }
+
     public void noPermission(PermissionSet permissionRequired) {
         StringBuilder perm = new StringBuilder();
         for (Permission permission : permissionRequired.getPerm()) {

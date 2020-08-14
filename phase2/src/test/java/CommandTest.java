@@ -72,6 +72,6 @@ public class CommandTest {
             assertEquals(1, result.size());
             // assertEquals(result.get(0).getCRUDType(), CRUDType.UPDATE);
         },gatewayBundle);
-        // command.undo();
+        // command.undoUnchecked();
     }
 }

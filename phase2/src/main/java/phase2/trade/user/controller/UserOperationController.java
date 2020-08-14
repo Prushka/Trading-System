@@ -122,10 +122,16 @@ public class UserOperationController extends GeneralTableViewController<Command>
             public void handle(ActionEvent event) {
                 tableView.getSelectionModel().getSelectedItem().undoIfUndoable((ResultStatusCallback<List<Command>>) (result, status) -> {
                     status.setSucceeded(() -> {
-                        getPopupFactory().toast(5, "TADA~ Your command was successfully undone!");
+                        getPopupFactory().toast("TADA~ Your command was successfully undone!");
                         tableView.refresh();
                     });
-                    status.setFailed(() -> System.out.println(result));
+                    status.setFailed(() -> {
+                        if (result == null) {
+                            getPopupFactory().toast("The command you selected is not an undoable command! (It's configured to be undoable)");
+                        } else {
+                            getPopupFactory().toast("The command you selected is effected by other commands!");
+                        }
+                    });
                     status.handle(getPopupFactory());
                 }, getGatewayBundle());
 

@@ -35,7 +35,7 @@ public class ConfirmTrade extends TradeCommand<Trade> {
 
     // Unreasonable to do for this action
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
 
     }
 }

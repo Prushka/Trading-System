@@ -42,7 +42,7 @@ public class ReviewItem extends ItemCommand<Item> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             Item item = findItemByIdSyncInsideItemGateway(itemId);
             item.setOwnership(oldOwnership);

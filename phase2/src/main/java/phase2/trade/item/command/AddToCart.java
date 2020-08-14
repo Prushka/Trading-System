@@ -31,7 +31,7 @@ public class AddToCart extends ItemCommand<Void> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
     }
 
     public void setItems(Item... items) {

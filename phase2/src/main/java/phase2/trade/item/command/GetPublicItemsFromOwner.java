@@ -45,7 +45,7 @@ public class GetPublicItemsFromOwner extends ItemCommand<List<Item>> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
     }
 
     public void setItemOwnerUID(Long itemOwnerUID) {

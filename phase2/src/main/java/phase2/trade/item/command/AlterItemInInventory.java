@@ -29,7 +29,7 @@ public class AlterItemInInventory extends ItemCommand<Item> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
            getEffectedEntities(Item.class).forEach(gateway::delete);
             updateUndo();

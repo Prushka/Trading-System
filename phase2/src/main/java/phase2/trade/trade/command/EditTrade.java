@@ -28,7 +28,7 @@ public class EditTrade extends TradeCommand<Trade> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             gateway.delete(tradeId);
             updateUndo();

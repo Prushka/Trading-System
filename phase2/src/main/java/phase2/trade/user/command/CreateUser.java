@@ -13,7 +13,7 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
-@CommandProperty(crudType = CRUDType.CREATE, undoable = true,
+@CommandProperty(crudType = CRUDType.CREATE, undoable = false,
         persistent = true, permissionSet = {Permission.CREATE_USER})
 public class CreateUser extends UserCommand<User> {
 
@@ -36,7 +36,7 @@ public class CreateUser extends UserCommand<User> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
             gateway.delete(getOneEntity(User.class));
             updateUndo();

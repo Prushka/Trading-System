@@ -29,5 +29,5 @@ public class CreateTrade extends TradeCommand<Trade>{
 
     // Unreasonable to do for this action
     @Override
-    public void undo() {}
+    protected void undoUnchecked() {}
 }

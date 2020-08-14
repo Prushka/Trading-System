@@ -25,7 +25,7 @@ public class GetMarketItems extends ItemCommand<List<Item>> {
     }
 
     @Override
-    public void undo() {
+    protected void undoUnchecked() {
 
     }
 }

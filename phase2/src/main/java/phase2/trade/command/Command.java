@@ -71,8 +71,8 @@ public abstract class Command<T> implements PermissionBased {
 
     public abstract void execute(ResultStatusCallback<T> callback, String... args);
 
-    public void undo() {}
-    // do nothing here, undoIfUndoable is supposed to be used by the outer world. So undo should no be directly called. Override this if undoable
+    protected void undoUnchecked() {}
+    // do nothing here, undoIfUndoable is supposed to be used by the outer world. So undoUnchecked should no be directly called. Override this if undoable
 
     public void redo() {}
     // It seems we don't need to implement redo. Also redo may mess up the uid. Unless we store undo as new commands
@@ -95,7 +95,7 @@ public abstract class Command<T> implements PermissionBased {
             if (blockingCommands.size() > 0) {
                 callback.call(blockingCommands, new StatusFailed());
             } else {
-                undo();
+                undoUnchecked();
                 callback.call(blockingCommands, new StatusSucceeded());
             }
         });

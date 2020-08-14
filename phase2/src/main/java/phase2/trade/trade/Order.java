@@ -5,13 +5,14 @@ import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Order {
+public class Order{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,7 @@ public class Order {
     @OneToMany
     private List<UserOrderBundle> traders;
 
+    @Column
     private LocalDateTime dateAndTime;
 
     public Long getUid() {

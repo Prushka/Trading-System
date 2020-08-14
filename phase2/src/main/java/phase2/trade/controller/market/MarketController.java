@@ -1,82 +1,66 @@
-package phase2.trade.controller;
+package phase2.trade.controller.market;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.ResultStatus;
+import phase2.trade.command.Command;
+import phase2.trade.controller.ControllerProperty;
+import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.GeneralTableViewController;
 import phase2.trade.item.Item;
+import phase2.trade.item.command.GetMarketItems;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.command.ConfirmTrade;
 import phase2.trade.trade.command.CreateTrade;
 import phase2.trade.trade.command.EditTrade;
 import phase2.trade.trade.command.TradeCommand;
 import phase2.trade.user.User;
+import phase2.trade.user.command.ChangePassword;
+import phase2.trade.user.command.ChangeUserName;
+import phase2.trade.view.ListViewGenerator;
+import phase2.trade.view.PopupFactory;
+import phase2.trade.view.window.CustomWindow;
+import phase2.trade.view.window.PopupAlert;
+import phase2.trade.view.window.TextFieldAlert;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+@ControllerProperty(viewFile = "market.fxml")
 public class MarketController extends GeneralTableViewController implements Initializable {
 
     private TradeCommand tc, edit, confirm;
 
     @FXML
-    private VBox root;
+    private VBox root, content, content2;
+    private HBox buttonBar, users, meeting, dateTime, items, place, type;
+    private Label traders, date, tradeLocation, tradeType;
+    private ListView<Pane> itemList2, itemList3;
     private TabPane tradeTabs;
-    private Tab tradeView;
-    private Tab tradeMarket;
+    private Tab tradeView, tradeMarket;
     private TableView<Trade> trades;
     private TableColumn<Trade, String> statusColumn;
     private ObservableList<Trade> tradesList;
-    private JFXButton editButton;
-    private JFXButton confirmButton;
-    private VBox content2;
-    private HBox buttonBar;
-    private HBox users;
-    private HBox meeting;
-    private VBox content;
-    private HBox dateTime;
-    private Label traders;
-    private JFXComboBox<User> user1;
-    private JFXComboBox<User> user2;
-    private JFXComboBox<User> user3;
-    private HBox items;
-    private JFXButton addItems2;
-    private ListView<Pane> itemList2;
-    private JFXButton addItems3;
-    private ListView<Pane> itemList3;
-    private Label date;
-    private JFXTextField year;
-    private JFXTextField month;
-    private JFXTextField day;
-    private JFXTextField hour;
-    private JFXTextField minute;
-    private HBox place;
-    private Label tradeLocation;
-    private JFXTextField country;
-    private JFXTextField city;
-    private JFXTextField street;
-    private JFXTextField streetNum;
-    private HBox type;
-    private Label tradeType;
-    private JFXButton tradeButton;
+    private JFXButton editDateTimeButton, editLocationButton, confirmButton, addItems2, addItems3, tradeButton;
+    private JFXComboBox<User> user2, user3;
     private JFXComboBox<String> isPermanent;
+    private JFXTextField year, month, day, hour, minute, country, city, street, streetNum;
 
     public MarketController(ControllerResources controllerResources){
         super(controllerResources, false, false);
@@ -101,16 +85,17 @@ public class MarketController extends GeneralTableViewController implements Init
         statusColumn.setMinWidth(200);
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("tradeStatus"));
         trades = new TableView<>();
-        tradesList = FXCollections.observableArrayList();
-        // tradesList.addAll(getControllerResources().getGatewayBundle().getEntityBundle().getTradeGateway()
-           //     .findByUser(getControllerResources().getAccountManager().getLoggedInUser().getUid()));
+        //tradesList = FXCollections.observableArrayList(getGatewayBundle().getEntityBundle().getTradeGateway()
+          //      .findByUser(getControllerResources().getAccountManager().getLoggedInUser().getUid()));
         trades.setItems(tradesList);
         trades.getColumns().addAll(statusColumn);
-        editButton = new JFXButton("Edit Trade");
-        editButton.setOnAction(e -> editButtonClicked());
+        editDateTimeButton = new JFXButton("Edit Date and Time");
+        editDateTimeButton.setOnAction(e -> editDateTimeClicked());
+        editLocationButton = new JFXButton("Edit Location");
+        editLocationButton.setOnAction(e -> editLocationClicked());
         confirmButton = new JFXButton("Confirm Button");
         confirmButton.setOnAction(e -> confirmButtonClicked());
-        buttonBar.getChildren().addAll(editButton, confirmButton);
+        buttonBar.getChildren().addAll(editDateTimeButton, editLocationButton, confirmButton);
         buttonBar.setSpacing(20);
         buttonBar.setAlignment(Pos.BOTTOM_LEFT);
         buttonBar.setPadding(new Insets(5, 10, 5, 10));
@@ -122,7 +107,7 @@ public class MarketController extends GeneralTableViewController implements Init
         users.setPadding(new Insets(5, 10, 5, 10));
         traders = new Label("Other Traders: ");
         user2 = new JFXComboBox<>();
-        // user2.getItems().addAll(gatewayBundle.getEntityBundle().getUserGateway().findAll());
+        // user2.getItems().addAll(getGatewayBundle().getEntityBundle().getUserGateway().findAll());
         user3 = new JFXComboBox<>();
         users.getChildren().addAll(traders, user2, user3);
 
@@ -131,9 +116,11 @@ public class MarketController extends GeneralTableViewController implements Init
         users.setSpacing(20);
         users.setAlignment(Pos.BOTTOM_LEFT);
         users.setPadding(new Insets(5, 10, 5, 10));
-        addItems2 = new JFXButton("ADD ITEMS FOR TRADER 1");
+        addItems2 = new JFXButton("ADD ITEMS FOR TRADER 2");
+        addItems2.setOnAction(e -> items1Clicked());
         itemList2 = new ListView<>();
-        addItems3 = new JFXButton("ADD ITEMS FOR TRADER 2");
+        addItems3 = new JFXButton("ADD ITEMS FOR TRADER 3");
+        addItems3.setOnAction(e -> items2Clicked());
         itemList3 = new ListView<>();
         items.getChildren().addAll(itemList2, addItems2, itemList3, addItems3);
 
@@ -195,14 +182,96 @@ public class MarketController extends GeneralTableViewController implements Init
         root.getChildren().add(meeting);
     }
 
-    public void editButtonClicked(){
-        Trade currTrade = trades.getSelectionModel().getSelectedItem();
-        edit.setUid(currTrade.getUid());
+    public void items1Clicked(){
+        PopupAlert popup = getPopupFactory().popupWindow("Available Items for Trader 2", "");
+        ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
+        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
+        getMarket.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> {
+                for (Item item : result) {
+                    availableItems.addElement(item);
+                }
+            });
+            resultStatus.handle(getPopupFactory());
+        });
+        popup.display();
+    }
+
+    public void items2Clicked(){
+        PopupAlert popup = getPopupFactory().popupWindow("Available Items for Trader 3", "");
+        ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
+        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
+        getMarket.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> {
+                for (Item item : result) {
+                    availableItems.addElement(item);
+                }
+            });
+            resultStatus.handle(getPopupFactory());
+        });
+        popup.display();
+    }
+
+    public void editDateTimeClicked(){
+        TextField newYear = new TextField();
+        newYear.setPromptText("YEAR");
+        TextField newMonth = new TextField();
+        newMonth.setPromptText("MONTH");
+        TextField newDay = new TextField();
+        newDay.setPromptText("DAY");
+        TextField newHour = new TextField();
+        newHour.setPromptText("HOUR");
+        TextField newMinute = new TextField();
+        newMinute.setPromptText("MINUTE");
+
+        TextFieldAlert popup = getPopupFactory().textFieldAlert("Edit Trade Date and Time", "");
+        popup.setEventHandler(event -> {
+            Trade currTrade = trades.getSelectionModel().getSelectedItem();
+            edit.setUid(currTrade.getUid());
+            edit.execute(((result, status) -> {
+                status.setFailed(() -> getPopupFactory().toast(5, "Not proper format"));
+                status.handle(getPopupFactory());
+            }), newYear.getText(), newMonth.getText(),
+                    newDay.getText(), newHour.getText(), newMinute.getText());
+        });
+
+        popup.addTextField(newYear, newMonth, newDay, newHour, newMinute);
+        popup.display();
+    }
+
+    public void editLocationClicked(){
+        TextField newCountry = new TextField();
+        newCountry.setPromptText("COUNTRY");
+        TextField newCity = new TextField();
+        newCity.setPromptText("CITY");
+        TextField newStreet = new TextField();
+        newStreet.setPromptText("STREET");
+        TextField newStreetNum = new TextField();
+        newStreetNum.setPromptText("STREET NUMBER");
+
+        TextFieldAlert popup = getPopupFactory().textFieldAlert("Edit Trade Location", "");
+        popup.setEventHandler(event -> {
+            Trade currTrade = trades.getSelectionModel().getSelectedItem();
+            edit.setUid(currTrade.getUid());
+            edit.execute(((result, status) -> {
+                        status.setFailed(() -> getPopupFactory().toast(5, "Not proper format"));
+                        status.handle(getPopupFactory());
+                    }), newCountry.getText(), newCity.getText(), newStreet.getText(),
+                    newStreetNum.getText(), "false");
+        });
+
+        popup.addTextField(newCountry, newCity, newStreet, newStreetNum);
+        popup.display();
     }
 
     public void confirmButtonClicked(){
         Trade currTrade = trades.getSelectionModel().getSelectedItem();
         confirm.setUid(currTrade.getUid());
+        confirm.execute(new ResultStatusCallback() { @Override
+        public void call(Object result, ResultStatus resultStatus) {
+            System.out.println("success");
+        }
+        });
     }
 
 
@@ -226,5 +295,15 @@ public class MarketController extends GeneralTableViewController implements Init
                     day.getText(), hour.getText(), minute.getText(), country.getText(), city.getText(), street.getText(),
                     streetNum.getText(), "false");
         }
+        year.clear();
+        month.clear();
+        day.clear();
+        hour.clear();
+        minute.clear();
+        country.clear();
+        city.clear();
+        street.clear();
+        streetNum.clear();
+        // System.out.println(getGatewayBundle().getEntityBundle().getTradeGateway().findAll());
     }
 }

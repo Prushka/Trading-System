@@ -6,6 +6,10 @@ import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
 import phase2.trade.user.User;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
@@ -15,8 +19,13 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
     }
 
     @Override
-    public List<Trade> findByUser(Long id){
-        Query query = getCurrentSession().createQuery("from Trade");
+    public List<Trade> findByUser(User currUser){
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Trade> criteria = builder.createQuery(Trade.class);
+
+        Root<Trade> root = criteria.from(Trade.class);
+        criteria.select(root);
+        Query<Trade> query = getCurrentSession().createQuery(criteria);
         return query.list();
     }
 

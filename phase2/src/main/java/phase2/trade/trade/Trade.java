@@ -9,7 +9,7 @@ public class Trade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Order order;
 
     private TradeState tradeState;

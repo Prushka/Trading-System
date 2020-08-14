@@ -3,14 +3,20 @@ package phase2.trade.trade.command;
 import phase2.trade.callback.*;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
+import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeConfirmer;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import java.util.List;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@CommandProperty(crudType = CRUDType.UPDATE, undoable = false, persistent = true)
 public class ConfirmTrade extends TradeCommand<Trade> {
 
     private Long tradeId;

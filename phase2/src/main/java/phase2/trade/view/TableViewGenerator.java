@@ -52,10 +52,10 @@ public class TableViewGenerator<T> {
         return column;
     }
 
-    public TableViewGenerator<T> addColumn(String name, String fieldName, int maxWidth) {
+    public TableViewGenerator<T> addColumn(String name, String fieldName, int prefWidth) {
         TableColumn<T, String> column = getTableColumn(name, fieldName);
         listOfColumns.add(column);
-        column.setMaxWidth(maxWidth);
+        column.setPrefWidth(prefWidth);
         return this;
     }
 
@@ -73,10 +73,10 @@ public class TableViewGenerator<T> {
     }
 
     // https://stackoverflow.com/questions/14650787/javafx-column-in-tableview-auto-fit-size
-    public void autoResizeColumns() {
+    public void autoResizeColumns() { // well it seems that this is done by default
         //Set the right policy
         tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-        tableView.getColumns().stream().forEach((column) ->
+        tableView.getColumns().forEach((column) ->
         {
             //Minimal width = columnheader
             Text t = new Text(column.getText());
@@ -92,7 +92,7 @@ public class TableViewGenerator<T> {
                     }
                 }
             }
-            //set the new max-widht with some extra space
+            //set the new max-width with some extra space
             column.setPrefWidth(max + 10.0d);
         });
     }
@@ -103,7 +103,7 @@ public class TableViewGenerator<T> {
         sortedList.comparatorProperty().bind(tableView.comparatorProperty());
         tableView.setItems(sortedList);
 
-        autoResizeColumns();
+        //autoResizeColumns();
         tableView.getColumns().addAll(listOfColumns);
         return tableView;
     }

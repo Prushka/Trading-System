@@ -2,8 +2,6 @@ package phase2.trade.controller.item;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,7 +11,6 @@ import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.GeneralTableViewController;
-import phase2.trade.controller.item.AddItemController;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -49,7 +46,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
 
         tableViewGenerator.addColumn("Name", "name")
                 .addColumn("Description", "description",
-                getConfigBundle().getUiConfig().getItemDescriptionMaxWidth()).addColumn("Category", "category")
+                getConfigBundle().getUiConfig().getItemDescriptionPrefWidth()).addColumn("Category", "category")
                 .addColumn("Ownership", "ownership")
                 .addColumn("Quantity", "quantity")
                 .addColumn("Price", "price")
@@ -62,7 +59,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         JFXButton sellButton = new JFXButton("I wanna sell them");
         JFXButton lendButton = new JFXButton("I wanna lend them");
 
-        buttons.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
+        hBox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
         buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
         sellButton.setOnAction(getWillingnessHandler(Willingness.SELL));

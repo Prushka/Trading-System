@@ -35,7 +35,7 @@ public class CartController extends GeneralTableViewController<Item> implements 
         super.initialize(location, resources);
         setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
         tableViewGenerator.addColumn("Name", "name")
-                .addColumn("Description", "description",getConfigBundle().getUiConfig().getItemDescriptionMaxWidth())
+                .addColumn("Description", "description",getConfigBundle().getUiConfig().getItemDescriptionPrefWidth())
                 .addColumn("Category", "category")
                 .addColumn("Ownership", "ownership")
                 .addColumn("Quantity", "quantity").addColumn("Price", "price")
@@ -51,7 +51,7 @@ public class CartController extends GeneralTableViewController<Item> implements 
         JFXButton deleteButton = new JFXButton("Delete");
         JFXButton trade = new JFXButton("Trade");
 
-        buttons.getChildren().addAll(deleteButton, trade);
+        hBox.getChildren().addAll(deleteButton, trade);
 
         buttonsToDisable = FXCollections.observableArrayList(deleteButton, trade);
 

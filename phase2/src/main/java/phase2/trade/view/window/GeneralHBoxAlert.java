@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
@@ -15,17 +16,17 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TextFieldAlert extends AlertWindow<Void> {
+public class GeneralHBoxAlert extends AlertWindow<Void> {
 
     private Map<TextField, StringProperty> results = new HashMap<>();
 
-    public TextFieldAlert(Stage parent, String title, String header) {
+    public GeneralHBoxAlert(Stage parent, String title, String header) {
         super(parent, title, header);
         body.setSpacing(35);
     }
 
-    public void addTextField(TextField... textFields) {
-        body.getChildren().addAll(textFields);
+    public void addNodes(Node... nodes) {
+        body.getChildren().addAll(nodes);
     }
 
     private EventHandler<ActionEvent> confirmHandler;

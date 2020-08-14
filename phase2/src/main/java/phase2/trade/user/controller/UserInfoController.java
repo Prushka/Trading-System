@@ -1,24 +1,16 @@
 package phase2.trade.user.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import phase2.trade.controller.AbstractController;
-import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.user.User;
 import phase2.trade.user.command.ChangePassword;
 import phase2.trade.user.command.ChangeUserName;
-import phase2.trade.view.window.TextFieldAlert;
+import phase2.trade.view.window.GeneralHBoxAlert;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -54,7 +46,8 @@ public class UserInfoController extends AbstractController implements Initializa
 
         root.getChildren().addAll(changePassword, changeUserName);
 
-        TextFieldAlert passwordAlert = getPopupFactory().textFieldAlert("Change Password", "");
+        GeneralHBoxAlert passwordAlert = getPopupFactory().textFieldAlert("Change Password", "");
+        passwordAlert.addNodes(oldPassword, newPassword);
         passwordAlert.setEventHandler(event -> {
             ChangePassword changePasswordCommand = getCommandFactory().getCommand(ChangePassword::new);
             changePasswordCommand.execute(((result, status) -> {
@@ -65,7 +58,8 @@ public class UserInfoController extends AbstractController implements Initializa
                     getAccountManager().getLoggedInUser().getName(), oldPassword.getText(), newPassword.getText());
         });
 
-        TextFieldAlert userNameAlert = getPopupFactory().textFieldAlert("Change UserName", "");
+        GeneralHBoxAlert userNameAlert = getPopupFactory().textFieldAlert("Change UserName", "");
+        userNameAlert.addNodes(password, newUserName);
         userNameAlert.setEventHandler(event -> {
             ChangeUserName command = getCommandFactory().getCommand(ChangeUserName::new);
             command.execute(((result, status) -> {
@@ -76,11 +70,6 @@ public class UserInfoController extends AbstractController implements Initializa
                     ),
                     getAccountManager().getLoggedInUser().getName(), password.getText(), newUserName.getText());
         });
-
-
-        userNameAlert.addTextField(password, newUserName);
-
-        passwordAlert.addTextField(oldPassword, newPassword);
 
         changeUserName.setOnAction(event -> userNameAlert.display());
         changePassword.setOnAction(event -> passwordAlert.display());

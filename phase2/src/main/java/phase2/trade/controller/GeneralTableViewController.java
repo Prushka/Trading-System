@@ -25,7 +25,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
     protected TableView<T> tableView;
 
     @FXML
-    protected HBox buttons;
+    protected HBox hBox;
 
     protected List<Button> buttonsToDisable = new ArrayList<>();
 

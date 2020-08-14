@@ -23,7 +23,7 @@ public class PermissionConfig {
                 Permission.BROWSE_MARKET);
 
         addPermissions(PermissionGroup.ADMIN, Permission.CHANGE_THRESHOLD, Permission.REVIEW_ITEM);
-        addPermissions(PermissionGroup.HEAD_ADMIN, Permission.CHANGE_THRESHOLD, Permission.REVIEW_ITEM, Permission.BROWSE_USER_OPERATIONS, Permission.MANAGE_USER);
+        addPermissions(PermissionGroup.HEAD_ADMIN, Permission.CREATE_USER, Permission.CHANGE_THRESHOLD, Permission.REVIEW_ITEM, Permission.BROWSE_USER_OPERATIONS, Permission.MANAGE_USER);
 
         addPermissions(PermissionGroup.SYSTEM, Permission.CHANGE_THRESHOLD, Permission.CREATE_USER);
     }

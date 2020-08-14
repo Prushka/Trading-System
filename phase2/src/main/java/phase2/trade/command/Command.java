@@ -71,10 +71,12 @@ public abstract class Command<T> implements PermissionBased {
 
     public abstract void execute(ResultStatusCallback<T> callback, String... args);
 
-    protected void undoUnchecked() {}
+    protected void undoUnchecked() {
+    }
     // do nothing here, undoIfUndoable is supposed to be used by the outer world. So undoUnchecked should no be directly called. Override this if undoable
 
-    public void redo() {}
+    public void redo() {
+    }
     // It seems we don't need to implement redo. Also redo may mess up the uid. Unless we store undo as new commands
 
     public void undoIfUndoable(ResultStatusCallback<List<Command>> callback, GatewayBundle gatewayBundle) { // get all future commands that have an impact on the current one
@@ -127,7 +129,7 @@ public abstract class Command<T> implements PermissionBased {
     public boolean checkPermission(ResultStatusCallback<?> statusCallback) {
         boolean result = checkPermission();
         if (!result) {
-            System.out.println("[No Permission] User: " + operator + " | " + Arrays.toString(commandPropertyAnnotation.permissionSet()) + " -> " + operator.getPermissionSet().getPerm().toString());
+            System.out.println("[No Permission] User: " + operator + " | " + operator.getPermissionGroup() + " | " + Arrays.toString(commandPropertyAnnotation.permissionSet()) + " -> " + operator.getPermissionSet().getPerm().toString());
             statusCallback.call(null, new StatusNoPermission(new PermissionSet(commandPropertyAnnotation.permissionSet())));
         }
         return result;

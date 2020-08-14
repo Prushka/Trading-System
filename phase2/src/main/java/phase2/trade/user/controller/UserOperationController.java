@@ -147,7 +147,7 @@ public class UserOperationController extends GeneralTableViewController<Command>
 
             }
         });
-        buttons.getChildren().addAll(undo);
+        hBox.getChildren().addAll(undo);
     }
 
     // To display data of sub commands using custom logic

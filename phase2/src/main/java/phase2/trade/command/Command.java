@@ -89,15 +89,15 @@ public abstract class Command<T> implements PermissionBased {
     public void redo() {
     } // It seems we don't need to implement redo. Also redo may mess up the uid. Unless we store undo as new commands
 
-    public void isUndoable(ResultStatusCallback<List<Command<?>>> callback) { // get all future commands that have an impact on the current one
+    public void isUndoable(ResultStatusCallback<List<Command>> callback) { // get all future commands that have an impact on the current one
         if (!commandPropertyAnnotation.undoable()) {
             callback.call(null, new StatusFailed());
             return;
         }
         getEntityBundle().getCommandGateway().submitSession((gateway) -> {
-            List<Command<?>> futureCommands = gateway.getFutureCommands(timestamp);
-            List<Command<?>> blockingCommands = new ArrayList<>();
-            for (Command<?> command : futureCommands) {
+            List<Command> futureCommands = gateway.getFutureCommands(timestamp);
+            List<Command> blockingCommands = new ArrayList<>();
+            for (Command command : futureCommands) {
                 if (command.commandPropertyAnnotation.crudType().hasEffect && ifOverlaps(command.effectedEntitiesToPersist)) {
                     blockingCommands.add(command);
                 }

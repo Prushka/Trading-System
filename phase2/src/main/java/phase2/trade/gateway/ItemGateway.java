@@ -6,7 +6,6 @@ import phase2.trade.user.User;
 import java.util.List;
 
 public interface ItemGateway extends EntityGateway<Item, ItemGateway> {
-    List<Item> findByName(String itemName);
 
     List<Item> findMarketItems();
 

@@ -3,7 +3,9 @@ package phase2.trade.trade.command;
 import phase2.trade.callback.*;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
+import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
+import phase2.trade.command.CommandProperty;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeConfirmer;
 
@@ -11,6 +13,7 @@ import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
+@CommandProperty(crudType = CRUDType.UPDATE, undoable = false, persistent = true)
 public class ConfirmTrade extends TradeCommand<Trade> {
 
     private Long tradeId;
@@ -28,11 +31,6 @@ public class ConfirmTrade extends TradeCommand<Trade> {
                 callback.call(trade, new StatusSucceeded());
             gateway.update(trade);
         });
-    }
-
-    @Override
-    public void isUndoable(ResultStatusCallback<List<Command<?>>> callback) {
-        callback.call(null, new StatusFailed());
     }
 
     // Unreasonable to do for this action

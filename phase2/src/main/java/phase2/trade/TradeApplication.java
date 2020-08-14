@@ -34,7 +34,7 @@ public class TradeApplication extends Application {
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
         configurer.mockDashboardRegister("cannot-catch-any-hope", "password");
-
+        // login(primaryStage);
         configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
         // mockDashboardLogin(primaryStage, "admin", "admin???");
         //login(primaryStage);

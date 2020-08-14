@@ -4,10 +4,13 @@ import org.hibernate.query.Query;
 import phase2.trade.gateway.ItemGateway;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
+import phase2.trade.user.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDAO extends DAO<Item, ItemGateway> implements ItemGateway {
@@ -18,17 +21,14 @@ public class ItemDAO extends DAO<Item, ItemGateway> implements ItemGateway {
     }
 
     @Override
-    public List<Item> findByName(String itemName) {
-        Query query = getCurrentSession().createQuery("FROM Item WHERE name = :itemName");
-        query.setParameter("itemName", itemName);
-        return query.list();
-    }
-
-    @Override
     public List<Item> findMarketItems() {
-        Query query = getCurrentSession().createQuery("FROM Item WHERE willingness != :ownerWillingness");
-        query.setParameter("ownerWillingness", Willingness.NOPE);
-        return query.list();
+        final List<Item> result = new ArrayList<>();
+        criteria((builder, criteria, root) -> {
+            Predicate restriction = builder.notEqual(root.get("willingness"),Willingness.NOPE);
+            criteria.select(root).where(restriction);
+            executeCriteriaQuery(result, criteria);
+        });
+        return result;
     }
 
     @Override

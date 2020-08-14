@@ -80,6 +80,7 @@ public class Configurer {
         }, username, password, "12345678", "country", "city");
 
         addExample();
+
     }
 
     public void mockDashboardLogin(String userName, String password) {

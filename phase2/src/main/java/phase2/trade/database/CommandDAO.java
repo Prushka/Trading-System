@@ -4,27 +4,49 @@ import org.hibernate.query.Query;
 import phase2.trade.command.Command;
 import phase2.trade.gateway.CommandGateway;
 
-import java.util.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.List;
 
+// public class CommandDAO<C extends Command<Q>, Q> extends DAO<C, CommandGateway<C, Q>> implements CommandGateway<C, Q> {
+// public class CommandDAO<T extends Command<?>> extends DAO<T, CommandGateway<T>> implements CommandGateway<T> {
+// the problem here is that If I define CommandDAO using the line above
+// The parent class's T would ask for Command<?> instead of Command
+// The first problem encountered was that Class<T> is required to construct DAO<T>, so the
+// required class becomes Class<Command<?>>
+// while getting class from Command.class or any of its subclasses make it lose the wildcard or any generic type
+// that's why only raw type is used here until a workaround is figured out
+
+// Also the reason why CommandDAO cannot have a wild card also make some of its use cases unable to use a wildcard
 public class CommandDAO extends DAO<Command, CommandGateway> implements CommandGateway {
+
 
     public CommandDAO(DatabaseResourceBundle databaseResourceBundle) {
         super(Command.class, databaseResourceBundle);
     }
 
+
     @Override
-    public List<Command<?>> getFutureCommands(Long commandTimestamp) {
-        Query<Command<?>> query = getCurrentSession().createQuery("FROM Command WHERE timestamp > :commandTimestamp");
-        query.setParameter("commandTimestamp", commandTimestamp);
-        List<Command<?>> result = query.getResultList();
+    public List<Command> getFutureCommands(Long commandTimestamp) {
+        final List<Command> result = new ArrayList<>();
+
+        criteria((builder, criteria, root) -> {
+            Predicate restriction = builder.greaterThan(root.get("timestamp"), commandTimestamp);
+            criteria.select(root).where(restriction);
+            result.addAll(getCurrentSession().createQuery(criteria).getResultList());
+        });
         return result;
     }
 
     @Override
-    public <C> List<Command<C>> findByDType(Class<C> clazz) {
-        Query<Command<C>> query = getCurrentSession().createQuery("FROM Command WHERE dType = :dType");
+    public <Q> List<Command<Q>> findByDType(Class<Q> clazz) {
+        Query<Command<Q>> query = getCurrentSession().createQuery("FROM Command WHERE dType = :dType");
         query.setParameter("dType", clazz.getSimpleName());
-        List<Command<C>> result = query.getResultList();
+        List<Command<Q>> result = query.getResultList();
         return result;
     }
 

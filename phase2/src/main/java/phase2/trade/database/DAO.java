@@ -68,10 +68,12 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         getCurrentSession().update(entity);
     }
 
+    @Override
     public void merge(T entity) {
         getCurrentSession().merge(entity);
     }
 
+    @Override
     public void persist(T entity) {
         getCurrentSession().persist(entity);
     }
@@ -107,27 +109,22 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         return (List<T>) getCurrentSession().createQuery("from " + clazz.getSimpleName()).list();
     }
 
-    protected void criteria(QuadConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>, Query<T>> quadConsumer) {
-        CriteriaQuery<T> criteriaQuery = createCriteriaQuery(clazz);
+    protected void criteria(TriConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>> triConsumer) {
+        this.criteria(clazz, triConsumer);
+    }
+
+    protected void criteria(Class<T> clazz, TriConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>> triConsumer) {
+        CriteriaBuilder criteriaBuilder = getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);
         Root<T> root = criteriaQuery.from(clazz);
         criteriaQuery.select(root);
-        quadConsumer.consume(getCriteriaBuilder(), criteriaQuery, root, getCurrentSession().createQuery(criteriaQuery));
+        triConsumer.consume(criteriaBuilder, criteriaQuery, root);
     }
 
-    protected void criteria(Class<T> clazz, QuadConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>, Query<T>> quadConsumer) {
-        CriteriaQuery<T> criteriaQuery = createCriteriaQuery(clazz);
-        Root<T> root = criteriaQuery.from(clazz);
-        criteriaQuery.select(root);
-        quadConsumer.consume(getCriteriaBuilder(), criteriaQuery, root, getCurrentSession().createQuery(criteriaQuery));
+    protected void executeCriteriaQuery(List<T> result, CriteriaQuery<T> criteria){
+        result.addAll(getCurrentSession().createQuery(criteria).getResultList());
     }
 
-    private CriteriaBuilder getCriteriaBuilder() {
-        return getCurrentSession().getCriteriaBuilder();
-    }
-
-    private CriteriaQuery<T> createCriteriaQuery(Class<T> clazz) {
-        return getCriteriaBuilder().createQuery(clazz);
-    }
 
     @Override
     public void deleteAll() {

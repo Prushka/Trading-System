@@ -1,14 +1,15 @@
 package phase2.trade.user.controller;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
-import phase2.trade.command.GetCommandsByType;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.GeneralTableViewController;
@@ -31,7 +32,7 @@ public class UserOperationController extends GeneralTableViewController<Command>
 
     private String convertTime(long time) {
         Date date = new Date(time);
-        Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        Format format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return format.format(date);
     }
 
@@ -49,7 +50,6 @@ public class UserOperationController extends GeneralTableViewController<Command>
     }
 
     public void afterFetch(List<Command> result) {
-        System.out.println(result.size());
         setDisplayData(FXCollections.observableArrayList(result));
         tableViewGenerator
                 .addColumn("Type", param -> {
@@ -91,6 +91,18 @@ public class UserOperationController extends GeneralTableViewController<Command>
                         }
                     }
                     return new SimpleStringProperty("null");
+                })
+                .addColumn("undone", param -> {
+                    if (param.getValue() != null) {
+                        return new SimpleStringProperty(String.valueOf(param.getValue().isUndone()));
+                    }
+                    return new SimpleStringProperty("null");
+                }).
+                addColumn("UndoneTime", param -> {
+                    if (param.getValue() != null && param.getValue().getUndoTimestamp() != null) {
+                        return new SimpleStringProperty(convertTime(param.getValue().getUndoTimestamp()));
+                    }
+                    return new SimpleStringProperty("null");
                 });
         tableViewGenerator.build();
 
@@ -102,7 +114,24 @@ public class UserOperationController extends GeneralTableViewController<Command>
                 // getCommands(comboBox.getSelectionModel().getSelectedItem());
             }
         });
-        getPane("topBar").getChildren().addAll();
+        getPane("topBar").getChildren().addAll(comboBox);
+
+        JFXButton undo = new JFXButton("Undo Selected Operations");
+        undo.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                tableView.getSelectionModel().getSelectedItem().undoIfUndoable((ResultStatusCallback<List<Command>>) (result, status) -> {
+                    status.setSucceeded(() -> {
+                        getPopupFactory().toast(5, "TADA~ Your command was successfully undone!");
+                        tableView.refresh();
+                    });
+                    status.setFailed(() -> System.out.println(result));
+                    status.handle(getPopupFactory());
+                }, getGatewayBundle());
+
+            }
+        });
+        buttons.getChildren().addAll(undo);
     }
 
     // To display data of sub commands using custom logic

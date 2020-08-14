@@ -38,6 +38,10 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         this.itemListType = itemListType;
     }
 
+    // TODO: if view is updated first, then even if the execution fails, the item would disappear. It would reappear if user refreshes this tableview
+    //  Also it's not possible to bind the entity to the view since the entity is in database and I don't think it's a good idea to replace all fields in entities to be Properties and Observable
+    //  1. We can update entity first without taking benefit from Observable List. So that the ResultStatus can be checked in first place
+    //  2. Maybe we can also retrieve necessary elements from the database and store it as a cache. But I don't have time for this. It can take time to implement the caching system
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);

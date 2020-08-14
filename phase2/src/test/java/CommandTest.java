@@ -56,10 +56,7 @@ public class CommandTest {
     public void testItemCommands() {
         testCommand();
         Command<ItemList> getInventory = commandFactory.getCommand(GetItems::new);
-        getInventory.execute(new ResultStatusCallback<ItemList>() {
-            @Override
-            public void call(ItemList result, ResultStatus resultStatus) {
-            }
+        getInventory.execute((result, resultStatus) -> {
         });
     }
 
@@ -71,10 +68,10 @@ public class CommandTest {
         command = gatewayBundle.getEntityBundle().getCommandGateway().findById(1L);
         gatewayBundle.getEntityBundle().getCommandGateway().closeCurrentSession();
 
-        command.isUndoable((result, status) -> {
+        command.undoIfUndoable((result, status) -> {
             assertEquals(1, result.size());
             // assertEquals(result.get(0).getCRUDType(), CRUDType.UPDATE);
-        });
+        },gatewayBundle);
         // command.undo();
     }
 }

@@ -33,7 +33,7 @@ public abstract class Command<T> implements PermissionBased {
 
     protected User operator;
 
-    private boolean ifUndone = false;
+    private boolean undone = false;
 
     private Long timestamp;
 
@@ -72,16 +72,17 @@ public abstract class Command<T> implements PermissionBased {
     public abstract void execute(ResultStatusCallback<T> callback, String... args);
 
     public void undo() {}
-    // do nothing here, isUndoable is supposed to be used by the outer world. So undo should no be directly called. Override this if undoable
+    // do nothing here, undoIfUndoable is supposed to be used by the outer world. So undo should no be directly called. Override this if undoable
 
     public void redo() {}
     // It seems we don't need to implement redo. Also redo may mess up the uid. Unless we store undo as new commands
 
-    public void isUndoable(ResultStatusCallback<List<Command>> callback) { // get all future commands that have an impact on the current one
+    public void undoIfUndoable(ResultStatusCallback<List<Command>> callback, GatewayBundle gatewayBundle) { // get all future commands that have an impact on the current one
         if (!commandPropertyAnnotation.undoable()) {
             callback.call(null, new StatusFailed());
             return;
         }
+        this.gatewayBundle = gatewayBundle;
         getEntityBundle().getCommandGateway().submitSession((gateway) -> {
             List<Command> futureCommands = gateway.getFutureCommands(timestamp);
             List<Command> blockingCommands = new ArrayList<>();
@@ -94,6 +95,7 @@ public abstract class Command<T> implements PermissionBased {
             if (blockingCommands.size() > 0) {
                 callback.call(blockingCommands, new StatusFailed());
             } else {
+                undo();
                 callback.call(blockingCommands, new StatusSucceeded());
             }
         });
@@ -110,8 +112,8 @@ public abstract class Command<T> implements PermissionBased {
 
     protected void updateUndo() {
         if (!commandPropertyAnnotation.persistent()) return;
-        undoTimestamp = System.currentTimeMillis();
-        ifUndone = true;
+        setUndoTimestamp(System.currentTimeMillis());
+        setUndone(true);
         getEntityBundle().getCommandGateway().submitTransaction((gateway) -> {
             gateway.update(getThis());
         });
@@ -256,11 +258,26 @@ public abstract class Command<T> implements PermissionBased {
 
     public void setEffectedEntitiesToPersist(String toPersist) {
         this.effectedEntities = retrieveEffectedEntities(toPersist);
-        System.out.println(toPersist);
     }
 
     public String getEffectedEntitiesToPersist() {
         return translateEffectedEntitiesToPersist(effectedEntities);
+    }
+
+    public boolean isUndone() {
+        return undone;
+    }
+
+    public void setUndone(boolean ifUndone) {
+        this.undone = ifUndone;
+    }
+
+    public Long getUndoTimestamp() {
+        return undoTimestamp;
+    }
+
+    public void setUndoTimestamp(Long undoTimestamp) {
+        this.undoTimestamp = undoTimestamp;
     }
 
     // https://stackoverflow.com/questions/13874528/what-is-the-purpose-of-accesstype-field-accesstype-property-and-access/13874900#13874900

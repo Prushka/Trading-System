@@ -2,7 +2,6 @@ package phase2.trade.controller.item;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXRadioButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,6 +24,7 @@ import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.item.command.UpdateInventoryItems;
 import phase2.trade.view.NodeFactory;
+import phase2.trade.view.window.GeneralSplitAlert;
 import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
@@ -111,7 +111,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
 
         addButton.setOnAction(event -> {
 
-            GeneralVBoxAlert addItemAlert = getPopupFactory().textFieldAlert("Add Item", "");
+            GeneralSplitAlert addItemAlert = getPopupFactory().splitAlert("Add Item", "");
             TextField enterItemName = getNodeFactory().getDefaultTextField("Item Name");
             TextField enterItemDescription = getNodeFactory().getDefaultTextField("Item Description");
             TextField enterQuantity = getNodeFactory().getDefaultTextField("Quantity");
@@ -137,7 +137,8 @@ public class InventoryController extends GeneralTableViewController<Item> implem
             privateRadio.setOnAction(willingnessRadioHandler);
 
             lendRadio.setSelected(true);
-            addItemAlert.addNodes(enterItemName, enterItemDescription, enterQuantity, comboBox, lendRadio, sellRadio, privateRadio, price);
+            addItemAlert.addLeft(enterItemName, enterItemDescription, enterQuantity, comboBox);
+            addItemAlert.addRight(lendRadio, sellRadio, privateRadio, price);
             addItemAlert.setEventHandler(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -147,7 +148,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
                     itemCommand.execute((result, resultStatus) -> {
                         resultStatus.setSucceeded(() -> displayData.add(result));
                         resultStatus.handle(getPopupFactory());
-                    }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getValue());
+                    }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getValue(), enterQuantity.getText());
                 }
             });
             addItemAlert.display();

@@ -177,7 +177,7 @@ public class MarketController extends GeneralTableViewController implements Init
     }
 
     public void items1Clicked(){
-        GeneralVBoxAlert popup = getPopupFactory().textFieldAlert("Available Items for Trader 2", "");
+        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Available Items for Trader 2", "");
         ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
@@ -193,7 +193,7 @@ public class MarketController extends GeneralTableViewController implements Init
     }
 
     public void items2Clicked(){
-        GeneralVBoxAlert popup = getPopupFactory().textFieldAlert("Available Items for Trader 3", "");
+        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Available Items for Trader 3", "");
         ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
@@ -220,7 +220,7 @@ public class MarketController extends GeneralTableViewController implements Init
         TextField newMinute = new TextField();
         newMinute.setPromptText("MINUTE");
 
-        GeneralVBoxAlert popup = getPopupFactory().textFieldAlert("Edit Trade Date and Time", "");
+        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Edit Trade Date and Time", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setUid(currTrade.getUid());
@@ -245,7 +245,7 @@ public class MarketController extends GeneralTableViewController implements Init
         TextField newStreetNum = new TextField();
         newStreetNum.setPromptText("STREET NUMBER");
 
-        GeneralVBoxAlert popup = getPopupFactory().textFieldAlert("Edit Trade Location", "");
+        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Edit Trade Location", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setUid(currTrade.getUid());

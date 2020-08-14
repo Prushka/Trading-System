@@ -9,10 +9,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
-import phase2.trade.view.window.ConfirmAlert;
-import phase2.trade.view.window.PopupAlert;
-import phase2.trade.view.window.TableViewAlert;
-import phase2.trade.view.window.GeneralVBoxAlert;
+import phase2.trade.view.window.*;
 
 public class PopupFactory {
 
@@ -68,8 +65,12 @@ public class PopupFactory {
         return new TableViewAlert<>(window, title, header);
     }
 
-    public GeneralVBoxAlert textFieldAlert(String title, String header) {
+    public GeneralVBoxAlert vBoxAlert(String title, String header) {
         return new GeneralVBoxAlert(window, title, header);
+    }
+
+    public GeneralSplitAlert splitAlert(String title, String header) {
+        return new GeneralSplitAlert(window, title, header);
     }
 
     protected Scene getRootScene() {

@@ -46,7 +46,7 @@ public class UserInfoController extends AbstractController implements Initializa
 
         root.getChildren().addAll(changePassword, changeUserName);
 
-        GeneralVBoxAlert passwordAlert = getPopupFactory().textFieldAlert("Change Password", "");
+        GeneralVBoxAlert passwordAlert = getPopupFactory().vBoxAlert("Change Password", "");
         passwordAlert.addNodes(oldPassword, newPassword);
         passwordAlert.setEventHandler(event -> {
             ChangePassword changePasswordCommand = getCommandFactory().getCommand(ChangePassword::new);
@@ -58,7 +58,7 @@ public class UserInfoController extends AbstractController implements Initializa
                     getAccountManager().getLoggedInUser().getName(), oldPassword.getText(), newPassword.getText());
         });
 
-        GeneralVBoxAlert userNameAlert = getPopupFactory().textFieldAlert("Change UserName", "");
+        GeneralVBoxAlert userNameAlert = getPopupFactory().vBoxAlert("Change UserName", "");
         userNameAlert.addNodes(password, newUserName);
         userNameAlert.setEventHandler(event -> {
             ChangeUserName command = getCommandFactory().getCommand(ChangeUserName::new);

@@ -10,6 +10,7 @@ import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
+import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.user.AccountManager;
 
@@ -71,7 +72,7 @@ public class Configurer {
             c.setAsynchronous(false);
         });
         itemCommand.execute((result, status) -> {
-        }, name, description, category.name(), String.valueOf(quantity), String.valueOf(price));
+        }, name, description, category.name(), String.valueOf(quantity), Willingness.NOPE.name(), String.valueOf(price));
     }
 
     public void mockDashboardRegister(String username, String email) {

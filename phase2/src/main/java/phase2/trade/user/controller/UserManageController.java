@@ -76,7 +76,7 @@ public class UserManageController extends GeneralTableViewController<User> imple
 
         ComboBox<String> permissionGroup = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(PermissionGroup.values()).map(PermissionGroup::name).toArray(String[]::new))));
 
-        GeneralVBoxAlert createUserAlert = getPopupFactory().textFieldAlert("Create New User", "");
+        GeneralVBoxAlert createUserAlert = getPopupFactory().vBoxAlert("Create New User", "");
         createUserAlert.addNodes(userName, email, password, permissionGroup);
         createUserAlert.setEventHandler(event -> {
             CreateUser command = getCommandFactory().getCommand(CreateUser::new);

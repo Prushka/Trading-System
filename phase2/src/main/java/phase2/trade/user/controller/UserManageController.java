@@ -14,7 +14,7 @@ import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
 import phase2.trade.user.command.GetUsers;
-import phase2.trade.view.window.GeneralHBoxAlert;
+import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -76,7 +76,7 @@ public class UserManageController extends GeneralTableViewController<User> imple
 
         ComboBox<String> permissionGroup = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(PermissionGroup.values()).map(PermissionGroup::name).toArray(String[]::new))));
 
-        GeneralHBoxAlert createUserAlert = getPopupFactory().textFieldAlert("Create New User", "");
+        GeneralVBoxAlert createUserAlert = getPopupFactory().textFieldAlert("Create New User", "");
         createUserAlert.addNodes(userName, email, password, permissionGroup);
         createUserAlert.setEventHandler(event -> {
             CreateUser command = getCommandFactory().getCommand(CreateUser::new);

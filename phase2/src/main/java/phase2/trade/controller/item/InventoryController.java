@@ -2,11 +2,16 @@ package phase2.trade.controller.item;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXRadioButton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
@@ -16,8 +21,11 @@ import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemEditor;
 import phase2.trade.item.Willingness;
+import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.item.command.UpdateInventoryItems;
+import phase2.trade.view.NodeFactory;
+import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -46,7 +54,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
 
         tableViewGenerator.addColumn("Name", "name")
                 .addColumn("Description", "description",
-                getConfigBundle().getUiConfig().getItemDescriptionPrefWidth()).addColumn("Category", "category")
+                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth()).addColumn("Category", "category")
                 .addColumn("Ownership", "ownership")
                 .addColumn("Quantity", "quantity")
                 .addColumn("Price", "price")
@@ -102,7 +110,47 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         privateCheckBox.setSelected(true);
 
         addButton.setOnAction(event -> {
-            addWindow(displayData);
+
+            GeneralVBoxAlert addItemAlert = getPopupFactory().textFieldAlert("Add Item", "");
+            TextField enterItemName = getNodeFactory().getDefaultTextField("Item Name");
+            TextField enterItemDescription = getNodeFactory().getDefaultTextField("Item Description");
+            TextField enterQuantity = getNodeFactory().getDefaultTextField("Quantity");
+            TextField price = getNodeFactory().getDefaultTextField("Price");
+            price.setDisable(true);
+
+            ComboBox<String> comboBox = getNodeFactory().getComboBox(NodeFactory.ComboBoxType.Category);
+
+
+            ToggleGroup group = new ToggleGroup();
+            RadioButton sellRadio = getNodeFactory().getDefaultRadioButton("Sell", group);
+            RadioButton lendRadio = getNodeFactory().getDefaultRadioButton("Lend", group);
+            RadioButton privateRadio = getNodeFactory().getDefaultRadioButton("Private", group);
+            EventHandler<ActionEvent> willingnessRadioHandler = event1 -> {
+                if (sellRadio.isSelected()) {
+                    price.setDisable(false);
+                } else {
+                    price.setDisable(true);
+                }
+            };
+            sellRadio.setOnAction(willingnessRadioHandler);
+            lendRadio.setOnAction(willingnessRadioHandler);
+            privateRadio.setOnAction(willingnessRadioHandler);
+
+            lendRadio.setSelected(true);
+            addItemAlert.addNodes(enterItemName, enterItemDescription, enterQuantity, comboBox, lendRadio, sellRadio, privateRadio, price);
+            addItemAlert.setEventHandler(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new,
+                            command -> command.setItemListType(itemListType));
+
+                    itemCommand.execute((result, resultStatus) -> {
+                        resultStatus.setSucceeded(() -> displayData.add(result));
+                        resultStatus.handle(getPopupFactory());
+                    }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getValue());
+                }
+            });
+            addItemAlert.display();
         });
 
         tableViewGenerator.build();
@@ -138,11 +186,6 @@ public class InventoryController extends GeneralTableViewController<Item> implem
             });
             resultStatus.handle(getPopupFactory());
         });
-    }
-
-    public void addWindow(ObservableList<Item> displayData) {
-        AddItemController addItemController = new AddItemController(getControllerResources(), itemListType, displayData);
-        getSceneManager().loadPane(addItemController);
     }
 
 }

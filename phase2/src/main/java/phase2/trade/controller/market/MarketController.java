@@ -29,8 +29,7 @@ import phase2.trade.trade.command.EditTrade;
 import phase2.trade.trade.command.TradeCommand;
 import phase2.trade.user.User;
 import phase2.trade.view.ListViewGenerator;
-import phase2.trade.view.window.GeneralHBoxAlert;
-import phase2.trade.view.window.PopupAlert;
+import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -178,7 +177,7 @@ public class MarketController extends GeneralTableViewController implements Init
     }
 
     public void items1Clicked(){
-        GeneralHBoxAlert popup = getPopupFactory().textFieldAlert("Available Items for Trader 2", "");
+        GeneralVBoxAlert popup = getPopupFactory().textFieldAlert("Available Items for Trader 2", "");
         ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
@@ -194,7 +193,7 @@ public class MarketController extends GeneralTableViewController implements Init
     }
 
     public void items2Clicked(){
-        GeneralHBoxAlert popup = getPopupFactory().textFieldAlert("Available Items for Trader 3", "");
+        GeneralVBoxAlert popup = getPopupFactory().textFieldAlert("Available Items for Trader 3", "");
         ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
@@ -221,7 +220,7 @@ public class MarketController extends GeneralTableViewController implements Init
         TextField newMinute = new TextField();
         newMinute.setPromptText("MINUTE");
 
-        GeneralHBoxAlert popup = getPopupFactory().textFieldAlert("Edit Trade Date and Time", "");
+        GeneralVBoxAlert popup = getPopupFactory().textFieldAlert("Edit Trade Date and Time", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setUid(currTrade.getUid());
@@ -246,7 +245,7 @@ public class MarketController extends GeneralTableViewController implements Init
         TextField newStreetNum = new TextField();
         newStreetNum.setPromptText("STREET NUMBER");
 
-        GeneralHBoxAlert popup = getPopupFactory().textFieldAlert("Edit Trade Location", "");
+        GeneralVBoxAlert popup = getPopupFactory().textFieldAlert("Edit Trade Location", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setUid(currTrade.getUid());

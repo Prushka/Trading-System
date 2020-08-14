@@ -16,17 +16,21 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GeneralHBoxAlert extends AlertWindow<Void> {
+public class GeneralVBoxAlert extends AlertWindow<Void> {
 
     private Map<TextField, StringProperty> results = new HashMap<>();
 
-    public GeneralHBoxAlert(Stage parent, String title, String header) {
+    public GeneralVBoxAlert(Stage parent, String title, String header) {
         super(parent, title, header);
         body.setSpacing(35);
     }
 
     public void addNodes(Node... nodes) {
         body.getChildren().addAll(nodes);
+    }
+
+    public void clear() {
+        body.getChildren().clear();
     }
 
     private EventHandler<ActionEvent> confirmHandler;

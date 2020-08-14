@@ -10,7 +10,7 @@ import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.command.ChangePassword;
 import phase2.trade.user.command.ChangeUserName;
-import phase2.trade.view.window.GeneralHBoxAlert;
+import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -46,7 +46,7 @@ public class UserInfoController extends AbstractController implements Initializa
 
         root.getChildren().addAll(changePassword, changeUserName);
 
-        GeneralHBoxAlert passwordAlert = getPopupFactory().textFieldAlert("Change Password", "");
+        GeneralVBoxAlert passwordAlert = getPopupFactory().textFieldAlert("Change Password", "");
         passwordAlert.addNodes(oldPassword, newPassword);
         passwordAlert.setEventHandler(event -> {
             ChangePassword changePasswordCommand = getCommandFactory().getCommand(ChangePassword::new);
@@ -58,7 +58,7 @@ public class UserInfoController extends AbstractController implements Initializa
                     getAccountManager().getLoggedInUser().getName(), oldPassword.getText(), newPassword.getText());
         });
 
-        GeneralHBoxAlert userNameAlert = getPopupFactory().textFieldAlert("Change UserName", "");
+        GeneralVBoxAlert userNameAlert = getPopupFactory().textFieldAlert("Change UserName", "");
         userNameAlert.addNodes(password, newUserName);
         userNameAlert.setEventHandler(event -> {
             ChangeUserName command = getCommandFactory().getCommand(ChangeUserName::new);

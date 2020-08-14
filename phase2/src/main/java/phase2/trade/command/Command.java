@@ -1,6 +1,6 @@
 package phase2.trade.command;
 
-import phase2.trade.callback.*;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusNoPermission;
 import phase2.trade.callback.status.StatusSucceeded;
@@ -29,14 +29,9 @@ import java.util.regex.Pattern;
 // please annotate CommandProperty in subclasses, otherwise the one above will be used
 public abstract class Command<T> implements PermissionBased {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    protected transient User operator;
-
-    @OneToOne
-    protected User operatorToPersist;
+    protected User operator;
 
     private boolean ifUndone = false;
 
@@ -44,17 +39,13 @@ public abstract class Command<T> implements PermissionBased {
 
     private Long undoTimestamp;
 
-    @Column(insertable = false, updatable = false)
     private String dType;
 
-    // this one is to be persisted for effected entities and to be deserialized
-    protected String effectedEntitiesToPersist;
-
     // this map is basically Class<?> -> A set of effected ids
-    // the reason why this is not persisted in its native form is because doing so would potentially mess up the db structure
+    // the reason why this is not persisted in its native form is because doing so would potentially pollute the db structure
     // the String part has to be a class's name and the set has to contain all effected ids
     // maybe it would be possible to benefit from sql statements to figure out the overlapping records, but I don't know how to query all mapped columns of such a nested set inside a map
-    protected transient Map<String, Set<Long>> effectedEntities;
+    protected transient Map<String, Set<Long>> effectedEntities = new HashMap<>();
 
     protected transient GatewayBundle gatewayBundle;
 
@@ -65,13 +56,11 @@ public abstract class Command<T> implements PermissionBased {
     void injectByFactory(GatewayBundle gatewayBundle, User operator) {
         this.gatewayBundle = gatewayBundle;
         this.operator = operator;
-        persistUserIfNotSystem();
         System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getName() + "  |  " + operator.getPermissionGroup() + "  |  " + operator.getPermissionSet().getPerm().toString());
     }
 
     public Command() {
         loadAnnotation();
-        effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
     }
 
     public void loadAnnotation() {
@@ -98,7 +87,7 @@ public abstract class Command<T> implements PermissionBased {
             List<Command> futureCommands = gateway.getFutureCommands(timestamp);
             List<Command> blockingCommands = new ArrayList<>();
             for (Command command : futureCommands) {
-                if (command.commandPropertyAnnotation.crudType().hasEffect && ifOverlaps(command.effectedEntitiesToPersist)) {
+                if (command.commandPropertyAnnotation.crudType().hasEffect && ifOverlaps(command.effectedEntities)) {
                     blockingCommands.add(command);
                 }
             }
@@ -114,17 +103,10 @@ public abstract class Command<T> implements PermissionBased {
     protected void save() {
         if (!commandPropertyAnnotation.persistent()) return;
         timestamp = System.currentTimeMillis();
-        effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
+        // effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
         getEntityBundle().getCommandGateway().submitTransaction((gateway) -> {
             gateway.add(getThis());
         });
-    }
-
-    // only used to avoid storing System as a user into database, this won't succeed also because System was not persistent as a User
-    private void persistUserIfNotSystem() {
-        if (operator.getPermissionGroup() != PermissionGroup.SYSTEM) {
-            operatorToPersist = operator;
-        }
     }
 
     protected void updateUndo() {
@@ -150,10 +132,10 @@ public abstract class Command<T> implements PermissionBased {
         return result;
     }
 
-    private boolean ifOverlaps(String otherEffectedEntitiesToPersist) {
-        Map<String, Set<Long>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);
-        Map<String, Set<Long>> effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
-        for (Map.Entry<String, Set<Long>> entry : otherEffectedEntities.entrySet()) {
+    private boolean ifOverlaps(Map<String, Set<Long>> otherEffectedEntitiesToPersist) {
+        // Map<String, Set<Long>> otherEffectedEntities = retrieveEffectedEntities(otherEffectedEntitiesToPersist);
+        // Map<String, Set<Long>> effectedEntities = retrieveEffectedEntities(effectedEntitiesToPersist);
+        for (Map.Entry<String, Set<Long>> entry : otherEffectedEntitiesToPersist.entrySet()) {
             if (effectedEntities.containsKey(entry.getKey())) {
                 if (!Collections.disjoint(effectedEntities.get(entry.getKey()), entry.getValue())) return true;
             }
@@ -206,8 +188,10 @@ public abstract class Command<T> implements PermissionBased {
         }
     }
 
-    protected Set<Long> getEffectedEntities(Class<?> clazz) {
-        if (effectedEntities == null) retrieveEffectedEntities(effectedEntitiesToPersist);
+    // This exists because constructor is called before the set of effectedEntitiesToPersist
+    // But it's possible to ask hibernate to use setter. This would however lead to the use
+
+    public Set<Long> getEffectedEntities(Class<?> clazz) {
         return effectedEntities.get(clazz.getName());
     }
 
@@ -215,14 +199,17 @@ public abstract class Command<T> implements PermissionBased {
         return getEffectedEntities(clazz).iterator().next();
     }
 
+    @Transient
     protected EntityBundle getEntityBundle() {
         return gatewayBundle.getEntityBundle();
     }
 
+    @Transient
     protected ConfigBundle getConfigBundle() {
         return gatewayBundle.getConfigBundle();
     }
 
+    @Transient
     public Command<T> getThis() {
         return this;
     }
@@ -231,6 +218,8 @@ public abstract class Command<T> implements PermissionBased {
         this.gatewayBundle = gatewayBundle;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getUid() {
         return uid;
     }
@@ -243,6 +232,11 @@ public abstract class Command<T> implements PermissionBased {
         return timestamp;
     }
 
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Transient
     public boolean isAsynchronous() {
         return asynchronous;
     }
@@ -251,11 +245,34 @@ public abstract class Command<T> implements PermissionBased {
         this.asynchronous = asynchronous;
     }
 
+    @OneToOne
     public User getOperator() {
-        return operatorToPersist;
+        if (operator == null || operator.getPermissionGroup() == PermissionGroup.SYSTEM) return null;
+        return operator;
     }
 
+    public void setOperator(User operator) {
+        this.operator = operator;
+    }
+
+    @Column(insertable = false, updatable = false)
     public String getDType() {
         return dType;
     }
+
+    public void setDType(String dType) {
+        this.dType = dType;
+    }
+
+    public void setEffectedEntitiesToPersist(String toPersist) {
+        this.effectedEntities = retrieveEffectedEntities(toPersist);
+    }
+
+    // this one is to be persisted for effected entities and to be deserialized
+    public String getEffectedEntitiesToPersist() {
+        return translateEffectedEntitiesToPersist(effectedEntities);
+    }
+
+    // https://stackoverflow.com/questions/13874528/what-is-the-purpose-of-accesstype-field-accesstype-property-and-access/13874900#13874900
+    // The default is not FIELD. The access type is FIELD if you place mapping annotations on fields, and it's PROPERTY if you place mapping annotations on getters. And all the entity hierarchy must be coherent in the mapping annotation placement: always on fields, or always on getters, but not mixed.
 }

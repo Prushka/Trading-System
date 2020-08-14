@@ -102,7 +102,7 @@ public class SideMenuController extends AbstractController implements Initializa
                     case "side.cart":
                         cart();
                         break;
-                    case "side.m.users.ops":
+                    case "side.m.user.ops":
                         loadCenter(UserOperationController::new);
                         break;
                     case "side.m.users":

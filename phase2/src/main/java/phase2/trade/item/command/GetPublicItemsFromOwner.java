@@ -39,7 +39,6 @@ public class GetPublicItemsFromOwner extends ItemCommand<List<Item>> {
         command.execute(new ResultStatusCallback<List<Item>>() {
             @Override
             public void call(List<Item> result, ResultStatus status) {
-                System.out.println(result.size());
             }
         });
     }

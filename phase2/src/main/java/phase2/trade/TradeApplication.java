@@ -4,10 +4,14 @@ import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import phase2.trade.controller.DashboardController;
 import phase2.trade.user.controller.LoginController;
 
 public class TradeApplication extends Application {
+
+    private static final Logger logger = LogManager.getLogger(TradeApplication.class);
 
     private final Configurer configurer = new Configurer();
 
@@ -16,7 +20,7 @@ public class TradeApplication extends Application {
                 this.getClass().getResource("/font/" + name + ".ttf").toExternalForm(),
                 10
         );
-        System.out.println(font.getFamily());
+        logger.info("Loaded Font: " + font.getFamily());
     }
 
     // TODO:

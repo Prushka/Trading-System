@@ -3,8 +3,12 @@ package phase2.trade.user;
 import phase2.trade.config.PermissionConfig;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 public class UserFactory {
+
+    private static final Logger logger = LogManager.getLogger(UserFactory.class);
 
     private PermissionConfig permissionConfig;
 
@@ -37,8 +41,8 @@ public class UserFactory {
         PermissionSet fromConfig = permissionConfig.getDefaultPermissions().get(permissionGroup);
         if (fromConfig != null) {
             user.setUserPermission(new PermissionSet(fromConfig.getPerm()));
-        } else{
-            System.err.println("Permission Not Set For Group: "+permissionGroup);
+        } else {
+            logger.error("Permission Not Set For Group: " + permissionGroup);
         }
         return user;
     }

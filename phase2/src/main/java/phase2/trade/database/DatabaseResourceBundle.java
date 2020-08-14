@@ -1,7 +1,10 @@
 package phase2.trade.database;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import phase2.trade.Main;
 import phase2.trade.Shutdownable;
 import phase2.trade.config.DatabaseConfig;
 
@@ -11,6 +14,8 @@ import java.util.logging.Level;
 
 public class DatabaseResourceBundle implements Shutdownable {
 
+    private static final Logger logger = LogManager.getLogger(DatabaseResourceBundle.class);
+
     private final ExecutorService threadPool;
 
     private final SessionFactory sessionFactory;
@@ -18,10 +23,14 @@ public class DatabaseResourceBundle implements Shutdownable {
     private final DAOBundle daoBundle;
 
     public DatabaseResourceBundle(DatabaseConfig databaseConfig) {
-        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 
-        System.out.println("Configuring Database:\n" + databaseConfig.toString());
+        logger.info("Database: " + databaseConfig.getDatabaseType());
+        logger.info("Dialect: " + databaseConfig.getConfiguredDialect());
+        logger.info("Driver: " + databaseConfig.getConfiguredDriver());
+        logger.info("Url: " + databaseConfig.getConfiguredURL());
+        logger.info("UserName: " + databaseConfig.getUsername());
+        logger.info("hbm2ddl: " + databaseConfig.getHbm2ddl());
 
         configuration.setProperty("hibernate.dialect", databaseConfig.getConfiguredDialect());
         configuration.setProperty("hibernate.connection.driver_class", databaseConfig.getConfiguredDriver());
@@ -33,7 +42,7 @@ public class DatabaseResourceBundle implements Shutdownable {
         configuration.setProperty("hibernate.show_sql", String.valueOf(databaseConfig.isShowSQL()));
         configuration.setProperty("hibernate.connection.pool_size", String.valueOf(databaseConfig.getConnection_pool_size()));
 
-        System.out.println("Connecting");
+        logger.info("Connecting to Database...");
         sessionFactory = configuration.configure().buildSessionFactory();
         threadPool = Executors.newFixedThreadPool(databaseConfig.getConnection_pool_size()); // do we need to configure this
 

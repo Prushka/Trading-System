@@ -2,6 +2,9 @@ package phase2.trade.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import phase2.trade.database.DatabaseResourceBundle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +13,8 @@ import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DatabaseConfig {
+
+    private static final Logger logger = LogManager.getLogger(DatabaseConfig.class);
 
     private String databaseType = "mysql";
 
@@ -168,11 +173,6 @@ public class DatabaseConfig {
 
     public void setDatabase(String database) {
         this.database = database;
-    }
-
-    // use this only for debugging
-    public String toString() {
-        return String.format("Database: %s\nDialect: %s\nDriver: %s\nUrl: %s\nUserName: %s\nhbm2ddl: %s", databaseType, getConfiguredDialect(), getConfiguredDriver(), getConfiguredURL(), getUsername(), getHbm2ddl());
     }
 
     public DatabaseConfig() {

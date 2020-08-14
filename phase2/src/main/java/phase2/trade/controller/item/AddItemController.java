@@ -54,7 +54,6 @@ public class AddItemController extends AbstractController implements Initializab
                 command -> command.setItemListType(itemListType));
 
         itemCommand.execute((result, resultStatus) -> {
-            System.out.println("executed");
             resultStatus.setSucceeded(() -> display.add(result));
             resultStatus.setAfter(() -> {
                 submitButton.setDisable(false);

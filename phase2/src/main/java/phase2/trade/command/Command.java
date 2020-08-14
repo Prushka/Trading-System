@@ -1,5 +1,8 @@
 package phase2.trade.command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import phase2.trade.Main;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusNoPermission;
@@ -29,6 +32,8 @@ import java.util.regex.Pattern;
 // please annotate CommandProperty in subclasses, otherwise the one above will be used
 public abstract class Command<T> implements PermissionBased {
 
+    private static final Logger logger = LogManager.getLogger(Command.class);
+
     private Long uid;
 
     protected User operator;
@@ -56,7 +61,7 @@ public abstract class Command<T> implements PermissionBased {
     void injectByFactory(GatewayBundle gatewayBundle, User operator) {
         this.gatewayBundle = gatewayBundle;
         this.operator = operator;
-        System.out.println("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getName() + "  |  " + operator.getPermissionGroup() + "  |  " + operator.getPermissionSet().getPerm().toString());
+        logger.debug("Command <" + getClass().getSimpleName() + "> Created  |  Operator: " + operator.getName() + "  |  " + operator.getPermissionGroup() + "  |  " + operator.getPermissionSet().getPerm().toString());
     }
 
     public Command() {
@@ -129,7 +134,7 @@ public abstract class Command<T> implements PermissionBased {
     public boolean checkPermission(ResultStatusCallback<?> statusCallback) {
         boolean result = checkPermission();
         if (!result) {
-            System.out.println("[No Permission] User: " + operator + " | " + operator.getPermissionGroup() + " | " + Arrays.toString(commandPropertyAnnotation.permissionSet()) + " -> " + operator.getPermissionSet().getPerm().toString());
+            logger.warn("[Permission Denied] User: " + operator + " | " + operator.getPermissionGroup() + " | " + Arrays.toString(commandPropertyAnnotation.permissionSet()) + " -> " + operator.getPermissionSet().getPerm().toString());
             statusCallback.call(null, new StatusNoPermission(new PermissionSet(commandPropertyAnnotation.permissionSet())));
         }
         return result;

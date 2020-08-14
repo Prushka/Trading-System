@@ -113,10 +113,10 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         this.criteria(clazz, triConsumer);
     }
 
-    protected void criteria(Class<T> clazz, TriConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>> triConsumer) {
+    protected <W> void criteria(Class<W> clazz, TriConsumer<CriteriaBuilder, CriteriaQuery<W>, Root<W>> triConsumer) {
         CriteriaBuilder criteriaBuilder = getCurrentSession().getCriteriaBuilder();
-        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(clazz);
-        Root<T> root = criteriaQuery.from(clazz);
+        CriteriaQuery<W> criteriaQuery = criteriaBuilder.createQuery(clazz);
+        Root<W> root = criteriaQuery.from(clazz);
         criteriaQuery.select(root);
         triConsumer.consume(criteriaBuilder, criteriaQuery, root);
     }

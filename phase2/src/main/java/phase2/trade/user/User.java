@@ -28,6 +28,8 @@ public abstract class User {
     @OneToOne(cascade = CascadeType.ALL)
     private AddressBook addressBook;
 
+    private AccountState accountState;
+
     @Embedded
     private PermissionSet permissionSet;
 
@@ -58,10 +60,20 @@ public abstract class User {
         this.country = country;
         this.city = city;
 
+        accountState = AccountState.NORMAL;
     }
 
     public User() {
 
+    }
+
+
+    public AccountState getAccountState() {
+        return accountState;
+    }
+
+    public void setAccountState(AccountState accountState) {
+        this.accountState = accountState;
     }
 
     public String getEmail() {

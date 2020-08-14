@@ -66,14 +66,14 @@ public class MarketItemCell extends JFXListCell<Item> {
             price = String.valueOf(String.format("%.2f", item.getPrice()));
         }
 
-        Label sellOrLendLabel = null;
+        Label sellOrLendLabel = new Label("");
         switch (item.getWillingness()) {
             case LEND:
-                sellOrLendLabel = new Label("For LEND");
+                sellOrLendLabel.setText("For LEND");
                 sellOrLendLabel.setStyle("-fx-text-fill: rgb(223,121,145);-fx-font-weight: BOLD");
                 break;
             case SELL:
-                sellOrLendLabel = new Label("Sell: " + price + "$"); // TODO: currency system?
+                sellOrLendLabel.setText("Sell: " + price + "$"); // TODO: currency system?
                 sellOrLendLabel.setStyle("-fx-text-fill: rgb(227,98,9);-fx-font-weight: BOLD");
                 break;
         }

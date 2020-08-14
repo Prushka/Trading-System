@@ -13,8 +13,6 @@ import javax.persistence.OneToOne;
 @Entity
 public class RegularUser extends User {
 
-    private AccountState accountState;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Inventory inventory;
 
@@ -35,7 +33,6 @@ public class RegularUser extends User {
      */
     public RegularUser(String userName, String email, String password, String country, String city) {
         super(userName, email, password, country, city);
-        accountState = AccountState.NORMAL;
         //incompleteTrades = 0;
 
         inventory = new Inventory();
@@ -51,15 +48,6 @@ public class RegularUser extends User {
 
     public RegularUser() {
 
-    }
-
-
-    public AccountState getAccountState() {
-        return accountState;
-    }
-
-    public void setAccountState(AccountState accountState) {
-        this.accountState = accountState;
     }
 
     public Inventory getInventory() {

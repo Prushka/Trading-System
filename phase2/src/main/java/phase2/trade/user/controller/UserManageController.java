@@ -82,7 +82,7 @@ public class UserManageController extends GeneralTableViewController<User> imple
             CreateUser command = getCommandFactory().getCommand(CreateUser::new);
             command.execute(((result, status) -> {
                         status.setExist(() -> getPopupFactory().toast(5, "Such User Name Already Exists"));
-                        status.setSucceeded(() -> tableView.refresh());
+                        status.setSucceeded(() -> getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(UserManageController::new)));
                         status.handle(getPopupFactory());
                     }
                     ),

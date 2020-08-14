@@ -154,7 +154,7 @@ public abstract class Command<T> implements PermissionBased {
         }
     }
 
-    private static String translateEffectedEntitiesToPersist(Map<String, Set<Long>> map) {
+    private String translateEffectedEntitiesToPersist(Map<String, Set<Long>> map) {
         StringBuilder temp = new StringBuilder();
         for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
             temp.append(entry.getKey()).append("!").append(String.join(",", String.valueOf(entry.getValue()))).append(";");
@@ -162,7 +162,7 @@ public abstract class Command<T> implements PermissionBased {
         return temp.toString();
     }
 
-    private static Map<String, Set<Long>> retrieveEffectedEntities(String effected) {
+    private Map<String, Set<Long>> retrieveEffectedEntities(String effected) {
         if (effected == null) return new HashMap<>();
         Map<String, Set<Long>> temp = new HashMap<>();
         Pattern classNamePattern = Pattern.compile("(.*)!");

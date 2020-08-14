@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableView;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
@@ -16,6 +17,8 @@ import phase2.trade.controller.GeneralTableViewController;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
+import phase2.trade.view.TableViewGenerator;
+import phase2.trade.view.window.TableViewAlert;
 
 import java.net.URL;
 import java.text.Format;
@@ -49,8 +52,7 @@ public class UserOperationController extends GeneralTableViewController<Command>
 
     }
 
-    public void afterFetch(List<Command> result) {
-        setDisplayData(FXCollections.observableArrayList(result));
+    private TableView<Command> addToTableViewGenerator(List<Command> result, TableViewGenerator<Command> tableViewGenerator){
         tableViewGenerator
                 .addColumn("Type", param -> {
                     if (param.getValue() != null) {
@@ -104,7 +106,12 @@ public class UserOperationController extends GeneralTableViewController<Command>
                     }
                     return new SimpleStringProperty("null");
                 });
-        tableViewGenerator.build();
+        return tableViewGenerator.build();
+    }
+
+    public void afterFetch(List<Command> result) {
+        setDisplayData(FXCollections.observableArrayList(result));
+        addToTableViewGenerator(result, tableViewGenerator);
 
         ComboBox<Class<?>> comboBox = new ComboBox<>();
         comboBox.setItems(FXCollections.observableArrayList(CreateUser.class));
@@ -130,6 +137,9 @@ public class UserOperationController extends GeneralTableViewController<Command>
                             getPopupFactory().toast("The command you selected is not an undoable command! (It's configured to be undoable)");
                         } else {
                             getPopupFactory().toast("The command you selected is effected by other commands!");
+                            TableViewAlert<Command> tableViewAlert = getPopupFactory().tableViewAlert(Command.class,"Blocking Commands","");
+                            tableViewAlert.addTableView(addToTableViewGenerator(result, new TableViewGenerator<>(FXCollections.observableArrayList(result))));
+                            tableViewAlert.display();
                         }
                     });
                     status.handle(getPopupFactory());

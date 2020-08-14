@@ -12,6 +12,7 @@ import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.view.window.ConfirmAlert;
 import phase2.trade.view.window.PopupAlert;
+import phase2.trade.view.window.TableViewAlert;
 import phase2.trade.view.window.TextFieldAlert;
 
 public class PopupFactory {
@@ -62,6 +63,10 @@ public class PopupFactory {
 
     public ConfirmAlert confirmWindow(String title, String header) {
         return new ConfirmAlert(window, title, header);
+    }
+
+    public <T> TableViewAlert<T> tableViewAlert(Class<T> clazz, String title, String header) {
+        return new TableViewAlert<>(window, title, header);
     }
 
     public TextFieldAlert textFieldAlert(String title, String header) {

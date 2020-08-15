@@ -19,6 +19,8 @@ public class ConfigBundle implements Shutdownable {
 
     private final RedisConfig redisConfig;
 
+    private final GeoConfig geoConfig;
+
     private ConfigStrategy configStrategy;
 
 
@@ -30,6 +32,7 @@ public class ConfigBundle implements Shutdownable {
         databaseConfig = configStrategy.read(DatabaseConfig.class, "config/database", DatabaseConfig::new);
         uiConfig = configStrategy.read(UIConfig.class, "config/ui", UIConfig::new);
         redisConfig = configStrategy.read(RedisConfig.class, "config/redis", RedisConfig::new);
+        geoConfig = new GeoConfig();
     }
 
     public void changeStrategy(ConfigStrategy configStrategy) {
@@ -64,5 +67,9 @@ public class ConfigBundle implements Shutdownable {
 
     public RedisConfig getRedisConfig() {
         return redisConfig;
+    }
+
+    public GeoConfig getGeoConfig() {
+        return geoConfig;
     }
 }

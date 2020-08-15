@@ -1,6 +1,8 @@
 package phase2.trade.user.controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -57,9 +59,8 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
         Label bio = new Label("Bio: ");
         Label currentStatus = new Label("Current Status: " + getAccountManager().getLoggedInUser().getUid());
 
-        if(getAccountManager().getLoggedInUser().getPermissionGroup().equals(PermissionGroup.GUEST)) return;
-        Button changePassword = new JFXButton("Change Password");
-        Button changeUserName = new JFXButton("Change User Name");
+        if (getAccountManager().getLoggedInUser().getPermissionGroup().equals(PermissionGroup.GUEST)) return;
+
 
         ToggleGroup group = new ToggleGroup();
         putLanguageValue(AccountState.NORMAL.name(), "state.normal");
@@ -85,14 +86,10 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
         normalRadio.setOnAction(accountStateHandler);
         onVocationRadio.setOnAction(accountStateHandler);
 
-        TextField oldPassword = getNodeFactory().getDefaultTextField("Old Password");
-        TextField newPassword = getNodeFactory().getDefaultTextField("New Password");
-
-        TextField password = getNodeFactory().getDefaultTextField("Password");
-        TextField newUserName = getNodeFactory().getDefaultTextField("New User Name");
-
 
         GeneralVBoxAlert passwordAlert = getPopupFactory().vBoxAlert("Change Password", "");
+        TextField oldPassword = getNodeFactory().getDefaultTextField("Old Password");
+        TextField newPassword = getNodeFactory().getDefaultTextField("New Password");
         passwordAlert.addNodes(oldPassword, newPassword);
         passwordAlert.setEventHandler(event -> {
             ChangePassword changePasswordCommand = getCommandFactory().getCommand(ChangePassword::new);
@@ -105,6 +102,8 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
         });
 
         GeneralVBoxAlert userNameAlert = getPopupFactory().vBoxAlert("Change UserName", "");
+        TextField password = getNodeFactory().getDefaultTextField("Password");
+        TextField newUserName = getNodeFactory().getDefaultTextField("New User Name");
         userNameAlert.addNodes(password, newUserName);
         userNameAlert.setEventHandler(event -> {
             ChangeUserName command = getCommandFactory().getCommand(ChangeUserName::new);
@@ -117,8 +116,44 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
                     getAccountManager().getLoggedInUser().getName(), password.getText(), newUserName.getText());
         });
 
+        GeneralVBoxAlert addressAlert = getPopupFactory().vBoxAlert("Modify Your Address", "");
+        ComboBox<String> country = getNodeFactory().getComboBox(getConfigBundle().getGeoConfig().getMap().keySet());
+
+        ComboBox<String> province = getNodeFactory().getComboBox();
+        ComboBox<String> city = getNodeFactory().getComboBox();
+        country.setOnAction(e -> {
+            String selectedCountry = country.getSelectionModel().getSelectedItem();
+            if (selectedCountry != null) {
+                province.setItems(FXCollections.observableArrayList(getConfigBundle().getGeoConfig().getMap().get(selectedCountry).keySet()));
+            }
+        });
+
+        province.setOnAction(e -> {
+            String selectedCountry = country.getSelectionModel().getSelectedItem();
+            String selectedProvince = province.getSelectionModel().getSelectedItem();
+            if (selectedCountry != null) {
+                city.setItems(FXCollections.observableArrayList(getConfigBundle().getGeoConfig().getMap().get(selectedCountry).get(selectedProvince)));
+            }
+        });
+
+        addressAlert.addNodes(country, province, city);
+        addressAlert.setEventHandler(event -> {
+            ChangeUserName command = getCommandFactory().getCommand(ChangeUserName::new);
+            command.execute(((result, status) -> {
+                        status.setFailed(() -> getPopupFactory().toast(5, "Cannot verify the information you provided. Check your password."));
+                        status.setExist(() -> getPopupFactory().toast(5, "Such User Name Already Exists"));
+                        status.handle(getPopupFactory());
+                    }
+                    ),
+                    getAccountManager().getLoggedInUser().getName(), password.getText(), newUserName.getText());
+        });
+
+        Button changePassword = new JFXButton("Change Password");
+        Button changeUserName = new JFXButton("Change User Name");
+        Button modifyAddress = new JFXButton("Modify Address");
         changeUserName.setOnAction(event -> userNameAlert.display());
         changePassword.setOnAction(event -> passwordAlert.display());
+        modifyAddress.setOnAction(event -> addressAlert.display());
 
         final Button changeAvatar = new JFXButton("Choose Avatar");
 
@@ -128,7 +163,7 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
 
         root.setSpacing(40);
 
-        root.getChildren().addAll(changePassword, changeUserName, normalRadio, onVocationRadio, changeAvatar);
+        root.getChildren().addAll(changePassword, changeUserName, normalRadio, onVocationRadio, changeAvatar, modifyAddress);
     }
 
     // TODO: decouple this one

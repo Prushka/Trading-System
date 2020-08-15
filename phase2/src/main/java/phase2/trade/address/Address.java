@@ -20,16 +20,19 @@ public class Address {
     private String firstAddressLine;
     private String secondAddressLine;
 
-    public Address(String country, String city, String firstAddressLine, String secondAddressLine){
+    public Address(String country, String city, String firstAddressLine, String secondAddressLine, String postalCode) {
         this.country = country;
         this.city = city;
         this.firstAddressLine = firstAddressLine;
         this.secondAddressLine = secondAddressLine;
     }
 
-    public Address(String country, String city){
-        this.country = country;
-        this.city = city;
+    public Address(String country, String city, String firstAddressLine, String secondAddressLine) {
+        this(country, city, firstAddressLine, secondAddressLine, null);
+    }
+
+    public Address(String country, String city) {
+        this(country, city, null, null);
     }
 
     public Address() {

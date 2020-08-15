@@ -29,6 +29,7 @@ public abstract class AbstractController {
     public AbstractController(ControllerResources controllerResources) {
         this.controllerResources = controllerResources;
         controllerResources.registerController(this.getClass().getSimpleName(), this);
+        if (getPane("topBar") != null) getPane("topBar").getChildren().clear();
     }
 
     protected String getLanguageByValue(String key) {

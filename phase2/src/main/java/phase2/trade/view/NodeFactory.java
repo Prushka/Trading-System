@@ -11,7 +11,9 @@ import javafx.scene.control.*;
 import phase2.trade.item.Category;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class NodeFactory {
@@ -46,6 +48,14 @@ public class NodeFactory {
 
     public ComboBox<String> getComboBox(Class<? extends Enum<?>> clazz) {
         return new JFXComboBox<>(getEnumAsObservableString(clazz));
+    }
+
+    public ComboBox<String> getComboBox(Collection<String> list) {
+        return new JFXComboBox<>(FXCollections.observableArrayList(list));
+    }
+
+    public ComboBox<String> getComboBox() {
+        return new JFXComboBox<>();
     }
 
     public ObservableList<String> getEnumAsObservableString(Class<? extends Enum<?>> clazz) {

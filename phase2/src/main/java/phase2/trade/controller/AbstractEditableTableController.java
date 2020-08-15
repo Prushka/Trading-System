@@ -48,7 +48,6 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         super(controllerResources, supplier);
         this.ifMultipleSelection = ifMultipleSelection;
         this.ifEditable = ifEditable;
-        if (getPane("topBar") != null) getPane("topBar").getChildren().clear();
     }
 
     public void setDisplayData(ObservableList<T> displayData) {

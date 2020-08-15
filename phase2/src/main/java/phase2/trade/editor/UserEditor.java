@@ -56,4 +56,8 @@ public class UserEditor extends Editor<User> {
         statusCallback.call(new StatusSucceeded());
     }
 
+    public void addAddress(String country, String city, String firstAddressLine, String secondAddressLine, String postalCode){
+
+    }
+
 }

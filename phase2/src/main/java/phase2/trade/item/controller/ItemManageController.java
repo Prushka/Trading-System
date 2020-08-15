@@ -2,6 +2,7 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,22 +12,24 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.GeneralTableViewController;
+import phase2.trade.database.TriConsumer;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemEditor;
 import phase2.trade.item.Willingness;
-import phase2.trade.item.command.AddItemToItemList;
-import phase2.trade.item.command.RemoveItem;
-import phase2.trade.item.command.UpdateInventoryItems;
+import phase2.trade.item.command.*;
 import phase2.trade.view.NodeFactory;
 import phase2.trade.view.window.GeneralSplitAlert;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -35,25 +38,53 @@ import java.util.stream.Stream;
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class ItemManageController extends GeneralTableViewController<Item> implements Initializable {
 
-    private final ItemListType itemListType;
-
     public ItemManageController(ControllerResources controllerResources, ItemListType itemListType) {
         super(controllerResources, true, false);
-        this.itemListType = itemListType;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
 
-        tableViewGenerator.addColumn("Name", "name")
-                .addColumn("Description", "description",
-                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth()).addColumn("Category", "category")
+        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetAllItems::new);
+        getMarket.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> {
+                setDisplayData(FXCollections.observableArrayList(result));
+                afterFetch();
+            });
+            resultStatus.handle(getPopupFactory());
+        });
+    }
+
+    private void afterFetch() {
+        tableViewGenerator
+                .addColumnEditable("Name", "name", event ->
+                        shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterName))
+
+                .addColumnEditable("Description", "description", getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(),
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterDescription))
+
                 .addColumn("Ownership", "ownership")
-                .addColumn("Quantity", "quantity")
-                .addColumn("Price", "price")
-                .addColumn("Willingness", "willingness")
+
+                .addColumnEditable("Quantity", param -> new SimpleStringProperty(String.valueOf(param.getValue().getQuantity())),
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterQuantity))
+
+                .addColumnEditable("Price", param -> new SimpleStringProperty(String.valueOf(param.getValue().getPrice())),
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterPrice))
+
+                .addColumnEditable("Category", "category", event -> {
+                    new ItemEditor(event.getRowValue()).alterCategory(event.getNewValue(), resultStatus -> {
+                    });
+                    updateItem(event.getRowValue());
+                }, ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Category.class)))
+
+                .addColumnEditable("Willingness", "willingness", event -> {
+                    ItemEditor itemEditor = new ItemEditor(event.getRowValue());
+                    itemEditor.alterWillingness(event.getNewValue(), resultStatus -> {
+                    });
+                    updateItem(event.getRowValue());
+                }, ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Willingness.class)))
+
                 .addColumn("UID", "uid");
 
         JFXButton addButton = new JFXButton("Add");
@@ -145,38 +176,6 @@ public class ItemManageController extends GeneralTableViewController<Item> imple
         });
 
         tableViewGenerator.build();
-    }
-
-
-    public EventHandler<ActionEvent> getWillingnessHandler(Willingness willingness) {
-        return event -> {
-            ObservableList<Item> itemsSelected = getSelected();
-            if (itemsSelected.size() == 0) {
-                getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
-                return;
-            }
-
-            ItemEditor itemEditor = new ItemEditor(itemsSelected);
-            itemEditor.alterWillingness(willingness, resultStatus -> {
-                resultStatus.setSucceeded(() -> updateItem(itemsSelected));
-                resultStatus.handle(getPopupFactory());
-            });
-
-        };
-    }
-
-    private void updateItem(List<Item> items) {
-        disableButtons(true);
-        Command<?> command = getCommandFactory().getCommand(UpdateInventoryItems::new, c -> {
-            c.setItemsToUpdate(items);
-        });
-        command.execute((result, resultStatus) -> {
-            resultStatus.setAfter(() -> {
-                disableButtons(false);
-                tableView.refresh();
-            });
-            resultStatus.handle(getPopupFactory());
-        });
     }
 
 }

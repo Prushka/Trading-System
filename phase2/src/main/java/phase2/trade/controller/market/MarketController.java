@@ -25,7 +25,7 @@ import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetMarketItems;
-import phase2.trade.item.controller.CartTableController;
+import phase2.trade.item.controller.CartController;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeState;
 import phase2.trade.trade.command.ConfirmTrade;
@@ -119,7 +119,7 @@ public class MarketController extends AbstractTableController<Trade> implements 
         items.setSpacing(20);
         items.setAlignment(Pos.BOTTOM_LEFT);
         items.setPadding(new Insets(5, 10, 5, 10));
-        items.getChildren().addAll(getSceneManager().loadPane(new CartTableController(getControllerResources(), ItemListType.CART)));
+        items.getChildren().addAll(getSceneManager().loadPane(new CartController(getControllerResources(), ItemListType.CART)));
 
         // Date
         dateTime = new HBox();
@@ -180,7 +180,7 @@ public class MarketController extends AbstractTableController<Trade> implements 
     }
 
     public void addTraderClicked(){
-        Parent itemList = getSceneManager().loadPane(new CartTableController(getControllerResources(), ItemListType.CART));
+        Parent itemList = getSceneManager().loadPane(new CartController(getControllerResources(), ItemListType.CART));
         items.getChildren().add(itemList);
     }
 

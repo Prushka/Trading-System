@@ -16,8 +16,6 @@ import java.util.List;
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = false, persistent = true)
 public class ConfirmTrade extends TradeCommand<Trade> {
 
-    private Long tradeId;
-
     private TradeConfirmer tcc;
 
     @Override
@@ -35,7 +33,5 @@ public class ConfirmTrade extends TradeCommand<Trade> {
 
     // Unreasonable to do for this action
     @Override
-    protected void undoUnchecked() {
-
-    }
+    protected void undoUnchecked() {}
 }

@@ -22,7 +22,7 @@ public class Trade {
 
     void setUid(Long uid) { this.uid = uid; }
 
-    TradeOrder getOrder(){ return myOrder; }
+    public TradeOrder getOrder(){ return myOrder; }
 
     void setOrder(TradeOrder order){ this.myOrder = order;}
 

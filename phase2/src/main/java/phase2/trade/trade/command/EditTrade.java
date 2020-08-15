@@ -14,8 +14,6 @@ import javax.persistence.InheritanceType;
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true, persistent = true)
 public class EditTrade extends TradeCommand<Trade> {
-    private Long tradeId;
-
     private transient TradeEditor te;
 
     @Override
@@ -40,7 +38,4 @@ public class EditTrade extends TradeCommand<Trade> {
         });
     }
 
-    public void setTradeId(Long tradeId) {
-        this.tradeId = tradeId;
-    }
 }

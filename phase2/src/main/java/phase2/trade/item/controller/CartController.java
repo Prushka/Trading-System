@@ -4,7 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.Initializable;
+import javafx.fxml.Initializable;;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.market.MarketListController;
@@ -47,7 +47,11 @@ public class CartController extends ItemController implements Initializable {
         addOwnershipComboBox();
         addWillingnessCheckBoxes();
 
-        JFXComboBox<User> newUser = new JFXComboBox<User>();
+        JFXComboBox<User> newUser = new JFXComboBox<>();
+        getGatewayBundle().getEntityBundle().getUserGateway().submitSession((gateway) -> {
+            List<User> matchedUsers = gateway.findAll();
+            newUser.getItems().setAll(matchedUsers);
+        });
 
         JFXButton addButton = new JFXButton("Add Items to Borrow/ Buy");
         addButton.setOnAction(e -> itemsClicked());

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 
 @Entity
 public abstract class TradeCommand<T> extends Command<T> {
+    transient Long tradeId;
 
     Trade findTradeByIdSyncInsideTradeGateway(Long tradeId) {
         return getEntityBundle().getTradeGateway().findById(tradeId);
@@ -20,6 +21,10 @@ public abstract class TradeCommand<T> extends Command<T> {
         Trade trade = getEntityBundle().getTradeGateway().findById(tradeId);
         getEntityBundle().getTradeGateway().closeCurrentSession();
         return trade;
+    }
+
+    public void setTradeId(Long tradeId) {
+        this.tradeId = tradeId;
     }
 
 }

@@ -21,11 +21,15 @@ public class UpdateUsers extends UserCommand<Void> {
 
     @Override
     public void execute(ResultStatusCallback<Void> callback, String... args) {
-        for (User user : usersToUpdate) {
-            if (!user.getUid().equals(operator.getUid())) {
-                if (!checkPermission(callback, Permission.ManageUsers)) return;
-            } else {
-                if (!checkPermission(callback, Permission.ManagePersonalAccount)) return; // this is a nice permission to have
+        if (!checkPermission(Permission.ManageUsers)) { // the user doesn't have ManageUsers perm, this means he/she might be editing his/her own account
+            for (User user : usersToUpdate) {
+                if (!user.getUid().equals(operator.getUid())) { // the user is editing other people's account, directly fire a StatusNoPermission and return
+                    checkPermission(callback, Permission.ManageUsers);
+                    return;
+                } else {
+                    if (!checkPermission(callback, Permission.ManagePersonalAccount)) // the user cannot even edit his/her own account
+                        return;
+                }
             }
         }
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {

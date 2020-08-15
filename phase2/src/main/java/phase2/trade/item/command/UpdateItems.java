@@ -20,11 +20,13 @@ public class UpdateItems extends ItemCommand<Void> {
 
     @Override
     public void execute(ResultStatusCallback<Void> callback, String... args) {
-        for (Item item : itemsToUpdate) {
-            if (!item.getOwner().getUid().equals(operator.getUid())) {
-                if (!checkPermission(callback, Permission.ManageAllItems)) return;
-            } else {
-                if (!checkPermission(callback, Permission.ManagePersonalItems)) return;
+        if(!checkPermission(Permission.ManageAllItems)) {
+            for (Item item : itemsToUpdate) {
+                if (!item.getOwner().getUid().equals(operator.getUid())) {
+                    checkPermission(callback, Permission.ManageAllItems); return;
+                } else {
+                    if (!checkPermission(callback, Permission.ManagePersonalItems)) return;
+                }
             }
         }
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {

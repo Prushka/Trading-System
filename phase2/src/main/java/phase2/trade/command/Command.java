@@ -136,7 +136,7 @@ public abstract class Command<T> implements PermissionBased {
         boolean result = checkPermission(permissions);
         if (!result) {
             logger.warn("[Permission Denied] User: " + operator + " | " + operator.getPermissionGroup() + " | " + Arrays.toString(permissions) + " -> " + operator.getPermissionSet().getPerm().toString());
-            statusCallback.call(null, new StatusNoPermission(new PermissionSet(commandPropertyAnnotation.permissionSet())));
+            statusCallback.call(null, new StatusNoPermission(new PermissionSet(permissions)));
         }
         return result;
     }

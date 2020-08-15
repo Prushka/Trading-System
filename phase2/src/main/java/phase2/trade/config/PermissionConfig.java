@@ -24,8 +24,12 @@ public class PermissionConfig {
                 Permission.BrowseMarket);
 
         addPermissions(PermissionGroup.ADMIN, Permission.ChangeThreshold, Permission.ReviewItem);
-        addPermissions(PermissionGroup.HEAD_ADMIN, Permission.CreateUser,
-                Permission.ChangeThreshold, Permission.ReviewItem, Permission.ManageUserOperations, Permission.ManageUsers,
+        addPermissions(PermissionGroup.HEAD_ADMIN,
+                Permission.CreateUser,
+                Permission.ChangeThreshold,
+                Permission.ReviewItem,
+                Permission.ManageUserOperations,
+                Permission.ManageUsers,
                 Permission.ManageAllItems);
 
         addPermissions(PermissionGroup.SYSTEM, Permission.ChangeThreshold, Permission.CreateUser);

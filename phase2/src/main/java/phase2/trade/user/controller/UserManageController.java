@@ -7,9 +7,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import phase2.trade.command.Command;
+import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.AbstractTableController;
+import phase2.trade.editor.UserEditor;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
@@ -23,11 +25,10 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class UserManageController extends AbstractTableController<User> implements Initializable {
-
+public class UserManageController extends UserTableController implements Initializable {
 
     public UserManageController(ControllerResources controllerResources) {
-        super(controllerResources, false, false);
+        super(controllerResources, true, true);
     }
 
     @Override
@@ -45,24 +46,16 @@ public class UserManageController extends AbstractTableController<User> implemen
 
     public void afterFetch(List<User> users) {
         setDisplayData(FXCollections.observableArrayList(users));
-        tableViewGenerator.addColumn("UserName", "name").addColumn("Email", "email")
-                .addColumn("Permission Group", "permissionGroup")
-                .addColumn("Permissions", "permissionSet", getConfigBundle().getUiConfig().getPermissionPrefWidth())
-                .addColumn("reputation", "reputation").addColumn("point", "point");
 
-        addSearchField("Search User Name", (entity, toMatch) -> {
-            String lowerCaseFilter = toMatch.toLowerCase();
-            return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
-        });
+        addNameColumn(true);
+        addEmailColumn(true);
+        addPermissionGroupColumn(true);
+        addPermissionsColumn();
 
-        addSearchField("Search Email", (entity, toMatch) -> {
-            String lowerCaseFilter = toMatch.toLowerCase();
-            return String.valueOf(entity.getEmail()).toLowerCase().contains(lowerCaseFilter);
-        });
-
-        addComboBox(FXCollections.observableArrayList(Arrays.asList(Stream.of(PermissionGroup.values()).map(PermissionGroup::name).toArray(String[]::new)))
-                , "Permission Group", "ALL", (entity, toMatch) -> entity.getPermissionGroup().name().equalsIgnoreCase(toMatch));
-
+        addSearchName();
+        addSearchEmail();
+        addPermissionGroupComboBox();
+        
         JFXButton createUser = new JFXButton("Create a New User");
 
         hBox.getChildren().add(createUser);

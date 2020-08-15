@@ -24,10 +24,10 @@ public class ItemTableController extends AbstractEditableTableController<Item, I
     }
 
     @Override
-    protected void updateEntity(List<Item> items) {
+    protected void updateEntity(List<Item> entities) {
         disableButtons(true);
         Command<?> command = getCommandFactory().getCommand(UpdateItems::new, c -> {
-            c.setItemsToUpdate(items);
+            c.setItemsToUpdate(entities);
         });
         command.execute((result, resultStatus) -> {
             resultStatus.setAfter(() -> {

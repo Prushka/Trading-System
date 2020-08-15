@@ -30,12 +30,12 @@ public abstract class AbstractEditableTableController<T, E> extends AbstractTabl
     }
 
     protected void shortenAlter(T entity, String newValue, StatusCallback statusCallback, TriConsumer<E, String, StatusCallback> consumer) {
-        consumer.consume(supplier.get(getEntityAsList(entity)), newValue, statusCallback);
+        consumer.consume(supplier.get(getEntityAsList(entity), getConfigBundle()), newValue, statusCallback);
         updateEntity(entity);
     }
 
     protected void shortenAlterOfSelected(String newValue, StatusCallback statusCallback, TriConsumer<E, String, StatusCallback> consumer) {
-        consumer.consume(supplier.get(getSelected()), newValue, statusCallback);
+        consumer.consume(supplier.get(getSelected(), getConfigBundle()), newValue, statusCallback);
         updateEntity(getSelected());
     }
 

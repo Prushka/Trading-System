@@ -3,6 +3,7 @@ package phase2.trade.editor;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
+import phase2.trade.config.ConfigBundle;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
@@ -12,13 +13,10 @@ import java.util.List;
 
 public class ItemEditor extends Editor<Item> {
 
-    public ItemEditor(List<Item> entities) {
-        super(entities);
+    public ItemEditor(List<Item> entities, ConfigBundle configBundle) {
+        super(entities,configBundle);
     }
 
-    public ItemEditor(Item entity) {
-        super(entity);
-    }
 
     public void alterWillingness(String willingness, StatusCallback statusCallback) {
         alterWillingness(Willingness.valueOf(willingness), statusCallback);

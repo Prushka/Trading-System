@@ -9,7 +9,7 @@ import phase2.trade.user.User;
 import javax.persistence.Entity;
 
 @Entity
-public abstract class UserCommand<T extends User> extends Command<T> {
+public abstract class UserCommand<T> extends Command<T> {
 
     public UserCommand() {}
 }

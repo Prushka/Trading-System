@@ -15,6 +15,7 @@ public class PermissionConfig {
         addPermissions(PermissionGroup.GUEST, Permission.BrowseMarket);
 
         addPermissions(PermissionGroup.REGULAR,
+                Permission.ManagePersonalAccount,
                 Permission.ManagePersonalItems,
                 Permission.ManageWishList,
                 Permission.Trade,

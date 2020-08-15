@@ -16,6 +16,7 @@ public enum Permission {
     BrowseMarket,
 
     ManagePersonalItems,
+    ManagePersonalAccount,
     ManageWishList,
 
     ManageUsers,

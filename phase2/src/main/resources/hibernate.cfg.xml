@@ -24,6 +24,7 @@
         <mapping class="phase2.trade.user.command.UserCommand" />
         <mapping class="phase2.trade.user.command.CreateUser" />
         <mapping class="phase2.trade.user.command.Login" />
+        <mapping class="phase2.trade.user.command.UpdateUsers" />
         <mapping class="phase2.trade.user.command.ChangePassword" />
         <mapping class="phase2.trade.user.command.ChangeUserName" />
 

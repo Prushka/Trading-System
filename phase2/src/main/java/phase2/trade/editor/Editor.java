@@ -1,19 +1,18 @@
 package phase2.trade.editor;
 
+import phase2.trade.config.ConfigBundle;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Editor<T> {
 
     protected final List<T> entities;
-    
-    public Editor(List<T> entities){
+    protected final ConfigBundle configBundle;
+
+    public Editor(List<T> entities, ConfigBundle configBundle){
         this.entities = entities;
-    }
-    
-    public Editor(T entity){
-        entities = new ArrayList<>();
-        entities.add(entity);
+        this.configBundle = configBundle;
     }
 
     protected boolean isInt(String toExam) {

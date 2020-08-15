@@ -15,6 +15,9 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+
+// TODO: even if you make AdministrativeUser have REGULAR Permission Group. He/She won't be able to trade
+//  Simply because AdministrativeUser doesn't have any ItemList
 public abstract class User {
 
     @Id

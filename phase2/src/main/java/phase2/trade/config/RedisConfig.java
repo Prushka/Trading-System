@@ -14,6 +14,8 @@ public class RedisConfig {
 
     private String channel = "group";
 
+    private boolean useRedis = true;
+
     public String getHost() {
         return host;
     }
@@ -36,5 +38,9 @@ public class RedisConfig {
 
     public String getChannel() {
         return channel;
+    }
+
+    public boolean isUseRedis() {
+        return useRedis;
     }
 }

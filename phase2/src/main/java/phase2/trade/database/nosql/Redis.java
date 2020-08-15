@@ -21,13 +21,17 @@ public class Redis implements Shutdownable {
 
     private JedisPool jedisPool;
 
-    private RedisConfig redisConfig;
+    private final RedisConfig redisConfig;
 
-    private final Map<String, AbstractController> registeredControllers;
+    private Map<String, AbstractController> registeredControllers;
 
-    private final ExecutorService threadPool;
+    private ExecutorService threadPool;
+
 
     public Redis(RedisConfig redisConfig, Map<String, AbstractController> registeredControllers) {
+
+        this.redisConfig = redisConfig;
+        if(!redisConfig.isUseRedis()) return;
 
         this.registeredControllers = registeredControllers;
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
@@ -42,19 +46,19 @@ public class Redis implements Shutdownable {
 
         threadPool = Executors.newFixedThreadPool(redisConfig.getPoolSize());
 
-        this.redisConfig = redisConfig;
         subscribe();
     }
 
-    public Jedis getConnection() {
+    private Jedis getConnection() {
         return jedisPool.getResource();
     }
 
     public void subscribe() {
+        if(!redisConfig.isUseRedis()) return;
         subscribe(redisConfig.getChannel());
     }
 
-    public void subscribe(String channel) {
+    private void subscribe(String channel) {
         JedisPubSub subscriber = new JedisPubSub() {
             @Override
             public void onMessage(String channel, String message) {
@@ -74,10 +78,11 @@ public class Redis implements Shutdownable {
     }
 
     public void publish(String message) {
+        if(!redisConfig.isUseRedis()) return;
         publish(redisConfig.getChannel(), message);
     }
 
-    public void publish(String channel, String message) {
+    private void publish(String channel, String message) {
         getConnection().publish(channel, message);
     }
 

@@ -48,7 +48,7 @@ public abstract class EditableController<T, E> extends AbstractController {
         updateEntity(selected);
     }
 
-    private void updateEntity(T entity) {
+    protected void updateEntity(T entity) {
         List<T> temp = new ArrayList<>();
         temp.add(entity);
         updateEntity(temp);
@@ -59,7 +59,6 @@ public abstract class EditableController<T, E> extends AbstractController {
     public void setUpdateEntityCommand(Command<?> updateEntityCommand) {
         this.updateEntityCommand = updateEntityCommand;
     }
-
 
     protected void disableButtons(boolean value) {
         for (Button button : buttonsToDisable) {

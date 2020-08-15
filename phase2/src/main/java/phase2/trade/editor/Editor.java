@@ -10,8 +10,19 @@ public class Editor<T> {
     protected final List<T> entities;
     protected final ConfigBundle configBundle;
 
-    public Editor(List<T> entities, ConfigBundle configBundle){
+    public Editor(List<T> entities, ConfigBundle configBundle) {
         this.entities = entities;
+        this.configBundle = configBundle;
+    }
+
+    private List<T> getEntities(T entity) {
+        List<T> entities = new ArrayList<>();
+        entities.add(entity);
+        return entities;
+    }
+
+    public Editor(T entity, ConfigBundle configBundle) {
+        this.entities = getEntities(entity);
         this.configBundle = configBundle;
     }
 

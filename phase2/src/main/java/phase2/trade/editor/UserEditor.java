@@ -1,5 +1,6 @@
 package phase2.trade.editor;
 
+import phase2.trade.address.Address;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
@@ -15,6 +16,10 @@ public class UserEditor extends Editor<User> {
 
     public UserEditor(List<User> entities, ConfigBundle configBundle) {
         super(entities, configBundle);
+    }
+
+    public UserEditor(User entity, ConfigBundle configBundle) {
+        super(entity, configBundle);
     }
 
     public void alterName(String name, StatusCallback statusCallback) {
@@ -56,8 +61,18 @@ public class UserEditor extends Editor<User> {
         statusCallback.call(new StatusSucceeded());
     }
 
-    public void addAddress(String country, String city, String firstAddressLine, String secondAddressLine, String postalCode){
-
+    public void addAddress(String country, String territory, String city, String firstAddressLine, String secondAddressLine
+    , String postalCode) {
+        entities.forEach(entity -> {
+            Address address = new Address();
+            address.setCountry(country);
+            address.setTerritory(territory);
+            address.setCity(city);
+            address.setFirstAddressLine(firstAddressLine);
+            address.setSecondAddressLine(secondAddressLine);
+            address.setPostalCode(postalCode);
+            entity.getAddressBook().setSelectedAddress(address);
+        });
     }
 
 }

@@ -1,6 +1,7 @@
 package phase2.trade.address;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,12 +13,12 @@ public class AddressBook {
     private Long uid;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Address> addresses;
+    private List<Address> addresses = new ArrayList<>();
 
-    private int addressSelected;
+    private int addressSelected = 0;
 
     public Address getSelectedAddress() {
-        if(addresses.size() < addressSelected || addresses.get(addressSelected)==null){
+        if (addresses.size() < addressSelected || addresses.get(addressSelected) == null) {
             return null;
         }
         return addresses.get(addressSelected);
@@ -25,6 +26,10 @@ public class AddressBook {
 
     public int getAddressSelected() {
         return addressSelected;
+    }
+
+    public void setSelectedAddress(Address address) {
+        addresses.set(getAddressSelected(), address);
     }
 
     public void setAddressSelected(int addressSelected) {

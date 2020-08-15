@@ -14,21 +14,22 @@ public class Address {
     private String lastName;
 
     private String country;
-    private String province;
+    private String territory;
     private String city;
     private String postalCode;
     private String firstAddressLine;
     private String secondAddressLine;
 
-    public Address(String country, String city, String firstAddressLine, String secondAddressLine, String postalCode) {
+    public Address(String country, String territory, String city, String firstAddressLine, String secondAddressLine, String postalCode) {
         this.country = country;
+        this.territory = territory;
         this.city = city;
         this.firstAddressLine = firstAddressLine;
         this.secondAddressLine = secondAddressLine;
     }
 
     public Address(String country, String city, String firstAddressLine, String secondAddressLine) {
-        this(country, city, firstAddressLine, secondAddressLine, null);
+        this(country, null, city, firstAddressLine, secondAddressLine, null);
     }
 
     public Address(String country, String city) {
@@ -77,5 +78,21 @@ public class Address {
 
     public void setSecondAddressLine(String streetNumber) {
         this.secondAddressLine = streetNumber;
+    }
+
+    public String getTerritory() {
+        return territory;
+    }
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
+    public void setTerritory(String territory) {
+        this.territory = territory;
     }
 }

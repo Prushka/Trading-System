@@ -1,13 +1,11 @@
 package phase2.trade.view;
 
 
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.paint.Paint;
 import phase2.trade.item.Category;
 
 import java.util.Arrays;
@@ -34,6 +32,13 @@ public class NodeFactory {
         area.setPromptText(promptText);
         area.setLabelFloat(true);
         return area;
+    }
+
+    public Button getDefaultRippleButton(String text) {
+        JFXButton button = new JFXButton(text);
+        button.setDisableVisualFocus(true);
+        button.setButtonType(JFXButton.ButtonType.RAISED);
+        return button;
     }
 
     public RadioButton getDefaultRadioButton(String text, ToggleGroup toggleGroup) {

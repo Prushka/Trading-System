@@ -121,7 +121,7 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         triConsumer.consume(criteriaBuilder, criteriaQuery, root);
     }
 
-    protected void executeCriteriaQuery(List<T> result, CriteriaQuery<T> criteria){
+    protected void executeCriteriaQuery(List<T> result, CriteriaQuery<T> criteria) {
         result.addAll(getCurrentSession().createQuery(criteria).getResultList());
     }
 

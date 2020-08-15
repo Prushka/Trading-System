@@ -15,7 +15,7 @@ import phase2.trade.user.AccountManager;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerProperty(viewFile = "abstract.fxml")
+@ControllerProperty(viewFile = "abstract_v.fxml")
 public abstract class AbstractController {
 
     private static final Logger logger = LogManager.getLogger(AbstractController.class);

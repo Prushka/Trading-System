@@ -3,6 +3,7 @@ package phase2.trade.user.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,10 +11,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import phase2.trade.address.Address;
 import phase2.trade.avatar.Avatar;
 import phase2.trade.command.Command;
+import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.EditableController;
 import phase2.trade.editor.UserEditor;
@@ -31,34 +36,63 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
 // TODO: ALL Controllers that don't extend AbstractTable... is a mess
 //  Refactor everything in the future
+@ControllerProperty(viewFile = "abstract_h.fxml")
 public class UserInfoController extends EditableController<User, UserEditor> implements Initializable {
 
     @FXML
-    private VBox root;
+    private HBox root;
 
     private final VBox userInfoBox;
+
+    private final VBox left = new VBox(10);
+    private final VBox right = new VBox(10);
 
     public UserInfoController(ControllerResources controllerResources, VBox userInfoBox) {
         super(controllerResources, UserEditor::new);
         this.userInfoBox = userInfoBox;
     }
 
+    private void generateLeft() {
+        User userToPresent = getAccountManager().getLoggedInUser();
+        if (userToPresent == null) return;
+        Label userId, userName, email, permissionGroup, permissions, country, province, city, accountState;
+        country = city = province = null;
+        userId = new Label("User Id: " + userToPresent.getUid());
+        userName = new Label("User Name: " + userToPresent.getName());
+        email = new Label("Email: " + userToPresent.getEmail());
+        permissionGroup = new Label("PermissionGroup: " + userToPresent.getPermissionGroup());
+
+        permissions = new Label("Permissions:");
+        left.getChildren().addAll(userId, userName, email, permissionGroup, permissions);
+
+        StringBuilder permissionsS = new StringBuilder();
+        userToPresent.getPermissionSet().getPerm().forEach(permission -> left.getChildren().addAll(new Label(permission.toString())));
+
+
+        Address address = userToPresent.getAddressBook().getSelectedAddress();
+        if (address != null) {
+            country = new Label("Country: " + address.getCountry());
+            province = new Label("Province: " + address.getTerritory());
+            city = new Label("City: " + address.getCity());
+        }
+        accountState = new Label("Current Status: " + userToPresent.getAccountState());
+        left.getChildren().addAll(country, province, city, accountState);
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Label userId = new Label("User Id: " + getAccountManager().getLoggedInUser().getUid());
-        Label userName = new Label("User Name: " + getAccountManager().getLoggedInUser().getName());
-        Label email = new Label("Email: " + getAccountManager().getLoggedInUser().getEmail());
-        Label permissionGroup = new Label("PermissionGroup: " + getAccountManager().getLoggedInUser().getPermissionGroup());
-        // address book + if user didnt input address
-        // home = new Label("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
-        Label bio = new Label("Bio: ");
-        Label currentStatus = new Label("Current Status: " + getAccountManager().getLoggedInUser().getUid());
-
+        root.getChildren().setAll(left, right);
+        root.setSpacing(100);
+        left.setSpacing(10);
+        left.setStyle("-fx-font-size: 20");
+        generateLeft();
         if (getAccountManager().getLoggedInUser().getPermissionGroup().equals(PermissionGroup.GUEST)) return;
 
 
@@ -118,13 +152,17 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
 
         GeneralVBoxAlert addressAlert = getPopupFactory().vBoxAlert("Modify Your Address", "");
         ComboBox<String> country = getNodeFactory().getComboBox(getConfigBundle().getGeoConfig().getMap().keySet());
-
         ComboBox<String> province = getNodeFactory().getComboBox();
         ComboBox<String> city = getNodeFactory().getComboBox();
+        TextField addressLine1 = getNodeFactory().getDefaultTextField("Address Line 1 (Optional)");
+        TextField addressLine2 = getNodeFactory().getDefaultTextField("Address Line 2 (Optional)");
+        TextField postalCode = getNodeFactory().getDefaultTextField("Postal Code (Optional)");
         country.setOnAction(e -> {
             String selectedCountry = country.getSelectionModel().getSelectedItem();
             if (selectedCountry != null) {
-                province.setItems(FXCollections.observableArrayList(getConfigBundle().getGeoConfig().getMap().get(selectedCountry).keySet()));
+                ObservableList<String> provinces = FXCollections.observableArrayList(getConfigBundle().getGeoConfig().getMap().get(selectedCountry).keySet());
+                Collections.sort(provinces);
+                province.setItems(provinces);
             }
         });
 
@@ -132,25 +170,23 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
             String selectedCountry = country.getSelectionModel().getSelectedItem();
             String selectedProvince = province.getSelectionModel().getSelectedItem();
             if (selectedCountry != null) {
-                city.setItems(FXCollections.observableArrayList(getConfigBundle().getGeoConfig().getMap().get(selectedCountry).get(selectedProvince)));
+                ObservableList<String> cities = FXCollections.observableArrayList(getConfigBundle().getGeoConfig().getMap().get(selectedCountry).get(selectedProvince));
+                Collections.sort(cities);
+                city.setItems(cities);
             }
         });
 
-        addressAlert.addNodes(country, province, city);
+        addressAlert.addNodes(country, province, city, addressLine1, addressLine2, postalCode);
         addressAlert.setEventHandler(event -> {
-            ChangeUserName command = getCommandFactory().getCommand(ChangeUserName::new);
-            command.execute(((result, status) -> {
-                        status.setFailed(() -> getPopupFactory().toast(5, "Cannot verify the information you provided. Check your password."));
-                        status.setExist(() -> getPopupFactory().toast(5, "Such User Name Already Exists"));
-                        status.handle(getPopupFactory());
-                    }
-                    ),
-                    getAccountManager().getLoggedInUser().getName(), password.getText(), newUserName.getText());
+            UserEditor userEditor = new UserEditor(getAccountManager().getLoggedInUser(), getConfigBundle());
+            userEditor.addAddress(country.getSelectionModel().getSelectedItem(), province.getSelectionModel().getSelectedItem(), city.getSelectionModel().getSelectedItem()
+                    , addressLine1.getText(), addressLine2.getText(), postalCode.getText());
+            updateEntity(getAccountManager().getLoggedInUser());
         });
 
-        Button changePassword = new JFXButton("Change Password");
-        Button changeUserName = new JFXButton("Change User Name");
-        Button modifyAddress = new JFXButton("Modify Address");
+        Button changePassword = getNodeFactory().getDefaultRippleButton("Change Password");
+        Button changeUserName = getNodeFactory().getDefaultRippleButton("Change User Name");
+        Button modifyAddress = getNodeFactory().getDefaultRippleButton("Modify Address");
         changeUserName.setOnAction(event -> userNameAlert.display());
         changePassword.setOnAction(event -> passwordAlert.display());
         modifyAddress.setOnAction(event -> addressAlert.display());
@@ -161,9 +197,7 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
             uploadAvatar();
         });
 
-        root.setSpacing(40);
-
-        root.getChildren().addAll(changePassword, changeUserName, normalRadio, onVocationRadio, changeAvatar, modifyAddress);
+        right.getChildren().addAll(changePassword, changeUserName, normalRadio, onVocationRadio, changeAvatar, modifyAddress);
     }
 
     // TODO: decouple this one

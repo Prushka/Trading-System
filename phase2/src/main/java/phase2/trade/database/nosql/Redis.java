@@ -65,13 +65,15 @@ public class Redis implements PubSub {
             @Override
             public void onMessage(String channel, String message) {
                 logger.info(message);
-                if (registeredControllers.containsKey(message)) {
-                    registeredControllers.get(message).reload();
+                for (String clazzSimple : message.split(",", -1)) {
+                    if (registeredControllers.containsKey(clazzSimple)) {
+                        registeredControllers.get(clazzSimple).reload();
+                    }
                 }
             }
         };
         threadPool.submit(() -> {
-            if(getConnection().isConnected())
+            if (getConnection().isConnected())
                 getConnection().subscribe(subscriber, channel);
         });
     }

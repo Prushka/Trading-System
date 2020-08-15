@@ -52,6 +52,14 @@ public abstract class AbstractController {
         controllerResources.publish(this.getClass().getSimpleName());
     }
 
+    protected void publish(Class<?>... effectedControllers) {
+        StringBuilder simpleRepresentation = new StringBuilder();
+        for (Class<?> clazz : effectedControllers) {
+            simpleRepresentation.append(clazz.getSimpleName()).append(",");
+        }
+        controllerResources.publish(simpleRepresentation.toString());
+    }
+
     public void reload() {
         logger.info("Reloading: " + this.getClass().getSimpleName());
     }

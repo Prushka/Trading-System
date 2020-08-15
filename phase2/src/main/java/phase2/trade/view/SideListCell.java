@@ -2,7 +2,6 @@ package phase2.trade.view;
 
 import com.jfoenix.controls.JFXListCell;
 import javafx.scene.Node;
-import javafx.scene.layout.*;
 
 public class SideListCell extends JFXListCell<String> {
 
@@ -12,7 +11,7 @@ public class SideListCell extends JFXListCell<String> {
         if (empty) {
             setGraphic(null);
         } else {
-            Node svg = new ImageFactory().generateSVG("user");
+            Node svg = new ImageFactory().generateGraphic("user");
             if(svg!=null){
                 setGraphic(svg);
                 setGraphicTextGap(10);

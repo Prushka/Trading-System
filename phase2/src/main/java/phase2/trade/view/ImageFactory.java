@@ -4,7 +4,6 @@ import com.jfoenix.svg.SVGGlyph;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import phase2.trade.Main;
@@ -24,14 +23,14 @@ public class ImageFactory {
     private final double defaultWidth = 20;
     private final double defaultHeight = 20;
 
-    public Node generateSVG(String filePath, Paint color, double width, double height) {
-        return generateSVG(Main.class.getResource(filePath), color, width, height);
+    public Node generateGraphic(String filePath, Paint color, double width, double height) {
+        return generateGraphic(Main.class.getResource(filePath), color, width, height);
     }
 
     // The reason why svg is not widely used is because the color and multiple paths don't render correctly.
     // And I do not have the time to find an appropriate library.
     // Currently single path svg can be used without problem.
-    public Node generateSVG(URL url, Paint color, double width, double height) {
+    public Node generateGraphic(URL url, Paint color, double width, double height) {
         try {
             if (url != null) {
                 String extension = url.getPath().substring(url.getPath().lastIndexOf(".")).toLowerCase();
@@ -55,18 +54,18 @@ public class ImageFactory {
         return node;
     }
 
-    public Node generateSVG(Category input) {
-        return generateSVG(input.resourcePath, Color.WHITE, this.defaultWidth, this.defaultHeight);
+    public Node generateGraphic(Category input) {
+        return generateGraphic(input.resourcePath, Color.WHITE, this.defaultWidth, this.defaultHeight);
     }
 
-    public Node generateSVG(String general) {
+    public Node generateGraphic(String general) {
         String path = null;
         switch (general){
             case "user":
                 path = "/svg/user.svg";
                 break;
         }
-        return generateSVG(path, Color.WHITE, this.defaultWidth, this.defaultHeight);
+        return generateGraphic(path, Color.WHITE, this.defaultWidth, this.defaultHeight);
     }
 
 

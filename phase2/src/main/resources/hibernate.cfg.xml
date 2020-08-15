@@ -31,8 +31,11 @@
         <mapping class="phase2.trade.address.Address" />
         <mapping class="phase2.trade.address.AddressBook" />
         <mapping class="phase2.trade.item.Item" />
-        <mapping class="phase2.trade.user.User" />
         <mapping class="phase2.trade.permission.PermissionSet" />
+
+        <mapping class="phase2.trade.avatar.Avatar" />
+
+        <mapping class="phase2.trade.user.User" />
         <mapping class="phase2.trade.user.AdministrativeUser" />
         <mapping class="phase2.trade.user.RegularUser" />
         <mapping class="phase2.trade.user.SystemUser" />

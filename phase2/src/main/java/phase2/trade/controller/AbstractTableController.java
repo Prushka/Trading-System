@@ -1,5 +1,6 @@
 package phase2.trade.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
@@ -11,9 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import phase2.trade.command.Command;
 import phase2.trade.editor.EntityIdLookUp;
 import phase2.trade.view.FilterPredicate;
+import phase2.trade.view.ImageFactory;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
@@ -106,8 +109,17 @@ public abstract class AbstractTableController<T> extends AbstractController impl
         getPane("topBar").getChildren().addAll(combo);
     }
 
-    protected void addButton(Button... buttons){
+    protected void addButton(Button... buttons) {
         hBox.getChildren().addAll(buttons);
         buttonsToDisable.addAll(Arrays.asList(buttons));
+    }
+
+    // This reloads the entire controller. Thus, the new data is retrieved from database
+    // concurrency
+    protected void addReloadButton(ControllerSupplier<?> controllerSupplier) {
+        Button button = new JFXButton();
+        button.setGraphic(new ImageFactory().generateGraphic("/image/refresh.png", Color.WHITE, 25, 25));
+        button.setOnAction(event -> getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controllerSupplier)));
+        getPane("topBar").getChildren().addAll(button);
     }
 }

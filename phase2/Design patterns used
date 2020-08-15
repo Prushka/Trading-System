@@ -1,3 +1,16 @@
 A list of design patterns that you used and why/how.
 Please include the names of all classes involved in the implementation of the pattern.
 You can also include reasons for not using certain design patterns.
+
+1. Builder. the builder design pattern is used in to build a trade.
+   The class is TradeBuilder, in the trade folder.
+   To build a trade that requires a lot of information, so the builder is used.
+   It stores the date and time of the trade, the location of the trade will make,
+   and stores the trade is permanent or not.
+   And last put them together.
+   The state of the trade is set to be in progress when a new trade is made
+
+2. Factory Method.
+   The factory method is used to create different types of users.
+   The class is UserFactory, in the user folder.
+   create different types of users dependent on the permission group that the user in

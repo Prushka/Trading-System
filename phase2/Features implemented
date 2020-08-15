@@ -10,7 +10,7 @@ This file lists all features that implemented for Phase 2.
 
 5. Administrative user can reasonably undo or redo every action of regular users.
 
-6. New type of user, guest user,
+6. New type of user - guest user, system user
    that allows the user to look at the various parts of the program without being able to trade
    or communicate with the administrative user.
 

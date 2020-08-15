@@ -1,0 +1,25 @@
+This file lists all features that implemented for Phase 2.
+1. Replace text UI with a GUI.
+
+2. Personal user can enter home city,
+   and the program shows other personal users in the same city.
+
+3. Give personal users option to sell items.
+
+4. The program automatically suggest items to a user to trade.
+
+5. Administrative user can reasonably undo or redo every action of regular users.
+
+6. New type of user - guest user, system user
+   that allows the user to look at the various parts of the program without being able to trade
+   or communicate with the administrative user.
+
+7. Administrative user can adjust all threshold values.
+
+8. Item has category tags, there are categories like book, video game and equipment...
+   All the categories are in the item folder - category.
+
+9. More types of trade.
+   Ex: Three way trade, No meeting trade...
+
+

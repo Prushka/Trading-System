@@ -1,3 +1,10 @@
+Before Running:
+-------------
+1. In phase 2 package, mark src as Source Root
+2. Mark resources as Resources Root
+
+The program won't run without doing these 2 steps
+
 Dependencies:
 -------------
 

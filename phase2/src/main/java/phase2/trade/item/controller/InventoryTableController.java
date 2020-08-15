@@ -15,6 +15,7 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemEditor;
+import phase2.trade.item.Ownership;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.RemoveItem;
@@ -66,10 +67,9 @@ public class InventoryTableController extends ItemTableController implements Ini
         hBox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
         buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
-        sellButton.setOnAction(getWillingnessHandler(Willingness.Sell));
-        privateButton.setOnAction(getWillingnessHandler(Willingness.Private));
-        lendButton.setOnAction(getWillingnessHandler(Willingness.Lend));
-
+        sellButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Sell.name(), s -> {}, ItemEditor::alterWillingness));
+        privateButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Private.name(), s -> {}, ItemEditor::alterWillingness));
+        lendButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Lend.name(), s -> {}, ItemEditor::alterWillingness));
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
             command.setItemListType(itemListType);
@@ -119,21 +119,4 @@ public class InventoryTableController extends ItemTableController implements Ini
         tableViewGenerator.build();
     }
 
-
-    public EventHandler<ActionEvent> getWillingnessHandler(Willingness willingness) {
-        return event -> {
-            ObservableList<Item> itemsSelected = getSelected();
-            if (itemsSelected.size() == 0) {
-                nothingSelectedToast();
-                return;
-            }
-
-            ItemEditor itemEditor = new ItemEditor(itemsSelected);
-            itemEditor.alterWillingness(willingness, resultStatus -> {
-                resultStatus.setSucceeded(() -> updateItem(itemsSelected));
-                resultStatus.handle(getPopupFactory());
-            });
-
-        };
-    }
 }

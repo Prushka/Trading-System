@@ -53,23 +53,10 @@ public class ItemManageTableController extends ItemTableController implements In
 
         JFXButton deleteButton = new JFXButton("Delete");
 
-        hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
-            command.setItemIds(idsRemoved);
-        }), Item::getUid);
+        hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> command.setItemIds(idsRemoved)), Item::getUid);
 
         Button reviewItems = new JFXButton("Mark selected items as reviewItems");
-        reviewItems.setOnAction(event -> {
-            if (getSelected().size() == 0) {
-                nothingSelectedToast();
-                return;
-            }
-            Command<Item> alterItemOwnership = getCommandFactory().getCommand(AlterItemOwnership::new,
-                    c -> c.setItemId(getSelectedItemsIds().toArray(new Long[0])));
-            alterItemOwnership.execute((result, status) -> {
-                status.setAfter(this::reload);
-                status.handle(getPopupFactory());
-            }, Ownership.OWNER.name());
-        });
+        reviewItems.setOnAction(event -> shortenAlterOfSelected(Ownership.OWNER.name(), s -> {}, ItemEditor::alterOwnership));
         addButton(reviewItems);
         tableViewGenerator.build();
     }

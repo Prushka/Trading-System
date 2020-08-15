@@ -2,6 +2,7 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.ComboBoxTableCell;
@@ -27,6 +28,11 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
         updateItem(item);
     }
 
+    protected void shortenAlterOfSelected(String newValue, StatusCallback statusCallback, TriConsumer<ItemEditor, String, StatusCallback> consumer) {
+        consumer.consume(new ItemEditor(getSelected()), newValue, statusCallback);
+        updateItem(getSelected());
+    }
+
     protected void updateItem(Item item) {
         List<Item> items = new ArrayList<>();
         items.add(item);
@@ -45,6 +51,14 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
             });
             resultStatus.handle(getPopupFactory());
         });
+    }
+
+    @Override
+    protected ObservableList<Item> getSelected(){
+        if(super.getSelected().size() == 0){
+            nothingSelectedToast();
+        }
+        return super.getSelected();
     }
 
     protected List<Long> getSelectedItemsIds() {

@@ -17,7 +17,6 @@
         <mapping class="phase2.trade.item.command.GetItems" />
         <mapping class="phase2.trade.item.command.GetMarketItems" />
         <mapping class="phase2.trade.item.command.AddItemToItemList" />
-        <mapping class="phase2.trade.item.command.AlterItemOwnership" />
         <mapping class="phase2.trade.item.command.UpdateItems" />
         <mapping class="phase2.trade.item.command.RemoveItem" />
         <mapping class="phase2.trade.item.command.ReviewItem" />

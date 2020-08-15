@@ -29,12 +29,6 @@ public class ItemEditor {
     }
 
     public void alterWillingness(Willingness willingness, StatusCallback statusCallback) {
-        for (Item item : items) {
-            // if (item.getOwnership() != Ownership.OWNER) {
-            //     statusCallback.call(new StatusFailed("You do not own this product yet!"));
-            //     return;
-            // }
-        }
         items.forEach(item -> item.setWillingness(willingness));
         statusCallback.call(new StatusSucceeded());
     }

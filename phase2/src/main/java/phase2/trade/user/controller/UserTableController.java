@@ -1,22 +1,16 @@
 package phase2.trade.user.controller;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.editor.ItemEditor;
 import phase2.trade.editor.UserEditor;
-import phase2.trade.item.Category;
-import phase2.trade.item.command.UpdateItems;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
 import phase2.trade.user.command.UpdateUsers;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class UserTableController extends AbstractEditableTableController<User, UserEditor> implements Initializable {
 

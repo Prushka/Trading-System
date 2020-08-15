@@ -13,7 +13,10 @@ import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.AbstractTableController;
+import phase2.trade.controller.AbstractEditableTableController;
+import phase2.trade.editor.CommandEditor;
+import phase2.trade.editor.EditorSupplier;
+import phase2.trade.editor.EntityIdLookUp;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
@@ -26,11 +29,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class UserOperationController extends AbstractTableController<Command> implements Initializable {
+public class UserOperationController extends AbstractEditableTableController<Command, CommandEditor> implements Initializable {
 
 
     public UserOperationController(ControllerResources controllerResources) {
-        super(controllerResources, false, false);
+        super(controllerResources, false, false, CommandEditor::new, Command::getUid);
     }
 
     private String convertTime(long time) {
@@ -170,4 +173,8 @@ public class UserOperationController extends AbstractTableController<Command> im
         return null;
     }
 
+    @Override
+    protected void updateEntity(List<Command> entities) {
+
+    }
 }

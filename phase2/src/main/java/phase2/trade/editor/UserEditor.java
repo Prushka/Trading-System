@@ -55,4 +55,5 @@ public class UserEditor extends Editor<User> {
         });
         statusCallback.call(new StatusSucceeded());
     }
+
 }

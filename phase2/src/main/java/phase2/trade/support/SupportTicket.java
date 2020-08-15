@@ -5,7 +5,7 @@ import phase2.trade.user.User;
 import javax.persistence.*;
 
 @Entity
-public class Ticket {
+public class SupportTicket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +13,9 @@ public class Ticket {
 
     @OneToOne
     private User submitter;
+
+    @OneToOne
+    private User handler;
 
     private TicketType type;
 
@@ -68,5 +71,13 @@ public class Ticket {
 
     public void setTicketState(TicketState ticketState) {
         this.ticketState = ticketState;
+    }
+
+    public User getHandler() {
+        return handler;
+    }
+
+    public void setHandler(User handler) {
+        this.handler = handler;
     }
 }

@@ -5,13 +5,15 @@ import phase2.trade.gateway.*;
 
 public class DAOBundle implements EntityBundle {
 
-    private final UserDAO userDAO;
+    private final UserGateway userDAO;
 
-    private final ItemDAO itemDAO;
+    private final ItemGateway itemDAO;
 
-    private final TradeDAO tradeDAO;
+    private final TradeGateway tradeDAO;
 
-    private final CommandDAO commandDAO;
+    private final CommandGateway commandDAO;
+
+    private final SupportTicketGateway supportTicketGateway;
 
 
     public DAOBundle(DatabaseResourceBundle databaseResourceBundle) {
@@ -22,6 +24,8 @@ public class DAOBundle implements EntityBundle {
         tradeDAO = new TradeDAO(databaseResourceBundle);
 
         commandDAO = new CommandDAO(databaseResourceBundle);
+
+        supportTicketGateway = new SupportTicketDAO(databaseResourceBundle);
     }
 
     public UserGateway getUserGateway() {
@@ -34,6 +38,10 @@ public class DAOBundle implements EntityBundle {
 
     public TradeGateway getTradeGateway() {
         return tradeDAO;
+    }
+
+    public SupportTicketGateway getSupportTicketGateway() {
+        return supportTicketGateway;
     }
 
     public CommandGateway getCommandGateway() {

@@ -58,7 +58,7 @@ public class MarketController extends AbstractTableController<Trade> implements 
     private JFXTextField year, month, day, hour, minute, country, city, street, streetNum;
 
     public MarketController(ControllerResources controllerResources){
-        super(controllerResources, false, false);
+        super(controllerResources, false);
         tc = getCommandFactory().getCommand(CreateTrade::new);
         edit = getCommandFactory().getCommand(EditTrade::new);
         confirm = getCommandFactory().getCommand(ConfirmTrade::new);

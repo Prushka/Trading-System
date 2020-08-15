@@ -5,13 +5,11 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
+import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.Willingness;
@@ -57,14 +55,13 @@ public class InventoryController extends ItemController implements Initializable
         addOwnershipComboBox();
         addWillingnessCheckBoxes();
 
-        JFXButton addButton = new JFXButton("Add");
-        JFXButton deleteButton = new JFXButton("Delete");
-        JFXButton privateButton = new JFXButton("I wanna this item to be private");
-        JFXButton sellButton = new JFXButton("I wanna sell them");
-        JFXButton lendButton = new JFXButton("I wanna lend them");
+        Button addButton = new JFXButton("Add");
+        Button deleteButton = new JFXButton("Delete");
+        Button privateButton = new JFXButton("I wanna this item to be private");
+        Button sellButton = new JFXButton("I wanna sell them");
+        Button lendButton = new JFXButton("I wanna lend them");
 
-        buttonPane.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
-        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
+        addButton(addButton, deleteButton, sellButton, lendButton, privateButton);
 
         sellButton.setOnAction(event -> shortenAlter(Willingness.Sell.name(), s -> {
         }, ItemEditor::alterWillingness));
@@ -87,7 +84,7 @@ public class InventoryController extends ItemController implements Initializable
             TextField price = getNodeFactory().getDefaultTextField("Price");
             price.setDisable(true);
 
-            ComboBox<String> comboBox = getNodeFactory().getComboBox(NodeFactory.ComboBoxType.Category);
+            ComboBox<String> comboBox = getNodeFactory().getComboBox(Category.class);
 
 
             ToggleGroup group = new ToggleGroup();

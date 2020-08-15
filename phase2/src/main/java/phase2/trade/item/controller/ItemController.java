@@ -2,9 +2,12 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.util.Callback;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerResources;
@@ -65,7 +68,7 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
             tableViewGenerator.addColumnEditable("Ownership", "ownership",
                     event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, ItemEditor::alterOwnership),
-                    ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Ownership.class)));
+                    getNodeFactory().getEnumAsObservableString(Ownership.class));
         } else {
             tableViewGenerator.addColumn("Ownership", "ownership");
         }
@@ -76,7 +79,7 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
             tableViewGenerator.addColumnEditable("Category", "category",
                     event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, ItemEditor::alterCategory),
-                    ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Category.class)));
+                    getNodeFactory().getEnumAsObservableString(Category.class));
         } else {
             tableViewGenerator.addColumn("Category", "category");
         }
@@ -87,7 +90,7 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
             tableViewGenerator.addColumnEditable("Willingness", "willingness",
                     event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, ItemEditor::alterWillingness),
-                    ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Willingness.class)));
+                    getNodeFactory().getEnumAsObservableString(Willingness.class));
         } else {
             tableViewGenerator.addColumn("Willingness", "willingness");
         }
@@ -111,6 +114,10 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
         } else {
             tableViewGenerator.addColumn("Price", "price");
         }
+    }
+
+    protected void addOwnerColumn() {
+        tableViewGenerator.addColumn("Name", param -> new SimpleStringProperty(param.getValue().getOwner().getName()));
     }
 
     protected void addUIDColumn() {

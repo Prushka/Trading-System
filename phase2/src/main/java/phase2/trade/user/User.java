@@ -7,8 +7,11 @@ import phase2.trade.inventory.ItemListType;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
+import phase2.trade.support.SupportTicket;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -23,10 +26,10 @@ public abstract class User {
 
     @Column(unique = true, length = 40)
     private String email;
-    private String telephone;
+    private String phoneNumber;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private AddressBook addressBook;
 
     private AccountState accountState;
@@ -43,6 +46,9 @@ public abstract class User {
     private String city;
 
     private String country;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<SupportTicket> supportTickets;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Avatar avatar;
@@ -65,6 +71,7 @@ public abstract class User {
         this.city = city;
 
         accountState = AccountState.NORMAL;
+        this.supportTickets = new HashSet<>();
     }
 
     public User() {
@@ -84,12 +91,12 @@ public abstract class User {
         return email;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setPhoneNumber(String telephone) {
+        this.phoneNumber = telephone;
     }
 
     public String getPassword() {
@@ -198,6 +205,14 @@ public abstract class User {
 
     public void setAvatar(Avatar avatar) {
         this.avatar = avatar;
+    }
+
+    public Set<SupportTicket> getSupportTickets() {
+        return supportTickets;
+    }
+
+    public void setSupportTickets(Set<SupportTicket> supportSupportTickets) {
+        this.supportTickets = supportSupportTickets;
     }
 }
 

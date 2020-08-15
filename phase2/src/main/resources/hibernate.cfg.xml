@@ -34,6 +34,9 @@
         <mapping class="phase2.trade.permission.PermissionSet" />
 
         <mapping class="phase2.trade.avatar.Avatar" />
+        <mapping class="phase2.trade.support.SupportTicket" />
+        <mapping class="phase2.trade.support.command.OpenSupportTicket" />
+        <mapping class="phase2.trade.support.command.UpdateSupportTickets" />
 
         <mapping class="phase2.trade.user.User" />
         <mapping class="phase2.trade.user.AdministrativeUser" />

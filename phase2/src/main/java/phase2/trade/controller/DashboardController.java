@@ -26,7 +26,8 @@ public class DashboardController extends AbstractController implements Initializ
         putPane("centerDashboard", center);
         putPane("rightDashboard", right);
         root.setLeft(getSceneManager().loadPane(SideMenuController::new));
-
+        // TODO: Ask the user to fill in at least one address
+        // TODO: use redis's pub-sub to implement chat system
     }
 
 }

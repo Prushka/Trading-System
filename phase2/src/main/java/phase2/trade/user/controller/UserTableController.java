@@ -58,7 +58,7 @@ public class UserTableController extends AbstractEditableTableController<User, U
             tableViewGenerator.addColumnEditable("Permission Group", "permissionGroup",
                     event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, UserEditor::alterPermissionGroup),
-                    ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(PermissionGroup.class)));
+                    getNodeFactory().getEnumAsObservableString(PermissionGroup.class));
         } else {
             tableViewGenerator.addColumn("Permission Group", "permissionGroup");
         }

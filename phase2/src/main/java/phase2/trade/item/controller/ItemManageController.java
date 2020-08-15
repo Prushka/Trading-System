@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class ItemManageTableController extends ItemController implements Initializable {
+public class ItemManageController extends ItemController implements Initializable {
 
-    public ItemManageTableController(ControllerResources controllerResources) {
+    public ItemManageController(ControllerResources controllerResources) {
         super(controllerResources, true, true);
     }
 
@@ -71,7 +71,7 @@ public class ItemManageTableController extends ItemController implements Initial
     // 1. Add a Command UpdateAnyItems (with permission)
     // 2. Make Use case classes handle permission using field annotation
     protected void reload() {
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(ItemManageTableController::new));
+        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(ItemManageController::new));
     }
 
 }

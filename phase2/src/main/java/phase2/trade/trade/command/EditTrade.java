@@ -12,7 +12,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true, persistent = true)
 public class EditTrade extends TradeCommand<Trade> {
     private Long tradeId;

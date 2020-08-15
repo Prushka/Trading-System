@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.*;
 import phase2.trade.item.command.*;
 

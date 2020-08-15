@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.*;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class GeneralTableViewController<T> extends AbstractController implements Initializable {
+public abstract class AbstractTableViewController<T> extends AbstractController implements Initializable {
 
     @FXML
     protected TableView<T> tableView;
@@ -35,7 +35,7 @@ public class GeneralTableViewController<T> extends AbstractController implements
 
     protected TableViewGenerator<T> tableViewGenerator;
 
-    public GeneralTableViewController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
+    public AbstractTableViewController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
         super(controllerResources);
         this.ifMultipleSelection = ifMultipleSelection;
         this.ifEditable = ifEditable;

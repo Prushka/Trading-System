@@ -2,76 +2,21 @@ package phase2.trade.user.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.ComboBoxTableCell;
-import phase2.trade.callback.StatusCallback;
-import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.GeneralTableViewController;
-import phase2.trade.database.TriConsumer;
+import phase2.trade.controller.AbstractTableViewController;
+import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.*;
-import phase2.trade.item.command.UpdateItems;
 import phase2.trade.user.User;
-import phase2.trade.user.UserEditor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class UserTableController extends GeneralTableViewController<User> implements Initializable {
+public class UserTableController extends AbstractTableViewController<User> implements Initializable {
 
     public UserTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
         super(controllerResources, ifMultipleSelection, ifEditable);
     }
 
-    protected void shortenAlter(User user, String newValue, StatusCallback statusCallback, TriConsumer<UserEditor, String, StatusCallback> consumer) {
-        consumer.consume(new UserEditor(user), newValue, statusCallback);
-        updateItem(user);
-    }
-
-    protected void shortenAlterOfSelected(String newValue, StatusCallback statusCallback, TriConsumer<ItemEditor, String, StatusCallback> consumer) {
-        consumer.consume(new ItemEditor(getSelected()), newValue, statusCallback);
-        updateItem(getSelected());
-    }
-
-    protected void updateItem(Item item) {
-        List<Item> items = new ArrayList<>();
-        items.add(item);
-        updateItem(items);
-    }
-
-    protected void updateItem(List<Item> items) {
-        disableButtons(true);
-        Command<?> command = getCommandFactory().getCommand(UpdateItems::new, c -> {
-            c.setItemsToUpdate(items);
-        });
-        command.execute((result, resultStatus) -> {
-            resultStatus.setAfter(() -> {
-                disableButtons(false);
-                tableView.refresh();
-            });
-            resultStatus.handle(getPopupFactory());
-        });
-    }
-
-    @Override
-    protected ObservableList<Item> getSelected(){
-        if(super.getSelected().size() == 0){
-            nothingSelectedToast();
-        }
-        return super.getSelected();
-    }
-
-    protected List<Long> getSelectedItemsIds() {
-        List<Long> ids = new ArrayList<>();
-        getSelected().forEach(item -> ids.add(item.getUid()));
-        return ids;
-    }
-
-    protected void nothingSelectedToast() {
-        getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
-    }
 
     // this is already a super class of all Item Table views, they will reside here
     protected void addNameColumn(boolean editable) {

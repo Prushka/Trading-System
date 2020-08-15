@@ -13,7 +13,7 @@ import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.GeneralTableViewController;
+import phase2.trade.controller.AbstractTableViewController;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class UserOperationController extends GeneralTableViewController<Command> implements Initializable {
+public class UserOperationController extends AbstractTableViewController<Command> implements Initializable {
 
 
     public UserOperationController(ControllerResources controllerResources) {

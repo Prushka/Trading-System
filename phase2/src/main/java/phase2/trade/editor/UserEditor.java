@@ -1,10 +1,7 @@
-package phase2.trade.user;
+package phase2.trade.editor;
 
-import phase2.trade.callback.StatusCallback;
-import phase2.trade.callback.status.StatusSucceeded;
-import phase2.trade.controller.Editor;
+import phase2.trade.user.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserEditor extends Editor<User> {

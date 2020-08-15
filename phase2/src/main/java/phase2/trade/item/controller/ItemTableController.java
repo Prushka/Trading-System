@@ -2,44 +2,28 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.ComboBoxTableCell;
-import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.GeneralTableViewController;
-import phase2.trade.database.TriConsumer;
-import phase2.trade.item.*;
+import phase2.trade.controller.AbstractEditableTableViewController;
+import phase2.trade.editor.ItemEditor;
+import phase2.trade.item.Category;
+import phase2.trade.item.Item;
+import phase2.trade.item.Ownership;
+import phase2.trade.item.Willingness;
 import phase2.trade.item.command.UpdateItems;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ItemTableController extends GeneralTableViewController<Item> implements Initializable {
+public class ItemTableController extends AbstractEditableTableViewController<Item,ItemEditor> implements Initializable {
 
     public ItemTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
-        super(controllerResources, ifMultipleSelection, ifEditable);
+        super(controllerResources, ifMultipleSelection, ifEditable, ItemEditor::new);
     }
 
-    protected void shortenAlter(Item item, String newValue, StatusCallback statusCallback, TriConsumer<ItemEditor, String, StatusCallback> consumer) {
-        consumer.consume(new ItemEditor(item), newValue, statusCallback);
-        updateItem(item);
-    }
-
-    protected void shortenAlterOfSelected(String newValue, StatusCallback statusCallback, TriConsumer<ItemEditor, String, StatusCallback> consumer) {
-        consumer.consume(new ItemEditor(getSelected()), newValue, statusCallback);
-        updateItem(getSelected());
-    }
-
-    protected void updateItem(Item item) {
-        List<Item> items = new ArrayList<>();
-        items.add(item);
-        updateItem(items);
-    }
-
-    protected void updateItem(List<Item> items) {
+    protected void updateEntity(List<Item> items) {
         disableButtons(true);
         Command<?> command = getCommandFactory().getCommand(UpdateItems::new, c -> {
             c.setItemsToUpdate(items);
@@ -51,20 +35,6 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
             });
             resultStatus.handle(getPopupFactory());
         });
-    }
-
-    @Override
-    protected ObservableList<Item> getSelected(){
-        if(super.getSelected().size() == 0){
-            nothingSelectedToast();
-        }
-        return super.getSelected();
-    }
-
-    protected List<Long> getSelectedItemsIds() {
-        List<Long> ids = new ArrayList<>();
-        getSelected().forEach(item -> ids.add(item.getUid()));
-        return ids;
     }
 
     protected void nothingSelectedToast() {

@@ -2,7 +2,6 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
@@ -14,8 +13,7 @@ import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
-import phase2.trade.item.ItemEditor;
-import phase2.trade.item.Ownership;
+import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.RemoveItem;

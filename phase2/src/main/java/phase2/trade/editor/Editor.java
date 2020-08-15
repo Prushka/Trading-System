@@ -1,4 +1,4 @@
-package phase2.trade.controller;
+package phase2.trade.editor;
 
 import java.util.ArrayList;
 import java.util.List;

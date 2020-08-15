@@ -1,14 +1,13 @@
-package phase2.trade.item;
+package phase2.trade.editor;
 
-import javafx.beans.property.BooleanProperty;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
-import phase2.trade.controller.Editor;
-import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionProperty;
+import phase2.trade.item.Category;
+import phase2.trade.item.Item;
+import phase2.trade.item.Ownership;
+import phase2.trade.item.Willingness;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemEditor extends Editor<Item> {

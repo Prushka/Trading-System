@@ -56,7 +56,7 @@ public class UserManageController extends UserTableController implements Initial
 
         JFXButton createUser = new JFXButton("Create a New User");
 
-        hBox.getChildren().add(createUser);
+        buttonPane.getChildren().add(createUser);
 
         tableViewGenerator.build();
 

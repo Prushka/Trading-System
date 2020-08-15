@@ -63,7 +63,7 @@ public class InventoryController extends ItemController implements Initializable
         JFXButton sellButton = new JFXButton("I wanna sell them");
         JFXButton lendButton = new JFXButton("I wanna lend them");
 
-        hBox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
+        buttonPane.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
         buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
         sellButton.setOnAction(event -> shortenAlter(Willingness.Sell.name(), s -> {

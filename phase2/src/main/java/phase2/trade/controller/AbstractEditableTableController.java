@@ -29,17 +29,12 @@ import java.util.*;
 // TODO: how to create an AbstractTableController<T> in hierarchy
 //  If AbstractEditableTableController<T,E> is a subclass of AbstractTableController<T> -> AbstractEditableController<T, E> wouldn't be in hierarchy
 //  If AbstractEditableTableController<T,E> is a subclass of AbstractEditableController<T,E> -> AbstractTableController<T> wouldn't be in hierarchy
-//  the only way is composition
-//  But if composition is used, the update entity method would be impossible to customize (It will required 4 Runnables to be used by the ResultState)
+//  If composition is used, the update entity method would be impossible to customize (It will required 4 Runnables to be used by the ResultState)
+//  The current implementation introduces an EmptyEditor
 public abstract class AbstractEditableTableController<T, E> extends EditableController<T, E> implements Initializable {
 
     @FXML
     protected TableView<T> tableView;
-
-    @FXML
-    protected HBox hBox;
-
-    protected List<Button> buttonsToDisable = new ArrayList<>();
 
     protected ObservableList<T> displayData = FXCollections.observableArrayList();
 
@@ -92,13 +87,6 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
     }
 
-
-    protected void disableButtons(boolean value) {
-        for (Button button : buttonsToDisable) {
-            button.setDisable(value);
-        }
-    }
-
     protected Set<Long> idsRemoved = new HashSet<>();
 
     protected void hookUpRemoveCommand(Command<?> command, EntityIdLookUp<T> entityIdLookUp) {
@@ -134,11 +122,6 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         combo.setLabelFloat(true);
         tableViewGenerator.getFilterGroup().addComboBox(combo, predicate);
         getPane("topBar").getChildren().addAll(combo);
-    }
-
-    protected void addButton(Button... buttons) {
-        hBox.getChildren().addAll(buttons);
-        buttonsToDisable.addAll(Arrays.asList(buttons));
     }
 
     // This reloads the entire controller. Thus, the new data is retrieved from database

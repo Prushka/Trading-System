@@ -150,7 +150,7 @@ public class UserOperationController extends AbstractEditableTableController<Com
 
             }
         });
-        hBox.getChildren().addAll(undo);
+        buttonPane.getChildren().addAll(undo);
     }
 
     // To display data of sub commands using custom logic

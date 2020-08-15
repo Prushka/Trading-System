@@ -11,11 +11,12 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import phase2.trade.avatar.Avatar;
-import phase2.trade.avatar.PersistAvatarCommand;
-import phase2.trade.controller.AbstractController;
+import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.item.Willingness;
+import phase2.trade.controller.EditableController;
+import phase2.trade.editor.UserEditor;
 import phase2.trade.user.AccountState;
+import phase2.trade.user.User;
 import phase2.trade.user.command.ChangePassword;
 import phase2.trade.user.command.ChangeUserName;
 import phase2.trade.user.command.UpdateUsers;
@@ -27,11 +28,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 // TODO: ALL Controllers that don't extend AbstractTable... is a mess
 //  Refactor everything in the future
-public class UserInfoController extends AbstractController implements Initializable {
+public class UserInfoController extends EditableController<User, UserEditor> implements Initializable {
 
     @FXML
     private VBox root;
@@ -39,7 +41,7 @@ public class UserInfoController extends AbstractController implements Initializa
     private final VBox userInfoBox;
 
     public UserInfoController(ControllerResources controllerResources, VBox userInfoBox) {
-        super(controllerResources);
+        super(controllerResources, UserEditor::new);
         this.userInfoBox = userInfoBox;
     }
 
@@ -63,7 +65,7 @@ public class UserInfoController extends AbstractController implements Initializa
         RadioButton normalRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(AccountState.NORMAL.name()), group);
         RadioButton onVocationRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(AccountState.ON_VOCATION.name()), group);
 
-        switch (getAccountManager().getLoggedInUser().getAccountState()){
+        switch (getAccountManager().getLoggedInUser().getAccountState()) {
             case NORMAL:
                 normalRadio.setSelected(true);
                 break;
@@ -71,9 +73,15 @@ public class UserInfoController extends AbstractController implements Initializa
                 onVocationRadio.setSelected(true);
                 break;
         }
-        EventHandler<ActionEvent> accountStateHandler = event->{
-
+        EventHandler<ActionEvent> accountStateHandler = event -> {
+            shortenAlter(getAccountManager().getLoggedInUser(),
+                    getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()),
+                    s -> {
+                    }, UserEditor::alterAccountState);
         };
+
+        normalRadio.setOnAction(accountStateHandler);
+        onVocationRadio.setOnAction(accountStateHandler);
 
         TextField oldPassword = getNodeFactory().getDefaultTextField("Old Password");
         TextField newPassword = getNodeFactory().getDefaultTextField("New Password");
@@ -116,6 +124,8 @@ public class UserInfoController extends AbstractController implements Initializa
             uploadAvatar();
         });
 
+        root.setSpacing(40);
+
         root.getChildren().addAll(changePassword, changeUserName, normalRadio, onVocationRadio, changeAvatar);
     }
 
@@ -138,23 +148,31 @@ public class UserInfoController extends AbstractController implements Initializa
                 Avatar avatar = new Avatar();
                 avatar.setImageData(res);
                 getAccountManager().getLoggedInUser().setAvatar(avatar);
-                PersistAvatarCommand persistAvatarCommand = getCommandFactory().getCommand(PersistAvatarCommand::new, c -> c.setAvatar(avatar));
-                persistAvatarCommand.execute((result, status) -> {
-                    status.setSucceeded(() -> {
-                        UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
-                                getAccountManager().getLoggedInUser()));
-                        update.execute((result1, status1) -> {
-                            status1.setSucceeded(() -> userInfoBox.getChildren().setAll
-                                    (getSceneManager().loadPane(UserSideInfoController::new)));
-                            status1.handle(getPopupFactory());
-                        });
-                    });
-                    status.handle(getPopupFactory());
+                UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
+                        getAccountManager().getLoggedInUser()));
+                update.execute((result1, status1) -> {
+                    status1.setSucceeded(() -> userInfoBox.getChildren().setAll
+                            (getSceneManager().loadPane(UserSideInfoController::new)));
+                    status1.handle(getPopupFactory());
                 });
 
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected void updateEntity(List<User> entities) {
+        disableButtons(true);
+        Command<?> command = getCommandFactory().getCommand(UpdateUsers::new, c -> {
+            c.setUsersToUpdate(entities);
+        });
+        command.execute((result, resultStatus) -> {
+            resultStatus.setAfter(() -> {
+                disableButtons(false);
+            });
+            resultStatus.handle(getPopupFactory());
+        });
     }
 }

@@ -1,15 +1,12 @@
 package phase2.trade.user.controller;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import phase2.trade.avatar.Avatar;
-import phase2.trade.avatar.PersistAvatarCommand;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
@@ -45,8 +42,6 @@ public class UserSideInfoController extends AbstractController implements Initia
     }
 
 
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         userId.setText("User Id: " + user.getUid());
@@ -56,11 +51,12 @@ public class UserSideInfoController extends AbstractController implements Initia
         imageView.setOnMouseClicked(event -> uploadAvatar());
         // address book + if user didnt input address
         // home.setText("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
+        refreshAvatar();
         bio.setText("Bio: ");
         currentStatus.setText("Current Status: " + user.getUid());
     }
 
-    private  void refreshAvatar() {
+    private void refreshAvatar() {
         if (user.getAvatar() != null && user.getAvatar().getImageData() != null) {
             Image img = new Image(new ByteArrayInputStream(user.getAvatar().getImageData()));
             imageView.setImage(img);
@@ -87,17 +83,12 @@ public class UserSideInfoController extends AbstractController implements Initia
                 Avatar avatar = new Avatar();
                 avatar.setImageData(res);
                 getAccountManager().getLoggedInUser().setAvatar(avatar);
-                PersistAvatarCommand persistAvatarCommand = getCommandFactory().getCommand(PersistAvatarCommand::new, c -> c.setAvatar(avatar));
-                persistAvatarCommand.execute((result, status) -> {
-                    status.setSucceeded(() -> {
-                        UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
-                                getAccountManager().getLoggedInUser()));
-                        update.execute((result1, status1) -> {
-                            status1.setSucceeded(this::refreshAvatar);
-                            status1.handle(getPopupFactory());
-                        });
-                    });
-                    status.handle(getPopupFactory());
+
+                UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
+                        getAccountManager().getLoggedInUser()));
+                update.execute((result1, status1) -> {
+                    status1.setSucceeded(this::refreshAvatar);
+                    status1.handle(getPopupFactory());
                 });
 
             } catch (IOException ioException) {

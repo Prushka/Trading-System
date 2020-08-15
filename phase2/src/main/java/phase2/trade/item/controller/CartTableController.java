@@ -46,7 +46,7 @@ public class CartTableController extends ItemController implements Initializable
         JFXButton deleteButton = new JFXButton("Delete");
         JFXButton trade = new JFXButton("Trade");
 
-        hBox.getChildren().addAll(deleteButton, trade);
+        buttonPane.getChildren().addAll(deleteButton, trade);
 
         buttonsToDisable = FXCollections.observableArrayList(deleteButton, trade);
 

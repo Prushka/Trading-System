@@ -1,7 +1,11 @@
 package phase2.trade.controller;
 
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.database.TriConsumer;
@@ -11,13 +15,16 @@ import phase2.trade.editor.EntityIdLookUp;
 import java.net.URL;
 import java.util.*;
 
-@ControllerProperty(viewFile = "general_table_view.fxml")
 public abstract class EditableController<T, E> extends AbstractController {
 
     private final EditorSupplier<E, T> supplier;
 
+    protected List<Button> buttonsToDisable = new ArrayList<>();
 
     protected Command<?> updateEntityCommand;
+
+    @FXML
+    protected Pane buttonPane;
 
     public EditableController(ControllerResources controllerResources,
                               EditorSupplier<E, T> supplier) {
@@ -52,4 +59,17 @@ public abstract class EditableController<T, E> extends AbstractController {
     public void setUpdateEntityCommand(Command<?> updateEntityCommand) {
         this.updateEntityCommand = updateEntityCommand;
     }
+
+
+    protected void disableButtons(boolean value) {
+        for (Button button : buttonsToDisable) {
+            button.setDisable(value);
+        }
+    }
+
+    protected void addButton(Button... buttons) {
+        buttonPane.getChildren().addAll(buttons);
+        buttonsToDisable.addAll(Arrays.asList(buttons));
+    }
+
 }

@@ -9,6 +9,4 @@ public interface EntityBundle {
     CommandGateway getCommandGateway();
 
     TradeGateway getTradeGateway();
-
-    AvatarGateway getAvatarGateway();
 }

@@ -13,7 +13,6 @@ public class DAOBundle implements EntityBundle {
 
     private final CommandDAO commandDAO;
 
-    private final AvatarGateway avatarGateway;
 
     public DAOBundle(DatabaseResourceBundle databaseResourceBundle) {
         userDAO = new UserDAO(databaseResourceBundle);
@@ -23,8 +22,6 @@ public class DAOBundle implements EntityBundle {
         tradeDAO = new TradeDAO(databaseResourceBundle);
 
         commandDAO = new CommandDAO(databaseResourceBundle);
-
-        avatarGateway = new AvatarDAO(databaseResourceBundle);
     }
 
     public UserGateway getUserGateway() {
@@ -43,5 +40,4 @@ public class DAOBundle implements EntityBundle {
         return commandDAO;
     }
 
-    public AvatarGateway getAvatarGateway() {return avatarGateway;}
 }

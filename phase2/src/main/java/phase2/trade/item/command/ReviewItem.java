@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
-        persistent = true, permissionSet = {Permission.REVIEW_ITEM})
+        persistent = true, permissionSet = {Permission.ReviewItem})
 public class ReviewItem extends ItemCommand<Item> {
 
     private Long itemId;

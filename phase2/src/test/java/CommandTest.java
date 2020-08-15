@@ -1,20 +1,9 @@
-import org.junit.Test;
-import phase2.trade.callback.status.ResultStatus;
-import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.config.ConfigBundle;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.inventory.ItemList;
-import phase2.trade.item.command.AddItemToItemList;
-import phase2.trade.item.command.AlterItemInInventory;
-import phase2.trade.command.Command;
 import phase2.trade.database.DatabaseResourceBundle;
-import phase2.trade.item.Item;
-import phase2.trade.item.command.GetItems;
 import phase2.trade.user.AccountManager;
 import phase2.trade.user.RegularUser;
-
-import static org.junit.Assert.*;
 
 import java.util.logging.Level;
 
@@ -39,7 +28,7 @@ public class CommandTest {
     }
 
     RegularUser regularUser = new RegularUser("name", "email", "password", "country", "city");
-
+/*
     @Test
     public void testCommand() {
         save();
@@ -74,4 +63,5 @@ public class CommandTest {
         },gatewayBundle);
         // command.undoUnchecked();
     }
+    */
 }

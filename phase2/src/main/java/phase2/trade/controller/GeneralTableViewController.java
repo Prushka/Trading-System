@@ -105,4 +105,8 @@ public class GeneralTableViewController<T> extends AbstractController implements
         getPane("topBar").getChildren().addAll(combo);
     }
 
+    protected void addButton(Button... buttons){
+        hBox.getChildren().addAll(buttons);
+        buttonsToDisable.addAll(Arrays.asList(buttons));
+    }
 }

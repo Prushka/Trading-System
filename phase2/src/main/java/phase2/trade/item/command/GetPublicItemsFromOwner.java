@@ -6,19 +6,15 @@ import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.inventory.ItemList;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
-import phase2.trade.user.RegularUser;
-import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = true,
-        persistent = true, permissionSet = {Permission.BROWSE_MARKET})
+        persistent = true, permissionSet = {Permission.BrowseMarket})
 public class GetPublicItemsFromOwner extends ItemCommand<List<Item>> {
 
     private transient Long itemOwnerUID;

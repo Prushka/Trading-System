@@ -1,22 +1,26 @@
 package phase2.trade.permission;
 
+// Using ALL UPPERCASE letters in enum worsen the readability
+// according to the naming convention we should name it that way (CHANGE_THRESHOLD, MANAGE_ITEMS etc.)
+// So maybe change them back later
 public enum Permission {
 
-    CHANGE_THRESHOLD,
-    TRADE,
-    EDIT_TRADE,
-    CONFIRM_TRADE,
+    ChangeThreshold,
+    Trade,
+    EditTrade,
+    ConfirmTrade,
+    ManageAllItems,
 
-    REVIEW_ITEM,
+    ReviewItem,
 
-    BROWSE_MARKET,
+    BrowseMarket,
 
-    MANAGE_PERSONAL_ITEMS,
-    MANAGE_WISH_LIST,
+    ManagePersonalItems,
+    ManageWishList,
 
-    MANAGE_USER,
-    BROWSE_USER_OPERATIONS,
+    ManageUsers,
+    ManageUserOperations,
 
 
-    CREATE_USER;
+    CreateUser;
 }

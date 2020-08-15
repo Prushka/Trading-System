@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
-        persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
+        persistent = true, permissionSet = {Permission.ManagePersonalItems})
 public class UpdateInventoryItems extends ItemCommand<Void> {
 
     private transient List<Item> itemsToUpdate;

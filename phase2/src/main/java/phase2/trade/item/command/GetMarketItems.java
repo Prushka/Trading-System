@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false,
-        persistent = false, permissionSet = {Permission.BROWSE_MARKET})
+        persistent = false, permissionSet = {Permission.BrowseMarket})
 public class GetMarketItems extends ItemCommand<List<Item>> {
 
     @Override

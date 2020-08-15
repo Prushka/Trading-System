@@ -109,7 +109,7 @@ public class InventoryController extends ItemController implements Initializable
         });
 
         addComboBox(
-                FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))),
+                getNodeFactory().getEnumAsObservableString(Category.class),
                 "Category", "ALL",
                 (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
@@ -175,7 +175,7 @@ public class InventoryController extends ItemController implements Initializable
         return event -> {
             ObservableList<Item> itemsSelected = getSelected();
             if (itemsSelected.size() == 0) {
-                getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
+                nothingSelectedToast();
                 return;
             }
 

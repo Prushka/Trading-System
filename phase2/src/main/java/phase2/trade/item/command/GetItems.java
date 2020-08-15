@@ -7,13 +7,12 @@ import phase2.trade.command.CommandProperty;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.permission.Permission;
-import phase2.trade.user.RegularUser;
 
 import javax.persistence.Entity;
 
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = true,
-        persistent = true, permissionSet = {Permission.MANAGE_PERSONAL_ITEMS})
+        persistent = true, permissionSet = {Permission.ManagePersonalItems})
 public class GetItems extends ItemCommand<ItemList> {
 
     private ItemListType itemListType;

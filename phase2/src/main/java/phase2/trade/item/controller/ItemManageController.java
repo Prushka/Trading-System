@@ -8,22 +8,18 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.GeneralTableViewController;
 import phase2.trade.database.TriConsumer;
 import phase2.trade.inventory.ItemListType;
-import phase2.trade.item.Category;
-import phase2.trade.item.Item;
-import phase2.trade.item.ItemEditor;
-import phase2.trade.item.Willingness;
+import phase2.trade.item.*;
 import phase2.trade.item.command.*;
 import phase2.trade.view.NodeFactory;
 import phase2.trade.view.window.GeneralSplitAlert;
@@ -36,9 +32,9 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class ItemManageController extends GeneralTableViewController<Item> implements Initializable {
+public class ItemManageController extends ItemController implements Initializable {
 
-    public ItemManageController(ControllerResources controllerResources, ItemListType itemListType) {
+    public ItemManageController(ControllerResources controllerResources) {
         super(controllerResources, true, false);
     }
 
@@ -59,18 +55,22 @@ public class ItemManageController extends GeneralTableViewController<Item> imple
     private void afterFetch() {
         tableViewGenerator
                 .addColumnEditable("Name", "name", event ->
-                        shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterName))
+                        shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
+                        }, ItemEditor::alterName))
 
                 .addColumnEditable("Description", "description", getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(),
-                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterDescription))
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
+                        }, ItemEditor::alterDescription))
 
                 .addColumn("Ownership", "ownership")
 
                 .addColumnEditable("Quantity", param -> new SimpleStringProperty(String.valueOf(param.getValue().getQuantity())),
-                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterQuantity))
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
+                        }, ItemEditor::alterQuantity))
 
                 .addColumnEditable("Price", param -> new SimpleStringProperty(String.valueOf(param.getValue().getPrice())),
-                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterPrice))
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
+                        }, ItemEditor::alterPrice))
 
                 .addColumnEditable("Category", "category", event -> {
                     new ItemEditor(event.getRowValue()).alterCategory(event.getNewValue(), resultStatus -> {
@@ -87,22 +87,9 @@ public class ItemManageController extends GeneralTableViewController<Item> imple
 
                 .addColumn("UID", "uid");
 
-        JFXButton addButton = new JFXButton("Add");
         JFXButton deleteButton = new JFXButton("Delete");
-        JFXButton privateButton = new JFXButton("I wanna this item to be private");
-        JFXButton sellButton = new JFXButton("I wanna sell them");
-        JFXButton lendButton = new JFXButton("I wanna lend them");
-
-        hBox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
-        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
-
-        sellButton.setOnAction(getWillingnessHandler(Willingness.Sell));
-        privateButton.setOnAction(getWillingnessHandler(Willingness.Private));
-        lendButton.setOnAction(getWillingnessHandler(Willingness.Lend));
-
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
-            command.setItemListType(itemListType);
             command.setItemIds(idsRemoved);
         }), Item::getUid);
 
@@ -117,14 +104,19 @@ public class ItemManageController extends GeneralTableViewController<Item> imple
         });
 
         addComboBox(
-                FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))),
+                getNodeFactory().getEnumAsObservableString(Category.class),
                 "Category", "ALL",
                 (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
+        addComboBox(
+                getNodeFactory().getEnumAsObservableString(Ownership.class),
+                "Ownership", "ALL",
+                (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
-        JFXCheckBox lend = new JFXCheckBox("Wish To Lend");
-        JFXCheckBox sell = new JFXCheckBox("Wish To Sell");
-        JFXCheckBox privateCheckBox = new JFXCheckBox("Private");
+
+        CheckBox lend = new JFXCheckBox("Wish To Lend");
+        CheckBox sell = new JFXCheckBox("Wish To Sell");
+        CheckBox privateCheckBox = new JFXCheckBox("Private");
 
         tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
                 .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell))
@@ -135,46 +127,20 @@ public class ItemManageController extends GeneralTableViewController<Item> imple
         sell.setSelected(true);
         privateCheckBox.setSelected(true);
 
-        addButton.setOnAction(event -> {
-
-            GeneralSplitAlert addItemAlert = getPopupFactory().splitAlert("Add Item", "");
-            TextField enterItemName = getNodeFactory().getDefaultTextField("Item Name");
-            TextField enterItemDescription = getNodeFactory().getDefaultTextField("Item Description");
-            TextField enterQuantity = getNodeFactory().getDefaultTextField("Quantity");
-            TextField price = getNodeFactory().getDefaultTextField("Price");
-            price.setDisable(true);
-
-            ComboBox<String> comboBox = getNodeFactory().getComboBox(NodeFactory.ComboBoxType.Category);
-
-
-            ToggleGroup group = new ToggleGroup();
-            putLanguageValue(Willingness.Sell.name(), "sell.willingness");
-            putLanguageValue(Willingness.Lend.name(), "lend.willingness");
-            putLanguageValue(Willingness.Private.name(), "private.willingness");
-
-            RadioButton sellRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Sell.name()), group);
-            RadioButton lendRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Lend.name()), group);
-            RadioButton privateRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Private.name()), group);
-            EventHandler<ActionEvent> willingnessRadioHandler = event1 -> price.setDisable(!sellRadio.isSelected());
-            sellRadio.setOnAction(willingnessRadioHandler);
-            lendRadio.setOnAction(willingnessRadioHandler);
-            privateRadio.setOnAction(willingnessRadioHandler);
-
-            privateRadio.setSelected(true);
-            addItemAlert.addLeft(enterItemName, enterItemDescription, enterQuantity, comboBox);
-            addItemAlert.addRight(lendRadio, sellRadio, privateRadio, price);
-            addItemAlert.setEventHandler(event12 -> {
-                AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new,
-                        command -> command.setItemListType(itemListType));
-
-                itemCommand.execute((result, resultStatus) -> {
-                    resultStatus.setSucceeded(() -> displayData.add(result));
-                    resultStatus.handle(getPopupFactory());
-                }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText())); // this casting cannot be avoided. another approach would be to loop through all radio buttons
-            });
-            addItemAlert.display();
+        Button reviewItems = new JFXButton("Mark selected items as reviewItems");
+        reviewItems.setOnAction(event -> {
+            if (getSelected().size() == 0) {
+                nothingSelectedToast();
+                return;
+            }
+            Command<Item> alterItemOwnership = getCommandFactory().getCommand(AlterItemOwnership::new,
+                    c -> c.setItemId(getSelectedItemsIds().toArray(new Long[0])));
+            alterItemOwnership.execute((result, status) -> {
+                status.setSucceeded(() -> tableView.refresh());
+                status.handle(getPopupFactory());
+            }, Ownership.OWNER.name());
         });
-
+        addButton(reviewItems);
         tableViewGenerator.build();
     }
 

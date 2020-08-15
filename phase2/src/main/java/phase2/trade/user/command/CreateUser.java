@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.CREATE, undoable = false,
-        persistent = true, permissionSet = {Permission.CREATE_USER})
+        persistent = true, permissionSet = {Permission.CreateUser})
 public class CreateUser extends UserCommand<User> {
 
     @Override

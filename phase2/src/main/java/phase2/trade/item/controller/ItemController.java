@@ -1,5 +1,6 @@
 package phase2.trade.item.controller;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
@@ -42,5 +43,15 @@ public class ItemController extends GeneralTableViewController<Item> implements 
             });
             resultStatus.handle(getPopupFactory());
         });
+    }
+
+    protected List<Long> getSelectedItemsIds() {
+        List<Long> ids = new ArrayList<>();
+        getSelected().forEach(item -> ids.add(item.getUid()));
+        return ids;
+    }
+
+    protected void nothingSelectedToast() {
+        getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
     }
 }

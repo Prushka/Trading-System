@@ -12,14 +12,21 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
-        persistent = true, permissionSet = {Permission.ManagePersonalItems})
-public class UpdateInventoryItems extends ItemCommand<Void> {
+        persistent = true)
+// The permission of this command depends on the operator and the item's owner
+public class UpdateItems extends ItemCommand<Void> {
 
     private transient List<Item> itemsToUpdate;
 
     @Override
     public void execute(ResultStatusCallback<Void> callback, String... args) {
-        if (!checkPermission(callback)) return;
+        for (Item item : itemsToUpdate) {
+            if (!item.getOwner().getUid().equals(operator.getUid())) {
+                if (!checkPermission(callback, Permission.ManageAllItems)) return;
+            } else {
+                if (!checkPermission(callback, Permission.ManagePersonalItems)) return;
+            }
+        }
         getEntityBundle().getItemGateway().submitTransaction((gateway) -> {
             for (Item item : itemsToUpdate) {
                 gateway.update(item);

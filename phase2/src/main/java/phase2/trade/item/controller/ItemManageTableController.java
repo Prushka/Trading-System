@@ -25,8 +25,8 @@ public class ItemManageTableController extends ItemTableController implements In
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
 
-        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetAllItems::new);
-        getMarket.execute((result, resultStatus) -> {
+        Command<List<Item>> getItems = getCommandFactory().getCommand(GetAllItems::new);
+        getItems.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
                 setDisplayData(FXCollections.observableArrayList(result));
                 afterFetch();

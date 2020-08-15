@@ -2,7 +2,6 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.ComboBoxTableCell;
@@ -12,12 +11,9 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.GeneralTableViewController;
 import phase2.trade.database.TriConsumer;
 import phase2.trade.item.*;
-import phase2.trade.item.command.UpdateInventoryItems;
-import phase2.trade.view.TableViewGenerator;
-import phase2.trade.view.window.TableViewAlert;
+import phase2.trade.item.command.UpdateItems;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ItemTableController extends GeneralTableViewController<Item> implements Initializable {
@@ -39,7 +35,7 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
 
     protected void updateItem(List<Item> items) {
         disableButtons(true);
-        Command<?> command = getCommandFactory().getCommand(UpdateInventoryItems::new, c -> {
+        Command<?> command = getCommandFactory().getCommand(UpdateItems::new, c -> {
             c.setItemsToUpdate(items);
         });
         command.execute((result, resultStatus) -> {
@@ -63,78 +59,81 @@ public class ItemTableController extends GeneralTableViewController<Item> implem
 
     // this is already a super class of all Item Table views, they will reside here
     protected void addNameColumn(boolean editable) {
-        if(editable){
+        if (editable) {
             tableViewGenerator.addColumnEditable("Name", "name", event ->
                     shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, ItemEditor::alterName));
-        }else{
+        } else {
             tableViewGenerator.addColumn("Name", "name");
         }
     }
 
     // to decouple this would be unnecessary since some columns require cellfactory or cellfactory + cellvaluefactory while some don't
     protected void addDescriptionColumn(boolean editable) {
-        if(editable){
+        if (editable) {
             tableViewGenerator.addColumnEditable("Description", "description", getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(),
                     event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, ItemEditor::alterDescription));
-        }else{
+        } else {
             tableViewGenerator.addColumn("Description", "description");
         }
     }
 
     protected void addOwnershipColumn(boolean editable) {
-        if(editable){
+        if (editable) {
             tableViewGenerator.addColumnEditable("Ownership", "ownership",
-                    event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {},ItemEditor::alterCategory), // TODO!!
-                            ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Ownership.class)));
-        }else{
+                    event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
+                    }, ItemEditor::alterOwnership),
+                    ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Ownership.class)));
+        } else {
             tableViewGenerator.addColumn("Ownership", "ownership");
         }
     }
 
     protected void addCategoryColumn(boolean editable) {
-        if(editable){
+        if (editable) {
             tableViewGenerator.addColumnEditable("Category", "category",
-                    event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {},ItemEditor::alterCategory),
+                    event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
+                    }, ItemEditor::alterCategory),
                     ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Category.class)));
-        }else{
+        } else {
             tableViewGenerator.addColumn("Category", "category");
         }
     }
 
     protected void addWillingnessColumn(boolean editable) {
-        if(editable){
+        if (editable) {
             tableViewGenerator.addColumnEditable("Willingness", "willingness",
-                    event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {},ItemEditor::alterWillingness),
+                    event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
+                    }, ItemEditor::alterWillingness),
                     ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Willingness.class)));
-        }else{
+        } else {
             tableViewGenerator.addColumn("Willingness", "willingness");
         }
     }
 
     protected void addQuantityColumn(boolean editable) {
-        if(editable){
+        if (editable) {
             tableViewGenerator.addColumnEditable("Quantity", param -> new SimpleStringProperty(String.valueOf(param.getValue().getQuantity())),
                     event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, ItemEditor::alterQuantity));
-        }else{
+        } else {
             tableViewGenerator.addColumn("Quantity", "quantity");
         }
     }
 
     protected void addPriceColumn(boolean editable) {
-        if(editable){
+        if (editable) {
             tableViewGenerator.addColumnEditable("Price", param -> new SimpleStringProperty(String.valueOf(param.getValue().getPrice())),
                     event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, ItemEditor::alterPrice));
-        }else{
+        } else {
             tableViewGenerator.addColumn("Price", "price");
         }
     }
 
     protected void addUIDColumn() {
-        tableViewGenerator.addColumn("UID","uid");
+        tableViewGenerator.addColumn("UID", "uid");
     }
 
     protected void addSearchName() {

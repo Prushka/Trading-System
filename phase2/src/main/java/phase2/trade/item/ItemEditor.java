@@ -54,6 +54,11 @@ public class ItemEditor {
         statusCallback.call(new StatusSucceeded());
     }
 
+    public void alterOwnership(String ownership, StatusCallback statusCallback) {
+        items.forEach(item -> item.setOwnership(Ownership.valueOf(ownership)));
+        statusCallback.call(new StatusSucceeded());
+    }
+
     public void alterPrice(String price, StatusCallback statusCallback) {
         if (!isNumber(price)) {
             statusCallback.call(new StatusFailed());

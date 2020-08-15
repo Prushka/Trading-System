@@ -1,9 +1,9 @@
 package phase2.trade.item.command;
 
+import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
@@ -12,12 +12,12 @@ import phase2.trade.permission.Permission;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import java.util.*;
+import java.util.Set;
 
 @Entity
 @CommandProperty(crudType = CRUDType.DELETE, undoable = true,
         persistent = true, permissionSet = {Permission.ManagePersonalItems})
-public class RemoveItem extends ItemCommand<Long[]> {
+public class RemoveItemByAdmin extends ItemCommand<Long[]> {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Long> itemIds;

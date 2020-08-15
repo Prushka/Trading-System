@@ -27,11 +27,6 @@ public class MarketItemCell extends JFXListCell<Item> {
         this.popupFactory = popupFactory;
     }
 
-    @Override
-    public void startEdit() {
-        super.startEdit();
-    }
-
     private Pane generateItemPreview(Item item) {
         HBox hBox = new HBox(15);
         hBox.setPadding(new Insets(15, 20, 15, 20));

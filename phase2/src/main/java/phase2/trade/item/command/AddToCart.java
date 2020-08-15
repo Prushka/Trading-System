@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
-        persistent = true, permissionSet = {Permission.MANAGE_WISH_LIST})
+        persistent = true, permissionSet = {Permission.ManageWishList})
 public class AddToCart extends ItemCommand<Void> {
 
     private final transient Set<Item> items = new HashSet<>();

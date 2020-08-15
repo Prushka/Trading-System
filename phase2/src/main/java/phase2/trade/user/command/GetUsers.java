@@ -13,7 +13,7 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false, persistent = false,
-        permissionSet = {Permission.BROWSE_USER_OPERATIONS})
+        permissionSet = {Permission.ManageUserOperations})
 public class GetUsers extends Command<List<User>> {
 
     @Override

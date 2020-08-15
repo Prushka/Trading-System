@@ -12,13 +12,13 @@ import java.util.List;
 
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false,
-        persistent = false, permissionSet = {Permission.BrowseMarket})
-public class GetMarketItems extends ItemCommand<List<Item>> {
+        persistent = false, permissionSet = {Permission.ManageAllItems})
+public class GetAllItems extends ItemCommand<List<Item>> {
 
     @Override
     public void execute(ResultStatusCallback<List<Item>> callback, String... args) {
         if (!checkPermission(callback)) return;
-        getEntityBundle().getItemGateway().submitSession((gateway) -> callback.call(gateway.findMarketItems(), new StatusSucceeded()));
+        getEntityBundle().getItemGateway().submitSession((gateway) -> callback.call(gateway.findAll(), new StatusSucceeded()));
     }
 
     @Override

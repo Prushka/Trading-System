@@ -12,20 +12,22 @@ public class PermissionConfig {
 
     public PermissionConfig() {
 
-        addPermissions(PermissionGroup.GUEST, Permission.BROWSE_MARKET);
+        addPermissions(PermissionGroup.GUEST, Permission.BrowseMarket);
 
         addPermissions(PermissionGroup.REGULAR,
-                Permission.MANAGE_PERSONAL_ITEMS,
-                Permission.MANAGE_WISH_LIST,
-                Permission.TRADE,
-                Permission.EDIT_TRADE,
-                Permission.CONFIRM_TRADE,
-                Permission.BROWSE_MARKET);
+                Permission.ManagePersonalItems,
+                Permission.ManageWishList,
+                Permission.Trade,
+                Permission.EditTrade,
+                Permission.ConfirmTrade,
+                Permission.BrowseMarket);
 
-        addPermissions(PermissionGroup.ADMIN, Permission.CHANGE_THRESHOLD, Permission.REVIEW_ITEM);
-        addPermissions(PermissionGroup.HEAD_ADMIN, Permission.CREATE_USER, Permission.CHANGE_THRESHOLD, Permission.REVIEW_ITEM, Permission.BROWSE_USER_OPERATIONS, Permission.MANAGE_USER);
+        addPermissions(PermissionGroup.ADMIN, Permission.ChangeThreshold, Permission.ReviewItem);
+        addPermissions(PermissionGroup.HEAD_ADMIN, Permission.CreateUser,
+                Permission.ChangeThreshold, Permission.ReviewItem, Permission.ManageUserOperations, Permission.ManageUsers,
+                Permission.ManageAllItems);
 
-        addPermissions(PermissionGroup.SYSTEM, Permission.CHANGE_THRESHOLD, Permission.CREATE_USER);
+        addPermissions(PermissionGroup.SYSTEM, Permission.ChangeThreshold, Permission.CreateUser);
     }
 
     private void addPermissions(PermissionGroup permissionGroup, Permission... permissions) {

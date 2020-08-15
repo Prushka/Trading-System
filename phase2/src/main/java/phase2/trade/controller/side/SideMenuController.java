@@ -10,6 +10,7 @@ import phase2.trade.controller.*;
 import phase2.trade.item.controller.CartController;
 import phase2.trade.item.controller.InventoryController;
 import phase2.trade.controller.market.MarketListController;
+import phase2.trade.item.controller.ItemManageController;
 import phase2.trade.user.controller.*;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.view.SideListCell;
@@ -80,7 +81,7 @@ public class SideMenuController extends AbstractController implements Initializa
                 break;
             case ADMIN:
             case HEAD_ADMIN:
-                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.m.users", "side.m.user.ops"));
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.m.users","side.m.items", "side.m.user.ops"));
                 break;
         }
 
@@ -107,6 +108,9 @@ public class SideMenuController extends AbstractController implements Initializa
                         break;
                     case "side.m.users":
                         loadCenter(UserManageController::new);
+                        break;
+                    case "side.m.items":
+                        loadCenter(ItemManageController::new);
                         break;
                     case "side.order":
 

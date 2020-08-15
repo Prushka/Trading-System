@@ -41,9 +41,9 @@ public class SideMenuController extends AbstractController implements Initializa
         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(supplier));
     }
 
-    private <T> void loadCenter(Object controller) {
+    private void loadCenter(Object controller) {
         getPane("centerDashboard").getChildren().clear();
-        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(supplier));
+        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(controller));
     }
 
     private void inventory() {

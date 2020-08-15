@@ -43,6 +43,8 @@ public class UserInfoPresenter extends AbstractController implements Initializab
         if (user.getAvatar() != null && user.getAvatar().getImageData() != null) {
             Image img = new Image(new ByteArrayInputStream(user.getAvatar().getImageData()));
             imageView.setImage(img);
+            imageView.setFitWidth(150);
+            imageView.setFitHeight(150);
         }
         // address book + if user didnt input address
         // home.setText("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());

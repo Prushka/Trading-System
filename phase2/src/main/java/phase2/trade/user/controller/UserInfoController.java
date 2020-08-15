@@ -33,6 +33,9 @@ import java.util.ResourceBundle;
 
 public class UserInfoController extends AbstractController implements Initializable {
 
+    @FXML
+    private VBox root;
+
     private final VBox userInfoBox;
 
     public UserInfoController(ControllerResources controllerResources, VBox userInfoBox) {
@@ -89,7 +92,7 @@ public class UserInfoController extends AbstractController implements Initializa
         changeUserName.setOnAction(event -> userNameAlert.display());
         changePassword.setOnAction(event -> passwordAlert.display());
 
-        final Button openButton = new JFXButton("Choose Background Image");
+        final Button openButton = new JFXButton("Choose Avatar");
 
         final FileChooser fileChooser = new FileChooser();
 
@@ -115,7 +118,9 @@ public class UserInfoController extends AbstractController implements Initializa
                             UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
                                     getAccountManager().getLoggedInUser()));
                             update.execute((result1, status1) -> {
-
+                                status1.setSucceeded(() -> userInfoBox.getChildren().setAll
+                                        (getSceneManager().loadPane(UserInfoPresenter::new)));
+                                status1.handle(getPopupFactory());
                             });
                         });
                         status.handle(getPopupFactory());

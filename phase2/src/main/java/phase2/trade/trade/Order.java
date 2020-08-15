@@ -5,8 +5,8 @@ import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +18,16 @@ public class Order{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<UserOrderBundle> traders;
 
-    @Column
-    private LocalDateTime dateAndTime;
+    private Long timestamp;
+
+    public Long getTimeStamp() { return timestamp; }
+
+    public void setTimeStamp(Long timeStamp) { this.timestamp = timeStamp; }
+
+    private transient LocalDateTime dateAndTime;
 
     public Long getUid() {
         return uid;
@@ -40,12 +45,13 @@ public class Order{
         this.traders = traders;
     }
 
-    public LocalDateTime getDateAndTime() {
-        return dateAndTime;
-    }
+    @Transient
+    public LocalDateTime getDateAndTime() { return dateAndTime; }
 
+    @Transient
     public void setDateAndTime(LocalDateTime dateAndTime) {
         this.dateAndTime = dateAndTime;
+        setTimeStamp(dateAndTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
     }
 
     public List<User> getUsers() {

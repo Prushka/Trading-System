@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -21,9 +22,12 @@ import phase2.trade.controller.AbstractTableController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.AbstractEditableTableController;
+import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetMarketItems;
+import phase2.trade.item.controller.CartTableController;
 import phase2.trade.trade.Trade;
+import phase2.trade.trade.TradeState;
 import phase2.trade.trade.command.ConfirmTrade;
 import phase2.trade.trade.command.CreateTrade;
 import phase2.trade.trade.command.EditTrade;
@@ -45,15 +49,15 @@ public class MarketController extends AbstractTableController<Trade> implements 
     @FXML
     private VBox root, content, content2;
     private HBox buttonBar, users, meeting, dateTime, items, place, type;
-    private Label traders, date, tradeLocation, tradeType;
-    private ListView<Pane> itemList2, itemList3;
+    private Label date, tradeLocation, tradeType;
     private TabPane tradeTabs;
     private Tab tradeView, tradeMarket;
     private TableView<Trade> trades;
-    private TableColumn<Trade, String> statusColumn;
+    private TableColumn<Trade, Long> idColumn;
+    private TableColumn<Trade, TradeState> statusColumn;
+    private TableColumn<Trade, Boolean> typeColumn;
     private ObservableList<Trade> tradesList;
-    private JFXButton editDateTimeButton, editLocationButton, confirmButton, addItems2, addItems3, tradeButton;
-    private JFXComboBox<User> user2, user3;
+    private JFXButton editDateTimeButton, editLocationButton, confirmButton, tradeButton, addTraderButton;
     private JFXComboBox<String> isPermanent;
     private JFXTextField year, month, day, hour, minute, country, city, street, streetNum;
 
@@ -76,21 +80,27 @@ public class MarketController extends AbstractTableController<Trade> implements 
         tradeMarket = new Tab("Make a Trade");
 
         // Trades
+        idColumn = new TableColumn<>("Trade ID: ");
+        idColumn.setMinWidth(200);
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("uid"));
         statusColumn = new TableColumn<>("Status: ");
         statusColumn.setMinWidth(200);
         statusColumn.setCellValueFactory(new PropertyValueFactory<>("tradeStatus"));
+        typeColumn = new TableColumn<>("Trade Type: ");
+        typeColumn.setMinWidth(200);
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("isPermanent"));
         trades = new TableView<>();
         //tradesList = FXCollections.observableArrayList(getGatewayBundle().getEntityBundle().getTradeGateway()
           //      .findByUser(getControllerResources().getAccountManager().getLoggedInUser().getUid()));
         trades.setItems(tradesList);
-        trades.getColumns().addAll(statusColumn);
+        trades.getColumns().addAll(idColumn, statusColumn, typeColumn);
         editDateTimeButton = new JFXButton("Edit Date and Time");
         editDateTimeButton.setOnAction(e -> editDateTimeClicked());
         editLocationButton = new JFXButton("Edit Location");
         editLocationButton.setOnAction(e -> editLocationClicked());
         confirmButton = new JFXButton("Confirm Button");
         confirmButton.setOnAction(e -> confirmButtonClicked());
-        buttonBar.getChildren().addAll(editDateTimeButton, editLocationButton, confirmButton);
+        buttonBar.getChildren().addAll(confirmButton, editDateTimeButton, editLocationButton);
         buttonBar.setSpacing(20);
         buttonBar.setAlignment(Pos.BOTTOM_LEFT);
         buttonBar.setPadding(new Insets(5, 10, 5, 10));
@@ -100,24 +110,16 @@ public class MarketController extends AbstractTableController<Trade> implements 
         users.setSpacing(20);
         users.setAlignment(Pos.BOTTOM_LEFT);
         users.setPadding(new Insets(5, 10, 5, 10));
-        traders = new Label("Other Traders: ");
-        user2 = new JFXComboBox<>();
-        // user2.getItems().addAll(getGatewayBundle().getEntityBundle().getUserGateway().findAll());
-        user3 = new JFXComboBox<>();
-        users.getChildren().addAll(traders, user2, user3);
+        addTraderButton = new JFXButton("Add Trader");
+        addTraderButton.setOnAction(e -> addTraderClicked());
+        users.getChildren().addAll(addTraderButton);
 
         // Items
         items = new HBox();
-        users.setSpacing(20);
-        users.setAlignment(Pos.BOTTOM_LEFT);
-        users.setPadding(new Insets(5, 10, 5, 10));
-        addItems2 = new JFXButton("ADD ITEMS FOR TRADER 2");
-        addItems2.setOnAction(e -> items1Clicked());
-        itemList2 = new ListView<>();
-        addItems3 = new JFXButton("ADD ITEMS FOR TRADER 3");
-        addItems3.setOnAction(e -> items2Clicked());
-        itemList3 = new ListView<>();
-        items.getChildren().addAll(itemList2, addItems2, itemList3, addItems3);
+        items.setSpacing(20);
+        items.setAlignment(Pos.BOTTOM_LEFT);
+        items.setPadding(new Insets(5, 10, 5, 10));
+        items.getChildren().addAll(getSceneManager().loadPane(new CartTableController(getControllerResources(), ItemListType.CART)));
 
         // Date
         dateTime = new HBox();
@@ -177,36 +179,9 @@ public class MarketController extends AbstractTableController<Trade> implements 
         root.getChildren().add(meeting);
     }
 
-    public void items1Clicked(){
-        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Available Items for Trader 2", "");
-        ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
-        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
-        getMarket.execute((result, resultStatus) -> {
-            resultStatus.setSucceeded(() -> {
-                for (Item item : result) {
-                    availableItems.addElement(item);
-                }
-            });
-            resultStatus.handle(getPopupFactory());
-        });
-        popup.addNodes(availableItems.build());
-        popup.display();
-    }
-
-    public void items2Clicked(){
-        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Available Items for Trader 3", "");
-        ListViewGenerator<Item> availableItems = new ListViewGenerator<>(new JFXListView<>());
-        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
-        getMarket.execute((result, resultStatus) -> {
-            resultStatus.setSucceeded(() -> {
-                for (Item item : result) {
-                    availableItems.addElement(item);
-                }
-            });
-            resultStatus.handle(getPopupFactory());
-        });
-        popup.addNodes(availableItems.build());
-        popup.display();
+    public void addTraderClicked(){
+        Parent itemList = getSceneManager().loadPane(new CartTableController(getControllerResources(), ItemListType.CART));
+        items.getChildren().add(itemList);
     }
 
     public void editDateTimeClicked(){

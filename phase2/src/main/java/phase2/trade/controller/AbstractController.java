@@ -9,6 +9,9 @@ import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @ControllerProperty(viewFile = "abstract.fxml")
 public abstract class AbstractController {
 
@@ -16,8 +19,27 @@ public abstract class AbstractController {
 
     private final NodeFactory nodeFactory = new NodeFactory();
 
+    private final Map<String, String> valueLanguage = new HashMap<>();
+
     public AbstractController(ControllerResources controllerResources) {
         this.controllerResources = controllerResources;
+    }
+
+    protected String getLanguageByValue(String key) {
+        return valueLanguage.get(key);
+    }
+
+    protected void putLanguageValue(String key, String value) {
+        valueLanguage.put(key, value);
+    }
+
+    public String getValueByLanguage(String value) {
+        for (Map.Entry<String, String> entry : valueLanguage.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     protected SceneManager getSceneManager() {

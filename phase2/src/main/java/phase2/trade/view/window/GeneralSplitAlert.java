@@ -28,26 +28,15 @@ public class GeneralSplitAlert extends AlertWindow<Void> {
         body.setSpacing(35);
         friend = new HBox(10);
         right = new VBox(35);
-        friend.setPrefWidth(600);
         friend.getChildren().addAll(body, right);
     }
 
     public void addLeft(Node... nodes) {
-        body.getChildren().addAll(nodes);
+        addNodes(nodes);
     }
 
     public void addRight(Node... nodes) {
         right.getChildren().addAll(nodes);
-    }
-
-    public void clear() {
-        body.getChildren().clear();
-    }
-
-    private EventHandler<ActionEvent> confirmHandler;
-
-    public void setEventHandler(EventHandler<ActionEvent> actionEventEventHandler) {
-        this.confirmHandler = actionEventEventHandler;
     }
 
     public Void display(String... args) {
@@ -58,6 +47,10 @@ public class GeneralSplitAlert extends AlertWindow<Void> {
             alert.hideWithAnimation();
         });
         confirmButton.setFocusTraversable(false);
+
+        body.setMinWidth(250);
+        right.setMinWidth(250); // use a configuration file in the future
+
         layout.getBody().setAll(friend);
         layout.setActions(confirmButton);
 

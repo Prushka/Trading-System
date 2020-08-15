@@ -1,11 +1,8 @@
 package phase2.trade.database;
 
-import org.hibernate.query.Query;
 import phase2.trade.gateway.ItemGateway;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
-import phase2.trade.permission.PermissionGroup;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.AccountState;
 import phase2.trade.user.User;
 
@@ -28,7 +25,7 @@ public class ItemDAO extends DAO<Item, ItemGateway> implements ItemGateway {
             Join<Item, User> user = root.join("owner");
 
                 Predicate restriction = builder.and(
-                        builder.notEqual(root.get("willingness"), Willingness.NOPE),
+                        builder.notEqual(root.get("willingness"), Willingness.Private),
                         builder.notEqual(user.get("accountState"), AccountState.ON_VOCATION)
                 );
                 query.select(root).where(restriction);

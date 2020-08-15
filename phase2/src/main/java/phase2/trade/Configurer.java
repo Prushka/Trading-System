@@ -72,7 +72,7 @@ public class Configurer {
             c.setAsynchronous(false);
         });
         itemCommand.execute((result, status) -> {
-        }, name, description, category.name(), String.valueOf(quantity), Willingness.NOPE.name(), String.valueOf(price));
+        }, name, description, category.name(), String.valueOf(quantity), Willingness.Private.name(), String.valueOf(price));
     }
 
     public void mockDashboardRegister(String username, String email) {

@@ -89,8 +89,8 @@ public class MarketListController extends AbstractController implements Initiali
         priceMaxInclusive.setLabelFloat(true);
 
         Pattern doublePattern = Pattern.compile("\\d+\\.?\\d?");
-        listViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
-                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
+        listViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
+                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell))
                 .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch))
                 .addToggleButton(includeMine, ((entity, toMatch) -> entity.getOwner().getUid().
                         equals(getAccountManager().getLoggedInUser().getUid())))

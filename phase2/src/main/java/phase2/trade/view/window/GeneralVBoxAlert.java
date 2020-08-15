@@ -23,22 +23,7 @@ public class GeneralVBoxAlert extends AlertWindow<Void> {
         body.setSpacing(35);
     }
 
-    public void addNodes(Node... nodes) {
-        body.getChildren().addAll(nodes);
-    }
-
-    public void clear() {
-        body.getChildren().clear();
-    }
-
-    private EventHandler<ActionEvent> confirmHandler;
-
-    public void setEventHandler(EventHandler<ActionEvent> actionEventEventHandler) {
-        this.confirmHandler = actionEventEventHandler;
-    }
-
     public Void display(String... args) {
-
         Button confirmButton = new JFXButton("Ok");
 
         confirmButton.setOnAction(confirmHandler);
@@ -51,8 +36,6 @@ public class GeneralVBoxAlert extends AlertWindow<Void> {
         layout.setActions(confirmButton);
 
         alert.setContent(layout);
-
-
         alert.showAndWait();
         return null;
     }

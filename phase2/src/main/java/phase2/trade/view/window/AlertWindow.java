@@ -3,6 +3,9 @@ package phase2.trade.view.window;
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXDialogLayout;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -19,11 +22,25 @@ public abstract class AlertWindow<T> extends CustomWindow<T> {
 
     protected VBox body;
 
+    protected EventHandler<ActionEvent> confirmHandler;
+
     public AlertWindow(Stage parent, String title, String content) {
         super(parent);
         this.title = title;
         this.content = content;
         generateAlert();
+    }
+
+    public void clear() {
+        body.getChildren().clear();
+    }
+
+    public void setEventHandler(EventHandler<ActionEvent> actionEventEventHandler) {
+        this.confirmHandler = actionEventEventHandler;
+    }
+
+    public void addNodes(Node... nodes) {
+        body.getChildren().addAll(nodes);
     }
 
     protected void generateAlert() {

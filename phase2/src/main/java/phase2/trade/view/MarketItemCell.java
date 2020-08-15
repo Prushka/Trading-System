@@ -8,8 +8,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import phase2.trade.item.Item;
@@ -68,11 +66,11 @@ public class MarketItemCell extends JFXListCell<Item> {
 
         Label sellOrLendLabel = new Label("");
         switch (item.getWillingness()) {
-            case LEND:
+            case Lend:
                 sellOrLendLabel.setText("For LEND");
                 sellOrLendLabel.setStyle("-fx-text-fill: rgb(223,121,145);-fx-font-weight: BOLD");
                 break;
-            case SELL:
+            case Sell:
                 sellOrLendLabel.setText("Sell: " + price + "$"); // TODO: currency system?
                 sellOrLendLabel.setStyle("-fx-text-fill: rgb(227,98,9);-fx-font-weight: BOLD");
                 break;

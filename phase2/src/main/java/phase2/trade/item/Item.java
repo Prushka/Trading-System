@@ -1,7 +1,6 @@
 package phase2.trade.item;
 
 
-import phase2.trade.inventory.ItemList;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
@@ -19,7 +18,7 @@ public class Item {
 
     private Ownership ownership;
 
-    private Willingness willingness = Willingness.NOPE;
+    private Willingness willingness = Willingness.Private;
 
     private int quantity = 1;
 

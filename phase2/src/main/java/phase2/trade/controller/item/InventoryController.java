@@ -25,7 +25,6 @@ import phase2.trade.item.command.RemoveItem;
 import phase2.trade.item.command.UpdateInventoryItems;
 import phase2.trade.view.NodeFactory;
 import phase2.trade.view.window.GeneralSplitAlert;
-import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -70,9 +69,9 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         hBox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
         buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
-        sellButton.setOnAction(getWillingnessHandler(Willingness.SELL));
-        privateButton.setOnAction(getWillingnessHandler(Willingness.NOPE));
-        lendButton.setOnAction(getWillingnessHandler(Willingness.LEND));
+        sellButton.setOnAction(getWillingnessHandler(Willingness.Sell));
+        privateButton.setOnAction(getWillingnessHandler(Willingness.Private));
+        lendButton.setOnAction(getWillingnessHandler(Willingness.Lend));
 
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
@@ -100,9 +99,9 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         JFXCheckBox sell = new JFXCheckBox("Wish To Sell");
         JFXCheckBox privateCheckBox = new JFXCheckBox("Private");
 
-        tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
-                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
-                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE));
+        tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
+                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell))
+                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.Private));
 
         getPane("topBar").getChildren().addAll(lend, sell, privateCheckBox);
         lend.setSelected(true);
@@ -122,9 +121,13 @@ public class InventoryController extends GeneralTableViewController<Item> implem
 
 
             ToggleGroup group = new ToggleGroup();
-            RadioButton sellRadio = getNodeFactory().getDefaultRadioButton("Sell", group);
-            RadioButton lendRadio = getNodeFactory().getDefaultRadioButton("Lend", group);
-            RadioButton privateRadio = getNodeFactory().getDefaultRadioButton("Private", group);
+            putLanguageValue(Willingness.Sell.name(), "sell.willingness");
+            putLanguageValue(Willingness.Lend.name(), "lend.willingness");
+            putLanguageValue(Willingness.Private.name(), "private.willingness");
+
+            RadioButton sellRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Sell.name()), group);
+            RadioButton lendRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Lend.name()), group);
+            RadioButton privateRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Private.name()), group);
             EventHandler<ActionEvent> willingnessRadioHandler = event1 -> {
                 if (sellRadio.isSelected()) {
                     price.setDisable(false);
@@ -136,7 +139,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
             lendRadio.setOnAction(willingnessRadioHandler);
             privateRadio.setOnAction(willingnessRadioHandler);
 
-            lendRadio.setSelected(true);
+            privateRadio.setSelected(true);
             addItemAlert.addLeft(enterItemName, enterItemDescription, enterQuantity, comboBox);
             addItemAlert.addRight(lendRadio, sellRadio, privateRadio, price);
             addItemAlert.setEventHandler(new EventHandler<ActionEvent>() {
@@ -148,7 +151,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
                     itemCommand.execute((result, resultStatus) -> {
                         resultStatus.setSucceeded(() -> displayData.add(result));
                         resultStatus.handle(getPopupFactory());
-                    }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getValue(), enterQuantity.getText());
+                    }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText())); // this casting cannot be avoided. another approach would be to loop through all radio buttons
                 }
             });
             addItemAlert.display();

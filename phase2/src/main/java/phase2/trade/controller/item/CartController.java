@@ -85,9 +85,9 @@ public class CartController extends GeneralTableViewController<Item> implements 
         JFXCheckBox sell = new JFXCheckBox("Wish To Sell");
         JFXCheckBox privateCheckBox = new JFXCheckBox("Private");
 
-        tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
-                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
-                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.NOPE))
+        tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
+                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell))
+                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.Private))
                 .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
 
         getPane("topBar").getChildren().addAll(category, lend, sell, privateCheckBox);

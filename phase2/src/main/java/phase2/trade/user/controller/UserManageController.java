@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.AbstractTableViewController;
+import phase2.trade.controller.AbstractTableController;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class UserManageController extends AbstractTableViewController<User> implements Initializable {
+public class UserManageController extends AbstractTableController<User> implements Initializable {
 
 
     public UserManageController(ControllerResources controllerResources) {

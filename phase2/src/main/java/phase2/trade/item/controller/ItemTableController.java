@@ -7,7 +7,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.AbstractEditableTableViewController;
+import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -17,12 +17,13 @@ import phase2.trade.item.command.UpdateItems;
 
 import java.util.List;
 
-public class ItemTableController extends AbstractEditableTableViewController<Item,ItemEditor> implements Initializable {
+public class ItemTableController extends AbstractEditableTableController<Item, ItemEditor> implements Initializable {
 
     public ItemTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
-        super(controllerResources, ifMultipleSelection, ifEditable, ItemEditor::new);
+        super(controllerResources, ifMultipleSelection, ifEditable, ItemEditor::new, Item::getUid);
     }
 
+    @Override
     protected void updateEntity(List<Item> items) {
         disableButtons(true);
         Command<?> command = getCommandFactory().getCommand(UpdateItems::new, c -> {
@@ -35,10 +36,6 @@ public class ItemTableController extends AbstractEditableTableViewController<Ite
             });
             resultStatus.handle(getPopupFactory());
         });
-    }
-
-    protected void nothingSelectedToast() {
-        getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
     }
 
     // this is already a super class of all Item Table views, they will reside here

@@ -5,17 +5,22 @@ import javafx.fxml.Initializable;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.database.TriConsumer;
 import phase2.trade.editor.EditorSupplier;
+import phase2.trade.editor.EntityIdLookUp;
 
 import java.util.*;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public abstract class AbstractEditableTableViewController<T, E> extends AbstractTableViewController<T> implements Initializable {
+public abstract class AbstractEditableTableController<T, E> extends AbstractTableController<T> implements Initializable {
 
     private final EditorSupplier<E, T> supplier;
 
-    public AbstractEditableTableViewController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable, EditorSupplier<E, T> supplier) {
+    private final EntityIdLookUp<T> entityIdLookUp;
+
+    public AbstractEditableTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable,
+                                           EditorSupplier<E, T> supplier, EntityIdLookUp<T> entityIdLookUp) {
         super(controllerResources, ifMultipleSelection, ifEditable);
         this.supplier = supplier;
+        this.entityIdLookUp = entityIdLookUp;
     }
 
     private List<T> getEntityAsList(T entity) {
@@ -54,9 +59,9 @@ public abstract class AbstractEditableTableViewController<T, E> extends Abstract
         return super.getSelected();
     }
 
-    protected List<Long> getSelectedItemsIds() {
+    protected List<Long> getSelectedEntityIds() {
         List<Long> ids = new ArrayList<>();
-        getSelected().forEach(item -> ids.add(item.getUid()));
+        getSelected().forEach(entityIdLookUp::getId);
         return ids;
     }
 

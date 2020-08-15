@@ -1,4 +1,4 @@
-package phase2.trade.controller;
+package phase2.trade.editor;
 
 @FunctionalInterface
 public interface EntityIdLookUp<T> {

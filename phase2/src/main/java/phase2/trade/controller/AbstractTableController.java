@@ -12,6 +12,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import phase2.trade.command.Command;
+import phase2.trade.editor.EntityIdLookUp;
 import phase2.trade.view.FilterPredicate;
 import phase2.trade.view.TableViewGenerator;
 
@@ -19,7 +20,7 @@ import java.net.URL;
 import java.util.*;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public abstract class AbstractTableViewController<T> extends AbstractController implements Initializable {
+public abstract class AbstractTableController<T> extends AbstractController implements Initializable {
 
     @FXML
     protected TableView<T> tableView;
@@ -35,7 +36,7 @@ public abstract class AbstractTableViewController<T> extends AbstractController 
 
     protected TableViewGenerator<T> tableViewGenerator;
 
-    public AbstractTableViewController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
+    public AbstractTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
         super(controllerResources);
         this.ifMultipleSelection = ifMultipleSelection;
         this.ifEditable = ifEditable;

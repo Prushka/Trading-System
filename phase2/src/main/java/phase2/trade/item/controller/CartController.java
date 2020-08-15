@@ -18,11 +18,11 @@ import java.net.URL;
 import java.util.*;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class CartTableController extends ItemController implements Initializable {
+public class CartController extends ItemController implements Initializable {
 
     private final ItemListType itemListType;
 
-    public CartTableController(ControllerResources controllerResources, ItemListType itemListType) {
+    public CartController(ControllerResources controllerResources, ItemListType itemListType) {
         super(controllerResources, true, false);
         this.itemListType = itemListType;
     }

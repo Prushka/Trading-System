@@ -10,7 +10,9 @@
 
         <mapping class="phase2.trade.trade.UserOrderBundle" />
         <mapping class="phase2.trade.trade.Trade" />
-        <mapping class="phase2.trade.trade.Order" />
+        <mapping class="phase2.trade.trade.TradeOrder" />
+        <mapping class="phase2.trade.trade.MeetUpOrder" />
+        <mapping class="phase2.trade.trade.OnlineOrder" />
 
         <mapping class="phase2.trade.command.Command" />
         <mapping class="phase2.trade.item.command.ItemCommand" />
@@ -34,6 +36,9 @@
         <mapping class="phase2.trade.permission.PermissionSet" />
 
         <mapping class="phase2.trade.avatar.Avatar" />
+        <mapping class="phase2.trade.support.SupportTicket" />
+        <mapping class="phase2.trade.support.command.OpenSupportTicket" />
+        <mapping class="phase2.trade.support.command.UpdateSupportTickets" />
 
         <mapping class="phase2.trade.user.User" />
         <mapping class="phase2.trade.user.AdministrativeUser" />

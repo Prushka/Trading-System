@@ -15,7 +15,7 @@ public class UserOrderBundle {
     @OneToOne
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private TradeItemHolder tradeItemHolder;
 
     private int edit;

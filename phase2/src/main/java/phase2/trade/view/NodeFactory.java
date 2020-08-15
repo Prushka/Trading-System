@@ -3,13 +3,11 @@ package phase2.trade.view;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import phase2.trade.item.Category;
 
 import java.util.Arrays;
@@ -29,6 +27,13 @@ public class NodeFactory {
         return jfxTextField;
     }
 
+    public TextArea getDefaultTextArea(String promptText) {
+        JFXTextArea area = new JFXTextArea();
+        area.setPromptText(promptText);
+        area.setLabelFloat(true);
+        return area;
+    }
+
     public RadioButton getDefaultRadioButton(String text, ToggleGroup toggleGroup) {
         RadioButton radio = new JFXRadioButton(text);
         radio.setToggleGroup(toggleGroup);
@@ -39,13 +44,8 @@ public class NodeFactory {
         Category
     }
 
-    public ComboBox<String> getComboBox(ComboBoxType type) {
-        switch (type) {
-            case Category:
-                return new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))));
-            default:
-                return null;
-        }
+    public ComboBox<String> getComboBox(Class<? extends Enum<?>> clazz) {
+        return new JFXComboBox<>(getEnumAsObservableString(clazz));
     }
 
     public ObservableList<String> getEnumAsObservableString(Class<? extends Enum<?>> clazz) {

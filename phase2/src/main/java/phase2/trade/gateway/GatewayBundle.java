@@ -8,6 +8,7 @@ public class GatewayBundle {
 
     ConfigBundle configBundle;
 
+
     public ConfigBundle getConfigBundle() {
         return configBundle;
     }

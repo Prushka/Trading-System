@@ -57,12 +57,7 @@ public class UserOperationController extends AbstractEditableTableController<Com
 
     private TableView<Command> addToTableViewGenerator(List<Command> result, TableViewGenerator<Command> tableViewGenerator){
         tableViewGenerator
-                .addColumn("Type", param -> {
-                    if (param.getValue() != null) {
-                        return new SimpleStringProperty(param.getValue().getDType());
-                    }
-                    return new SimpleStringProperty("null");
-                })
+                .addColumn("Type", "dType")
                 .addColumn("Time", param -> {
                     if (param.getValue() != null) {
                         return new SimpleStringProperty(convertTime(param.getValue().getTimestamp()));

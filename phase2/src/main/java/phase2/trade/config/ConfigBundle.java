@@ -17,6 +17,8 @@ public class ConfigBundle implements Shutdownable {
 
     private final UIConfig uiConfig;
 
+    private final RedisConfig redisConfig;
+
     private ConfigStrategy configStrategy;
 
 
@@ -27,6 +29,7 @@ public class ConfigBundle implements Shutdownable {
         tradeConfig = configStrategy.read(TradeConfig.class, "config/trade", TradeConfig::new);
         databaseConfig = configStrategy.read(DatabaseConfig.class, "config/database", DatabaseConfig::new);
         uiConfig = configStrategy.read(UIConfig.class, "config/ui", UIConfig::new);
+        redisConfig = configStrategy.read(RedisConfig.class, "config/redis", RedisConfig::new);
     }
 
     public void changeStrategy(ConfigStrategy configStrategy) {
@@ -40,6 +43,7 @@ public class ConfigBundle implements Shutdownable {
         configStrategy.save(tradeConfig, "config/trade");
         configStrategy.save(databaseConfig, "config/database");
         configStrategy.save(uiConfig, "config/ui");
+        configStrategy.save(redisConfig, "config/redis");
     }
 
     public PermissionConfig getPermissionConfig() {
@@ -56,5 +60,9 @@ public class ConfigBundle implements Shutdownable {
 
     public UIConfig getUiConfig() {
         return uiConfig;
+    }
+
+    public RedisConfig getRedisConfig() {
+        return redisConfig;
     }
 }

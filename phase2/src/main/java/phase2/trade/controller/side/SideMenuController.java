@@ -7,11 +7,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import phase2.trade.controller.*;
-import phase2.trade.controller.market.MarketController;
-import phase2.trade.item.controller.CartTableController;
+import phase2.trade.item.controller.CartController;
 import phase2.trade.item.controller.InventoryController;
 import phase2.trade.controller.market.MarketListController;
-import phase2.trade.item.controller.ItemManageTableController;
+import phase2.trade.item.controller.ItemManageController;
+import phase2.trade.support.controller.SupportTicketAdminController;
+import phase2.trade.support.controller.SupportTicketUserController;
 import phase2.trade.user.controller.*;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.view.SideListCell;
@@ -55,7 +56,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private void cart() {
         getPane("centerDashboard").getChildren().clear();
-        CartTableController controller = new CartTableController(getControllerResources(), ItemListType.CART);
+        CartController controller = new CartController(getControllerResources(), ItemListType.CART);
         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(controller));
     }
 
@@ -83,11 +84,14 @@ public class SideMenuController extends AbstractController implements Initializa
 
         switch (getAccountManager().getPermissionGroup()) {
             case REGULAR:
-                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart", "side.order"));
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart", "side.order","side.user.support"));
                 break;
             case ADMIN:
             case HEAD_ADMIN:
-                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.m.users","side.m.items", "side.m.user.ops"));
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.m.users","side.m.items", "side.m.user.ops","side.a.support"));
+                break;
+            case GUEST:
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market"));
                 break;
         }
 
@@ -101,9 +105,8 @@ public class SideMenuController extends AbstractController implements Initializa
                         loadCenter(userInfoController);
                         break;
                     case "side.market":
-                        // getPane("centerDashboard").getChildren().clear();
-                        // getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(new MarketListController(getControllerResources())));
-                        loadCenter(MarketController::new);
+                        getPane("centerDashboard").getChildren().clear();
+                        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(new MarketListController(getControllerResources())));
                         break;
                     case "side.inventory":
                         inventory();
@@ -118,10 +121,18 @@ public class SideMenuController extends AbstractController implements Initializa
                         loadCenter(UserManageController::new);
                         break;
                     case "side.m.items":
-                        loadCenter(ItemManageTableController::new);
+                        loadCenter(ItemManageController::new);
                         break;
                     case "side.order":
 
+                        break;
+                    case "side.user.support":
+
+                        loadCenter(SupportTicketUserController::new);
+                        break;
+                    case "side.a.support":
+
+                        loadCenter(SupportTicketAdminController::new);
                         break;
                 }
             }

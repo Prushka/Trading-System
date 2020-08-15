@@ -2,8 +2,11 @@ package phase2.trade.controller;
 
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import phase2.trade.ShutdownHook;
 import phase2.trade.command.CommandFactory;
+import phase2.trade.database.nosql.Redis;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.gateway.PubSub;
 import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
@@ -31,13 +34,20 @@ public class ControllerResources {
 
     private final Map<String, Pane> panes = new HashMap<>();
 
-    public ControllerResources(GatewayBundle gatewayBundle, Stage window, AccountManager accountManager) {
+    private final PubSub pubSub;
+
+    // only use this for pub-sub for now
+    private final Map<String, AbstractController> registeredControllers = new HashMap<>();
+
+    public ControllerResources(GatewayBundle gatewayBundle, ShutdownHook shutdownHook, Stage window, AccountManager accountManager) {
         this.gatewayBundle = gatewayBundle;
         this.window = window;
         this.accountManager = accountManager;
         popupFactory = new PopupFactory(window);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);
         sceneManager = new SceneManager(this);
+        pubSub = new Redis(getGatewayBundle().getConfigBundle().getRedisConfig(),registeredControllers);
+        shutdownHook.addShutdownables(pubSub);
     }
 
     public Stage getWindow() {
@@ -66,5 +76,17 @@ public class ControllerResources {
 
     protected Map<String, Pane> getPanes() {
         return panes;
+    }
+
+    protected void registerController(String simpleName, AbstractController abstractController) {
+        registeredControllers.put(simpleName, abstractController);
+    }
+
+    public phase2.trade.gateway.PubSub getPubSub() {
+        return pubSub;
+    }
+
+    public void publish(String message) {
+        pubSub.publish(message);
     }
 }

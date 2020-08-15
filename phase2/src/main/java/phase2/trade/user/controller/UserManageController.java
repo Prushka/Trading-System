@@ -41,6 +41,19 @@ public class UserManageController extends UserTableController implements Initial
 
     }
 
+    @Override
+    public void reload() {
+        Command<List<User>> getUsers = getCommandFactory().getCommand(GetUsers::new);
+
+        getUsers.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> {
+                reloadNewDisplayData(result);
+                super.reload();
+            });
+            resultStatus.handle(getPopupFactory());
+        });
+    }
+
     public void afterFetch(List<User> users) {
         setDisplayData(FXCollections.observableArrayList(users));
 

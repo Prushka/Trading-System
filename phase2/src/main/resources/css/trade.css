@@ -180,3 +180,30 @@
 .side-list-view .bottom-list-view {
 
 }
+
+.dashboard-table-view .jfx-combo-box {
+    -jfx-unfocus-color: rgb(230, 230, 230);
+    -jfx-focus-color: WHITE;
+    -fx-prompt-text-fill: WHITE;
+    -fx-prompt-text-weight: BOLD;
+
+    -fx-text-fill: BLACK;
+}
+
+.dashboard-table-view .jfx-combo-box .cell {
+
+    -fx-text-fill: BLACK;
+}
+
+.dashboard-table-view .jfx-combo-box .jfx-list-cell {
+    -fx-background: WHITE;
+    -fx-text-fill: BLACK;
+}
+
+.dashboard-table-view .combo-box-popup .list-cell:hover {
+    -fx-background-color: rgb(230, 230, 230);
+}
+
+.dashboard-table-view .combo-box-popup .list-view .list-cell .jfx-rippler {
+    -jfx-rippler-fill: rgb(70, 70, 70);
+}

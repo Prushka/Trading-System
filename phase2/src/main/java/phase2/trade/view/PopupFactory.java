@@ -46,7 +46,7 @@ public class PopupFactory {
         for (Permission permission : permissionRequired.getPerm()) {
             perm.append(permission).append(" ");
         }
-        toast(Duration.seconds(4), "Permission Denied | " + perm, "CLOSE");
+        toast(Duration.seconds(4), "Permission Denied | Permission Required: " + perm, "CLOSE");
     }
 
     public void noPermission() {

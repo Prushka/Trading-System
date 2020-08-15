@@ -8,8 +8,8 @@ import java.util.List;
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public abstract class AbstractTableController<T> extends AbstractEditableTableController<T, EmptyEditor<T>> implements Initializable {
 
-    public AbstractTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
-        super(controllerResources, ifMultipleSelection, ifEditable, EmptyEditor::new);
+    public AbstractTableController(ControllerResources controllerResources, boolean ifMultipleSelection) {
+        super(controllerResources, ifMultipleSelection, false, EmptyEditor::new);
     }
 
     public void updateEntity(List<T> entities){

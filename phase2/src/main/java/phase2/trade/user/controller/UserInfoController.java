@@ -15,6 +15,7 @@ import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.EditableController;
 import phase2.trade.editor.UserEditor;
+import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.AccountState;
 import phase2.trade.user.User;
 import phase2.trade.user.command.ChangePassword;
@@ -56,6 +57,7 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
         Label bio = new Label("Bio: ");
         Label currentStatus = new Label("Current Status: " + getAccountManager().getLoggedInUser().getUid());
 
+        if(getAccountManager().getLoggedInUser().getPermissionGroup().equals(PermissionGroup.GUEST)) return;
         Button changePassword = new JFXButton("Change Password");
         Button changeUserName = new JFXButton("Change User Name");
 

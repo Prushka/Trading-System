@@ -10,7 +10,7 @@ public class Trade {
     private Long uid;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private Order myOrder;
+    private TradeOrder myOrder;
 
     private TradeState tradeState;
 
@@ -22,9 +22,9 @@ public class Trade {
 
     void setUid(Long uid) { this.uid = uid; }
 
-    Order getOrder(){ return myOrder; }
+    TradeOrder getOrder(){ return myOrder; }
 
-    void setOrder(Order order){ this.myOrder = order;}
+    void setOrder(TradeOrder order){ this.myOrder = order;}
 
     public TradeState getTradeState() {
         return tradeState;

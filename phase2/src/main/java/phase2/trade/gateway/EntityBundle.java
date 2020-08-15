@@ -9,4 +9,6 @@ public interface EntityBundle {
     CommandGateway getCommandGateway();
 
     TradeGateway getTradeGateway();
+
+    SupportTicketGateway getSupportTicketGateway();
 }

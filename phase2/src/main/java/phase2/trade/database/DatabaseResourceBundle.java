@@ -4,13 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import phase2.trade.Main;
 import phase2.trade.Shutdownable;
 import phase2.trade.config.DatabaseConfig;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 
 public class DatabaseResourceBundle implements Shutdownable {
 
@@ -40,11 +38,11 @@ public class DatabaseResourceBundle implements Shutdownable {
         configuration.setProperty("hibernate.hbm2ddl.auto", databaseConfig.getHbm2ddl());
         configuration.setProperty("hibernate.connection.autoReconnect", String.valueOf(databaseConfig.isAutoReconnect()));
         configuration.setProperty("hibernate.show_sql", String.valueOf(databaseConfig.isShowSQL()));
-        configuration.setProperty("hibernate.connection.pool_size", String.valueOf(databaseConfig.getConnection_pool_size()));
+        configuration.setProperty("hibernate.connection.pool_size", String.valueOf(databaseConfig.getPoolSize()));
 
         logger.info("Connecting to Database...");
         sessionFactory = configuration.configure().buildSessionFactory();
-        threadPool = Executors.newFixedThreadPool(databaseConfig.getConnection_pool_size());
+        threadPool = Executors.newFixedThreadPool(databaseConfig.getPoolSize());
 
         daoBundle = new DAOBundle(this);
     }

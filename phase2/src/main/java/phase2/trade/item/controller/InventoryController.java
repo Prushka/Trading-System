@@ -8,12 +8,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import org.hibernate.event.service.spi.EventActionWithParameter;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.GeneralTableViewController;
+import phase2.trade.database.TriConsumer;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -30,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
@@ -51,25 +56,50 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         super.initialize(location, resources);
         setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
 
-        tableViewGenerator.addColumnEditable("Name", "name",
-                getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
-                    ItemEditor itemEditor = new ItemEditor(event.getRowValue());
-                    itemEditor.alterName(event.getNewValue(), resultStatus -> {
-                    });
-                    updateItem(event.getRowValue());
-                })
+        tableViewGenerator
+                .addColumnEditable("Name", "name",
+                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
+                            shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterName);
+                        })
+
                 .addColumnEditable("Description", "description",
                         getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
-                            ItemEditor itemEditor = new ItemEditor(event.getRowValue());
-                            itemEditor.alterDescription(event.getNewValue(), resultStatus -> {
+                            new ItemEditor(event.getRowValue()).alterDescription(event.getNewValue(), resultStatus -> {
+                            });
+                            updateItem(event.getRowValue());
+                            TriConsumer<ItemEditor, String, StatusCallback> alterPrice = ItemEditor::alterPrice;
+                        })
+
+                .addColumn("Ownership", "ownership")
+
+                .addColumnEditable("Quantity", "quantity",
+                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
+                            new ItemEditor(event.getRowValue()).alterQuantity(event.getNewValue(), resultStatus -> {
                             });
                             updateItem(event.getRowValue());
                         })
-                .addColumn("Category", "category")
-                .addColumn("Ownership", "ownership")
-                .addColumn("Quantity", "quantity")
-                .addColumn("Price", "price")
-                .addColumn("Willingness", "willingness")
+
+                .addColumnEditable("Price", "price",
+                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
+                            new ItemEditor(event.getRowValue()).alterPrice(event.getNewValue(), resultStatus -> {
+                            });
+                            updateItem(event.getRowValue());
+                        })
+
+
+                .addColumnEditable("Category", "category", event -> {
+                    new ItemEditor(event.getRowValue()).alterCategory(event.getNewValue(), resultStatus -> {
+                    });
+                    updateItem(event.getRowValue());
+                }, ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Category.class)))
+
+                .addColumnEditable("Willingness", "willingness", event -> {
+                    ItemEditor itemEditor = new ItemEditor(event.getRowValue());
+                    itemEditor.alterWillingness(event.getNewValue(), resultStatus -> {
+                    });
+                    updateItem(event.getRowValue());
+                }, ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Willingness.class)))
+
                 .addColumn("UID", "uid");
 
         JFXButton addButton = new JFXButton("Add");
@@ -179,6 +209,11 @@ public class InventoryController extends GeneralTableViewController<Item> implem
             });
 
         };
+    }
+
+    private void shortenAlter(Item item, String newValue, StatusCallback statusCallback, TriConsumer<ItemEditor, String, StatusCallback> consumer) {
+        consumer.consume(new ItemEditor(item), newValue, statusCallback);
+        updateItem(item);
     }
 
 

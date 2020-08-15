@@ -9,6 +9,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
@@ -76,6 +77,16 @@ public class TableViewGenerator<T> {
         TableColumn<T, String> column = getTableColumn(name, fieldName);
         listOfColumns.add(column);
         column.setCellFactory(TextFieldTableCell.forTableColumn());
+        column.setOnEditCommit(onEditCommit);
+        return this;
+    }
+
+    public TableViewGenerator<T> addColumnEditable(String name, String fieldName,
+                                                   EventHandler<TableColumn.CellEditEvent<T, String>> onEditCommit,
+                                                   Callback<TableColumn<T, String>, TableCell<T, String>> cellFactory) {
+        TableColumn<T, String> column = getTableColumn(name, fieldName);
+        listOfColumns.add(column);
+        column.setCellFactory(cellFactory);
         column.setOnEditCommit(onEditCommit);
         return this;
     }

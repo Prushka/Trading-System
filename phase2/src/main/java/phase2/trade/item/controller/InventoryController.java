@@ -26,11 +26,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class InventoryTableController extends ItemTableController implements Initializable {
+public class InventoryController extends ItemTableController implements Initializable {
 
     private final ItemListType itemListType;
 
-    public InventoryTableController(ControllerResources controllerResources, ItemListType itemListType) {
+    public InventoryController(ControllerResources controllerResources, ItemListType itemListType) {
         super(controllerResources, true, true);
         this.itemListType = itemListType;
     }
@@ -51,6 +51,7 @@ public class InventoryTableController extends ItemTableController implements Ini
         addPriceColumn(true);
         addCategoryColumn(true);
         addWillingnessColumn(true);
+        addUIDColumn();
 
         addSearchName();
         addSearchDescription();
@@ -67,9 +68,12 @@ public class InventoryTableController extends ItemTableController implements Ini
         hBox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
         buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
-        sellButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Sell.name(), s -> {}, ItemEditor::alterWillingness));
-        privateButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Private.name(), s -> {}, ItemEditor::alterWillingness));
-        lendButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Lend.name(), s -> {}, ItemEditor::alterWillingness));
+        sellButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Sell.name(), s -> {
+        }, ItemEditor::alterWillingness));
+        privateButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Private.name(), s -> {
+        }, ItemEditor::alterWillingness));
+        lendButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Lend.name(), s -> {
+        }, ItemEditor::alterWillingness));
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
             command.setItemListType(itemListType);

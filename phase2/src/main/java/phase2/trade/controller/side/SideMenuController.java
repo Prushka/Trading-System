@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import phase2.trade.controller.*;
 import phase2.trade.item.controller.CartTableController;
-import phase2.trade.item.controller.InventoryTableController;
+import phase2.trade.item.controller.InventoryController;
 import phase2.trade.controller.market.MarketListController;
 import phase2.trade.item.controller.ItemManageTableController;
 import phase2.trade.user.controller.*;
@@ -43,7 +43,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     private void inventory() {
         getPane("centerDashboard").getChildren().clear();
-        InventoryTableController controller = new InventoryTableController(getControllerResources(), ItemListType.INVENTORY);
+        InventoryController controller = new InventoryController(getControllerResources(), ItemListType.INVENTORY);
         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(controller));
     }
 

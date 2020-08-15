@@ -44,7 +44,7 @@ public class DatabaseResourceBundle implements Shutdownable {
 
         logger.info("Connecting to Database...");
         sessionFactory = configuration.configure().buildSessionFactory();
-        threadPool = Executors.newFixedThreadPool(databaseConfig.getConnection_pool_size()); // do we need to configure this
+        threadPool = Executors.newFixedThreadPool(databaseConfig.getConnection_pool_size());
 
         daoBundle = new DAOBundle(this);
     }

@@ -4,52 +4,49 @@ import javafx.beans.property.BooleanProperty;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
+import phase2.trade.controller.Editor;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionProperty;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemEditor {
+public class ItemEditor extends Editor<Item> {
 
-    private final List<Item> items;
-
-    public ItemEditor(List<Item> items) {
-        this.items = items;
+    public ItemEditor(List<Item> entities) {
+        super(entities);
     }
 
-    public ItemEditor(Item item) {
-        this.items = new ArrayList<>();
-        this.items.add(item);
+    public ItemEditor(Item entity) {
+        super(entity);
     }
 
-    @PermissionProperty(permissionSet = {Permission.ManageAllItems})
     public void alterWillingness(String willingness, StatusCallback statusCallback) {
         alterWillingness(Willingness.valueOf(willingness), statusCallback);
     }
 
     public void alterWillingness(Willingness willingness, StatusCallback statusCallback) {
-        items.forEach(item -> item.setWillingness(willingness));
+        entities.forEach(item -> item.setWillingness(willingness));
         statusCallback.call(new StatusSucceeded());
     }
 
     public void alterDescription(String description, StatusCallback statusCallback) {
-        items.forEach(item -> item.setDescription(description));
+        entities.forEach(item -> item.setDescription(description));
         statusCallback.call(new StatusSucceeded());
     }
 
     public void alterName(String name, StatusCallback statusCallback) {
-        items.forEach(item -> item.setName(name));
+        entities.forEach(item -> item.setName(name));
         statusCallback.call(new StatusSucceeded());
     }
 
     public void alterCategory(String category, StatusCallback statusCallback) {
-        items.forEach(item -> item.setCategory(Category.valueOf(category)));
+        entities.forEach(item -> item.setCategory(Category.valueOf(category)));
         statusCallback.call(new StatusSucceeded());
     }
 
     public void alterOwnership(String ownership, StatusCallback statusCallback) {
-        items.forEach(item -> item.setOwnership(Ownership.valueOf(ownership)));
+        entities.forEach(item -> item.setOwnership(Ownership.valueOf(ownership)));
         statusCallback.call(new StatusSucceeded());
     }
 
@@ -58,7 +55,7 @@ public class ItemEditor {
             statusCallback.call(new StatusFailed());
             return;
         }
-        items.forEach(item -> item.setPrice(Double.parseDouble(price)));
+        entities.forEach(item -> item.setPrice(Double.parseDouble(price)));
         statusCallback.call(new StatusSucceeded());
     }
 
@@ -67,19 +64,7 @@ public class ItemEditor {
             statusCallback.call(new StatusFailed());
             return;
         }
-        items.forEach(item -> item.setQuantity(Integer.parseInt(quantity)));
+        entities.forEach(item -> item.setQuantity(Integer.parseInt(quantity)));
         statusCallback.call(new StatusSucceeded());
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    private boolean isInt(String toExam) {
-        return toExam.matches("[0-9]+");
-    }
-
-    private boolean isNumber(String toExam) {
-        return toExam.matches("-?\\d+(\\.\\d+)?");
     }
 }

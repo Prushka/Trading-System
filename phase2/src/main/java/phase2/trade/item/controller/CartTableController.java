@@ -40,6 +40,7 @@ public class CartTableController extends ItemTableController implements Initiali
         addPriceColumn(false);
         addCategoryColumn(false);
         addWillingnessColumn(false);
+        addUIDColumn();
 
         addSearchName();
         addSearchDescription();

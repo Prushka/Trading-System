@@ -21,7 +21,8 @@ public class PermissionConfig {
                 Permission.Trade,
                 Permission.EditTrade,
                 Permission.ConfirmTrade,
-                Permission.BrowseMarket);
+                Permission.BrowseMarket,
+                Permission.ManagePersonalSupportTickets);
 
         addPermissions(PermissionGroup.ADMIN, Permission.ChangeThreshold, Permission.ReviewItem);
         addPermissions(PermissionGroup.HEAD_ADMIN,
@@ -30,7 +31,8 @@ public class PermissionConfig {
                 Permission.ReviewItem,
                 Permission.ManageUserOperations,
                 Permission.ManageUsers,
-                Permission.ManageAllItems);
+                Permission.ManageAllItems,
+                Permission.ManageAllSupportTickets);
 
         addPermissions(PermissionGroup.SYSTEM, Permission.ChangeThreshold, Permission.CreateUser);
     }

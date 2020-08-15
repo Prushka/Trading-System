@@ -83,10 +83,21 @@ public class TableViewGenerator<T> {
 
     public TableViewGenerator<T> addColumnEditable(String name, String fieldName,
                                                    EventHandler<TableColumn.CellEditEvent<T, String>> onEditCommit,
-                                                   Callback<TableColumn<T, String>, TableCell<T, String>> cellFactory) {
+                                                   Callback<TableColumn<T, String>,
+                                                           TableCell<T, String>> cellFactory) {
         TableColumn<T, String> column = getTableColumn(name, fieldName);
         listOfColumns.add(column);
         column.setCellFactory(cellFactory);
+        column.setOnEditCommit(onEditCommit);
+        return this;
+    }
+
+    public TableViewGenerator<T> addColumnEditable(String name, String fieldName,
+                                                   EventHandler<TableColumn.CellEditEvent<T, String>> onEditCommit,
+                                                   ObservableList<String> comboBox) {
+        TableColumn<T, String> column = getTableColumn(name, fieldName);
+        listOfColumns.add(column);
+        column.setCellFactory(JFXComboBoxTableCell.forTableColumn(comboBox));
         column.setOnEditCommit(onEditCommit);
         return this;
     }
@@ -105,7 +116,7 @@ public class TableViewGenerator<T> {
     }
 
     public TableViewGenerator<T> addColumnEditable(String name,
-                                           Callback<TableColumn.CellDataFeatures<T, String>, ObservableValue<String>> cellValueFactory,
+                                                   Callback<TableColumn.CellDataFeatures<T, String>, ObservableValue<String>> cellValueFactory,
                                                    EventHandler<TableColumn.CellEditEvent<T, String>> onEditCommit) {
         TableColumn<T, String> column = new TableColumn<>(name);
         column.setCellValueFactory(cellValueFactory);

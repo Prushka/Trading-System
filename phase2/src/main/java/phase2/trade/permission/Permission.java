@@ -19,6 +19,9 @@ public enum Permission {
     ManagePersonalAccount,
     ManageWishList,
 
+    ManagePersonalSupportTickets,
+    ManageAllSupportTickets,
+
     ManageUsers,
     ManageUserOperations,
 

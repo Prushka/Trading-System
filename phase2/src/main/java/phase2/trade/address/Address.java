@@ -10,16 +10,21 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uid;
 
-    private String country;
-    private String city;
-    private String street;
-    private String streetNumber;
+    private String firstName;
+    private String lastName;
 
-    public Address(String country, String city, String street, String streetNumber){
+    private String country;
+    private String province;
+    private String city;
+    private String postalCode;
+    private String firstAddressLine;
+    private String secondAddressLine;
+
+    public Address(String country, String city, String firstAddressLine, String secondAddressLine){
         this.country = country;
         this.city = city;
-        this.street = street;
-        this.streetNumber = streetNumber;
+        this.firstAddressLine = firstAddressLine;
+        this.secondAddressLine = secondAddressLine;
     }
 
     public Address(String country, String city){
@@ -55,19 +60,19 @@ public class Address {
         this.city = city;
     }
 
-    public String getStreet() {
-        return street;
+    public String getFirstAddressLine() {
+        return firstAddressLine;
     }
 
-    public void setStreet(String street) {
-        this.street = street;
+    public void setFirstAddressLine(String street) {
+        this.firstAddressLine = street;
     }
 
-    public String getStreetNumber() {
-        return streetNumber;
+    public String getSecondAddressLine() {
+        return secondAddressLine;
     }
 
-    public void setStreetNumber(String streetNumber) {
-        this.streetNumber = streetNumber;
+    public void setSecondAddressLine(String streetNumber) {
+        this.secondAddressLine = streetNumber;
     }
 }

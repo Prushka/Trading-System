@@ -7,11 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import phase2.trade.command.Command;
-import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.AbstractTableController;
-import phase2.trade.editor.UserEditor;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
@@ -55,7 +52,8 @@ public class UserManageController extends UserTableController implements Initial
         addSearchName();
         addSearchEmail();
         addPermissionGroupComboBox();
-        
+        addReloadButton(UserManageController::new);
+
         JFXButton createUser = new JFXButton("Create a New User");
 
         hBox.getChildren().add(createUser);

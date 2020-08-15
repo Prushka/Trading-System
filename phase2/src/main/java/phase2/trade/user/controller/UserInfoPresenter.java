@@ -2,11 +2,14 @@ package phase2.trade.user.controller;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.User;
 
+import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -22,6 +25,7 @@ public class UserInfoPresenter extends AbstractController implements Initializab
     public Label bio = new Label();
     public Label currentStatus = new Label();
     public Label permissionGroup = new Label();
+    public ImageView imageView;
 
     private final User user;
 
@@ -36,6 +40,10 @@ public class UserInfoPresenter extends AbstractController implements Initializab
         userName.setText("User Name: " + user.getName());
         email.setText("Email: " + user.getEmail());
         permissionGroup.setText("PermissionGroup: " + user.getPermissionGroup());
+        if (user.getAvatar() != null && user.getAvatar().getImageData() != null) {
+            Image img = new Image(new ByteArrayInputStream(user.getAvatar().getImageData()));
+            imageView.setImage(img);
+        }
         // address book + if user didnt input address
         // home.setText("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
         bio.setText("Bio: ");

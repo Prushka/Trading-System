@@ -1,6 +1,7 @@
 package phase2.trade.user;
 
 import phase2.trade.address.AddressBook;
+import phase2.trade.avatar.Avatar;
 import phase2.trade.inventory.ItemList;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.permission.Permission;
@@ -43,10 +44,13 @@ public abstract class User {
 
     private String country;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Avatar avatar;
+
     /**
      * Creates a new User with userName, email, telephone and given password.
      *
-     * @param name the username of this Person.
+     * @param name     the username of this Person.
      * @param email    the email this Person.
      * @param password the password this user set to
      */
@@ -186,6 +190,14 @@ public abstract class User {
 
     public ItemList getCart() { // this should not happen!
         return getItemList(ItemListType.CART);
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
     }
 }
 

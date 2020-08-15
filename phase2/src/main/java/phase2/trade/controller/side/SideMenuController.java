@@ -41,6 +41,11 @@ public class SideMenuController extends AbstractController implements Initializa
         getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(supplier));
     }
 
+    private <T> void loadCenter(Object controller) {
+        getPane("centerDashboard").getChildren().clear();
+        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(supplier));
+    }
+
     private void inventory() {
         getPane("centerDashboard").getChildren().clear();
         InventoryController controller = new InventoryController(getControllerResources(), ItemListType.INVENTORY);
@@ -91,7 +96,8 @@ public class SideMenuController extends AbstractController implements Initializa
             if (newValue != null) {
                 switch (newValue) {
                     case "side.user.info":
-                        loadCenter(UserInfoController::new);
+                        UserInfoController userInfoController = new UserInfoController(getControllerResources(),userInfoBox);
+                        loadCenter(userInfoController);
                         break;
                     case "side.market":
                         getPane("centerDashboard").getChildren().clear();

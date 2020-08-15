@@ -9,6 +9,7 @@ import phase2.trade.permission.Permission;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -50,5 +51,10 @@ public class UpdateUsers extends UserCommand<Void> {
 
     public void setUsersToUpdate(List<User> usersToUpdate) {
         this.usersToUpdate = usersToUpdate;
+    }
+
+    public void setUserToUpdate(User usersToUpdate) {
+        this.usersToUpdate = new ArrayList<>();
+        this.usersToUpdate.add(usersToUpdate);
     }
 }

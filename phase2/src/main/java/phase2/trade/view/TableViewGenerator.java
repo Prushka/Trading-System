@@ -104,6 +104,17 @@ public class TableViewGenerator<T> {
         return this;
     }
 
+    public TableViewGenerator<T> addColumnEditable(String name,
+                                           Callback<TableColumn.CellDataFeatures<T, String>, ObservableValue<String>> cellValueFactory,
+                                                   EventHandler<TableColumn.CellEditEvent<T, String>> onEditCommit) {
+        TableColumn<T, String> column = new TableColumn<>(name);
+        column.setCellValueFactory(cellValueFactory);
+        listOfColumns.add(column);
+        column.setCellFactory(TextFieldTableCell.forTableColumn());
+        column.setOnEditCommit(onEditCommit);
+        return this;
+    }
+
     // https://stackoverflow.com/questions/14650787/javafx-column-in-tableview-auto-fit-size
     public void autoResizeColumns() { // well it seems that this is done by default
         //Set the right policy
@@ -134,8 +145,6 @@ public class TableViewGenerator<T> {
         SortedList<T> sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(tableView.comparatorProperty());
         tableView.setItems(sortedList);
-
-        //autoResizeColumns();
         tableView.getColumns().addAll(listOfColumns);
         return tableView;
     }

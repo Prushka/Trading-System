@@ -75,16 +75,10 @@ public class ItemEditor {
     }
 
     private boolean isInt(String toExam) {
-        if (toExam.matches("[0-9]+")) {
-            return true;
-        }
-        return false;
+        return toExam.matches("[0-9]+");
     }
 
     private boolean isNumber(String toExam) {
-        if (toExam.matches("-?\\d+(\\.\\d+)?")) {
-            return true;
-        }
-        return false;
+        return toExam.matches("-?\\d+(\\.\\d+)?");
     }
 }

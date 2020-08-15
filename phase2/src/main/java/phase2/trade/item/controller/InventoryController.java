@@ -2,6 +2,10 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import com.mysql.cj.x.protobuf.MysqlxCrud;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,6 +13,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
+import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.NumberStringConverter;
 import org.hibernate.event.service.spi.EventActionWithParameter;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.callback.status.ResultStatus;
@@ -57,35 +65,19 @@ public class InventoryController extends GeneralTableViewController<Item> implem
         setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
 
         tableViewGenerator
-                .addColumnEditable("Name", "name",
-                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
-                            shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterName);
-                        })
+                .addColumnEditable("Name", "name", event ->
+                        shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterName))
 
-                .addColumnEditable("Description", "description",
-                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
-                            new ItemEditor(event.getRowValue()).alterDescription(event.getNewValue(), resultStatus -> {
-                            });
-                            updateItem(event.getRowValue());
-                            TriConsumer<ItemEditor, String, StatusCallback> alterPrice = ItemEditor::alterPrice;
-                        })
+                .addColumnEditable("Description", "description", getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(),
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterDescription))
 
                 .addColumn("Ownership", "ownership")
 
-                .addColumnEditable("Quantity", "quantity",
-                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
-                            new ItemEditor(event.getRowValue()).alterQuantity(event.getNewValue(), resultStatus -> {
-                            });
-                            updateItem(event.getRowValue());
-                        })
+                .addColumnEditable("Quantity", param -> new SimpleStringProperty(String.valueOf(param.getValue().getQuantity())),
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterQuantity))
 
-                .addColumnEditable("Price", "price",
-                        getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(), event -> {
-                            new ItemEditor(event.getRowValue()).alterPrice(event.getNewValue(), resultStatus -> {
-                            });
-                            updateItem(event.getRowValue());
-                        })
-
+                .addColumnEditable("Price", param -> new SimpleStringProperty(String.valueOf(param.getValue().getPrice())),
+                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterPrice))
 
                 .addColumnEditable("Category", "category", event -> {
                     new ItemEditor(event.getRowValue()).alterCategory(event.getNewValue(), resultStatus -> {

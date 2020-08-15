@@ -5,17 +5,17 @@ import org.apache.logging.log4j.Logger;
 import phase2.trade.Shutdownable;
 import phase2.trade.config.RedisConfig;
 import phase2.trade.controller.AbstractController;
+import phase2.trade.gateway.PubSub;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Redis implements Shutdownable {
+public class Redis implements PubSub {
 
     private static final Logger logger = LogManager.getLogger(Redis.class);
 
@@ -27,11 +27,13 @@ public class Redis implements Shutdownable {
 
     private ExecutorService threadPool;
 
+    private JedisPubSub subscriber;
+
 
     public Redis(RedisConfig redisConfig, Map<String, AbstractController> registeredControllers) {
 
         this.redisConfig = redisConfig;
-        if(!redisConfig.isUseRedis()) return;
+        if (!redisConfig.isUseRedis()) return;
 
         this.registeredControllers = registeredControllers;
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
@@ -54,12 +56,12 @@ public class Redis implements Shutdownable {
     }
 
     public void subscribe() {
-        if(!redisConfig.isUseRedis()) return;
+        if (!redisConfig.isUseRedis()) return;
         subscribe(redisConfig.getChannel());
     }
 
     private void subscribe(String channel) {
-        JedisPubSub subscriber = new JedisPubSub() {
+        subscriber = new JedisPubSub() {
             @Override
             public void onMessage(String channel, String message) {
                 logger.info(message);
@@ -69,16 +71,13 @@ public class Redis implements Shutdownable {
             }
         };
         threadPool.submit(() -> {
-            try {
+            if(getConnection().isConnected())
                 getConnection().subscribe(subscriber, channel);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         });
     }
 
     public void publish(String message) {
-        if(!redisConfig.isUseRedis()) return;
+        if (!redisConfig.isUseRedis()) return;
         publish(redisConfig.getChannel(), message);
     }
 
@@ -88,6 +87,8 @@ public class Redis implements Shutdownable {
 
     @Override
     public void stop() {
+        if (!redisConfig.isUseRedis()) return;
+        getConnection().shutdown();
         threadPool.shutdown();
     }
 }

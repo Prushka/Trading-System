@@ -41,7 +41,7 @@ public class Configurer {
     }
 
     public void configure(Stage primaryStage) {
-        controllerResources = new ControllerResources(gatewayBundle, primaryStage, accountManager);
+        controllerResources = new ControllerResources(gatewayBundle, shutdownHook, primaryStage, accountManager);
 
         new CreatePrerequisiteIfNotExist(getControllerResources().getCommandFactory());
     }
@@ -92,7 +92,7 @@ public class Configurer {
 
     public static void main(String[] args) {
         Configurer configurer = new Configurer();
-        configurer.mockDashboardRegister("admin2","admin???");
+        configurer.mockDashboardRegister("admin2", "admin???");
         configurer.getCommandFactory().getCommand(AddItemToItemList::new);
 
     }

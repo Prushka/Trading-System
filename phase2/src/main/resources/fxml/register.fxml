@@ -28,7 +28,7 @@
             <children>
                 <JFXTextField text="username" fx:id="username" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0" promptText="%input.username.prompt" />
                 <JFXTextField text="a@b.ccc" fx:id="email" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Email" />
-                <JFXTextField text="12345678" fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Password" />
+                <JFXPasswordField text="12345678" fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Password" />
                 <JFXTextField text="Country" fx:id="country" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Country" />
                 <JFXTextField text="City" fx:id="city" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="City" />
             </children>

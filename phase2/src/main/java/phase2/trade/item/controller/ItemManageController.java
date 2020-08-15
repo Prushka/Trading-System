@@ -21,6 +21,7 @@ import phase2.trade.database.TriConsumer;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.*;
 import phase2.trade.item.command.*;
+import phase2.trade.user.controller.UserManageController;
 import phase2.trade.view.NodeFactory;
 import phase2.trade.view.window.GeneralSplitAlert;
 
@@ -111,7 +112,7 @@ public class ItemManageController extends ItemController implements Initializabl
         addComboBox(
                 getNodeFactory().getEnumAsObservableString(Ownership.class),
                 "Ownership", "ALL",
-                (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
+                (entity, toMatch) -> entity.getOwnership().name().equalsIgnoreCase(toMatch));
 
 
         CheckBox lend = new JFXCheckBox("Wish To Lend");
@@ -136,12 +137,23 @@ public class ItemManageController extends ItemController implements Initializabl
             Command<Item> alterItemOwnership = getCommandFactory().getCommand(AlterItemOwnership::new,
                     c -> c.setItemId(getSelectedItemsIds().toArray(new Long[0])));
             alterItemOwnership.execute((result, status) -> {
-                status.setSucceeded(() -> tableView.refresh());
+                status.setAfter(this::reload);
                 status.handle(getPopupFactory());
             }, Ownership.OWNER.name());
         });
         addButton(reviewItems);
         tableViewGenerator.build();
+    }
+
+    // Due to the fact that ItemEditor don't process Permission, the reload here reloads the Controller itself
+    // The reason is just it's not neat for me
+    // We have to call a command above to update ownership
+    // This makes the tableview unable to refresh itself. So let's reload the controller itself~
+    // This however will be improved in the future if I have time
+    // 1. Add a Command UpdateAnyItems (with permission)
+    // 2. Make Use case classes handle permission using field annotation
+    protected void reload() {
+        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(ItemManageController::new));
     }
 
 }

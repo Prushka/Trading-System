@@ -7,8 +7,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import phase2.trade.item.Item;
@@ -56,6 +58,25 @@ public class TableViewGenerator<T> {
         TableColumn<T, String> column = getTableColumn(name, fieldName);
         listOfColumns.add(column);
         column.setPrefWidth(prefWidth);
+
+        return this;
+    }
+
+    public TableViewGenerator<T> addColumnEditable(String name, String fieldName, int prefWidth, EventHandler<TableColumn.CellEditEvent<T, String>> onEditCommit) {
+        TableColumn<T, String> column = getTableColumn(name, fieldName);
+        listOfColumns.add(column);
+        column.setPrefWidth(prefWidth);
+
+        column.setCellFactory(TextFieldTableCell.forTableColumn());
+        column.setOnEditCommit(onEditCommit);
+        return this;
+    }
+
+    public TableViewGenerator<T> addColumnEditable(String name, String fieldName, EventHandler<TableColumn.CellEditEvent<T, String>> onEditCommit) {
+        TableColumn<T, String> column = getTableColumn(name, fieldName);
+        listOfColumns.add(column);
+        column.setCellFactory(TextFieldTableCell.forTableColumn());
+        column.setOnEditCommit(onEditCommit);
         return this;
     }
 

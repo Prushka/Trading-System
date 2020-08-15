@@ -48,14 +48,23 @@ public class GeneralSplitAlert extends AlertWindow<Void> {
         });
         confirmButton.setFocusTraversable(false);
 
+        Button cancelButton = new JFXButton("Cancel");
+
+        cancelButton.setOnAction(confirmHandler);
+        cancelButton.addEventFilter(ActionEvent.ACTION, event -> {
+            alert.hideWithAnimation();
+        });
+        cancelButton.setFocusTraversable(false);
+
         body.setMinWidth(250);
         right.setMinWidth(250); // use a configuration file in the future
 
+        alert.setOverlayClose(false);
+
         layout.getBody().setAll(friend);
-        layout.setActions(confirmButton);
+        layout.setActions(cancelButton, confirmButton);
 
         alert.setContent(layout);
-
 
         alert.showAndWait();
         return null;

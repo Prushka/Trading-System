@@ -1,4 +1,4 @@
-package phase2.trade.controller.item;
+package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;

@@ -90,4 +90,11 @@ public class Configurer {
         }, userName, password);
     }
 
+    public static void main(String[] args) {
+        Configurer configurer = new Configurer();
+        configurer.mockDashboardRegister("admin2","admin???");
+        configurer.getCommandFactory().getCommand(AddItemToItemList::new);
+
+    }
+
 }

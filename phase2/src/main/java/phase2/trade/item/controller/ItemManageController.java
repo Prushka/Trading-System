@@ -1,4 +1,4 @@
-package phase2.trade.controller.item;
+package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -33,19 +33,15 @@ import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class InventoryController extends GeneralTableViewController<Item> implements Initializable {
+public class ItemManageController extends GeneralTableViewController<Item> implements Initializable {
 
     private final ItemListType itemListType;
 
-    public InventoryController(ControllerResources controllerResources, ItemListType itemListType) {
+    public ItemManageController(ControllerResources controllerResources, ItemListType itemListType) {
         super(controllerResources, true, false);
         this.itemListType = itemListType;
     }
 
-    // TODO: if view is updated first, then even if the execution fails, the item would disappear. It would reappear if user refreshes this tableview
-    //  Also it's not possible to bind the entity to the view since the entity is in database and I don't think it's a good idea to replace all fields in entities to be Properties and Observable
-    //  1. We can update entity first without taking benefit from Observable List. So that the ResultStatus can be checked in first place
-    //  2. Maybe we can also retrieve necessary elements from the database and store it as a cache. But I don't have time for this. It can take time to implement the caching system
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
@@ -128,13 +124,7 @@ public class InventoryController extends GeneralTableViewController<Item> implem
             RadioButton sellRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Sell.name()), group);
             RadioButton lendRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Lend.name()), group);
             RadioButton privateRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Private.name()), group);
-            EventHandler<ActionEvent> willingnessRadioHandler = event1 -> {
-                if (sellRadio.isSelected()) {
-                    price.setDisable(false);
-                } else {
-                    price.setDisable(true);
-                }
-            };
+            EventHandler<ActionEvent> willingnessRadioHandler = event1 -> price.setDisable(!sellRadio.isSelected());
             sellRadio.setOnAction(willingnessRadioHandler);
             lendRadio.setOnAction(willingnessRadioHandler);
             privateRadio.setOnAction(willingnessRadioHandler);
@@ -142,17 +132,14 @@ public class InventoryController extends GeneralTableViewController<Item> implem
             privateRadio.setSelected(true);
             addItemAlert.addLeft(enterItemName, enterItemDescription, enterQuantity, comboBox);
             addItemAlert.addRight(lendRadio, sellRadio, privateRadio, price);
-            addItemAlert.setEventHandler(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new,
-                            command -> command.setItemListType(itemListType));
+            addItemAlert.setEventHandler(event12 -> {
+                AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new,
+                        command -> command.setItemListType(itemListType));
 
-                    itemCommand.execute((result, resultStatus) -> {
-                        resultStatus.setSucceeded(() -> displayData.add(result));
-                        resultStatus.handle(getPopupFactory());
-                    }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText())); // this casting cannot be avoided. another approach would be to loop through all radio buttons
-                }
+                itemCommand.execute((result, resultStatus) -> {
+                    resultStatus.setSucceeded(() -> displayData.add(result));
+                    resultStatus.handle(getPopupFactory());
+                }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText())); // this casting cannot be avoided. another approach would be to loop through all radio buttons
             });
             addItemAlert.display();
         });

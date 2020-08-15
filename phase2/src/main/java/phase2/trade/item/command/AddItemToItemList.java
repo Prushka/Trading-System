@@ -31,9 +31,9 @@ public class AddItemToItemList extends ItemCommand<Item> {
             String name = args[0];
             String description = args[1];
             String category = args[2];
-            String quantity = args.length > 3 && args[3]!=null ? args[3] : "1";
-            String willingness = args.length > 4 && args[4]!=null ? args[4] : Willingness.Private.name();
-            String price = args.length > 5  && args[5]!=null ? args[5] : "-1";
+            String quantity = args.length > 3 && args[3] != null ? args[3] : "1";
+            String willingness = args.length > 4 && args[4] != null ? args[4] : Willingness.Private.name();
+            String price = args.length > 5 && args[5] != null ? args[5] : "-1";
 
             // logger.info(String.format("Adding Item: Name %s | Description %s | Category %s | Quantity %s | Willingness %s | Price %s",
             //         name, description, category, quantity, willingness, price));

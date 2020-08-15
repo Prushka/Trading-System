@@ -48,6 +48,8 @@ public abstract class AlertWindow<T> extends CustomWindow<T> {
         alert.initModality(Modality.APPLICATION_MODAL);
         alert.setOverlayClose(true);
         alert.setAnimation(JFXAlertAnimation.NO_ANIMATION);
+
+        alert.setHideOnEscape(true);
         layout = new JFXDialogLayout();
         layout.setHeading(new Label(title));
         body = new VBox(15);

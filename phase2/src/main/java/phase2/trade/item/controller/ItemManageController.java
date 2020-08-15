@@ -70,7 +70,7 @@ public class ItemManageController extends ItemController implements Initializabl
     // This however will be improved in the future if I have time
     // 1. Add a Command UpdateAnyItems (with permission)
     // 2. Make Use case classes handle permission using field annotation
-    protected void reload() {
+    public void reload() {
         getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(ItemManageController::new));
     }
 

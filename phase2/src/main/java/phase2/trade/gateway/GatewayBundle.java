@@ -9,7 +9,6 @@ public class GatewayBundle {
 
     ConfigBundle configBundle;
 
-    Redis redis; // TODO: add interface later
 
     public ConfigBundle getConfigBundle() {
         return configBundle;
@@ -19,13 +18,8 @@ public class GatewayBundle {
         return entityBundle;
     }
 
-    public Redis getRedis() {
-        return redis;
-    }
-
     public GatewayBundle(EntityBundle entityBundle, ConfigBundle configBundle) {
         this.entityBundle = entityBundle;
         this.configBundle = configBundle;
-        this.redis = new Redis(configBundle.getRedisConfig());
     }
 }

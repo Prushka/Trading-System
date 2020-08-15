@@ -56,6 +56,14 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         tableViewGenerator = new TableViewGenerator<>(displayData, tableView);
     }
 
+    public void setDisplayData(List<T> displayData) {
+        setDisplayData(FXCollections.observableArrayList(displayData));
+    }
+
+    public void reloadNewDisplayData(List<T> displayData) {
+        tableView.setItems(FXCollections.observableArrayList(displayData));
+    }
+
     protected List<Long> getSelectedEntityIds(EntityIdLookUp<T> entityIdLookUp) {
         List<Long> ids = new ArrayList<>();
         getSelected().forEach(entityIdLookUp::getId);
@@ -75,7 +83,8 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
     }
 
     protected ObservableList<T> getSelected() {
-        ObservableList<T> itemsSelected = tableView.getSelectionModel().getSelectedItems();;
+        ObservableList<T> itemsSelected = tableView.getSelectionModel().getSelectedItems();
+        ;
         if (itemsSelected.size() == 0) {
             nothingSelectedToast();
         }

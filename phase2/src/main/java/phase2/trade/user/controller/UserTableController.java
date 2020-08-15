@@ -27,10 +27,17 @@ public class UserTableController extends AbstractEditableTableController<User, U
         command.execute((result, resultStatus) -> {
             resultStatus.setAfter(() -> {
                 disableButtons(false);
+                publish();
                 tableView.refresh();
             });
             resultStatus.handle(getPopupFactory());
         });
+    }
+
+    @Override
+    public void reload() {
+        tableView.refresh();
+        super.reload();
     }
 
     protected void addNameColumn(boolean editable) {

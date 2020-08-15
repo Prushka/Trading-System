@@ -3,6 +3,7 @@ package phase2.trade.controller;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import phase2.trade.command.CommandFactory;
+import phase2.trade.database.nosql.Redis;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
@@ -31,6 +32,11 @@ public class ControllerResources {
 
     private final Map<String, Pane> panes = new HashMap<>();
 
+    private final Redis redis; // TODO: add interface later
+
+    // only use this for pub-sub for now
+    private final Map<String, AbstractController> registeredControllers = new HashMap<>();
+
     public ControllerResources(GatewayBundle gatewayBundle, Stage window, AccountManager accountManager) {
         this.gatewayBundle = gatewayBundle;
         this.window = window;
@@ -38,6 +44,7 @@ public class ControllerResources {
         popupFactory = new PopupFactory(window);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);
         sceneManager = new SceneManager(this);
+        redis = new Redis(getGatewayBundle().getConfigBundle().getRedisConfig(),registeredControllers);
     }
 
     public Stage getWindow() {
@@ -66,5 +73,17 @@ public class ControllerResources {
 
     protected Map<String, Pane> getPanes() {
         return panes;
+    }
+
+    protected void registerController(String simpleName, AbstractController abstractController) {
+        registeredControllers.put(simpleName, abstractController);
+    }
+
+    public Redis getRedis() {
+        return redis;
+    }
+
+    public void publish(String message) {
+        redis.publish(message);
     }
 }

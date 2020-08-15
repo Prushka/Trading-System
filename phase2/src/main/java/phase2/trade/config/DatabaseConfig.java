@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import phase2.trade.database.DatabaseResourceBundle;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,11 +33,11 @@ public class DatabaseConfig {
 
     private String password = "aC4YD6G4J@Y";
 
-    private int connection_pool_size = 10;
+    private int poolSize = 10;
 
     private String hbm2ddl = "update";
 
-    private boolean showSQL = true;
+    private boolean showSQL = false;
 
     private boolean autoReconnect = true;
 
@@ -111,12 +110,12 @@ public class DatabaseConfig {
         this.password = password;
     }
 
-    public int getConnection_pool_size() {
-        return connection_pool_size;
+    public int getPoolSize() {
+        return poolSize;
     }
 
-    public void setConnection_pool_size(int connection_pool_size) {
-        this.connection_pool_size = connection_pool_size;
+    public void setPoolSize(int poolSize) {
+        this.poolSize = poolSize;
     }
 
     public String getHbm2ddl() {

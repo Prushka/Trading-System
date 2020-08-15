@@ -23,7 +23,7 @@ class TradeBuilder {
     // For Order(s)
     LocalDateTime dateAndTime;
     Address location;
-    Order order;
+    TradeOrder order;
 
     // For a Trade
     Boolean isPermanent;

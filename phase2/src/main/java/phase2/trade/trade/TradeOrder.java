@@ -5,6 +5,7 @@ import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -12,23 +13,16 @@ import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class Order{
+public class TradeOrder {
+
+    private Long uid;
+
+    private List<UserOrderBundle> traders;
+
+    private LocalDateTime dateAndTime;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uid;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<UserOrderBundle> traders;
-
-    private Long timestamp;
-
-    public Long getTimeStamp() { return timestamp; }
-
-    public void setTimeStamp(Long timeStamp) { this.timestamp = timeStamp; }
-
-    private transient LocalDateTime dateAndTime;
-
     public Long getUid() {
         return uid;
     }
@@ -37,6 +31,7 @@ public class Order{
         this.uid = uid;
     }
 
+    @OneToMany(cascade = CascadeType.ALL)
     public List<UserOrderBundle> getTraders() {
         return traders;
     }
@@ -45,15 +40,15 @@ public class Order{
         this.traders = traders;
     }
 
-    @Transient
-    public LocalDateTime getDateAndTime() { return dateAndTime; }
-
-    @Transient
-    public void setDateAndTime(LocalDateTime dateAndTime) {
-        this.dateAndTime = dateAndTime;
-        setTimeStamp(dateAndTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+    public LocalDateTime getDateAndTime() {
+        return dateAndTime;
     }
 
+    public void setDateAndTime(LocalDateTime dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
+
+    @Transient
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
         for (UserOrderBundle user : traders) {

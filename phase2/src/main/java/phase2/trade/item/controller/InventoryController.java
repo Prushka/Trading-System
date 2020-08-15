@@ -24,7 +24,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class InventoryController extends ItemTableController implements Initializable {
+public class InventoryController extends ItemController implements Initializable {
 
     private final ItemListType itemListType;
 
@@ -66,11 +66,11 @@ public class InventoryController extends ItemTableController implements Initiali
         hBox.getChildren().addAll(addButton, deleteButton, sellButton, lendButton, privateButton);
         buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton, sellButton, lendButton, privateButton);
 
-        sellButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Sell.name(), s -> {
+        sellButton.setOnAction(event -> shortenAlter(Willingness.Sell.name(), s -> {
         }, ItemEditor::alterWillingness));
-        privateButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Private.name(), s -> {
+        privateButton.setOnAction(event -> shortenAlter(Willingness.Private.name(), s -> {
         }, ItemEditor::alterWillingness));
-        lendButton.setOnAction(event -> shortenAlterOfSelected(Willingness.Lend.name(), s -> {
+        lendButton.setOnAction(event -> shortenAlter(Willingness.Lend.name(), s -> {
         }, ItemEditor::alterWillingness));
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {

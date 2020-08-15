@@ -33,7 +33,7 @@ public class UserOperationController extends AbstractEditableTableController<Com
 
 
     public UserOperationController(ControllerResources controllerResources) {
-        super(controllerResources, false, false, CommandEditor::new, Command::getUid);
+        super(controllerResources, false, false, CommandEditor::new);
     }
 
     private String convertTime(long time) {

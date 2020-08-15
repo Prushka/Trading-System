@@ -17,9 +17,10 @@ import javafx.scene.layout.VBox;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.command.Command;
+import phase2.trade.controller.AbstractTableController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.AbstractTableController;
+import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.GetMarketItems;
 import phase2.trade.trade.Trade;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "market.fxml")
-public class MarketController extends AbstractTableController implements Initializable {
+public class MarketController extends AbstractTableController<Trade> implements Initializable {
 
     private TradeCommand tc, edit, confirm;
 

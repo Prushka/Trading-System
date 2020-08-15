@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class ItemManageTableController extends ItemTableController implements Initializable {
+public class ItemManageTableController extends ItemController implements Initializable {
 
     public ItemManageTableController(ControllerResources controllerResources) {
         super(controllerResources, true, true);
@@ -57,7 +57,8 @@ public class ItemManageTableController extends ItemTableController implements In
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> command.setItemIds(idsRemoved)), Item::getUid);
 
         Button reviewItems = new JFXButton("Mark selected items as reviewItems");
-        reviewItems.setOnAction(event -> shortenAlterOfSelected(Ownership.OWNER.name(), s -> {}, ItemEditor::alterOwnership));
+        reviewItems.setOnAction(event -> shortenAlterOfSelected(getSelected(), Ownership.OWNER.name(), s -> {
+        }, ItemEditor::alterOwnership));
         addButton(reviewItems);
         tableViewGenerator.build();
     }

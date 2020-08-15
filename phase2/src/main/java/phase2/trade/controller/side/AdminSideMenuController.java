@@ -11,7 +11,7 @@ import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.LimitsController;
 import phase2.trade.user.controller.UserAccountsController;
-import phase2.trade.user.controller.UserInfoPresenter;
+import phase2.trade.user.controller.UserSideInfoController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -49,7 +49,7 @@ public class AdminSideMenuController extends AbstractController implements Initi
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userInfoBox.getChildren().add(getSceneManager().loadPane("user_info_side.fxml", UserInfoPresenter::new));
+        userInfoBox.getChildren().add(getSceneManager().loadPane("user_info_side.fxml", UserSideInfoController::new));
         sideList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 switch (newValue.getId()) {

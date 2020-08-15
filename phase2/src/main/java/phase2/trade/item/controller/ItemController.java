@@ -6,8 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import phase2.trade.command.Command;
-import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.AbstractEditableTableController;
+import phase2.trade.controller.ControllerResources;
 import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -17,10 +17,10 @@ import phase2.trade.item.command.UpdateItems;
 
 import java.util.List;
 
-public class ItemTableController extends AbstractEditableTableController<Item, ItemEditor> implements Initializable {
+public class ItemController extends AbstractEditableTableController<Item, ItemEditor> implements Initializable {
 
-    public ItemTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
-        super(controllerResources, ifMultipleSelection, ifEditable, ItemEditor::new, Item::getUid);
+    public ItemController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
+        super(controllerResources, ifMultipleSelection, ifEditable, ItemEditor::new);
     }
 
     @Override

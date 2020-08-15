@@ -1,25 +1,20 @@
 package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
-import phase2.trade.item.Category;
 import phase2.trade.item.Item;
-import phase2.trade.item.Willingness;
 import phase2.trade.item.command.RemoveItem;
 
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class CartTableController extends ItemTableController implements Initializable {
+public class CartTableController extends ItemController implements Initializable {
 
     private final ItemListType itemListType;
 

@@ -75,7 +75,7 @@ public class SideMenuController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        userInfoBox.getChildren().add(getSceneManager().loadPane(UserInfoPresenter::new));
+        userInfoBox.getChildren().add(getSceneManager().loadPane(UserSideInfoController::new));
 
         sideList.setCellFactory(param -> new SideListCell());
         bottomSideList.setCellFactory(param -> new SideListCell());

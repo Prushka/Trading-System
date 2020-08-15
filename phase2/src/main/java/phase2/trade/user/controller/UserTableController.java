@@ -15,7 +15,7 @@ import java.util.List;
 public class UserTableController extends AbstractEditableTableController<User, UserEditor> implements Initializable {
 
     public UserTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
-        super(controllerResources, ifMultipleSelection, ifEditable, UserEditor::new, User::getUid);
+        super(controllerResources, ifMultipleSelection, ifEditable, UserEditor::new);
     }
 
     @Override

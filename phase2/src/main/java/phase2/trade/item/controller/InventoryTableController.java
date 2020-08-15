@@ -1,8 +1,6 @@
 package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,11 +10,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.inventory.ItemListType;
-import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemEditor;
 import phase2.trade.item.Willingness;
@@ -26,16 +22,14 @@ import phase2.trade.view.NodeFactory;
 import phase2.trade.view.window.GeneralSplitAlert;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class InventoryController extends ItemController implements Initializable {
+public class InventoryTableController extends ItemTableController implements Initializable {
 
     private final ItemListType itemListType;
 
-    public InventoryController(ControllerResources controllerResources, ItemListType itemListType) {
+    public InventoryTableController(ControllerResources controllerResources, ItemListType itemListType) {
         super(controllerResources, true, true);
         this.itemListType = itemListType;
     }
@@ -49,35 +43,19 @@ public class InventoryController extends ItemController implements Initializable
         super.initialize(location, resources);
         setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
 
-        tableViewGenerator
-                .addColumnEditable("Name", "name", event ->
-                        shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterName))
+        addNameColumn(true);
+        addDescriptionColumn(true);
+        addOwnershipColumn(false);
+        addQuantityColumn(true);
+        addPriceColumn(true);
+        addCategoryColumn(true);
+        addWillingnessColumn(true);
 
-                .addColumnEditable("Description", "description", getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(),
-                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterDescription))
-
-                .addColumn("Ownership", "ownership")
-
-                .addColumnEditable("Quantity", param -> new SimpleStringProperty(String.valueOf(param.getValue().getQuantity())),
-                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterQuantity))
-
-                .addColumnEditable("Price", param -> new SimpleStringProperty(String.valueOf(param.getValue().getPrice())),
-                        event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {}, ItemEditor::alterPrice))
-
-                .addColumnEditable("Category", "category", event -> {
-                    new ItemEditor(event.getRowValue()).alterCategory(event.getNewValue(), resultStatus -> {
-                    });
-                    updateItem(event.getRowValue());
-                }, ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Category.class)))
-
-                .addColumnEditable("Willingness", "willingness", event -> {
-                    ItemEditor itemEditor = new ItemEditor(event.getRowValue());
-                    itemEditor.alterWillingness(event.getNewValue(), resultStatus -> {
-                    });
-                    updateItem(event.getRowValue());
-                }, ComboBoxTableCell.forTableColumn(getNodeFactory().getEnumAsObservableString(Willingness.class)))
-
-                .addColumn("UID", "uid");
+        addSearchName();
+        addSearchDescription();
+        addCategoryComboBox();
+        addOwnershipComboBox();
+        addWillingnessCheckBoxes();
 
         JFXButton addButton = new JFXButton("Add");
         JFXButton deleteButton = new JFXButton("Delete");
@@ -97,35 +75,6 @@ public class InventoryController extends ItemController implements Initializable
             command.setItemListType(itemListType);
             command.setItemIds(idsRemoved);
         }), Item::getUid);
-
-        addSearchField("Search Name", (entity, toMatch) -> {
-            String lowerCaseFilter = toMatch.toLowerCase();
-            return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
-        });
-
-        addSearchField("Search Description", (entity, textField) -> {
-            String lowerCaseFilter = textField.toLowerCase();
-            return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
-        });
-
-        addComboBox(
-                getNodeFactory().getEnumAsObservableString(Category.class),
-                "Category", "ALL",
-                (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
-
-
-        JFXCheckBox lend = new JFXCheckBox("Wish To Lend");
-        JFXCheckBox sell = new JFXCheckBox("Wish To Sell");
-        JFXCheckBox privateCheckBox = new JFXCheckBox("Private");
-
-        tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
-                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell))
-                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.Private));
-
-        getPane("topBar").getChildren().addAll(lend, sell, privateCheckBox);
-        lend.setSelected(true);
-        sell.setSelected(true);
-        privateCheckBox.setSelected(true);
 
         addButton.setOnAction(event -> {
 

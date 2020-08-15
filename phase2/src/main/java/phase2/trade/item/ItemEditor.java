@@ -4,6 +4,8 @@ import javafx.beans.property.BooleanProperty;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
+import phase2.trade.permission.Permission;
+import phase2.trade.permission.PermissionProperty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ public class ItemEditor {
         this.items.add(item);
     }
 
-
+    @PermissionProperty(permissionSet = {Permission.ManageAllItems})
     public void alterWillingness(String willingness, StatusCallback statusCallback) {
         alterWillingness(Willingness.valueOf(willingness), statusCallback);
     }

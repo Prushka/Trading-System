@@ -204,7 +204,7 @@ public class MarketController extends AbstractTableController<Trade> implements 
         GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Edit Trade Date and Time", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
-            edit.setUid(currTrade.getUid());
+            edit.setTradeId(currTrade.getUid());
             edit.execute(((result, status) -> {
                 status.setFailed(() -> getPopupFactory().toast(5, "Not proper format"));
                 status.handle(getPopupFactory());

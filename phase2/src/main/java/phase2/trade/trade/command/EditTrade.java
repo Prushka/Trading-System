@@ -22,8 +22,7 @@ public class EditTrade extends TradeCommand<Trade> {
         te = new TradeEditor(getConfigBundle().getTradeConfig().getEditLimit());
         if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
-            Trade currTrade = findTradeByIdSyncOutsideTradeGateway(tradeId);
-            getEntityBundle().getUserGateway().update(operator);
+            Trade currTrade = gateway.findById(tradeId);
             Trade trade = te.edit(currTrade, operator, args);
             gateway.update(trade);
             callback.call(trade, new StatusSucceeded());

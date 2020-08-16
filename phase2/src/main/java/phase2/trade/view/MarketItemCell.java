@@ -81,6 +81,7 @@ public class MarketItemCell extends JFXListCell<Item> {
             addToCartCommand.setItems(item);
             addToCartCommand.execute((result, status) -> {
                 status.setSucceeded(() -> getPopupFactory().toast(3, "Successfully added to cart"));
+                status.setExist(() -> getPopupFactory().toast(3, "The item is already in your cart"));
                 status.handle(getPopupFactory());
             });
         });

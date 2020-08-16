@@ -73,4 +73,8 @@ public abstract class ItemList {
         }
         return null;
     }
+
+    public boolean contains(Long uid) {
+        return findByUid(uid)!=null;
+    }
 }

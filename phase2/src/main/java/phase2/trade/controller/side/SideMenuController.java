@@ -40,25 +40,21 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     private <T> void loadCenter(ControllerSupplier<T> supplier) {
-        getPane("centerDashboard").getChildren().clear();
-        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(supplier));
+        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(supplier));
     }
 
     private void loadCenter(Object controller) {
-        getPane("centerDashboard").getChildren().clear();
-        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(controller));
+        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     private void inventory() {
-        getPane("centerDashboard").getChildren().clear();
         InventoryController controller = new InventoryController(getControllerResources(), ItemListType.INVENTORY);
-        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(controller));
+        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     private void cart() {
-        getPane("centerDashboard").getChildren().clear();
         CartController controller = new CartController(getControllerResources(), ItemListType.CART);
-        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(controller));
+        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     // TODO: extend for different users
@@ -85,11 +81,11 @@ public class SideMenuController extends AbstractController implements Initializa
 
         switch (getAccountManager().getPermissionGroup()) {
             case REGULAR:
-                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart", "side.order","side.user.support"));
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market", "side.inventory", "side.cart", "side.order", "side.user.support"));
                 break;
             case ADMIN:
             case HEAD_ADMIN:
-                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.m.users","side.m.items", "side.m.user.ops","side.a.support"));
+                sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.m.users", "side.m.items", "side.m.user.ops", "side.a.support"));
                 break;
             case GUEST:
                 sideList.setItems(FXCollections.observableArrayList("side.user.info", "side.market"));
@@ -106,9 +102,8 @@ public class SideMenuController extends AbstractController implements Initializa
                         loadCenter(userInfoController);
                         break;
                     case "side.market":
-                        // getPane("centerDashboard").getChildren().clear();
-                        // getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(new MarketListController(getControllerResources())));
-                        loadCenter(MarketController::new);
+                        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(new MarketListController(getControllerResources())));
+                        // loadCenter(MarketController::new);
                         break;
                     case "side.inventory":
                         inventory();

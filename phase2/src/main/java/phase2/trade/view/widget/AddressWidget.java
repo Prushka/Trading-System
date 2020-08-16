@@ -1,6 +1,5 @@
 package phase2.trade.view.widget;
 
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -10,7 +9,6 @@ import phase2.trade.user.command.ChangeAddress;
 import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class AddressWidget extends SmallTextWidgetController {
@@ -91,8 +89,9 @@ public class AddressWidget extends SmallTextWidgetController {
             countryLabel.setText("Address - " + address.getCountry());
             provinceLabel.setText("Province - " + address.getTerritory());
             cityLabel.setText("City - " + address.getCity());
-        }else{
-            countryLabel.setText("Address - Undefined");
+        } else {
+            countryLabel.setText("Address");
+            provinceLabel.setText("Undefined");
         }
     }
 

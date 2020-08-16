@@ -7,6 +7,7 @@ import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusNoPermission;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.config.ConfigBundle;
+import phase2.trade.editor.EntityIdLookUp;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.*;

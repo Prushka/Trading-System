@@ -31,6 +31,12 @@ public class InventoryController extends ItemController implements Initializable
         this.itemListType = itemListType;
     }
 
+    @Override
+    public void reload() {
+        // huh, this requires a new Command to update user
+        super.reload();
+    }
+
     // TODO: if view is updated first, then even if the execution fails, the item would disappear. It would reappear if user refreshes this tableview
     //  Also it's not possible to bind the entity to the view since the entity is in database and I don't think it's a good idea to replace all fields in entities to be Properties and Observable
     //  1. We can update entity first without taking benefit from Observable List. So that the ResultStatus can be checked in first place

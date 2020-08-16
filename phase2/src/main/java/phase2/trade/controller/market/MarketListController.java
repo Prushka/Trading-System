@@ -30,6 +30,10 @@ import java.util.regex.Pattern;
 @ControllerProperty(viewFile = "general_list_view.fxml")
 public class MarketListController extends AbstractListController<Item> implements Initializable {
 
+    private ComboBox<String> countryCombo;
+    private ComboBox<String> provinceCombo;
+    private ComboBox<String> cityCombo;
+
     public JFXListView<Item> listView;
 
     public MarketListController(ControllerResources controllerResources) {
@@ -39,6 +43,7 @@ public class MarketListController extends AbstractListController<Item> implement
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
+
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
@@ -49,9 +54,17 @@ public class MarketListController extends AbstractListController<Item> implement
         });
     }
 
-    private ComboBox<String> countryCombo;
-    private ComboBox<String> provinceCombo;
-    private ComboBox<String> cityCombo;
+    @Override
+    public void reload() {
+        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
+        getMarket.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> {
+                reloadNewDisplayData(result);
+            });
+            resultStatus.handle(getPopupFactory());
+        });
+        super.reload();
+    }
 
     private void afterFetch() {
         listView.setSelectionModel(new NoSelectionModel<>());
@@ -78,7 +91,7 @@ public class MarketListController extends AbstractListController<Item> implement
             countryCombo = a;
             provinceCombo = b;
             cityCombo = c;
-        },getConfigBundle().getGeoConfig());
+        }, getConfigBundle().getGeoConfig());
 
         Pattern doublePattern = Pattern.compile("\\d+\\.?\\d?");
         listViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
@@ -118,7 +131,10 @@ public class MarketListController extends AbstractListController<Item> implement
                     String lowerCaseFilter = toMatch.toLowerCase();
                     return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
                 }))
-                .addComboBox(provinceCombo, (entity, toMatch) -> entity.getOwner().getAddressBook().getSelectedAddress().getTerritory().equalsIgnoreCase(toMatch));
+                .addComboBox(countryCombo, (entity, toMatch) -> entity.getOwner().getAddressBook().getSelectedAddress().getCountry().equalsIgnoreCase(toMatch))
+                .addComboBox(provinceCombo, (entity, toMatch) -> entity.getOwner().getAddressBook().getSelectedAddress().getTerritory().equalsIgnoreCase(toMatch))
+                .addComboBox(cityCombo, (entity, toMatch) -> entity.getOwner().getAddressBook().getSelectedAddress().getCity().equalsIgnoreCase(toMatch))
+        ;
 
         lend.setSelected(true);
         sell.setSelected(true);

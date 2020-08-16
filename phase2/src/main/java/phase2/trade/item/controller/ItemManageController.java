@@ -36,6 +36,18 @@ public class ItemManageController extends ItemController implements Initializabl
         });
     }
 
+    @Override
+    public void reload() {
+        Command<List<Item>> getItems = getCommandFactory().getCommand(GetAllItems::new);
+        getItems.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> {
+                reloadNewDisplayData(result);
+            });
+            resultStatus.handle(getPopupFactory());
+        });
+        super.reload();
+    }
+
     private void afterFetch() {
         addNameColumn(true);
         addDescriptionColumn(true);
@@ -62,17 +74,6 @@ public class ItemManageController extends ItemController implements Initializabl
         }, ItemEditor::alterOwnership));
         addButton(reviewItems);
         tableViewGenerator.build();
-    }
-
-    // Due to the fact that ItemEditor don't process Permission, the reload here reloads the Controller itself
-    // The reason is just it's not neat for me
-    // We have to call a command above to update ownership
-    // This makes the tableview unable to refresh itself. So let's reload the controller itself~
-    // This however will be improved in the future if I have time
-    // 1. Add a Command UpdateAnyItems (with permission)
-    // 2. Make Use case classes handle permission using field annotation
-    public void reload() {
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(ItemManageController::new));
     }
 
 }

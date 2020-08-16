@@ -41,6 +41,10 @@ public abstract class AbstractListController<T> extends AbstractController imple
         setDisplayData(FXCollections.observableArrayList(displayData));
     }
 
+    public void reloadNewDisplayData(List<T> displayData) {
+        listView.setItems(FXCollections.observableArrayList(displayData));
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (ifMultipleSelection) {

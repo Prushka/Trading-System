@@ -11,6 +11,7 @@ import javafx.util.Callback;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.market.MarketListController;
 import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
@@ -36,6 +37,7 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
             resultStatus.setAfter(() -> {
                 disableButtons(false);
                 tableView.refresh();
+                publishGateway(MarketListController.class,ItemManageController.class, InventoryController.class);
             });
             resultStatus.handle(getPopupFactory());
         });

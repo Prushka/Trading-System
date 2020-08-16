@@ -37,7 +37,7 @@ public class CreateUser extends UserCommand<User> {
                 String province = argRequired(5, args);
                 String city = argRequired(6, args);
                 Validator validator = new ValidatorFactory().getValidator(ValidatorType.NOT_EMPTY);
-                if(!validator.validate(country) || !validator.validate(province) || !validator.validate(city)){
+                if (!validator.validate(country) || !validator.validate(province) || !validator.validate(city)) {
                     callback.call(null, new StatusFailed("address.not.set"));
                     return;
                 }

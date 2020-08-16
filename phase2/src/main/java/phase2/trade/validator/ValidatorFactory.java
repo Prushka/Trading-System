@@ -17,7 +17,7 @@ public class ValidatorFactory {
             case EMAIL:
                 return new EmailValidator();
             case NOT_EMPTY:
-                return input -> input.length() > 0;
+                return input -> input != null && !input.isEmpty();
         }
         return null;
     }

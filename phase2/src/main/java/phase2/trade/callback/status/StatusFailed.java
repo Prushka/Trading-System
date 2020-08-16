@@ -4,14 +4,10 @@ import phase2.trade.view.PopupFactory;
 
 public class StatusFailed extends ResultStatus {
 
-    public StatusFailed() {
-
-    }
-
-    private String message;
+    public StatusFailed() {}
 
     public StatusFailed(String message) {
-        this.message = message;
+        super(message);
     }
 
     @Override

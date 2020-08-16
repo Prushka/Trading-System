@@ -7,6 +7,13 @@ public abstract class ResultStatus { // the whole thing may still need to be imp
 
     Runnable succeeded, failed, exist, after;
 
+    protected String message = "";
+
+    public ResultStatus(String message) {
+        this();
+        this.message = message;
+    }
+
     public ResultStatus() {
         succeeded = () -> {};
         failed = () -> {};
@@ -34,6 +41,10 @@ public abstract class ResultStatus { // the whole thing may still need to be imp
 
     public void setAfter(Runnable after) {
         this.after = after;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public abstract boolean ifPass();

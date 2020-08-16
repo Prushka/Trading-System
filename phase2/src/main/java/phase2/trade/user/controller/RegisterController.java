@@ -55,18 +55,20 @@ public class RegisterController extends AbstractController implements Initializa
         }
         submissionResultProperty.setValue("Signing up..");
         getAccountManager().register((result, resultStatus) -> {
-            resultStatus.setSucceeded(() -> {
-                publishGateway(UserManageController.class);
-                getSceneManager().switchScene(DashboardController::new);
-            });
-            resultStatus.setFailed(() -> {
-                registerButton.setDisable(false);
-                submissionResultProperty.setValue("Username / Email already exists");
-            });
-            resultStatus.handle(getPopupFactory());
-        }, username.getText(), email.getText(), password.getText(),
+                    resultStatus.setSucceeded(() -> {
+                        publishGateway(UserManageController.class);
+                        getSceneManager().switchScene(DashboardController::new);
+                    });
+                    resultStatus.setFailed(() -> {
+                        submissionResultProperty.setValue(resultStatus.getMessage());
+                    });
+                    resultStatus.setAfter(() -> {
+                        registerButton.setDisable(false);
+                    });
+                    resultStatus.handle(getPopupFactory());
+                }, username.getText(), email.getText(), password.getText(),
                 countryCombo.getSelectionModel().getSelectedItem(),
-                provinceCombo.getSelectionModel().getSelectedItem(),cityCombo.getSelectionModel().getSelectedItem());
+                provinceCombo.getSelectionModel().getSelectedItem(), cityCombo.getSelectionModel().getSelectedItem());
     }
 
     public void goToSignIn(ActionEvent actionEvent) {
@@ -88,6 +90,9 @@ public class RegisterController extends AbstractController implements Initializa
             provinceCombo = b;
             cityCombo = c;
         }, getConfigBundle().getGeoConfig());
+        countryCombo.setPrefWidth(300);
+        provinceCombo.setPrefWidth(300);
+        cityCombo.setPrefWidth(300);
         inputArea.getChildren().addAll(countryCombo, provinceCombo, cityCombo);
     }
 }

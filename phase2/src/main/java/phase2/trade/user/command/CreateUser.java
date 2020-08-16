@@ -3,12 +3,16 @@ package phase2.trade.user.command;
 import phase2.trade.address.Address;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusExist;
+import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.permission.Permission;
 import phase2.trade.user.User;
 import phase2.trade.user.UserFactory;
+import phase2.trade.validator.Validator;
+import phase2.trade.validator.ValidatorFactory;
+import phase2.trade.validator.ValidatorType;
 
 import javax.persistence.Entity;
 import java.util.List;
@@ -32,6 +36,11 @@ public class CreateUser extends UserCommand<User> {
                 String country = argRequired(4, args);
                 String province = argRequired(5, args);
                 String city = argRequired(6, args);
+                Validator validator = new ValidatorFactory().getValidator(ValidatorType.NOT_EMPTY);
+                if(!validator.validate(country) || !validator.validate(province) || !validator.validate(city)){
+                    callback.call(null, new StatusFailed("address.not.set"));
+                    return;
+                }
                 User user =
                         new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).createByPermissionGroup(
                                 userName, email, password, permission_group);
@@ -45,7 +54,7 @@ public class CreateUser extends UserCommand<User> {
                 save();
                 callback.call(user, new StatusSucceeded());
             } else {
-                callback.call(null, new StatusExist());
+                callback.call(null, new StatusExist("user.name.email.exists"));
             }
         });
     }

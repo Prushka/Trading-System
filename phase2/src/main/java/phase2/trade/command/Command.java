@@ -135,7 +135,6 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
     public boolean checkPermission(ResultStatusCallback<?> statusCallback, Permission... permissions) {
         boolean result = checkPermission(permissions);
         if (!result) {
-            logger.warn("[Permission Denied] User: " + operator + " | " + operator.getPermissionGroup() + " | " + Arrays.toString(permissions) + " -> " + operator.getPermissionSet().getPerm().toString());
             statusCallback.call(null, new StatusNoPermission(new PermissionSet(permissions)));
         }
         return result;

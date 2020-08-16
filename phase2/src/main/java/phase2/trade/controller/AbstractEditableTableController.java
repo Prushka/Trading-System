@@ -133,7 +133,8 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
     }
 
     // This reloads the entire controller. Thus, the new data is retrieved from database
-    // concurrency
+    // Please use the pub/sub to reload (which will reflect changes in multiple clients automatically)
+    @Deprecated
     protected void addReloadButton(ControllerSupplier<?> controllerSupplier) {
         Button button = new JFXButton();
         button.setGraphic(new ImageFactory().generateGraphic("/image/refresh.png", Color.WHITE, 25, 25));

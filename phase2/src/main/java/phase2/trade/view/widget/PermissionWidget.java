@@ -2,10 +2,11 @@ package phase2.trade.view.widget;
 
 import javafx.scene.control.Label;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.permission.Permission;
 import phase2.trade.view.window.AlertWindow;
 
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class PermissionWidget extends WidgetControllerBase {
 
@@ -24,9 +25,8 @@ public class PermissionWidget extends WidgetControllerBase {
         group.setText("Group - " + userToPresent.getPermissionGroup().toString());
         permissionCounts.setText("Permissions - " + userToPresent.getPermissionSet().getPerm().size());
         StringBuilder perms = new StringBuilder();
-        userToPresent.getPermissionSet().getPerm().forEach(perm -> {
-            perms.append(perm).append("\n");
-        });
+        Collection<Permission> permissionsToSort = new TreeSet<>(userToPresent.getPermissionSet().getPerm());
+        permissionsToSort.forEach(perm -> perms.append(perm).append("\n"));
         permissions.setText(perms.toString());
     }
 

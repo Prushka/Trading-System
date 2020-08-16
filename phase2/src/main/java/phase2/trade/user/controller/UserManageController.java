@@ -65,7 +65,6 @@ public class UserManageController extends UserTableController implements Initial
         addSearchName();
         addSearchEmail();
         addPermissionGroupComboBox();
-        addReloadButton(UserManageController::new);
 
         JFXButton createUser = new JFXButton("Create a New User");
 

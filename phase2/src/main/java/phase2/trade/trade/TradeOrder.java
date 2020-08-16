@@ -31,7 +31,7 @@ public class TradeOrder {
         this.uid = uid;
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     public List<UserOrderBundle> getTraders() {
         return traders;
     }

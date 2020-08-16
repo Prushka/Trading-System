@@ -16,8 +16,6 @@ import java.util.List;
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = false, persistent = true)
 public class ConfirmTrade extends TradeCommand<Trade> {
 
-    private Long tradeId;
-
     private TradeConfirmer tcc;
 
     @Override
@@ -25,7 +23,7 @@ public class ConfirmTrade extends TradeCommand<Trade> {
         tcc = new TradeConfirmer(getConfigBundle().getTradeConfig().getTimeLimit());
         if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
-            Trade currTrade = findTradeByIdSyncOutsideTradeGateway(tradeId);
+            Trade currTrade = gateway.findById(tradeId);
             Trade trade = tcc.confirmTrade(currTrade, operator);
             if (callback != null)
                 callback.call(trade, new StatusSucceeded());
@@ -35,7 +33,5 @@ public class ConfirmTrade extends TradeCommand<Trade> {
 
     // Unreasonable to do for this action
     @Override
-    protected void undoUnchecked() {
-
-    }
+    protected void undoUnchecked() {}
 }

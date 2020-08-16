@@ -40,4 +40,12 @@ public class CreateTrade extends TradeCommand<Trade>{
     // Unreasonable to do for this action
     @Override
     protected void undoUnchecked() {}
+
+    public void setTraders(List<User> users){
+        this.users = users;
+    }
+
+    public void setTraderItems(List<List<Item>> items){
+        this.items = items;
+    }
 }

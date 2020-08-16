@@ -1,14 +1,18 @@
 package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.Initializable;
+import javafx.fxml.Initializable;;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.market.MarketListController;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.RemoveItem;
+import phase2.trade.user.User;
+import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
 import java.util.*;
@@ -30,12 +34,11 @@ public class CartController extends ItemController implements Initializable {
 
         addNameColumn(false);
         addDescriptionColumn(false);
-        addOwnershipColumn(false);
+//        addOwnershipColumn(false);
         addQuantityColumn(false);
         addPriceColumn(false);
-        addCategoryColumn(false);
-        addWillingnessColumn(false);
-        addOwnerColumn();
+//        addCategoryColumn(false);
+//        addWillingnessColumn(false);
         addUIDColumn();
 
         addSearchName();
@@ -44,12 +47,19 @@ public class CartController extends ItemController implements Initializable {
         addOwnershipComboBox();
         addWillingnessCheckBoxes();
 
+        JFXComboBox<User> newUser = new JFXComboBox<>();
+        getGatewayBundle().getEntityBundle().getUserGateway().submitSession((gateway) -> {
+            List<User> matchedUsers = gateway.findAll();
+            newUser.getItems().setAll(matchedUsers);
+        });
+
+        JFXButton addButton = new JFXButton("Add Items to Borrow/ Buy");
+        addButton.setOnAction(e -> itemsClicked());
         JFXButton deleteButton = new JFXButton("Delete");
-        JFXButton trade = new JFXButton("Trade");
 
-        buttonPane.getChildren().addAll(deleteButton, trade);
+        buttonPane.getChildren().addAll(newUser, addButton, deleteButton);
 
-        buttonsToDisable = FXCollections.observableArrayList(deleteButton, trade);
+        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton);
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
             command.setItemListType(itemListType);
@@ -62,5 +72,11 @@ public class CartController extends ItemController implements Initializable {
         });
 
         tableViewGenerator.build();
+    }
+
+    public void itemsClicked(){
+        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Available Items", "");
+        popup.addNodes(getSceneManager().loadPane(new MarketListController(getControllerResources())));
+        popup.display();
     }
 }

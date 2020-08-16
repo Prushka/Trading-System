@@ -14,8 +14,6 @@ import javax.persistence.InheritanceType;
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true, persistent = true)
 public class EditTrade extends TradeCommand<Trade> {
-    private Long tradeId;
-
     private transient TradeEditor te;
 
     @Override
@@ -24,8 +22,7 @@ public class EditTrade extends TradeCommand<Trade> {
         te = new TradeEditor(getConfigBundle().getTradeConfig().getEditLimit());
         if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
-            Trade currTrade = findTradeByIdSyncOutsideTradeGateway(tradeId);
-            getEntityBundle().getUserGateway().update(operator);
+            Trade currTrade = gateway.findById(tradeId);
             Trade trade = te.edit(currTrade, operator, args);
             gateway.update(trade);
             callback.call(trade, new StatusSucceeded());
@@ -40,7 +37,4 @@ public class EditTrade extends TradeCommand<Trade> {
         });
     }
 
-    public void setTradeId(Long tradeId) {
-        this.tradeId = tradeId;
-    }
 }

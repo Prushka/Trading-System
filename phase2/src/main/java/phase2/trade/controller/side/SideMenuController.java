@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import phase2.trade.controller.*;
+import phase2.trade.controller.market.MarketController;
 import phase2.trade.item.controller.CartController;
 import phase2.trade.item.controller.InventoryController;
 import phase2.trade.controller.market.MarketListController;
@@ -105,8 +106,9 @@ public class SideMenuController extends AbstractController implements Initializa
                         loadCenter(userInfoController);
                         break;
                     case "side.market":
-                        getPane("centerDashboard").getChildren().clear();
-                        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(new MarketListController(getControllerResources())));
+                        // getPane("centerDashboard").getChildren().clear();
+                        // getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(new MarketListController(getControllerResources())));
+                        loadCenter(MarketController::new);
                         break;
                     case "side.inventory":
                         inventory();

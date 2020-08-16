@@ -21,8 +21,6 @@ public abstract class EditableController<T, E> extends AbstractController {
 
     protected List<Button> buttonsToDisable = new ArrayList<>();
 
-    protected Command<?> updateEntityCommand;
-
     @FXML
     protected Pane buttonPane;
 
@@ -55,10 +53,6 @@ public abstract class EditableController<T, E> extends AbstractController {
     }
 
     protected abstract void updateEntity(List<T> entities);
-
-    public void setUpdateEntityCommand(Command<?> updateEntityCommand) {
-        this.updateEntityCommand = updateEntityCommand;
-    }
 
     protected void disableButtons(boolean value) {
         for (Button button : buttonsToDisable) {

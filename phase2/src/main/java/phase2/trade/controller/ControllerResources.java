@@ -36,7 +36,6 @@ public class ControllerResources {
 
     private final PubSub pubSub;
 
-    // only use this for pub-sub for now
     private final Map<String, Reloadable> registeredReloadable = new HashMap<>();
 
     public ControllerResources(GatewayBundle gatewayBundle, ShutdownHook shutdownHook, Stage window, AccountManager accountManager) {
@@ -78,12 +77,8 @@ public class ControllerResources {
         return panes;
     }
 
-    protected void registerController(String simpleName, Reloadable reloadable) {
+    protected void registerReloadable(String simpleName, Reloadable reloadable) {
         registeredReloadable.put(simpleName, reloadable);
-    }
-
-    public PubSub getPubSub() {
-        return pubSub;
     }
 
     public void publish(String message) {

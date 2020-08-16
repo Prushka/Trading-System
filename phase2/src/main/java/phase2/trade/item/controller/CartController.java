@@ -57,9 +57,8 @@ public class CartController extends ItemController implements Initializable {
         addButton.setOnAction(e -> itemsClicked());
         JFXButton deleteButton = new JFXButton("Delete");
 
-        buttonPane.getChildren().addAll(newUser, addButton, deleteButton);
-
-        buttonsToDisable = FXCollections.observableArrayList(addButton, deleteButton);
+        buttonPane.getChildren().addAll(newUser);
+        addButton(addButton,deleteButton);
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
             command.setItemListType(itemListType);

@@ -5,7 +5,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.config.ConfigBundle;
-import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.view.NodeFactory;
 import phase2.trade.view.PopupFactory;
@@ -28,7 +27,7 @@ public abstract class AbstractController implements Reloadable {
 
     public AbstractController(ControllerResources controllerResources) {
         this.controllerResources = controllerResources;
-        controllerResources.registerController(this.getClass().getSimpleName(), this);
+        controllerResources.registerReloadable(this.getClass().getSimpleName(), this);
         if (getPane("topBar") != null) getPane("topBar").getChildren().clear();
     }
 
@@ -40,7 +39,7 @@ public abstract class AbstractController implements Reloadable {
         valueLanguage.put(key, value);
     }
 
-    public String getValueByLanguage(String value) {
+    protected String getValueByLanguage(String value) {
         for (Map.Entry<String, String> entry : valueLanguage.entrySet()) {
             if (entry.getValue().equals(value)) {
                 return entry.getKey();

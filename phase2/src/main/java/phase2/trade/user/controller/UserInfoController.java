@@ -3,17 +3,14 @@ package phase2.trade.user.controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
-import phase2.trade.address.AddressBook;
 import phase2.trade.avatar.Avatar;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
@@ -21,13 +18,11 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.EditableController;
 import phase2.trade.editor.UserEditor;
 import phase2.trade.permission.PermissionGroup;
-import phase2.trade.user.AccountState;
 import phase2.trade.user.User;
 import phase2.trade.user.command.ChangePassword;
 import phase2.trade.user.command.ChangeUserName;
 import phase2.trade.user.command.UpdateUsers;
-import phase2.trade.view.widget.SmallTextWidget;
-import phase2.trade.view.widget.Widget;
+import phase2.trade.view.widget.*;
 import phase2.trade.view.window.GeneralVBoxAlert;
 
 import javax.imageio.ImageIO;
@@ -51,7 +46,7 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
 
     private final User userToPresent;
 
-    private Widget userWidget, permissionWidget, addressWidget, accountStateWidget;
+    private Parent userWidget, permissionWidget, addressWidget, accountStateWidget;
 
     public UserInfoController(ControllerResources controllerResources, VBox userInfoBox) {
         super(controllerResources, UserEditor::new);
@@ -61,123 +56,16 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
 
     private void generateLeftUserPane() {
         if (userToPresent == null) return; // this shouldn't happen
-
-        userWidget = new SmallTextWidget("gradient-j", "User - " + userToPresent.getUid(), "Name: " + userToPresent.getName(), "Email: " + userToPresent.getEmail());
-
-        permissionWidget = new SmallTextWidget("gradient-k", "Permission", "Group: " + userToPresent.getPermissionGroup().toString(),
-                "Permissions: " + userToPresent.getPermissionSet().getPerm().size());
-
-        generateAddressWidget();
-        generateAccountStateWidget();
-
-        GridPane.setConstraints(userWidget.getRoot(), 1, 1);
-        GridPane.setConstraints(permissionWidget.getRoot(), 2, 1);
-        GridPane.setConstraints(addressWidget.getRoot(), 3, 1);
-        GridPane.setConstraints(accountStateWidget.getRoot(), 4, 1);
-        HBox top = new HBox(permissionWidget.getRoot(), userWidget.getRoot(), addressWidget.getRoot(), accountStateWidget.getRoot());
+        userWidget = getSceneManager().loadPane(UserWidget::new);
+        addressWidget = getSceneManager().loadPane(AddressWidget::new);
+        accountStateWidget = getSceneManager().loadPane(AccountStateWidget::new);
+        GridPane.setConstraints(userWidget, 1, 1);
+        //GridPane.setConstraints(permissionWidget, 2, 1);
+        GridPane.setConstraints(addressWidget, 3, 1);
+        GridPane.setConstraints(accountStateWidget, 4, 1);
+        HBox top = new HBox(userWidget, addressWidget, accountStateWidget);
         top.setSpacing(20);
         root.setTop(top);
-    }
-
-    private void refreshAddressWidget() {
-
-        = new Label("Address - " + country);
-        Label  = new Label("Province: " + province);
-        Label cityLabel = new Label("City: " + city);
-    }
-
-    private void generateAddressWidget() {
-        AddressBook addressBook = userToPresent.getAddressBook();
-        String country = "";
-        String province = "";
-        String city = "";
-        GeneralVBoxAlert addressAlert = getPopupFactory().vBoxAlert("Modify Your Address", "");
-        ComboBox<String> countryCombo = getNodeFactory().getComboBox(getConfigBundle().getGeoConfig().getMap().keySet());
-        ComboBox<String> provinceCombo = getNodeFactory().getComboBox();
-        ComboBox<String> cityCombo = getNodeFactory().getComboBox();
-        TextField addressLine1 = getNodeFactory().getDefaultTextField("Address Line 1 (Optional)");
-        TextField addressLine2 = getNodeFactory().getDefaultTextField("Address Line 2 (Optional)");
-        TextField postalCode = getNodeFactory().getDefaultTextField("Postal Code (Optional)");
-
-        countryCombo.setOnAction(e -> {
-            String selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
-            if (selectedCountry != null) {
-                provinceCombo.setItems(getConfigBundle().getGeoConfig().getProvincesByCountry(selectedCountry));
-            }
-        });
-
-        provinceCombo.setOnAction(e -> {
-            String selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
-            String selectedProvince = provinceCombo.getSelectionModel().getSelectedItem();
-            if (selectedCountry != null) {
-                cityCombo.setItems(getConfigBundle().getGeoConfig().getCitiesByProvinceCountry(selectedCountry, selectedProvince));
-            }
-        });
-
-        Label countryLabel, provinceLabel, cityLabel;
-
-        addressAlert.addNodes(countryCombo, provinceCombo, cityCombo, addressLine1, addressLine2, postalCode);
-        addressAlert.setEventHandler(event -> {
-            UserEditor userEditor = new UserEditor(getAccountManager().getLoggedInUser(), getConfigBundle());
-            userEditor.addAddress(countryCombo.getSelectionModel().getSelectedItem(), provinceCombo.getSelectionModel().getSelectedItem(), cityCombo.getSelectionModel().getSelectedItem()
-                    , addressLine1.getText(), addressLine2.getText(), postalCode.getText());
-            updateEntity(getAccountManager().getLoggedInUser());
-            refreshAddressWidget();
-        });
-
-        if (userToPresent.getAddressBook().getSelectedAddress() != null) {
-            country = addressBook.getSelectedAddress().getCountry();
-            province = addressBook.getSelectedAddress().getTerritory();
-            city = addressBook.getSelectedAddress().getCity();
-            countryCombo.getSelectionModel().select(country);
-            provinceCombo.setItems(getConfigBundle().getGeoConfig().getProvincesByCountry(country));
-            provinceCombo.getSelectionModel().select(province);
-            cityCombo.setItems(getConfigBundle().getGeoConfig().getCitiesByProvinceCountry(country, province));
-            cityCombo.getSelectionModel().select(city);
-            addressLine1.setText(addressBook.getSelectedAddress().getFirstAddressLine());
-            addressLine2.setText(addressBook.getSelectedAddress().getSecondAddressLine());
-        }
-
-        addressWidget = new SmallTextWidget("gradient-i");
-        addressWidget.addTitle(countryLabel);
-        addressWidget.addTitle(provinceLabel, cityLabel);
-        addressWidget.setOnMouseClicked(e -> addressAlert.display());
-    }
-
-    private void generateAccountStateWidget() {
-        ToggleGroup group = new ToggleGroup();
-        putLanguageValue(AccountState.NORMAL.name(), "state.normal");
-        putLanguageValue(AccountState.ON_VOCATION.name(), "state.on.vocation");
-        RadioButton normalRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(AccountState.NORMAL.name()), group);
-        RadioButton onVocationRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(AccountState.ON_VOCATION.name()), group);
-
-        switch (getAccountManager().getLoggedInUser().getAccountState()) {
-            case NORMAL:
-                normalRadio.setSelected(true);
-                break;
-            case ON_VOCATION:
-                onVocationRadio.setSelected(true);
-                break;
-        }
-        EventHandler<ActionEvent> accountStateHandler = event -> {
-            shortenAlter(getAccountManager().getLoggedInUser(),
-                    getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()),
-                    s -> {
-                        s.setSucceeded(() -> {
-                            getPopupFactory().toast(2, "Updated");
-                            s.handle(getPopupFactory());
-                        });
-                    }, UserEditor::alterAccountState);
-        };
-        normalRadio.getStyleClass().addAll("butter-body");
-        onVocationRadio.getStyleClass().addAll("butter-body");
-
-        normalRadio.setOnAction(accountStateHandler);
-        onVocationRadio.setOnAction(accountStateHandler);
-        Label title = new Label("Account State");
-        title.getStyleClass().addAll("butter-header");
-        accountStateWidget = new Widget("gradient-l", 270, 120);
-        accountStateWidget.addNodes(title, normalRadio, onVocationRadio);
     }
 
     @Override

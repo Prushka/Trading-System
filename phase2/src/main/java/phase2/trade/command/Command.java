@@ -2,7 +2,6 @@ package phase2.trade.command;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import phase2.trade.Main;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusNoPermission;
@@ -27,7 +26,7 @@ import java.util.regex.Pattern;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @CommandProperty(crudType = CRUDType.READ, undoable = true, persistent = true)
 // please annotate CommandProperty in subclasses, otherwise the one above will be used
-public abstract class Command<T> implements PermissionBased {
+public abstract class Command<T> implements PermissionBased, ArgsInvolved {
 
     private static final Logger logger = LogManager.getLogger(Command.class);
 

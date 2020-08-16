@@ -25,23 +25,17 @@ public class AddItemToItemList extends ItemCommand<Item> {
     public void execute(ResultStatusCallback<Item> callback, String... args) { // name, description, category, quantity, willingness, price (-1)
         if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
-            String name = args[0];
-            String description = args[1];
-            String category = args[2];
-            String quantity = args.length > 3 && args[3] != null ? args[3] : "1";
-            String willingness = args.length > 4 && args[4] != null ? args[4] : Willingness.Private.name();
-            String price = args.length > 5 && args[5] != null ? args[5] : "-1";
 
             // logger.info(String.format("Adding Item: Name %s | Description %s | Category %s | Quantity %s | Willingness %s | Price %s",
             //         name, description, category, quantity, willingness, price));
 
             Item item = new Item();
-            item.setName(name);
-            item.setDescription(description);
-            item.setCategory(Category.valueOf(category));
-            item.setQuantity(Integer.parseInt(quantity));
-            item.setWillingness(Willingness.valueOf(willingness));
-            item.setPrice(Double.parseDouble(price));
+            item.setName(argRequired(0, args));
+            item.setDescription(argRequired(1, args));
+            item.setCategory(Category.valueOf(argRequired(2, args)));
+            item.setQuantity(Integer.parseInt(argRequired(3, "1", args)));
+            item.setWillingness(Willingness.valueOf(argRequired(4, Willingness.Private.name(), args)));
+            item.setPrice(Double.parseDouble(argRequired(5, "-1", args)));
             item.setOwner(operator);
             item.setOwnership(Ownership.TO_BE_REVIEWED);
 

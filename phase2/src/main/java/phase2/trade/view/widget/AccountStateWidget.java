@@ -25,7 +25,7 @@ public class AccountStateWidget extends WidgetControllerBase {
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
         title.setText("Account State");
     }
 
@@ -53,9 +53,9 @@ public class AccountStateWidget extends WidgetControllerBase {
                 status.handle(getPopupFactory());
             }), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()));
         };
-        normalRadio.getStyleClass().addAll("butter-body");
-        onVocationRadio.getStyleClass().addAll("butter-body");
 
+        normalRadio.setFocusTraversable(false);
+        onVocationRadio.setFocusTraversable(false);
         normalRadio.setOnAction(accountStateHandler);
         onVocationRadio.setOnAction(accountStateHandler);
         addTitle(title);

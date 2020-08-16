@@ -66,5 +66,4 @@ public abstract class WidgetControllerBase extends AbstractController implements
         this.root.getStyleClass().add(gradient);
     }
 
-    protected abstract void refresh();
 }

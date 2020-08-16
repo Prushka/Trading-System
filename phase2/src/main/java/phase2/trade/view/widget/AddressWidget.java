@@ -78,6 +78,7 @@ public class AddressWidget extends SmallTextWidgetController {
             cityCombo.getSelectionModel().select(city);
             addressLine1.setText(address.getFirstAddressLine());
             addressLine2.setText(address.getSecondAddressLine());
+            postalCode.setText(address.getPostalCode());
         }
         addTitle(countryLabel);
         addContent(provinceLabel, cityLabel);
@@ -85,10 +86,14 @@ public class AddressWidget extends SmallTextWidgetController {
         refresh();
     }
 
-    protected void refresh() {
-        countryLabel.setText("Address - " + address.getCountry());
-        provinceLabel.setText("Province - " + address.getTerritory());
-        cityLabel.setText("City - " + address.getCity());
+    public void refresh() {
+        if (address != null) {
+            countryLabel.setText("Address - " + address.getCountry());
+            provinceLabel.setText("Province - " + address.getTerritory());
+            cityLabel.setText("City - " + address.getCity());
+        }else{
+            countryLabel.setText("Address - Undefined");
+        }
     }
 
 }

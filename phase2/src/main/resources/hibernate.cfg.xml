@@ -24,6 +24,8 @@
         <mapping class="phase2.trade.item.command.ReviewItem" />
 
         <mapping class="phase2.trade.user.command.UserCommand" />
+        <mapping class="phase2.trade.user.command.ChangeAddress" />
+        <mapping class="phase2.trade.user.command.ChangeAccountState" />
         <mapping class="phase2.trade.user.command.CreateUser" />
         <mapping class="phase2.trade.user.command.Login" />
         <mapping class="phase2.trade.user.command.UpdateUsers" />

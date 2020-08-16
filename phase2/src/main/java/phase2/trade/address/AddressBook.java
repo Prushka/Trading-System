@@ -29,7 +29,11 @@ public class AddressBook {
     }
 
     public void setSelectedAddress(Address address) {
-        addresses.set(getAddressSelected(), address);
+        if (getSelectedAddress() == null) {
+            addresses.add(address);
+        } else {
+            addresses.set(getAddressSelected(), address);
+        }
     }
 
     public void setAddressSelected(int addressSelected) {

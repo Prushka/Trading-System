@@ -60,7 +60,7 @@ public class ImageFactory {
 
     public Node generateGraphic(String general) {
         String path = null;
-        switch (general){
+        switch (general) {
             case "user":
                 path = "/svg/user.svg";
                 break;

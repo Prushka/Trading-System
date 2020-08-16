@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import phase2.trade.config.GeoConfig;
+import phase2.trade.database.TriConsumer;
 import phase2.trade.item.Category;
 
 import java.util.Arrays;
@@ -66,7 +68,7 @@ public class NodeFactory {
         Category
     }
 
-    public JFXComboBox<String> getComboBoxByType(ComboBoxType type){
+    public JFXComboBox<String> getComboBoxByType(ComboBoxType type) {
         switch (type) {
             case Category:
                 JFXComboBox<String> comboBox = getComboBox(Category.class);
@@ -76,6 +78,33 @@ public class NodeFactory {
                 return comboBox;
         }
         return null;
+    }
+
+    public void getAddressComboBoxes(TriConsumer<ComboBox<String>, ComboBox<String>, ComboBox<String>> consumer, GeoConfig geoConfig) {
+        JFXComboBox<String> countryCombo = getComboBox(geoConfig.getMap().keySet());
+        countryCombo.setPromptText("Country");
+        countryCombo.setLabelFloat(true);
+        JFXComboBox<String> provinceCombo = getComboBox();
+        provinceCombo.setPromptText("Province");
+        provinceCombo.setLabelFloat(true);
+        JFXComboBox<String> cityCombo = getComboBox();
+        cityCombo.setPromptText("City");
+        cityCombo.setLabelFloat(true);
+        countryCombo.setOnAction(e -> {
+            String selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
+            if (selectedCountry != null) {
+                provinceCombo.setItems(geoConfig.getProvincesByCountry(selectedCountry));
+            }
+        });
+
+        provinceCombo.setOnAction(e -> {
+            String selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
+            String selectedProvince = provinceCombo.getSelectionModel().getSelectedItem();
+            if (selectedCountry != null) {
+                cityCombo.setItems(geoConfig.getCitiesByProvinceCountry(selectedCountry, selectedProvince));
+            }
+        });
+        consumer.consume(countryCombo, provinceCombo, cityCombo);
     }
 
     public JFXComboBox<String> getComboBox(Class<? extends Enum<?>> clazz) {

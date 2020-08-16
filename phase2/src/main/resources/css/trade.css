@@ -43,7 +43,7 @@
 
 .side-menu-user > .label {
     -fx-font-size: 13px;
-    -fx-text-fill: rgb(200, 200, 200);
+    -fx-text-fill: rgb(240, 240, 240);
 }
 
 
@@ -300,3 +300,7 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
     -fx-background-color: linear-gradient(from 100% 100% to 0% 0%,
     rgb(225,217,65), rgb(255,136,87));
 }
+
+/* TODO: someone redesign this. It's way too colorful
+
+ */

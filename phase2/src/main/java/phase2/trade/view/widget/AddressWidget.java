@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import phase2.trade.address.Address;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.database.TriConsumer;
 import phase2.trade.user.command.ChangeAddress;
 import phase2.trade.view.window.GeneralVBoxAlert;
 
@@ -13,11 +14,15 @@ import java.util.ResourceBundle;
 
 public class AddressWidget extends SmallTextWidgetController {
 
-    private final Address address;
+    private Address address;
 
     private final Label countryLabel = new Label();
     private final Label provinceLabel = new Label();
     private final Label cityLabel = new Label();
+
+    private ComboBox<String> countryCombo;
+    private ComboBox<String> provinceCombo;
+    private ComboBox<String> cityCombo;
 
     public AddressWidget(ControllerResources controllerResources) {
         super(controllerResources);
@@ -31,27 +36,17 @@ public class AddressWidget extends SmallTextWidgetController {
         String province = "";
         String city = "";
         GeneralVBoxAlert addressAlert = getPopupFactory().vBoxAlert("Modify Your Address", "");
-        ComboBox<String> countryCombo = getNodeFactory().getComboBox(getConfigBundle().getGeoConfig().getMap().keySet());
-        ComboBox<String> provinceCombo = getNodeFactory().getComboBox();
-        ComboBox<String> cityCombo = getNodeFactory().getComboBox();
+
+        getNodeFactory().getAddressComboBoxes((a, b, c) -> {
+            countryCombo = a;
+            provinceCombo = b;
+            cityCombo = c;
+        },getConfigBundle().getGeoConfig());
+
         TextField addressLine1 = getNodeFactory().getDefaultTextField("Address Line 1 (Optional)");
         TextField addressLine2 = getNodeFactory().getDefaultTextField("Address Line 2 (Optional)");
         TextField postalCode = getNodeFactory().getDefaultTextField("Postal Code (Optional)");
 
-        countryCombo.setOnAction(e -> {
-            String selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
-            if (selectedCountry != null) {
-                provinceCombo.setItems(getConfigBundle().getGeoConfig().getProvincesByCountry(selectedCountry));
-            }
-        });
-
-        provinceCombo.setOnAction(e -> {
-            String selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
-            String selectedProvince = provinceCombo.getSelectionModel().getSelectedItem();
-            if (selectedCountry != null) {
-                cityCombo.setItems(getConfigBundle().getGeoConfig().getCitiesByProvinceCountry(selectedCountry, selectedProvince));
-            }
-        });
 
         addressAlert.addNodes(countryCombo, provinceCombo, cityCombo, addressLine1, addressLine2, postalCode);
         addressAlert.setEventHandler(event -> {
@@ -85,6 +80,7 @@ public class AddressWidget extends SmallTextWidgetController {
     }
 
     public void refresh() {
+        address = userToPresent.getAddressBook().getSelectedAddress();
         if (address != null) {
             countryLabel.setText("Address - " + address.getCountry());
             provinceLabel.setText("Province - " + address.getTerritory());

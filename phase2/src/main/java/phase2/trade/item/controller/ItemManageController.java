@@ -44,6 +44,7 @@ public class ItemManageController extends ItemController implements Initializabl
         addPriceColumn(true);
         addCategoryColumn(true);
         addWillingnessColumn(true);
+        addOwnerColumn();
         addUIDColumn();
 
         addSearchName();

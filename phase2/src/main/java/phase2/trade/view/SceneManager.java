@@ -2,6 +2,7 @@ package phase2.trade.view;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import phase2.trade.controller.ControllerFactory;
 import phase2.trade.controller.ControllerResources;

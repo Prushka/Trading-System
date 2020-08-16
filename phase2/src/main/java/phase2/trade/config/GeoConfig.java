@@ -1,5 +1,7 @@
 package phase2.trade.config;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -63,6 +65,26 @@ public class GeoConfig {
         }
 
     }
+
+
+    public ObservableList<String> getCountries() {
+        ObservableList<String> countries = FXCollections.observableArrayList(map.keySet());
+        Collections.sort(countries);
+        return countries;
+    }
+
+    public ObservableList<String> getProvincesByCountry(String country) {
+        ObservableList<String> provinces = FXCollections.observableArrayList(map.get(country).keySet());
+        Collections.sort(provinces);
+        return provinces;
+    }
+
+    public ObservableList<String> getCitiesByProvinceCountry(String country, String province) {
+        ObservableList<String> cities = FXCollections.observableArrayList(map.get(country).get(province));
+        Collections.sort(cities);
+        return cities;
+    }
+
 
     public Map<String, Map<String, Set<String>>> getMap() {
         return map;

@@ -1,7 +1,9 @@
 package phase2.trade;
 
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -41,6 +43,8 @@ public class TradeApplication extends Application {
         // login(primaryStage);
         // configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
         configurer.mockDashboardLogin("admin", "admin???");
+
+        primaryStage.setScene(new Scene(new VBox()));
         configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
         //login(primaryStage);
         primaryStage.show();

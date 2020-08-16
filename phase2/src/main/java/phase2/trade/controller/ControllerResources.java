@@ -46,7 +46,7 @@ public class ControllerResources {
         popupFactory = new PopupFactory(window);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);
         sceneManager = new SceneManager(this);
-        pubSub = new Redis(getGatewayBundle().getConfigBundle().getRedisConfig(),registeredControllers);
+        pubSub = new Redis(getGatewayBundle().getConfigBundle().getRedisConfig(), registeredControllers);
         shutdownHook.addShutdownables(pubSub);
     }
 
@@ -82,7 +82,7 @@ public class ControllerResources {
         registeredControllers.put(simpleName, abstractController);
     }
 
-    public phase2.trade.gateway.PubSub getPubSub() {
+    public PubSub getPubSub() {
         return pubSub;
     }
 

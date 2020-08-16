@@ -5,6 +5,7 @@ import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import phase2.trade.item.Category;
 
@@ -38,6 +39,13 @@ public class NodeFactory {
         JFXButton button = new JFXButton(text);
         button.setDisableVisualFocus(true);
         button.setButtonType(JFXButton.ButtonType.RAISED);
+        return button;
+    }
+
+    public Button getDefaultFlatButton(String text, Paint ripple) {
+        JFXButton button = new JFXButton(text);
+        button.setDisableVisualFocus(true);
+        button.setRipplerFill(ripple);
         return button;
     }
 

@@ -18,7 +18,7 @@ public class AddressBook {
     private int addressSelected = 0;
 
     public Address getSelectedAddress() {
-        if (addresses.size() < addressSelected || addresses.get(addressSelected) == null) {
+        if (addresses.size() < addressSelected + 1 || addresses.get(addressSelected) == null) {
             return null;
         }
         return addresses.get(addressSelected);

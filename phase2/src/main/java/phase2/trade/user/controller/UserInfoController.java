@@ -1,21 +1,19 @@
 package phase2.trade.user.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
-import phase2.trade.address.Address;
+import phase2.trade.address.AddressBook;
 import phase2.trade.avatar.Avatar;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
@@ -28,6 +26,8 @@ import phase2.trade.user.User;
 import phase2.trade.user.command.ChangePassword;
 import phase2.trade.user.command.ChangeUserName;
 import phase2.trade.user.command.UpdateUsers;
+import phase2.trade.view.widget.SmallTextWidget;
+import phase2.trade.view.widget.Widget;
 import phase2.trade.view.window.GeneralVBoxAlert;
 
 import javax.imageio.ImageIO;
@@ -36,66 +36,115 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
 // TODO: ALL Controllers that don't extend AbstractTable... is a mess
 //  Refactor everything in the future
-@ControllerProperty(viewFile = "abstract_h.fxml")
+@ControllerProperty(viewFile = "abstract_border.fxml")
 public class UserInfoController extends EditableController<User, UserEditor> implements Initializable {
 
     @FXML
-    private HBox root;
+    private BorderPane root;
 
     private final VBox userInfoBox;
 
-    private final VBox left = new VBox(10);
-    private final VBox right = new VBox(10);
+    private final User userToPresent;
+
+    private Widget userWidget, permissionWidget, addressWidget, accountStateWidget;
 
     public UserInfoController(ControllerResources controllerResources, VBox userInfoBox) {
         super(controllerResources, UserEditor::new);
         this.userInfoBox = userInfoBox;
+        userToPresent = getAccountManager().getLoggedInUser();
     }
 
-    private void generateLeft() {
-        User userToPresent = getAccountManager().getLoggedInUser();
-        if (userToPresent == null) return;
-        Label userId, userName, email, permissionGroup, permissions, country, province, city, accountState;
-        country = city = province = null;
-        userId = new Label("User Id: " + userToPresent.getUid());
-        userName = new Label("User Name: " + userToPresent.getName());
-        email = new Label("Email: " + userToPresent.getEmail());
-        permissionGroup = new Label("PermissionGroup: " + userToPresent.getPermissionGroup());
+    private void generateLeftUserPane() {
+        if (userToPresent == null) return; // this shouldn't happen
 
-        permissions = new Label("Permissions:");
-        left.getChildren().addAll(userId, userName, email, permissionGroup, permissions);
+        userWidget = new SmallTextWidget("gradient-j", "User - " + userToPresent.getUid(), "Name: " + userToPresent.getName(), "Email: " + userToPresent.getEmail());
 
-        StringBuilder permissionsS = new StringBuilder();
-        userToPresent.getPermissionSet().getPerm().forEach(permission -> left.getChildren().addAll(new Label(permission.toString())));
+        permissionWidget = new SmallTextWidget("gradient-k", "Permission", "Group: " + userToPresent.getPermissionGroup().toString(),
+                "Permissions: " + userToPresent.getPermissionSet().getPerm().size());
 
+        generateAddressWidget();
+        generateAccountStateWidget();
 
-        Address address = userToPresent.getAddressBook().getSelectedAddress();
-        if (address != null) {
-            country = new Label("Country: " + address.getCountry());
-            province = new Label("Province: " + address.getTerritory());
-            city = new Label("City: " + address.getCity());
+        GridPane.setConstraints(userWidget.getRoot(), 1, 1);
+        GridPane.setConstraints(permissionWidget.getRoot(), 2, 1);
+        GridPane.setConstraints(addressWidget.getRoot(), 3, 1);
+        GridPane.setConstraints(accountStateWidget.getRoot(), 4, 1);
+        HBox top = new HBox(permissionWidget.getRoot(), userWidget.getRoot(), addressWidget.getRoot(), accountStateWidget.getRoot());
+        top.setSpacing(20);
+        root.setTop(top);
+    }
+
+    private void refreshAddressWidget() {
+
+        = new Label("Address - " + country);
+        Label  = new Label("Province: " + province);
+        Label cityLabel = new Label("City: " + city);
+    }
+
+    private void generateAddressWidget() {
+        AddressBook addressBook = userToPresent.getAddressBook();
+        String country = "";
+        String province = "";
+        String city = "";
+        GeneralVBoxAlert addressAlert = getPopupFactory().vBoxAlert("Modify Your Address", "");
+        ComboBox<String> countryCombo = getNodeFactory().getComboBox(getConfigBundle().getGeoConfig().getMap().keySet());
+        ComboBox<String> provinceCombo = getNodeFactory().getComboBox();
+        ComboBox<String> cityCombo = getNodeFactory().getComboBox();
+        TextField addressLine1 = getNodeFactory().getDefaultTextField("Address Line 1 (Optional)");
+        TextField addressLine2 = getNodeFactory().getDefaultTextField("Address Line 2 (Optional)");
+        TextField postalCode = getNodeFactory().getDefaultTextField("Postal Code (Optional)");
+
+        countryCombo.setOnAction(e -> {
+            String selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
+            if (selectedCountry != null) {
+                provinceCombo.setItems(getConfigBundle().getGeoConfig().getProvincesByCountry(selectedCountry));
+            }
+        });
+
+        provinceCombo.setOnAction(e -> {
+            String selectedCountry = countryCombo.getSelectionModel().getSelectedItem();
+            String selectedProvince = provinceCombo.getSelectionModel().getSelectedItem();
+            if (selectedCountry != null) {
+                cityCombo.setItems(getConfigBundle().getGeoConfig().getCitiesByProvinceCountry(selectedCountry, selectedProvince));
+            }
+        });
+
+        Label countryLabel, provinceLabel, cityLabel;
+
+        addressAlert.addNodes(countryCombo, provinceCombo, cityCombo, addressLine1, addressLine2, postalCode);
+        addressAlert.setEventHandler(event -> {
+            UserEditor userEditor = new UserEditor(getAccountManager().getLoggedInUser(), getConfigBundle());
+            userEditor.addAddress(countryCombo.getSelectionModel().getSelectedItem(), provinceCombo.getSelectionModel().getSelectedItem(), cityCombo.getSelectionModel().getSelectedItem()
+                    , addressLine1.getText(), addressLine2.getText(), postalCode.getText());
+            updateEntity(getAccountManager().getLoggedInUser());
+            refreshAddressWidget();
+        });
+
+        if (userToPresent.getAddressBook().getSelectedAddress() != null) {
+            country = addressBook.getSelectedAddress().getCountry();
+            province = addressBook.getSelectedAddress().getTerritory();
+            city = addressBook.getSelectedAddress().getCity();
+            countryCombo.getSelectionModel().select(country);
+            provinceCombo.setItems(getConfigBundle().getGeoConfig().getProvincesByCountry(country));
+            provinceCombo.getSelectionModel().select(province);
+            cityCombo.setItems(getConfigBundle().getGeoConfig().getCitiesByProvinceCountry(country, province));
+            cityCombo.getSelectionModel().select(city);
+            addressLine1.setText(addressBook.getSelectedAddress().getFirstAddressLine());
+            addressLine2.setText(addressBook.getSelectedAddress().getSecondAddressLine());
         }
-        accountState = new Label("Current Status: " + userToPresent.getAccountState());
-        left.getChildren().addAll(country, province, city, accountState);
+
+        addressWidget = new SmallTextWidget("gradient-i");
+        addressWidget.addTitle(countryLabel);
+        addressWidget.addTitle(provinceLabel, cityLabel);
+        addressWidget.setOnMouseClicked(e -> addressAlert.display());
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        root.getChildren().setAll(left, right);
-        root.setSpacing(100);
-        left.setSpacing(10);
-        left.setStyle("-fx-font-size: 20");
-        generateLeft();
-        if (getAccountManager().getLoggedInUser().getPermissionGroup().equals(PermissionGroup.GUEST)) return;
-
-
+    private void generateAccountStateWidget() {
         ToggleGroup group = new ToggleGroup();
         putLanguageValue(AccountState.NORMAL.name(), "state.normal");
         putLanguageValue(AccountState.ON_VOCATION.name(), "state.on.vocation");
@@ -114,11 +163,27 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
             shortenAlter(getAccountManager().getLoggedInUser(),
                     getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()),
                     s -> {
+                        s.setSucceeded(() -> {
+                            getPopupFactory().toast(2, "Updated");
+                            s.handle(getPopupFactory());
+                        });
                     }, UserEditor::alterAccountState);
         };
+        normalRadio.getStyleClass().addAll("butter-body");
+        onVocationRadio.getStyleClass().addAll("butter-body");
 
         normalRadio.setOnAction(accountStateHandler);
         onVocationRadio.setOnAction(accountStateHandler);
+        Label title = new Label("Account State");
+        title.getStyleClass().addAll("butter-header");
+        accountStateWidget = new Widget("gradient-l", 270, 120);
+        accountStateWidget.addNodes(title, normalRadio, onVocationRadio);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        generateLeftUserPane();
+        if (getAccountManager().getLoggedInUser().getPermissionGroup().equals(PermissionGroup.GUEST)) return;
 
 
         GeneralVBoxAlert passwordAlert = getPopupFactory().vBoxAlert("Change Password", "");
@@ -150,46 +215,12 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
                     getAccountManager().getLoggedInUser().getName(), password.getText(), newUserName.getText());
         });
 
-        GeneralVBoxAlert addressAlert = getPopupFactory().vBoxAlert("Modify Your Address", "");
-        ComboBox<String> country = getNodeFactory().getComboBox(getConfigBundle().getGeoConfig().getMap().keySet());
-        ComboBox<String> province = getNodeFactory().getComboBox();
-        ComboBox<String> city = getNodeFactory().getComboBox();
-        TextField addressLine1 = getNodeFactory().getDefaultTextField("Address Line 1 (Optional)");
-        TextField addressLine2 = getNodeFactory().getDefaultTextField("Address Line 2 (Optional)");
-        TextField postalCode = getNodeFactory().getDefaultTextField("Postal Code (Optional)");
-        country.setOnAction(e -> {
-            String selectedCountry = country.getSelectionModel().getSelectedItem();
-            if (selectedCountry != null) {
-                ObservableList<String> provinces = FXCollections.observableArrayList(getConfigBundle().getGeoConfig().getMap().get(selectedCountry).keySet());
-                Collections.sort(provinces);
-                province.setItems(provinces);
-            }
-        });
-
-        province.setOnAction(e -> {
-            String selectedCountry = country.getSelectionModel().getSelectedItem();
-            String selectedProvince = province.getSelectionModel().getSelectedItem();
-            if (selectedCountry != null) {
-                ObservableList<String> cities = FXCollections.observableArrayList(getConfigBundle().getGeoConfig().getMap().get(selectedCountry).get(selectedProvince));
-                Collections.sort(cities);
-                city.setItems(cities);
-            }
-        });
-
-        addressAlert.addNodes(country, province, city, addressLine1, addressLine2, postalCode);
-        addressAlert.setEventHandler(event -> {
-            UserEditor userEditor = new UserEditor(getAccountManager().getLoggedInUser(), getConfigBundle());
-            userEditor.addAddress(country.getSelectionModel().getSelectedItem(), province.getSelectionModel().getSelectedItem(), city.getSelectionModel().getSelectedItem()
-                    , addressLine1.getText(), addressLine2.getText(), postalCode.getText());
-            updateEntity(getAccountManager().getLoggedInUser());
-        });
 
         Button changePassword = getNodeFactory().getDefaultRippleButton("Change Password");
         Button changeUserName = getNodeFactory().getDefaultRippleButton("Change User Name");
         Button modifyAddress = getNodeFactory().getDefaultRippleButton("Modify Address");
         changeUserName.setOnAction(event -> userNameAlert.display());
         changePassword.setOnAction(event -> passwordAlert.display());
-        modifyAddress.setOnAction(event -> addressAlert.display());
 
         final Button changeAvatar = new JFXButton("Choose Avatar");
 
@@ -197,7 +228,8 @@ public class UserInfoController extends EditableController<User, UserEditor> imp
             uploadAvatar();
         });
 
-        right.getChildren().addAll(changePassword, changeUserName, normalRadio, onVocationRadio, changeAvatar, modifyAddress);
+        VBox right = new VBox(10);
+        right.getChildren().addAll(changePassword, changeUserName, changeAvatar, modifyAddress);
     }
 
     // TODO: decouple this one

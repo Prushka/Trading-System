@@ -34,11 +34,11 @@ public class CartController extends ItemController implements Initializable {
 
         addNameColumn(false);
         addDescriptionColumn(false);
-//        addOwnershipColumn(false);
+        addOwnershipColumn(false);
         addQuantityColumn(false);
         addPriceColumn(false);
-//        addCategoryColumn(false);
-//        addWillingnessColumn(false);
+        addCategoryColumn(false);
+        addWillingnessColumn(false);
         addUIDColumn();
 
         addSearchName();

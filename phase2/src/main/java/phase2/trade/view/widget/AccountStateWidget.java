@@ -5,12 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
-import phase2.trade.callback.ResultStatusCallback;
-import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.editor.UserEditor;
 import phase2.trade.user.AccountState;
-import phase2.trade.user.User;
 import phase2.trade.user.command.ChangeAccountState;
 
 import java.net.URL;
@@ -48,10 +44,10 @@ public class AccountStateWidget extends WidgetControllerBase {
         }
         EventHandler<ActionEvent> accountStateHandler = event -> {
             ChangeAccountState changeAccountState = getCommandFactory().getCommand(ChangeAccountState::new);
-            changeAccountState.execute((result, status) -> status.setSucceeded(() -> {
-                getPopupFactory().toast(2, "Updated");
+            changeAccountState.execute((result, status) -> {
+                status.setSucceeded(() -> getPopupFactory().toast(2, "Updated!"));
                 status.handle(getPopupFactory());
-            }), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()));
+            }, getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()));
         };
 
         normalRadio.setFocusTraversable(false);

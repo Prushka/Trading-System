@@ -1,11 +1,18 @@
 package phase2.trade.permission;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import phase2.trade.command.Command;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
 
+import java.util.Arrays;
+
 public class UserPermissionChecker {
+
+    private static final Logger logger = LogManager.getLogger(UserPermissionChecker.class);
 
     private final User operator;
 
@@ -32,8 +39,12 @@ public class UserPermissionChecker {
             return operator.getPermissionGroup().equals(permissionGroup);
         }
         for (Permission permissionRequired : permissionSet.getPerm()) {
-            if (!operator.hasPermission(permissionRequired)) return false;
+            if (!operator.hasPermission(permissionRequired)) {
+                logger.debug("[Permission Denied] User: " + operator.getName() + " | " + operator.getPermissionGroup() + " | Required:" + permissionSet + " -> Got" + operator.getPermissionSet());
+                return false;
+            }
         }
+        logger.debug("[Permission Verified] User: " + operator.getName() + " | " + operator.getPermissionGroup() + " | Required:" + permissionSet + " -> Got" + operator.getPermissionSet());
         return true;
     }
 }

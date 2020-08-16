@@ -3,8 +3,8 @@ package phase2.trade.database.nosql;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import phase2.trade.config.RedisConfig;
-import phase2.trade.controller.Reloadable;
-import phase2.trade.gateway.PubSub;
+import phase2.trade.refresh.Reloadable;
+import phase2.trade.gateway.GatewayPubSub;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Redis implements PubSub {
+public class Redis implements GatewayPubSub {
 
     private static final Logger logger = LogManager.getLogger(Redis.class);
 
@@ -27,7 +27,6 @@ public class Redis implements PubSub {
     private ExecutorService threadPool;
 
     private JedisPubSub subscriber;
-
 
     public Redis(RedisConfig redisConfig, Map<String, Reloadable> registeredControllers) {
 

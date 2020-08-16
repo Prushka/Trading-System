@@ -6,7 +6,9 @@ import phase2.trade.ShutdownHook;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.database.nosql.Redis;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.PubSub;
+import phase2.trade.gateway.GatewayPubSub;
+import phase2.trade.refresh.ReReReRe;
+import phase2.trade.refresh.Reloadable;
 import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
@@ -34,9 +36,7 @@ public class ControllerResources {
 
     private final Map<String, Pane> panes = new HashMap<>();
 
-    private final PubSub pubSub;
-
-    private final Map<String, Reloadable> registeredReloadable = new HashMap<>();
+    private final ReReReRe reReReRe;
 
     public ControllerResources(GatewayBundle gatewayBundle, ShutdownHook shutdownHook, Stage window, AccountManager accountManager) {
         this.gatewayBundle = gatewayBundle;
@@ -45,8 +45,7 @@ public class ControllerResources {
         popupFactory = new PopupFactory(window);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);
         sceneManager = new SceneManager(this);
-        pubSub = new Redis(getGatewayBundle().getConfigBundle().getRedisConfig(), registeredReloadable);
-        shutdownHook.addShutdownables(pubSub);
+        reReReRe = new ReReReRe(gatewayBundle.getConfigBundle(), shutdownHook);
     }
 
     public Stage getWindow() {
@@ -77,11 +76,7 @@ public class ControllerResources {
         return panes;
     }
 
-    protected void registerReloadable(String simpleName, Reloadable reloadable) {
-        registeredReloadable.put(simpleName, reloadable);
-    }
-
-    public void publish(String message) {
-        pubSub.publish(message);
+    public ReReReRe getReReReRe() {
+        return reReReRe;
     }
 }

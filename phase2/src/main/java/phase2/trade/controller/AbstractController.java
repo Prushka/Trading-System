@@ -6,6 +6,9 @@ import org.apache.logging.log4j.Logger;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.config.ConfigBundle;
 import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.refresh.ReType;
+import phase2.trade.refresh.Refreshable;
+import phase2.trade.refresh.Reloadable;
 import phase2.trade.view.NodeFactory;
 import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
@@ -15,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerProperty(viewFile = "abstract_v.fxml")
-public abstract class AbstractController implements Reloadable {
+public abstract class AbstractController implements Reloadable, Refreshable {
 
     private static final Logger logger = LogManager.getLogger(AbstractController.class);
 
@@ -27,7 +30,8 @@ public abstract class AbstractController implements Reloadable {
 
     public AbstractController(ControllerResources controllerResources) {
         this.controllerResources = controllerResources;
-        controllerResources.registerReloadable(this.getClass().getSimpleName(), this);
+        controllerResources.getReReReRe().subscribeRefreshable(this.getClass().getSimpleName(), this);
+        controllerResources.getReReReRe().subscribeReloadable(this.getClass().getSimpleName(), this);
         if (getPane("topBar") != null) getPane("topBar").getChildren().clear();
     }
 
@@ -49,15 +53,15 @@ public abstract class AbstractController implements Reloadable {
     }
 
     protected void publish() {
-        controllerResources.publish(this.getClass().getSimpleName());
+        publish();
     }
 
-    protected void publish(Class<?>... effectedControllers) {
-        StringBuilder simpleRepresentation = new StringBuilder();
-        for (Class<?> clazz : effectedControllers) {
-            simpleRepresentation.append(clazz.getSimpleName()).append(",");
-        }
-        controllerResources.publish(simpleRepresentation.toString());
+    protected void publish(ReType reType) {
+        controllerResources.getReReReRe().publish(reType, this.getClass().getSimpleName());
+    }
+
+    protected void publish(ReType reType, Class<?>... effectedControllers) {
+        controllerResources.getReReReRe().publish(reType, effectedControllers);
     }
 
     // Reload: Reload data from gateway if applicable
@@ -66,8 +70,8 @@ public abstract class AbstractController implements Reloadable {
     }
 
     // Refresh: If the view has to be refreshed (Observable doesn't apply). No gateway involved
-    protected void refresh() {
-        logger.info("Reloading: " + this.getClass().getSimpleName());
+    public void refresh() {
+        logger.info("Refreshing: " + this.getClass().getSimpleName());
     }
 
     protected SceneManager getSceneManager() {

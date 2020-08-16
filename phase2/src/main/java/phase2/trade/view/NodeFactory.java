@@ -5,6 +5,7 @@ import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import phase2.trade.item.Category;
@@ -65,15 +66,27 @@ public class NodeFactory {
         Category
     }
 
-    public ComboBox<String> getComboBox(Class<? extends Enum<?>> clazz) {
+    public JFXComboBox<String> getComboBoxByType(ComboBoxType type){
+        switch (type) {
+            case Category:
+                JFXComboBox<String> comboBox = getComboBox(Category.class);
+                comboBox.setPromptText("Category");
+                comboBox.setLabelFloat(true);
+                comboBox.getItems().add("ALL");
+                return comboBox;
+        }
+        return null;
+    }
+
+    public JFXComboBox<String> getComboBox(Class<? extends Enum<?>> clazz) {
         return new JFXComboBox<>(getEnumAsObservableString(clazz));
     }
 
-    public ComboBox<String> getComboBox(Collection<String> list) {
+    public JFXComboBox<String> getComboBox(Collection<String> list) {
         return new JFXComboBox<>(FXCollections.observableArrayList(list));
     }
 
-    public ComboBox<String> getComboBox() {
+    public JFXComboBox<String> getComboBox() {
         return new JFXComboBox<>();
     }
 

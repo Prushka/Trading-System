@@ -5,11 +5,14 @@ import com.jfoenix.svg.SVGGlyph;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractController;
+import phase2.trade.controller.AbstractListController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.Category;
@@ -17,9 +20,11 @@ import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AddToCart;
 import phase2.trade.item.command.GetMarketItems;
+import phase2.trade.item.controller.ItemController;
 import phase2.trade.view.ListViewGenerator;
 import phase2.trade.view.MarketItemCell;
 import phase2.trade.view.NoSelectionModel;
+import phase2.trade.view.NodeFactory;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -28,44 +33,32 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-@ControllerProperty(viewFile = "market_list.fxml")
-public class MarketListController extends AbstractController implements Initializable {
+@ControllerProperty(viewFile = "general_list_view.fxml")
+public class MarketListController extends AbstractListController<Item> implements Initializable {
 
     public JFXListView<Item> listView;
 
-    public JFXTextField searchName;
-
-    private ListViewGenerator<Item> listViewGenerator;
-
     public MarketListController(ControllerResources controllerResources) {
-        super(controllerResources);
+        super(controllerResources, false);
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        listViewGenerator = new ListViewGenerator<>(listView);
-
+        super.initialize(location, resources);
         Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
-                for (Item item : result) {
-                    listViewGenerator.addElement(item);
-                }
+                setDisplayData(result);
                 afterFetch();
             });
             resultStatus.handle(getPopupFactory());
         });
-
-
     }
 
     private void afterFetch() {
         listView.setSelectionModel(new NoSelectionModel<>());
         AddToCart addToCartCommand = getCommandFactory().getCommand(AddToCart::new);
         listView.setCellFactory(param -> new MarketItemCell(addToCartCommand, getPopupFactory()));
-        JFXButton search = new JFXButton();
         JFXCheckBox lend = new JFXCheckBox("Lend");
         JFXCheckBox sell = new JFXCheckBox("Sell");
 
@@ -73,20 +66,16 @@ public class MarketListController extends AbstractController implements Initiali
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.getChildren().addAll(lend, sell);
 
-        JFXComboBox<String> category = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(Category.values()).map(Category::name).toArray(String[]::new))));
-        category.setPromptText("Category");
-        category.setLabelFloat(true);
-        category.getItems().add("ALL");
+        JFXComboBox<String> category = getNodeFactory().getComboBoxByType(NodeFactory.ComboBoxType.Category);
 
         JFXToggleButton includeMine = new JFXToggleButton();
         includeMine.setText("includeMine");
 
-        JFXTextField priceMinInclusive = new JFXTextField();
-        priceMinInclusive.setPromptText("Min Price");
-        priceMinInclusive.setLabelFloat(true);
-        JFXTextField priceMaxInclusive = new JFXTextField();
-        priceMaxInclusive.setPromptText("Max Price");
-        priceMaxInclusive.setLabelFloat(true);
+        TextField priceMinInclusive = getNodeFactory().getDefaultTextField("Min Price");
+        TextField priceMaxInclusive = getNodeFactory().getDefaultTextField("Max Price");
+        TextField name = getNodeFactory().getDefaultTextField("Name");
+        TextField description = getNodeFactory().getDefaultTextField("Description");
+
 
         Pattern doublePattern = Pattern.compile("\\d+\\.?\\d?");
         listViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
@@ -109,7 +98,16 @@ public class MarketListController extends AbstractController implements Initiali
                     } else {
                         return entity.getPrice() <= Double.parseDouble(toMatch);
                     }
-                }));
+                }))
+                .addSearch(priceMaxInclusive, ((entity, toMatch) -> {
+                    if (!doublePattern.matcher(toMatch).matches()) {
+                        getPopupFactory().toast(3, "Please enter a double in Price Max", "CLOSE");
+                        return true;
+                    } else {
+                        return entity.getPrice() <= Double.parseDouble(toMatch);
+                    }
+                }))
+                ;
 
         lend.setSelected(true);
         sell.setSelected(true);
@@ -118,18 +116,8 @@ public class MarketListController extends AbstractController implements Initiali
         priceMaxInclusive.setMaxWidth(80);
         Label label = new Label("-");
 
+        getPane("topBar").getChildren().setAll(vBox, name, description, category, includeMine, priceMinInclusive, label, priceMaxInclusive);
 
-        // custom svg elsewhere
-        SVGGlyph arrow = new SVGGlyph(0,
-                "FULLSCREEN",
-                "M.22,18.28a.75.75,0,0,1,0-1.06l5.4-5.4a7.258,7.258,0,1,1,1.061,1.061l-5.4,5.4a.75.75,0,0,1-1.061,0ZM5.5,7.25A5.75,5.75,0,1,0,11.25,1.5,5.757,5.757,0,0,0,5.5,7.25Z",
-                Color.WHITE);
-
-        arrow.setSize(35, 35);
-        search.setGraphic(arrow);
-        search.setRipplerFill(Color.WHITE);
-
-        getPane("topBar").getChildren().setAll(vBox, category, includeMine, priceMinInclusive, label, priceMaxInclusive, search);
         listViewGenerator.build();
     }
 }

@@ -40,7 +40,8 @@ import java.util.ResourceBundle;
 @ControllerProperty(viewFile = "market.fxml")
 public class MarketController extends AbstractListController<Trade> implements Initializable {
 
-    private TradeCommand tc, edit, confirm;
+    private TradeCommand edit, confirm;
+    private CreateTrade tc;
 
     @FXML
     private VBox root, content, content2;
@@ -246,8 +247,10 @@ public class MarketController extends AbstractListController<Trade> implements I
 
 
     public void tradeButtonClicked(){
-        List<User> allUsers = new ArrayList<>();
-        List<List<Item>> allItems = new ArrayList<>();
+        List<User> allUsers = new ArrayList<>(); // TODO: replace with selected combo boxes
+        List<List<Item>> allItems = new ArrayList<>(); // TODO: replace with selected combo boxes
+        tc.setTraders(allUsers);
+        tc.setTraderItems(allItems);
         if (isPermanent.getSelectionModel().getSelectedItem().equals("PERMANENT")){
             tc.execute(new ResultStatusCallback() { @Override
                        public void call(Object result, ResultStatus resultStatus) {

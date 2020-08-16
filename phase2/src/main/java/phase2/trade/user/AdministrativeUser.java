@@ -10,10 +10,11 @@ import java.util.List;
 public class AdministrativeUser extends User {
 
 
-    public AdministrativeUser(String userName, String email, String password, String country, String city) {
-        super(userName, email, password, country, city);
+    public AdministrativeUser(String userName, String email, String password) {
+        super(userName, email, password);
         setPermissionGroup(PermissionGroup.ADMIN);
     }
 
-    public AdministrativeUser(){}
+    public AdministrativeUser() {
+    }
 }

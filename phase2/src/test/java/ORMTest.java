@@ -58,11 +58,4 @@ public class ORMTest {
         return user;
     }
 
-    @Test
-    public void getItemFromUser() throws InterruptedException {
-        RegularUser user = new RegularUser("name", "email", "password", "country", "city");
-
-        userDAO.submitSession((gateway) -> gateway.add(user), false);
-
-    }
 }

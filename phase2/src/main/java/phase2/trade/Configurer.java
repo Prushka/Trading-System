@@ -78,7 +78,7 @@ public class Configurer {
     public void mockDashboardRegister(String username, String email) {
         accountManager.register((result, status) -> {
 
-        }, username, email, "12345678", "country", "city");
+        }, username, email, "12345678", "Canada", "Ontario", "Toronto");
 
         addExample();
 

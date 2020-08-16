@@ -31,8 +31,8 @@ public class RegularUser extends User {
      * @param email    email of this user
      * @param password password of this user
      */
-    public RegularUser(String userName, String email, String password, String country, String city) {
-        super(userName, email, password, country, city);
+    public RegularUser(String userName, String email, String password) {
+        super(userName, email, password);
         //incompleteTrades = 0;
 
         inventory = new Inventory();

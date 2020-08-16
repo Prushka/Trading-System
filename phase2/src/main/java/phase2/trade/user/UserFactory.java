@@ -16,17 +16,17 @@ public class UserFactory {
         this.permissionConfig = permissionConfig;
     }
 
-    public User createByPermissionGroup(String userName, String email, String password, String country, String city, String permissionGroupString) { // country and city are not necessary for all users
+    public User createByPermissionGroup(String userName, String email, String password, String permissionGroupString) { // country and city are not necessary for all users
         PermissionGroup permissionGroup = PermissionGroup.valueOf(permissionGroupString);
         User user;
         switch (permissionGroup) {
             case ADMIN:
             case HEAD_ADMIN:
-                user = new AdministrativeUser(userName, email, password, country, city);
+                user = new AdministrativeUser(userName, email, password);
                 break;
 
             case REGULAR:
-                user = new RegularUser(userName, email, password, country, city);
+                user = new RegularUser(userName, email, password);
                 break;
 
             case SYSTEM:
@@ -34,7 +34,7 @@ public class UserFactory {
                 break;
 
             default:
-                user = new Guest(userName, email, password, country, city);
+                user = new Guest();
                 break;
         }
         user.setPermissionGroup(permissionGroup);
@@ -48,10 +48,10 @@ public class UserFactory {
     }
 
     public User configureSystemUser() { // system user will not be persistent
-        return createByPermissionGroup("SYSTEM", "SYSTEM", "", "MARS", "", PermissionGroup.SYSTEM.name());
+        return createByPermissionGroup("SYSTEM", "SYSTEM", "", PermissionGroup.SYSTEM.name());
     }
 
     public User configureGuest() { // system user will not be persistent
-        return createByPermissionGroup("Guest", "guest@example.com", "", "MARS", "", PermissionGroup.GUEST.name());
+        return createByPermissionGroup("Guest", "guest@example.com", "", PermissionGroup.GUEST.name());
     }
 }

@@ -41,7 +41,7 @@ public class AddressWidget extends SmallTextWidgetController {
             countryCombo = a;
             provinceCombo = b;
             cityCombo = c;
-        },getConfigBundle().getGeoConfig());
+        }, getConfigBundle().getGeoConfig());
 
         TextField addressLine1 = getNodeFactory().getDefaultTextField("Address Line 1 (Optional)");
         TextField addressLine2 = getNodeFactory().getDefaultTextField("Address Line 2 (Optional)");

@@ -52,10 +52,10 @@ public class AccountManager {
         return loggedInUser.getPermissionGroup();
     }
 
-    public void register(ResultStatusCallback<User> callback, String userName, String email, String password, String country, String city) {
+    public void register(ResultStatusCallback<User> callback, String userName, String email, String password, String country, String province, String city) {
         registerCommand.execute((result, status) -> {
             loggedInUser = result;
             callback.call(result, status);
-        }, userName, email, password, country, city, PermissionGroup.REGULAR.name());
+        }, userName, email, password, PermissionGroup.REGULAR.name(), country, province, city);
     }
 }

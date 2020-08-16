@@ -46,10 +46,6 @@ public abstract class User {
 
     private Integer point;
 
-    private String city;
-
-    private String country;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<SupportTicket> supportTickets;
 
@@ -63,15 +59,13 @@ public abstract class User {
      * @param email    the email this Person.
      * @param password the password this user set to
      */
-    public User(String name, String email, String password, String country, String city) {
-        this.name = name;
+    public User(String userName, String email, String password) {
+        this.name = userName;
         this.email = email;
         this.password = password;
         this.addressBook = new AddressBook();
         this.reputation = 0;
         this.point = 0;
-        this.country = country;
-        this.city = city;
 
         accountState = AccountState.NORMAL;
         this.supportTickets = new HashSet<>();
@@ -164,22 +158,6 @@ public abstract class User {
 
     public void setAddressBook(AddressBook addressBook) {
         this.addressBook = addressBook;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public PermissionGroup getPermissionGroup() {

@@ -6,8 +6,10 @@ import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
@@ -22,15 +24,22 @@ import java.util.ResourceBundle;
 public class RegisterController extends AbstractController implements Initializable {
 
     @FXML
-    public Label submissionResult;
+    private Label submissionResult;
 
     @FXML
-    public TextField username, email, password, country, city;
+    private TextField username, email, password;
 
     @FXML
-    public JFXButton registerButton;
+    private JFXButton registerButton;
+
+    @FXML
+    private VBox inputArea;
 
     private StringProperty submissionResultProperty;
+
+    private ComboBox<String> countryCombo;
+    private ComboBox<String> provinceCombo;
+    private ComboBox<String> cityCombo;
 
     public RegisterController(ControllerResources controllerResources) {
         super(controllerResources);
@@ -55,7 +64,9 @@ public class RegisterController extends AbstractController implements Initializa
                 submissionResultProperty.setValue("Username / Email already exists");
             });
             resultStatus.handle(getPopupFactory());
-        }, username.getText(), email.getText(), password.getText(), country.getText(), city.getText());
+        }, username.getText(), email.getText(), password.getText(),
+                countryCombo.getSelectionModel().getSelectedItem(),
+                provinceCombo.getSelectionModel().getSelectedItem(),cityCombo.getSelectionModel().getSelectedItem());
     }
 
     public void goToSignIn(ActionEvent actionEvent) {
@@ -71,5 +82,12 @@ public class RegisterController extends AbstractController implements Initializa
     public void initialize(URL location, ResourceBundle resources) {
         submissionResultProperty = new SimpleStringProperty("");
         submissionResult.textProperty().bind(submissionResultProperty);
+
+        getNodeFactory().getAddressComboBoxes((a, b, c) -> {
+            countryCombo = a;
+            provinceCombo = b;
+            cityCombo = c;
+        }, getConfigBundle().getGeoConfig());
+        inputArea.getChildren().addAll(countryCombo, provinceCombo, cityCombo);
     }
 }

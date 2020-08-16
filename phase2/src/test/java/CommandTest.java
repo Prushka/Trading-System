@@ -22,12 +22,6 @@ public class CommandTest {
         AccountManager accountManager = new AccountManager(gatewayBundle);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);
     }
-
-    private void save() {
-        gatewayBundle.getEntityBundle().getUserGateway().submitSession((gateway) -> gateway.add(regularUser));
-    }
-
-    RegularUser regularUser = new RegularUser("name", "email", "password", "country", "city");
 /*
     @Test
     public void testCommand() {

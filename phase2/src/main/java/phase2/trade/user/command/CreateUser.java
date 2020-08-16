@@ -1,5 +1,6 @@
 package phase2.trade.user.command;
 
+import phase2.trade.address.Address;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusExist;
 import phase2.trade.callback.status.StatusSucceeded;
@@ -18,13 +19,27 @@ import java.util.List;
 public class CreateUser extends UserCommand<User> {
 
     @Override
-    public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group
+    public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group, country, province, city,
         if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             List<User> usersByName = gateway.findByUserName(args[0]);
             List<User> usersByEmail = gateway.findByEmail(args[1]);
             if (usersByEmail.size() == 0 && usersByName.size() == 0) {
-                User user = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).createByPermissionGroup(args[0], args[1], args[2], args[3], args[4], args[5]);
+                String userName = argRequired(0, args);
+                String email = argRequired(1, args);
+                String password = argRequired(2, args);
+                String permission_group = argRequired(3, args);
+                String country = argRequired(4, args);
+                String province = argRequired(5, args);
+                String city = argRequired(6, args);
+                User user =
+                        new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig()).createByPermissionGroup(
+                                userName, email, password, permission_group);
+                Address address = new Address();
+                address.setCountry(country);
+                address.setTerritory(province);
+                address.setCity(city);
+                user.getAddressBook().setSelectedAddress(address);
                 gateway.add(user);
                 addEffectedEntity(User.class, user.getUid());
                 save();

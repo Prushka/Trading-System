@@ -16,6 +16,6 @@ public class CreatePrerequisiteIfNotExist {
         CreateUser createUser = commandFactory.getCommand(CreateUser::new, true);
         createUser.execute((result, resultStatus) -> {
                 },
-                "admin", "admin@example.com", "admin???", "country", "city", "HEAD_ADMIN");
+                "admin", "admin@example.com", "admin???", "HEAD_ADMIN", "Canada", "Ontario", "Toronto");
     }
 }

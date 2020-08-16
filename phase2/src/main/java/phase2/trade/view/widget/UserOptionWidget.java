@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import phase2.trade.avatar.Avatar;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.refresh.ReType;
 import phase2.trade.user.command.ChangePassword;
 import phase2.trade.user.command.ChangeUserName;
 import phase2.trade.user.command.UpdateUsers;
@@ -28,7 +29,7 @@ public class UserOptionWidget extends WidgetControllerBase {
 
     private final Button changePassword = getNodeFactory().getDefaultRippleButton("Change Password");
     private final Button changeUserName = getNodeFactory().getDefaultRippleButton("Change User Name");
-    private final Button changeAvatar = getNodeFactory().getDefaultRippleButton("Change User Name");
+    private final Button changeAvatar = getNodeFactory().getDefaultRippleButton("Change Avatar");
 
     public UserOptionWidget(ControllerResources controllerResources) {
         super(controllerResources);
@@ -71,14 +72,13 @@ public class UserOptionWidget extends WidgetControllerBase {
         });
 
 
-
         changeUserName.setOnAction(event -> userNameAlert.display());
         changePassword.setOnAction(event -> passwordAlert.display());
         changeAvatar.setOnAction((final ActionEvent e) -> {
             uploadAvatar();
         });
 
-        addNodes(changePassword,changeUserName,changeAvatar);
+        addNodes(changePassword, changeUserName, changeAvatar);
         refresh();
     }
 
@@ -104,8 +104,7 @@ public class UserOptionWidget extends WidgetControllerBase {
                 UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
                         getAccountManager().getLoggedInUser()));
                 update.execute((result1, status1) -> {
-                    status1.setSucceeded(() -> userInfoBox.getChildren().setAll
-                            (getSceneManager().loadPane(UserSideInfoController::new)));
+                    status1.setSucceeded(() -> publish(ReType.REFRESH, UserSideInfoController.class));
                     status1.handle(getPopupFactory());
                 });
 

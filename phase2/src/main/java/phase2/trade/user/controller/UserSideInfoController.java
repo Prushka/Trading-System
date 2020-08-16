@@ -29,8 +29,6 @@ public class UserSideInfoController extends AbstractController implements Initia
     public Label userName = new Label();
     public Label email = new Label();
     public Label home = new Label();
-    public Label bio = new Label();
-    public Label currentStatus = new Label();
     public Label permissionGroup = new Label();
     public ImageView imageView;
 
@@ -44,25 +42,23 @@ public class UserSideInfoController extends AbstractController implements Initia
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        imageView.setOnMouseClicked(event -> uploadAvatar());
+        refresh();
+    }
+
+    public void refresh() {
         userId.setText("User Id: " + user.getUid());
         userName.setText("User Name: " + user.getName());
         email.setText("Email: " + user.getEmail());
         permissionGroup.setText("PermissionGroup: " + user.getPermissionGroup());
-        imageView.setOnMouseClicked(event -> uploadAvatar());
-        // address book + if user didnt input address
-        // home.setText("Location: " + user.getAddressBook().getSelectedAddress().getCity() + ", " + user.getAddress().getCountry());
-        refreshAvatar();
-        bio.setText("Bio: ");
-        currentStatus.setText("Current Status: " + user.getUid());
-    }
 
-    private void refreshAvatar() {
         if (user.getAvatar() != null && user.getAvatar().getImageData() != null) {
             Image img = new Image(new ByteArrayInputStream(user.getAvatar().getImageData()));
             imageView.setImage(img);
             imageView.setFitWidth(150);
             imageView.setFitHeight(150);
         }
+        super.refresh();
     }
 
     // TODO: decouple
@@ -87,7 +83,7 @@ public class UserSideInfoController extends AbstractController implements Initia
                 UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
                         getAccountManager().getLoggedInUser()));
                 update.execute((result1, status1) -> {
-                    status1.setSucceeded(this::refreshAvatar);
+                    status1.setSucceeded(this::refresh);
                     status1.handle(getPopupFactory());
                 });
 

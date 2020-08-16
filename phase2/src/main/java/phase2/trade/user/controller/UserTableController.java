@@ -27,7 +27,7 @@ public class UserTableController extends AbstractEditableTableController<User, U
         command.execute((result, resultStatus) -> {
             resultStatus.setAfter(() -> {
                 disableButtons(false);
-                publish();
+                publishGateway();
                 tableView.refresh();
             });
             resultStatus.handle(getPopupFactory());

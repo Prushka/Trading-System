@@ -102,7 +102,7 @@ public class SideMenuController extends AbstractController implements Initializa
             if (newValue != null) {
                 switch (newValue) {
                     case "side.user.info":
-                        UserInfoController userInfoController = new UserInfoController(getControllerResources(),userInfoBox);
+                        UserInfoController userInfoController = new UserInfoController(getControllerResources());
                         loadCenter(userInfoController);
                         break;
                     case "side.market":

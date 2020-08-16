@@ -28,6 +28,14 @@ public class ReReReRe { // observable pub sub?
         this.reloadables.put(key, t);
     }
 
+    public void publishGateway(Class<?>... effectedControllers) {
+        publishGateway(getStringRepresentation(effectedControllers));
+    }
+
+    public void publishGateway(String message) {
+        gatewayPubSub.publish(message);
+    }
+
     public void publish(ReType reType, Class<?>... effectedControllers) {
         publish(reType, getStringRepresentation(effectedControllers));
     }

@@ -47,7 +47,7 @@ public class RegisterController extends AbstractController implements Initializa
         submissionResultProperty.setValue("Signing up..");
         getAccountManager().register((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
-                publish(UserManageController.class);
+                publishGateway(UserManageController.class);
                 getSceneManager().switchScene(DashboardController::new);
             });
             resultStatus.setFailed(() -> {

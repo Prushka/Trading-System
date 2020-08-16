@@ -53,7 +53,11 @@ public abstract class AbstractController implements Reloadable, Refreshable {
     }
 
     protected void publish() {
-        publish();
+        controllerResources.getReReReRe().publishGateway(this.getClass().getSimpleName());
+    }
+
+    protected void publishGateway(Class<?>... effectedControllers) {
+        controllerResources.getReReReRe().publishGateway(effectedControllers);
     }
 
     protected void publish(ReType reType) {

@@ -43,15 +43,12 @@ public class UserInfoController extends AbstractController implements Initializa
     @FXML
     private BorderPane root;
 
-    private final VBox userInfoBox;
-
     private final User userToPresent;
 
     private Parent userWidget, permissionWidget, addressWidget, accountStateWidget, userOptionWidget;
 
-    public UserInfoController(ControllerResources controllerResources, VBox userInfoBox) {
+    public UserInfoController(ControllerResources controllerResources) {
         super(controllerResources);
-        this.userInfoBox = userInfoBox;
         userToPresent = getAccountManager().getLoggedInUser();
     }
 

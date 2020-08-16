@@ -36,6 +36,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 @ControllerProperty(viewFile = "market.fxml")
 public class MarketController extends AbstractListController<Trade> implements Initializable {
@@ -248,7 +249,7 @@ public class MarketController extends AbstractListController<Trade> implements I
 
     public void tradeButtonClicked(){
         List<User> allUsers = new ArrayList<>(); // TODO: replace with selected combo boxes
-        List<List<Item>> allItems = new ArrayList<>(); // TODO: replace with selected combo boxes
+        List<Set<Item>> allItems = new ArrayList<>(); // TODO: replace with selected combo boxes
         tc.setTraders(allUsers);
         tc.setTraderItems(allItems);
         if (isPermanent.getSelectionModel().getSelectedItem().equals("PERMANENT")){

@@ -14,6 +14,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @CommandProperty(crudType = CRUDType.CREATE, undoable = false, persistent = true)
@@ -21,7 +22,7 @@ public class CreateTrade extends TradeCommand<Trade>{
 
     private transient TradeCreator tc;
     private transient List<User> users;
-    private transient List<List<Item>> items;
+    private transient List<Set<Item>> items;
 
     @Override
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
@@ -45,7 +46,7 @@ public class CreateTrade extends TradeCommand<Trade>{
         this.users = users;
     }
 
-    public void setTraderItems(List<List<Item>> items){
+    public void setTraderItems(List<Set<Item>> items){
         this.items = items;
     }
 }

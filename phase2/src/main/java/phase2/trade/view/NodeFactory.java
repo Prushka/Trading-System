@@ -35,17 +35,23 @@ public class NodeFactory {
         return area;
     }
 
-    public Button getDefaultRippleButton(String text) {
+    public Button getDefaultRaisedButton(String text) {
         JFXButton button = new JFXButton(text);
         button.setDisableVisualFocus(true);
         button.setButtonType(JFXButton.ButtonType.RAISED);
         return button;
     }
 
-    public Button getDefaultFlatButton(String text, Paint ripple) {
+
+    public Button getDefaultRaisedButton(String text, String style) {
+        Button button = getDefaultRaisedButton(text);
+        button.setStyle(style);
+        return button;
+    }
+
+    public Button getDefaultFlatButton(String text) {
         JFXButton button = new JFXButton(text);
         button.setDisableVisualFocus(true);
-        button.setRipplerFill(ripple);
         return button;
     }
 

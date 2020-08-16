@@ -3,7 +3,6 @@ package phase2.trade.view.widget;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
@@ -14,7 +13,6 @@ import phase2.trade.user.command.ChangePassword;
 import phase2.trade.user.command.ChangeUserName;
 import phase2.trade.user.command.UpdateUsers;
 import phase2.trade.user.controller.UserSideInfoController;
-import phase2.trade.view.window.AlertWindow;
 import phase2.trade.view.window.GeneralVBoxAlert;
 
 import javax.imageio.ImageIO;
@@ -27,9 +25,9 @@ import java.util.ResourceBundle;
 
 public class UserOptionWidget extends WidgetControllerBase {
 
-    private final Button changePassword = getNodeFactory().getDefaultRippleButton("Change Password");
-    private final Button changeUserName = getNodeFactory().getDefaultRippleButton("Change User Name");
-    private final Button changeAvatar = getNodeFactory().getDefaultRippleButton("Change Avatar");
+    private final Button changePassword = getNodeFactory().getDefaultRaisedButton("Change Password", "-fx-background-color:#dc5696;");
+    private final Button changeUserName = getNodeFactory().getDefaultRaisedButton("Change User Name", "-fx-background-color:#dc5696;");
+    private final Button changeAvatar = getNodeFactory().getDefaultRaisedButton("Change Avatar", "-fx-background-color:#dc5696;");
 
     public UserOptionWidget(ControllerResources controllerResources) {
         super(controllerResources);
@@ -50,6 +48,10 @@ public class UserOptionWidget extends WidgetControllerBase {
             ChangePassword changePasswordCommand = getCommandFactory().getCommand(ChangePassword::new);
             changePasswordCommand.execute(((result, status) -> {
                         status.setFailed(() -> getPopupFactory().toast(5, "Cannot verify the information you provided. Check your password."));
+                        status.setSucceeded(() -> {
+                            publish(ReType.REFRESH, UserSideInfoController.class, UserWidget.class);
+                            getPopupFactory().toast(2, "Updated!");
+                        });
                         status.handle(getPopupFactory());
                     }
                     ),
@@ -65,6 +67,10 @@ public class UserOptionWidget extends WidgetControllerBase {
             command.execute(((result, status) -> {
                         status.setFailed(() -> getPopupFactory().toast(5, "Cannot verify the information you provided. Check your password."));
                         status.setExist(() -> getPopupFactory().toast(5, "Such User Name Already Exists"));
+                        status.setSucceeded(() -> {
+                            publish(ReType.REFRESH, UserSideInfoController.class, UserWidget.class);
+                            getPopupFactory().toast(2, "Updated!");
+                        });
                         status.handle(getPopupFactory());
                     }
                     ),
@@ -78,7 +84,7 @@ public class UserOptionWidget extends WidgetControllerBase {
             uploadAvatar();
         });
 
-        addNodes(changePassword, changeUserName, changeAvatar);
+        addContent(changePassword, changeUserName, changeAvatar);
         refresh();
     }
 
@@ -104,7 +110,7 @@ public class UserOptionWidget extends WidgetControllerBase {
                 UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
                         getAccountManager().getLoggedInUser()));
                 update.execute((result1, status1) -> {
-                    status1.setSucceeded(() -> publish(ReType.REFRESH, UserSideInfoController.class));
+                    status1.setSucceeded(() -> publish(ReType.REFRESH, UserSideInfoController.class, UserWidget.class));
                     status1.handle(getPopupFactory());
                 });
 

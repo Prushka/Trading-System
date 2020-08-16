@@ -10,15 +10,8 @@ public class PopupAlert extends AlertWindow<Void> {
         super(parent, title, header);
     }
 
-    private Boolean answer;
-
     public Void display(String... args) {
-        JFXButton okButton = new JFXButton("Ok");
-        okButton.setOnAction(event -> {
-            alert.hideWithAnimation();
-        });
-        okButton.setFocusTraversable(false);
-        layout.setActions(okButton);
+        layout.setActions(confirmButton);
         alert.setContent(layout);
         alert.showAndWait();
         return null;

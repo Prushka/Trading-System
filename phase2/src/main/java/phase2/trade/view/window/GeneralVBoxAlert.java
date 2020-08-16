@@ -24,14 +24,7 @@ public class GeneralVBoxAlert extends AlertWindow<Void> {
     }
 
     public Void display(String... args) {
-        Button confirmButton = new JFXButton("Ok");
-
         confirmButton.setOnAction(confirmHandler);
-
-        confirmButton.addEventFilter(ActionEvent.ACTION, event -> {
-            alert.hideWithAnimation();
-        });
-        confirmButton.setFocusTraversable(false);
 
         layout.setActions(confirmButton);
 

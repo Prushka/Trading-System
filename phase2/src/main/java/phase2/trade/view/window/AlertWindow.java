@@ -2,11 +2,13 @@ package phase2.trade.view.window;
 
 import com.jfoenix.animation.alert.JFXAlertAnimation;
 import com.jfoenix.controls.JFXAlert;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialogLayout;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -23,6 +25,8 @@ public abstract class AlertWindow<T> extends CustomWindow<T> {
     protected VBox body;
 
     protected EventHandler<ActionEvent> confirmHandler;
+
+    protected Button confirmButton;
 
     public AlertWindow(Stage parent, String title, String content) {
         super(parent);
@@ -57,6 +61,16 @@ public abstract class AlertWindow<T> extends CustomWindow<T> {
             body.getChildren().addAll(new Label(content));
         }
         layout.setBody(body);
+
+        confirmButton = new JFXButton("Ok");
+        confirmButton.setOnAction(confirmHandler);
+
+        confirmButton.addEventFilter(ActionEvent.ACTION, event -> {
+            alert.hideWithAnimation();
+        });
+        confirmButton.setFocusTraversable(false);
+        confirmButton.setDefaultButton(true);
+
     }
 
 }

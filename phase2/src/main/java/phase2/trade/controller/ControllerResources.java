@@ -37,7 +37,7 @@ public class ControllerResources {
     private final PubSub pubSub;
 
     // only use this for pub-sub for now
-    private final Map<String, AbstractController> registeredControllers = new HashMap<>();
+    private final Map<String, Reloadable> registeredReloadable = new HashMap<>();
 
     public ControllerResources(GatewayBundle gatewayBundle, ShutdownHook shutdownHook, Stage window, AccountManager accountManager) {
         this.gatewayBundle = gatewayBundle;
@@ -46,7 +46,7 @@ public class ControllerResources {
         popupFactory = new PopupFactory(window);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);
         sceneManager = new SceneManager(this);
-        pubSub = new Redis(getGatewayBundle().getConfigBundle().getRedisConfig(), registeredControllers);
+        pubSub = new Redis(getGatewayBundle().getConfigBundle().getRedisConfig(), registeredReloadable);
         shutdownHook.addShutdownables(pubSub);
     }
 
@@ -78,8 +78,8 @@ public class ControllerResources {
         return panes;
     }
 
-    protected void registerController(String simpleName, AbstractController abstractController) {
-        registeredControllers.put(simpleName, abstractController);
+    protected void registerController(String simpleName, Reloadable reloadable) {
+        registeredReloadable.put(simpleName, reloadable);
     }
 
     public PubSub getPubSub() {

@@ -2,9 +2,8 @@ package phase2.trade.database.nosql;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import phase2.trade.Shutdownable;
 import phase2.trade.config.RedisConfig;
-import phase2.trade.controller.AbstractController;
+import phase2.trade.controller.Reloadable;
 import phase2.trade.gateway.PubSub;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -23,14 +22,14 @@ public class Redis implements PubSub {
 
     private final RedisConfig redisConfig;
 
-    private Map<String, AbstractController> registeredControllers;
+    private Map<String, Reloadable> registeredControllers;
 
     private ExecutorService threadPool;
 
     private JedisPubSub subscriber;
 
 
-    public Redis(RedisConfig redisConfig, Map<String, AbstractController> registeredControllers) {
+    public Redis(RedisConfig redisConfig, Map<String, Reloadable> registeredControllers) {
 
         this.redisConfig = redisConfig;
         if (!redisConfig.isUseRedis()) return;

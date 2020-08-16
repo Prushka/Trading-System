@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerProperty(viewFile = "abstract_v.fxml")
-public abstract class AbstractController {
+public abstract class AbstractController implements Reloadable {
 
     private static final Logger logger = LogManager.getLogger(AbstractController.class);
 
@@ -61,7 +61,13 @@ public abstract class AbstractController {
         controllerResources.publish(simpleRepresentation.toString());
     }
 
+    // Reload: Reload data from gateway if applicable
     public void reload() {
+        logger.info("Reloading: " + this.getClass().getSimpleName());
+    }
+
+    // Refresh: If the view has to be refreshed (Observable doesn't apply). No gateway involved
+    protected void refresh() {
         logger.info("Reloading: " + this.getClass().getSimpleName());
     }
 

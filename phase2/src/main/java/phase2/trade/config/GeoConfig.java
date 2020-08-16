@@ -7,11 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import phase2.trade.Main;
 
-import java.io.*;
-import java.net.URL;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 //https://simplemaps.com/data/ca-cities

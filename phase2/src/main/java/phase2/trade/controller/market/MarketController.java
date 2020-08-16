@@ -33,6 +33,8 @@ import phase2.trade.user.User;
 import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -252,7 +254,7 @@ public class MarketController extends AbstractListController<Trade> implements I
         List<Set<Item>> allItems = new ArrayList<>(); // TODO: replace with selected combo boxes
         tc.setTraders(allUsers);
         tc.setTraderItems(allItems);
-        if (isPermanent.getSelectionModel().getSelectedItem().equals("PERMANENT")){
+        if (isPermanent.getSelectionModel().getSelectedItem().equals("PERMANENT") && validate()){
             tc.execute(new ResultStatusCallback() { @Override
                        public void call(Object result, ResultStatus resultStatus) {
                            System.out.println("success");
@@ -260,7 +262,7 @@ public class MarketController extends AbstractListController<Trade> implements I
                        }, year.getText(), month.getText(),
                     day.getText(), hour.getText(), minute.getText(), country.getText(), city.getText(), street.getText(),
                     streetNum.getText(), "true");
-        } else if (isPermanent.getSelectionModel().getSelectedItem().equals("TEMPORARY")){
+        } else if (isPermanent.getSelectionModel().getSelectedItem().equals("TEMPORARY") && validate()){
             tc.execute(new ResultStatusCallback() { @Override
                        public void call(Object result, ResultStatus resultStatus) {
                            System.out.println("success");
@@ -282,7 +284,16 @@ public class MarketController extends AbstractListController<Trade> implements I
             List<Trade> matchedTrades = gateway.findAll();
             tradesList = FXCollections.observableArrayList(matchedTrades);
             trades.setItems(tradesList);
-            System.out.println(((MeetUpOrder)tradesList.get(0).getOrder()).getLocation());
         });
+    }
+
+    public boolean validate() {
+        try {
+            return (LocalDateTime.of(Integer.parseInt(year.getText()), Integer.parseInt(month.getText()),
+                    Integer.parseInt(day.getText()), Integer.parseInt(hour.getText()), Integer.parseInt(minute.getText())))
+                    .isAfter(LocalDateTime.now());
+        } catch (NumberFormatException | DateTimeException e) {
+            return false;
+        }
     }
 }

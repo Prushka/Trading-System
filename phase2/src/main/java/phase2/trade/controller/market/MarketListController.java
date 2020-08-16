@@ -107,7 +107,14 @@ public class MarketListController extends AbstractListController<Item> implement
                         return entity.getPrice() <= Double.parseDouble(toMatch);
                     }
                 }))
-                ;
+                .addSearch(name, ((entity, toMatch) -> {
+                    String lowerCaseFilter = toMatch.toLowerCase();
+                    return String.valueOf(entity.getName()).toLowerCase().contains(lowerCaseFilter);
+                }))
+                .addSearch(description, ((entity, toMatch) -> {
+                    String lowerCaseFilter = toMatch.toLowerCase();
+                    return String.valueOf(entity.getDescription()).toLowerCase().contains(lowerCaseFilter);
+                }));
 
         lend.setSelected(true);
         sell.setSelected(true);

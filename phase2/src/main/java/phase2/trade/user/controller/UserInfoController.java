@@ -1,6 +1,7 @@
 package phase2.trade.user.controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXMasonryPane;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -37,15 +38,16 @@ import java.util.ResourceBundle;
 
 // TODO: ALL Controllers that don't extend AbstractTable... is a mess
 //  Refactor everything in the future
-@ControllerProperty(viewFile = "abstract_border.fxml")
+@ControllerProperty(viewFile = "abstract_masonry.fxml")
 public class UserInfoController extends AbstractController implements Initializable {
 
     @FXML
-    private BorderPane root;
+    private JFXMasonryPane root;
 
     private final User userToPresent;
 
     private Parent userWidget, permissionWidget, addressWidget, accountStateWidget, userOptionWidget;
+
 
     public UserInfoController(ControllerResources controllerResources) {
         super(controllerResources);
@@ -68,8 +70,9 @@ public class UserInfoController extends AbstractController implements Initializa
         GridPane.setConstraints(permissionWidget, 2, 1);
         GridPane.setConstraints(addressWidget, 3, 1);
         GridPane.setConstraints(accountStateWidget, 4, 1);
-        HBox top = new HBox(userWidget, permissionWidget, addressWidget, accountStateWidget, userOptionWidget);
-        top.setSpacing(20);
-        root.setTop(top);
+        root.setHSpacing(20);
+        root.setVSpacing(20);
+        root.getChildren().addAll(userWidget, permissionWidget, addressWidget, accountStateWidget, userOptionWidget);
+
     }
 }

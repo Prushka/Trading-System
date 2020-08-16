@@ -166,7 +166,8 @@
 }
 
 .dashboard-top-tool-bar .jfx-combo-box .jfx-list-cell {
-    -fx-background: #BA8BAF;
+    -fx-background: linear-gradient(from 333% 333% to 0% 0%,
+    #9828AD, #436AAC, #43B7B8);
     -fx-text-fill: WHITE;
 }
 

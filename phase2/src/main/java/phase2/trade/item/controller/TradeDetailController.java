@@ -47,7 +47,7 @@ public class TradeDetailController extends AbstractController implements Initial
 
     private ComboBox<User> rightComboBox, leftComboBox;
 
-    private final Map<User, Collection<Item>> userToItemToGet;
+    private final Map<User, Collection<Item>> usersToItemsToGet;
 
     private final Map<User, Map<User, UserTable>> userTablesCombination = new HashMap<>();
 
@@ -55,7 +55,7 @@ public class TradeDetailController extends AbstractController implements Initial
 
     public TradeDetailController(ControllerResources controllerResources, Map<User, Collection<Item>> usersToItemsToGet) {
         super(controllerResources);
-        this.userToItemToGet = usersToItemsToGet;
+        this.usersToItemsToGet = usersToItemsToGet;
 
         createTrade = new CreateTrade(usersToItemsToGet);
 
@@ -65,15 +65,15 @@ public class TradeDetailController extends AbstractController implements Initial
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        createTrade.createOrder(userToItemToGet);
+        createTrade.createOrder();
 
-        for (Map.Entry<User, Collection<Item>> entry : userToItemToGet.entrySet()) {
+        for (Map.Entry<User, Collection<Item>> entry : usersToItemsToGet.entrySet()) {
             userTablesCombination.put(entry.getKey(), getUserTables(entry.getKey()));
         }
 
 
-        rightComboBox = getUserComboBox(userToItemToGet.keySet());
-        leftComboBox = getUserComboBox(userToItemToGet.keySet());
+        rightComboBox = getUserComboBox(usersToItemsToGet.keySet());
+        leftComboBox = getUserComboBox(usersToItemsToGet.keySet());
         leftComboBox.setOnAction(e -> {
             User leftSelected = leftComboBox.getSelectionModel().getSelectedItem();
             User rightSelected = rightComboBox.getSelectionModel().getSelectedItem();
@@ -139,18 +139,26 @@ public class TradeDetailController extends AbstractController implements Initial
     }
 
     private ObservableList<User> getUsersBesides(User user) {
-        ObservableList<User> list = FXCollections.observableArrayList(userToItemToGet.keySet());
+        ObservableList<User> list = FXCollections.observableArrayList(usersToItemsToGet.keySet());
         list.remove(user);
         return list;
     }
 
+    // well these loops need optimization
     private Map<User, UserTable> getUserTables(User matchesWhom) {
         Map<User, UserTable> table = new HashMap<>();
         for (TradeOrder order : createTrade.getTrade().getOrders()) {
-            if (order.getInitiator().getUser().getUid().equals(matchesWhom.getUid())) {
+            if (order.getInitiatorUser().getUid().equals(matchesWhom.getUid())) {
                 UserTable userTable = new UserTable(order.getTarget().getUser(),
-                        FXCollections.observableArrayList(order.getTarget().getTradeItemHolder().getSetOfItems()), getControllerResources());
+                        FXCollections.observableArrayList(
+                                order.getTarget().getTradeItemHolder().getSetOfItems()), getControllerResources());
                 table.put(order.getTarget().getUser(), userTable);
+            }
+            if (order.getTargetUser().getUid().equals(matchesWhom.getUid())) {
+                UserTable userTable = new UserTable(order.getTarget().getUser(),
+                        FXCollections.observableArrayList(
+                                order.getInitiator().getTradeItemHolder().getSetOfItems()), getControllerResources());
+                table.put(order.getInitiatorUser(), userTable);
             }
         }
         return table;

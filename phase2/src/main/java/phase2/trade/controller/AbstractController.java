@@ -40,9 +40,9 @@ public abstract class AbstractController implements Reloadable, Refreshable {
     }
 
     private void clearToolBars() {
-        //if (getPane(DashboardPane.TOP) != null) getPane(DashboardPane.TOP).getChildren().clear();
+        if (getPane(DashboardPane.TOP) != null) getPane(DashboardPane.TOP).getChildren().clear();
         if (getPane(DashboardPane.LEFT) != null) getPane(DashboardPane.LEFT).getChildren().clear();
-        //if (getPane(DashboardPane.RIGHT) != null) getPane(DashboardPane.RIGHT).getChildren().clear();
+        if (getPane(DashboardPane.RIGHT) != null) getPane(DashboardPane.RIGHT).getChildren().clear();
     }
 
     protected String getLanguageByValue(String key) {

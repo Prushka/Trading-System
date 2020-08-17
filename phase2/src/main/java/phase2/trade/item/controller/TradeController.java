@@ -97,7 +97,7 @@ public class TradeController extends AbstractController implements Initializable
 
         BorderPane.setMargin(left, new Insets(0, 10, 0, 0));
 
-        Label willGetFollowingItems = new Label("  will get following items.");
+        Label willGetFollowingItems = new Label("  will get following items");
 
         leftTableArea.getChildren().setAll(allTable.tableViewGenerator.getTableView());
         topRightHBox.getChildren().addAll(rightComboBox, willGetFollowingItems);

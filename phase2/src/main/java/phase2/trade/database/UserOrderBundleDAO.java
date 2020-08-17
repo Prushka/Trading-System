@@ -16,6 +16,14 @@ public class UserOrderBundleDAO extends DAO<UserOrderBundle, UserOrderBundleGate
         super(UserOrderBundle.class, databaseResourceBundle);
     }
 
+    public int getUserBorrowCount() {
+        return 0;
+    }
+
+    public int getUserPurchaseCount() {
+        return 0;
+    }
+
     @Override
     protected UserOrderBundleGateway getThis() {
         return this;

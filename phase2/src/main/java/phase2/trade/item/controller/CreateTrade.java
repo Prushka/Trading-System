@@ -22,11 +22,19 @@ public class CreateTrade {
         usersToItemsToGet.values().forEach(allItems::addAll);
     }
 
+    public boolean ifUsersMatchOrder(TradeOrder order,User a, User b) {
+        return a.getUid().equals(order.getInitiatorUser().getUid()) && b.getUid().equals(order.getTargetUser().getUid()) ||
+                b.getUid().equals(order.getInitiatorUser().getUid()) && a.getUid().equals(order.getTargetUser().getUid());
+    }
+
+
     public void createTwoWayUserOrderBundle(User initiator, User target, Collection<Item> itemsInitiatorWant, Collection<Item> itemsTargetWant) {
         // find out what initiator will provide to target and vice versa
-
+        if (initiator == target) return;
+        System.out.println("Create: " + trade.getOrders().size());
         for (TradeOrder order : trade.getOrders()) {
-            if (order.getTarget().getUser().getUid().equals(target.getUid()) && order.getInitiator().getUser().getUid().equals(initiator.getUid())) {
+            System.out.println(order.getInitiatorUser().getUid() + " | " + order.getTargetUser().getUid());
+            if (ifUsersMatchOrder(order,initiator, target)) {
                 return;
             }
         }
@@ -55,9 +63,12 @@ public class CreateTrade {
 
     public void cleanup() {
         Set<TradeOrder> ordersToRemove = new HashSet<>();
+        System.out.println(trade.getOrders().size());
         for (TradeOrder order : trade.getOrders()) {
             if (order.getTarget().getTradeItemHolder().size() == 0 && order.getInitiator().getTradeItemHolder().size() == 0) {
                 ordersToRemove.add(order);
+                System.out.println(order.getTarget().getUser().getName());
+                System.out.println(order.getInitiator().getUser().getName());
                 usersToItemsToGet.remove(order.getTarget().getUser());
                 usersToItemsToGet.remove(order.getInitiator().getUser());
             }
@@ -65,14 +76,14 @@ public class CreateTrade {
         trade.getOrders().removeAll(ordersToRemove);
     }
 
-    public void createOrder(Map<User, Collection<Item>> userToItemToGet) {
-        for (Map.Entry<User, Collection<Item>> entry : userToItemToGet.entrySet()) {
-            for (Map.Entry<User, Collection<Item>> entry2 : userToItemToGet.entrySet()) {
+    public void createOrder() {
+        for (Map.Entry<User, Collection<Item>> entry : usersToItemsToGet.entrySet()) {
+            for (Map.Entry<User, Collection<Item>> entry2 : usersToItemsToGet.entrySet()) {
                 createTwoWayUserOrderBundle(entry.getKey(), entry2.getKey(), entry.getValue(), entry2.getValue());
                 // only need combinations here. But whatever
             }
         }
-        //cleanup();
+        cleanup();
     }
 
     public Trade getTrade() {

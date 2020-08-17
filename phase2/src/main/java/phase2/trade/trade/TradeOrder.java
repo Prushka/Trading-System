@@ -1,6 +1,7 @@
 package phase2.trade.trade;
 
 import phase2.trade.address.Address;
+import phase2.trade.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -47,6 +48,16 @@ public class TradeOrder {
     @OneToOne
     public UserOrderBundle getTarget() {
         return target;
+    }
+
+    @Transient
+    public User getTargetUser() {
+        return getTarget().getUser();
+    }
+
+    @Transient
+    public User getInitiatorUser() {
+        return getInitiator().getUser();
     }
 
     public void setTarget(UserOrderBundle target) {

@@ -108,13 +108,13 @@ public class SideMenuController extends AbstractController implements Initializa
                         break;
                     case MARKET:
                         getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(new MarketListController(getControllerResources())));
-                        // loadCenter(MarketController::new);
                         break;
                     case INVENTORY:
                         inventory();
                         break;
                     case CART:
-                        cart();
+                        // cart();
+                        loadCenter(MarketController::new);
                         break;
                     case MANAGE_USERS_OPERATIONS:
                         loadCenter(UserOperationController::new);

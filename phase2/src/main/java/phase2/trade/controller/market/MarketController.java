@@ -108,7 +108,8 @@ public class MarketController extends AbstractListController<Trade> implements I
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("isPermanent"));
         trades = new TableView<>();
         trades.setItems(tradesList);
-        trades.getColumns().addAll(idColumn, dateColumn, locationColumn, statusColumn, typeColumn); // add editsColumn, confirmColumn,
+        trades.getColumns().addAll(idColumn, dateColumn, locationColumn, statusColumn, editsColumn, confirmColumn, typeColumn);
+        // add editsColumn, confirmColumn -- need to remove previous trades because they include incomplete content
         editDateTimeButton = new JFXButton("Edit Date and Time");
         editDateTimeButton.setOnAction(e -> editDateTimeClicked());
         editLocationButton = new JFXButton("Edit Location");
@@ -193,7 +194,7 @@ public class MarketController extends AbstractListController<Trade> implements I
         root.getChildren().add(meeting);
 
         getGatewayBundle().getEntityBundle().getTradeGateway().submitSession((gateway) -> {
-            List<Trade> matchedTrades = gateway.findAll();
+            List<Trade> matchedTrades = gateway.findByUser(getAccountManager().getLoggedInUser());
             tradesList = FXCollections.observableArrayList(matchedTrades);
             trades.setItems(tradesList);
         });
@@ -324,7 +325,7 @@ public class MarketController extends AbstractListController<Trade> implements I
 
     public void reloadTable(){
         getGatewayBundle().getEntityBundle().getTradeGateway().submitSession((gateway) -> {
-            List<Trade> matchedTrades = gateway.findAll();
+            List<Trade> matchedTrades = gateway.findByUser(getAccountManager().getLoggedInUser());
             tradesList = FXCollections.observableArrayList(matchedTrades);
             trades.getItems().clear();
             trades.setItems(tradesList);

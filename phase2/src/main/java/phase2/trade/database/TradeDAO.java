@@ -3,13 +3,14 @@ package phase2.trade.database;
 import org.hibernate.query.Query;
 import phase2.trade.gateway.TradeGateway;
 import phase2.trade.trade.Trade;
+import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.TradeState;
+import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
@@ -20,35 +21,61 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
 
     @Override
     public List<Trade> findByUser(User currUser){
-//        CriteriaBuilder builder = getCriteriaBuilder();
-//        CriteriaQuery<Trade> criteria = builder.createQuery(Trade.class);
-//
-//        Root<Trade> root = criteria.from(Trade.class);
-//        criteria.select(root);
-        Query<Trade> query = getCurrentSession().createQuery("from Trade");
-        return query.list();
+        // Citation needed? -- https://stackoverflow.com/questions/40461519/search-by-nested-property-of-collection-field-with-criteria-api
+        CriteriaBuilder criteriaBuilder = getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Trade> criteriaQuery = criteriaBuilder.createQuery(Trade.class);
+        Root<Trade> root = criteriaQuery.from(Trade.class);
+
+        Subquery<UserOrderBundle> userSubquery = criteriaQuery.subquery(UserOrderBundle.class);
+        Root<Trade> tradeSubroot = userSubquery.correlate(root);
+        Join<Trade, TradeOrder> tradeOrderJoin = tradeSubroot.join("myOrder");
+        Join<TradeOrder, UserOrderBundle> bundleJoin = tradeOrderJoin.join("traders");
+        userSubquery.select(bundleJoin);
+        userSubquery.where(criteriaBuilder.equal(bundleJoin.get("user"), currUser));
+        criteriaQuery.where(criteriaBuilder.exists(userSubquery));
+
+        TypedQuery<Trade> tradeTypedQuery = getCurrentSession().createQuery(criteriaQuery);
+        return tradeTypedQuery.getResultList();
     }
 
     // I'm not sure if these will work or if you can use function calls in query strings
     public int findNumOfTransactions(User currUser) {
-        Query query = getCurrentSession().createQuery("select count(T.order.getUsers(:currUser)) from Trade as T where tradeState = :tradeState");
-        query.setParameter("tradeState", TradeState.CLOSED);
-        query.setParameter("currUser", currUser);
-        return ((int) query.list().get(0));
+        final List<Trade> result = new ArrayList<>();
+        criteria((builder, query, root) -> {
+            Predicate restrictions = builder.or(
+                    builder.and(
+                            builder.equal(root.get("tradeState"), TradeState.CLOSED))
+            );
+            query.select(root).where(restrictions);
+            executeCriteriaQuery(result, query);
+        });
+        return result.size();
     }
 
     public int findNumOfBorrowing(User currUser) {
-        Query query = getCurrentSession().createQuery("select count(T.order.borrowed(:currUser)) from Trade as T where tradeState = :tradeState");
-        query.setParameter("tradeState", TradeState.CLOSED);
-        query.setParameter("currUser", currUser);
-        return ((int) query.list().get(0));
+        final List<Trade> result = new ArrayList<>();
+        criteria((builder, query, root) -> {
+            Predicate restrictions = builder.or(
+                    builder.and(
+                            builder.equal(root.get("tradeState"), TradeState.CLOSED))
+            );
+            query.select(root).where(restrictions);
+            executeCriteriaQuery(result, query);
+        });
+        return result.size();
     }
 
     public int findNumOfLending(User currUser) {
-        Query query = getCurrentSession().createQuery("select count(T.order.lent(:currUser)) from Trade as T where tradeState = :tradeState");
-        query.setParameter("tradeState", TradeState.CLOSED);
-        query.setParameter("currUser", currUser);
-        return ((int) query.list().get(0));
+        final List<Trade> result = new ArrayList<>();
+        criteria((builder, query, root) -> {
+            Predicate restrictions = builder.or(
+                    builder.and(
+                            builder.equal(root.get("tradeState"), TradeState.CLOSED))
+            );
+            query.select(root).where(restrictions);
+            executeCriteriaQuery(result, query);
+        });
+        return result.size();
     }
 
     @Override

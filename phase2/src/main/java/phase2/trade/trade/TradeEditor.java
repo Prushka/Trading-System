@@ -27,8 +27,8 @@ public class TradeEditor {
                     LocalDateTime dateTime = LocalDateTime.of(Integer.parseInt(args[0]), Integer.parseInt(args[1]),
                             Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
                     currTrade.getOrder().setDateAndTime(dateTime);
-                } else if (args.length == 4){
-                    Address location = new Address(args[0], args[1], args[2], args[3]);
+                } else if (args.length == 2){
+                    Address location = new Address(args[0], args[1]);
                     ((MeetUpOrder)currTrade.getOrder()).setLocation(location);
                 }
                 user.setEdits(user.getEdits() + 1);

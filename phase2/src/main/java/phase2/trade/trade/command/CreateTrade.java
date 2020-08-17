@@ -30,7 +30,7 @@ public class CreateTrade extends TradeCommand<Trade>{
         if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade newTrade = tc.createTrade(users, items, args[0], args[1], args[2], args[3],
-                    args[4], args[5], args[6], args[7], args[8], args[9]);
+                    args[4], args[5], args[6], args[7]);
             gateway.add(newTrade);
             if (callback != null)
                 callback.call(newTrade, new StatusSucceeded());

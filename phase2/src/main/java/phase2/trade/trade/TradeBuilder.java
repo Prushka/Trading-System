@@ -45,8 +45,8 @@ class TradeBuilder {
         order = newOrder;
     }
 
-    void buildLocation(String country, String city, String street, String streetNum){
-        this.location = new Address(country, city, street, streetNum);
+    void buildLocation(String country, String city){
+        this.location = new Address(country, city);
         MeetUpOrder newOrder = new MeetUpOrder();
         newOrder.setDateAndTime(dateAndTime);
         newOrder.setLocation(location);

@@ -24,8 +24,9 @@ public class EditTrade extends TradeCommand<Trade> {
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade currTrade = gateway.findById(tradeId);
             Trade trade = te.edit(currTrade, operator, args);
+            if (callback != null)
+                callback.call(trade, new StatusSucceeded());
             gateway.update(trade);
-            callback.call(trade, new StatusSucceeded());
         });
     }
 

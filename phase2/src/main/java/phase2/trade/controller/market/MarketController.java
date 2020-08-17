@@ -41,10 +41,7 @@ import phase2.trade.view.window.GeneralVBoxAlert;
 import java.net.URL;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 @ControllerProperty(viewFile = "market.fxml")
 public class MarketController extends AbstractListController<Trade> implements Initializable {
@@ -64,8 +61,7 @@ public class MarketController extends AbstractListController<Trade> implements I
     private TableColumn<Trade, Boolean> typeColumn, confirmColumn;
     private ObservableList<Trade> tradesList;
     private JFXButton editDateTimeButton, editLocationButton, confirmButton, tradeButton, addTraderButton;
-    private JFXComboBox<String> isPermanent;
-    private JFXTextField year, month, day, hour, minute, country, city, street, streetNum;
+    private JFXComboBox<String> isPermanent, year, month, day, hour, minute, country, city;
 
     public MarketController(ControllerResources controllerResources){
         super(controllerResources, false);
@@ -136,24 +132,27 @@ public class MarketController extends AbstractListController<Trade> implements I
         items.setSpacing(20);
         items.setAlignment(Pos.BOTTOM_LEFT);
         items.setPadding(new Insets(5, 10, 5, 10));
-        items.getChildren().addAll(getSceneManager().loadPane(new CartController(getControllerResources(), ItemListType.CART)));
+        addTraderClicked();
+        addTraderClicked();
 
         // Date
         dateTime = new HBox();
         dateTime.setSpacing(20);
         dateTime.setAlignment(Pos.BOTTOM_LEFT);
         dateTime.setPadding(new Insets(5, 10, 5, 10));
-        date = new Label("Date: ");
-        year = new JFXTextField();
-        year.setPromptText("YEAR");
-        month = new JFXTextField();
-        month.setPromptText("MONTH");
-        day = new JFXTextField();
-        day.setPromptText("DAY");
-        hour = new JFXTextField();
-        hour.setPromptText("HOUR");
-        minute = new JFXTextField();
-        minute.setPromptText("MINUTE");
+        date = new Label("Date (YEAR/ MONTH /DAY /HOUR /MINUTE): ");
+        year = new JFXComboBox<>();
+        year.getItems().setAll("2020", "2021");
+        month = new JFXComboBox<>();
+        month.getItems().setAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11", "12");
+        day = new JFXComboBox<>();
+        day.getItems().setAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
+                "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31");
+        hour = new JFXComboBox<>();
+        hour.getItems().setAll("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+                "16", "17", "18", "19", "20", "21", "22", "23");
+        minute = new JFXComboBox<>();
+        minute.getItems().setAll("0", "30");
         dateTime.getChildren().addAll(date, year, month, day, hour, minute);
 
         // Place
@@ -162,15 +161,11 @@ public class MarketController extends AbstractListController<Trade> implements I
         place.setAlignment(Pos.BOTTOM_LEFT);
         place.setPadding(new Insets(5, 10, 5, 10));
         tradeLocation = new Label("Location: ");
-        street = new JFXTextField();
-        street.setPromptText("STREET");
-        streetNum = new JFXTextField();
-        streetNum.setPromptText("STREET NUMBER");
-        city = new JFXTextField();
-        city.setPromptText("CITY");
-        country = new JFXTextField();
-        country.setPromptText("COUNTRY");
-        place.getChildren().addAll(tradeLocation, street, streetNum, city, country);
+        city = new JFXComboBox<>();
+        city.getItems().setAll("Toronto");
+        country = new JFXComboBox<>();
+        country.getItems().setAll("Canada");
+        place.getChildren().addAll(tradeLocation, city, country);
 
         // Type
         type = new HBox();
@@ -208,16 +203,24 @@ public class MarketController extends AbstractListController<Trade> implements I
     }
 
     public void editDateTimeClicked(){
-        TextField newYear = new TextField();
-        newYear.setPromptText("YEAR");
-        TextField newMonth = new TextField();
-        newMonth.setPromptText("MONTH");
-        TextField newDay = new TextField();
-        newDay.setPromptText("DAY");
-        TextField newHour = new TextField();
-        newHour.setPromptText("HOUR");
-        TextField newMinute = new TextField();
-        newMinute.setPromptText("MINUTE");
+        Label yearText = new Label("Year: ");
+        Label monthText = new Label("Month: ");
+        Label dayText = new Label("Day: ");
+        Label hourText = new Label("Hour: ");
+        Label minuteText = new Label("Minute: ");
+
+        JFXComboBox<String> newYear = new JFXComboBox<>();
+        newYear.getItems().setAll("2020", "2021");
+        JFXComboBox<String> newMonth = new JFXComboBox<>();
+        newMonth.getItems().setAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10","11", "12");
+        JFXComboBox<String> newDay = new JFXComboBox<>();
+        newDay.getItems().setAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
+                "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31");
+        JFXComboBox<String> newHour = new JFXComboBox<>();
+        newHour.getItems().setAll("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15",
+                "16", "17", "18", "19", "20", "21", "22", "23");
+        JFXComboBox<String> newMinute = new JFXComboBox<>();
+        newMinute.getItems().setAll("0", "30");
 
         GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Edit Trade Date and Time", "");
         popup.setEventHandler(event -> {
@@ -226,24 +229,23 @@ public class MarketController extends AbstractListController<Trade> implements I
             edit.execute(((result, status) -> {
                 status.setFailed(() -> getPopupFactory().toast(5, "Not proper format"));
                 status.handle(getPopupFactory());
-            }), newYear.getText(), newMonth.getText(),
-                    newDay.getText(), newHour.getText(), newMinute.getText());
+            }), newYear.getSelectionModel().getSelectedItem(), newMonth.getSelectionModel().getSelectedItem(),
+                    newDay.getSelectionModel().getSelectedItem(), newHour.getSelectionModel().getSelectedItem(),
+                    newMinute.getSelectionModel().getSelectedItem());
         });
 
-        popup.addNodes(newYear, newMonth, newDay, newHour, newMinute);
+        popup.addNodes(yearText, newYear, monthText, newMonth, dayText, newDay, hourText, newHour, minuteText, newMinute);
         popup.display();
         reloadTable();
     }
 
     public void editLocationClicked(){
-        TextField newCountry = new TextField();
-        newCountry.setPromptText("COUNTRY");
-        TextField newCity = new TextField();
-        newCity.setPromptText("CITY");
-        TextField newStreet = new TextField();
-        newStreet.setPromptText("STREET");
-        TextField newStreetNum = new TextField();
-        newStreetNum.setPromptText("STREET NUMBER");
+        Label countryText = new Label("Country: ");
+        Label cityText = new Label("City: ");
+        JFXComboBox<String> newCountry = new JFXComboBox();
+        newCountry.getItems().setAll("Canada");
+        JFXComboBox<String> newCity = new JFXComboBox();
+        newCity.getItems().setAll("Toronto");
 
         GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Edit Trade Location", "");
         popup.setEventHandler(event -> {
@@ -252,11 +254,11 @@ public class MarketController extends AbstractListController<Trade> implements I
             edit.execute(((result, status) -> {
                         status.setFailed(() -> getPopupFactory().toast(5, "Not proper format"));
                         status.handle(getPopupFactory());
-                    }), newCountry.getText(), newCity.getText(), newStreet.getText(),
-                    newStreetNum.getText(), "false");
+                    }), newCountry.getSelectionModel().getSelectedItem(),
+                    newCity.getSelectionModel().getSelectedItem(), "false");
         });
 
-        popup.addNodes(newCountry, newCity, newStreet, newStreetNum);
+        popup.addNodes(countryText, newCountry, cityText, newCity);
         popup.display();
         reloadTable();
     }
@@ -277,6 +279,10 @@ public class MarketController extends AbstractListController<Trade> implements I
         List<User> allUsers = new ArrayList<>(); // TODO: replace with selected combo boxes
         allUsers.add(getAccountManager().getLoggedInUser());
         List<Set<Item>> allItems = new ArrayList<>(); // TODO: replace with selected combo boxes
+        for (int i = 0; i < allUsers.size(); i++){
+            Set<Item> itemList = new HashSet<>();
+            allItems.add(itemList);
+        }
         tc.setTraders(allUsers);
         tc.setTraderItems(allItems);
         if (isPermanent.getSelectionModel().getSelectedItem().equals("PERMANENT") && validate()){
@@ -284,34 +290,30 @@ public class MarketController extends AbstractListController<Trade> implements I
                        public void call(Object result, ResultStatus resultStatus) {
                            System.out.println("success");
                        }
-                       }, year.getText(), month.getText(),
-                    day.getText(), hour.getText(), minute.getText(), country.getText(), city.getText(), street.getText(),
-                    streetNum.getText(), "true");
+                       }, year.getSelectionModel().getSelectedItem(), month.getSelectionModel().getSelectedItem(),
+                    day.getSelectionModel().getSelectedItem(), hour.getSelectionModel().getSelectedItem(),
+                    minute.getSelectionModel().getSelectedItem(), country.getSelectionModel().getSelectedItem(),
+                    city.getSelectionModel().getSelectedItem(), "true");
         } else if (isPermanent.getSelectionModel().getSelectedItem().equals("TEMPORARY") && validate()){
             tc.execute(new ResultStatusCallback() { @Override
                        public void call(Object result, ResultStatus resultStatus) {
                            System.out.println("success");
                        }
-                       }, year.getText(), month.getText(),
-                    day.getText(), hour.getText(), minute.getText(), country.getText(), city.getText(), street.getText(),
-                    streetNum.getText(), "false");
+                       }, year.getSelectionModel().getSelectedItem(), month.getSelectionModel().getSelectedItem(),
+                    day.getSelectionModel().getSelectedItem(), hour.getSelectionModel().getSelectedItem(),
+                    minute.getSelectionModel().getSelectedItem(), country.getSelectionModel().getSelectedItem(),
+                    city.getSelectionModel().getSelectedItem(), "false");
         }
-        year.clear();
-        month.clear();
-        day.clear();
-        hour.clear();
-        minute.clear();
-        country.clear();
-        city.clear();
-        street.clear();
-        streetNum.clear();
         reloadTable();
     }
 
     public boolean validate() {
         try {
-            return (LocalDateTime.of(Integer.parseInt(year.getText()), Integer.parseInt(month.getText()),
-                    Integer.parseInt(day.getText()), Integer.parseInt(hour.getText()), Integer.parseInt(minute.getText())))
+            return (LocalDateTime.of(Integer.parseInt(year.getSelectionModel().getSelectedItem()),
+                    Integer.parseInt(month.getSelectionModel().getSelectedItem()),
+                    Integer.parseInt(day.getSelectionModel().getSelectedItem()),
+                    Integer.parseInt(hour.getSelectionModel().getSelectedItem()),
+                    Integer.parseInt(minute.getSelectionModel().getSelectedItem())))
                     .isAfter(LocalDateTime.now());
         } catch (NumberFormatException | DateTimeException e) {
             return false;

@@ -4,9 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -58,6 +56,7 @@ public class MarketController extends AbstractListController<Trade> implements I
     private TableView<Trade> trades;
     private TableColumn<Trade, Long> idColumn;
     private TableColumn<Trade, String> statusColumn, dateColumn, locationColumn;
+    private TableColumn<Trade, Integer> editsColumn;
     private TableColumn<Trade, Boolean> typeColumn, confirmColumn;
     private ObservableList<Trade> tradesList;
     private JFXButton editDateTimeButton, editLocationButton, confirmButton, tradeButton, addTraderButton;
@@ -97,6 +96,9 @@ public class MarketController extends AbstractListController<Trade> implements I
         statusColumn = new TableColumn<>("Status: ");
         statusColumn.setMinWidth(200);
         statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTradeState().toString()));
+        editsColumn = new TableColumn<>("Edits: ");
+        editsColumn.setMinWidth(200);
+        editsColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getOrder().getTraders().get(0).getEdits()).asObject());
         confirmColumn = new TableColumn<>("Confirmation: ");
         confirmColumn.setMinWidth(200);
         confirmColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getOrder()
@@ -106,7 +108,7 @@ public class MarketController extends AbstractListController<Trade> implements I
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("isPermanent"));
         trades = new TableView<>();
         trades.setItems(tradesList);
-        trades.getColumns().addAll(idColumn, dateColumn, locationColumn, statusColumn, typeColumn);
+        trades.getColumns().addAll(idColumn, dateColumn, locationColumn, statusColumn, typeColumn); // add editsColumn, confirmColumn,
         editDateTimeButton = new JFXButton("Edit Date and Time");
         editDateTimeButton.setOnAction(e -> editDateTimeClicked());
         editLocationButton = new JFXButton("Edit Location");

@@ -5,6 +5,7 @@ import phase2.trade.address.Address;
 import phase2.trade.user.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +29,10 @@ class TradeBuilder {
     // For a Trade
     Boolean isPermanent;
 
-    TradeBuilder() {}
+    TradeBuilder() {
+        uobb = new UserOrderBundleBuilder();
+        traders = new ArrayList<>();
+    }
 
     void buildUserOrderBundle(User user, Set<Item> items){
         uobb.buildUser(user);
@@ -57,6 +61,10 @@ class TradeBuilder {
 
     Trade buildTrade() {
         newTrade = new Trade();
+        order.setTraders(traders);
+        System.out.println(traders.size());
+        System.out.println(order.getTraders().size());
+
         newTrade.setOrder(order);
         newTrade.setIsPermanent(isPermanent);
         newTrade.setTradeState(TradeState.IN_PROGRESS);

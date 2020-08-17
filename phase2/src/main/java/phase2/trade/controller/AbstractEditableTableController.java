@@ -55,11 +55,11 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         tableViewGenerator = new TableViewGenerator<>(displayData, tableView);
     }
 
-    public void setDisplayData(List<T> displayData) {
+    public void setDisplayData(Collection<T> displayData) {
         setDisplayData(FXCollections.observableArrayList(displayData));
     }
 
-    public void reloadNewDisplayData(List<T> displayData) {
+    public void reloadNewDisplayData(Collection<T> displayData) {
         tableView.setItems(FXCollections.observableArrayList(displayData));
     }
 

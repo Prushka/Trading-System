@@ -12,13 +12,15 @@
         <Root level="debug">
             <AppenderRef ref="Console"/>
         </Root>
+
+        <!-- https://www.codejava.net/frameworks/hibernate/how-to-configure-hibernate-logging-with-log4j2 -->
         <!-- Log everything in hibernate -->
         <Logger name="org.hibernate" level="warn" additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
 
         <!-- Log all SQL statements -->
-        <Logger name="org.hibernate.SQL" level="warn" additivity="false">
+        <Logger name="org.hibernate.SQL" level="debug" additivity="false">
             <AppenderRef ref="Console" />
         </Logger>
 

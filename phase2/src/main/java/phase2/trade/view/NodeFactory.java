@@ -45,18 +45,24 @@ public class NodeFactory {
         return button;
     }
 
-
-    public Button getDefaultRaisedButton(String text, String style) {
-        Button button = getDefaultRaisedButton(text);
-        button.setStyle(style);
-        return button;
-    }
-
     public Button getDefaultFlatButton(String text) {
         JFXButton button = new JFXButton(text);
         button.setDisableVisualFocus(true);
         return button;
     }
+
+    public Button getDefaultRaisedButton(String text, String styleClass) {
+        Button button = getDefaultRaisedButton(text);
+        button.getStyleClass().addAll(styleClass);
+        return button;
+    }
+
+    public Button getDefaultFlatButton(String text, String styleClass) {
+        Button button = getDefaultFlatButton(text);
+        button.getStyleClass().addAll(styleClass);
+        return button;
+    }
+
 
     public RadioButton getDefaultRadioButton(String text, ToggleGroup toggleGroup) {
         RadioButton radio = new JFXRadioButton(text);

@@ -45,7 +45,10 @@ public class AccountStateWidget extends WidgetControllerBase {
         EventHandler<ActionEvent> accountStateHandler = event -> {
             ChangeAccountState changeAccountState = getCommandFactory().getCommand(ChangeAccountState::new);
             changeAccountState.execute((result, status) -> {
-                status.setSucceeded(() -> getPopupFactory().toast(2, "Updated!"));
+                status.setSucceeded(() -> {
+                    String message = result.equals(AccountState.ON_VOCATION) ? "Your items won't be on shelf!" : "Updated!";
+                    getPopupFactory().toast(2, message);
+                });
                 status.handle(getPopupFactory());
             }, getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()));
         };

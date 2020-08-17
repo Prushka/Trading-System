@@ -1,5 +1,6 @@
 package phase2.trade.user.command;
 
+import phase2.trade.address.Address;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusExist;
 import phase2.trade.callback.status.StatusFailed;
@@ -9,37 +10,33 @@ import phase2.trade.command.CommandProperty;
 import phase2.trade.permission.Permission;
 import phase2.trade.user.User;
 import phase2.trade.user.UserFactory;
+import phase2.trade.validator.Validator;
+import phase2.trade.validator.ValidatorFactory;
+import phase2.trade.validator.ValidatorType;
 
 import javax.persistence.Entity;
 import java.util.List;
 
 @Entity
-@CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
+@CommandProperty(crudType = CRUDType.CREATE, undoable = false,
         persistent = true, permissionSet = {})
-public class ChangePassword extends UserCommand<User> {
-
-    private String oldPassword;
+public class ReloadUser extends UserCommand<User> {
 
     @Override
-    public void execute(ResultStatusCallback<User> callback, String... args) { // username, old password, new password
+    public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group, country, province, city,
         if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
-            if (gateway.findMatches(args[0], args[1]).size() == 0) {
-                callback.call(null, new StatusFailed("wrong.password"));
-                return;
-            }
-            oldPassword = operator.getPassword();
-            operator.setPassword(args[1]);
-            save();
-            gateway.merge(operator);
+            gateway.refresh(operator);
             callback.call(operator, new StatusSucceeded());
+
         });
     }
 
     @Override
     protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
-            // gateway.delete(userId);
+            gateway.delete(getOneEntity(User.class));
+            updateUndo();
         });
     }
 }

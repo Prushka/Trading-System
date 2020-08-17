@@ -4,10 +4,16 @@ import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import phase2.trade.callback.ResultStatusCallback;
+import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.refresh.ReType;
 import phase2.trade.support.TicketPriority;
 import phase2.trade.support.TicketType;
+import phase2.trade.support.command.GetSupportTickets;
 import phase2.trade.support.command.OpenSupportTicket;
+import phase2.trade.user.User;
+import phase2.trade.user.command.ReloadUser;
 import phase2.trade.view.window.GeneralSplitAlert;
 
 import java.net.URL;
@@ -20,6 +26,13 @@ public class SupportTicketUserController extends SupportTicketController impleme
     }
 
     @Override
+    public void refresh() {
+        reloadNewDisplayData(getAccountManager().getLoggedInUser().getSupportTickets());
+        tableView.refresh();
+        super.refresh();
+    }
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
         setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getSupportTickets()));
@@ -29,6 +42,11 @@ public class SupportTicketUserController extends SupportTicketController impleme
         addContentColumn();
         addTypeColumn();
         addHandlerColumn();
+
+        addSearchContent();
+        addStateComboBox();
+        addPriorityComboBox();
+        addTypeComboBox();
 
         Button addButton = new JFXButton("Add");
 
@@ -48,8 +66,7 @@ public class SupportTicketUserController extends SupportTicketController impleme
                 OpenSupportTicket command = getCommandFactory().getCommand(OpenSupportTicket::new);
                 command.execute((result, resultStatus) -> {
                     resultStatus.setSucceeded(() -> {
-                        displayData.add(result);
-                        tableView.refresh();
+                        publish(ReType.REFRESH);
                     });
                     resultStatus.handle(getPopupFactory());
                 }, content.getText(), priority.getSelectionModel().getSelectedItem(), type.getSelectionModel().getSelectedItem());

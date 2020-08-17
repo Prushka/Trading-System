@@ -27,6 +27,8 @@ public interface EntityGateway<T, S extends EntityGateway<T, S>> {
 
     void deleteAll();
 
+    void refresh(T entity);
+
     // void submitSessionSync(Consumer<EntityGateway<T>> consumer);
 
     // void submitSessionWithTransactionSync(Consumer<EntityGateway<T>> consumer);

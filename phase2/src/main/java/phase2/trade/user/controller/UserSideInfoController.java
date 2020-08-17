@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import phase2.trade.avatar.Avatar;
+import phase2.trade.avatar.UploadAvatarController;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
@@ -20,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "user_info_side.fxml")
@@ -42,10 +44,13 @@ public class UserSideInfoController extends AbstractController implements Initia
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        imageView.setOnMouseClicked(event -> uploadAvatar());
+        UploadAvatarController uploadAvatarController = getControllerFactory().getController(UploadAvatarController::new);
+
+        imageView.setOnMouseClicked(event -> uploadAvatarController.uploadAvatar());
         refresh();
     }
 
+    @Override
     public void refresh() {
         userId.setText("User Id: " + user.getUid());
         userName.setText("User Name: " + user.getName());
@@ -59,37 +64,5 @@ public class UserSideInfoController extends AbstractController implements Initia
             imageView.setFitHeight(150);
         }
         super.refresh();
-    }
-
-    // TODO: decouple
-    // https://stackoverflow.com/questions/24038524/how-to-get-byte-from-javafx-imageview
-    public void uploadAvatar() {
-        final FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(getSceneManager().getWindow());
-        if (file != null) {
-            // openFile(file);
-            Image image = new Image(file.toURI().toString());
-            BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-            ByteArrayOutputStream s = new ByteArrayOutputStream();
-            try {
-                ImageIO.write(bImage, "png", s);
-                byte[] res = s.toByteArray();
-                s.close();
-
-                Avatar avatar = new Avatar();
-                avatar.setImageData(res);
-                getAccountManager().getLoggedInUser().setAvatar(avatar);
-
-                UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setUserToUpdate(
-                        getAccountManager().getLoggedInUser()));
-                update.execute((result1, status1) -> {
-                    status1.setSucceeded(this::refresh);
-                    status1.handle(getPopupFactory());
-                });
-
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        }
     }
 }

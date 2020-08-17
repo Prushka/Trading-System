@@ -15,9 +15,7 @@ public class StatusExist extends StatusFailed {
     @Override
     public void handle(PopupFactory popupFactory) {
         run(() -> {
-            if (message != null) {
-                popupFactory.toast(5, message, "CLOSE");
-            }
+            toastMessage(popupFactory);
             exist.run();
             failed.run();
             after.run();

@@ -7,6 +7,7 @@ import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.editor.UserEditor;
 import phase2.trade.permission.PermissionGroup;
+import phase2.trade.refresh.ReType;
 import phase2.trade.user.User;
 import phase2.trade.user.command.UpdateUsers;
 
@@ -19,16 +20,23 @@ public class UserTableController extends AbstractEditableTableController<User, U
     }
 
     @Override
+    public void refresh() {
+        tableView.refresh();
+    }
+
+    @Override
     protected void updateEntity(List<User> entities) {
         disableButtons(true);
         Command<?> command = getCommandFactory().getCommand(UpdateUsers::new, c -> {
-            c.setUsersToUpdate(entities);
+            c.setToUpdate(entities);
         });
         command.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> {
+                publishGateway();
+                publish(ReType.REFRESH);
+            });
             resultStatus.setAfter(() -> {
                 disableButtons(false);
-                publishGateway();
-                tableView.refresh();
             });
             resultStatus.handle(getPopupFactory());
         });

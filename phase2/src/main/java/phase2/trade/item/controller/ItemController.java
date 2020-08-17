@@ -37,7 +37,7 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
             resultStatus.setAfter(() -> {
                 disableButtons(false);
                 tableView.refresh();
-                publishGateway(MarketListController.class,ItemManageController.class, InventoryController.class);
+                publishGateway(MarketListController.class, ItemManageController.class, InventoryController.class);
             });
             resultStatus.handle(getPopupFactory());
         });
@@ -152,18 +152,23 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
                 (entity, toMatch) -> entity.getOwnership().name().equalsIgnoreCase(toMatch));
     }
 
-    protected void addWillingnessCheckBoxes() {
+    protected void addWillingnessCheckBoxes(boolean includePrivate) {
         CheckBox lend = new JFXCheckBox("Wish To Lend");
         CheckBox sell = new JFXCheckBox("Wish To Sell");
-        CheckBox privateCheckBox = new JFXCheckBox("Private");
+
 
         tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
-                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell))
-                .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.Private));
+                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell));
 
         lend.setSelected(true);
         sell.setSelected(true);
-        privateCheckBox.setSelected(true);
-        getPane("topBar").getChildren().addAll(lend, sell, privateCheckBox);
+        getPane("topBar").getChildren().addAll(lend, sell);
+        if (includePrivate) {
+            CheckBox privateCheckBox = new JFXCheckBox("Private");
+            tableViewGenerator.getFilterGroup()
+                    .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.Private));
+            privateCheckBox.setSelected(true);
+            getPane("topBar").getChildren().addAll(privateCheckBox);
+        }
     }
 }

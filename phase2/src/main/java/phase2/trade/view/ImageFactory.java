@@ -64,6 +64,9 @@ public class ImageFactory {
             case "user":
                 path = "/svg/user.svg";
                 break;
+            default:
+                path = general;
+                break;
         }
         return generateGraphic(path, Color.WHITE, this.defaultWidth, this.defaultHeight);
     }

@@ -45,7 +45,7 @@ public class CartController extends ItemController implements Initializable {
         addSearchDescription();
         addCategoryComboBox();
         addOwnershipComboBox();
-        addWillingnessCheckBoxes();
+        addWillingnessCheckBoxes(false);
 
         JFXComboBox<User> newUser = new JFXComboBox<>();
         getGatewayBundle().getEntityBundle().getUserGateway().submitSession((gateway) -> {

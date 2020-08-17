@@ -17,7 +17,7 @@
 }
 
 .side-list-view .jfx-list-cell .jfx-rippler {
-    -jfx-rippler-fill: #293841;
+    -jfx-rippler-fill: rgb(46, 86, 100);
 }
 
 
@@ -33,12 +33,12 @@
 }
 
 .side-list-view .jfx-list-cell:filled:hover, .side-list-view .jfx-list-cell:hover {
-    -fx-background-color: #293841;
+    -fx-background-color: rgb(46, 80, 90);
     -fx-text-fill: white;
 }
 
 .side-vbox {
-    -fx-background-color: rgb(40, 80, 80);
+    -fx-background-color: rgb(23, 43, 61);
 }
 
 .side-menu-user > .label {

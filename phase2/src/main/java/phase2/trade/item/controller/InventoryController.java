@@ -59,7 +59,7 @@ public class InventoryController extends ItemController implements Initializable
         addSearchDescription();
         addCategoryComboBox();
         addOwnershipComboBox();
-        addWillingnessCheckBoxes();
+        addWillingnessCheckBoxes(true);
 
         Button addButton = new JFXButton("Add");
         Button deleteButton = new JFXButton("Delete");

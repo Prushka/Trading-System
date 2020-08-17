@@ -1,6 +1,8 @@
 package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +18,7 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.Item;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.user.User;
+import phase2.trade.view.window.AddressAlertController;
 
 import java.net.URL;
 import java.util.*;
@@ -88,15 +91,45 @@ public class TradeDetailController extends AbstractController implements Initial
         topRightHBox.getChildren().addAll(rightComboBox);
     }
 
+    class GroupedDetailViews {
+        DatePicker datePicker = new JFXDatePicker();
+        JFXTimePicker timePicker = new JFXTimePicker();
+        Button addressButton = getNodeFactory().getDefaultFlatButton("Address");
+
+        AddressAlertController addressAlertController = getControllerFactory().getController(AddressAlertController::new);
+
+        GroupedDetailViews() {
+            addressAlertController.setAddress(getAccountManager().getLoggedInUser().getAddressBook().cloneSelectedAddressWithoutDetail());
+            addressButton.setOnAction(event -> addressAlertController.display());
+        }
+
+        void consume(Pane parent) {
+            parent.getChildren().setAll(datePicker, timePicker, addressButton);
+        }
+    }
+
+    Map<User, Map<User, GroupedDetailViews>> detailViewsMap = new HashMap<>();
+
+    private GroupedDetailViews createDetailLayoutIfNotExist(User leftSelected, User rightSelected) {
+        if (!detailViewsMap.containsKey(leftSelected)) {
+            detailViewsMap.put(leftSelected, new HashMap<>());
+        }
+        if (!detailViewsMap.get(leftSelected).containsKey(rightSelected)) {
+            detailViewsMap.get(leftSelected).put(rightSelected, new GroupedDetailViews());
+        }
+        return detailViewsMap.get(leftSelected).get(rightSelected);
+    }
+
     private void refreshTableArea(User leftSelected, User rightSelected) {
         if (leftSelected == null || rightSelected == null) return;
         leftTableArea.getChildren().setAll(userTablesCombination.get(rightSelected)
                 .get(leftSelected).tableViewGenerator.getTableView());
         rightTableArea.getChildren().setAll(userTablesCombination.get(leftSelected)
                 .get(rightSelected).tableViewGenerator.getTableView());
+        createDetailLayoutIfNotExist(leftSelected, rightSelected).consume(buttonPane);
     }
 
-    private ObservableList<User> getUsersBesides(User user){
+    private ObservableList<User> getUsersBesides(User user) {
         ObservableList<User> list = FXCollections.observableArrayList(userToItemToGet.keySet());
         list.remove(user);
         return list;

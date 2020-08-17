@@ -102,26 +102,16 @@ public class TradeController extends AbstractController implements Initializable
         leftTableArea.getChildren().setAll(allTable.tableViewGenerator.getTableView());
         topRightHBox.getChildren().addAll(rightComboBox, willGetFollowingItems);
 
-        Button test = new JFXButton("TEST");
-        Button test2 = new JFXButton("TEST2");
-
-        AddressAlertController addressAlertController = getControllerFactory().getController(AddressAlertController::new);
-        addressAlertController.setAddress(getAccountManager().getLoggedInUser().getAddressBook().cloneSelectedAddressWithoutDetail());
+        Button tradeButton = new JFXButton("Trade");
 
         leftComboBox = new JFXComboBox<>();
         leftComboBox.setVisible(false);
         topLeftHBox.getChildren().addAll(leftComboBox);
-        DatePicker datePicker = new JFXDatePicker();
-        JFXTimePicker timePicker = new JFXTimePicker();
-        buttonPane.getChildren().addAll(datePicker, timePicker, test, test2);
 
-        test.setOnAction(e -> {
-            LocalTime localTime = timePicker.getValue();
-            LocalDate localDate = datePicker.getValue();
-            LocalDateTime localDateTime = localDate.atTime(localTime);
-            System.out.println(localDateTime);
-        });
-        test2.setOnAction(e -> {
+        buttonPane.getChildren().addAll(tradeButton);
+
+
+        tradeButton.setOnAction(e -> {
             Map<User, Collection<Item>> userToItemToGet = new HashMap<>();
             for (Map.Entry<User, UserTable> entry : userTables.entrySet()) {
                 userToItemToGet.put(entry.getKey(), entry.getValue().getTableView().getItems());

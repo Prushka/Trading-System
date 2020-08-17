@@ -18,10 +18,8 @@ public class TargetUserTableController extends ItemController {
         this.tableView = tableViewGenerator.getTableView();
 
         addNameColumn(true);
-        addDescriptionColumn(true);
         addQuantityColumn(true);
         addPriceColumn(true);
-        addCategoryColumn(true);
         addOwnerColumn();
         addWillingnessColumn(true);
         tableViewGenerator.build();

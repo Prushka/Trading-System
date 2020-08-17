@@ -22,6 +22,7 @@ public class TargetUserTableController extends ItemController {
         addQuantityColumn(true);
         addPriceColumn(true);
         addCategoryColumn(true);
+        addOwnerColumn();
         addWillingnessColumn(true);
         tableViewGenerator.build();
     }

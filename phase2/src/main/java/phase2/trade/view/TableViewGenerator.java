@@ -34,6 +34,8 @@ public class TableViewGenerator<T> {
 
     private final FilteredList<T> filteredList;
 
+    private SortedList<T> sortedList;
+
     private final FilterGroup<T> filterGroup;
 
     public TableViewGenerator(ObservableList<T> original) {
@@ -155,11 +157,15 @@ public class TableViewGenerator<T> {
 
     public TableView<T> build() {
         filterGroup.group();
-        SortedList<T> sortedList = new SortedList<>(filteredList);
+        sortedList = new SortedList<>(filteredList);
         sortedList.comparatorProperty().bind(tableView.comparatorProperty());
         tableView.setItems(sortedList);
         tableView.getColumns().addAll(listOfColumns);
         return tableView;
+    }
+
+    public SortedList<T> getSortedList() {
+        return sortedList;
     }
 
     public FilterGroup<T> getFilterGroup() {

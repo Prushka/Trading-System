@@ -46,26 +46,26 @@ public class SideMenuController extends AbstractController implements Initializa
     // TODO: drop down sub menu
 
     private <T> void loadCenter(String fileName, ControllerSupplier<T> supplier) {
-        getPane("centerDashboard").getChildren().clear();
-        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(fileName, supplier));
+        getPane(DashboardPane.CENTER).getChildren().clear();
+        getPane(DashboardPane.CENTER).getChildren().add(getSceneManager().loadPane(fileName, supplier));
     }
 
     private <T> void loadCenter(ControllerSupplier<T> supplier) {
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(supplier));
+        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(supplier));
     }
 
     private void loadCenter(Object controller) {
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
+        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     private void inventory() {
         InventoryController controller = new InventoryController(getControllerResources(), ItemListType.INVENTORY);
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
+        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     private void cart() {
         CartController controller = new CartController(getControllerResources(), ItemListType.CART);
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
+        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     // TODO: extend for different users
@@ -107,7 +107,7 @@ public class SideMenuController extends AbstractController implements Initializa
                         loadCenter(userInfoController);
                         break;
                     case MARKET:
-                        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(new MarketListController(getControllerResources())));
+                        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(new MarketListController(getControllerResources())));
                         break;
                     case INVENTORY:
                         inventory();

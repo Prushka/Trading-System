@@ -11,15 +11,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.database.TriConsumer;
 import phase2.trade.editor.EditorSupplier;
 import phase2.trade.editor.EntityIdLookUp;
 import phase2.trade.view.FilterPredicate;
-import phase2.trade.view.ImageFactory;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
@@ -120,7 +117,7 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         textField.setPromptText(promptText);
         textField.setLabelFloat(true);
         tableViewGenerator.getFilterGroup().addSearch(textField, predicate);
-        getPane("topBar").getChildren().addAll(textField);
+        getPane(DashboardPane.TOP).getChildren().addAll(textField);
     }
 
     protected void addComboBox(ObservableList<String> observableList, String promptText, String allText, FilterPredicate<T, String> predicate) {
@@ -129,16 +126,15 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         combo.getItems().add(allText);
         combo.setLabelFloat(true);
         tableViewGenerator.getFilterGroup().addComboBox(combo, predicate);
-        getPane("topBar").getChildren().addAll(combo);
+        getPane(DashboardPane.TOP).getChildren().addAll(combo);
     }
 
     // This reloads the entire controller. Thus, the new data is retrieved from database
     // Please use the pub/sub to reload (which will reflect changes in multiple clients automatically)
     @Deprecated
     protected void addReloadButton(ControllerSupplier<?> controllerSupplier) {
-        Button button = new JFXButton();
-        button.setGraphic(new ImageFactory().generateGraphic("/image/refresh.png", 1, 25, 25));
-        button.setOnAction(event -> getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controllerSupplier)));
-        getPane("topBar").getChildren().addAll(button);
+        Button button = new JFXButton("reload");
+        button.setOnAction(event -> getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controllerSupplier)));
+        getPane(DashboardPane.TOP).getChildren().addAll(button);
     }
 }

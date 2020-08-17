@@ -25,17 +25,18 @@ public class ImageFactory {
     private final double defaultWidth = 25;
     private final double defaultHeight = 25;
     private final double defaultBrightness = 1;
+    private final boolean defaultSmoothing = true;
 
-    public Node generateGraphic(String filePath, double brightness, double width, double height) {
-        return generateGraphic(Main.class.getResource(filePath), brightness, width, height);
+    public Node generateGraphic(String filePath, double brightness, boolean smoothing, double width, double height) {
+        return generateGraphic(Main.class.getResource(filePath), brightness, smoothing, width, height);
     }
 
     // https://stackoverflow.com/questions/18124364/how-to-change-color-of-image-in-javafx
-    public Node generateGraphic(URL url, double brightness, double width, double height) {
+    public Node generateGraphic(URL url, double brightness, boolean smoothing, double width, double height) {
         try {
             if (url != null) {
                 // String extension = url.getPath().substring(url.getPath().lastIndexOf(".")).toLowerCase();
-                Image image = new Image(url.openStream(),defaultWidth,defaultHeight,true,true);
+                Image image = new Image(url.openStream(), width, height, true, smoothing);
 
                 ImageView imageView = new ImageView(image);
 
@@ -57,6 +58,6 @@ public class ImageFactory {
     }
 
     public Node generateGraphic(String path) {
-        return generateGraphic(path, defaultBrightness, this.defaultWidth, this.defaultHeight);
+        return generateGraphic(path, defaultBrightness, this.defaultSmoothing, this.defaultWidth, this.defaultHeight);
     }
 }

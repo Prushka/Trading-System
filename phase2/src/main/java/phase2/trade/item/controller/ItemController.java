@@ -2,15 +2,12 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.util.Callback;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.DashboardPane;
 import phase2.trade.controller.market.MarketListController;
 import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.Category;
@@ -162,13 +159,13 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
 
         lend.setSelected(true);
         sell.setSelected(true);
-        getPane("topBar").getChildren().addAll(lend, sell);
+        getPane(DashboardPane.TOP).getChildren().addAll(lend, sell);
         if (includePrivate) {
             CheckBox privateCheckBox = new JFXCheckBox("Private");
             tableViewGenerator.getFilterGroup()
                     .addCheckBox(privateCheckBox, ((entity, toMatch) -> entity.getWillingness() == Willingness.Private));
             privateCheckBox.setSelected(true);
-            getPane("topBar").getChildren().addAll(privateCheckBox);
+            getPane(DashboardPane.TOP).getChildren().addAll(privateCheckBox);
         }
     }
 }

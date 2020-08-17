@@ -14,9 +14,8 @@ import phase2.trade.command.GetCommands;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.AbstractEditableTableController;
+import phase2.trade.controller.DashboardPane;
 import phase2.trade.editor.CommandEditor;
-import phase2.trade.editor.EditorSupplier;
-import phase2.trade.editor.EntityIdLookUp;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
@@ -119,7 +118,7 @@ public class UserOperationController extends AbstractEditableTableController<Com
                 // getCommands(comboBox.getSelectionModel().getSelectedItem());
             }
         });
-        getPane("topBar").getChildren().addAll(comboBox);
+        getPane(DashboardPane.TOP).getChildren().addAll(comboBox);
 
         JFXButton undo = new JFXButton("Undo Selected Operations");
         undo.setOnAction(new EventHandler<ActionEvent>() {

@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.DashboardPane;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
@@ -85,7 +86,7 @@ public class UserManageController extends UserTableController implements Initial
             CreateUser command = getCommandFactory().getCommand(CreateUser::new);
             command.execute(((result, status) -> {
                         status.setExist(() -> getPopupFactory().toast(5, "Such User Name Already Exists"));
-                        status.setSucceeded(() -> getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(UserManageController::new)));
+                        status.setSucceeded(() -> getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(UserManageController::new)));
                         status.handle(getPopupFactory());
                     }
                     ),

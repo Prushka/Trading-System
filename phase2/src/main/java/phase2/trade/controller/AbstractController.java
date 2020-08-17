@@ -1,6 +1,7 @@
 package phase2.trade.controller;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import phase2.trade.command.CommandFactory;
@@ -35,7 +36,13 @@ public abstract class AbstractController implements Reloadable, Refreshable {
         controllerResources.getReReReRe().subscribeRefreshable(this.getClass().getSimpleName(), this);
         controllerResources.getReReReRe().subscribeReloadable(this.getClass().getSimpleName(), this);
         controllerFactory = new ControllerFactory(controllerResources);
-        if (getPane("topBar") != null) getPane("topBar").getChildren().clear();
+        clearToolBars();
+    }
+
+    private void clearToolBars() {
+        if (getPane(DashboardPane.TOP) != null) getPane(DashboardPane.TOP).getChildren().clear();
+        if (getPane(DashboardPane.LEFT) != null) getPane(DashboardPane.LEFT).getChildren().clear();
+        if (getPane(DashboardPane.RIGHT) != null) getPane(DashboardPane.RIGHT).getChildren().clear();
     }
 
     protected String getLanguageByValue(String key) {
@@ -105,12 +112,12 @@ public abstract class AbstractController implements Reloadable, Refreshable {
         return controllerResources.getGatewayBundle();
     }
 
-    protected Pane getPane(String name) {
-        return controllerResources.getPanes().get(name);
+    protected Pane getPane(DashboardPane name) {
+        return controllerResources.getPane().get(name);
     }
 
-    protected void putPane(String name, Pane pane) {
-        controllerResources.getPanes().put(name, pane);
+    protected void putPane(DashboardPane name, Pane pane) {
+        controllerResources.getPane().put(name, pane);
     }
 
     protected NodeFactory getNodeFactory() {

@@ -118,7 +118,7 @@
  */
 .market-list-view, .market-list-view .jfx-list-cell {
     -fx-background-color: rgba(0, 0, 0, 0);
-    -fx-text-fill: rgb(180, 210, 210);
+    -fx-text-fill: rgb(0, 0, 0);
 }
 
 .market-list-view .jfx-list-cell .jfx-rippler {
@@ -168,6 +168,20 @@
 .dashboard-top-tool-bar .jfx-combo-box .jfx-list-cell {
     -fx-background: linear-gradient(from 333% 333% to 0% 0%,
     #9828AD, #436AAC, #43B7B8);
+    -fx-text-fill: WHITE;
+}
+
+.dashboard-left-tool-bar {
+    -fx-background-color: rgb(23, 43, 61);
+}
+
+.dashboard-left-tool-bar .button {
+    -fx-font-weight: BOLD;
+    -fx-text-fill: WHITE;
+}
+
+.dashboard-left-tool-bar .jfx-combo-box .jfx-list-cell {
+    -fx-background: rgb(23, 43, 61);
     -fx-text-fill: WHITE;
 }
 

@@ -90,8 +90,9 @@ public class MarketItemCell extends JFXListCell<Item> {
 
         rightVBox.getChildren().addAll(uidLabel, sellOrLendLabel);
 
-        Node svg = new ImageFactory().generateGraphic(item.getCategory().resourcePath, 1, 120, 120);
+        Node svg = new ImageFactory().generateGraphic(item.getCategory().resourcePath, -1, false, 120, 120);
         if (svg != null) {
+            HBox.setMargin(svg,new Insets(0,20,0,0));
             hBox.getChildren().addAll(svg);
         }
         hBox.getChildren().addAll(leftVBox, region, comboBox, rightVBox, addToCart);

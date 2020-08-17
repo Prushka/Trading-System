@@ -58,7 +58,7 @@ public class AddressWidget extends SmallTextWidgetController {
             cityLabel.setText("City: " + address.getCity());
         } else {
             countryLabel.setText("Address");
-            provinceLabel.setText("Undefined"); // this technically shouldn't happen since every user is required to set their country, province and city when signing up
+            provinceLabel.setText("Undefined"); // this technically shouldn't happen since every user is required to set the address when signing up
         }
     }
 

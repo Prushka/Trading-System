@@ -18,6 +18,7 @@ public class EditTrade extends TradeCommand<Trade> {
 
     @Override
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
+        /*
         // TO DO: Implement cancelling after limit
         te = new TradeEditor(getConfigBundle().getTradeConfig().getEditLimit());
         if (!checkPermission(callback)) return;
@@ -27,7 +28,7 @@ public class EditTrade extends TradeCommand<Trade> {
             gateway.update(currTrade);
             if (callback != null)
                 callback.call(currTrade, new StatusSucceeded());
-        });
+        });*/
     }
 
     @Override

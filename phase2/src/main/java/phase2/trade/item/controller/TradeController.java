@@ -57,7 +57,7 @@ public class TradeController extends AbstractController implements Initializable
     Map<User, UserTable> userTables = new HashMap<>();
     AllTable allTable;
 
-    private ComboBox<User> rightComboBox, leftComboBox;
+    private ComboBox<User> rightComboBox;
 
     private final Map<Long, Item> allItems = new HashMap<>();
 
@@ -104,7 +104,7 @@ public class TradeController extends AbstractController implements Initializable
 
         Button tradeButton = new JFXButton("Trade");
 
-        leftComboBox = new JFXComboBox<>();
+        ComboBox<User> leftComboBox = new JFXComboBox<>();
         leftComboBox.setVisible(false);
         topLeftHBox.getChildren().addAll(leftComboBox);
 

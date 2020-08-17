@@ -1,8 +1,6 @@
 package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXTimePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,10 +13,12 @@ import javafx.scene.layout.VBox;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.user.User;
-import phase2.trade.view.window.AddressAlertController;
+import phase2.trade.view.widget.TradeAddressWidget;
+import phase2.trade.view.widget.TradeTimeWidget;
 
 import java.net.URL;
 import java.util.*;
@@ -89,33 +89,35 @@ public class TradeDetailController extends AbstractController implements Initial
 
         topLeftHBox.getChildren().addAll(leftComboBox);
         topRightHBox.getChildren().addAll(rightComboBox);
+        Button finishTrade = getNodeFactory().getDefaultFlatButton("Finish Trade");
+        getPane(DashboardPane.TOP).getChildren().addAll(finishTrade);
+        finishTrade.setOnAction(e -> {
+
+        });
     }
 
-    class GroupedDetailViews {
-        DatePicker datePicker = new JFXDatePicker();
-        JFXTimePicker timePicker = new JFXTimePicker();
-        Button addressButton = getNodeFactory().getDefaultFlatButton("Address");
+    class WidgetBundle {
+        TradeTimeWidget tradeTimeWidget;
+        TradeAddressWidget tradeAddressWidget;
 
-        AddressAlertController addressAlertController = getControllerFactory().getController(AddressAlertController::new);
-
-        GroupedDetailViews() {
-            addressAlertController.setAddress(getAccountManager().getLoggedInUser().getAddressBook().cloneSelectedAddressWithoutDetail());
-            addressButton.setOnAction(event -> addressAlertController.display());
+        public WidgetBundle(User leftSelected, User rightSelected) {
+            tradeTimeWidget = new TradeTimeWidget(getControllerResources(), leftSelected, rightSelected);
+            tradeAddressWidget = new TradeAddressWidget(getControllerResources(), leftSelected, rightSelected);
         }
 
-        void consume(Pane parent) {
-            parent.getChildren().setAll(datePicker, timePicker, addressButton);
+        void consume(Pane pane) {
+            pane.getChildren().setAll(getSceneManager().loadPane(tradeTimeWidget), getSceneManager().loadPane(tradeAddressWidget));
         }
     }
 
-    Map<User, Map<User, GroupedDetailViews>> detailViewsMap = new HashMap<>();
+    Map<User, Map<User, WidgetBundle>> detailViewsMap = new HashMap<>();
 
-    private GroupedDetailViews createDetailLayoutIfNotExist(User leftSelected, User rightSelected) {
+    private WidgetBundle createDetailLayoutIfNotExist(User leftSelected, User rightSelected) {
         if (!detailViewsMap.containsKey(leftSelected)) {
             detailViewsMap.put(leftSelected, new HashMap<>());
         }
         if (!detailViewsMap.get(leftSelected).containsKey(rightSelected)) {
-            detailViewsMap.get(leftSelected).put(rightSelected, new GroupedDetailViews());
+            detailViewsMap.get(leftSelected).put(rightSelected, new WidgetBundle(leftSelected, rightSelected));
         }
         return detailViewsMap.get(leftSelected).get(rightSelected);
     }

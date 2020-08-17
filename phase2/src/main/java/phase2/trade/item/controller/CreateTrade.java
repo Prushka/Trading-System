@@ -1,7 +1,5 @@
 package phase2.trade.item.controller;
 
-import org.hibernate.criterion.Order;
-import phase2.trade.address.Address;
 import phase2.trade.inventory.TradeItemHolder;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
@@ -9,7 +7,6 @@ import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 
@@ -59,7 +56,7 @@ public class CreateTrade {
         for (Map.Entry<User, Collection<Item>> entry : userToItemToGet.entrySet()) {
             for (Map.Entry<User, Collection<Item>> entry2 : userToItemToGet.entrySet()) {
                 createTwoWayUserOrderBundle(entry.getKey(), entry2.getKey(), entry.getValue(), entry2.getValue());
-                // only need combinations here. But whatever. This will prove inefficient in the future (maybe not)
+                // only need combinations here. But whatever
             }
         }
     }

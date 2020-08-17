@@ -58,7 +58,7 @@ public abstract class WidgetControllerBase extends AbstractController implements
         root.setOnMouseClicked(value);
     }
 
-    public Pane getRoot() {
+    public VBox getRoot() {
         return root;
     }
 

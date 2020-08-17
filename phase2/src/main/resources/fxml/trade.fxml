@@ -8,15 +8,15 @@
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane fx:id="root" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
     <left>
-        <VBox fx:id="left" spacing="10">
+        <VBox fx:id="left" spacing="10" prefWidth="650">
             <HBox fx:id="topLeftHBox"/>
             <Pane fx:id="leftTableArea">
             </Pane>
         </VBox>
     </left>
     <right>
-        <VBox fx:id="right" spacing="10" alignment="TOP_CENTER">
-            <HBox fx:id="topRightHBox" alignment="CENTER_LEFT"/>
+        <VBox fx:id="right" spacing="10" prefWidth="650">
+            <HBox fx:id="topRightHBox"/>
             <Pane fx:id="rightTableArea">
             </Pane>
         </VBox>

@@ -17,7 +17,9 @@ public class TradeOrder {
 
     private Long uid;
 
-    private List<UserOrderBundle> traders;
+    private UserOrderBundle initiator;
+
+    private UserOrderBundle target;
 
     private LocalDateTime dateAndTime;
 
@@ -31,13 +33,22 @@ public class TradeOrder {
         this.uid = uid;
     }
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    public List<UserOrderBundle> getTraders() {
-        return traders;
+    @OneToOne
+    public UserOrderBundle getInitiator() {
+        return initiator;
     }
 
-    public void setTraders(List<UserOrderBundle> traders) {
-        this.traders = traders;
+    public void setInitiator(UserOrderBundle initiator) {
+        this.initiator = initiator;
+    }
+
+    @OneToOne
+    public UserOrderBundle getTarget() {
+        return target;
+    }
+
+    public void setTarget(UserOrderBundle target) {
+        this.target = target;
     }
 
     public LocalDateTime getDateAndTime() {
@@ -48,6 +59,7 @@ public class TradeOrder {
         this.dateAndTime = dateAndTime;
     }
 
+    /*
     @Transient
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
@@ -77,5 +89,5 @@ public class TradeOrder {
             }
         }
         return false;
-    }
+    }*/
 }

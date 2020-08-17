@@ -7,9 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -52,6 +50,9 @@ public class TradeController extends AbstractController implements Initializable
     @FXML
     private VBox left, right;
 
+    @FXML
+    private HBox buttonPane;
+
     class UserTable {
         ObservableList<Item> items = FXCollections.observableArrayList();
         User owner;
@@ -72,12 +73,15 @@ public class TradeController extends AbstractController implements Initializable
 
         void build() {
             tableViewGenerator = new TableViewGenerator<>(items);
-            tableViewGenerator.getTableView().setPrefWidth(600);
+            tableViewGenerator.getTableView().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            tableViewGenerator.getTableView().setPrefWidth(650);
             targetUserTableController = new TargetUserTableController(getControllerResources(), tableViewGenerator);
         }
     }
 
-    private final Map<User, UserTable> targetTables = new HashMap<>();
+    Map<User, Map<User, UserTable>> userTables = new HashMap<>();
+
+    private ComboBox<User> rightComboBox, leftComboBox;
 
     public TradeController(ControllerResources controllerResources, ObservableList<Item> selectedItems) {
         super(controllerResources);
@@ -87,9 +91,41 @@ public class TradeController extends AbstractController implements Initializable
     //dashboard-table-view
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Collection<Item> userItems = new ItemFilter(getAccountManager().getLoggedInUser()).getTradableItems();
 
-        System.out.println(userItems.size());
+        for (Item item : selectedItems) {
+            if (!userTables.containsKey(item.getOwner())) {
+                UserTable userTable = new UserTable(item.getOwner());
+                userTables.put(item.getOwner(), getUserTables());
+                userTable.addItem(item);
+            }
+        }
+
+        Label initiatorLabel = new Label("From");
+        Label targetLabel = new Label("To");
+
+        rightComboBox = getUserComboBox(userTables.keySet());
+        leftComboBox = getUserComboBox(userTables.keySet());
+
+        leftComboBox.setOnAction(e -> {
+            leftTableArea.getChildren().setAll(userTables.get(leftComboBox.getSelectionModel().getSelectedItem())
+                    .get(leftComboBox.getSelectionModel().getSelectedItem()).tableViewGenerator.getTableView());
+            rightTableArea.getChildren().setAll(userTables.get(leftComboBox.getSelectionModel().getSelectedItem())
+                    .get(rightComboBox.getSelectionModel().getSelectedItem()).tableViewGenerator.getTableView());
+        });
+
+        rightComboBox.setOnAction(e -> {
+            rightTableArea.getChildren().setAll(userTables.get(leftComboBox.getSelectionModel().getSelectedItem())
+                    .get(rightComboBox.getSelectionModel().getSelectedItem()).tableViewGenerator.getTableView());
+        });
+
+        BorderPane.setMargin(left, new Insets(0, 10, 0, 0));
+        topLeftHBox.getChildren().addAll(initiatorLabel, leftComboBox);
+        topRightHBox.getChildren().addAll(targetLabel, rightComboBox);
+    }
+
+    private Map<User, UserTable> getUserTables() {
+        Map<User, UserTable> targetTables = new HashMap<>();
+        Collection<Item> userItems = new ItemFilter(getAccountManager().getLoggedInUser()).getTradableItems();
         for (Item item : selectedItems) {
             if (!targetTables.containsKey(item.getOwner())) {
                 UserTable userTable = new UserTable(item.getOwner());
@@ -103,27 +139,14 @@ public class TradeController extends AbstractController implements Initializable
         currUserTable.addItem(userItems);
         targetTables.put(getAccountManager().getLoggedInUser(), currUserTable);
         targetTables.values().forEach(UserTable::build);
-
-        ComboBox<User> rightComboBox = getUserComboBox(rightTableArea);
-        //ComboBox<User> leftComboBox = getUserComboBox(leftTableArea);
-
-        rightComboBox.getSelectionModel().select(0);
-        //leftComboBox.getSelectionModel().select(0);
-
-        BorderPane.setMargin(left, new Insets(0, 10, 0, 0));
-        //topLeftHBox.getChildren().addAll(leftComboBox);
-        topRightHBox.getChildren().addAll(rightComboBox);
+        return targetTables;
     }
 
-    private ComboBox<User> getUserComboBox(Pane tableArea) {
+    private ComboBox<User> getUserComboBox(Collection<User> users) {
         ComboBox<User> comboBox = new JFXComboBox<>();
         comboBox.setConverter(new UserStringConverter(comboBox));
         comboBox.setCellFactory(e -> new UserCell());
-        comboBox.getItems().addAll(targetTables.keySet());
-
-        comboBox.setOnAction(event -> {
-            tableArea.getChildren().setAll(targetTables.get(comboBox.getSelectionModel().getSelectedItem()).tableViewGenerator.getTableView());
-        });
+        comboBox.getItems().addAll(users);
         return comboBox;
     }
 }

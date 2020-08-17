@@ -43,7 +43,11 @@ import java.util.*;
 
 @ControllerProperty(viewFile = "market.fxml")
 public class MarketController extends AbstractListController<Trade> implements Initializable {
+    public MarketController(ControllerResources controllerResources, boolean ifMultipleSelection) {
+        super(controllerResources, ifMultipleSelection);
+    }
 
+    /*
     private TradeCommand edit, confirm;
     private CreateTrade tc;
 
@@ -330,5 +334,5 @@ public class MarketController extends AbstractListController<Trade> implements I
             trades.getItems().clear();
             trades.setItems(tradesList);
         });
-    }
+    }*/
 }

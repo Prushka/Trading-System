@@ -20,16 +20,19 @@ public class ConfirmTrade extends TradeCommand<Trade> {
 
     @Override
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
-        /*
         tcc = new TradeConfirmer(getConfigBundle().getTradeConfig().getTimeLimit());
         if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade currTrade = gateway.findById(tradeId);
-            Trade trade = tcc.confirmTrade(currTrade, operator);
+            tcc.confirmTrade(currTrade, operator);
+            System.out.println(operator.getName());
+            gateway.update(currTrade);
             if (callback != null)
-                callback.call(trade, new StatusSucceeded());
-            gateway.update(trade);
-        });*/
+                callback.call(currTrade, new StatusSucceeded());
+        });
     }
 
+    // Unreasonable to do for this action
+    @Override
+    protected void undoUnchecked() {}
 }

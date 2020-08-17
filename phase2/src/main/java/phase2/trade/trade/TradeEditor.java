@@ -18,12 +18,12 @@ public class TradeEditor {
         this.editLimit = editLimit;
     }
 
-    public Trade edit(Trade currTrade, User editingUser, String... args) {
+    public void edit(Trade currTrade, User editingUser, String... args) {
         // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
-            if (user.getUser().equals(editingUser) && !user.getConfirmations() && user.getEdits() == editLimit){
+            if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.getConfirmations() && user.getEdits() == editLimit){
                 cancelOrder(currTrade);
-            } else if (user.getUser().equals(editingUser) && !user.getConfirmations() && user.getEdits() < editLimit){
+            } else if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.getConfirmations() && user.getEdits() < editLimit){
                 if (args.length == 5){
                     LocalDateTime dateTime = LocalDateTime.of(Integer.parseInt(args[0]), Integer.parseInt(args[1]),
                             Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
@@ -38,8 +38,6 @@ public class TradeEditor {
                 user.setConfirmations(false); // Need to alter so if they aren't in the trade at all, this doesn't happen
             }
         }
-
-        return currTrade;
     }
 
     private void cancelOrder(Trade currTrade) {

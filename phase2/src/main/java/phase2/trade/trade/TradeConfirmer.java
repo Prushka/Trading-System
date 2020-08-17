@@ -19,15 +19,15 @@ public class TradeConfirmer {
         this.timeLimit = timeLimit;
     }
 
-    public Trade confirmTrade(Trade currTrade, User editingUser){
+    public void confirmTrade(Trade currTrade, User editingUser){
         boolean canStart = true;
 
         if (currTrade.getTradeState().equals(TradeState.CANCELLED) || currTrade.getTradeState().equals(TradeState.CLOSED)){
-            return currTrade;
+            return;
         }
 
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
-            if (user.getUser().equals(editingUser) && !user.getConfirmations()){
+            if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.getConfirmations()){
                 user.setConfirmations(true);
             }
             if (!user.getConfirmations()){
@@ -50,7 +50,6 @@ public class TradeConfirmer {
         } else if (currTrade.getTradeState().equals(TradeState.PENDING_TRADEBACK) && canStart){
             currTrade.setTradeState(TradeState.CLOSED);
         }
-        return currTrade;
     }
 
     private void resetConfirms(Trade currTrade){

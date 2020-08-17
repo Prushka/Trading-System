@@ -63,9 +63,6 @@ class TradeBuilder {
     Trade buildTrade() {
         newTrade = new Trade();
         order.setTraders(traders);
-        System.out.println(traders.size());
-        System.out.println(order.getTraders().size());
-
         newTrade.setOrder(order);
         newTrade.setIsPermanent(isPermanent);
         newTrade.setTradeState(TradeState.IN_PROGRESS);

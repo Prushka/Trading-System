@@ -46,6 +46,17 @@ public class TradeAddressWidget extends TradeDetailWidget {
         refresh();
     }
 
+    public Address getSubmittedAddress() {
+        Address address = new Address();
+        address.setCountry(addressAlertController.getCountryCombo().getSelectionModel().getSelectedItem());
+        address.setTerritory(addressAlertController.getProvinceCombo().getSelectionModel().getSelectedItem());
+        address.setCity(addressAlertController.getCityCombo().getSelectionModel().getSelectedItem());
+        address.setFirstAddressLine(addressAlertController.getAddressLine1().getText());
+        address.setSecondAddressLine(addressAlertController.getAddressLine2().getText());
+        address.setPostalCode(addressAlertController.getPostalCode().getText());
+        return address;
+    }
+
     public void refresh() {
         countryLabel.setText("Country: " + addressAlertController.getCountryCombo().getSelectionModel().getSelectedItem());
         provinceLabel.setText("Province: " + addressAlertController.getProvinceCombo().getSelectionModel().getSelectedItem());

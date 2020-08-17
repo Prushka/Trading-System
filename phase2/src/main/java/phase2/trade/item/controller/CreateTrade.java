@@ -22,7 +22,7 @@ public class CreateTrade {
         usersToItemsToGet.values().forEach(allItems::addAll);
     }
 
-    public boolean ifUsersMatchOrder(TradeOrder order,User a, User b) {
+    public boolean ifUsersMatchOrder(TradeOrder order, User a, User b) {
         return a.getUid().equals(order.getInitiatorUser().getUid()) && b.getUid().equals(order.getTargetUser().getUid()) ||
                 b.getUid().equals(order.getInitiatorUser().getUid()) && a.getUid().equals(order.getTargetUser().getUid());
     }
@@ -34,7 +34,7 @@ public class CreateTrade {
         System.out.println("Create: " + trade.getOrders().size());
         for (TradeOrder order : trade.getOrders()) {
             System.out.println(order.getInitiatorUser().getUid() + " | " + order.getTargetUser().getUid());
-            if (ifUsersMatchOrder(order,initiator, target)) {
+            if (ifUsersMatchOrder(order, initiator, target)) {
                 return;
             }
         }
@@ -61,19 +61,22 @@ public class CreateTrade {
         trade.getOrders().add(order);
     }
 
+    private Set<User> usersInvolved = new HashSet<>();
+
+    // this cleanup doesn't remove order because even if two users do not have transaction, there is a chance user select both of them in the controller since
+    // the number of users involved in arbitrary
     public void cleanup() {
-        Set<TradeOrder> ordersToRemove = new HashSet<>();
         System.out.println(trade.getOrders().size());
         for (TradeOrder order : trade.getOrders()) {
             if (order.getTarget().getTradeItemHolder().size() == 0 && order.getInitiator().getTradeItemHolder().size() == 0) {
-                ordersToRemove.add(order);
-                System.out.println(order.getTarget().getUser().getName());
-                System.out.println(order.getInitiator().getUser().getName());
-                usersToItemsToGet.remove(order.getTarget().getUser());
-                usersToItemsToGet.remove(order.getInitiator().getUser());
+            }else{
+                usersInvolved.add(order.getTargetUser());
+                usersInvolved.add(order.getInitiatorUser());
             }
         }
-        trade.getOrders().removeAll(ordersToRemove);
+        // trade.getOrders().removeAll(ordersToRemove);
+
+        System.out.println("Final Order Size: " + trade.getOrders().size());
     }
 
     public void createOrder() {
@@ -88,5 +91,9 @@ public class CreateTrade {
 
     public Trade getTrade() {
         return trade;
+    }
+
+    public Set<User> getUsersInvolved() {
+        return usersInvolved;
     }
 }

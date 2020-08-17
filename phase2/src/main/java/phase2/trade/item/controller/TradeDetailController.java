@@ -3,6 +3,8 @@ package phase2.trade.item.controller;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,18 +12,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import phase2.trade.address.Address;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.command.CreateTradeCommand;
 import phase2.trade.user.User;
 import phase2.trade.view.widget.TradeAddressWidget;
+import phase2.trade.view.widget.TradeOptionWidget;
 import phase2.trade.view.widget.TradeTimeWidget;
 
 import java.net.URL;
@@ -43,7 +46,7 @@ public class TradeDetailController extends AbstractController implements Initial
     private VBox left, right;
 
     @FXML
-    private HBox buttonPane;
+    private HBox buttonPane, globalPane;
 
     private ComboBox<User> rightComboBox, leftComboBox;
 
@@ -52,6 +55,8 @@ public class TradeDetailController extends AbstractController implements Initial
     private final Map<User, Map<User, UserTable>> userTablesCombination = new HashMap<>();
 
     private final CreateTrade createTrade;
+
+    private final Map<TradeOrder, WidgetBundle> widgetBundleMap = new HashMap<>();
 
     public TradeDetailController(ControllerResources controllerResources, Map<User, Collection<Item>> usersToItemsToGet) {
         super(controllerResources);
@@ -72,8 +77,8 @@ public class TradeDetailController extends AbstractController implements Initial
         }
 
 
-        rightComboBox = getUserComboBox(usersToItemsToGet.keySet());
-        leftComboBox = getUserComboBox(usersToItemsToGet.keySet());
+        rightComboBox = getUserComboBox(createTrade.getUsersInvolved());
+        leftComboBox = getUserComboBox(createTrade.getUsersInvolved());
         leftComboBox.setOnAction(e -> {
             User leftSelected = leftComboBox.getSelectionModel().getSelectedItem();
             User rightSelected = rightComboBox.getSelectionModel().getSelectedItem();
@@ -87,20 +92,30 @@ public class TradeDetailController extends AbstractController implements Initial
             leftComboBox.setItems(getUsersBesides(rightSelected));
         });
 
-        Label offersFollowingItems = new Label("  offers following items");
-        topLeftHBox.getChildren().addAll(leftComboBox, offersFollowingItems);
-        topRightHBox.getChildren().addAll(rightComboBox, offersFollowingItems);
-        Button finishTrade = getNodeFactory().getDefaultFlatButton("Finish Trade");
-        getPane(DashboardPane.TOP).getChildren().setAll(finishTrade);
-        finishTrade.setOnAction(e -> {
-            CreateTradeCommand createTradeCommand = getCommandFactory().getCommand(CreateTradeCommand::new, c -> c.setToUpdate(createTrade.getTrade()));
+        Label offersFollowingItemsA = new Label("  offers following items");
+        Label offersFollowingItemsB = new Label("  offers following items");
+        topLeftHBox.getChildren().addAll(leftComboBox, offersFollowingItemsA);
+        topRightHBox.getChildren().addAll(rightComboBox, offersFollowingItemsB);
+
+        TradeOptionWidget tradeOptionWidget = getControllerFactory().getController(TradeOptionWidget::new);
+
+
+        EventHandler<ActionEvent> handler = e -> {
+            CreateTradeCommand createTradeCommand = getCommandFactory().getCommand(
+                    CreateTradeCommand::new, c -> c.setToUpdate(createTrade.getTrade()));
+            for (Map.Entry<TradeOrder, WidgetBundle> entry : widgetBundleMap.entrySet()) {
+                entry.getKey().setAddressTrade(entry.getValue().tradeAddressWidget.getSubmittedAddress());
+                entry.getKey().setDateAndTime(entry.getValue().tradeTimeWidget.getTime());
+            }
             createTradeCommand.execute(new ResultStatusCallback<Trade>() {
                 @Override
                 public void call(Trade result, ResultStatus status) {
-
+                    status.handle(getPopupFactory());
                 }
             });
-        });
+        };
+        tradeOptionWidget.setEventHandler(handler);
+        globalPane.getChildren().addAll(getSceneManager().loadPane(tradeOptionWidget));
     }
 
     class WidgetBundle {
@@ -117,16 +132,22 @@ public class TradeDetailController extends AbstractController implements Initial
         }
     }
 
-    Map<User, Map<User, WidgetBundle>> detailViewsMap = new HashMap<>();
-
     private WidgetBundle createDetailLayoutIfNotExist(User leftSelected, User rightSelected) {
-        if (!detailViewsMap.containsKey(leftSelected)) {
-            detailViewsMap.put(leftSelected, new HashMap<>());
+        TradeOrder order = findOrderByUserPair(leftSelected, rightSelected);
+        if (order == null) return null;
+        if (!widgetBundleMap.containsKey(order)) {
+            widgetBundleMap.put(order, new WidgetBundle(leftSelected, rightSelected));
         }
-        if (!detailViewsMap.get(leftSelected).containsKey(rightSelected)) {
-            detailViewsMap.get(leftSelected).put(rightSelected, new WidgetBundle(leftSelected, rightSelected));
+        return widgetBundleMap.get(order);
+    }
+
+    private TradeOrder findOrderByUserPair(User a, User b) {
+        for (TradeOrder order : createTrade.getTrade().getOrders()) {
+            if (createTrade.ifUsersMatchOrder(order, a, b)) {
+                return order;
+            }
         }
-        return detailViewsMap.get(leftSelected).get(rightSelected);
+        return null;
     }
 
     private void refreshTableArea(User leftSelected, User rightSelected) {
@@ -135,11 +156,12 @@ public class TradeDetailController extends AbstractController implements Initial
                 .get(leftSelected).tableViewGenerator.getTableView());
         rightTableArea.getChildren().setAll(userTablesCombination.get(leftSelected)
                 .get(rightSelected).tableViewGenerator.getTableView());
-        createDetailLayoutIfNotExist(leftSelected, rightSelected).consume(buttonPane);
+        WidgetBundle widgetBundle = createDetailLayoutIfNotExist(leftSelected, rightSelected);
+        if (widgetBundle != null) widgetBundle.consume(buttonPane);
     }
 
     private ObservableList<User> getUsersBesides(User user) {
-        ObservableList<User> list = FXCollections.observableArrayList(usersToItemsToGet.keySet());
+        ObservableList<User> list = FXCollections.observableArrayList(createTrade.getUsersInvolved());
         list.remove(user);
         return list;
     }

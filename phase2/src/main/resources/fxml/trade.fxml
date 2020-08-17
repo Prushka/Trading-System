@@ -22,7 +22,9 @@
         </VBox>
     </right>
     <bottom>
-        <HBox fx:id="buttonPane" spacing="10">
+        <HBox fx:id="outer" spacing="10">
+            <HBox fx:id="buttonPane" spacing="10"/>
+            <HBox fx:id="globalPane" spacing="10"/>
             <padding>
                 <Insets bottom="25.0" left="10.0" right="25.0" top="35.0"/>
             </padding>

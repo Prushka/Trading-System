@@ -13,6 +13,9 @@ import phase2.trade.user.command.ChangeAccountState;
 import phase2.trade.view.window.AddressAlertController;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 public class TradeTimeWidget extends TradeDetailWidget {
@@ -36,5 +39,12 @@ public class TradeTimeWidget extends TradeDetailWidget {
         getRoot().setSpacing(15);
         getRoot().setPrefHeight(200);
         refresh();
+    }
+
+    public LocalDateTime getTime() {
+        LocalDate localDate = datePicker.getValue();
+        LocalTime localTime = timePicker.getValue();
+        if (localDate == null || localTime == null) return null;
+        return localDate.atTime(timePicker.getValue());
     }
 }

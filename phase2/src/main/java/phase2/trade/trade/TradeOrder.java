@@ -24,7 +24,6 @@ public class TradeOrder {
 
     private OrderState orderState;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getUid() {

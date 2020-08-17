@@ -8,9 +8,9 @@ import java.util.HashSet;
 
 public enum BottomSideOption {
 
-    SIGN_OUT("side.sign.out", "/image/logout.png"),
-    EXIT("side.exit", "/image/switch.png");
-    
+    EXIT("side.exit", "/svg/turnoff.svg"),
+    SIGN_OUT("side.sign.out", "/svg/logout.svg");
+
 
     public boolean ifDisplay(PermissionGroup permissionGroup) {
         return permissionGroups.contains(permissionGroup) || permissionGroups.size() == 0;

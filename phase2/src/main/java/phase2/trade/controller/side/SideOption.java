@@ -9,16 +9,15 @@ import java.util.HashSet;
 public enum SideOption {
 
     USER("side.user", "/svg/user.svg", PermissionGroup.REGULAR),
-    INVENTORY("side.inventory", "/image/shelf.png", PermissionGroup.REGULAR),
-    MARKET("side.market", "/image/marketplace.png", PermissionGroup.REGULAR, PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN, PermissionGroup.GUEST),
-    CART("side.cart", "/image/cart.png", PermissionGroup.REGULAR),
-    MANAGE_USERS("side.m.users", "/image/process.png", PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
-    MANAGE_USERS_OPERATIONS("side.m.user.ops", "/image/user.png", PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
-    MANAGE_ITEMS("side.m.items", "/image/shelf.png", PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
-    SUPPORT("side.support", "/image/support.png", PermissionGroup.REGULAR, PermissionGroup.FROZEN),
-    MANAGE_SUPPORT("side.m.support", "/image/support.png", PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
-    ORDER("side.orders", "/image/team.png", PermissionGroup.REGULAR);
-
+    INVENTORY("side.inventory", "/svg/stock.svg", PermissionGroup.REGULAR),
+    MARKET("side.market", "/svg/marketplace.svg", PermissionGroup.REGULAR, PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN, PermissionGroup.GUEST),
+    CART("side.cart", "/svg/supermarket.svg", PermissionGroup.REGULAR),
+    MANAGE_USERS("side.m.users", "/svg/process.svg", PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
+    MANAGE_USERS_OPERATIONS("side.m.user.ops", "/svg/users.svg", PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
+    MANAGE_ITEMS("side.m.items", "/svg/stock.svg", PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
+    SUPPORT("side.support", "/svg/support.svg", PermissionGroup.REGULAR, PermissionGroup.FROZEN),
+    MANAGE_SUPPORT("side.m.support", "/svg/support.svg", PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
+    ORDER("side.orders", "/svg/team.svg", PermissionGroup.REGULAR);
 
     public String resourcePath;
     public String language;

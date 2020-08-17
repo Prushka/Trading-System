@@ -1,7 +1,9 @@
 package phase2.trade.view;
 
 import com.jfoenix.svg.SVGGlyph;
+import javafx.scene.CacheHint;
 import javafx.scene.Node;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -20,33 +22,33 @@ public class ImageFactory {
 
     Node node = null;
 
-    private final double defaultWidth = 20;
-    private final double defaultHeight = 20;
+    private final double defaultWidth = 25;
+    private final double defaultHeight = 25;
+    private final double defaultBrightness = 1;
 
-    public Node generateGraphic(String filePath, Paint color, double width, double height) {
-        return generateGraphic(Main.class.getResource(filePath), color, width, height);
+    public Node generateGraphic(String filePath, double brightness, double width, double height) {
+        return generateGraphic(Main.class.getResource(filePath), brightness, width, height);
     }
 
-    // The reason why svg is not widely used is because the color and multiple paths don't render correctly.
-    // And I do not have the time to find an appropriate library.
-    // Currently single path svg can be used without problem.
-    public Node generateGraphic(URL url, Paint color, double width, double height) {
+    // https://stackoverflow.com/questions/18124364/how-to-change-color-of-image-in-javafx
+    public Node generateGraphic(URL url, double brightness, double width, double height) {
         try {
             if (url != null) {
-                String extension = url.getPath().substring(url.getPath().lastIndexOf(".")).toLowerCase();
-                switch (extension) {
-                    case ".svg":
-                        SVGGlyph svgGlyph = extract(url, color);
-                        svgGlyph.setSize(width, height);
-                        node = svgGlyph;
-                        break;
-                    default:
-                        ImageView imageView = new ImageView(new Image(url.openStream()));
-                        imageView.setFitWidth(width);
-                        imageView.setFitHeight(height);
-                        node = imageView;
-                        break;
-                }
+                // String extension = url.getPath().substring(url.getPath().lastIndexOf(".")).toLowerCase();
+                Image image = new Image(url.openStream(),defaultWidth,defaultHeight,true,true);
+
+                ImageView imageView = new ImageView(image);
+
+                ColorAdjust blackout = new ColorAdjust();
+                blackout.setBrightness(brightness);
+
+                imageView.setEffect(blackout);
+                imageView.setCache(true);
+                imageView.setCacheHint(CacheHint.SPEED);
+
+                imageView.setFitWidth(width);
+                imageView.setFitHeight(height);
+                node = imageView;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -54,56 +56,7 @@ public class ImageFactory {
         return node;
     }
 
-    public Node generateGraphic(Category input) {
-        return generateGraphic(input.resourcePath, Color.WHITE, this.defaultWidth, this.defaultHeight);
+    public Node generateGraphic(String path) {
+        return generateGraphic(path, defaultBrightness, this.defaultWidth, this.defaultHeight);
     }
-
-    public Node generateGraphic(String general) {
-        String path = null;
-        switch (general) {
-            case "user":
-                path = "/svg/user.svg";
-                break;
-            default:
-                path = general;
-                break;
-        }
-        return generateGraphic(path, Color.WHITE, this.defaultWidth, this.defaultHeight);
-    }
-
-
-    // the methods below are modified from SVGGlyphLoader
-    // the loader requires the filename to have a specific format
-    private SVGGlyph extract(URL url, Paint paint) throws IOException {
-        return new SVGGlyph(extractSvgPath(getStringFromInputStream(url.openStream())), paint);
-    }
-
-    private String getStringFromInputStream(InputStream is) {
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    private String extractSvgPath(String svgString) {
-        return svgString.replaceFirst(".*d=\"", "").replaceFirst("\".*", "");
-    }
-
 }

@@ -3,7 +3,6 @@ import phase2.trade.config.ConfigBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.database.DatabaseResourceBundle;
 import phase2.trade.user.AccountManager;
-import phase2.trade.user.RegularUser;
 
 import java.util.logging.Level;
 
@@ -17,7 +16,7 @@ public class CommandTest {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
 
         ConfigBundle configBundle = new ConfigBundle();
-        gatewayBundle = new GatewayBundle(new DatabaseResourceBundle(configBundle.getDatabaseConfig()).getDaoBundle(), new ConfigBundle());
+        gatewayBundle = new GatewayBundle(new DatabaseResourceBundle(configBundle.getDatabaseConfig()).getEntityGatewayBundle(), new ConfigBundle());
 
         AccountManager accountManager = new AccountManager(gatewayBundle);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);

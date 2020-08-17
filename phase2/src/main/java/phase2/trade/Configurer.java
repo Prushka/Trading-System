@@ -34,7 +34,7 @@ public class Configurer {
         DatabaseResourceBundle databaseResourceBundle = new DatabaseResourceBundle(configBundle.getDatabaseConfig());
 
         shutdownHook.addShutdownables(databaseResourceBundle, configBundle);
-        gatewayBundle = new GatewayBundle(databaseResourceBundle.getDaoBundle(), configBundle);
+        gatewayBundle = new GatewayBundle(databaseResourceBundle.getEntityGatewayBundle(), configBundle);
 
         accountManager = new AccountManager(gatewayBundle);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);

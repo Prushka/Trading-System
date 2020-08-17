@@ -10,12 +10,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import phase2.trade.callback.ResultStatusCallback;
+import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
+import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
+import phase2.trade.trade.command.CreateTradeCommand;
 import phase2.trade.user.User;
 import phase2.trade.view.widget.TradeAddressWidget;
 import phase2.trade.view.widget.TradeTimeWidget;
@@ -47,17 +51,13 @@ public class TradeDetailController extends AbstractController implements Initial
 
     private final Map<User, Map<User, UserTable>> userTablesCombination = new HashMap<>();
 
-    private final Collection<Item> allItems = new HashSet<>();
-
     private final CreateTrade createTrade;
 
-    public TradeDetailController(ControllerResources controllerResources, Map<User, Collection<Item>> userToItemToGet) {
+    public TradeDetailController(ControllerResources controllerResources, Map<User, Collection<Item>> usersToItemsToGet) {
         super(controllerResources);
-        this.userToItemToGet = userToItemToGet;
+        this.userToItemToGet = usersToItemsToGet;
 
-        userToItemToGet.values().forEach(allItems::addAll);
-
-        createTrade = new CreateTrade(allItems);
+        createTrade = new CreateTrade(usersToItemsToGet);
 
     }
 
@@ -87,12 +87,19 @@ public class TradeDetailController extends AbstractController implements Initial
             leftComboBox.setItems(getUsersBesides(rightSelected));
         });
 
-        topLeftHBox.getChildren().addAll(leftComboBox);
-        topRightHBox.getChildren().addAll(rightComboBox);
+        Label offersFollowingItems = new Label("  offers following items");
+        topLeftHBox.getChildren().addAll(leftComboBox, offersFollowingItems);
+        topRightHBox.getChildren().addAll(rightComboBox, offersFollowingItems);
         Button finishTrade = getNodeFactory().getDefaultFlatButton("Finish Trade");
-        getPane(DashboardPane.TOP).getChildren().addAll(finishTrade);
+        getPane(DashboardPane.TOP).getChildren().setAll(finishTrade);
         finishTrade.setOnAction(e -> {
+            CreateTradeCommand createTradeCommand = getCommandFactory().getCommand(CreateTradeCommand::new, c -> c.setToUpdate(createTrade.getTrade()));
+            createTradeCommand.execute(new ResultStatusCallback<Trade>() {
+                @Override
+                public void call(Trade result, ResultStatus status) {
 
+                }
+            });
         });
     }
 

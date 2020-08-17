@@ -4,20 +4,19 @@ import phase2.trade.config.ConfigBundle;
 
 public class GatewayBundle {
 
-    EntityBundle entityBundle;
+    EntityGatewayBundle entityBundle;
 
     ConfigBundle configBundle;
-
 
     public ConfigBundle getConfigBundle() {
         return configBundle;
     }
 
-    public EntityBundle getEntityBundle() {
+    public EntityGatewayBundle getEntityBundle() {
         return entityBundle;
     }
 
-    public GatewayBundle(EntityBundle entityBundle, ConfigBundle configBundle) {
+    public GatewayBundle(EntityGatewayBundle entityBundle, ConfigBundle configBundle) {
         this.entityBundle = entityBundle;
         this.configBundle = configBundle;
     }

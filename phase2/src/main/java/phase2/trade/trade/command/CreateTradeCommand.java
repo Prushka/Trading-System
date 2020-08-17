@@ -7,6 +7,7 @@ import phase2.trade.command.CommandProperty;
 import phase2.trade.item.Item;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeCreator;
+import phase2.trade.trade.TradeOrder;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
@@ -18,32 +19,24 @@ import java.util.Set;
 
 @Entity
 @CommandProperty(crudType = CRUDType.CREATE, undoable = false, persistent = true)
-public class CreateTrade extends TradeCommand<Trade>{
-
-    private transient TradeCreator tc;
-    private transient List<User> users;
-    private transient List<Set<Item>> items;
+public class CreateTradeCommand extends TradeCommand<Trade> {
 
     @Override
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
-        /*
-        tc = new TradeCreator();
         if (!checkPermission(callback)) return;
-        getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
-            Trade newTrade = tc.createTrade(users, items, args[0], args[1], args[2], args[3],
-                    args[4], args[5], args[6], args[7]);
-            gateway.add(newTrade);
-            if (callback != null)
-                callback.call(newTrade, new StatusSucceeded());
+        getEntityBundle().getUserOrderBundleGateway().submitTransaction((gateway) -> {
+            for (TradeOrder order : toUpdate.getOrders()) {
+                gateway.add(order.getInitiator());
+                gateway.add(order.getTarget());
+            }
+            getEntityBundle().getTradeGateway().submitTransaction((tradeGateway) -> {
+                tradeGateway.add(toUpdate);
+                if (callback != null)
+                    callback.call(toUpdate, new StatusSucceeded());
+            }, false);
         });
-         */
+
+
     }
 
-    public void setTraders(List<User> users){
-        this.users = users;
-    }
-
-    public void setTraderItems(List<Set<Item>> items){
-        this.items = items;
-    }
 }

@@ -7,17 +7,19 @@ import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public class CreateTrade {
 
-    private final Collection<Item> allItemsInvolved;
+    private final Map<User, Collection<Item>> usersToItemsToGet;
 
     private final Trade trade = new Trade();
 
-    public CreateTrade(Collection<Item> allItemsInvolved) {
-        this.allItemsInvolved = allItemsInvolved;
+    private final Collection<Item> allItems = new HashSet<>();
+
+    public CreateTrade(Map<User, Collection<Item>> usersToItemsToGet) {
+        this.usersToItemsToGet = usersToItemsToGet;
+        usersToItemsToGet.values().forEach(allItems::addAll);
     }
 
     public void createTwoWayUserOrderBundle(User initiator, User target, Collection<Item> itemsInitiatorWant, Collection<Item> itemsTargetWant) {
@@ -38,7 +40,7 @@ public class CreateTrade {
         initiatorBundle.setTradeItemHolder(initiatorHolder);
         targetBundle.setTradeItemHolder(targetHolder);
 
-        for (Item item : allItemsInvolved) {
+        for (Item item : allItems) {
             if (item.getOwner().getUid().equals(initiator.getUid()) && itemsTargetWant.contains(item)) { // initiator owns the item and target wants it
                 initiatorHolder.addItem(item);
             } else if (item.getOwner().getUid().equals(target.getUid()) && itemsInitiatorWant.contains(item)) {
@@ -49,7 +51,18 @@ public class CreateTrade {
         order.setTarget(targetBundle);
         order.setInitiator(initiatorBundle);
         trade.getOrders().add(order);
-        System.out.println(trade.getOrders().size());
+    }
+
+    public void cleanup() {
+        Set<TradeOrder> ordersToRemove = new HashSet<>();
+        for (TradeOrder order : trade.getOrders()) {
+            if (order.getTarget().getTradeItemHolder().size() == 0 && order.getInitiator().getTradeItemHolder().size() == 0) {
+                ordersToRemove.add(order);
+                usersToItemsToGet.remove(order.getTarget().getUser());
+                usersToItemsToGet.remove(order.getInitiator().getUser());
+            }
+        }
+        trade.getOrders().removeAll(ordersToRemove);
     }
 
     public void createOrder(Map<User, Collection<Item>> userToItemToGet) {
@@ -59,6 +72,7 @@ public class CreateTrade {
                 // only need combinations here. But whatever
             }
         }
+        //cleanup();
     }
 
     public Trade getTrade() {

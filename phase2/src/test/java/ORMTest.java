@@ -3,14 +3,13 @@ import phase2.trade.config.ConfigBundle;
 import phase2.trade.gateway.*;
 import phase2.trade.database.*;
 import phase2.trade.item.Item;
-import phase2.trade.user.RegularUser;
 import phase2.trade.user.User;
 
 import java.util.logging.Level;
 
 public class ORMTest {
 
-    private final EntityBundle bundle;
+    private final EntityGatewayBundle bundle;
 
     private UserGateway userDAO;
     private ItemGateway itemDAO;
@@ -18,7 +17,7 @@ public class ORMTest {
     public ORMTest() {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         ConfigBundle configBundle = new ConfigBundle();
-        bundle = new DatabaseResourceBundle(configBundle.getDatabaseConfig()).getDaoBundle();
+        bundle = new DatabaseResourceBundle(configBundle.getDatabaseConfig()).getEntityGatewayBundle();
 
         userDAO = bundle.getUserGateway();
         itemDAO = bundle.getItemGateway();

@@ -1,45 +1,10 @@
 package phase2.trade.controller.market;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import phase2.trade.callback.ResultStatusCallback;
-import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.controller.AbstractListController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.inventory.ItemListType;
-import phase2.trade.item.Item;
-import phase2.trade.item.controller.CartController;
-import phase2.trade.trade.MeetUpOrder;
 import phase2.trade.trade.Trade;
-import phase2.trade.trade.TradeOrder;
-import phase2.trade.trade.command.ConfirmTrade;
-import phase2.trade.trade.command.CreateTrade;
-import phase2.trade.trade.command.EditTrade;
-import phase2.trade.trade.command.TradeCommand;
-import phase2.trade.user.User;
-import phase2.trade.view.window.GeneralVBoxAlert;
-
-import java.net.URL;
-import java.time.DateTimeException;
-import java.time.LocalDateTime;
-import java.util.*;
 
 @ControllerProperty(viewFile = "market.fxml")
 public class MarketController extends AbstractListController<Trade> implements Initializable {

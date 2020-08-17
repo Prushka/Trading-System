@@ -6,6 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import phase2.trade.Shutdownable;
 import phase2.trade.config.DatabaseConfig;
+import phase2.trade.gateway.EntityGatewayBundle;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,7 +19,7 @@ public class DatabaseResourceBundle implements Shutdownable {
 
     private final SessionFactory sessionFactory;
 
-    private final DAOBundle daoBundle;
+    private final EntityGatewayBundle entityGatewayBundle;
 
     public DatabaseResourceBundle(DatabaseConfig databaseConfig) {
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
@@ -44,7 +45,7 @@ public class DatabaseResourceBundle implements Shutdownable {
         sessionFactory = configuration.configure().buildSessionFactory();
         threadPool = Executors.newFixedThreadPool(databaseConfig.getPoolSize());
 
-        daoBundle = new DAOBundle(this);
+        entityGatewayBundle = new EntityGatewayBundle(this);
     }
 
     public SessionFactory getSessionFactory() {
@@ -60,7 +61,7 @@ public class DatabaseResourceBundle implements Shutdownable {
         threadPool.shutdown();
     }
 
-    public DAOBundle getDaoBundle() {
-        return daoBundle;
+    public EntityGatewayBundle getEntityGatewayBundle() {
+        return entityGatewayBundle;
     }
 }

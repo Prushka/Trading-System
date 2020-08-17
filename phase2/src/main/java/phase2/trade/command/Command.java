@@ -7,11 +7,9 @@ import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusNoPermission;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.config.ConfigBundle;
-import phase2.trade.editor.EntityIdLookUp;
-import phase2.trade.gateway.EntityBundle;
+import phase2.trade.gateway.EntityGatewayBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.*;
-import phase2.trade.support.SupportTicket;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
@@ -210,7 +208,7 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
     }
 
     @Transient
-    protected EntityBundle getEntityBundle() {
+    protected EntityGatewayBundle getEntityBundle() {
         return gatewayBundle.getEntityBundle();
     }
 

@@ -63,7 +63,7 @@ public class ItemManageController extends ItemController implements Initializabl
         addSearchDescription();
         addCategoryComboBox();
         addOwnershipComboBox();
-        addWillingnessCheckBoxes();
+        addWillingnessCheckBoxes(true);
 
         JFXButton deleteButton = new JFXButton("Delete");
 

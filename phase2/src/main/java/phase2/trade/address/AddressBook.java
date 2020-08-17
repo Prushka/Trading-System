@@ -24,15 +24,23 @@ public class AddressBook {
         return addresses.get(addressSelected);
     }
 
-    public int getAddressSelected() {
-        return addressSelected;
+    public Address cloneSelectedAddressWithoutDetail() {
+        Address selected = getSelectedAddress();
+        Address newAddress = new Address();
+        if (selected == null) {
+            return null;
+        }
+        newAddress.setCountry(selected.getCountry());
+        newAddress.setCity(selected.getCity());
+        newAddress.setTerritory(selected.getTerritory());
+        return newAddress;
     }
 
     public void setSelectedAddress(Address address) {
         if (getSelectedAddress() == null) {
             addresses.add(address);
         } else {
-            addresses.set(getAddressSelected(), address);
+            addresses.set(addressSelected, address);
         }
     }
 

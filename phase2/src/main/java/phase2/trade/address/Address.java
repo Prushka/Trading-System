@@ -3,6 +3,7 @@ package phase2.trade.address;
 import javax.persistence.*;
 
 @Entity
+@Embeddable
 public class Address {
 
 

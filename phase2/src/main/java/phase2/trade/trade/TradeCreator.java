@@ -1,10 +1,14 @@
 package phase2.trade.trade;
 
+import phase2.trade.address.Address;
+import phase2.trade.inventory.TradeItemHolder;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class TradeCreator {

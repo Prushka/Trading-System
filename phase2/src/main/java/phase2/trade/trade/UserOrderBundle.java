@@ -16,7 +16,7 @@ public class UserOrderBundle {
     private User user;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private TradeItemHolder tradeItemHolder;
+    private TradeItemHolder tradeItemHolder; // the items this user is providing
 
     private int edit;
 
@@ -24,10 +24,6 @@ public class UserOrderBundle {
 
     public Long getUid() {
         return uid;
-    }
-
-    public void setUid(Long uid) {
-        this.uid = uid;
     }
 
     public User getUser() {

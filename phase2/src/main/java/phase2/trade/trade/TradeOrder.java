@@ -1,15 +1,9 @@
 package phase2.trade.trade;
 
-import phase2.trade.item.Item;
-import phase2.trade.user.RegularUser;
-import phase2.trade.user.User;
+import phase2.trade.address.Address;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -23,6 +17,13 @@ public class TradeOrder {
 
     private LocalDateTime dateAndTime;
 
+    private Address addressTrade;
+
+    private Address addressTradeBack;
+
+    private OrderState orderState;
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getUid() {
@@ -32,6 +33,7 @@ public class TradeOrder {
     public void setUid(Long uid) {
         this.uid = uid;
     }
+
 
     @OneToOne
     public UserOrderBundle getInitiator() {
@@ -57,6 +59,32 @@ public class TradeOrder {
 
     public void setDateAndTime(LocalDateTime dateAndTime) {
         this.dateAndTime = dateAndTime;
+    }
+
+    @OneToOne
+    public Address getAddressTrade() {
+        return addressTrade;
+    }
+
+    public void setAddressTrade(Address addressTrade) {
+        this.addressTrade = addressTrade;
+    }
+
+    @OneToOne
+    public Address getAddressTradeBack() {
+        return addressTradeBack;
+    }
+
+    public void setAddressTradeBack(Address addressTradeBack) {
+        this.addressTradeBack = addressTradeBack;
+    }
+
+    public OrderState getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(OrderState orderState) {
+        this.orderState = orderState;
     }
 
     /*

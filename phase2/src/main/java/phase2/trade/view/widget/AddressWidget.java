@@ -2,7 +2,9 @@ package phase2.trade.view.widget;
 
 import javafx.scene.control.Label;
 import phase2.trade.address.Address;
+import phase2.trade.callback.Callback;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.user.command.ChangeAddress;
 import phase2.trade.view.window.AddressAlertController;
 
 import java.net.URL;
@@ -29,6 +31,21 @@ public class AddressWidget extends SmallTextWidgetController {
         addressAlertController.setAddress(address);
         addTitle(countryLabel);
         addContent(provinceLabel, cityLabel);
+
+        addressAlertController.setEventHandler(event -> {
+            ChangeAddress changeAddress = getCommandFactory().getCommand(ChangeAddress::new);
+            changeAddress.execute((result, status) -> {
+                        status.setSucceeded(this::refresh);
+                        status.handle(getPopupFactory());
+                    },
+                    addressAlertController.getCountryCombo().getSelectionModel().getSelectedItem(),
+                    addressAlertController.getProvinceCombo().getSelectionModel().getSelectedItem(),
+                    addressAlertController.getCityCombo().getSelectionModel().getSelectedItem(),
+                    addressAlertController.getAddressLine1().getText(),
+                    addressAlertController.getAddressLine2().getText(),
+                    addressAlertController.getPostalCode().getText());
+        });
+
         setOnMouseClicked(e -> addressAlertController.display());
         refresh();
     }

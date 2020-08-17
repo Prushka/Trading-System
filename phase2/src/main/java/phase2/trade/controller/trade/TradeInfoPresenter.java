@@ -23,9 +23,11 @@ public class TradeInfoPresenter implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+    /*
         userId.setText("User Id: " + trade.getUid());
         tradeState.setText("Trade State: " + trade.getTradeState());
         isPermanent.setText("Email: " + trade.getIsPermanent());
-
+*/
     }
 }

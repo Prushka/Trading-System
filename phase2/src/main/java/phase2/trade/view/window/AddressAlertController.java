@@ -1,11 +1,12 @@
 package phase2.trade.view.window;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import phase2.trade.address.Address;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.user.command.ChangeAddress;
 
 public class AddressAlertController extends AbstractController {
 
@@ -32,16 +33,11 @@ public class AddressAlertController extends AbstractController {
 
 
         addressAlert.addNodes(countryCombo, provinceCombo, cityCombo, addressLine1, addressLine2, postalCode);
-        addressAlert.setEventHandler(event -> {
-            ChangeAddress changeAddress = getCommandFactory().getCommand(ChangeAddress::new);
-            changeAddress.execute((result, status) -> {
-                        status.setSucceeded(this::refresh);
-                        status.handle(getPopupFactory());
-                    },
-                    countryCombo.getSelectionModel().getSelectedItem(),
-                    provinceCombo.getSelectionModel().getSelectedItem(), cityCombo.getSelectionModel().getSelectedItem()
-                    , addressLine1.getText(), addressLine2.getText(), postalCode.getText());
-        });
+
+    }
+
+    public void setEventHandler(EventHandler<ActionEvent> eventHandler){
+        addressAlert.setEventHandler(eventHandler);
     }
 
     public void display() {

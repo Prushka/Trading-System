@@ -18,10 +18,12 @@ import javafx.scene.layout.VBox;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemFilter;
 import phase2.trade.user.User;
 import phase2.trade.view.TableViewGenerator;
+import phase2.trade.view.window.AddressAlertController;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -52,32 +54,6 @@ public class TradeController extends AbstractController implements Initializable
     @FXML
     private HBox buttonPane;
 
-    class UserTable extends AllTable {
-        User owner;
-
-        UserTable(User owner) {
-            super(FXCollections.observableArrayList());
-            this.owner = owner;
-        }
-    }
-
-    class AllTable {
-        TableViewGenerator<Item> tableViewGenerator;
-        TargetUserTableController targetUserTableController;
-
-        AllTable(ObservableList<Item> items) {
-            tableViewGenerator = new TableViewGenerator<>(items);
-            tableViewGenerator.getTableView().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-            tableViewGenerator.getTableView().setPrefWidth(650);
-            targetUserTableController = new TargetUserTableController(getControllerResources(), tableViewGenerator);
-            tableViewGenerator.getTableView().setItems(items);
-        }
-
-        TableView<Item> getTableView() {
-            return tableViewGenerator.getTableView();
-        }
-    }
-
     Map<User, UserTable> userTables = new HashMap<>();
     AllTable allTable;
 
@@ -94,13 +70,13 @@ public class TradeController extends AbstractController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         selectedItems.addAll(new ItemFilter(getAccountManager().getLoggedInUser()).getTradableItems());
-        allTable = new AllTable(selectedItems);
+        allTable = new AllTable(selectedItems, getControllerResources());
         selectedItems.forEach(item -> allItems.put(item.getUid(), item));
 
         for (Item item : selectedItems) {
             User owner = item.getOwner();
             if (!userTables.containsKey(owner)) {
-                UserTable userTable = new UserTable(owner);
+                UserTable userTable = new UserTable(owner, getControllerResources());
                 userTables.put(owner, userTable);
             }
         }
@@ -127,19 +103,31 @@ public class TradeController extends AbstractController implements Initializable
         topRightHBox.getChildren().addAll(rightComboBox, willGetFollowingItems);
 
         Button test = new JFXButton("TEST");
+        Button test2 = new JFXButton("TEST2");
+
+        AddressAlertController addressAlertController = getControllerFactory().getController(AddressAlertController::new);
+        addressAlertController.setAddress(getAccountManager().getLoggedInUser().getAddressBook().cloneSelectedAddressWithoutDetail());
 
         leftComboBox = new JFXComboBox<>();
         leftComboBox.setVisible(false);
         topLeftHBox.getChildren().addAll(leftComboBox);
         DatePicker datePicker = new JFXDatePicker();
         JFXTimePicker timePicker = new JFXTimePicker();
-        buttonPane.getChildren().addAll(datePicker, timePicker, test);
+        buttonPane.getChildren().addAll(datePicker, timePicker, test, test2);
 
         test.setOnAction(e -> {
             LocalTime localTime = timePicker.getValue();
             LocalDate localDate = datePicker.getValue();
             LocalDateTime localDateTime = localDate.atTime(localTime);
             System.out.println(localDateTime);
+        });
+        test2.setOnAction(e -> {
+            Map<User, Collection<Item>> userToItemToGet = new HashMap<>();
+            for (Map.Entry<User, UserTable> entry : userTables.entrySet()) {
+                userToItemToGet.put(entry.getKey(), entry.getValue().getTableView().getItems());
+            }
+            TradeDetailController tradeDetailController = new TradeDetailController(getControllerResources(), userToItemToGet);
+            getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(tradeDetailController));
         });
     }
 
@@ -209,27 +197,6 @@ public class TradeController extends AbstractController implements Initializable
                 }
         );
     }
-
-    /*
-    private Map<User, UserTable> getUserTables() {
-        Map<User, UserTable> targetTables = new HashMap<>();
-        Collection<Item> userItems = new ItemFilter(getAccountManager().getLoggedInUser()).getTradableItems();
-        for (Item item : selectedItems) {
-            if (!targetTables.containsKey(item.getOwner())) {
-                UserTable userTable = new UserTable(item.getOwner());
-                targetTables.put(item.getOwner(), userTable);
-                userTable.addItem(item);
-            } else {
-                targetTables.get(item.getOwner()).addItem(item);
-            }
-        }
-        UserTable currUserTable = new UserTable(getAccountManager().getLoggedInUser());
-        currUserTable.addItem(userItems);
-        targetTables.put(getAccountManager().getLoggedInUser(), currUserTable);
-        targetTables.values().forEach(UserTable::build);
-        return targetTables;
-    }
-     */
 
     private ComboBox<User> getUserComboBox(Collection<User> users) {
         ComboBox<User> comboBox = new JFXComboBox<>();

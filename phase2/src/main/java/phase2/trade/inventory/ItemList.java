@@ -36,7 +36,7 @@ public abstract class ItemList {
         getSetOfItems().addAll(Arrays.asList(items));
     }
 
-    public void addItem(Set<Item> items) {
+    public void addItem(Collection<Item> items) {
         this.getSetOfItems().addAll(items);
     }
 

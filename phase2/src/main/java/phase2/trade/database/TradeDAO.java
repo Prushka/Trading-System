@@ -1,10 +1,9 @@
 package phase2.trade.database;
 
-import org.hibernate.query.Query;
 import phase2.trade.gateway.TradeGateway;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
-import phase2.trade.trade.TradeState;
+import phase2.trade.trade.OrderState;
 import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
@@ -44,7 +43,7 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
         criteria((builder, query, root) -> {
             Predicate restrictions = builder.or(
                     builder.and(
-                            builder.equal(root.get("tradeState"), TradeState.CLOSED))
+                            builder.equal(root.get("tradeState"), OrderState.CLOSED))
             );
             query.select(root).where(restrictions);
             executeCriteriaQuery(result, query);
@@ -57,7 +56,7 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
         criteria((builder, query, root) -> {
             Predicate restrictions = builder.or(
                     builder.and(
-                            builder.equal(root.get("tradeState"), TradeState.CLOSED))
+                            builder.equal(root.get("tradeState"), OrderState.CLOSED))
             );
             query.select(root).where(restrictions);
             executeCriteriaQuery(result, query);
@@ -70,7 +69,7 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
         criteria((builder, query, root) -> {
             Predicate restrictions = builder.or(
                     builder.and(
-                            builder.equal(root.get("tradeState"), TradeState.CLOSED))
+                            builder.equal(root.get("tradeState"), OrderState.CLOSED))
             );
             query.select(root).where(restrictions);
             executeCriteriaQuery(result, query);

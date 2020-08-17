@@ -2,6 +2,7 @@ package phase2.trade.item.controller;
 
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -73,26 +74,14 @@ public class TradeDetailController extends AbstractController implements Initial
         leftComboBox.setOnAction(e -> {
             User leftSelected = leftComboBox.getSelectionModel().getSelectedItem();
             User rightSelected = rightComboBox.getSelectionModel().getSelectedItem();
-            rightComboBox.getItems().setAll(userToItemToGet.keySet());
-            rightComboBox.getItems().remove(leftSelected);
-            if (userTablesCombination.containsKey(leftSelected)) {
-                leftTableArea.getChildren().setAll(userTablesCombination.get(leftSelected)
-                        .get(leftSelected).tableViewGenerator.getTableView());
-                if (userTablesCombination.get(leftSelected).containsKey(rightSelected)) {
-                    rightTableArea.getChildren().setAll(userTablesCombination.get(leftSelected)
-                            .get(rightSelected).tableViewGenerator.getTableView());
-                }
-            }
+            refreshTableArea(leftSelected, rightSelected);
+            rightComboBox.setItems(getUsersBesides(leftSelected));
         });
         rightComboBox.setOnAction(e -> {
             User leftSelected = leftComboBox.getSelectionModel().getSelectedItem();
             User rightSelected = rightComboBox.getSelectionModel().getSelectedItem();
-            if (userTablesCombination.containsKey(leftSelected) && userTablesCombination.get(leftSelected).containsKey(rightSelected)) {
-                leftComboBox.getItems().setAll(userToItemToGet.keySet());
-                leftComboBox.getItems().remove(rightSelected);
-                rightTableArea.getChildren().setAll(userTablesCombination.get(leftSelected)
-                        .get(rightSelected).tableViewGenerator.getTableView());
-            }
+            refreshTableArea(leftSelected, rightSelected);
+            leftComboBox.setItems(getUsersBesides(rightSelected));
         });
 
         topLeftHBox.getChildren().addAll(leftComboBox);
@@ -101,10 +90,16 @@ public class TradeDetailController extends AbstractController implements Initial
 
     private void refreshTableArea(User leftSelected, User rightSelected) {
         if (leftSelected == null || rightSelected == null) return;
-        leftTableArea.getChildren().setAll(userTablesCombination.get(leftSelected)
+        leftTableArea.getChildren().setAll(userTablesCombination.get(rightSelected)
                 .get(leftSelected).tableViewGenerator.getTableView());
         rightTableArea.getChildren().setAll(userTablesCombination.get(leftSelected)
                 .get(rightSelected).tableViewGenerator.getTableView());
+    }
+
+    private ObservableList<User> getUsersBesides(User user){
+        ObservableList<User> list = FXCollections.observableArrayList(userToItemToGet.keySet());
+        list.remove(user);
+        return list;
     }
 
     private Map<User, UserTable> getUserTables(User matchesWhom) {

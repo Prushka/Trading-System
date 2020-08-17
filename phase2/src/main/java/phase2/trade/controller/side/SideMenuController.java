@@ -1,12 +1,15 @@
 package phase2.trade.controller.side;
 
+import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import phase2.trade.controller.*;
+import phase2.trade.controller.market.MarketController;
 import phase2.trade.item.controller.CartController;
 import phase2.trade.item.controller.InventoryController;
 import phase2.trade.controller.market.MarketListController;
@@ -105,13 +108,13 @@ public class SideMenuController extends AbstractController implements Initializa
                         break;
                     case MARKET:
                         getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(new MarketListController(getControllerResources())));
-                        // loadCenter(MarketController::new);
                         break;
                     case INVENTORY:
                         inventory();
                         break;
                     case CART:
-                        cart();
+                        // cart();
+                        loadCenter(MarketController::new);
                         break;
                     case MANAGE_USERS_OPERATIONS:
                         loadCenter(UserOperationController::new);

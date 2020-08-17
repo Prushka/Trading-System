@@ -23,10 +23,10 @@ public class EditTrade extends TradeCommand<Trade> {
         if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
             Trade currTrade = gateway.findById(tradeId);
-            Trade trade = te.edit(currTrade, operator, args);
+            te.edit(currTrade, operator, args);
+            gateway.update(currTrade);
             if (callback != null)
-                callback.call(trade, new StatusSucceeded());
-            gateway.update(trade);
+                callback.call(currTrade, new StatusSucceeded());
         });
     }
 

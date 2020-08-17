@@ -137,7 +137,7 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
     @Deprecated
     protected void addReloadButton(ControllerSupplier<?> controllerSupplier) {
         Button button = new JFXButton();
-        button.setGraphic(new ImageFactory().generateGraphic("/image/refresh.png", Color.WHITE, 25, 25));
+        button.setGraphic(new ImageFactory().generateGraphic("/image/refresh.png", 1, 25, 25));
         button.setOnAction(event -> getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controllerSupplier)));
         getPane("topBar").getChildren().addAll(button);
     }

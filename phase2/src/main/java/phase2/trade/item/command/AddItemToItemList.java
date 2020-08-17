@@ -1,8 +1,11 @@
 package phase2.trade.item.command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
+import phase2.trade.command.Command;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
@@ -18,6 +21,7 @@ import javax.persistence.Entity;
         persistent = true, permissionSet = {Permission.ManagePersonalItems})
 public class AddItemToItemList extends ItemCommand<Item> {
 
+    private static final Logger logger = LogManager.getLogger(AddItemToItemList.class);
 
     private ItemListType itemListType;
 
@@ -26,8 +30,8 @@ public class AddItemToItemList extends ItemCommand<Item> {
         if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
 
-            // logger.info(String.format("Adding Item: Name %s | Description %s | Category %s | Quantity %s | Willingness %s | Price %s",
-            //         name, description, category, quantity, willingness, price));
+            logger.info(String.format("Adding Item: Name %s | Description %s | Category %s | Quantity %s | Willingness %s | Price %s",
+                    argRequired(0, args), argRequired(1, args), argRequired(2, args), argRequired(3, args), argRequired(4, args), argRequired(5, args)));
 
             Item item = new Item();
             item.setName(argRequired(0, args));
@@ -36,10 +40,11 @@ public class AddItemToItemList extends ItemCommand<Item> {
             item.setQuantity(Integer.parseInt(argRequired(3, "1", args)));
             item.setWillingness(Willingness.valueOf(argRequired(4, Willingness.Private.name(), args)));
             item.setPrice(Double.parseDouble(argRequired(5, "-1", args)));
-            System.out.println(argRequired(5,args));
-            item.setOwner(operator);
-            item.setOwnership(Ownership.TO_BE_REVIEWED);
 
+            item.setOwner(operator);
+
+            item.setOwnership(Ownership.TO_BE_REVIEWED);
+            System.out.println("1");
             operator.getItemList(itemListType).addItem(item);
             gateway.update(operator);
             addEffectedEntity(Item.class, item.getUid());

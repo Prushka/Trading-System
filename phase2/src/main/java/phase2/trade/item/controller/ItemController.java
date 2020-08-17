@@ -56,7 +56,7 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
                     event -> shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
                     }, ItemEditor::alterDescription));
         } else {
-            tableViewGenerator.addColumn("Description", "description");
+            tableViewGenerator.addColumn("Description", "description", getConfigBundle().getUiConfig().getItemDescriptionPrefWidth());
         }
     }
 
@@ -114,7 +114,7 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
     }
 
     protected void addOwnerColumn() {
-        tableViewGenerator.addColumn("Name", param -> new SimpleStringProperty(param.getValue().getOwner().getName()));
+        tableViewGenerator.addColumn("Owner", param -> new SimpleStringProperty(param.getValue().getOwner().getName()));
     }
 
     protected void addUIDColumn() {

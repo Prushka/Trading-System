@@ -19,12 +19,16 @@ import phase2.trade.view.NodeFactory;
 import phase2.trade.view.window.GeneralSplitAlert;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class InventoryController extends ItemController implements Initializable {
 
     private final ItemListType itemListType = ItemListType.INVENTORY;
+
 
     public InventoryController(ControllerResources controllerResources) {
         super(controllerResources, true, true);
@@ -32,7 +36,7 @@ public class InventoryController extends ItemController implements Initializable
 
     @Override
     public void reload() {
-        // huh, this requires a new Command to update user
+        // use RefreshUser here
         super.reload();
     }
 
@@ -43,7 +47,7 @@ public class InventoryController extends ItemController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-        setDisplayData(FXCollections.observableArrayList(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems()));
+        setDisplayData(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems());
 
         addNameColumn(true);
         addDescriptionColumn(true);
@@ -113,9 +117,10 @@ public class InventoryController extends ItemController implements Initializable
                         command -> command.setItemListType(itemListType));
 
                 itemCommand.execute((result, resultStatus) -> {
-                    resultStatus.setSucceeded(() -> displayData.add(result));
-                    resultStatus.handle(getPopupFactory());
-                }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText())); // this casting cannot be avoided. another approach would be to loop through all radio buttons
+                            resultStatus.setSucceeded(() -> displayData.add(result));
+                            resultStatus.handle(getPopupFactory());
+                        }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()),
+                        price.getText()); // this casting cannot be avoided. another approach would be to loop through all radio buttons
             });
             addItemAlert.display();
         });

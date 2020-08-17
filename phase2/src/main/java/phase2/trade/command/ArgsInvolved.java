@@ -10,7 +10,7 @@ public interface ArgsInvolved {
 
     default String argRequired(Integer required, String defaultValue, String... args) {
         // required++;
-        return args.length > required && args[required] != null ? args[required] : defaultValue;
+        return args.length > required && args[required] != null && !args[required].isEmpty() ? args[required] : defaultValue;
     }
 
 }

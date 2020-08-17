@@ -82,7 +82,7 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         tableView.setEditable(ifEditable);
     }
 
-    protected ObservableList<T> getSelected() {
+    public ObservableList<T> getSelected() {
         ObservableList<T> itemsSelected = tableView.getSelectionModel().getSelectedItems();
         if (itemsSelected.size() == 0) {
             nothingSelectedToast();
@@ -139,5 +139,9 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
         Button button = new JFXButton("reload");
         button.setOnAction(event -> getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controllerSupplier)));
         getPane(DashboardPane.TOP).getChildren().addAll(button);
+    }
+
+    public TableView<T> getTableView() {
+        return tableView;
     }
 }

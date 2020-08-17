@@ -24,7 +24,7 @@ public class Item {
 
     private double price = -1;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     private User owner;
 
     public Long getUid() {

@@ -10,6 +10,7 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.refresh.ReType;
 import phase2.trade.support.TicketPriority;
 import phase2.trade.support.TicketType;
+import phase2.trade.support.command.GetSupportTickets;
 import phase2.trade.support.command.OpenSupportTicket;
 import phase2.trade.user.User;
 import phase2.trade.user.command.ReloadUser;

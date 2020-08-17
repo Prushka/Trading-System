@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 public class DashboardController extends AbstractController implements Initializable {
 
     public BorderPane root;
-    public VBox center, right;
+    public VBox center, right, left;
     public HBox top;
 
     public DashboardController(ControllerResources controllerResources) {
@@ -22,12 +22,11 @@ public class DashboardController extends AbstractController implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        putPane("topBar", top);
-        putPane("centerDashboard", center);
-        putPane("rightDashboard", right);
+        putPane(DashboardPane.TOP, top);
+        putPane(DashboardPane.CENTER, center);
+        putPane(DashboardPane.RIGHT, right);
+        putPane(DashboardPane.LEFT, left);
         root.setLeft(getSceneManager().loadPane(SideMenuController::new));
-        // TODO: Ask the user to fill in at least one address
-        // TODO: use redis's pub-sub to implement chat system
     }
 
 }

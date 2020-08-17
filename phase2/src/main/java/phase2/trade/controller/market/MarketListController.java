@@ -5,15 +5,21 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractListController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AddToCart;
@@ -77,7 +83,7 @@ public class MarketListController extends AbstractListController<Item> implement
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.getChildren().addAll(lend, sell);
 
-        JFXComboBox<String> category = getNodeFactory().getComboBoxByType(NodeFactory.ComboBoxType.Category);
+        JFXComboBox<String> categoryCombo = getNodeFactory().getComboBoxByType(NodeFactory.ComboBoxType.Category);
 
         JFXToggleButton includeMine = new JFXToggleButton();
         includeMine.setText("includeMine");
@@ -96,7 +102,7 @@ public class MarketListController extends AbstractListController<Item> implement
         Pattern doublePattern = Pattern.compile("\\d+\\.?\\d?");
         listViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
                 .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell))
-                .addComboBox(category, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch))
+                .addComboBox(categoryCombo, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch))
                 .addToggleButton(includeMine, ((entity, toMatch) -> entity.getOwner().getUid().
                         equals(getAccountManager().getLoggedInUser().getUid())))
                 .addSearch(priceMinInclusive, ((entity, toMatch) -> {
@@ -141,11 +147,36 @@ public class MarketListController extends AbstractListController<Item> implement
         includeMine.setSelected(true);
         priceMinInclusive.setMaxWidth(80);
         priceMaxInclusive.setMaxWidth(80);
-        Label label = new Label("-");
+        Label label = new Label("|");
 
-        getPane("topBar").getChildren().setAll(vBox, name, description, category, includeMine, priceMinInclusive, label, priceMaxInclusive,
-                countryCombo, provinceCombo, cityCombo);
+        getPane(DashboardPane.TOP).getChildren().setAll(vBox, name, description, categoryCombo, includeMine);
 
         listViewGenerator.build();
+
+        countryCombo.setPrefWidth(200);
+        cityCombo.setPrefWidth(200);
+        provinceCombo.setPrefWidth(200);
+
+        Pane left = getPane(DashboardPane.LEFT);
+
+        left.getStyleClass().addAll("dashboard-top-tool-bar", "dashboard-left-tool-bar");
+
+        Button clear = getNodeFactory().getDefaultFlatButton("Clear", "");
+        clear.setOnAction(e -> {
+            name.setText("");
+            description.setText("");
+            priceMaxInclusive.setText("");
+            priceMinInclusive.setText("");
+            categoryCombo.getSelectionModel().clearSelection();
+            countryCombo.getSelectionModel().clearSelection();
+            cityCombo.getSelectionModel().clearSelection();
+            provinceCombo.getSelectionModel().clearSelection();
+        });
+        VBox.setMargin(clear, new Insets(20, 0, 0, 0));
+        VBox.setMargin(priceMinInclusive, new Insets(20, 0, 0, 0));
+        VBox.setMargin(countryCombo, new Insets(0, 20, 0, 20));
+        left.getChildren().setAll(priceMinInclusive, label, priceMaxInclusive,
+                countryCombo, provinceCombo, cityCombo, clear);
+
     }
 }

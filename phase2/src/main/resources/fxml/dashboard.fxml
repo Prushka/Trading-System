@@ -37,6 +37,10 @@
                 <VBox fx:id="right">
                 </VBox>
             </right>
+            <left>
+                <VBox fx:id="left" spacing="20" alignment="TOP_CENTER">
+                </VBox>
+            </left>
         </BorderPane>
     </center>
 </BorderPane>

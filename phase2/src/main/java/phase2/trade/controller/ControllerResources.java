@@ -1,14 +1,12 @@
 package phase2.trade.controller;
 
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import phase2.trade.ShutdownHook;
 import phase2.trade.command.CommandFactory;
-import phase2.trade.database.nosql.Redis;
 import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.GatewayPubSub;
 import phase2.trade.refresh.ReReReRe;
-import phase2.trade.refresh.Reloadable;
 import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
@@ -34,7 +32,7 @@ public class ControllerResources {
 
     private final SceneManager sceneManager;
 
-    private final Map<String, Pane> panes = new HashMap<>();
+    private final Map<DashboardPane, Pane> panes = new HashMap<>();
 
     private final ReReReRe reReReRe;
 
@@ -72,7 +70,7 @@ public class ControllerResources {
         return sceneManager;
     }
 
-    protected Map<String, Pane> getPanes() {
+    protected Map<DashboardPane, Pane> getPane() {
         return panes;
     }
 

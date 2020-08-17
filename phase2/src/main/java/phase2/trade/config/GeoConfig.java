@@ -72,13 +72,20 @@ public class GeoConfig {
     }
 
     public ObservableList<String> getProvincesByCountry(String country) {
-        ObservableList<String> provinces = FXCollections.observableArrayList(map.get(country).keySet());
-        Collections.sort(provinces);
+        ObservableList<String> provinces = FXCollections.observableArrayList();
+        if (map.containsKey(country)) {
+            provinces.addAll(map.get(country).keySet());
+            Collections.sort(provinces);
+        }
         return provinces;
     }
 
     public ObservableList<String> getCitiesByProvinceCountry(String country, String province) {
-        ObservableList<String> cities = FXCollections.observableArrayList(map.get(country).get(province));
+        ObservableList<String> cities = FXCollections.observableArrayList();
+        if (map.containsKey(country) && map.get(country).containsKey(province)) {
+            cities.addAll(map.get(country).get(province));
+            Collections.sort(cities);
+        }
         Collections.sort(cities);
         return cities;
     }

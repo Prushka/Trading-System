@@ -1,15 +1,12 @@
 package phase2.trade.controller.side;
 
-import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import phase2.trade.controller.*;
-import phase2.trade.controller.market.MarketController;
 import phase2.trade.item.controller.CartController;
 import phase2.trade.item.controller.InventoryController;
 import phase2.trade.controller.market.MarketListController;
@@ -46,26 +43,26 @@ public class SideMenuController extends AbstractController implements Initializa
     // TODO: drop down sub menu
 
     private <T> void loadCenter(String fileName, ControllerSupplier<T> supplier) {
-        getPane("centerDashboard").getChildren().clear();
-        getPane("centerDashboard").getChildren().add(getSceneManager().loadPane(fileName, supplier));
+        getPane(DashboardPane.CENTER).getChildren().clear();
+        getPane(DashboardPane.CENTER).getChildren().add(getSceneManager().loadPane(fileName, supplier));
     }
 
     private <T> void loadCenter(ControllerSupplier<T> supplier) {
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(supplier));
+        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(supplier));
     }
 
     private void loadCenter(Object controller) {
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
+        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     private void inventory() {
         InventoryController controller = new InventoryController(getControllerResources(), ItemListType.INVENTORY);
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
+        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     private void cart() {
         CartController controller = new CartController(getControllerResources(), ItemListType.CART);
-        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(controller));
+        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
     // TODO: extend for different users
@@ -107,7 +104,7 @@ public class SideMenuController extends AbstractController implements Initializa
                         loadCenter(userInfoController);
                         break;
                     case MARKET:
-                        getPane("centerDashboard").getChildren().setAll(getSceneManager().loadPane(new MarketListController(getControllerResources())));
+                        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(new MarketListController(getControllerResources())));
                         // loadCenter(MarketController::new);
                         break;
                     case INVENTORY:

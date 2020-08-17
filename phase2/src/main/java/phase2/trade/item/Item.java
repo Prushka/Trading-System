@@ -4,6 +4,7 @@ package phase2.trade.item;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class Item {
@@ -26,6 +27,9 @@ public class Item {
 
     @OneToOne
     private User owner;
+
+    @ElementCollection
+    private Collection<Tag> tags;
 
     public Long getUid() {
         return uid;
@@ -93,5 +97,13 @@ public class Item {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public Collection<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
     }
 }

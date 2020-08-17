@@ -21,9 +21,9 @@ public class UserWidget extends WidgetControllerBase {
 
     @Override
     public void refresh() {
-        title.setText("User - " + userToPresent.getUid());
-        name.setText("Name - " + userToPresent.getName());
-        email.setText("Email - " + userToPresent.getEmail());
+        title.setText("UID: " + userToPresent.getUid());
+        name.setText("Name: " + userToPresent.getName());
+        email.setText("Email: " + userToPresent.getEmail());
     }
 
     @Override

@@ -23,7 +23,9 @@ public class Login extends UserCommand<User> {
             List<User> matchedUsers = gateway.findMatches(args[0], args[1]);
             if (matchedUsers.size() > 0) {
                 User user = matchedUsers.get(0);
-                user.getAvatar().getImageData(); // lazy load
+                if(user.getAvatar()!=null) {
+                    user.getAvatar().getImageData(); // lazy load
+                }
                 int size = user.getSupportTickets().size(); // lazy load
                 callback.call(user, new StatusSucceeded());
             } else {

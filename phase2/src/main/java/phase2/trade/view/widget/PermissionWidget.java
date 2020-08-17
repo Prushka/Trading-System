@@ -22,8 +22,8 @@ public class PermissionWidget extends WidgetControllerBase {
     @Override
     public void refresh() {
         title.setText("Permission");
-        group.setText("Group - " + userToPresent.getPermissionGroup().toString());
-        permissionCounts.setText("Permissions - " + userToPresent.getPermissionSet().getPerm().size());
+        group.setText("Group: " + userToPresent.getPermissionGroup().toString());
+        permissionCounts.setText("Permissions: " + userToPresent.getPermissionSet().getPerm().size());
         StringBuilder perms = new StringBuilder();
         Collection<Permission> permissionsToSort = new TreeSet<>(userToPresent.getPermissionSet().getPerm());
         permissionsToSort.forEach(perm -> perms.append(perm).append("\n"));

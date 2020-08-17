@@ -82,12 +82,12 @@ public class AddressWidget extends SmallTextWidgetController {
     public void refresh() {
         address = userToPresent.getAddressBook().getSelectedAddress();
         if (address != null) {
-            countryLabel.setText("Address - " + address.getCountry());
-            provinceLabel.setText("Province - " + address.getTerritory());
-            cityLabel.setText("City - " + address.getCity());
+            countryLabel.setText("Country: " + address.getCountry());
+            provinceLabel.setText("Province: " + address.getTerritory());
+            cityLabel.setText("City: " + address.getCity());
         } else {
             countryLabel.setText("Address");
-            provinceLabel.setText("Undefined");
+            provinceLabel.setText("Undefined"); // this technically shouldn't happen since every user is required to set their country, province and city when signing up
         }
     }
 

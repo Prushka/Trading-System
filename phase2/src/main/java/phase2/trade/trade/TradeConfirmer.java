@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TradeConfirmer {
+    /*
     Integer timeLimit;
 
     public TradeConfirmer(int timeLimit){
@@ -83,5 +84,5 @@ public class TradeConfirmer {
             currUser.setInventory(newInventory);
         }
     }
-
+*/
 }

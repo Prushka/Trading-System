@@ -26,6 +26,7 @@ public class CreateTrade extends TradeCommand<Trade>{
 
     @Override
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
+        /*
         tc = new TradeCreator();
         if (!checkPermission(callback)) return;
         getEntityBundle().getTradeGateway().submitTransaction((gateway) -> {
@@ -35,12 +36,8 @@ public class CreateTrade extends TradeCommand<Trade>{
             if (callback != null)
                 callback.call(newTrade, new StatusSucceeded());
         });
+         */
     }
-
-
-    // Unreasonable to do for this action
-    @Override
-    protected void undoUnchecked() {}
 
     public void setTraders(List<User> users){
         this.users = users;

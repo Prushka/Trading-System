@@ -15,6 +15,7 @@ import java.util.Set;
  */
 class TradeBuilder {
 
+    /*
     Trade newTrade;
 
     // For UserOrderBundle(s)
@@ -70,4 +71,5 @@ class TradeBuilder {
         newTrade.setTradeState(TradeState.IN_PROGRESS);
         return newTrade;
     }
+     */
 }

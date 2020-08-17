@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  */
 public class TradeEditor {
 
+    /*
     Integer editLimit;
 
     public TradeEditor(int editLimit){
@@ -43,5 +44,5 @@ public class TradeEditor {
 
     private void cancelOrder(Trade currTrade) {
         currTrade.setTradeState(TradeState.CANCELLED);
-    }
+    }*/
 }

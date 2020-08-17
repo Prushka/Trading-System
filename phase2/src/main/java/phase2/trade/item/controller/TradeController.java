@@ -1,39 +1,36 @@
 package phase2.trade.item.controller;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemFilter;
-import phase2.trade.item.Ownership;
 import phase2.trade.user.User;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @ControllerProperty(viewFile = "trade.fxml")
 public class TradeController extends AbstractController implements Initializable {
@@ -108,10 +105,11 @@ public class TradeController extends AbstractController implements Initializable
             }
         }
 
-        setUpDrags(allTable.getTableView());
+        setupAllTableDrags(allTable.getTableView());
+
 
         userTables.values().forEach(t -> {
-            setUpDrags(t.getTableView());
+            setupUserTableDrags(t.getTableView());
         });
 
         rightComboBox = getUserComboBox(userTables.keySet());
@@ -121,16 +119,70 @@ public class TradeController extends AbstractController implements Initializable
         });
 
 
-
         BorderPane.setMargin(left, new Insets(0, 10, 0, 0));
 
+        Label willGetFollowingItems = new Label("  will get following items.");
+
         leftTableArea.getChildren().setAll(allTable.tableViewGenerator.getTableView());
-        topRightHBox.getChildren().addAll(rightComboBox);
+        topRightHBox.getChildren().addAll(rightComboBox, willGetFollowingItems);
+
+        Button test = new JFXButton("TEST");
 
         leftComboBox = new JFXComboBox<>();
         leftComboBox.setVisible(false);
         topLeftHBox.getChildren().addAll(leftComboBox);
+        DatePicker datePicker = new JFXDatePicker();
+        JFXTimePicker timePicker = new JFXTimePicker();
+        buttonPane.getChildren().addAll(datePicker, timePicker, test);
 
+        test.setOnAction(e -> {
+            LocalTime localTime = timePicker.getValue();
+            LocalDate localDate = datePicker.getValue();
+            LocalDateTime localDateTime = localDate.atTime(localTime);
+            System.out.println(localDateTime);
+        });
+    }
+
+    private void setupAllTableDrags(TableView<Item> allTableView) {
+        setUpDrags(allTableView);
+        allTableView.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (event.getDragboard().hasString()) {
+                Item item = allItems.get(Long.valueOf(db.getString()));
+                if (!allTableView.getItems().contains(item)) {
+                    allTableView.getItems().addAll(item);
+                    for (UserTable userTable : userTables.values()) {
+                        userTable.getTableView().getItems().remove(item);
+                    }
+                }
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
+    }
+
+    private void setupUserTableDrags(TableView<Item> tableView) {
+        setUpDrags(tableView);
+        tableView.setOnDragDropped(event -> {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (event.getDragboard().hasString()) {
+                Item item = allItems.get(Long.valueOf(db.getString()));
+                if (!tableView.getItems().contains(item)) {
+                    if (userTables.get(item.getOwner()).getTableView() == tableView) {
+                        getPopupFactory().toast(5, "Do not drag items to oneself! This won't form a trade my friend");
+                        return;
+                    }
+                    tableView.getItems().addAll(item);
+                    allTable.getTableView().getItems().remove(item);
+                }
+                success = true;
+            }
+            event.setDropCompleted(success);
+            event.consume();
+        });
     }
 
     private void setUpDrags(TableView<Item> tableView) {
@@ -156,32 +208,6 @@ public class TradeController extends AbstractController implements Initializable
                     event.consume();
                 }
         );
-
-        tableView.setOnDragDropped(event -> {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (event.getDragboard().hasString()) {
-                Item item = allItems.get(Long.valueOf(db.getString()));
-                if (!tableView.getItems().contains(item)) {
-                    if (userTables.get(item.getOwner()).getTableView() == tableView) {
-                        getPopupFactory().toast(5, "Do not drag things to oneself! This won't form a trade my friend");
-                        return;
-                    }
-                    tableView.getItems().addAll(item);
-                    if (tableView != allTable.getTableView()) {
-                        System.out.println("Removing");
-                        allTable.getTableView().getItems().remove(item);
-                        allTable.getTableView().refresh();
-                        System.out.println(allTable.getTableView().getItems().size());
-                    }
-                    tableView.refresh();
-                }
-                success = true;
-            }
-            event.setDropCompleted(success);
-            event.consume();
-        });
-
     }
 
     /*

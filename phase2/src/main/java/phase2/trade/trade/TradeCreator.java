@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class TradeCreator {
     TradeBuilder tb;
+    /*
 
     public TradeCreator(){}
 
@@ -22,5 +23,5 @@ public class TradeCreator {
         tb.buildLocation(country, city);
         tb.buildIsPermanent(Boolean.parseBoolean(isPermanent));
         return tb.buildTrade();
-    }
+    }*/
 }

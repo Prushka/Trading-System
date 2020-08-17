@@ -4,7 +4,8 @@ import phase2.trade.view.PopupFactory;
 
 public class StatusFailed extends ResultStatus {
 
-    public StatusFailed() {}
+    public StatusFailed() {
+    }
 
     public StatusFailed(String message) {
         super(message);
@@ -13,9 +14,7 @@ public class StatusFailed extends ResultStatus {
     @Override
     public void handle(PopupFactory popupFactory) {
         run(() -> {
-            if (message != null) {
-                popupFactory.toast(5, message, "CLOSE");
-            }
+            toastMessage(popupFactory);
             failed.run();
             after.run();
         });

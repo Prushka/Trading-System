@@ -42,14 +42,14 @@ public abstract class WidgetControllerBase extends AbstractController implements
 
     public void addTitle(Node... nodes) {
         for (Node node : nodes) {
-            node.getStyleClass().addAll("butter-header");
+            node.getStyleClass().addAll("widget-header");
         }
         root.getChildren().addAll(nodes);
     }
 
     public void addContent(Node... nodes) {
         for (Node node : nodes) {
-            node.getStyleClass().addAll("butter-body");
+            node.getStyleClass().addAll("widget-body");
         }
         root.getChildren().addAll(nodes);
     }

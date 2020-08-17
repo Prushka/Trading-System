@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
-<VBox fx:id="root" styleClass="butter" spacing="10" prefWidth="270" prefHeight="120" minWidth="270" minHeight="120"
+<VBox fx:id="root" styleClass="widget" spacing="10" prefWidth="270" prefHeight="120" minWidth="270" minHeight="120"
       alignment="CENTER_LEFT" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
 
     <padding>

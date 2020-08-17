@@ -11,6 +11,7 @@ import phase2.trade.editor.EntityIdLookUp;
 import phase2.trade.gateway.EntityBundle;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.*;
+import phase2.trade.support.SupportTicket;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
@@ -28,6 +29,8 @@ import java.util.regex.Pattern;
 @CommandProperty(crudType = CRUDType.READ, undoable = true, persistent = true)
 // please annotate CommandProperty in subclasses, otherwise the one above will be used
 public abstract class Command<T> implements PermissionBased, ArgsInvolved {
+
+    protected transient T toUpdate;
 
     private static final Logger logger = LogManager.getLogger(Command.class);
 
@@ -289,6 +292,10 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
 
     public void setUndoTimestamp(Long undoTimestamp) {
         this.undoTimestamp = undoTimestamp;
+    }
+
+    public void setToUpdate(T toUpdate) {
+        this.toUpdate = toUpdate;
     }
 
     // https://stackoverflow.com/questions/13874528/what-is-the-purpose-of-accesstype-field-accesstype-property-and-access/13874900#13874900

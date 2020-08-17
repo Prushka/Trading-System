@@ -4,7 +4,6 @@ import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
 import phase2.trade.user.User;
 
@@ -16,14 +15,12 @@ import java.util.List;
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true)
 // The permission of this command depends on the operator and the item's owner
-public class UpdateUsers extends UserCommand<Void> {
-
-    private transient List<User> usersToUpdate;
+public class UpdateUsers extends UserCommand<List<User>> {
 
     @Override
-    public void execute(ResultStatusCallback<Void> callback, String... args) {
+    public void execute(ResultStatusCallback<List<User>> callback, String... args) {
         if (!checkPermission(Permission.ManageUsers)) { // the user doesn't have ManageUsers perm, this means he/she might be editing his/her own account
-            for (User user : usersToUpdate) {
+            for (User user : toUpdate) {
                 if (!user.getUid().equals(operator.getUid())) { // the user is editing other people's account, directly fire a StatusNoPermission and return
                     checkPermission(callback, Permission.ManageUsers);
                     return;
@@ -34,7 +31,7 @@ public class UpdateUsers extends UserCommand<Void> {
             }
         }
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
-            for (User user : usersToUpdate) {
+            for (User user : toUpdate) {
                 gateway.update(user);
                 addEffectedEntity(User.class, user.getUid());
             }
@@ -47,14 +44,5 @@ public class UpdateUsers extends UserCommand<Void> {
 
     @Override
     protected void undoUnchecked() {
-    }
-
-    public void setUsersToUpdate(List<User> usersToUpdate) {
-        this.usersToUpdate = usersToUpdate;
-    }
-
-    public void setUserToUpdate(User usersToUpdate) {
-        this.usersToUpdate = new ArrayList<>();
-        this.usersToUpdate.add(usersToUpdate);
     }
 }

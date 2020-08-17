@@ -1,6 +1,7 @@
 package phase2.trade.support.command;
 
 import phase2.trade.callback.ResultStatusCallback;
+import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.Command;
 import phase2.trade.command.CommandProperty;
@@ -32,6 +33,7 @@ public class OpenSupportTicket extends Command<SupportTicket> {
             gateway.update(operator);
             addEffectedEntity(SupportTicket.class, supportTicket.getUid());
             save();
+            callback.call(supportTicket,new StatusSucceeded());
         });
     }
 

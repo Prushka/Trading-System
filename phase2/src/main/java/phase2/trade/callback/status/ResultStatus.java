@@ -21,6 +21,12 @@ public abstract class ResultStatus { // the whole thing may still need to be imp
         exist = () -> {};
     }
 
+    protected void toastMessage(PopupFactory popupFactory) {
+        if (message != null && !message.isEmpty()) {
+            popupFactory.toast(message);
+        }
+    }
+
     public void setExist(Runnable exist) {
         this.exist = exist;
     }

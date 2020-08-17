@@ -43,7 +43,6 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
         });
     }
 
-    // this is already a super class of all Item Table views, they will reside here
     protected void addNameColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Name", "name", event ->
@@ -54,7 +53,6 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
         }
     }
 
-    // to decouple this would be unnecessary since some columns require cellfactory or cellfactory + cellvaluefactory while some don't
     protected void addDescriptionColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Description", "description", getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(),

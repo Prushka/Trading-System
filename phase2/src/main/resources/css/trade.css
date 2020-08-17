@@ -215,30 +215,44 @@ https://stackoverflow.com/questions/37026738/how-to-set-radial-gradient-with-css
 https://i.pinimg.com/originals/29/88/ed/2988ed3e99af32b8987f5a2ae880138e.png
 https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d?gi=2dbed476cea4
 */
-.butter {
+.widget {
     -fx-background-radius: 8 8 8;
     /*-fx-background-color: WHITE;*/
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.27), 20, 0, 0, 0);
 }
 
-.butter:hover {
+.widget:hover {
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0.1, 0, 0);
 }
 
-.butter-header {
+.widget-header {
     -fx-font-size: 23;
     -fx-font-weight: BOLD;
     -fx-text-fill: WHITE;
 }
 
-.butter-body {
+.widget-body {
     -fx-font-size: 15;
     -fx-text-fill: WHITE;
     -fx-font-weight: BOLD;
 }
 
+.widget-button {
+    -fx-font-size: 16;
+    -fx-text-fill: WHITE;
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+}
+
 .no-ripple .jfx-rippler {
     -jfx-rippler-fill: rgba(0, 0, 0, 0);
+}
+
+.gradient-white {
+    -fx-background-color: WHITE;
+}
+
+.gradient-black {
+    -fx-background-color: BLACK;
 }
 
 .gradient-a {
@@ -248,7 +262,7 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
 
 .gradient-b {
     -fx-background-color: linear-gradient(from 155% 155% to 0% 0%,
-    #FCCF3A, #DE791E, #EA5A6F );
+    #FCCF3A, #DE791E, #EA5A6F);
 }
 
 .gradient-c {
@@ -283,22 +297,22 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
 
 .gradient-i {
     -fx-background-color: linear-gradient(from 100% 100% to 0% 0%,
-    rgb(65,226,152), rgb(59,180,182));
+    rgb(65, 226, 152), rgb(59, 180, 182));
 }
 
 .gradient-j {
     -fx-background-color: linear-gradient(from 100% 100% to 0% 0%,
-    rgb(20,231,216), rgb(91,126,233));
+    rgb(20, 231, 216), rgb(91, 126, 233));
 }
 
 .gradient-k {
     -fx-background-color: linear-gradient(from 100% 100% to 0% 0%,
-    rgb(245,79,160), rgb(254,114,121));
+    rgb(245, 79, 160), rgb(254, 114, 121));
 }
 
 .gradient-l {
     -fx-background-color: linear-gradient(from 100% 100% to 0% 0%,
-    rgb(225,217,65), rgb(255,136,87));
+    rgb(225, 217, 65), rgb(255, 136, 87));
 }
 
 /* TODO: someone redesign this. It's way too colorful

@@ -12,8 +12,12 @@ import phase2.trade.editor.ItemEditor;
 import phase2.trade.editor.SupportTicketEditor;
 import phase2.trade.editor.UserEditor;
 import phase2.trade.item.Category;
+import phase2.trade.item.Ownership;
+import phase2.trade.refresh.ReType;
 import phase2.trade.support.SupportTicket;
+import phase2.trade.support.TicketPriority;
 import phase2.trade.support.TicketState;
+import phase2.trade.support.TicketType;
 import phase2.trade.support.command.UpdateSupportTickets;
 
 import java.util.List;
@@ -29,13 +33,16 @@ public class SupportTicketController extends AbstractEditableTableController<Sup
     @Override
     protected void updateEntity(List<SupportTicket> entities) {
         disableButtons(true);
-        Command<?> command = getCommandFactory().getCommand(UpdateSupportTickets::new, c -> {
+        UpdateSupportTickets command = getCommandFactory().getCommand(UpdateSupportTickets::new, c -> {
             c.setToUpdate(entities);
         });
         command.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> {
+                publish(ReType.REFRESH);
+                getPopupFactory().toast("affect.next.log.in");
+            });
             resultStatus.setAfter(() -> {
                 disableButtons(false);
-                tableView.refresh();
             });
             resultStatus.handle(getPopupFactory());
         });
@@ -77,6 +84,34 @@ public class SupportTicketController extends AbstractEditableTableController<Sup
         } else {
             tableViewGenerator.addColumn("State", "ticketState");
         }
+    }
+
+    protected void addSearchContent() {
+        addSearchField("Search Content", (entity, toMatch) -> {
+            String lowerCaseFilter = toMatch.toLowerCase();
+            return String.valueOf(entity.getContent()).toLowerCase().contains(lowerCaseFilter);
+        });
+    }
+
+    protected void addStateComboBox() {
+        addComboBox(
+                getNodeFactory().getEnumAsObservableString(TicketState.class),
+                "Ticket State", "ALL",
+                (entity, toMatch) -> entity.getTicketState().name().equalsIgnoreCase(toMatch));
+    }
+
+    protected void addPriorityComboBox() {
+        addComboBox(
+                getNodeFactory().getEnumAsObservableString(TicketPriority.class),
+                "Ticket Priority", "ALL",
+                (entity, toMatch) -> entity.getTicketPriority().name().equalsIgnoreCase(toMatch));
+    }
+
+    protected void addTypeComboBox() {
+        addComboBox(
+                getNodeFactory().getEnumAsObservableString(TicketType.class),
+                "Ticket Type", "ALL",
+                (entity, toMatch) -> entity.getType().name().equalsIgnoreCase(toMatch));
     }
 
 

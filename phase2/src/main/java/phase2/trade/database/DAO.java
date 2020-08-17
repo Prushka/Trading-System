@@ -125,6 +125,10 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         result.addAll(getCurrentSession().createQuery(criteria).getResultList());
     }
 
+    public void refresh(T entity) {
+        getCurrentSession().refresh(entity);
+    }
+
 
     @Override
     public void deleteAll() {

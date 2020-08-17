@@ -39,6 +39,12 @@ public class SupportTicketAdminController extends SupportTicketController implem
         addContentColumn();
         addTypeColumn();
         addHandlerColumn();
+
+        addSearchContent();
+        addStateComboBox();
+        addPriorityComboBox();
+        addTypeComboBox();
+
         tableViewGenerator.build();
     }
 

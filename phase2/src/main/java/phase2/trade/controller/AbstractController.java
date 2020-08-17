@@ -26,12 +26,15 @@ public abstract class AbstractController implements Reloadable, Refreshable {
 
     private final NodeFactory nodeFactory = new NodeFactory();
 
+    private final ControllerFactory controllerFactory;
+
     private final Map<String, String> valueLanguage = new HashMap<>();
 
     public AbstractController(ControllerResources controllerResources) {
         this.controllerResources = controllerResources;
         controllerResources.getReReReRe().subscribeRefreshable(this.getClass().getSimpleName(), this);
         controllerResources.getReReReRe().subscribeReloadable(this.getClass().getSimpleName(), this);
+        controllerFactory = new ControllerFactory(controllerResources);
         if (getPane("topBar") != null) getPane("topBar").getChildren().clear();
     }
 
@@ -116,5 +119,9 @@ public abstract class AbstractController implements Reloadable, Refreshable {
 
     protected ConfigBundle getConfigBundle() {
         return controllerResources.getGatewayBundle().getConfigBundle();
+    }
+
+    public ControllerFactory getControllerFactory() {
+        return controllerFactory;
     }
 }

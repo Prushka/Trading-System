@@ -24,13 +24,13 @@ public class ChangeUserName extends UserCommand<User> {
         if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
             if (gateway.findMatches(args[0], args[1]).size() == 0) {
-                callback.call(null, new StatusFailed());
+                callback.call(null, new StatusFailed("wrong.password"));
                 return;
             }
 
             List<User> usersByName = gateway.findByUserName(args[2]);
             if (usersByName.size() > 0) {
-                callback.call(null, new StatusExist());
+                callback.call(null, new StatusExist("user.name.exists"));
                 return;
             }
             oldName = operator.getName();

@@ -3,6 +3,12 @@ package phase2.trade.controller.market;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -54,9 +60,8 @@ public class MarketController extends AbstractListController<Trade> implements I
     private Tab tradeView, tradeMarket;
     private TableView<Trade> trades;
     private TableColumn<Trade, Long> idColumn;
-    private TableColumn<Trade, String> statusColumn;
-    private TableColumn<Trade, Boolean> typeColumn;
-    private TableColumn<Trade, TradeOrder> tradeOrderColumn;
+    private TableColumn<Trade, String> statusColumn, dateColumn, locationColumn;
+    private TableColumn<Trade, Boolean> typeColumn, confirmColumn;
     private ObservableList<Trade> tradesList;
     private JFXButton editDateTimeButton, editLocationButton, confirmButton, tradeButton, addTraderButton;
     private JFXComboBox<String> isPermanent;
@@ -84,18 +89,28 @@ public class MarketController extends AbstractListController<Trade> implements I
         idColumn = new TableColumn<>("Trade ID: ");
         idColumn.setMinWidth(200);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("uid"));
-        tradeOrderColumn = new TableColumn<>("Trade ID: ");
-        tradeOrderColumn.setMinWidth(200);
-        tradeOrderColumn.setCellValueFactory(new PropertyValueFactory<>("myOrder"));
+        dateColumn = new TableColumn<>("Date: ");
+        dateColumn.setMinWidth(200);
+        dateColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getOrder()
+                .getDateAndTime().toString()));
+        locationColumn = new TableColumn<>("Location: ");
+        locationColumn.setMinWidth(200);
+        locationColumn.setCellValueFactory(cellData -> new SimpleStringProperty(((MeetUpOrder) cellData.getValue()
+                .getOrder()).getLocation().getCity() + ", " + ((MeetUpOrder) cellData.getValue()
+                .getOrder()).getLocation().getCountry()));
         statusColumn = new TableColumn<>("Status: ");
         statusColumn.setMinWidth(200);
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("tradeStatus"));
-        typeColumn = new TableColumn<>("Trade Type: ");
+        statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTradeState().toString()));
+        confirmColumn = new TableColumn<>("Confirmation: ");
+        confirmColumn.setMinWidth(200);
+        confirmColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getOrder()
+                .getTraders().get(0).getConfirmations()));
+        typeColumn = new TableColumn<>("Permanency: ");
         typeColumn.setMinWidth(200);
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("isPermanent"));
         trades = new TableView<>();
         trades.setItems(tradesList);
-        trades.getColumns().addAll(idColumn, tradeOrderColumn, statusColumn, typeColumn);
+        trades.getColumns().addAll(idColumn, dateColumn, locationColumn, statusColumn, typeColumn);
         editDateTimeButton = new JFXButton("Edit Date and Time");
         editDateTimeButton.setOnAction(e -> editDateTimeClicked());
         editLocationButton = new JFXButton("Edit Location");
@@ -179,6 +194,12 @@ public class MarketController extends AbstractListController<Trade> implements I
         tradeTabs.getTabs().setAll(tradeView, tradeMarket);
         meeting.getChildren().addAll(tradeTabs);
         root.getChildren().add(meeting);
+
+        getGatewayBundle().getEntityBundle().getTradeGateway().submitSession((gateway) -> {
+            List<Trade> matchedTrades = gateway.findAll();
+            tradesList = FXCollections.observableArrayList(matchedTrades);
+            trades.setItems(tradesList);
+        });
     }
 
     public void addTraderClicked(){
@@ -211,6 +232,7 @@ public class MarketController extends AbstractListController<Trade> implements I
 
         popup.addNodes(newYear, newMonth, newDay, newHour, newMinute);
         popup.display();
+        reloadTable();
     }
 
     public void editLocationClicked(){
@@ -236,6 +258,7 @@ public class MarketController extends AbstractListController<Trade> implements I
 
         popup.addNodes(newCountry, newCity, newStreet, newStreetNum);
         popup.display();
+        reloadTable();
     }
 
     public void confirmButtonClicked(){
@@ -246,11 +269,13 @@ public class MarketController extends AbstractListController<Trade> implements I
             System.out.println("success");
         }
         });
+        reloadTable();
     }
 
 
     public void tradeButtonClicked(){
         List<User> allUsers = new ArrayList<>(); // TODO: replace with selected combo boxes
+        allUsers.add(getAccountManager().getLoggedInUser());
         List<Set<Item>> allItems = new ArrayList<>(); // TODO: replace with selected combo boxes
         tc.setTraders(allUsers);
         tc.setTraderItems(allItems);
@@ -280,11 +305,7 @@ public class MarketController extends AbstractListController<Trade> implements I
         city.clear();
         street.clear();
         streetNum.clear();
-        getGatewayBundle().getEntityBundle().getTradeGateway().submitSession((gateway) -> {
-            List<Trade> matchedTrades = gateway.findAll();
-            tradesList = FXCollections.observableArrayList(matchedTrades);
-            trades.setItems(tradesList);
-        });
+        reloadTable();
     }
 
     public boolean validate() {
@@ -295,5 +316,14 @@ public class MarketController extends AbstractListController<Trade> implements I
         } catch (NumberFormatException | DateTimeException e) {
             return false;
         }
+    }
+
+    public void reloadTable(){
+        getGatewayBundle().getEntityBundle().getTradeGateway().submitSession((gateway) -> {
+            List<Trade> matchedTrades = gateway.findAll();
+            tradesList = FXCollections.observableArrayList(matchedTrades);
+            trades.getItems().clear();
+            trades.setItems(tradesList);
+        });
     }
 }

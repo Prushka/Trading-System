@@ -24,11 +24,10 @@ import java.util.ResourceBundle;
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class InventoryController extends ItemController implements Initializable {
 
-    private final ItemListType itemListType;
+    private final ItemListType itemListType = ItemListType.INVENTORY;
 
-    public InventoryController(ControllerResources controllerResources, ItemListType itemListType) {
+    public InventoryController(ControllerResources controllerResources) {
         super(controllerResources, true, true);
-        this.itemListType = itemListType;
     }
 
     @Override

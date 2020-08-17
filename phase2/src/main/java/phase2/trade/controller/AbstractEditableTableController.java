@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.VBox;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.database.TriConsumer;
@@ -32,6 +33,9 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
 
     @FXML
     protected TableView<T> tableView;
+
+    // @FXML
+    // protected VBox root;
 
     protected ObservableList<T> displayData = FXCollections.observableArrayList();
 
@@ -80,7 +84,6 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
 
     protected ObservableList<T> getSelected() {
         ObservableList<T> itemsSelected = tableView.getSelectionModel().getSelectedItems();
-        ;
         if (itemsSelected.size() == 0) {
             nothingSelectedToast();
         }

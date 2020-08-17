@@ -75,10 +75,10 @@ public class Configurer {
         }, name, description, category.name(), String.valueOf(quantity), Willingness.Private.name(), String.valueOf(price));
     }
 
-    public void mockDashboardRegister(String username, String email) {
+    public void mockDashboardRegister(String username, String email, String password) {
         accountManager.register((result, status) -> {
 
-        }, username, email, "12345678", "Canada", "Ontario", "Toronto");
+        }, username, email, password, "Canada", "Ontario", "Toronto");
 
         addExample();
 
@@ -92,7 +92,7 @@ public class Configurer {
 
     public static void main(String[] args) {
         Configurer configurer = new Configurer();
-        configurer.mockDashboardRegister("admin2", "admin???");
+        configurer.mockDashboardRegister("admin2", "admin???","12345678");
         configurer.getCommandFactory().getCommand(AddItemToItemList::new);
 
     }

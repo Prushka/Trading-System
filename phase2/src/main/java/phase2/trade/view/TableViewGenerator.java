@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -18,10 +19,7 @@ import phase2.trade.item.Item;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class TableViewGenerator<T> {
@@ -38,15 +36,19 @@ public class TableViewGenerator<T> {
 
     private final FilterGroup<T> filterGroup;
 
+    public TableViewGenerator(ObservableList<T> original) {
+        this(original, new TableView<>());
+    }
+
+    public TableViewGenerator(Collection<T> original) {
+        this(FXCollections.observableArrayList(original), new TableView<>());
+    }
+
     public TableViewGenerator(ObservableList<T> original, TableView<T> tableView) {
         this.original = original;
         filteredList = new FilteredList<>(original, p -> true);
         this.tableView = tableView;
         this.filterGroup = new FilterGroup<>(filteredList);
-    }
-
-    public TableViewGenerator(ObservableList<T> original) {
-        this(original, new TableView<>());
     }
 
     private TableColumn<T, String> getTableColumn(String name, String fieldName) {
@@ -162,5 +164,9 @@ public class TableViewGenerator<T> {
 
     public FilterGroup<T> getFilterGroup() {
         return filterGroup;
+    }
+
+    public TableView<T> getTableView() {
+        return tableView;
     }
 }

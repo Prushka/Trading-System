@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.layout.VBox;
 import phase2.trade.view.ListViewGenerator;
 import phase2.trade.view.TableViewGenerator;
 
@@ -20,6 +21,9 @@ public abstract class AbstractListController<T> extends AbstractController imple
 
     @FXML
     private ListView<T> listView;
+
+    // @FXML
+    // protected VBox root;
 
     private boolean ifMultipleSelection;
 

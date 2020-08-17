@@ -58,17 +58,6 @@ public class SideMenuController extends AbstractController implements Initializa
         getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
     }
 
-    private void inventory() {
-        InventoryController controller = new InventoryController(getControllerResources(), ItemListType.INVENTORY);
-        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
-    }
-
-    private void cart() {
-        CartController controller = new CartController(getControllerResources(), ItemListType.CART);
-        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
-    }
-
-    // TODO: extend for different users
     public void signOut() {
         if (getPopupFactory().confirmWindow("Sign out", "Do you really want to sign out?").display()) {
             getAccountManager().logOut();
@@ -107,14 +96,14 @@ public class SideMenuController extends AbstractController implements Initializa
                         loadCenter(userInfoController);
                         break;
                     case MARKET:
-                        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(new MarketListController(getControllerResources())));
+                        loadCenter(MarketListController::new);
                         break;
                     case INVENTORY:
-                        inventory();
+                        loadCenter(InventoryController::new);
                         break;
                     case CART:
-                        // cart();
-                        loadCenter(MarketController::new);
+                        loadCenter(CartController::new);
+                        //loadCenter(MarketController::new);
                         break;
                     case MANAGE_USERS_OPERATIONS:
                         loadCenter(UserOperationController::new);
@@ -140,7 +129,7 @@ public class SideMenuController extends AbstractController implements Initializa
             }
         });
 
-        sideList.getSelectionModel().select(0);
+        sideList.getSelectionModel().select(3);
         bottomSideList.setOnMouseClicked(event -> {
                     switch (bottomSideList.getSelectionModel().getSelectedItem()) {
                         case SIGN_OUT:

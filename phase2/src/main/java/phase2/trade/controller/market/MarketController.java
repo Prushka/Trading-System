@@ -201,7 +201,7 @@ public class MarketController extends AbstractListController<Trade> implements I
     }
 
     public void addTraderClicked(){
-        Parent itemList = getSceneManager().loadPane(new CartController(getControllerResources(), ItemListType.CART));
+        Parent itemList = getSceneManager().loadPane(CartController::new);
         items.getChildren().add(itemList);
     }
 

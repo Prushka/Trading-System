@@ -27,6 +27,7 @@ public class AddToCart extends ItemCommand<Void> {
     public void execute(ResultStatusCallback<Void> callback, String... args) {
         if (!checkPermission(callback)) return;
         getEntityBundle().getUserGateway().submitTransaction((gateway) -> {
+            // operator.getCart().getSetOfItems().forEach(e -> System.out.println(e.getName() + " | " + e.getUid()));
             for (Long uid : getEntityIds(items)) {
                 if (operator.getItemList(ItemListType.CART).contains(uid)) {
                     callback.call(null, new StatusExist());
@@ -34,7 +35,7 @@ public class AddToCart extends ItemCommand<Void> {
                 }
             }
             operator.getItemList(ItemListType.CART).addItem(items);
-            gateway.merge(operator);
+            gateway.update(operator);
             callback.call(null, new StatusSucceeded());
         });
     }
@@ -54,6 +55,7 @@ public class AddToCart extends ItemCommand<Void> {
         for (Item item : items) {
             addEffectedEntity(Item.class, item.getUid());
         }
+        this.items.clear();
         this.items.addAll(Arrays.asList(items));
     }
 }

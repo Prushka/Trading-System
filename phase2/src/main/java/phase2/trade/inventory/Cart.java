@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class Cart extends ItemList {
 
-    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = {CascadeType.PERSIST,CascadeType.REMOVE,CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
     protected Set<Item> setOfItems = new HashSet<>();
 
     @Override

@@ -43,7 +43,7 @@ public class GeneralSplitAlert extends AlertWindow<Void> {
         confirmButton.setOnAction(confirmHandler);
         Button cancelButton = new JFXButton("Cancel");
 
-        cancelButton.setOnAction(confirmHandler);
+        confirmButton.setOnAction(confirmHandler);
         cancelButton.addEventFilter(ActionEvent.ACTION, event -> {
             alert.hideWithAnimation();
         });

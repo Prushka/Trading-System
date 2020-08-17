@@ -36,6 +36,7 @@ public class AddItemToItemList extends ItemCommand<Item> {
             item.setQuantity(Integer.parseInt(argRequired(3, "1", args)));
             item.setWillingness(Willingness.valueOf(argRequired(4, Willingness.Private.name(), args)));
             item.setPrice(Double.parseDouble(argRequired(5, "-1", args)));
+            System.out.println(argRequired(5,args));
             item.setOwner(operator);
             item.setOwnership(Ownership.TO_BE_REVIEWED);
 

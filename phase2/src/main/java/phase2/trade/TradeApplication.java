@@ -39,13 +39,12 @@ public class TradeApplication extends Application {
 
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
-        //configurer.mockDashboardLogin("justsomeuser", "12345678");
-        login(primaryStage);
-        // configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
+        configurer.mockDashboardRegister("justsomeuser","a@b.ccc", "12345678");
+        // login(primaryStage);
         // configurer.mockDashboardLogin("admin", "admin???");
 
         //primaryStage.setScene(new Scene(new VBox()));
-        //configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
+        configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
         //login(primaryStage);
         primaryStage.show();
     }

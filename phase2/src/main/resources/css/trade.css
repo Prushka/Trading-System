@@ -333,6 +333,36 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
  */
 
 
-.market-trade-cell .label {
-    -fx-text-fill: black;
+.market-trade-cell {
+    -fx-font-size: 16;
+    -fx-font-weight: BOLD;
+}
+
+.trade-uid {
+    -fx-font-size: 19;
+    -fx-text-fill: rgb(91, 88, 172);
+}
+
+.trade-placed-time {
+    -fx-font-size: 15;
+    -fx-text-fill: rgb(91, 88, 172);
+}
+
+.trade-state {
+    -fx-text-fill: rgb(121, 175, 194);
+}
+
+.trade-users-involved {
+    -fx-font-size: 15;
+    -fx-text-fill: rgb(171, 70, 55);
+}
+
+.trade-detail {
+    -fx-text-fill: rgb(145, 100, 150);
+}
+
+.trade-item-detail {
+    -fx-font-weight: BOLD;
+    -fx-font-size: 14;
+    -fx-text-fill: rgb(91, 88, 172);
 }

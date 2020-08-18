@@ -20,7 +20,7 @@
         </Logger>
 
         <!-- Log all SQL statements -->
-        <Logger name="org.hibernate.SQL" level="info" additivity="false">
+        <Logger name="org.hibernate.SQL" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 

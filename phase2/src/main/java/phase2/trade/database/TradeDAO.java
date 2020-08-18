@@ -1,27 +1,25 @@
 package phase2.trade.database;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import phase2.trade.gateway.TradeGateway;
-import phase2.trade.trade.OrderState;
-import phase2.trade.trade.Trade;
-import phase2.trade.trade.TradeOrder;
-import phase2.trade.trade.UserOrderBundle;
+import phase2.trade.trade.*;
 import phase2.trade.user.User;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
+
+    private static final Logger logger = LogManager.getLogger(TradeDAO.class);
 
     public TradeDAO(DatabaseResourceBundle resource) {
         super(Trade.class, resource);
     }
 
     @Override
-    public Set<Trade> findByUser(User currUser) {
+    public Collection<Trade> findByUser(User currUser) {
         final Set<Trade> result = new HashSet<>();
 
         criteria((builder, query, root) -> {
@@ -37,8 +35,10 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
             query.select(root).where(restriction);
             executeCriteriaQuery(result, query);
         });
-        System.out.println(result.size() + " trades find for user");
-        return result;
+        logger.debug(result.size() + " trades find for user");
+        List<Trade> newResult = new ArrayList<>(result);
+        newResult.sort(new TradeIdComparator());
+        return newResult;
 
         /*
         // Citation needed? -- https://stackoverflow.com/questions/40461519/search-by-nested-property-of-collection-field-with-criteria-api

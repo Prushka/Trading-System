@@ -26,6 +26,7 @@ public class TradeCell extends JFXListCell<Trade> {
         VBox leftVBox = new VBox(5);
         VBox rightVBox = new VBox(5);
 
+        hBox.getStyleClass().add("market-trade-cell");
         hBox.setAlignment(Pos.CENTER_LEFT);
         leftVBox.setAlignment(Pos.CENTER_LEFT);
         rightVBox.setAlignment(Pos.CENTER_RIGHT);
@@ -36,29 +37,40 @@ public class TradeCell extends JFXListCell<Trade> {
         Set<Long> users = new HashSet<>();
 
         for (TradeOrder tradeOrder : trade.getOrders()) {
+            HBox subHBox = new HBox(20);
+            subHBox.setAlignment(Pos.CENTER_RIGHT);
+            Label state = new Label(tradeOrder.getOrderState().name() + " ");
+            state.getStyleClass().addAll("trade-state");
+            Label outer = new Label(String.format("%s (%s items) <-> %s (%s items)",
+                    tradeOrder.getLeftUser().getName(),
+                    tradeOrder.getLeftBundle().getTradeItemHolder().size(), tradeOrder.getRightUser().getName(),
+                    tradeOrder.getRightBundle().getTradeItemHolder().size()
+            ));
+            outer.getStyleClass().addAll("trade-detail");
+            Label items = new Label(String.format("%s <-> %s",
+                    getTradeItemHolderRepresentation(tradeOrder.getLeftBundle().getTradeItemHolder()),
+                    getTradeItemHolderRepresentation(tradeOrder.getRightBundle().getTradeItemHolder())
+            ));
 
-            String userRepresentation =
-                    String.format("%s [ %s items <%s> ] <-> %s [ %s items <%s> ]",
-                            tradeOrder.getLeftUser().getName(),
-                            tradeOrder.getLeftBundle().getTradeItemHolder().size(),
-                            getTradeItemHolderRepresentation(tradeOrder.getLeftBundle().getTradeItemHolder()),
-                            tradeOrder.getRightUser().getName(), tradeOrder.getRightBundle().getTradeItemHolder().size(),
-                            getTradeItemHolderRepresentation(tradeOrder.getRightBundle().getTradeItemHolder())
-                    );
+            items.getStyleClass().addAll("trade-item-detail");
+
             users.add(tradeOrder.getLeftUser().getUid());
             users.add(tradeOrder.getRightUser().getUid());
-            rightVBox.getChildren().addAll(new Label(userRepresentation));
+            subHBox.getChildren().addAll(outer, state);
+            rightVBox.getChildren().addAll(subHBox, items);
         }
 
         Label idLabel = new Label("Trade: " + trade.getUid());
+        idLabel.getStyleClass().addAll("trade-uid");
         Label tradePlacedTime = new Label("Placed at: " + trade.getLocalDateTime().format(formatter));
+        tradePlacedTime.getStyleClass().addAll("trade-placed-time");
 
         Label involvedUsers = new Label(users.size() + " Users Involved");
+        involvedUsers.getStyleClass().addAll("trade-users-involved");
 
         leftVBox.getChildren().addAll(idLabel, tradePlacedTime, involvedUsers);
 
         hBox.getChildren().addAll(leftVBox, region, rightVBox);
-        hBox.getStyleClass().add("market-trade-cell");
         return hBox;
     }
 
@@ -69,7 +81,7 @@ public class TradeCell extends JFXListCell<Trade> {
         });
         String r = stringBuilder.toString();
         if (tradeItemHolder.size() == 0) {
-            return r;
+            return "nothing";
         }
         return r.substring(0, r.length() - 2);
     }

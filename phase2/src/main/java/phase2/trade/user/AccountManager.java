@@ -3,7 +3,6 @@ package phase2.trade.user;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import phase2.trade.callback.ResultStatusCallback;
-import phase2.trade.command.Command;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.PermissionGroup;
@@ -51,7 +50,7 @@ public class AccountManager {
 
     public User getLoggedInUser() {
         if (loggedInUser == null) {
-            logger.warn("The logged in user is missing while someone is trying to pull an existing logged in user!");
+            logger.warn("The logged in user is missing but someone is trying to pull an existing logged in user!");
             logger.warn("If this happens when you try to mock the dashboard, " +
                     "please check the database hbm2ddl option, if you are logging using wrong credentials or if you are mocking the registration" +
                     "of a user who" +

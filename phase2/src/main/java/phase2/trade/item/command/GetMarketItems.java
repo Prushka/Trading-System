@@ -15,6 +15,9 @@ import java.util.List;
         persistent = false, permissionSet = {Permission.BrowseMarket})
 public class GetMarketItems extends ItemCommand<List<Item>> {
 
+    // TODO: Optimize the query here
+    //  The owner and all its fields will be fetched together with its item
+    //  This is unnecessary since we only need owner's name and address
     @Override
     public void execute(ResultStatusCallback<List<Item>> callback, String... args) {
         if (!checkPermission(callback)) return;

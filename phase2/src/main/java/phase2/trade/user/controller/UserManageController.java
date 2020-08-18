@@ -90,7 +90,7 @@ public class UserManageController extends UserTableController implements Initial
                         status.handle(getNotificationFactory());
                     }
                     ),
-                    userName.getText(), email.getText(), password.getText(), "country", "city", permissionGroup.getSelectionModel().getSelectedItem());
+                    userName.getText(), email.getText(), password.getText(), permissionGroup.getSelectionModel().getSelectedItem(), "Canada", "Ontario", "Toronto");
         });
 
         createUser.setOnAction(a -> createUserAlert.display());

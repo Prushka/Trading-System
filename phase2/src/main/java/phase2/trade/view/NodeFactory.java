@@ -5,24 +5,15 @@ import com.jfoenix.controls.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import phase2.trade.config.GeoConfig;
 import phase2.trade.database.TriConsumer;
 import phase2.trade.item.Category;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumSet;
-import java.util.List;
 import java.util.stream.Stream;
 
 public class NodeFactory {
-
-    public NodeFactory() {
-
-    }
 
     public TextField getDefaultTextField(String promptText) {
         JFXTextField jfxTextField = new JFXTextField();

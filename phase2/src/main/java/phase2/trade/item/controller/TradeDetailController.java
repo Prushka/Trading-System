@@ -7,12 +7,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import phase2.trade.address.Address;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.controller.AbstractController;
@@ -23,12 +23,15 @@ import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.command.CreateTradeCommand;
 import phase2.trade.user.User;
-import phase2.trade.view.widget.TradeAddressWidget;
-import phase2.trade.view.widget.TradeOptionWidget;
-import phase2.trade.view.widget.TradeTimeWidget;
+import phase2.trade.widget.TradeAddressWidget;
+import phase2.trade.widget.TradeOptionWidget;
+import phase2.trade.widget.TradeTimeWidget;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "trade.fxml")
 public class TradeDetailController extends AbstractController implements Initializable {
@@ -142,12 +145,7 @@ public class TradeDetailController extends AbstractController implements Initial
     }
 
     private TradeOrder findOrderByUserPair(User a, User b) {
-        for (TradeOrder order : createTrade.getTrade().getOrders()) {
-            if (createTrade.ifUsersMatchOrder(order, a, b)) {
-                return order;
-            }
-        }
-        return null;
+        return createTrade.getTrade().findOrderByUserPair(a, b);
     }
 
     private void refreshTableArea(User leftSelected, User rightSelected) {
@@ -170,17 +168,17 @@ public class TradeDetailController extends AbstractController implements Initial
     private Map<User, UserTable> getUserTables(User matchesWhom) {
         Map<User, UserTable> table = new HashMap<>();
         for (TradeOrder order : createTrade.getTrade().getOrders()) {
-            if (order.getInitiatorUser().getUid().equals(matchesWhom.getUid())) {
-                UserTable userTable = new UserTable(order.getTarget().getUser(),
+            if (order.getLeftUser().getUid().equals(matchesWhom.getUid())) {
+                UserTable userTable = new UserTable(order.getRightBundle().getUser(),
                         FXCollections.observableArrayList(
-                                order.getTarget().getTradeItemHolder().getSetOfItems()), getControllerResources());
-                table.put(order.getTarget().getUser(), userTable);
+                                order.getRightBundle().getTradeItemHolder().getSetOfItems()), getControllerResources());
+                table.put(order.getRightBundle().getUser(), userTable);
             }
-            if (order.getTargetUser().getUid().equals(matchesWhom.getUid())) {
-                UserTable userTable = new UserTable(order.getTarget().getUser(),
+            if (order.getRightUser().getUid().equals(matchesWhom.getUid())) {
+                UserTable userTable = new UserTable(order.getRightBundle().getUser(),
                         FXCollections.observableArrayList(
-                                order.getInitiator().getTradeItemHolder().getSetOfItems()), getControllerResources());
-                table.put(order.getInitiatorUser(), userTable);
+                                order.getLeftBundle().getTradeItemHolder().getSetOfItems()), getControllerResources());
+                table.put(order.getLeftUser(), userTable);
             }
         }
         return table;

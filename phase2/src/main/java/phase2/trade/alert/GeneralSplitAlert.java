@@ -1,19 +1,12 @@
-package phase2.trade.view.window;
+package phase2.trade.alert;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.util.HashMap;
-import java.util.Map;
 
 // this is not the splitpane, but instead two VBoxes in an HBox
 // the name may change in the future to avoid confusion

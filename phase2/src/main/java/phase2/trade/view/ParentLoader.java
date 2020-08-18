@@ -11,8 +11,6 @@ import java.util.ResourceBundle;
 // the resource files have a very small chance not to be indexed, cleaning build cache could solve it
 public class ParentLoader {
 
-    public ParentLoader(){}
-
     public FXMLLoader getLoader(String fileName, Class<?> clazz) {
         Locale locale = new Locale("en", "US");
         ResourceBundle en = ResourceBundle.getBundle("language.strings", locale);

@@ -1,16 +1,11 @@
-package phase2.trade.view.widget;
+package phase2.trade.widget;
 
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.user.AccountState;
 import phase2.trade.user.User;
-import phase2.trade.user.command.ChangeAccountState;
-import phase2.trade.view.window.AddressAlertController;
 
 import java.net.URL;
 import java.time.LocalDate;

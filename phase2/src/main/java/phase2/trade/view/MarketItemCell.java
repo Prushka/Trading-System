@@ -9,7 +9,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddToCart;
 
@@ -20,11 +19,11 @@ public class MarketItemCell extends JFXListCell<Item> {
 
     private final AddToCart addToCartCommand;
 
-    private final PopupFactory popupFactory;
+    private final NotificationFactory notificationFactory;
 
-    public MarketItemCell(AddToCart addToCartCommand, PopupFactory popupFactory) {
+    public MarketItemCell(AddToCart addToCartCommand, NotificationFactory notificationFactory) {
         this.addToCartCommand = addToCartCommand;
-        this.popupFactory = popupFactory;
+        this.notificationFactory = notificationFactory;
     }
 
     private Pane generateItemPreview(Item item) {
@@ -120,7 +119,7 @@ public class MarketItemCell extends JFXListCell<Item> {
         }
     }
 
-    private PopupFactory getPopupFactory() {
-        return popupFactory;
+    private NotificationFactory getPopupFactory() {
+        return notificationFactory;
     }
 }

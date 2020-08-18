@@ -12,7 +12,7 @@ import java.util.List;
  * @author CraigTP - <a href="https://stackoverflow.com/questions/1102891/how-to-check-if-a-string-is-numeric-in-java">regex for checking if a string is numberic</a>
  */
 public class GeneralValidator implements Validator {
-    //This validator comes from phase 1 and is unmodified.
+    //This validator comes from phase 1 and is to be modified.
 
     /**
      * The minimum length allowed (inclusive) for the input String

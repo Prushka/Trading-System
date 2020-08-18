@@ -1,11 +1,10 @@
-package phase2.trade.view.widget;
+package phase2.trade.widget;
 
 import javafx.scene.control.Label;
 import phase2.trade.address.Address;
-import phase2.trade.callback.Callback;
+import phase2.trade.alert.AddressAlertController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.command.ChangeAddress;
-import phase2.trade.view.window.AddressAlertController;
 
 import java.net.URL;
 import java.util.ResourceBundle;

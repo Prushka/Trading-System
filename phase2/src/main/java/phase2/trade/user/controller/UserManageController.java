@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import phase2.trade.alert.GeneralVBoxAlert;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
@@ -14,7 +15,6 @@ import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
 import phase2.trade.user.command.GetUsers;
-import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
 import java.util.Arrays;

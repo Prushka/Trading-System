@@ -1,18 +1,12 @@
-package phase2.trade.view.widget;
+package phase2.trade.widget;
 
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXTimePicker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import phase2.trade.address.Address;
+import phase2.trade.alert.AddressAlertController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.User;
-import phase2.trade.user.command.ChangeAddress;
-import phase2.trade.view.window.AddressAlertController;
 
 import java.net.URL;
 import java.util.ResourceBundle;

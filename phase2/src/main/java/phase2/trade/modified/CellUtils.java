@@ -23,20 +23,21 @@
  *
  */
 
-package phase2.trade.view;
+package phase2.trade.modified;
 
 import com.jfoenix.controls.JFXComboBox;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Cell;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
+
+// This is modified from the original CellUtils
+// We didn't contribute to this class. This was created because the original CellUtils forces the use of the
+// JavaFX's original ComboBox
+// And since we've been using JFoenix library, we replaced the ComboBox -> JFXComboBox in the CellUtils
 
 // Package protected - not intended for external use
 class CellUtils {

@@ -1,6 +1,6 @@
 package phase2.trade.callback.status;
 
-import phase2.trade.view.PopupFactory;
+import phase2.trade.view.NotificationFactory;
 
 public class StatusExist extends StatusFailed {
 
@@ -13,9 +13,9 @@ public class StatusExist extends StatusFailed {
     }
 
     @Override
-    public void handle(PopupFactory popupFactory) {
+    public void handle(NotificationFactory notificationFactory) {
         run(() -> {
-            toastMessage(popupFactory);
+            toastMessage(notificationFactory);
             exist.run();
             failed.run();
             after.run();

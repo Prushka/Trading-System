@@ -9,7 +9,7 @@ import phase2.trade.refresh.ReType;
 import phase2.trade.user.User;
 import phase2.trade.user.command.UpdateUsers;
 import phase2.trade.user.controller.UserSideInfoController;
-import phase2.trade.view.widget.UserWidget;
+import phase2.trade.widget.UserWidget;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

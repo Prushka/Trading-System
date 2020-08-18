@@ -1,4 +1,4 @@
-package phase2.trade.view.window;
+package phase2.trade.alert;
 
 import javafx.stage.Stage;
 

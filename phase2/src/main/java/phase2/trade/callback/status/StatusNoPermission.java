@@ -1,7 +1,7 @@
 package phase2.trade.callback.status;
 
 import phase2.trade.permission.PermissionSet;
-import phase2.trade.view.PopupFactory;
+import phase2.trade.view.NotificationFactory;
 
 public class StatusNoPermission extends StatusFailed {
 
@@ -12,9 +12,9 @@ public class StatusNoPermission extends StatusFailed {
     }
 
     @Override
-    public void handle(PopupFactory popupFactory) {
+    public void handle(NotificationFactory notificationFactory) {
         run(() -> {
-            popupFactory.noPermission(permissionRequired);
+            notificationFactory.noPermission(permissionRequired);
             failed.run();
             after.run();
         });

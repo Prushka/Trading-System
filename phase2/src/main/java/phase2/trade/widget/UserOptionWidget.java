@@ -1,15 +1,15 @@
-package phase2.trade.view.widget;
+package phase2.trade.widget;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import phase2.trade.alert.GeneralVBoxAlert;
 import phase2.trade.avatar.UploadAvatarController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.refresh.ReType;
 import phase2.trade.user.command.ChangePassword;
 import phase2.trade.user.command.ChangeUserName;
 import phase2.trade.user.controller.UserSideInfoController;
-import phase2.trade.view.window.GeneralVBoxAlert;
 
 import java.net.URL;
 import java.util.ResourceBundle;

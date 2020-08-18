@@ -1,39 +1,17 @@
 package phase2.trade.user.controller;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
-import javafx.stage.FileChooser;
-import phase2.trade.avatar.Avatar;
-import phase2.trade.command.Command;
+import javafx.scene.layout.GridPane;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.EditableController;
-import phase2.trade.editor.UserEditor;
-import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
-import phase2.trade.user.command.ChangePassword;
-import phase2.trade.user.command.ChangeUserName;
-import phase2.trade.user.command.UpdateUsers;
-import phase2.trade.view.widget.*;
-import phase2.trade.view.window.GeneralVBoxAlert;
+import phase2.trade.widget.*;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 // TODO: ALL Controllers that don't extend AbstractTable... is a mess

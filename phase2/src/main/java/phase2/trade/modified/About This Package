@@ -1,0 +1,12 @@
+The classes in this package allow a TableView's column to be editable as a JFXComboBox.
+
+The reason why we had to modify them (from the JavaFX) was because the original classes hide the
+instantiation of the ComboBox and there is
+no way to replace the ComboBox using the JFXComboBox from JFoenix library.
+
+It only affects the view appearance, and I'm not very sure if this causes any licensing problems.
+But "CellUtils" and "JFXComboBoxTableCell" are not our contribution.
+
+It doesn't seem to be possible to extend ComboBoxTableCell since that class has private members which will be required in the child class.
+Thus the only way is to extend TableCell and write our own implementation.
+But it's still not worth spending time on this since I only want to replace the instantiation of that particular ComboBox

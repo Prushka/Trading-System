@@ -1,7 +1,7 @@
 package phase2.trade.callback.status;
 
 import javafx.application.Platform;
-import phase2.trade.view.PopupFactory;
+import phase2.trade.view.NotificationFactory;
 
 public abstract class ResultStatus { // the whole thing may still need to be improved
 
@@ -21,9 +21,9 @@ public abstract class ResultStatus { // the whole thing may still need to be imp
         exist = () -> {};
     }
 
-    protected void toastMessage(PopupFactory popupFactory) {
+    protected void toastMessage(NotificationFactory notificationFactory) {
         if (message != null && !message.isEmpty()) {
-            popupFactory.toast(message);
+            notificationFactory.toast(message);
         }
     }
 
@@ -35,7 +35,7 @@ public abstract class ResultStatus { // the whole thing may still need to be imp
         Platform.runLater(runnable);
     }
 
-    public abstract void handle(PopupFactory popupFactory);
+    public abstract void handle(NotificationFactory notificationFactory);
 
     public void setSucceeded(Runnable succeeded) {
         this.succeeded = succeeded;

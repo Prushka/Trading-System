@@ -1,27 +1,15 @@
-package phase2.trade.view.widget;
+package phase2.trade.widget;
 
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.EditableController;
-import phase2.trade.editor.EditorSupplier;
 import phase2.trade.user.User;
-
-import java.net.URL;
-import java.util.*;
 
 @ControllerProperty(viewFile = "widget.fxml")
 public abstract class WidgetControllerBase extends AbstractController implements Initializable {

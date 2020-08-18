@@ -1,7 +1,6 @@
 package phase2.trade.controller;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import phase2.trade.command.CommandFactory;
@@ -10,10 +9,10 @@ import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.refresh.ReType;
 import phase2.trade.refresh.Refreshable;
 import phase2.trade.refresh.Reloadable;
-import phase2.trade.view.NodeFactory;
-import phase2.trade.view.PopupFactory;
-import phase2.trade.view.SceneManager;
 import phase2.trade.user.AccountManager;
+import phase2.trade.view.NodeFactory;
+import phase2.trade.view.NotificationFactory;
+import phase2.trade.view.SceneManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +99,7 @@ public abstract class AbstractController implements Reloadable, Refreshable {
         return controllerResources.getAccountManager();
     }
 
-    protected PopupFactory getPopupFactory() {
+    protected NotificationFactory getPopupFactory() {
         return controllerResources.getPopupFactory();
     }
 

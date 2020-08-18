@@ -8,24 +8,27 @@ import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
+import phase2.trade.alert.TableViewAlert;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
+import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.DashboardPane;
 import phase2.trade.editor.CommandEditor;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
 import phase2.trade.user.command.CreateUser;
 import phase2.trade.view.TableViewGenerator;
-import phase2.trade.view.window.TableViewAlert;
 
 import java.net.URL;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class UserOperationController extends AbstractEditableTableController<Command, CommandEditor> implements Initializable {

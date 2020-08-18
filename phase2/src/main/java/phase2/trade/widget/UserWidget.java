@@ -1,10 +1,7 @@
-package phase2.trade.view.widget;
+package phase2.trade.widget;
 
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.view.window.AlertWindow;
 
 import java.net.URL;
 import java.util.ResourceBundle;

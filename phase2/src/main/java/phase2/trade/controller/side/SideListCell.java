@@ -1,8 +1,8 @@
-package phase2.trade.view;
+package phase2.trade.controller.side;
 
 import com.jfoenix.controls.JFXListCell;
 import javafx.scene.Node;
-import phase2.trade.controller.side.SideOption;
+import phase2.trade.view.ImageFactory;
 
 public class SideListCell extends JFXListCell<SideOption> {
 
@@ -12,7 +12,7 @@ public class SideListCell extends JFXListCell<SideOption> {
         if (empty) {
             setGraphic(null);
         } else {
-            Node graphic = new ImageFactory().generateGraphic(item.resourcePath);
+            Node graphic = new ImageFactory().generateGraphic(item.iconPath);
             if (graphic != null) {
                 setGraphic(graphic);
                 setGraphicTextGap(10);

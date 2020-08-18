@@ -1,5 +1,7 @@
 package phase2.trade.trade;
 
+import phase2.trade.user.User;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +30,18 @@ public class Trade {
 
     public void setOrders(Set<TradeOrder> orders) {
         this.orders = orders;
+    }
+
+    // A trade should contain only one pair of such users
+    public TradeOrder findOrderByUserPair(User a, User b) {
+        for (TradeOrder tradeOrder : orders) {
+            if (tradeOrder.ifUserPairMatchOrder(a, b)) return tradeOrder;
+        }
+        return null;
+    }
+
+    public boolean ifUserPairInOrder(User a, User b) {
+        return findOrderByUserPair(a, b) != null;
     }
 
 }

@@ -12,9 +12,9 @@ public class TradeOrder {
 
     private Long uid;
 
-    private UserOrderBundle initiator;
+    private UserOrderBundle left;
 
-    private UserOrderBundle target;
+    private UserOrderBundle right;
 
     private LocalDateTime dateAndTime;
 
@@ -36,32 +36,33 @@ public class TradeOrder {
 
 
     @OneToOne
-    public UserOrderBundle getInitiator() {
-        return initiator;
+    public UserOrderBundle getLeftBundle() {
+        return left;
     }
 
-    public void setInitiator(UserOrderBundle initiator) {
-        this.initiator = initiator;
+    public void setLeftBundle(UserOrderBundle left) {
+        this.left = left;
     }
 
     @OneToOne
-    public UserOrderBundle getTarget() {
-        return target;
+    public UserOrderBundle getRightBundle() {
+        return right;
+    }
+
+    public void setRightBundle(UserOrderBundle right) {
+        this.right = right;
     }
 
     @Transient
-    public User getTargetUser() {
-        return getTarget().getUser();
+    public User getRightUser() {
+        return getRightBundle().getUser();
     }
 
     @Transient
-    public User getInitiatorUser() {
-        return getInitiator().getUser();
+    public User getLeftUser() {
+        return getLeftBundle().getUser();
     }
 
-    public void setTarget(UserOrderBundle target) {
-        this.target = target;
-    }
 
     public LocalDateTime getDateAndTime() {
         return dateAndTime;
@@ -71,7 +72,7 @@ public class TradeOrder {
         this.dateAndTime = dateAndTime;
     }
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     public Address getAddressTrade() {
         return addressTrade;
     }
@@ -80,7 +81,7 @@ public class TradeOrder {
         this.addressTrade = addressTrade;
     }
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.ALL})
     public Address getAddressTradeBack() {
         return addressTradeBack;
     }
@@ -97,6 +98,11 @@ public class TradeOrder {
         this.orderState = orderState;
     }
 
+
+    public boolean ifUserPairMatchOrder(User a, User b) { // ids are used to avoid detached entities caused by hibernate (that may not point to the same entity object)
+        return a.getUid().equals(getLeftUser().getUid()) && b.getUid().equals(getRightUser().getUid()) ||
+                b.getUid().equals(getLeftUser().getUid()) && a.getUid().equals(getRightUser().getUid());
+    }
     /*
     @Transient
     public List<User> getUsers() {

@@ -1,12 +1,14 @@
-package phase2.trade.view.widget;
+package phase2.trade.widget;
 
 import javafx.scene.control.Label;
+import phase2.trade.alert.AlertWindow;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.permission.Permission;
-import phase2.trade.view.window.AlertWindow;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Collection;
+import java.util.ResourceBundle;
+import java.util.TreeSet;
 
 public class PermissionWidget extends WidgetControllerBase {
 

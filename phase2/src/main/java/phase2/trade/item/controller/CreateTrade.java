@@ -7,7 +7,10 @@ import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class CreateTrade {
 
@@ -22,22 +25,12 @@ public class CreateTrade {
         usersToItemsToGet.values().forEach(allItems::addAll);
     }
 
-    public boolean ifUsersMatchOrder(TradeOrder order, User a, User b) {
-        return a.getUid().equals(order.getInitiatorUser().getUid()) && b.getUid().equals(order.getTargetUser().getUid()) ||
-                b.getUid().equals(order.getInitiatorUser().getUid()) && a.getUid().equals(order.getTargetUser().getUid());
-    }
-
 
     public void createTwoWayUserOrderBundle(User initiator, User target, Collection<Item> itemsInitiatorWant, Collection<Item> itemsTargetWant) {
         // find out what initiator will provide to target and vice versa
         if (initiator == target) return;
         System.out.println("Create: " + trade.getOrders().size());
-        for (TradeOrder order : trade.getOrders()) {
-            System.out.println(order.getInitiatorUser().getUid() + " | " + order.getTargetUser().getUid());
-            if (ifUsersMatchOrder(order, initiator, target)) {
-                return;
-            }
-        }
+        if (trade.ifUserPairInOrder(initiator, target)) return;
         UserOrderBundle initiatorBundle = new UserOrderBundle();
         initiatorBundle.setUser(initiator);
         UserOrderBundle targetBundle = new UserOrderBundle();
@@ -56,8 +49,8 @@ public class CreateTrade {
             }
         }
         TradeOrder order = new TradeOrder();
-        order.setTarget(targetBundle);
-        order.setInitiator(initiatorBundle);
+        order.setRightBundle(targetBundle);
+        order.setLeftBundle(initiatorBundle);
         trade.getOrders().add(order);
     }
 
@@ -68,10 +61,10 @@ public class CreateTrade {
     public void cleanup() {
         System.out.println(trade.getOrders().size());
         for (TradeOrder order : trade.getOrders()) {
-            if (order.getTarget().getTradeItemHolder().size() == 0 && order.getInitiator().getTradeItemHolder().size() == 0) {
-            }else{
-                usersInvolved.add(order.getTargetUser());
-                usersInvolved.add(order.getInitiatorUser());
+            if (order.getRightBundle().getTradeItemHolder().size() == 0 && order.getLeftBundle().getTradeItemHolder().size() == 0) {
+            } else {
+                usersInvolved.add(order.getRightUser());
+                usersInvolved.add(order.getLeftUser());
             }
         }
         // trade.getOrders().removeAll(ordersToRemove);

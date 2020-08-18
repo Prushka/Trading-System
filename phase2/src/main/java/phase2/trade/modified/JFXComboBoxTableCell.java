@@ -23,7 +23,7 @@
  *
  */
 
-package phase2.trade.view;
+package phase2.trade.modified;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -32,9 +32,17 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+
+// This is modified from the original ComboBoxTableCell
+// We didn't contribute to this class. This was created because the original ComboBoxTableCell
+// uses a package-protected CellUtils and it forces the use of the JavaFX's original ComboBox
+// And since we've been using JFoenix library, we replaced the ComboBox -> JFXComboBox in the CellUtils
 
 /**
  * A class containing a {@link TableCell} implementation that draws a

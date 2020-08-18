@@ -1,15 +1,15 @@
 package phase2.trade.controller;
 
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import phase2.trade.ShutdownHook;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.refresh.ReReReRe;
+import phase2.trade.user.AccountManager;
+import phase2.trade.view.NotificationFactory;
 import phase2.trade.view.PopupFactory;
 import phase2.trade.view.SceneManager;
-import phase2.trade.user.AccountManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class ControllerResources {
 
     private final Stage window;
 
-    private final PopupFactory popupFactory;
+    private final NotificationFactory notificationFactory;
 
     private final GatewayBundle gatewayBundle;
 
@@ -40,7 +40,7 @@ public class ControllerResources {
         this.gatewayBundle = gatewayBundle;
         this.window = window;
         this.accountManager = accountManager;
-        popupFactory = new PopupFactory(window);
+        notificationFactory = new PopupFactory(window);
         commandFactory = new CommandFactory(gatewayBundle, accountManager);
         sceneManager = new SceneManager(this);
         reReReRe = new ReReReRe(gatewayBundle.getConfigBundle(), shutdownHook);
@@ -58,8 +58,8 @@ public class ControllerResources {
         return gatewayBundle;
     }
 
-    protected PopupFactory getPopupFactory() {
-        return popupFactory;
+    protected NotificationFactory getPopupFactory() {
+        return notificationFactory;
     }
 
     public CommandFactory getCommandFactory() {

@@ -1,4 +1,4 @@
-package phase2.trade.view.widget;
+package phase2.trade.widget;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

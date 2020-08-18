@@ -4,26 +4,33 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import phase2.trade.address.Address;
-import phase2.trade.alert.AddressAlertController;
+import phase2.trade.alert.AddressAlert;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.User;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TradeAddressWidget extends TradeDetailWidget {
+public class TradeAddressWidget extends TradeDetailWidget<Address> {
 
     private final Label countryLabel = new Label();
     private final Label provinceLabel = new Label();
     private final Label cityLabel = new Label();
-    private final AddressAlertController addressAlertController;
+    private final AddressAlert addressAlert;
 
+    private final Address previousAddress;
+
+
+    public TradeAddressWidget(ControllerResources controllerResources, User leftSelected, User rightSelected, Address previousAddress) {
+        super(controllerResources, leftSelected, rightSelected);
+        this.previousAddress = previousAddress;
+        addressAlert = getControllerFactory().getController(AddressAlert::new);
+        addressAlert.setAddress(previousAddress);
+    }
 
     public TradeAddressWidget(ControllerResources controllerResources, User leftSelected, User rightSelected) {
-        super(controllerResources, leftSelected, rightSelected);
-        Address address = getAccountManager().getLoggedInUser().getAddressBook().cloneSelectedAddressWithoutDetail();
-        addressAlertController = getControllerFactory().getController(AddressAlertController::new);
-        addressAlertController.setAddress(address);
+        this(controllerResources, leftSelected, rightSelected,
+                controllerResources.getAccountManager().getLoggedInUser().getAddressBook().cloneSelectedAddressWithoutDetail());
     }
 
     @Override
@@ -33,28 +40,28 @@ public class TradeAddressWidget extends TradeDetailWidget {
         addContent(provinceLabel, cityLabel);
 
         EventHandler<ActionEvent> eventEventHandler = event -> refresh();
-        addressAlertController.getCountryCombo().setOnAction(eventEventHandler);
-        addressAlertController.getCityCombo().setOnAction(eventEventHandler);
-        addressAlertController.getProvinceCombo().setOnAction(eventEventHandler);
-        setOnMouseClicked(e -> addressAlertController.display());
+        addressAlert.getCountryCombo().setOnAction(eventEventHandler);
+        addressAlert.getCityCombo().setOnAction(eventEventHandler);
+        addressAlert.getProvinceCombo().setOnAction(eventEventHandler);
+        setOnMouseClicked(e -> addressAlert.display());
         refresh();
     }
 
-    public Address getSubmittedAddress() {
+    public Address getValue() {
         Address address = new Address();
-        address.setCountry(addressAlertController.getCountryCombo().getSelectionModel().getSelectedItem());
-        address.setTerritory(addressAlertController.getProvinceCombo().getSelectionModel().getSelectedItem());
-        address.setCity(addressAlertController.getCityCombo().getSelectionModel().getSelectedItem());
-        address.setFirstAddressLine(addressAlertController.getAddressLine1().getText());
-        address.setSecondAddressLine(addressAlertController.getAddressLine2().getText());
-        address.setPostalCode(addressAlertController.getPostalCode().getText());
+        address.setCountry(addressAlert.getCountryCombo().getSelectionModel().getSelectedItem());
+        address.setTerritory(addressAlert.getProvinceCombo().getSelectionModel().getSelectedItem());
+        address.setCity(addressAlert.getCityCombo().getSelectionModel().getSelectedItem());
+        address.setFirstAddressLine(addressAlert.getAddressLine1().getText());
+        address.setSecondAddressLine(addressAlert.getAddressLine2().getText());
+        address.setPostalCode(addressAlert.getPostalCode().getText());
         return address;
     }
 
     public void refresh() {
-        countryLabel.setText("Country: " + addressAlertController.getCountryCombo().getSelectionModel().getSelectedItem());
-        provinceLabel.setText("Province: " + addressAlertController.getProvinceCombo().getSelectionModel().getSelectedItem());
-        cityLabel.setText("City: " + addressAlertController.getCityCombo().getSelectionModel().getSelectedItem());
+        countryLabel.setText("Country: " + addressAlert.getCountryCombo().getSelectionModel().getSelectedItem());
+        provinceLabel.setText("Province: " + addressAlert.getProvinceCombo().getSelectionModel().getSelectedItem());
+        cityLabel.setText("City: " + addressAlert.getCityCombo().getSelectionModel().getSelectedItem());
 
     }
 }

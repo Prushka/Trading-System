@@ -27,7 +27,7 @@ import java.util.*;
 //  If AbstractEditableTableController<T,E> is a subclass of AbstractTableController<T> -> AbstractEditableController<T, E> wouldn't be in hierarchy
 //  If AbstractEditableTableController<T,E> is a subclass of AbstractEditableController<T,E> -> AbstractTableController<T> wouldn't be in hierarchy
 //  If composition is used, the update entity method would be impossible to customize (It will require a ResultStatusCallback)
-public abstract class AbstractEditableTableController<T, E> extends EditableController<T, E> implements Initializable {
+public abstract class EditableTableController<T, E> extends EditableController<T, E> implements Initializable {
 
     @FXML
     protected TableView<T> tableView;
@@ -41,9 +41,9 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
 
     protected TableViewGenerator<T> tableViewGenerator;
 
-    public AbstractEditableTableController(ControllerResources controllerResources,
-                                           boolean ifMultipleSelection, boolean ifEditable,
-                                           EditorSupplier<E, T> supplier) {
+    public EditableTableController(ControllerResources controllerResources,
+                                   boolean ifMultipleSelection, boolean ifEditable,
+                                   EditorSupplier<E, T> supplier) {
         super(controllerResources, supplier);
         this.ifMultipleSelection = ifMultipleSelection;
         this.ifEditable = ifEditable;

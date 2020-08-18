@@ -13,15 +13,23 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
-public class TradeTimeWidget extends TradeDetailWidget {
+public class TradeTimeWidget extends TradeDetailWidget<LocalDateTime> {
 
     private final DatePicker datePicker = new JFXDatePicker();
     private final JFXTimePicker timePicker = new JFXTimePicker();
 
     private final Label userLabel = new Label();
 
+    private final LocalDateTime previousValue;
+
     public TradeTimeWidget(ControllerResources controllerResources, User leftSelected, User rightSelected) {
+        this(controllerResources, leftSelected, rightSelected, null);
+    }
+
+    public TradeTimeWidget(ControllerResources controllerResources, User leftSelected, User rightSelected,
+                           LocalDateTime previousValue) {
         super(controllerResources, leftSelected, rightSelected);
+        this.previousValue = previousValue;
     }
 
     @Override
@@ -33,10 +41,14 @@ public class TradeTimeWidget extends TradeDetailWidget {
         getRoot().setPrefWidth(350);
         getRoot().setSpacing(15);
         getRoot().setPrefHeight(200);
+        if (previousValue != null) {
+            datePicker.setValue(previousValue.toLocalDate());
+            timePicker.setValue(previousValue.toLocalTime());
+        }
         refresh();
     }
 
-    public LocalDateTime getTime() {
+    public LocalDateTime getValue() {
         LocalDate localDate = datePicker.getValue();
         LocalTime localTime = timePicker.getValue();
         if (localDate == null || localTime == null) return null;

@@ -3,9 +3,9 @@ package phase2.trade.support.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.Initializable;
-import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.EditableTableController;
 import phase2.trade.editor.SupportTicketEditor;
 import phase2.trade.refresh.ReType;
 import phase2.trade.support.SupportTicket;
@@ -17,7 +17,7 @@ import phase2.trade.support.command.UpdateSupportTickets;
 import java.util.List;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class SupportTicketController extends AbstractEditableTableController<SupportTicket, SupportTicketEditor> implements Initializable {
+public class SupportTicketController extends EditableTableController<SupportTicket, SupportTicketEditor> implements Initializable {
 
 
     public SupportTicketController(ControllerResources controllerResources, boolean ifMultipleSelection) {

@@ -3,7 +3,7 @@ package phase2.trade.widget;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.User;
 
-public abstract class TradeDetailWidget extends WidgetControllerBase {
+public abstract class TradeDetailWidget<T> extends WidgetControllerBase {
 
     protected final User leftSelected, rightSelected;
 
@@ -12,4 +12,6 @@ public abstract class TradeDetailWidget extends WidgetControllerBase {
         this.leftSelected = leftSelected;
         this.rightSelected = rightSelected;
     }
+
+    public abstract T getValue();
 }

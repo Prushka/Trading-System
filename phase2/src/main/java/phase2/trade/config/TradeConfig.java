@@ -2,9 +2,9 @@ package phase2.trade.config;
 
 public class TradeConfig {
 
-    private int editLimit;
+    private int editLimit = 3;
 
-    private int timeLimit;
+    private int timeLimit = 3;
 
     public int getEditLimit() {
         return editLimit;

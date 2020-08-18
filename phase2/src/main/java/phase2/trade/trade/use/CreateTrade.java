@@ -1,4 +1,4 @@
-package phase2.trade.item.controller;
+package phase2.trade.trade.use;
 
 import phase2.trade.item.Item;
 import phase2.trade.itemlist.TradeItemHolder;

@@ -9,9 +9,9 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
 import phase2.trade.item.controller.CartController;
-import phase2.trade.item.controller.CreateTrade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.command.CreateTradeCommand;
+import phase2.trade.trade.use.CreateTrade;
 import phase2.trade.user.User;
 import phase2.trade.widget.TradeOptionWidget;
 
@@ -21,15 +21,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class TradeDetailController extends TradeController {
+public class TradeDetailController extends TradeInfoController {
 
     private final Map<User, Collection<Item>> usersToItemsToGet;
 
     private final Map<User, Map<User, UserTable>> userTablesCombination = new HashMap<>();
 
     private final CreateTrade createTrade;
-
-    private final Map<TradeOrder, WidgetBundle> widgetBundleMap = new HashMap<>();
 
     private TradeOptionWidget tradeOptionWidget;
 
@@ -52,21 +50,7 @@ public class TradeDetailController extends TradeController {
         }
 
         usersInvolved = createTrade.getUsersInvolved();
-
-        rightComboBox = getUserComboBox(usersInvolved);
-        leftComboBox = getUserComboBox(usersInvolved);
-        leftComboBox.setOnAction(e -> {
-            User leftSelected = leftComboBox.getSelectionModel().getSelectedItem();
-            User rightSelected = rightComboBox.getSelectionModel().getSelectedItem();
-            refreshTableArea(leftSelected, rightSelected);
-            rightComboBox.setItems(getUsersBesides(leftSelected));
-        });
-        rightComboBox.setOnAction(e -> {
-            User leftSelected = leftComboBox.getSelectionModel().getSelectedItem();
-            User rightSelected = rightComboBox.getSelectionModel().getSelectedItem();
-            refreshTableArea(leftSelected, rightSelected);
-            leftComboBox.setItems(getUsersBesides(rightSelected));
-        });
+        loadComboBoxesWithUsers();
 
         Label offersFollowingItemsA = new Label("  offers following items");
         Label offersFollowingItemsB = new Label("  offers following items");
@@ -80,8 +64,8 @@ public class TradeDetailController extends TradeController {
             CreateTradeCommand createTradeCommand = getCommandFactory().getCommand(
                     CreateTradeCommand::new, c -> c.setToUpdate(createTrade.getTrade()));
             for (Map.Entry<TradeOrder, WidgetBundle> entry : widgetBundleMap.entrySet()) {
-                entry.getKey().setAddressTrade(entry.getValue().tradeAddressWidget.getSubmittedAddress());
-                entry.getKey().setDateAndTime(entry.getValue().tradeTimeWidget.getTime());
+                entry.getKey().setAddressTrade(entry.getValue().tradeAddressWidget.getValue());
+                entry.getKey().setDateAndTime(entry.getValue().tradeTimeWidget.getValue());
             }
             createTradeCommand.execute((result, status) -> {
                 status.setSucceeded(() -> {
@@ -105,7 +89,8 @@ public class TradeDetailController extends TradeController {
         return widgetBundleMap.get(order);
     }
 
-    private void refreshTableArea(User leftSelected, User rightSelected) {
+    @Override
+    void refreshTableArea(User leftSelected, User rightSelected) {
         if (leftSelected == null || rightSelected == null) return;
         TableView<Item> left = userTablesCombination.get(rightSelected)
                 .get(leftSelected).tableViewGenerator.getTableView();

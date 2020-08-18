@@ -2,7 +2,7 @@ package phase2.trade.widget;
 
 import javafx.scene.control.Label;
 import phase2.trade.address.Address;
-import phase2.trade.alert.AddressAlertController;
+import phase2.trade.alert.AddressAlert;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.command.ChangeAddress;
 
@@ -26,26 +26,26 @@ public class AddressWidget extends LittleTextWidgetController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setGradient("gradient-i");
-        AddressAlertController addressAlertController = getControllerFactory().getController(AddressAlertController::new);
-        addressAlertController.setAddress(address);
+        AddressAlert addressAlert = getControllerFactory().getController(AddressAlert::new);
+        addressAlert.setAddress(address);
         addTitle(countryLabel);
         addContent(provinceLabel, cityLabel);
 
-        addressAlertController.setEventHandler(event -> {
+        addressAlert.setEventHandler(event -> {
             ChangeAddress changeAddress = getCommandFactory().getCommand(ChangeAddress::new);
             changeAddress.execute((result, status) -> {
                         status.setSucceeded(this::refresh);
                         status.handle(getNotificationFactory());
                     },
-                    addressAlertController.getCountryCombo().getSelectionModel().getSelectedItem(),
-                    addressAlertController.getProvinceCombo().getSelectionModel().getSelectedItem(),
-                    addressAlertController.getCityCombo().getSelectionModel().getSelectedItem(),
-                    addressAlertController.getAddressLine1().getText(),
-                    addressAlertController.getAddressLine2().getText(),
-                    addressAlertController.getPostalCode().getText());
+                    addressAlert.getCountryCombo().getSelectionModel().getSelectedItem(),
+                    addressAlert.getProvinceCombo().getSelectionModel().getSelectedItem(),
+                    addressAlert.getCityCombo().getSelectionModel().getSelectedItem(),
+                    addressAlert.getAddressLine1().getText(),
+                    addressAlert.getAddressLine2().getText(),
+                    addressAlert.getPostalCode().getText());
         });
 
-        setOnMouseClicked(e -> addressAlertController.display());
+        setOnMouseClicked(e -> addressAlert.display());
         refresh();
     }
 

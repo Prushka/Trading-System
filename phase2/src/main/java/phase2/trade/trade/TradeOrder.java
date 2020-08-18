@@ -104,8 +104,18 @@ public class TradeOrder {
                 b.getUid().equals(getLeftUser().getUid()) && a.getUid().equals(getRightUser().getUid());
     }
 
+    public UserOrderBundle findBundleByUser(User user) {
+        if (user.getUid().equals(getLeftUser().getUid())) {
+            return getLeftBundle();
+        }
+        if (user.getUid().equals(getRightUser().getUid())) {
+            return getRightBundle();
+        }
+        return null;
+    }
+
     public boolean ifUserInOrder(User user) {
-        return user.getUid().equals(getLeftUser().getUid()) || user.getUid().equals(getRightUser().getUid());
+        return findBundleByUser(user) != null;
     }
     /*
     @Transient

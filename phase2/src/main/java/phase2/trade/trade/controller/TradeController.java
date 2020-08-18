@@ -1,7 +1,5 @@
 package phase2.trade.trade.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -15,8 +13,6 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.controller.UserCell;
 import phase2.trade.item.controller.UserStringConverter;
 import phase2.trade.user.User;
-import phase2.trade.widget.TradeAddressWidget;
-import phase2.trade.widget.TradeTimeWidget;
 
 import java.util.Collection;
 
@@ -40,25 +36,11 @@ public abstract class TradeController extends AbstractController implements Init
 
     ComboBox<User> rightComboBox, leftComboBox;
 
-    Collection<User> usersInvolved;
-
-    class WidgetBundle {
-        TradeTimeWidget tradeTimeWidget;
-        TradeAddressWidget tradeAddressWidget;
-
-        public WidgetBundle(User leftSelected, User rightSelected) {
-            tradeTimeWidget = new TradeTimeWidget(getControllerResources(), leftSelected, rightSelected);
-            tradeAddressWidget = new TradeAddressWidget(getControllerResources(), leftSelected, rightSelected);
-        }
-
-        void loadOnto(Pane pane) {
-            pane.getChildren().setAll(getSceneManager().loadPane(tradeTimeWidget), getSceneManager().loadPane(tradeAddressWidget));
-        }
-    }
 
     public TradeController(ControllerResources controllerResources) {
         super(controllerResources);
     }
+
 
     ComboBox<User> getUserComboBox(Collection<User> users) {
         ComboBox<User> comboBox = getNodeFactory().getComboBox(users);
@@ -66,12 +48,5 @@ public abstract class TradeController extends AbstractController implements Init
         comboBox.setCellFactory(e -> new UserCell());
         return comboBox;
     }
-
-    ObservableList<User> getUsersBesides(User user) {
-        ObservableList<User> list = FXCollections.observableArrayList(usersInvolved);
-        list.remove(user);
-        return list;
-    }
-
 
 }

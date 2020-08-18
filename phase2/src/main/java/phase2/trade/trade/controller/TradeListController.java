@@ -61,9 +61,9 @@ public class TradeListController extends AbstractListController<Trade> implement
     }
 
     private void displayPopup(Trade trade) {
-        VBoxAlert VBoxAlert = getNotificationFactory().vBoxAlert("", "", "Ok");
-        TradeEditController tradeEditController = new TradeEditController(getControllerResources(), trade);
-        VBoxAlert.addNodes(getSceneManager().loadPane(tradeEditController));
-        VBoxAlert.display();
+        VBoxAlert alert = getNotificationFactory().vBoxAlert("", "", "Ok");
+        TradeEditController tradeEditController = new TradeEditController(getControllerResources(), trade, alert);
+        alert.addNodes(getSceneManager().loadPane(tradeEditController));
+        alert.display();
     }
 }

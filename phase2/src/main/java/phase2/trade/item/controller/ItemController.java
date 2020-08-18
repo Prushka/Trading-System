@@ -5,9 +5,9 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import phase2.trade.command.Command;
-import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
+import phase2.trade.controller.EditableTableController;
 import phase2.trade.controller.market.MarketListController;
 import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.Category;
@@ -18,7 +18,7 @@ import phase2.trade.item.command.UpdateItems;
 
 import java.util.List;
 
-public class ItemController extends AbstractEditableTableController<Item, ItemEditor> implements Initializable {
+public class ItemController extends EditableTableController<Item, ItemEditor> implements Initializable {
 
     public ItemController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
         super(controllerResources, ifMultipleSelection, ifEditable, ItemEditor::new);

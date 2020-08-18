@@ -1,10 +1,5 @@
 package phase2.trade.trade;
 
-import phase2.trade.address.Address;
-import phase2.trade.user.User;
-
-import java.time.LocalDateTime;
-
 /**
  * Where trade dates and locations are edited
  * @author Grace Leung
@@ -21,9 +16,9 @@ public class TradeEditor {
     public void edit(Trade currTrade, User editingUser, String... args) {
         // Only unconfirmed parties a part of this trade can edit and users automatically confirm to their edit
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
-            if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.getConfirmations() && user.getEdits() == editLimit){
+            if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.hasConfirmed() && user.getEdits() == editLimit){
                 cancelOrder(currTrade);
-            } else if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.getConfirmations() && user.getEdits() < editLimit){
+            } else if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.hasConfirmed() && user.getEdits() < editLimit){
                 if (args.length == 5){
                     LocalDateTime dateTime = LocalDateTime.of(Integer.parseInt(args[0]), Integer.parseInt(args[1]),
                             Integer.parseInt(args[2]), Integer.parseInt(args[3]), Integer.parseInt(args[4]));
@@ -33,9 +28,9 @@ public class TradeEditor {
                     ((MeetUpOrder)currTrade.getOrder()).setLocation(location);
                 }
                 user.setEdits(user.getEdits() + 1);
-                user.setConfirmations(true);
+                user.setConfirm(true);
             } else if (!user.getUser().equals(editingUser)){
-                user.setConfirmations(false); // Need to alter so if they aren't in the trade at all, this doesn't happen
+                user.setConfirm(false); // Need to alter so if they aren't in the trade at all, this doesn't happen
             }
         }
     }

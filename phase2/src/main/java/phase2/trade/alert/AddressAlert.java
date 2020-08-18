@@ -8,7 +8,7 @@ import phase2.trade.address.Address;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerResources;
 
-public class AddressAlertController extends AbstractController {
+public class AddressAlert extends AbstractController {
 
     private ComboBox<String> countryCombo;
     private ComboBox<String> provinceCombo;
@@ -20,7 +20,7 @@ public class AddressAlertController extends AbstractController {
 
     private VBoxAlert addressAlert;
 
-    public AddressAlertController(ControllerResources controllerResources) {
+    public AddressAlert(ControllerResources controllerResources) {
         super(controllerResources);
 
         addressAlert = getNotificationFactory().vBoxAlert("Modify Your Address", "");

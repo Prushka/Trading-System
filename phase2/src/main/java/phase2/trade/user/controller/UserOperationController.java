@@ -12,10 +12,10 @@ import phase2.trade.alert.TableViewAlert;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
-import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
+import phase2.trade.controller.EditableTableController;
 import phase2.trade.editor.CommandEditor;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-public class UserOperationController extends AbstractEditableTableController<Command, CommandEditor> implements Initializable {
+public class UserOperationController extends EditableTableController<Command, CommandEditor> implements Initializable {
 
 
     public UserOperationController(ControllerResources controllerResources) {

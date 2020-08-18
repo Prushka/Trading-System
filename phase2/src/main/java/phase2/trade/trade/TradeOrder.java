@@ -103,6 +103,10 @@ public class TradeOrder {
         return a.getUid().equals(getLeftUser().getUid()) && b.getUid().equals(getRightUser().getUid()) ||
                 b.getUid().equals(getLeftUser().getUid()) && a.getUid().equals(getRightUser().getUid());
     }
+
+    public boolean ifUserInOrder(User user) {
+        return user.getUid().equals(getLeftUser().getUid()) || user.getUid().equals(getRightUser().getUid());
+    }
     /*
     @Transient
     public List<User> getUsers() {
@@ -126,7 +130,7 @@ public class TradeOrder {
         for (UserOrderBundle user : traders) {
             if (!user.getUser().equals(currUser)) {
                 for (Item item : user.getTradeItemHolder().getSetOfItems()) {
-                    if (((RegularUser) currUser).getInventory().getSetOfItems().contains(item)) {
+                    if (((RegularUser) currUser).getInventory().getSetOfItems().containsUid(item)) {
                         return true;
                     }
                 }

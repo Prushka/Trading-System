@@ -11,7 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
 import phase2.trade.modified.JFXComboBoxTableCell;
 
@@ -126,31 +125,6 @@ public class TableViewGenerator<T> {
         column.setCellFactory(TextFieldTableCell.forTableColumn());
         column.setOnEditCommit(onEditCommit);
         return this;
-    }
-
-    // https://stackoverflow.com/questions/14650787/javafx-column-in-tableview-auto-fit-size
-    public void autoResizeColumns() { // well it seems that this is done by default
-        //Set the right policy
-        tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
-        tableView.getColumns().forEach((column) ->
-        {
-            //Minimal width = columnheader
-            Text t = new Text(column.getText());
-            double max = t.getLayoutBounds().getWidth();
-            for (int i = 0; i < tableView.getItems().size(); i++) {
-                //cell must not be empty
-                if (column.getCellData(i) != null) {
-                    t = new Text(column.getCellData(i).toString());
-                    double calcwidth = t.getLayoutBounds().getWidth();
-                    //remember new max-width
-                    if (calcwidth > max) {
-                        max = calcwidth;
-                    }
-                }
-            }
-            //set the new max-width with some extra space
-            column.setPrefWidth(max + 10.0d);
-        });
     }
 
     public TableView<T> build() {

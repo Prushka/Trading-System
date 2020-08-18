@@ -1,7 +1,5 @@
 package phase2.trade.command;
 
-import java.util.List;
-
 public interface ArgsInvolved {
 
     default String argRequired(Integer required, String... args) {

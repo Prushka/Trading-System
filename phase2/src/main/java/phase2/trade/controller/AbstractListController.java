@@ -6,12 +6,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.layout.VBox;
 import phase2.trade.view.ListViewGenerator;
-import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
-import java.util.List;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_list_view.fxml")
@@ -20,7 +18,7 @@ import java.util.ResourceBundle;
 public abstract class AbstractListController<T> extends AbstractController implements Initializable {
 
     @FXML
-    private ListView<T> listView;
+    protected ListView<T> listView;
 
     // @FXML
     // protected VBox root;
@@ -41,11 +39,11 @@ public abstract class AbstractListController<T> extends AbstractController imple
         listViewGenerator = new ListViewGenerator<>(displayData, listView);
     }
 
-    public void setDisplayData(List<T> displayData) {
+    public void setDisplayData(Collection<T> displayData) {
         setDisplayData(FXCollections.observableArrayList(displayData));
     }
 
-    public void reloadNewDisplayData(List<T> displayData) {
+    public void reloadNewDisplayData(Collection<T> displayData) {
         listView.setItems(FXCollections.observableArrayList(displayData));
     }
 
@@ -57,6 +55,6 @@ public abstract class AbstractListController<T> extends AbstractController imple
     }
 
     protected void nothingSelectedToast() {
-        getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
+        getNotificationFactory().toast(3, "You didn't select anything", "CLOSE");
     }
 }

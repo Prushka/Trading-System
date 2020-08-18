@@ -1,7 +1,7 @@
 package phase2.trade.item.controller;
 
-import phase2.trade.inventory.TradeItemHolder;
 import phase2.trade.item.Item;
+import phase2.trade.itemlist.TradeItemHolder;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.UserOrderBundle;

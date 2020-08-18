@@ -1,4 +1,4 @@
-package phase2.trade.item.controller;
+package phase2.trade.trade.controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -24,6 +24,8 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
 import phase2.trade.item.ItemFilter;
+import phase2.trade.item.controller.UserCell;
+import phase2.trade.item.controller.UserStringConverter;
 import phase2.trade.user.User;
 
 import java.net.URL;
@@ -38,8 +40,6 @@ public class TradeController extends AbstractController implements Initializable
     @FXML
     private BorderPane root;
 
-    private final ObservableList<Item> selectedItems;
-
     @FXML
     private HBox topLeftHBox, topRightHBox;
 
@@ -52,19 +52,21 @@ public class TradeController extends AbstractController implements Initializable
     @FXML
     private HBox buttonPane;
 
-    Map<User, UserTable> userTables = new HashMap<>();
-    AllTable allTable;
-
     private ComboBox<User> rightComboBox;
 
+    private final ObservableList<Item> selectedItems;
+
     private final Map<Long, Item> allItems = new HashMap<>();
+
+    private final Map<User, UserTable> userTables = new HashMap<>();
+
+    private AllTable allTable;
 
     public TradeController(ControllerResources controllerResources, ObservableList<Item> selectedItems) {
         super(controllerResources);
         this.selectedItems = FXCollections.observableArrayList(selectedItems);
     }
 
-    //dashboard-table-view
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         selectedItems.addAll(new ItemFilter(getAccountManager().getLoggedInUser()).getTradableItems());
@@ -82,9 +84,7 @@ public class TradeController extends AbstractController implements Initializable
         setupAllTableDrags(allTable.getTableView());
 
 
-        userTables.values().forEach(t -> {
-            setupUserTableDrags(t.getTableView());
-        });
+        userTables.values().forEach(t -> setupUserTableDrags(t.getTableView()));
 
         rightComboBox = getUserComboBox(userTables.keySet());
         rightComboBox.setOnAction(e -> {
@@ -148,7 +148,7 @@ public class TradeController extends AbstractController implements Initializable
                 Item item = allItems.get(Long.valueOf(db.getString()));
                 if (!tableView.getItems().contains(item)) {
                     if (userTables.get(item.getOwner()).getTableView() == tableView) {
-                        getPopupFactory().toast(5, "Do not drag items to oneself! This won't form a trade my friend");
+                        getNotificationFactory().toast(5, "Do not drag items to oneself! This won't form a trade my friend");
                         return;
                     }
                     tableView.getItems().addAll(item);

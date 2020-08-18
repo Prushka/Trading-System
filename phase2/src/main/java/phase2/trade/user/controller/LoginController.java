@@ -40,7 +40,7 @@ public class LoginController extends AbstractController implements Initializable
         getAccountManager().login((result, status) -> {
             status.setFailed(() -> submissionResultProperty.setValue("Invalid Username / Password"));
             status.setSucceeded(() -> getSceneManager().switchScene(DashboardController::new));
-            status.handle(getPopupFactory());
+            status.handle(getNotificationFactory());
         }, usernameOrEmail.getText(), password.getText());
     }
 

@@ -9,7 +9,7 @@ import phase2.trade.user.command.ChangeAddress;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddressWidget extends SmallTextWidgetController {
+public class AddressWidget extends LittleTextWidgetController {
 
     private Address address;
 
@@ -35,7 +35,7 @@ public class AddressWidget extends SmallTextWidgetController {
             ChangeAddress changeAddress = getCommandFactory().getCommand(ChangeAddress::new);
             changeAddress.execute((result, status) -> {
                         status.setSucceeded(this::refresh);
-                        status.handle(getPopupFactory());
+                        status.handle(getNotificationFactory());
                     },
                     addressAlertController.getCountryCombo().getSelectionModel().getSelectedItem(),
                     addressAlertController.getProvinceCombo().getSelectionModel().getSelectedItem(),

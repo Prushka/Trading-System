@@ -8,6 +8,7 @@ import phase2.trade.item.controller.ItemManageController;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.support.controller.SupportTicketAdminController;
 import phase2.trade.support.controller.SupportTicketUserController;
+import phase2.trade.trade.controller.TradeListController;
 import phase2.trade.user.controller.UserInfoController;
 import phase2.trade.user.controller.UserManageController;
 import phase2.trade.user.controller.UserOperationController;
@@ -40,7 +41,7 @@ public enum SideOption {
 
     ORDER("side.orders",
             "/svg/team.svg",
-            null,
+            TradeListController::new,
             PermissionGroup.REGULAR),
 
     MANAGE_USERS("side.m.users",
@@ -69,13 +70,15 @@ public enum SideOption {
             SupportTicketAdminController::new,
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
-    SIGN_OUT(SidePosition.BOTTOM,
-            "side.sign.out",
-            "/svg/logout.svg"),
 
     EXIT(SidePosition.BOTTOM,
             "side.exit",
-            "/svg/turnoff.svg");
+            "/svg/turnoff.svg"),
+
+    SIGN_OUT(SidePosition.BOTTOM,
+            "side.sign.out",
+            "/svg/logout.svg");
+
 
     enum SidePosition {
         TOP, BOTTOM
@@ -83,7 +86,7 @@ public enum SideOption {
 
     public String iconPath;
     public String language;
-    private Collection<PermissionGroup> permissionGroups = new HashSet<>();
+    private final Collection<PermissionGroup> permissionGroups = new HashSet<>();
     public SidePosition sidePosition;
     public ControllerSupplier<?> controllerSupplier;
 

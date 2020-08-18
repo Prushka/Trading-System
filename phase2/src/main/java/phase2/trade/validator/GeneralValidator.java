@@ -5,13 +5,13 @@ import java.util.List;
 
 /**
  * A validator that serves a general purpose.<p>
- * This validator checks if the input is a number / string, if the input is within a range of length and if the input contains potential csv injection characters.<p>
+ * This validator checks if the input is a number / string, if the input is within a range of length and if the input containsUid potential csv injection characters.<p>
  * This validator can have other validators as children.
  *
  * @author Dan Lyu
  * @author CraigTP - <a href="https://stackoverflow.com/questions/1102891/how-to-check-if-a-string-is-numeric-in-java">regex for checking if a string is numberic</a>
  */
-public class GeneralValidator implements Validator {
+public class GeneralValidator implements Validator<String> {
     //This validator comes from phase 1 and is to be modified.
 
     /**

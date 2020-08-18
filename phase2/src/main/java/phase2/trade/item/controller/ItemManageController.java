@@ -3,13 +3,15 @@ package phase2.trade.item.controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.editor.ItemEditor;
-import phase2.trade.item.*;
-import phase2.trade.item.command.*;
+import phase2.trade.item.Item;
+import phase2.trade.item.Ownership;
+import phase2.trade.item.command.GetAllItems;
+import phase2.trade.item.command.RemoveItem;
 
 import java.net.URL;
 import java.util.List;
@@ -32,7 +34,7 @@ public class ItemManageController extends ItemController implements Initializabl
                 setDisplayData(FXCollections.observableArrayList(result));
                 afterFetch();
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
     }
 
@@ -43,7 +45,7 @@ public class ItemManageController extends ItemController implements Initializabl
             resultStatus.setSucceeded(() -> {
                 reloadNewDisplayData(result);
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
         super.reload();
     }

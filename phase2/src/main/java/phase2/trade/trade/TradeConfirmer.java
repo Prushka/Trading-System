@@ -1,16 +1,5 @@
 package phase2.trade.trade;
 
-import phase2.trade.inventory.Cart;
-import phase2.trade.inventory.Inventory;
-import phase2.trade.inventory.ItemListType;
-import phase2.trade.item.Item;
-import phase2.trade.user.RegularUser;
-import phase2.trade.user.User;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 public class TradeConfirmer {
     /*
     Integer timeLimit;
@@ -66,7 +55,7 @@ public class TradeConfirmer {
             Set<Item> newInventoryList = currUser.getItemList(ItemListType.INVENTORY).getSetOfItems();
             for (Item item : user.getTradeItemHolder().getSetOfItems()) {
                 newCartList.remove(item);
-                if (tradedItems.contains(item)){
+                if (tradedItems.containsUid(item)){
                     newInventoryList.remove(item);
                 }
                 if (currTrade.getIsPermanent()){

@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  *
  * @author GeeksforGeeks - <a href="https://www.geeksforgeeks.org/check-email-address-valid-not-java/">Check Email Address Valid</a>
  */
-public class EmailValidator implements Validator {
+public class EmailValidator implements Validator<String> {
 
     /**
      * @param input String input

@@ -1,4 +1,4 @@
-package phase2.trade.item.controller;
+package phase2.trade.trade.controller;
 
 import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
@@ -19,6 +19,9 @@ import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.Item;
+import phase2.trade.item.controller.CreateTrade;
+import phase2.trade.item.controller.UserCell;
+import phase2.trade.item.controller.UserStringConverter;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.command.CreateTradeCommand;
@@ -113,7 +116,7 @@ public class TradeDetailController extends AbstractController implements Initial
             createTradeCommand.execute(new ResultStatusCallback<Trade>() {
                 @Override
                 public void call(Trade result, ResultStatus status) {
-                    status.handle(getPopupFactory());
+                    status.handle(getNotificationFactory());
                 }
             });
         };

@@ -52,7 +52,7 @@ public class UserOperationController extends AbstractEditableTableController<Com
 
         getCommands.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> afterFetch(result));
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
 
     }
@@ -129,20 +129,20 @@ public class UserOperationController extends AbstractEditableTableController<Com
             public void handle(ActionEvent event) {
                 tableView.getSelectionModel().getSelectedItem().undoIfUndoable((ResultStatusCallback<List<Command>>) (result, status) -> {
                     status.setSucceeded(() -> {
-                        getPopupFactory().toast("TADA~ Your command was successfully undone!");
+                        getNotificationFactory().toast("TADA~ Your command was successfully undone!");
                         tableView.refresh();
                     });
                     status.setFailed(() -> {
                         if (result == null) {
-                            getPopupFactory().toast("The command you selected is not an undoable command! (It's configured to be undoable)");
+                            getNotificationFactory().toast("The command you selected is not an undoable command! (It's configured to be undoable)");
                         } else {
-                            getPopupFactory().toast("The command you selected is effected by other commands!");
-                            TableViewAlert<Command> tableViewAlert = getPopupFactory().tableViewAlert(Command.class,"Blocking Commands","");
+                            getNotificationFactory().toast("The command you selected is effected by other commands!");
+                            TableViewAlert<Command> tableViewAlert = getNotificationFactory().tableViewAlert(Command.class, "Blocking Commands", "");
                             tableViewAlert.addTableView(addToTableViewGenerator(result, new TableViewGenerator<>(FXCollections.observableArrayList(result))));
                             tableViewAlert.display();
                         }
                     });
-                    status.handle(getPopupFactory());
+                    status.handle(getNotificationFactory());
                 }, getGatewayBundle());
 
             }

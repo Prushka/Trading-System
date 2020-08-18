@@ -5,13 +5,12 @@ import org.apache.logging.log4j.Logger;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
-import phase2.trade.command.Command;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.Ownership;
 import phase2.trade.item.Willingness;
+import phase2.trade.itemlist.ItemListType;
 import phase2.trade.permission.Permission;
 
 import javax.persistence.Entity;

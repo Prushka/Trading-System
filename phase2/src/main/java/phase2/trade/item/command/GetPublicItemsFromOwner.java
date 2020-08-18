@@ -30,7 +30,7 @@ public class GetPublicItemsFromOwner extends ItemCommand<List<Item>> {
 
     public static void main(String[] args) {
         Configurer configurer = new Configurer();
-        configurer.mockDashboardRegister("username","a@b.ccc","12345678");
+        configurer.mockRegister("username", "a@b.ccc", "12345678");
         GetPublicItemsFromOwner command = configurer.getCommandFactory().getCommand(GetPublicItemsFromOwner::new, c -> c.setItemOwnerUID(2L));
         command.execute(new ResultStatusCallback<List<Item>>() {
             @Override

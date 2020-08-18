@@ -3,16 +3,10 @@ package phase2.trade.support.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.Initializable;
-import javafx.scene.control.cell.ComboBoxTableCell;
-import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.editor.ItemEditor;
 import phase2.trade.editor.SupportTicketEditor;
-import phase2.trade.editor.UserEditor;
-import phase2.trade.item.Category;
-import phase2.trade.item.Ownership;
 import phase2.trade.refresh.ReType;
 import phase2.trade.support.SupportTicket;
 import phase2.trade.support.TicketPriority;
@@ -39,12 +33,12 @@ public class SupportTicketController extends AbstractEditableTableController<Sup
         command.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
                 publish(ReType.REFRESH);
-                getPopupFactory().toast("affect.next.log.in");
+                getNotificationFactory().toast("affect.next.log.in");
             });
             resultStatus.setAfter(() -> {
                 disableButtons(false);
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
     }
 

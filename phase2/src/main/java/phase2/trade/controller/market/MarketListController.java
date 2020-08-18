@@ -2,7 +2,6 @@ package phase2.trade.controller.market;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -12,8 +11,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractListController;
@@ -40,34 +37,32 @@ public class MarketListController extends AbstractListController<Item> implement
     private ComboBox<String> provinceCombo;
     private ComboBox<String> cityCombo;
 
-    public JFXListView<Item> listView;
+    private final Command<List<Item>> getMarket;
 
     public MarketListController(ControllerResources controllerResources) {
         super(controllerResources, false);
+        getMarket = getCommandFactory().getCommand(GetMarketItems::new);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-
-        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
                 setDisplayData(result);
                 afterFetch();
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
     }
 
     @Override
     public void reload() {
-        Command<List<Item>> getMarket = getCommandFactory().getCommand(GetMarketItems::new);
         getMarket.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> {
                 reloadNewDisplayData(result);
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
         super.reload();
     }
@@ -75,7 +70,7 @@ public class MarketListController extends AbstractListController<Item> implement
     private void afterFetch() {
         listView.setSelectionModel(new NoSelectionModel<>());
         AddToCart addToCartCommand = getCommandFactory().getCommand(AddToCart::new);
-        listView.setCellFactory(param -> new MarketItemCell(addToCartCommand, getPopupFactory()));
+        listView.setCellFactory(param -> new MarketItemCell(addToCartCommand, getNotificationFactory()));
         JFXCheckBox lend = new JFXCheckBox("Lend");
         JFXCheckBox sell = new JFXCheckBox("Sell");
 
@@ -100,14 +95,14 @@ public class MarketListController extends AbstractListController<Item> implement
         }, getConfigBundle().getGeoConfig());
 
         Pattern doublePattern = Pattern.compile("\\d+\\.?\\d?");
-        listViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
-                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell))
+        listViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
+                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL))
                 .addComboBox(categoryCombo, (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch))
                 .addToggleButton(includeMine, ((entity, toMatch) -> entity.getOwner().getUid().
                         equals(getAccountManager().getLoggedInUser().getUid())))
                 .addSearch(priceMinInclusive, ((entity, toMatch) -> {
                     if (!doublePattern.matcher(toMatch).matches()) {
-                        getPopupFactory().toast(3, "Please enter a double in Price Min", "CLOSE");
+                        getNotificationFactory().toast(3, "Please enter a double in Price Min", "CLOSE");
                         return true;
                     } else {
                         return entity.getPrice() >= Double.parseDouble(toMatch);
@@ -115,7 +110,7 @@ public class MarketListController extends AbstractListController<Item> implement
                 }))
                 .addSearch(priceMaxInclusive, ((entity, toMatch) -> {
                     if (!doublePattern.matcher(toMatch).matches()) {
-                        getPopupFactory().toast(3, "Please enter a double in Price Max", "CLOSE");
+                        getNotificationFactory().toast(3, "Please enter a double in Price Max", "CLOSE");
                         return true;
                     } else {
                         return entity.getPrice() <= Double.parseDouble(toMatch);
@@ -123,7 +118,7 @@ public class MarketListController extends AbstractListController<Item> implement
                 }))
                 .addSearch(priceMaxInclusive, ((entity, toMatch) -> {
                     if (!doublePattern.matcher(toMatch).matches()) {
-                        getPopupFactory().toast(3, "Please enter a double in Price Max", "CLOSE");
+                        getNotificationFactory().toast(3, "Please enter a double in Price Max", "CLOSE");
                         return true;
                     } else {
                         return entity.getPrice() <= Double.parseDouble(toMatch);

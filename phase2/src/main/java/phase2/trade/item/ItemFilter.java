@@ -1,10 +1,9 @@
 package phase2.trade.item;
 
-import phase2.trade.inventory.ItemListType;
+import phase2.trade.itemlist.ItemListType;
 import phase2.trade.user.User;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class ItemFilter {

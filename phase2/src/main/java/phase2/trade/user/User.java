@@ -2,8 +2,9 @@ package phase2.trade.user;
 
 import phase2.trade.address.AddressBook;
 import phase2.trade.avatar.Avatar;
-import phase2.trade.inventory.ItemList;
-import phase2.trade.inventory.ItemListType;
+import phase2.trade.exception.IllegalUserOperationException;
+import phase2.trade.itemlist.ItemList;
+import phase2.trade.itemlist.ItemListType;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
@@ -169,7 +170,7 @@ public abstract class User {
     }
 
     public ItemList getItemList(ItemListType itemListType) { // this should not happen!
-        throw new IllegalArgumentException("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
+        throw new IllegalUserOperationException("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
     }
 
     public ItemList getInventory() { // this should not happen!

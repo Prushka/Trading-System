@@ -1,14 +1,16 @@
-package phase2.trade.inventory;
+package phase2.trade.itemlist;
 
 import phase2.trade.item.Item;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-
-public class Cart extends ItemList {
+public class TradeItemHolder extends ItemList {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
     protected Set<Item> setOfItems = new HashSet<>();

@@ -1,16 +1,13 @@
-package phase2.trade.item.controller;
+package phase2.trade.trade.controller;
 
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.Item;
+import phase2.trade.item.controller.ItemController;
 import phase2.trade.view.TableViewGenerator;
 
-import java.util.Collection;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+public class TradeUserTableController extends ItemController {
 
-public class TargetUserTableController extends ItemController {
-
-    public TargetUserTableController(ControllerResources controllerResources, TableViewGenerator<Item> tableViewGenerator) {
+    public TradeUserTableController(ControllerResources controllerResources, TableViewGenerator<Item> tableViewGenerator) {
         super(controllerResources, true, false);
 
         this.tableViewGenerator = tableViewGenerator;

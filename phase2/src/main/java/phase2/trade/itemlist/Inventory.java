@@ -1,8 +1,11 @@
-package phase2.trade.inventory;
+package phase2.trade.itemlist;
 
 import phase2.trade.item.Item;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 

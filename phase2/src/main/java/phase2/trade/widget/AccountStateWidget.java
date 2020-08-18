@@ -47,9 +47,9 @@ public class AccountStateWidget extends WidgetControllerBase {
             changeAccountState.execute((result, status) -> {
                 status.setSucceeded(() -> {
                     String message = result.equals(AccountState.ON_VOCATION) ? "Your items won't be on shelf!" : "Updated!";
-                    getPopupFactory().toast(2, message);
+                    getNotificationFactory().toast(2, message);
                 });
-                status.handle(getPopupFactory());
+                status.handle(getNotificationFactory());
             }, getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()));
         };
 

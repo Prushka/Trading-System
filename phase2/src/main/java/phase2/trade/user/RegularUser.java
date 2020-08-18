@@ -1,9 +1,9 @@
 package phase2.trade.user;
 
-import phase2.trade.inventory.Cart;
-import phase2.trade.inventory.Inventory;
-import phase2.trade.inventory.ItemListType;
-import phase2.trade.inventory.ItemList;
+import phase2.trade.itemlist.Cart;
+import phase2.trade.itemlist.Inventory;
+import phase2.trade.itemlist.ItemList;
+import phase2.trade.itemlist.ItemListType;
 import phase2.trade.permission.PermissionGroup;
 
 import javax.persistence.CascadeType;

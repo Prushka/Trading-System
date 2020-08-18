@@ -9,11 +9,11 @@ import phase2.trade.alert.GeneralSplitAlert;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.editor.ItemEditor;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.RemoveItem;
+import phase2.trade.itemlist.ItemListType;
 import phase2.trade.view.NodeFactory;
 
 import java.net.URL;
@@ -67,11 +67,11 @@ public class InventoryController extends ItemController implements Initializable
 
         addButton(addButton, deleteButton, sellButton, lendButton, privateButton);
 
-        sellButton.setOnAction(event -> shortenAlter(Willingness.Sell.name(), s -> {
+        sellButton.setOnAction(event -> shortenAlter(Willingness.SELL.name(), s -> {
         }, ItemEditor::alterWillingness));
         privateButton.setOnAction(event -> shortenAlter(Willingness.Private.name(), s -> {
         }, ItemEditor::alterWillingness));
-        lendButton.setOnAction(event -> shortenAlter(Willingness.Lend.name(), s -> {
+        lendButton.setOnAction(event -> shortenAlter(Willingness.LEND.name(), s -> {
         }, ItemEditor::alterWillingness));
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
@@ -81,7 +81,7 @@ public class InventoryController extends ItemController implements Initializable
 
         addButton.setOnAction(event -> {
 
-            GeneralSplitAlert addItemAlert = getPopupFactory().splitAlert("Add Item", "");
+            GeneralSplitAlert addItemAlert = getNotificationFactory().splitAlert("Add Item", "");
             TextField enterItemName = getNodeFactory().getDefaultTextField("Item Name");
             TextField enterItemDescription = getNodeFactory().getDefaultTextField("Item Description");
             TextField enterQuantity = getNodeFactory().getDefaultTextField("Quantity");
@@ -92,12 +92,12 @@ public class InventoryController extends ItemController implements Initializable
 
 
             ToggleGroup group = new ToggleGroup();
-            putLanguageValue(Willingness.Sell.name(), "sell.willingness");
-            putLanguageValue(Willingness.Lend.name(), "lend.willingness");
+            putLanguageValue(Willingness.SELL.name(), "sell.willingness");
+            putLanguageValue(Willingness.LEND.name(), "lend.willingness");
             putLanguageValue(Willingness.Private.name(), "private.willingness");
 
-            RadioButton sellRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Sell.name()), group);
-            RadioButton lendRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Lend.name()), group);
+            RadioButton sellRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.SELL.name()), group);
+            RadioButton lendRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.LEND.name()), group);
             RadioButton privateRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Private.name()), group);
             EventHandler<ActionEvent> willingnessRadioHandler = event1 -> price.setDisable(!sellRadio.isSelected());
             sellRadio.setOnAction(willingnessRadioHandler);
@@ -113,7 +113,7 @@ public class InventoryController extends ItemController implements Initializable
 
                 itemCommand.execute((result, resultStatus) -> {
                             resultStatus.setSucceeded(() -> displayData.add(result));
-                            resultStatus.handle(getPopupFactory());
+                            resultStatus.handle(getNotificationFactory());
                         }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()),
                         price.getText()); // this casting cannot be avoided. another approach would be to loop through all radio buttons
             });

@@ -6,7 +6,7 @@ public class ValidatorFactory {
 
     }
 
-    public Validator getValidator(ValidatorType type) {
+    public Validator<String> getStringValidator(ValidatorType type) {
         switch (type) {
             case TELEPHONE:
                 return new GeneralValidator(GeneralValidator.InputType.Number, 5, 12, true);

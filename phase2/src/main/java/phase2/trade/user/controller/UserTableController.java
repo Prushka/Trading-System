@@ -1,7 +1,6 @@
 package phase2.trade.user.controller;
 
 import javafx.fxml.Initializable;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import phase2.trade.command.Command;
 import phase2.trade.controller.AbstractEditableTableController;
 import phase2.trade.controller.ControllerResources;
@@ -38,7 +37,7 @@ public class UserTableController extends AbstractEditableTableController<User, U
             resultStatus.setAfter(() -> {
                 disableButtons(false);
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
     }
 

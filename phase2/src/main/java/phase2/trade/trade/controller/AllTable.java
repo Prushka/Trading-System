@@ -1,4 +1,4 @@
-package phase2.trade.item.controller;
+package phase2.trade.trade.controller;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.SelectionMode;
@@ -10,14 +10,14 @@ import phase2.trade.view.TableViewGenerator;
 
 public class AllTable extends AbstractController {
     TableViewGenerator<Item> tableViewGenerator;
-    TargetUserTableController targetUserTableController;
+    TradeUserTableController tradeUserTableController;
 
     public AllTable(ObservableList<Item> items, ControllerResources controllerResources) {
         super(controllerResources);
         tableViewGenerator = new TableViewGenerator<>(items);
         tableViewGenerator.getTableView().getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tableViewGenerator.getTableView().setPrefWidth(650);
-        targetUserTableController = new TargetUserTableController(getControllerResources(), tableViewGenerator);
+        tradeUserTableController = new TradeUserTableController(getControllerResources(), tableViewGenerator);
         tableViewGenerator.getTableView().setItems(items);
     }
 

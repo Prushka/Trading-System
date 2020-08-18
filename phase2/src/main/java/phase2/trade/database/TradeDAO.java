@@ -1,14 +1,14 @@
 package phase2.trade.database;
 
 import phase2.trade.gateway.TradeGateway;
+import phase2.trade.trade.OrderState;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
-import phase2.trade.trade.OrderState;
 import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +19,25 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
     }
 
     @Override
-    public List<Trade> findByUser(User currUser){
+    public List<Trade> findByUser(User currUser) {
+        final List<Trade> result = new ArrayList<>();
+
+        criteria((builder, query, root) -> {
+            Join<Trade, TradeOrder> orders = root.join("orders");
+            Join<TradeOrder, UserOrderBundle> leftBundles = orders.join("leftBundle");
+            Join<TradeOrder, UserOrderBundle> rightBundles = orders.join("rightBundle");
+
+            Predicate restriction = builder.or(
+                    builder.equal(leftBundles.get("user"), currUser),
+                    builder.equal(rightBundles.get("user"), currUser)
+            );
+
+            query.select(root).where(restriction);
+            executeCriteriaQuery(result, query);
+        });
+        return result;
+
+        /*
         // Citation needed? -- https://stackoverflow.com/questions/40461519/search-by-nested-property-of-collection-field-with-criteria-api
         CriteriaBuilder criteriaBuilder = getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<Trade> criteriaQuery = criteriaBuilder.createQuery(Trade.class);
@@ -34,7 +52,7 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
         criteriaQuery.where(criteriaBuilder.exists(userSubquery));
 
         TypedQuery<Trade> tradeTypedQuery = getCurrentSession().createQuery(criteriaQuery);
-        return tradeTypedQuery.getResultList();
+        return tradeTypedQuery.getResultList();*/
     }
 
     // I'm not sure if these will work or if you can use function calls in query strings

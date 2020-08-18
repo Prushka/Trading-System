@@ -48,14 +48,14 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     public void signOut() {
-        if (getPopupFactory().confirmWindow("Sign out", "Do you really want to sign out?").display()) {
+        if (getNotificationFactory().confirmWindow("Sign out", "Do you really want to sign out?").display()) {
             getAccountManager().logOut();
             getSceneManager().switchScene(LoginController::new);
         }
     }
 
     public void exit() {
-        if (getPopupFactory().confirmWindow("Exit", "Do you really want to exit?").display()) {
+        if (getNotificationFactory().confirmWindow("Exit", "Do you really want to exit?").display()) {
             Platform.exit();
         }
     }

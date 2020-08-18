@@ -2,16 +2,19 @@ package phase2.trade.item.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.Initializable;;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
-import phase2.trade.inventory.ItemListType;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.RemoveItem;
+import phase2.trade.itemlist.ItemListType;
+import phase2.trade.trade.controller.TradeController;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ResourceBundle;
+
+;
 
 public class CartController extends ItemController implements Initializable {
 

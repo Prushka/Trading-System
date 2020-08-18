@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-//https://simplemaps.com/data/ca-cities
+// The resource /json/ca.json comes from https://simplemaps.com/data/ca-cities
 public class GeoConfig {
 
     Map<String, Map<String, Set<String>>> map = new HashMap<>();

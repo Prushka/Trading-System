@@ -58,7 +58,7 @@ public class ControllerResources {
         return gatewayBundle;
     }
 
-    protected NotificationFactory getPopupFactory() {
+    protected NotificationFactory getNotificationFactory() {
         return notificationFactory;
     }
 

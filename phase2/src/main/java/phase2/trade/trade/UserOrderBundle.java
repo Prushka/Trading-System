@@ -1,6 +1,6 @@
 package phase2.trade.trade;
 
-import phase2.trade.inventory.TradeItemHolder;
+import phase2.trade.itemlist.TradeItemHolder;
 import phase2.trade.user.User;
 
 import javax.persistence.*;

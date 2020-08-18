@@ -45,13 +45,13 @@ public class SupportTicketUserController extends SupportTicketController impleme
         addPriorityComboBox();
         addTypeComboBox();
 
-        Button addButton = new JFXButton("Add");
+        Button addButton = new JFXButton("Open Support Ticket");
 
         addButton(addButton);
 
         addButton.setOnAction(event -> {
 
-            GeneralSplitAlert addAlert = getPopupFactory().splitAlert("Open SupportTicket", "");
+            GeneralSplitAlert addAlert = getNotificationFactory().splitAlert("Open SupportTicket", "");
 
             TextArea content = getNodeFactory().getDefaultTextArea("Content");
             ComboBox<String> type = getNodeFactory().getComboBox(TicketType.class);
@@ -65,7 +65,7 @@ public class SupportTicketUserController extends SupportTicketController impleme
                     resultStatus.setSucceeded(() -> {
                         publish(ReType.REFRESH);
                     });
-                    resultStatus.handle(getPopupFactory());
+                    resultStatus.handle(getNotificationFactory());
                 }, content.getText(), priority.getSelectionModel().getSelectedItem(), type.getSelectionModel().getSelectedItem());
             });
             addAlert.display();

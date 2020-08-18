@@ -1,21 +1,20 @@
-package phase2.trade.inventory;
+package phase2.trade.itemlist;
 
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @MappedSuperclass
 public abstract class ItemList {
 
-    // I don't know why the subclasses are complaining about the missing primary key
-    // This is a standard implementation according to JPA documentation to have this primary key in a MappedSuperClass
-    // There are related questions in stackoverflow but none has come up with a solution
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uid;
+    private Long id;
 
     @OneToOne
     private User owner;
@@ -40,12 +39,8 @@ public abstract class ItemList {
         this.getSetOfItems().addAll(items);
     }
 
-    public Long getUid() {
-        return uid;
-    }
-
-    public void setUid(Long uid) {
-        this.uid = uid;
+    public Long getId() {
+        return id;
     }
 
     public int size() {
@@ -58,21 +53,33 @@ public abstract class ItemList {
         }
     }
 
-    public void removeItemByUid(Long... uids) {
-        for (Long uid : uids) {
+    public void removeItemByUid(Collection<Long> ids) {
+        for (Long uid : ids) {
             Item item = findByUid(uid);
             if (item != null) removeItem(item);
         }
     }
 
-    public Item findByUid(Long uid) {
+    public void removeItemByUid(Long... ids) {
+        removeItemByUid(Arrays.asList(ids));
+    }
+
+    public Item findByUid(Long id) {
         for (Item item : getSetOfItems()) {
-            if (item.getUid().equals(uid)) return item;
+            if (item.getUid().equals(id)) return item;
         }
         return null;
     }
 
-    public boolean contains(Long uid) {
-        return findByUid(uid) != null;
+    public Collection<Long> getItemsAsIds() {
+        Collection<Long> itemIds = new HashSet<>();
+        getSetOfItems().forEach(item -> {
+            itemIds.add(item.getUid());
+        });
+        return itemIds;
+    }
+
+    public boolean containsUid(Long id) {
+        return findByUid(id) != null;
     }
 }

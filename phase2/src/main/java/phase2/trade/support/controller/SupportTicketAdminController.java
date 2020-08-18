@@ -27,7 +27,7 @@ public class SupportTicketAdminController extends SupportTicketController implem
                 setDisplayData(FXCollections.observableArrayList(result));
                 afterFetch();
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
     }
 

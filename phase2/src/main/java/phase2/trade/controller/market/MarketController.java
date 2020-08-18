@@ -194,13 +194,13 @@ public class MarketController extends AbstractListController<Trade> implements I
         JFXComboBox<String> newMinute = new JFXComboBox<>();
         newMinute.getItems().setAll("0", "30");
 
-        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Edit Trade Date and Time", "");
+        GeneralVBoxAlert popup = getNotificationFactory().vBoxAlert("Edit Trade Date and Time", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setTradeId(currTrade.getUid());
             edit.execute(((result, status) -> {
-                status.setFailed(() -> getPopupFactory().toast(5, "Not proper format"));
-                status.handle(getPopupFactory());
+                status.setFailed(() -> getNotificationFactory().toast(5, "Not proper format"));
+                status.handle(getNotificationFactory());
             }), newYear.getSelectionModel().getSelectedItem(), newMonth.getSelectionModel().getSelectedItem(),
                     newDay.getSelectionModel().getSelectedItem(), newHour.getSelectionModel().getSelectedItem(),
                     newMinute.getSelectionModel().getSelectedItem());
@@ -219,13 +219,13 @@ public class MarketController extends AbstractListController<Trade> implements I
         JFXComboBox<String> newCity = new JFXComboBox();
         newCity.getItems().setAll("Toronto");
 
-        GeneralVBoxAlert popup = getPopupFactory().vBoxAlert("Edit Trade Location", "");
+        GeneralVBoxAlert popup = getNotificationFactory().vBoxAlert("Edit Trade Location", "");
         popup.setEventHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setTradeId(currTrade.getUid());
             edit.execute(((result, status) -> {
-                        status.setFailed(() -> getPopupFactory().toast(5, "Not proper format"));
-                        status.handle(getPopupFactory());
+                        status.setFailed(() -> getNotificationFactory().toast(5, "Not proper format"));
+                        status.handle(getNotificationFactory());
                     }), newCountry.getSelectionModel().getSelectedItem(),
                     newCity.getSelectionModel().getSelectedItem(), "false");
         });

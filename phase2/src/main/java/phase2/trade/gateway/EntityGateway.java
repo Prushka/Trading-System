@@ -1,6 +1,5 @@
 package phase2.trade.gateway;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -28,14 +27,6 @@ public interface EntityGateway<T, S extends EntityGateway<T, S>> {
     void deleteAll();
 
     void refresh(T entity);
-
-    // void submitSessionSync(Consumer<EntityGateway<T>> consumer);
-
-    // void submitSessionWithTransactionSync(Consumer<EntityGateway<T>> consumer);
-
-    // void submitSessionAsync(Consumer<EntityGateway<T>> consumer);
-
-    // void submitSessionWithTransactionAsync(Consumer<EntityGateway<T>> consumer);
 
     void submitTransaction(Consumer<S> consumer, boolean asynchronous);
 

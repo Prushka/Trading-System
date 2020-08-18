@@ -37,7 +37,7 @@ public class UserManageController extends UserTableController implements Initial
 
         getUsers.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> afterFetch(result));
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
 
     }
@@ -51,7 +51,7 @@ public class UserManageController extends UserTableController implements Initial
                 reloadNewDisplayData(result);
                 super.reload();
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
     }
 
@@ -80,14 +80,14 @@ public class UserManageController extends UserTableController implements Initial
 
         ComboBox<String> permissionGroup = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(PermissionGroup.values()).map(PermissionGroup::name).toArray(String[]::new))));
 
-        GeneralVBoxAlert createUserAlert = getPopupFactory().vBoxAlert("Create New User", "");
+        GeneralVBoxAlert createUserAlert = getNotificationFactory().vBoxAlert("Create New User", "");
         createUserAlert.addNodes(userName, email, password, permissionGroup);
         createUserAlert.setEventHandler(event -> {
             CreateUser command = getCommandFactory().getCommand(CreateUser::new);
             command.execute(((result, status) -> {
-                        status.setExist(() -> getPopupFactory().toast(5, "Such User Name Already Exists"));
+                        status.setExist(() -> getNotificationFactory().toast(5, "Such User Name Already Exists"));
                         status.setSucceeded(() -> getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(UserManageController::new)));
-                        status.handle(getPopupFactory());
+                        status.handle(getNotificationFactory());
                     }
                     ),
                     userName.getText(), email.getText(), password.getText(), "country", "city", permissionGroup.getSelectionModel().getSelectedItem());

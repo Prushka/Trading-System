@@ -1,13 +1,4 @@
-package phase2.trade.trade;
-
-import phase2.trade.item.Item;
-import phase2.trade.address.Address;
-import phase2.trade.user.User;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+package phase2.trade.trade.rest.in.peace;
 
 /**
  * Represents a trade between users at a specific date and place

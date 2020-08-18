@@ -99,8 +99,8 @@ public abstract class AbstractController implements Reloadable, Refreshable {
         return controllerResources.getAccountManager();
     }
 
-    protected NotificationFactory getPopupFactory() {
-        return controllerResources.getPopupFactory();
+    protected NotificationFactory getNotificationFactory() {
+        return controllerResources.getNotificationFactory();
     }
 
     protected CommandFactory getCommandFactory() {

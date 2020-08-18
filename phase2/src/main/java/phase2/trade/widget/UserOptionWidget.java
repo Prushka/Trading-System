@@ -31,7 +31,7 @@ public class UserOptionWidget extends WidgetControllerBase {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setGradient("gradient-j");
-        GeneralVBoxAlert passwordAlert = getPopupFactory().vBoxAlert("Change Password", "");
+        GeneralVBoxAlert passwordAlert = getNotificationFactory().vBoxAlert("Change Password", "");
         TextField oldPassword = getNodeFactory().getDefaultTextField("Old Password");
         TextField newPassword = getNodeFactory().getDefaultTextField("New Password");
         passwordAlert.addNodes(oldPassword, newPassword);
@@ -40,28 +40,28 @@ public class UserOptionWidget extends WidgetControllerBase {
             changePasswordCommand.execute(((result, status) -> {
                         status.setSucceeded(() -> {
                             publish(ReType.REFRESH, UserSideInfoController.class, UserWidget.class);
-                            getPopupFactory().toast(2, "Updated!");
+                            getNotificationFactory().toast(2, "Updated!");
                         });
-                        status.handle(getPopupFactory());
+                        status.handle(getNotificationFactory());
                     }
                     ),
                     getAccountManager().getLoggedInUser().getName(), oldPassword.getText(), newPassword.getText());
         });
 
-        GeneralVBoxAlert userNameAlert = getPopupFactory().vBoxAlert("Change UserName", "");
+        GeneralVBoxAlert userNameAlert = getNotificationFactory().vBoxAlert("Change UserName", "");
         TextField password = getNodeFactory().getDefaultTextField("Password");
         TextField newUserName = getNodeFactory().getDefaultTextField("New User Name");
         userNameAlert.addNodes(password, newUserName);
         userNameAlert.setEventHandler(event -> {
             ChangeUserName command = getCommandFactory().getCommand(ChangeUserName::new);
             command.execute(((result, status) -> {
-                        status.setFailed(() -> getPopupFactory().toast(5, "Cannot verify the information you provided. Check your password."));
-                        status.setExist(() -> getPopupFactory().toast(5, "Such User Name Already Exists"));
+                        status.setFailed(() -> getNotificationFactory().toast(5, "Cannot verify the information you provided. Check your password."));
+                        status.setExist(() -> getNotificationFactory().toast(5, "Such User Name Already Exists"));
                         status.setSucceeded(() -> {
                             publish(ReType.REFRESH, UserSideInfoController.class, UserWidget.class);
-                            getPopupFactory().toast(2, "Updated!");
+                            getNotificationFactory().toast(2, "Updated!");
                         });
-                        status.handle(getPopupFactory());
+                        status.handle(getNotificationFactory());
                     }
                     ),
                     getAccountManager().getLoggedInUser().getName(), password.getText(), newUserName.getText());

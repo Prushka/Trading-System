@@ -4,38 +4,38 @@
 
 <hibernate-configuration>
     <session-factory>
-        <mapping class="phase2.trade.inventory.Inventory" />
-        <mapping class="phase2.trade.inventory.Cart" />
-        <mapping class="phase2.trade.inventory.TradeItemHolder" />
+        <mapping class="phase2.trade.itemlist.Inventory"/>
+        <mapping class="phase2.trade.itemlist.Cart"/>
+        <mapping class="phase2.trade.itemlist.TradeItemHolder"/>
 
-        <mapping class="phase2.trade.trade.UserOrderBundle" />
-        <mapping class="phase2.trade.trade.Trade" />
-        <mapping class="phase2.trade.trade.TradeOrder" />
-        <mapping class="phase2.trade.trade.MeetUpOrder" />
-        <mapping class="phase2.trade.trade.OnlineOrder" />
+        <mapping class="phase2.trade.trade.UserOrderBundle"/>
+        <mapping class="phase2.trade.trade.Trade"/>
+        <mapping class="phase2.trade.trade.TradeOrder"/>
+        <mapping class="phase2.trade.trade.MeetUpOrder"/>
+        <mapping class="phase2.trade.trade.OnlineOrder"/>
 
-        <mapping class="phase2.trade.command.Command" />
-        <mapping class="phase2.trade.item.command.ItemCommand" />
-        <mapping class="phase2.trade.item.command.GetItems" />
-        <mapping class="phase2.trade.item.command.GetMarketItems" />
-        <mapping class="phase2.trade.item.command.AddItemToItemList" />
-        <mapping class="phase2.trade.item.command.UpdateItems" />
-        <mapping class="phase2.trade.item.command.RemoveItem" />
-        <mapping class="phase2.trade.item.command.ReviewItem" />
+        <mapping class="phase2.trade.command.Command"/>
+        <mapping class="phase2.trade.item.command.ItemCommand"/>
+        <mapping class="phase2.trade.item.command.GetItems"/>
+        <mapping class="phase2.trade.item.command.GetMarketItems"/>
+        <mapping class="phase2.trade.item.command.AddItemToItemList"/>
+        <mapping class="phase2.trade.item.command.UpdateItems"/>
+        <mapping class="phase2.trade.item.command.RemoveItem"/>
+        <mapping class="phase2.trade.item.command.ReviewItem"/>
 
-        <mapping class="phase2.trade.user.command.UserCommand" />
-        <mapping class="phase2.trade.user.command.ChangeAddress" />
-        <mapping class="phase2.trade.user.command.ChangeAccountState" />
-        <mapping class="phase2.trade.user.command.CreateUser" />
-        <mapping class="phase2.trade.user.command.Login" />
-        <mapping class="phase2.trade.user.command.UpdateUsers" />
-        <mapping class="phase2.trade.user.command.ChangePassword" />
-        <mapping class="phase2.trade.user.command.ChangeUserName" />
+        <mapping class="phase2.trade.user.command.UserCommand"/>
+        <mapping class="phase2.trade.user.command.ChangeAddress"/>
+        <mapping class="phase2.trade.user.command.ChangeAccountState"/>
+        <mapping class="phase2.trade.user.command.CreateUser"/>
+        <mapping class="phase2.trade.user.command.Login"/>
+        <mapping class="phase2.trade.user.command.UpdateUsers"/>
+        <mapping class="phase2.trade.user.command.ChangePassword"/>
+        <mapping class="phase2.trade.user.command.ChangeUserName"/>
 
-        <mapping class="phase2.trade.address.Address" />
-        <mapping class="phase2.trade.address.AddressBook" />
-        <mapping class="phase2.trade.item.Item" />
-        <mapping class="phase2.trade.permission.PermissionSet" />
+        <mapping class="phase2.trade.address.Address"/>
+        <mapping class="phase2.trade.address.AddressBook"/>
+        <mapping class="phase2.trade.item.Item"/>
+        <mapping class="phase2.trade.permission.PermissionSet"/>
 
         <mapping class="phase2.trade.avatar.Avatar" />
         <mapping class="phase2.trade.support.SupportTicket" />

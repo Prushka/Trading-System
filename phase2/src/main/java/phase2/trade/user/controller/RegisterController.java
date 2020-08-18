@@ -65,7 +65,7 @@ public class RegisterController extends AbstractController implements Initializa
                     resultStatus.setAfter(() -> {
                         registerButton.setDisable(false);
                     });
-                    resultStatus.handle(getPopupFactory());
+                    resultStatus.handle(getNotificationFactory());
                 }, username.getText(), email.getText(), password.getText(),
                 countryCombo.getSelectionModel().getSelectedItem(),
                 provinceCombo.getSelectionModel().getSelectedItem(), cityCombo.getSelectionModel().getSelectedItem());

@@ -11,7 +11,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
 import phase2.trade.callback.StatusCallback;
 import phase2.trade.command.Command;
 import phase2.trade.database.TriConsumer;
@@ -24,11 +23,10 @@ import java.net.URL;
 import java.util.*;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
-// TODO: how to create an AbstractTableController<T> in hierarchy
+// To create an AbstractTableController<T> in hierarchy
 //  If AbstractEditableTableController<T,E> is a subclass of AbstractTableController<T> -> AbstractEditableController<T, E> wouldn't be in hierarchy
 //  If AbstractEditableTableController<T,E> is a subclass of AbstractEditableController<T,E> -> AbstractTableController<T> wouldn't be in hierarchy
-//  If composition is used, the update entity method would be impossible to customize (It will required 4 Runnables to be used by the ResultState)
-//  The current implementation introduces an EmptyEditor
+//  If composition is used, the update entity method would be impossible to customize (It will require a ResultStatusCallback)
 public abstract class AbstractEditableTableController<T, E> extends EditableController<T, E> implements Initializable {
 
     @FXML
@@ -92,7 +90,7 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
 
 
     protected void nothingSelectedToast() {
-        getPopupFactory().toast(3, "You didn't select anything", "CLOSE");
+        getNotificationFactory().toast(3, "You didn't select anything", "CLOSE");
     }
 
     protected Set<Long> idsRemoved = new HashSet<>();
@@ -108,7 +106,7 @@ public abstract class AbstractEditableTableController<T, E> extends EditableCont
                     }
                     command.execute((result, resultStatus) -> {
                         resultStatus.setAfter(() -> disableButtons(false));
-                        resultStatus.handle(getPopupFactory());
+                        resultStatus.handle(getNotificationFactory());
                     });
                 }
             }

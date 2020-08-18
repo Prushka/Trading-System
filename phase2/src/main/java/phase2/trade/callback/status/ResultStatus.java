@@ -3,7 +3,7 @@ package phase2.trade.callback.status;
 import javafx.application.Platform;
 import phase2.trade.view.NotificationFactory;
 
-public abstract class ResultStatus { // the whole thing may still need to be improved
+public abstract class ResultStatus { // unsatisfied with the current implementation
 
     Runnable succeeded, failed, exist, after;
 

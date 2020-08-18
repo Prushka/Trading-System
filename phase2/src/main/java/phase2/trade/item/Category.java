@@ -7,7 +7,8 @@ public enum Category {
     VIDEO_GAME("/svg/controller.svg"),
     FURNITURE("/svg/bath.svg"),
     EQUIPMENT("/svg/ruler.svg"),
-    MISCELLANEOUS("/svg/stain.svg");
+    MISCELLANEOUS("/svg/stain.svg"),
+    FOOD("/svg/food.svg");
 
     public String resourcePath;
 

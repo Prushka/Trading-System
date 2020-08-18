@@ -1,4 +1,4 @@
-package phase2.trade.item.controller;
+package phase2.trade.trade.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

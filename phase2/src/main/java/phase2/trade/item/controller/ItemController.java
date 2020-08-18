@@ -36,7 +36,7 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
                 tableView.refresh();
                 publishGateway(MarketListController.class, ItemManageController.class, InventoryController.class);
             });
-            resultStatus.handle(getPopupFactory());
+            resultStatus.handle(getNotificationFactory());
         });
     }
 
@@ -154,8 +154,8 @@ public class ItemController extends AbstractEditableTableController<Item, ItemEd
         CheckBox sell = new JFXCheckBox("Wish To Sell");
 
 
-        tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.Lend))
-                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.Sell));
+        tableViewGenerator.getFilterGroup().addCheckBox(lend, ((entity, toMatch) -> entity.getWillingness() == Willingness.LEND))
+                .addCheckBox(sell, ((entity, toMatch) -> entity.getWillingness() == Willingness.SELL));
 
         lend.setSelected(true);
         sell.setSelected(true);

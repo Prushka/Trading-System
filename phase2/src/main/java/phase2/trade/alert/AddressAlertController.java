@@ -23,7 +23,7 @@ public class AddressAlertController extends AbstractController {
     public AddressAlertController(ControllerResources controllerResources) {
         super(controllerResources);
 
-        addressAlert = getPopupFactory().vBoxAlert("Modify Your Address", "");
+        addressAlert = getNotificationFactory().vBoxAlert("Modify Your Address", "");
 
         getNodeFactory().getAddressComboBoxes((a, b, c) -> {
             countryCombo = a;

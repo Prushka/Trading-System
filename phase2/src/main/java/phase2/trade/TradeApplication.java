@@ -1,9 +1,7 @@
 package phase2.trade;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +24,7 @@ public class TradeApplication extends Application {
     }
 
     // TODO:
-    //  VALIDATION!
+    //  VALIDATION
     //  Avoid SQL injection
     //  Avoid spaces
 
@@ -39,11 +37,13 @@ public class TradeApplication extends Application {
 
         primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("/test.png")));
 
-        //configurer.mockDashboardRegister("justsomeuser","a@b.ccc", "12345678");
-        configurer.mockDashboardLogin("justsomeuser", "12345678");
+        //configurer.mockRegister("justsomeuser","a@b.ccc", "12345678");
+        //configurer.mockLogin("justsomeuser", "12345678");
         // login(primaryStage);
-        // configurer.mockDashboardLogin("admin", "admin???");
+        // configurer.mockLogin("admin", "admin???");
 
+        // configurer.testTrade();
+        configurer.loginRestaurant();
         //primaryStage.setScene(new Scene(new VBox()));
         configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
         //login(primaryStage);

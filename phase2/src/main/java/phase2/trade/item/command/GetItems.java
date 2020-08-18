@@ -4,8 +4,8 @@ import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.inventory.ItemListType;
-import phase2.trade.inventory.ItemList;
+import phase2.trade.itemlist.ItemList;
+import phase2.trade.itemlist.ItemListType;
 import phase2.trade.permission.Permission;
 
 import javax.persistence.Entity;

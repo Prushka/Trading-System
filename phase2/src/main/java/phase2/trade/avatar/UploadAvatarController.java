@@ -56,7 +56,7 @@ public class UploadAvatarController extends AbstractController {
                         }}));
                 update.execute((result1, status1) -> {
                     status1.setSucceeded(() -> publish(ReType.REFRESH, UserSideInfoController.class, UserWidget.class));
-                    status1.handle(getPopupFactory());
+                    status1.handle(getNotificationFactory());
                 });
 
             } catch (IOException ioException) {

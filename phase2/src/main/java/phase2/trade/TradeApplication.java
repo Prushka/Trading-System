@@ -42,7 +42,7 @@ public class TradeApplication extends Application {
         // login(primaryStage);
         // configurer.mockLogin("admin", "admin???");
 
-        // configurer.testTrade();
+        //configurer.testTrade();
         configurer.loginRestaurant();
         //primaryStage.setScene(new Scene(new VBox()));
         configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);

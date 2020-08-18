@@ -10,6 +10,7 @@ import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.UserOrderBundle;
 
 import javax.persistence.Entity;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public class CreateTradeCommand extends TradeCommand<Trade> {
     @Override
     public void execute(ResultStatusCallback<Trade> callback, String... args) {
         if (!checkPermission(callback)) return;
-
+        toUpdate.setLocalDateTime(LocalDateTime.now());
         Set<TradeOrder> ordersToRemove = new HashSet<>();
         for (TradeOrder order : toUpdate.getOrders()) {
             if (order.getRightBundle().getTradeItemHolder().size() == 0 && order.getLeftBundle().getTradeItemHolder().size() == 0) {
@@ -42,6 +43,7 @@ public class CreateTradeCommand extends TradeCommand<Trade> {
                     gateway.add(rightBundle);
                     gateway.add(leftBundle);
 
+                    // remove items from their carts if exist
                     order.getLeftUser().getCart().removeItemByUid(rightBundle.getTradeItemHolder().getItemsAsIds());
                     order.getRightUser().getCart().removeItemByUid(leftBundle.getTradeItemHolder().getItemsAsIds());
                     userGateway.update(order.getLeftUser());

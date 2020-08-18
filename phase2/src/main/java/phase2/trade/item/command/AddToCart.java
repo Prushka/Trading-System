@@ -29,7 +29,11 @@ public class AddToCart extends ItemCommand<Void> {
             // operator.getCart().getSetOfItems().forEach(e -> System.out.println(e.getName() + " | " + e.getUid()));
             for (Long uid : getEntityIds(items)) {
                 if (operator.getItemList(ItemListType.CART).containsUid(uid)) {
-                    callback.call(null, new StatusExist());
+                    callback.call(null, new StatusExist("item.exist.in.cart"));
+                    return;
+                }
+                if (operator.getItemList(ItemListType.INVENTORY).containsUid(uid)) {
+                    callback.call(null, new StatusExist("this.is.your.item"));
                     return;
                 }
             }

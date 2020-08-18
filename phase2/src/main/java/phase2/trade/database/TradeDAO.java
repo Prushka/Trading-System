@@ -10,7 +10,9 @@ import phase2.trade.user.User;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
 
@@ -19,8 +21,8 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
     }
 
     @Override
-    public List<Trade> findByUser(User currUser) {
-        final List<Trade> result = new ArrayList<>();
+    public Set<Trade> findByUser(User currUser) {
+        final Set<Trade> result = new HashSet<>();
 
         criteria((builder, query, root) -> {
             Join<Trade, TradeOrder> orders = root.join("orders");
@@ -35,6 +37,7 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
             query.select(root).where(restriction);
             executeCriteriaQuery(result, query);
         });
+        System.out.println(result.size() + " trades find for user");
         return result;
 
         /*

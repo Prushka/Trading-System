@@ -20,7 +20,6 @@
     -jfx-rippler-fill: rgb(46, 86, 100);
 }
 
-
 .side-list-view .jfx-list-cell:filled:selected:focused, .side-list-view .jfx-list-cell:filled:selected {
     -fx-background-color: rgba(0, 0, 0, 0);
     -fx-text-fill: white;
@@ -332,3 +331,8 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
 /* TODO: someone redesign this. It's way too colorful
 
  */
+
+
+.market-trade-cell .label {
+    -fx-text-fill: black;
+}

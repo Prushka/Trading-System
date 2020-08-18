@@ -21,6 +21,7 @@ public class TradeUserOrderBundleIterator implements Iterator<UserOrderBundle> {
             tradeOrderBundles.add(tradeOrder.getLeftBundle());
             tradeOrderBundles.add(tradeOrder.getRightBundle());
         });
+        curr = -1;
     }
 
     @Override

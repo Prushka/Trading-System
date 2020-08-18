@@ -3,12 +3,12 @@ package phase2.trade.database;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import phase2.trade.gateway.EntityGateway;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
@@ -121,7 +121,7 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         triConsumer.consume(criteriaBuilder, criteriaQuery, root);
     }
 
-    protected void executeCriteriaQuery(List<T> result, CriteriaQuery<T> criteria) {
+    protected void executeCriteriaQuery(Collection<T> result, CriteriaQuery<T> criteria) {
         result.addAll(getCurrentSession().createQuery(criteria).getResultList());
     }
 

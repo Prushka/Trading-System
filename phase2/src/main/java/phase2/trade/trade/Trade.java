@@ -3,6 +3,7 @@ package phase2.trade.trade;
 import phase2.trade.user.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,6 +19,8 @@ public class Trade {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<TradeOrder> orders = new HashSet<>();
 
+    private LocalDateTime localDateTime;
+
     public Long getUid() {
         return uid;
     }
@@ -28,6 +31,14 @@ public class Trade {
 
     public void setOrders(Set<TradeOrder> orders) {
         this.orders = orders;
+    }
+
+    public LocalDateTime getLocalDateTime() {
+        return localDateTime;
+    }
+
+    public void setLocalDateTime(LocalDateTime localDateTime) {
+        this.localDateTime = localDateTime;
     }
 
     // A trade should contain only one pair of such users

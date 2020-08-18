@@ -9,6 +9,7 @@ import phase2.trade.trade.Trade;
 import phase2.trade.trade.command.GetTrades;
 
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_list_view.fxml")
@@ -17,6 +18,8 @@ public class TradeListController extends AbstractListController<Trade> implement
     private ComboBox<String> countryCombo;
     private ComboBox<String> provinceCombo;
     private ComboBox<String> cityCombo;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     GetTrades getTrades = getCommandFactory().getCommand(GetTrades::new);
 
@@ -48,8 +51,16 @@ public class TradeListController extends AbstractListController<Trade> implement
     }
 
     private void afterFetch() {
-        // listView.setSelectionModel(new NoSelectionModel<>());
-        listViewGenerator.build();
+        listView.setCellFactory(param -> new TradeCell());
 
+        listView.setOnMouseClicked(event -> {
+            displayPopup(listView.getSelectionModel().getSelectedItem());
+        });
+        listViewGenerator.build();
+    }
+
+    private void displayPopup(Trade trade) {
+        System.out.println(trade);
+        getNotificationFactory().splitAlert(trade.getLocalDateTime().format(formatter), "").display();
     }
 }

@@ -12,16 +12,16 @@ import javafx.stage.Stage;
 // the name may change in the future to avoid confusion
 public class GeneralSplitAlert extends AlertWindow<Void> {
 
-    private final HBox friend;
+    private final HBox root;
 
     private final VBox right;
 
     public GeneralSplitAlert(Stage parent, String title, String header) {
         super(parent, title, header);
         body.setSpacing(35);
-        friend = new HBox(10);
+        root = new HBox(10);
         right = new VBox(35);
-        friend.getChildren().addAll(body, right);
+        root.getChildren().addAll(body, right);
     }
 
     public void addLeft(Node... nodes) {
@@ -47,7 +47,7 @@ public class GeneralSplitAlert extends AlertWindow<Void> {
 
         alert.setOverlayClose(false);
 
-        layout.getBody().setAll(friend);
+        layout.getBody().setAll(root);
         layout.setActions(cancelButton, confirmButton);
 
         alert.setContent(layout);

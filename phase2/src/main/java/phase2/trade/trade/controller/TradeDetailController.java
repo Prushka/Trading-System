@@ -13,16 +13,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import phase2.trade.callback.ResultStatusCallback;
-import phase2.trade.callback.status.ResultStatus;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
+import phase2.trade.item.controller.CartController;
 import phase2.trade.item.controller.CreateTrade;
 import phase2.trade.item.controller.UserCell;
 import phase2.trade.item.controller.UserStringConverter;
-import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.command.CreateTradeCommand;
 import phase2.trade.user.User;
@@ -113,11 +112,12 @@ public class TradeDetailController extends AbstractController implements Initial
                 entry.getKey().setAddressTrade(entry.getValue().tradeAddressWidget.getSubmittedAddress());
                 entry.getKey().setDateAndTime(entry.getValue().tradeTimeWidget.getTime());
             }
-            createTradeCommand.execute(new ResultStatusCallback<Trade>() {
-                @Override
-                public void call(Trade result, ResultStatus status) {
-                    status.handle(getNotificationFactory());
-                }
+            createTradeCommand.execute((result, status) -> {
+                status.setSucceeded(() -> {
+                    getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(CartController::new));
+                    getNotificationFactory().toast("Order successfully placed!");
+                });
+                status.handle(getNotificationFactory());
             });
         };
         tradeOptionWidget.setEventHandler(handler);
@@ -138,7 +138,7 @@ public class TradeDetailController extends AbstractController implements Initial
         }
     }
 
-    private WidgetBundle createDetailLayoutIfNotExist(User leftSelected, User rightSelected) {
+    private WidgetBundle createWidgetBundleIfNotExist(User leftSelected, User rightSelected) {
         TradeOrder order = findOrderByUserPair(leftSelected, rightSelected);
         if (order == null) return null;
         if (!widgetBundleMap.containsKey(order)) {
@@ -157,7 +157,7 @@ public class TradeDetailController extends AbstractController implements Initial
                 .get(leftSelected).tableViewGenerator.getTableView());
         rightTableArea.getChildren().setAll(userTablesCombination.get(leftSelected)
                 .get(rightSelected).tableViewGenerator.getTableView());
-        WidgetBundle widgetBundle = createDetailLayoutIfNotExist(leftSelected, rightSelected);
+        WidgetBundle widgetBundle = createWidgetBundleIfNotExist(leftSelected, rightSelected);
         if (widgetBundle != null) widgetBundle.consume(buttonPane);
     }
 

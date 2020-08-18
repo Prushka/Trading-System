@@ -79,9 +79,8 @@ public class MarketItemCell extends JFXListCell<Item> {
         addToCart.setOnAction(event -> {
             addToCartCommand.setItems(item);
             addToCartCommand.execute((result, status) -> {
-                status.setSucceeded(() -> getPopupFactory().toast(3, "Successfully added to cart"));
-                status.setExist(() -> getPopupFactory().toast(3, "The item is already in your cart"));
-                status.handle(getPopupFactory());
+                status.setSucceeded(() -> getNotificationFactory().toast(3, "Successfully added to cart"));
+                status.handle(getNotificationFactory());
             });
         });
 
@@ -91,7 +90,7 @@ public class MarketItemCell extends JFXListCell<Item> {
 
         Node svg = new ImageFactory().generateGraphic(item.getCategory().resourcePath, -1, false, 120, 120);
         if (svg != null) {
-            HBox.setMargin(svg,new Insets(0,20,0,0));
+            HBox.setMargin(svg, new Insets(0, 20, 0, 0));
             hBox.getChildren().addAll(svg);
         }
         hBox.getChildren().addAll(leftVBox, region, comboBox, rightVBox, addToCart);
@@ -119,7 +118,7 @@ public class MarketItemCell extends JFXListCell<Item> {
         }
     }
 
-    private NotificationFactory getPopupFactory() {
+    private NotificationFactory getNotificationFactory() {
         return notificationFactory;
     }
 }

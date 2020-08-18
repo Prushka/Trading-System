@@ -195,7 +195,7 @@ public class MarketController extends AbstractListController<Trade> implements I
         newMinute.getItems().setAll("0", "30");
 
         GeneralVBoxAlert popup = getNotificationFactory().vBoxAlert("Edit Trade Date and Time", "");
-        popup.setEventHandler(event -> {
+        popup.setConfirmHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setTradeId(currTrade.getUid());
             edit.execute(((result, status) -> {
@@ -220,7 +220,7 @@ public class MarketController extends AbstractListController<Trade> implements I
         newCity.getItems().setAll("Toronto");
 
         GeneralVBoxAlert popup = getNotificationFactory().vBoxAlert("Edit Trade Location", "");
-        popup.setEventHandler(event -> {
+        popup.setConfirmHandler(event -> {
             Trade currTrade = trades.getSelectionModel().getSelectedItem();
             edit.setTradeId(currTrade.getUid());
             edit.execute(((result, status) -> {

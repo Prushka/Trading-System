@@ -24,16 +24,26 @@ public class CreateTradeCommand extends TradeCommand<Trade> {
         if (!checkPermission(callback)) return;
         toUpdate.setLocalDateTime(LocalDateTime.now());
         Set<TradeOrder> ordersToRemove = new HashSet<>();
+
         for (TradeOrder order : toUpdate.getOrders()) {
             order.setOrderState(OrderState.PENDING_CONFIRMATION);
             if (order.getRightBundle().getTradeItemHolder().size() == 0 && order.getLeftBundle().getTradeItemHolder().size() == 0) {
                 ordersToRemove.add(order);
             } else if (order.getDateAndTime() == null) {
-                callback.call(null, new StatusFailed("missing.date.and.time"));
+                callback.call(null, new StatusFailed("not.all.date.and.time.are.filled"));
+                return;
+            } else if (order.getAddressTrade() == null) {
+                callback.call(null, new StatusFailed("not.all.addresses.are.filled"));
                 return;
             }
         }
+
         toUpdate.getOrders().removeAll(ordersToRemove);
+
+        if (toUpdate.getOrders().size() == 0) {
+            callback.call(null, new StatusFailed("no.order.detected"));
+            return;
+        }
 
         getEntityBundle().getUserOrderBundleGateway().submitTransaction((gateway) -> {
             getEntityBundle().getUserGateway().submitTransaction((userGateway) -> {
@@ -64,6 +74,9 @@ public class CreateTradeCommand extends TradeCommand<Trade> {
                     if (callback != null)
                         callback.call(toUpdate, new StatusSucceeded());
                 }, false);
+
+                save();
+
             }, false);
         });
 

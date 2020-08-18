@@ -39,7 +39,7 @@ public enum SideOption {
             CartController::new,
             PermissionGroup.REGULAR),
 
-    ORDER("side.orders",
+    ORDER("side.trades",
             "/svg/team.svg",
             TradeListController::new,
             PermissionGroup.REGULAR),

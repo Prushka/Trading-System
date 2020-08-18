@@ -6,7 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import phase2.trade.alert.GeneralVBoxAlert;
+import phase2.trade.alert.VBoxAlert;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
@@ -80,9 +80,9 @@ public class UserManageController extends UserTableController implements Initial
 
         ComboBox<String> permissionGroup = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(PermissionGroup.values()).map(PermissionGroup::name).toArray(String[]::new))));
 
-        GeneralVBoxAlert createUserAlert = getNotificationFactory().vBoxAlert("Create New User", "");
+        VBoxAlert createUserAlert = getNotificationFactory().vBoxAlert("Create New User", "");
         createUserAlert.addNodes(userName, email, password, permissionGroup);
-        createUserAlert.setEventHandler(event -> {
+        createUserAlert.setConfirmHandler(event -> {
             CreateUser command = getCommandFactory().getCommand(CreateUser::new);
             command.execute(((result, status) -> {
                         status.setExist(() -> getNotificationFactory().toast(5, "Such User Name Already Exists"));

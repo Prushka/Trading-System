@@ -3,7 +3,7 @@ package phase2.trade.widget;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import phase2.trade.alert.GeneralVBoxAlert;
+import phase2.trade.alert.VBoxAlert;
 import phase2.trade.avatar.UploadAvatarController;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.refresh.ReType;
@@ -31,11 +31,11 @@ public class UserOptionWidget extends WidgetControllerBase {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setGradient("gradient-j");
-        GeneralVBoxAlert passwordAlert = getNotificationFactory().vBoxAlert("Change Password", "");
+        VBoxAlert passwordAlert = getNotificationFactory().vBoxAlert("Change Password", "");
         TextField oldPassword = getNodeFactory().getDefaultTextField("Old Password");
         TextField newPassword = getNodeFactory().getDefaultTextField("New Password");
         passwordAlert.addNodes(oldPassword, newPassword);
-        passwordAlert.setEventHandler(event -> {
+        passwordAlert.setConfirmHandler(event -> {
             ChangePassword changePasswordCommand = getCommandFactory().getCommand(ChangePassword::new);
             changePasswordCommand.execute(((result, status) -> {
                         status.setSucceeded(() -> {
@@ -48,11 +48,11 @@ public class UserOptionWidget extends WidgetControllerBase {
                     getAccountManager().getLoggedInUser().getName(), oldPassword.getText(), newPassword.getText());
         });
 
-        GeneralVBoxAlert userNameAlert = getNotificationFactory().vBoxAlert("Change UserName", "");
+        VBoxAlert userNameAlert = getNotificationFactory().vBoxAlert("Change UserName", "");
         TextField password = getNodeFactory().getDefaultTextField("Password");
         TextField newUserName = getNodeFactory().getDefaultTextField("New User Name");
         userNameAlert.addNodes(password, newUserName);
-        userNameAlert.setEventHandler(event -> {
+        userNameAlert.setConfirmHandler(event -> {
             ChangeUserName command = getCommandFactory().getCommand(ChangeUserName::new);
             command.execute(((result, status) -> {
                         status.setFailed(() -> getNotificationFactory().toast(5, "Cannot verify the information you provided. Check your password."));

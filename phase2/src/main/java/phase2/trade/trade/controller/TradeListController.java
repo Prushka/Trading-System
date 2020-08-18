@@ -2,6 +2,7 @@ package phase2.trade.trade.controller;
 
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import phase2.trade.alert.VBoxAlert;
 import phase2.trade.controller.AbstractListController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
@@ -60,7 +61,9 @@ public class TradeListController extends AbstractListController<Trade> implement
     }
 
     private void displayPopup(Trade trade) {
-        System.out.println(trade);
-        getNotificationFactory().splitAlert(trade.getLocalDateTime().format(formatter), "").display();
+        VBoxAlert VBoxAlert = getNotificationFactory().vBoxAlert("", "", "Ok");
+        TradeEditController tradeEditController = new TradeEditController(getControllerResources(), trade);
+        VBoxAlert.addNodes(getSceneManager().loadPane(tradeEditController));
+        VBoxAlert.display();
     }
 }

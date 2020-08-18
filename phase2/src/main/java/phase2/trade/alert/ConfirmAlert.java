@@ -1,34 +1,16 @@
 package phase2.trade.alert;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.stage.Stage;
 
-public class ConfirmAlert extends AlertWindow<Boolean> {
+public class ConfirmAlert extends AlertWindow {
 
-    public ConfirmAlert(Stage parent, String title, String header) {
-        super(parent, title, header);
+    public ConfirmAlert(Stage parent, String title, String header, String confirmButtonText, String cancelButtonText) {
+        super(parent, title, header, confirmButtonText, cancelButtonText);
     }
 
-    private Boolean answer = false;
-
-    public Boolean display(String... args) {
-        JFXButton yesButton = new JFXButton("Yes");
-        JFXButton noButton = new JFXButton("No");
-        yesButton.setOnAction(event -> {
-            answer = true;
-            alert.hideWithAnimation();
-        });
-        noButton.setOnAction(event -> {
-            answer = false;
-            alert.hideWithAnimation();
-        });
-        yesButton.setFocusTraversable(false);
-        noButton.setFocusTraversable(false);
-        layout.setActions(yesButton, noButton);
-        alert.setContent(layout);
-        alert.showAndWait();
-
-        return answer;
+    public void display(String... args) {
+        layout.setActions(cancelButton, confirmButton);
+        super.display(args);
     }
 
 }

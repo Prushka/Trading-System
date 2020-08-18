@@ -20,6 +20,8 @@ public class CreateTrade {
 
     private final Collection<Item> allItems = new HashSet<>();
 
+    private Set<User> usersInvolved = new HashSet<>();
+
     public CreateTrade(Map<User, Collection<Item>> usersToItemsToGet) {
         this.usersToItemsToGet = usersToItemsToGet;
         usersToItemsToGet.values().forEach(allItems::addAll);
@@ -29,7 +31,6 @@ public class CreateTrade {
     public void createTwoWayUserOrderBundle(User initiator, User target, Collection<Item> itemsInitiatorWant, Collection<Item> itemsTargetWant) {
         // find out what initiator will provide to target and vice versa
         if (initiator == target) return;
-        System.out.println("Create: " + trade.getOrders().size());
         if (trade.ifUserPairInOrder(initiator, target)) return;
         UserOrderBundle initiatorBundle = new UserOrderBundle();
         initiatorBundle.setUser(initiator);
@@ -53,8 +54,6 @@ public class CreateTrade {
         order.setLeftBundle(initiatorBundle);
         trade.getOrders().add(order);
     }
-
-    private Set<User> usersInvolved = new HashSet<>();
 
     // this cleanup doesn't remove order because even if two users do not have transaction, there is a chance user select both of them in the controller since
     // the number of users involved in arbitrary

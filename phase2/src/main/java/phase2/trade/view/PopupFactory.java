@@ -65,23 +65,33 @@ public class PopupFactory implements NotificationFactory {
     }
 
     @Override
-    public ConfirmAlert confirmWindow(String title, String header) {
-        return new ConfirmAlert(window, title, header);
+    public ConfirmAlert confirmWindow(String title, String header, String confirmButtonText, String cancelButtonText) {
+        return new ConfirmAlert(window, title, header, confirmButtonText, cancelButtonText);
     }
 
     @Override
     public <T> TableViewAlert<T> tableViewAlert(Class<T> clazz, String title, String header) {
-        return new TableViewAlert<>(window, title, header);
+        return new TableViewAlert<>(window, title, header, "Ok");
     }
 
     @Override
-    public GeneralVBoxAlert vBoxAlert(String title, String header) {
-        return new GeneralVBoxAlert(window, title, header);
+    public VBoxAlert vBoxAlert(String title, String header) {
+        return vBoxAlert(title, header, "Ok");
     }
 
     @Override
-    public GeneralSplitAlert splitAlert(String title, String header) {
-        return new GeneralSplitAlert(window, title, header);
+    public VBoxAlert vBoxAlert(String title, String header, String confirmButtonText) {
+        return vBoxAlert(title, header, confirmButtonText, "");
+    }
+
+    @Override
+    public VBoxAlert vBoxAlert(String title, String header, String confirmButtonText, String cancelButtonText) {
+        return new VBoxAlert(window, title, header, confirmButtonText, cancelButtonText);
+    }
+
+    @Override
+    public SplitAlert splitAlert(String title, String header) {
+        return new SplitAlert(window, title, header);
     }
 
     protected Scene getRootScene() {

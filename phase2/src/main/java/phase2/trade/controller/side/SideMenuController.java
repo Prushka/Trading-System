@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import phase2.trade.alert.AlertWindow;
 import phase2.trade.controller.*;
 import phase2.trade.user.controller.LoginController;
 import phase2.trade.user.controller.UserSideInfoController;
@@ -48,16 +49,20 @@ public class SideMenuController extends AbstractController implements Initializa
     }
 
     public void signOut() {
-        if (getNotificationFactory().confirmWindow("Sign out", "Do you really want to sign out?").display()) {
+        AlertWindow alertWindow = getNotificationFactory().confirmWindow("Sign out", "Do you really want to sign out?", "Ok", "Cancel");
+        alertWindow.setConfirmHandler(e -> {
             getAccountManager().logOut();
             getSceneManager().switchScene(LoginController::new);
-        }
+        });
+        alertWindow.display();
     }
 
     public void exit() {
-        if (getNotificationFactory().confirmWindow("Exit", "Do you really want to exit?").display()) {
+        AlertWindow alertWindow = getNotificationFactory().confirmWindow("Exit", "Do you really want to exit?", "Ok", "Cancel");
+        alertWindow.setConfirmHandler(e -> {
             Platform.exit();
-        }
+        });
+        alertWindow.display();
     }
 
 
@@ -86,13 +91,13 @@ public class SideMenuController extends AbstractController implements Initializa
         sideList.getSelectionModel().select(3);
         bottomSideList.setOnMouseClicked(event -> {
             switch (bottomSideList.getSelectionModel().getSelectedItem()) {
-                        case SIGN_OUT:
-                            signOut();
-                            break;
-                        case EXIT:
-                            exit();
-                            break;
-                    }
+                case SIGN_OUT:
+                    signOut();
+                    break;
+                case EXIT:
+                    exit();
+                    break;
+            }
                 }
         );
 

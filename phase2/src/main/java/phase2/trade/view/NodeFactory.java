@@ -108,12 +108,16 @@ public class NodeFactory {
         return new JFXComboBox<>(getEnumAsObservableString(clazz));
     }
 
-    public JFXComboBox<String> getComboBox(Collection<String> list) {
-        return new JFXComboBox<>(FXCollections.observableArrayList(list));
+    public <T> JFXComboBox<T> getComboBox(Collection<T> list) {
+        JFXComboBox<T> comboBox = new JFXComboBox<>(FXCollections.observableArrayList(list));
+        comboBox.getStyleClass().addAll("default-combo-box");
+        return comboBox;
     }
 
     public JFXComboBox<String> getComboBox() {
-        return new JFXComboBox<>();
+        JFXComboBox<String> comboBox = new JFXComboBox<>();
+        comboBox.getStyleClass().addAll("default-combo-box");
+        return comboBox;
     }
 
     public ObservableList<String> getEnumAsObservableString(Class<? extends Enum<?>> clazz) {

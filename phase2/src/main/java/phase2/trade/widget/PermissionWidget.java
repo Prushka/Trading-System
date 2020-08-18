@@ -40,7 +40,7 @@ public class PermissionWidget extends WidgetControllerBase {
         refresh();
 
 
-        AlertWindow<?> alertWindow = getNotificationFactory().vBoxAlert("Your Permissions: ", "");
+        AlertWindow alertWindow = getNotificationFactory().vBoxAlert("Your Permissions: ", "");
         alertWindow.addNodes(permissions);
 
         setOnMouseClicked(e -> {

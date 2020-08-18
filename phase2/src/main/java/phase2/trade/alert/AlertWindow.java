@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public abstract class AlertWindow<T> extends CustomWindow<T> {
+public abstract class AlertWindow extends CustomWindow {
 
     private final String title, content;
 
@@ -23,23 +23,47 @@ public abstract class AlertWindow<T> extends CustomWindow<T> {
 
     protected VBox body;
 
-    protected EventHandler<ActionEvent> confirmHandler;
-
+    protected Button cancelButton;
     protected Button confirmButton;
 
     public AlertWindow(Stage parent, String title, String content) {
+        this(parent, title, content, "", "");
+    }
+
+    public AlertWindow(Stage parent, String title, String content, String confirmButtonText) {
+        this(parent, title, content, confirmButtonText, "");
+    }
+
+    public AlertWindow(Stage parent, String title, String content, String confirmButtonText, String cancelButtonText) {
         super(parent);
         this.title = title;
         this.content = content;
+
+        confirmButton = getButton(confirmButtonText);
+        cancelButton = getButton(cancelButtonText);
         generateAlert();
+    }
+
+    private Button getButton(String text) {
+        Button button = new JFXButton(text);
+        button.addEventFilter(ActionEvent.ACTION, event -> {
+            alert.hideWithAnimation();
+        });
+        button.setFocusTraversable(false);
+        button.setDefaultButton(true);
+        return button;
     }
 
     public void clear() {
         body.getChildren().clear();
     }
 
-    public void setEventHandler(EventHandler<ActionEvent> actionEventEventHandler) {
-        this.confirmHandler = actionEventEventHandler;
+    public void setConfirmHandler(EventHandler<ActionEvent> handler) {
+        confirmButton.setOnAction(handler);
+    }
+
+    public void setCancelHandler(EventHandler<ActionEvent> handler) {
+        cancelButton.setOnAction(handler);
     }
 
     public void addNodes(Node... nodes) {
@@ -60,16 +84,14 @@ public abstract class AlertWindow<T> extends CustomWindow<T> {
             body.getChildren().addAll(new Label(content));
         }
         layout.setBody(body);
+    }
 
-        confirmButton = new JFXButton("Ok");
-        confirmButton.setOnAction(confirmHandler);
-
-        confirmButton.addEventFilter(ActionEvent.ACTION, event -> {
-            alert.hideWithAnimation();
-        });
-        confirmButton.setFocusTraversable(false);
-        confirmButton.setDefaultButton(true);
-
+    public void display(String... args) {
+        if (cancelButton.getText().isEmpty()) {
+            layout.setActions(confirmButton);
+        }
+        alert.setContent(layout);
+        alert.showAndWait();
     }
 
 }

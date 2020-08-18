@@ -366,3 +366,37 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
     -fx-font-size: 14;
     -fx-text-fill: rgb(91, 88, 172);
 }
+
+.default-combo-box, .default-combo-box .jfx-list-cell {
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-text-fill: BLACK;
+}
+
+.default-combo-box .jfx-list-cell .jfx-rippler {
+    -jfx-rippler-fill: rgb(46, 80, 90);
+}
+
+.default-combo-box .jfx-list-cell:filled:selected:focused, .default-combo-box .jfx-list-cell:filled:selected {
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-text-fill: BLACK;
+}
+
+.bottom-list-view .jfx-list-cell:filled:selected:focused, .bottom-list-view .jfx-list-cell:filled:selected {
+    -fx-text-fill: BLACK;
+}
+
+.default-combo-box .jfx-list-cell:filled:hover, .default-combo-box .jfx-list-cell:hover {
+    -fx-background-color: rgb(46, 80, 90);
+    -fx-text-fill: white;
+}
+
+.jfx-date-picker, .jfx-time-picker {
+    -jfx-default-color: #004f48;
+}
+
+.jfx-date-picker > .jfx-text-field,
+.jfx-time-picker > .jfx-text-field {
+    -jfx-focus-color: WHITE;
+    -jfx-unfocus-color: WHITE;
+    -fx-text-fill: WHITE;
+}

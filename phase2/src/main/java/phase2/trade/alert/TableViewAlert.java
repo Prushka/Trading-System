@@ -10,12 +10,12 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TableViewAlert<T> extends AlertWindow<Void> {
+public class TableViewAlert<T> extends AlertWindow {
 
     private Map<TextField, StringProperty> results = new HashMap<>();
 
-    public TableViewAlert(Stage parent, String title, String header) {
-        super(parent, title, header);
+    public TableViewAlert(Stage parent, String title, String header, String confirmButton) {
+        super(parent, title, header, confirmButton);
         body.setSpacing(35);
     }
 
@@ -25,20 +25,14 @@ public class TableViewAlert<T> extends AlertWindow<Void> {
 
     private EventHandler<ActionEvent> confirmHandler;
 
-    public void setEventHandler(EventHandler<ActionEvent> actionEventEventHandler) {
-        this.confirmHandler = actionEventEventHandler;
+    public void setConfirmHandler(EventHandler<ActionEvent> handler) {
+        this.confirmHandler = handler;
     }
 
-    public Void display(String... args) {
-        confirmButton.setOnAction(confirmHandler);
-
+    public void display(String... args) {
         layout.setActions(confirmButton);
         layout.setPrefWidth(1000);
-        alert.setContent(layout);
-
-
-        alert.showAndWait();
-        return null;
+        super.display(args);
     }
 
 }

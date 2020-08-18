@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import phase2.trade.alert.GeneralSplitAlert;
+import phase2.trade.alert.SplitAlert;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.editor.ItemEditor;
@@ -81,7 +81,7 @@ public class InventoryController extends ItemController implements Initializable
 
         addButton.setOnAction(event -> {
 
-            GeneralSplitAlert addItemAlert = getNotificationFactory().splitAlert("Add Item", "");
+            SplitAlert addItemAlert = getNotificationFactory().splitAlert("Add Item", "");
             TextField enterItemName = getNodeFactory().getDefaultTextField("Item Name");
             TextField enterItemDescription = getNodeFactory().getDefaultTextField("Item Description");
             TextField enterQuantity = getNodeFactory().getDefaultTextField("Quantity");
@@ -107,7 +107,7 @@ public class InventoryController extends ItemController implements Initializable
             privateRadio.setSelected(true);
             addItemAlert.addLeft(enterItemName, enterItemDescription, enterQuantity, comboBox);
             addItemAlert.addRight(lendRadio, sellRadio, privateRadio, price);
-            addItemAlert.setEventHandler(event12 -> {
+            addItemAlert.setConfirmHandler(event12 -> {
                 AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new,
                         command -> command.setItemListType(itemListType));
 

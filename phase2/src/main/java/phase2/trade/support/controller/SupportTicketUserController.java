@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
-import phase2.trade.alert.GeneralSplitAlert;
+import phase2.trade.alert.SplitAlert;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.refresh.ReType;
 import phase2.trade.support.TicketPriority;
@@ -51,7 +51,7 @@ public class SupportTicketUserController extends SupportTicketController impleme
 
         addButton.setOnAction(event -> {
 
-            GeneralSplitAlert addAlert = getNotificationFactory().splitAlert("Open SupportTicket", "");
+            SplitAlert addAlert = getNotificationFactory().splitAlert("Open SupportTicket", "");
 
             TextArea content = getNodeFactory().getDefaultTextArea("Content");
             ComboBox<String> type = getNodeFactory().getComboBox(TicketType.class);
@@ -59,7 +59,7 @@ public class SupportTicketUserController extends SupportTicketController impleme
 
             addAlert.addLeft(content);
             addAlert.addRight(type, priority);
-            addAlert.setEventHandler(event12 -> {
+            addAlert.setConfirmHandler(event12 -> {
                 OpenSupportTicket command = getCommandFactory().getCommand(OpenSupportTicket::new);
                 command.execute((result, resultStatus) -> {
                     resultStatus.setSucceeded(() -> {

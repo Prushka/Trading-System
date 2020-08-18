@@ -18,7 +18,7 @@ public class AddressAlertController extends AbstractController {
     private TextField addressLine2 = getNodeFactory().getDefaultTextField("Address Line 2 (Optional)");
     private TextField postalCode = getNodeFactory().getDefaultTextField("Postal Code (Optional)");
 
-    private GeneralVBoxAlert addressAlert;
+    private VBoxAlert addressAlert;
 
     public AddressAlertController(ControllerResources controllerResources) {
         super(controllerResources);
@@ -37,7 +37,7 @@ public class AddressAlertController extends AbstractController {
     }
 
     public void setEventHandler(EventHandler<ActionEvent> eventHandler){
-        addressAlert.setEventHandler(eventHandler);
+        addressAlert.setConfirmHandler(eventHandler);
     }
 
     public void display() {
@@ -108,11 +108,11 @@ public class AddressAlertController extends AbstractController {
         this.postalCode = postalCode;
     }
 
-    public GeneralVBoxAlert getAddressAlert() {
+    public VBoxAlert getAddressAlert() {
         return addressAlert;
     }
 
-    public void setAddressAlert(GeneralVBoxAlert addressAlert) {
+    public void setAddressAlert(VBoxAlert addressAlert) {
         this.addressAlert = addressAlert;
     }
 }

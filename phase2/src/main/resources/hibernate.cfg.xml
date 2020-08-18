@@ -32,15 +32,17 @@
         <mapping class="phase2.trade.user.command.ChangePassword"/>
         <mapping class="phase2.trade.user.command.ChangeUserName"/>
 
+        <mapping class="phase2.trade.trade.command.CreateTradeCommand"/>
+
         <mapping class="phase2.trade.address.Address"/>
         <mapping class="phase2.trade.address.AddressBook"/>
         <mapping class="phase2.trade.item.Item"/>
         <mapping class="phase2.trade.permission.PermissionSet"/>
 
-        <mapping class="phase2.trade.avatar.Avatar" />
-        <mapping class="phase2.trade.support.SupportTicket" />
-        <mapping class="phase2.trade.support.command.OpenSupportTicket" />
-        <mapping class="phase2.trade.support.command.UpdateSupportTickets" />
+        <mapping class="phase2.trade.avatar.Avatar"/>
+        <mapping class="phase2.trade.support.SupportTicket"/>
+        <mapping class="phase2.trade.support.command.OpenSupportTicket"/>
+        <mapping class="phase2.trade.support.command.UpdateSupportTickets"/>
 
         <mapping class="phase2.trade.user.User" />
         <mapping class="phase2.trade.user.AdministrativeUser" />

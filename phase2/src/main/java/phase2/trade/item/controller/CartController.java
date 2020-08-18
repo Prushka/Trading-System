@@ -9,7 +9,7 @@ import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.itemlist.ItemListType;
-import phase2.trade.trade.controller.TradeController;
+import phase2.trade.trade.controller.TradeDragDropController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -59,8 +59,8 @@ public class CartController extends ItemController implements Initializable {
         });
 
         checkOut.setOnAction(e -> {
-            TradeController tradeController = new TradeController(getControllerResources(), getSelected());
-            getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(tradeController));
+            TradeDragDropController tradeDragDropController = new TradeDragDropController(getControllerResources(), getSelected());
+            getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(tradeDragDropController));
         });
 
         addButton(checkOut, remove);

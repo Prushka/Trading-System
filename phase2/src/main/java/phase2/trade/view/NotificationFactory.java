@@ -19,11 +19,15 @@ public interface NotificationFactory {
 
     PopupAlert popupWindow(String title, String header);
 
-    ConfirmAlert confirmWindow(String title, String header);
+    ConfirmAlert confirmWindow(String title, String header, String confirmButtonText, String cancelButtonText);
 
     <T> TableViewAlert<T> tableViewAlert(Class<T> clazz, String title, String header);
 
-    GeneralVBoxAlert vBoxAlert(String title, String header);
+    VBoxAlert vBoxAlert(String title, String header);
 
-    GeneralSplitAlert splitAlert(String title, String header);
+    VBoxAlert vBoxAlert(String title, String header, String confirmButtonText);
+
+    VBoxAlert vBoxAlert(String title, String header, String confirmButtonText, String cancelButtonText);
+
+    SplitAlert splitAlert(String title, String header);
 }

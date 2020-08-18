@@ -17,9 +17,6 @@ public class TradeCell extends JFXListCell<Trade> {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public TradeCell() {
-    }
-
     private Pane generateTradePreview(Trade trade) {
         HBox hBox = new HBox(15);
         hBox.setPadding(new Insets(15, 20, 15, 20));

@@ -2,12 +2,13 @@ package phase2.trade.alert;
 
 import javafx.stage.Stage;
 
-public abstract class CustomWindow<T> {
+public abstract class CustomWindow {
 
     protected final Stage parent;
-    public CustomWindow(Stage parent){
+
+    public CustomWindow(Stage parent) {
         this.parent = parent;
     }
 
-    public abstract T display(String... args);
+    public abstract void display(String... args);
 }

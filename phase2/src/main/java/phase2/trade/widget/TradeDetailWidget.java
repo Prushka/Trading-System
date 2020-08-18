@@ -1,16 +1,15 @@
 package phase2.trade.widget;
 
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.user.User;
+import phase2.trade.trade.TradeOrder;
 
 public abstract class TradeDetailWidget<T> extends WidgetControllerBase {
 
-    protected final User leftSelected, rightSelected;
+    protected final TradeOrder tradeOrder;
 
-    public TradeDetailWidget(ControllerResources controllerResources, User leftSelected, User rightSelected) {
+    public TradeDetailWidget(ControllerResources controllerResources, TradeOrder tradeOrder) {
         super(controllerResources);
-        this.leftSelected = leftSelected;
-        this.rightSelected = rightSelected;
+        this.tradeOrder = tradeOrder;
     }
 
     public abstract T getValue();

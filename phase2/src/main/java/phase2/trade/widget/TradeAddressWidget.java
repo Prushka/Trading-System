@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import phase2.trade.address.Address;
 import phase2.trade.alert.AddressAlert;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.user.User;
+import phase2.trade.trade.TradeOrder;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,18 +18,15 @@ public class TradeAddressWidget extends TradeDetailWidget<Address> {
     private final Label cityLabel = new Label();
     private final AddressAlert addressAlert;
 
-    private final Address previousAddress;
 
-
-    public TradeAddressWidget(ControllerResources controllerResources, User leftSelected, User rightSelected, Address previousAddress) {
-        super(controllerResources, leftSelected, rightSelected);
-        this.previousAddress = previousAddress;
+    public TradeAddressWidget(ControllerResources controllerResources, TradeOrder tradeOrder, Address previousAddress) {
+        super(controllerResources, tradeOrder);
         addressAlert = getControllerFactory().getController(AddressAlert::new);
         addressAlert.setAddress(previousAddress);
     }
 
-    public TradeAddressWidget(ControllerResources controllerResources, User leftSelected, User rightSelected) {
-        this(controllerResources, leftSelected, rightSelected,
+    public TradeAddressWidget(ControllerResources controllerResources, TradeOrder tradeOrder) {
+        this(controllerResources, tradeOrder,
                 controllerResources.getAccountManager().getLoggedInUser().getAddressBook().cloneSelectedAddressWithoutDetail());
     }
 

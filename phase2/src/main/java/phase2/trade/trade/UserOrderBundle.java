@@ -18,7 +18,7 @@ public class UserOrderBundle {
     @OneToOne(cascade = CascadeType.ALL)
     private TradeItemHolder tradeItemHolder; // the items this user is providing
 
-    private int timeEdit;
+    private int edits;
 
     private boolean hasConfirmed;
 
@@ -43,15 +43,15 @@ public class UserOrderBundle {
     }
 
     public int getEdits() {
-        return timeEdit;
+        return edits;
     }
 
     public void setEdits(int edit) {
-        this.timeEdit = edit;
+        this.edits = edit;
     }
 
     public void edit() {
-        this.timeEdit++;
+        this.edits++;
     }
 
     public boolean hasConfirmed() {

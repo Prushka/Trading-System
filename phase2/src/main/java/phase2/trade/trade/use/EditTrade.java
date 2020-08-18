@@ -29,16 +29,19 @@ public class EditTrade {
 
     public void editAddress(TradeOrder tradeOrder, Address newAddress, StatusCallback statusCallback) {
         UserOrderBundle operatorBundle = tradeOrder.findBundleByUser(operator);
+        if (operatorBundle == null || newAddress == null || newAddress.equals(tradeOrder.getAddressTrade())) return;
+        tradeOrder.findBundleByUser(operator).edit();
         if (ifExceedLimit(operatorBundle.getEdits(), operatorBundle.hasConfirmed())) {
             tradeOrder.setOrderState(OrderState.CANCELLED);
             statusCallback.call(new StatusFailed("your.order.has.been.cancelled"));
         }
-        tradeOrder.findBundleByUser(operator).edit();
         tradeOrder.setAddressTrade(newAddress);
     }
 
     public void editTime(TradeOrder tradeOrder, LocalDateTime newDate, StatusCallback statusCallback) {
         UserOrderBundle operatorBundle = tradeOrder.findBundleByUser(operator);
+        if (operatorBundle == null || newDate == null || newDate.equals(tradeOrder.getDateAndTime())) return;
+        tradeOrder.findBundleByUser(operator).edit();
         if (ifExceedLimit(operatorBundle.getEdits(), operatorBundle.hasConfirmed())) {
             tradeOrder.setOrderState(OrderState.CANCELLED);
             statusCallback.call(new StatusFailed("your.order.has.been.cancelled-" + operatorBundle.getEdits() + "-" + tradeConfig.getEditLimit()));
@@ -49,6 +52,9 @@ public class EditTrade {
 
     public void editConfirm(TradeOrder tradeOrder, Boolean hasConfirmed, StatusCallback statusCallback) {
         tradeOrder.findBundleByUser(operator).setConfirm(hasConfirmed);
+        if (tradeOrder.getRightBundle().hasConfirmed() && tradeOrder.getLeftBundle().hasConfirmed()) {
+            tradeOrder.setOrderState(OrderState.PENDING_TRADE);
+        }
     }
 
     private boolean ifExceedLimit(int edits, boolean hasConfirmed) {

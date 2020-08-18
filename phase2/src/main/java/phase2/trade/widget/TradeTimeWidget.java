@@ -5,7 +5,7 @@ import com.jfoenix.controls.JFXTimePicker;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.user.User;
+import phase2.trade.trade.TradeOrder;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -22,20 +22,20 @@ public class TradeTimeWidget extends TradeDetailWidget<LocalDateTime> {
 
     private final LocalDateTime previousValue;
 
-    public TradeTimeWidget(ControllerResources controllerResources, User leftSelected, User rightSelected) {
-        this(controllerResources, leftSelected, rightSelected, null);
+    public TradeTimeWidget(ControllerResources controllerResources, TradeOrder tradeOrder) {
+        this(controllerResources, tradeOrder, null);
     }
 
-    public TradeTimeWidget(ControllerResources controllerResources, User leftSelected, User rightSelected,
+    public TradeTimeWidget(ControllerResources controllerResources, TradeOrder tradeOrder,
                            LocalDateTime previousValue) {
-        super(controllerResources, leftSelected, rightSelected);
+        super(controllerResources, tradeOrder);
         this.previousValue = previousValue;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setGradient("gradient-l");
-        userLabel.setText("Between " + leftSelected.getName() + " & " + rightSelected.getName());
+        userLabel.setText("Between " + tradeOrder.getLeftUser().getName() + " & " + tradeOrder.getRightUser().getName());
         addContent(userLabel);
         addContent(datePicker, timePicker);
         getRoot().setPrefWidth(350);

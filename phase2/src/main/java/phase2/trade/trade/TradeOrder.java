@@ -35,7 +35,7 @@ public class TradeOrder {
     }
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     public UserOrderBundle getLeftBundle() {
         return left;
     }
@@ -44,7 +44,7 @@ public class TradeOrder {
         this.left = left;
     }
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     public UserOrderBundle getRightBundle() {
         return right;
     }

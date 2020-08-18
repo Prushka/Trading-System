@@ -4,7 +4,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.user.User;
+import phase2.trade.trade.TradeOrder;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,8 +14,8 @@ public class TradeConfirmWidget extends TradeDetailWidget<Boolean> {
     private final CheckBox doIConfirm;
 
 
-    public TradeConfirmWidget(ControllerResources controllerResources, User leftSelected, User rightSelected, Boolean previousValue) {
-        super(controllerResources, leftSelected, rightSelected);
+    public TradeConfirmWidget(ControllerResources controllerResources, TradeOrder tradeOrder, Boolean previousValue) {
+        super(controllerResources, tradeOrder);
         doIConfirm = new JFXCheckBox("Confirm");
         doIConfirm.setSelected(previousValue);
     }

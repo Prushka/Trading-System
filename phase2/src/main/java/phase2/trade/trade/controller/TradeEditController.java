@@ -1,6 +1,5 @@
 package phase2.trade.trade.controller;
 
-import javafx.collections.FXCollections;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
@@ -8,7 +7,7 @@ import phase2.trade.address.Address;
 import phase2.trade.alert.AlertWindow;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.item.Item;
-import phase2.trade.trade.OrderState;
+import phase2.trade.refresh.ReType;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.UserOrderBundle;
@@ -33,45 +32,39 @@ public class TradeEditController extends TradeInfoController {
 
     private final Trade trade;
 
-    private final EditWidgetBundle placeHolder;
-
     private final EditTrade editTrade;
 
     private final AlertWindow alertWindow;
 
     class EditWidgetBundle extends WidgetBundle {
 
-        TradeEmptyWidget tradeEmptyWidget;
-
-        EditWidgetBundle(User leftSelected, User rightSelected) {
-            this.leftSelected = leftSelected;
-            this.rightSelected = rightSelected;
-            tradeEmptyWidget = new TradeEmptyWidget(getControllerResources(), leftSelected, rightSelected);
+        EditWidgetBundle(TradeOrder tradeOrder) {
+            super(tradeOrder);
         }
 
         void setTradeConfirm(Boolean previousValue) {
-            tradeConfirmWidget = new TradeConfirmWidget(getControllerResources(), leftSelected, rightSelected, previousValue);
+            tradeConfirmWidget = new TradeConfirmWidget(getControllerResources(), tradeOrder, previousValue);
         }
 
         void setTradeAddress(Address previousValue) {
-            tradeAddressWidget = new TradeAddressWidget(getControllerResources(), leftSelected, rightSelected, previousValue);
+            tradeAddressWidget = new TradeAddressWidget(getControllerResources(), tradeOrder, previousValue);
         }
 
         void setTradeTime(LocalDateTime previousValue) {
-            tradeTimeWidget = new TradeTimeWidget(getControllerResources(), leftSelected, rightSelected, previousValue);
+            tradeTimeWidget = new TradeTimeWidget(getControllerResources(), tradeOrder, previousValue);
         }
 
-        void loadOnto(Pane pane, OrderState orderState) {
-            if ((leftSelected == null && rightSelected == null)) {
-                pane.getChildren().setAll(getSceneManager().loadPane(tradeEmptyWidget));
+        void loadOnto(Pane pane) {
+            if (!(tradeOrder.ifUserInOrder(getAccountManager().getLoggedInUser()))) { // this is not the (logged in user)'s order, display nothing
+                pane.getChildren().setAll(getSceneManager().loadPane(new TradeEmptyWidget(getControllerResources(), "Not Your Order")));
                 return;
             }
-            if (!orderState.editable) {
-                tradeEmptyWidget.setText("This is an uneditable Trade");
-                pane.getChildren().setAll(getSceneManager().loadPane(tradeEmptyWidget));
+            if (!tradeOrder.getOrderState().editable) {
+                pane.getChildren().setAll(getSceneManager().loadPane(new TradeEmptyWidget(getControllerResources(), "Uneditable Trade", "State: " + tradeOrder.getOrderState())));
+
                 return;
             }
-            loadOnto(pane);
+            super.loadOnto(pane);
             pane.getChildren().add(getSceneManager().loadPane(tradeConfirmWidget));
         }
     }
@@ -80,7 +73,6 @@ public class TradeEditController extends TradeInfoController {
         super(controllerResources);
         this.trade = trade;
         editTrade = new EditTrade(trade, getAccountManager().getLoggedInUser(), getConfigBundle().getTradeConfig());
-        placeHolder = new EditWidgetBundle(null, null);
         this.alertWindow = alertWindow;
     }
 
@@ -127,7 +119,8 @@ public class TradeEditController extends TradeInfoController {
             }
             editTradeCommand.execute((result, status) -> {
                 status.setSucceeded(() -> {
-                    //getNotificationFactory().toast("Order successfully updated!");
+                    getNotificationFactory().toast(2, "Order successfully updated!");
+                    publish(ReType.REFRESH, TradeListController.class);
                 });
                 status.handle(getNotificationFactory());
             });
@@ -138,13 +131,12 @@ public class TradeEditController extends TradeInfoController {
         TradeOrder order = trade.findOrderByUserPair(leftSelected, rightSelected);
         if (order == null) return null;
         if (!widgetBundleMap.containsKey(order)) {
-            if (order.findBundleByUser(getAccountManager().getLoggedInUser()) == null) { // this is not the (logged in user)'s order, display nothing
-                return placeHolder;
+            EditWidgetBundle editWidgetBundle = new EditWidgetBundle(order);
+            if (order.ifUserInOrder(getAccountManager().getLoggedInUser())) {
+                editWidgetBundle.setTradeAddress(order.getAddressTrade());
+                editWidgetBundle.setTradeTime(order.getDateAndTime());
+                editWidgetBundle.setTradeConfirm(order.findBundleByUser(getAccountManager().getLoggedInUser()).hasConfirmed());
             }
-            EditWidgetBundle editWidgetBundle = new EditWidgetBundle(leftSelected, rightSelected);
-            editWidgetBundle.setTradeAddress(order.getAddressTrade());
-            editWidgetBundle.setTradeTime(order.getDateAndTime());
-            editWidgetBundle.setTradeConfirm(order.findBundleByUser(getAccountManager().getLoggedInUser()).hasConfirmed());
             widgetBundleMap.put(order, editWidgetBundle);
         }
         return widgetBundleMap.get(order);
@@ -164,24 +156,8 @@ public class TradeEditController extends TradeInfoController {
         if (widgetBundle != null) widgetBundle.loadOnto(buttonPane);
     }
 
-    // well these loops need optimization
-    private Map<User, UserTable> getUserTables(User matchesWhom) {
-        Map<User, UserTable> table = new HashMap<>();
-        for (TradeOrder order : trade.getOrders()) {
-            if (order.getLeftUser().getUid().equals(matchesWhom.getUid())) {
-                UserTable userTable = new UserTable(order.getRightBundle().getUser(),
-                        FXCollections.observableArrayList(
-                                order.getRightBundle().getTradeItemHolder().getSetOfItems()), getControllerResources());
-                table.put(order.getRightBundle().getUser(), userTable);
-            }
-            if (order.getRightUser().getUid().equals(matchesWhom.getUid())) {
-                UserTable userTable = new UserTable(order.getRightBundle().getUser(),
-                        FXCollections.observableArrayList(
-                                order.getLeftBundle().getTradeItemHolder().getSetOfItems()), getControllerResources());
-                table.put(order.getLeftUser(), userTable);
-            }
-        }
-        return table;
+    @Override
+    Trade getTrade() {
+        return trade;
     }
-
 }

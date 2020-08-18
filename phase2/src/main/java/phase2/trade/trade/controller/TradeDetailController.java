@@ -1,6 +1,5 @@
 package phase2.trade.trade.controller;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
@@ -9,6 +8,7 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
 import phase2.trade.item.Item;
 import phase2.trade.item.controller.CartController;
+import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.command.CreateTradeCommand;
 import phase2.trade.trade.use.CreateTrade;
@@ -84,7 +84,7 @@ public class TradeDetailController extends TradeInfoController {
         TradeOrder order = createTrade.getTrade().findOrderByUserPair(leftSelected, rightSelected);
         if (order == null) return null;
         if (!widgetBundleMap.containsKey(order)) {
-            widgetBundleMap.put(order, new WidgetBundle(leftSelected, rightSelected));
+            widgetBundleMap.put(order, new WidgetBundle(order));
         }
         return widgetBundleMap.get(order);
     }
@@ -99,34 +99,15 @@ public class TradeDetailController extends TradeInfoController {
         globalPane.setVisible(true);
         leftTableArea.getChildren().setAll(left);
         rightTableArea.getChildren().setAll(right);
-        if (left.getItems().size() == 0 && right.getItems().size() == 0) {
-            // No trade will happen between these two people
-            // They were not removed from the ComboBoxes because these two users have ongoing order with other participants.
-            // All other users who are not involved but have their items chosen in the cart won't appear in ComboBoxes
-            getNotificationFactory().toast(13,
-                    "Please SKIP these two users since they don't have any items to trade! Their information won't be saved");
-        }
+
         WidgetBundle widgetBundle = createWidgetBundleIfNotExist(leftSelected, rightSelected);
         if (widgetBundle != null) widgetBundle.loadOnto(buttonPane);
     }
 
-    // well these loops need optimization
-    private Map<User, UserTable> getUserTables(User matchesWhom) {
-        Map<User, UserTable> table = new HashMap<>();
-        for (TradeOrder order : createTrade.getTrade().getOrders()) {
-            if (order.getLeftUser().getUid().equals(matchesWhom.getUid())) {
-                UserTable userTable = new UserTable(order.getRightBundle().getUser(),
-                        FXCollections.observableArrayList(
-                                order.getRightBundle().getTradeItemHolder().getSetOfItems()), getControllerResources());
-                table.put(order.getRightBundle().getUser(), userTable);
-            }
-            if (order.getRightUser().getUid().equals(matchesWhom.getUid())) {
-                UserTable userTable = new UserTable(order.getRightBundle().getUser(),
-                        FXCollections.observableArrayList(
-                                order.getLeftBundle().getTradeItemHolder().getSetOfItems()), getControllerResources());
-                table.put(order.getLeftUser(), userTable);
-            }
-        }
-        return table;
+    @Override
+    Trade getTrade() {
+        return createTrade.getTrade();
     }
+
+
 }

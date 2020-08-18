@@ -9,7 +9,7 @@ import phase2.trade.user.command.ChangeAddress;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AddressWidget extends LittleTextWidgetController {
+public class AddressWidget extends WidgetControllerBase {
 
     private Address address;
 

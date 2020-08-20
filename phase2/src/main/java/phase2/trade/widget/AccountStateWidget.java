@@ -29,8 +29,8 @@ public class AccountStateWidget extends WidgetControllerBase {
     public void initialize(URL location, ResourceBundle resources) {
         setGradient("gradient-l");
         ToggleGroup group = new ToggleGroup();
-        putLanguageValue(AccountState.NORMAL.name(), "state.normal");
-        putLanguageValue(AccountState.ON_VOCATION.name(), "state.on.vocation");
+        putLanguageValue(AccountState.NORMAL.name(), resources.getString("state.normal"));
+        putLanguageValue(AccountState.ON_VOCATION.name(), resources.getString("state.on.vocation"));
         RadioButton normalRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(AccountState.NORMAL.name()), group);
         RadioButton onVocationRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(AccountState.ON_VOCATION.name()), group);
 

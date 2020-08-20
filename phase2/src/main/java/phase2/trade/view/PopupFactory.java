@@ -91,7 +91,7 @@ public class PopupFactory implements NotificationFactory {
 
     @Override
     public SplitAlert splitAlert(String title, String header) {
-        return new SplitAlert(window, title, header);
+        return new SplitAlert(window, title, header, "Ok", "Cancel");
     }
 
     protected Scene getRootScene() {

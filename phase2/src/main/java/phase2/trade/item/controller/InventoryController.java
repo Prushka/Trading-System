@@ -75,6 +75,9 @@ public class InventoryController extends ItemController implements Initializable
         Button sellButton = new JFXButton("I wanna sell them");
         Button lendButton = new JFXButton("I wanna lend them");
 
+
+        deleteButton.setOnAction(e -> displayData.removeAll(getSelected()));
+
         addButton(addButton, deleteButton, sellButton, lendButton, privateButton);
 
         sellButton.setOnAction(event -> shortenAlter(Willingness.SELL.name(), s -> {
@@ -98,7 +101,7 @@ public class InventoryController extends ItemController implements Initializable
             TextField price = getNodeFactory().getDefaultTextField("Price");
             price.setDisable(true);
 
-            ComboBox<String> comboBox = getNodeFactory().getComboBoxByType(NodeFactory.ComboBoxType.Category);
+            ComboBox<String> comboBox = getNodeFactory().getComboBoxByType(NodeFactory.ComboBoxType.Category, null);
 
 
             ToggleGroup group = new ToggleGroup();

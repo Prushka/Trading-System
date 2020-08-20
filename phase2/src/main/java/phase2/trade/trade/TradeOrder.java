@@ -127,6 +127,28 @@ public class TradeOrder {
     public boolean ifUserInOrder(User user) {
         return findBundleByUser(user) != null;
     }
+
+    public void updateState() {
+        if (getRightBundle().isTradeConfirmed() && getLeftBundle().isTradeConfirmed()) {
+            setOrderState(OrderState.PENDING_TRADE);
+        }
+        if (getRightBundle().isTransactionConfirmed() && getLeftBundle().isTransactionConfirmed()) {
+            setOrderState(OrderState.CLOSED);
+            if (getOrderState() != OrderState.PENDING_TRADE_BACK &&
+                    (getRightBundle().getTradeItemHolder().getLendCount() > 0 || getLeftBundle().getTradeItemHolder().getLendCount() > 0)) { // one of the items in this trade has to be returned
+                setOrderState(OrderState.PENDING_TRADE_BACK);
+                resetEdits();
+            }
+            if (getRightBundle().isTransactionBackConfirmed() && getLeftBundle().isTransactionBackConfirmed()) {
+                setOrderState(OrderState.CLOSED);
+            }
+        }
+    }
+
+    private void resetEdits() {
+        getLeftBundle().setEdits(0);
+        getRightBundle().setEdits(0);
+    }
     /*
     @Transient
     public List<User> getUsers() {

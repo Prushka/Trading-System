@@ -23,7 +23,7 @@ public enum SideOption {
     USER("side.user",
             "/svg/user.svg",
             UserInfoController::new,
-            PermissionGroup.REGULAR),
+            PermissionGroup.REGULAR, PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
     MARKET("side.market",
             "/svg/marketplace.svg",

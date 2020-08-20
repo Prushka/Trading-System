@@ -24,6 +24,8 @@ public class UserOrderBundle {
 
     private boolean transactionConfirmed;
 
+    private boolean transactionBackConfirmed;
+
     public Long getUid() {
         return uid;
     }
@@ -70,5 +72,13 @@ public class UserOrderBundle {
 
     public void setTransactionConfirmed(boolean transactionConfirmed) {
         this.transactionConfirmed = transactionConfirmed;
+    }
+
+    public boolean isTransactionBackConfirmed() {
+        return transactionBackConfirmed;
+    }
+
+    public void setTransactionBackConfirmed(boolean transactionBackConfirmed) {
+        this.transactionBackConfirmed = transactionBackConfirmed;
     }
 }

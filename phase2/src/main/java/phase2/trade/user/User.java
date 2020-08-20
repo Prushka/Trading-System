@@ -1,8 +1,9 @@
 package phase2.trade.user;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import phase2.trade.address.AddressBook;
 import phase2.trade.avatar.Avatar;
-import phase2.trade.exception.IllegalUserOperationException;
 import phase2.trade.itemlist.Cart;
 import phase2.trade.itemlist.Inventory;
 import phase2.trade.itemlist.ItemList;
@@ -22,6 +23,9 @@ import java.util.Set;
 // TODO: even if you make AdministrativeUser have REGULAR Permission Group. He/She won't be able to trade
 //  Simply because AdministrativeUser doesn't have any ItemList
 public abstract class User {
+
+    private static final Logger logger = LogManager.getLogger(User.class);
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -165,15 +169,18 @@ public abstract class User {
     }
 
     public ItemList getItemList(ItemListType itemListType) { // this should not happen!
-        throw new IllegalUserOperationException("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
+        logger.warn("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
+        return new Inventory();
     }
 
     public Inventory getInventory() { // this should not happen!
-        throw new IllegalUserOperationException("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
+        logger.warn("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
+        return new Inventory();
     }
 
     public Cart getCart() {
-        throw new IllegalUserOperationException("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
+        logger.warn("User: " + name + " is not a Regular User but is trying to get his/her ItemList");
+        return new Cart();
     }
 
     public Avatar getAvatar() {

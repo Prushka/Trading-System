@@ -106,4 +106,8 @@ public class Item {
     public void setTags(Collection<Tag> tags) {
         this.tags = tags;
     }
+
+    public boolean belongsTo(User user) {
+        return getOwner().getUid().equals(user.getUid());
+    }
 }

@@ -5,7 +5,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-// this is not the splitpane, but instead two VBoxes in an HBox
+// this is not the SplitPane, but instead two VBoxes in an HBox
 // the name may change in the future to avoid confusion
 public class SplitAlert extends AlertWindow {
 
@@ -13,8 +13,8 @@ public class SplitAlert extends AlertWindow {
 
     private final VBox right;
 
-    public SplitAlert(Stage parent, String title, String header) {
-        super(parent, title, header);
+    public SplitAlert(Stage parent, String title, String header, String confirmText, String cancelText) {
+        super(parent, title, header, confirmText, cancelText);
         body.setSpacing(35);
         root = new HBox(10);
         right = new VBox(35);

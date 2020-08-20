@@ -58,9 +58,8 @@ public class EditTrade {
     public void editConfirm(TradeOrder tradeOrder, TradeConfirmWidget.ConfirmationPair hasConfirmed) {
         tradeOrder.findBundleByUser(operator).setTradeConfirmed(hasConfirmed.tradeConfirm);
         tradeOrder.findBundleByUser(operator).setTransactionConfirmed(hasConfirmed.transactionConfirm);
-        if (tradeOrder.getRightBundle().isTradeConfirmed() && tradeOrder.getLeftBundle().isTradeConfirmed()) {
-            tradeOrder.setOrderState(OrderState.PENDING_TRADE);
-        }
+        tradeOrder.findBundleByUser(operator).setTransactionBackConfirmed(hasConfirmed.transactionBackConfirm);
+        tradeOrder.updateState();
     }
 
     private boolean ifExceedLimit(int edits, boolean hasConfirmed) {

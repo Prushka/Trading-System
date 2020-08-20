@@ -32,8 +32,8 @@ public class UserOptionWidget extends WidgetControllerBase {
     public void initialize(URL location, ResourceBundle resources) {
         setGradient("gradient-j");
         VBoxAlert passwordAlert = getNotificationFactory().vBoxAlert("Change Password", "");
-        TextField oldPassword = getNodeFactory().getDefaultTextField("Old Password");
-        TextField newPassword = getNodeFactory().getDefaultTextField("New Password");
+        TextField oldPassword = getNodeFactory().getDefaultPasswordTextField("Old Password");
+        TextField newPassword = getNodeFactory().getDefaultPasswordTextField("New Password");
         passwordAlert.addNodes(oldPassword, newPassword);
         passwordAlert.setConfirmHandler(event -> {
             ChangePassword changePasswordCommand = getCommandFactory().getCommand(ChangePassword::new);
@@ -49,7 +49,7 @@ public class UserOptionWidget extends WidgetControllerBase {
         });
 
         VBoxAlert userNameAlert = getNotificationFactory().vBoxAlert("Change UserName", "");
-        TextField password = getNodeFactory().getDefaultTextField("Password");
+        TextField password = getNodeFactory().getDefaultPasswordTextField("Password");
         TextField newUserName = getNodeFactory().getDefaultTextField("New User Name");
         userNameAlert.addNodes(password, newUserName);
         userNameAlert.setConfirmHandler(event -> {

@@ -42,8 +42,9 @@ public class TradeEditController extends TradeInfoController {
             super(tradeOrder);
         }
 
-        void setTradeConfirm(Boolean previousTradeValue, Boolean previousTransactionValue) {
-            tradeConfirmWidget = new TradeConfirmWidget(getControllerResources(), tradeOrder, new TradeConfirmWidget.ConfirmationPair(previousTradeValue, previousTransactionValue));
+        void setTradeConfirm(Boolean previousTradeValue, Boolean previousTransactionValue, boolean previousTransactionBackValue) {
+            tradeConfirmWidget = new TradeConfirmWidget(getControllerResources(), tradeOrder, new TradeConfirmWidget.ConfirmationPair(
+                    previousTradeValue, previousTransactionValue, previousTransactionBackValue));
         }
 
         void setTradeAddress(Address previousValue) {
@@ -76,7 +77,6 @@ public class TradeEditController extends TradeInfoController {
         this.alertWindow = alertWindow;
     }
 
-    //dashboard-table-view
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         usersInvolved = new HashSet<>();
@@ -129,8 +129,9 @@ public class TradeEditController extends TradeInfoController {
             if (order.ifUserInOrder(getAccountManager().getLoggedInUser())) {
                 editWidgetBundle.setTradeAddress(order.getAddressTrade());
                 editWidgetBundle.setTradeTime(order.getDateAndTime());
-                editWidgetBundle.setTradeConfirm(order.findBundleByUser(getAccountManager().getLoggedInUser()).isTradeConfirmed(),
-                        order.findBundleByUser(getAccountManager().getLoggedInUser()).isTransactionConfirmed());
+                UserOrderBundle logged = order.findBundleByUser(getAccountManager().getLoggedInUser());
+                editWidgetBundle.setTradeConfirm(logged.isTradeConfirmed(),
+                        logged.isTransactionConfirmed(), logged.isTransactionBackConfirmed());
             }
             widgetBundleMap.put(order, editWidgetBundle);
         }

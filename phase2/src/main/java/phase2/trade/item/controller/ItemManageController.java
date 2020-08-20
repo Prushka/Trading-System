@@ -69,12 +69,14 @@ public class ItemManageController extends ItemController implements Initializabl
 
         JFXButton deleteButton = new JFXButton("Delete");
 
+        deleteButton.setOnAction(e -> displayData.removeAll(getSelected()));
+
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> command.setItemIds(idsRemoved)), Item::getUid);
 
         Button reviewItems = new JFXButton("Mark selected items as reviewItems");
         reviewItems.setOnAction(event -> shortenAlterOfSelected(getSelected(), Ownership.OWNER.name(), s -> {
         }, ItemEditor::alterOwnership));
-        addButton(reviewItems);
+        addButton(reviewItems, deleteButton);
         tableViewGenerator.build();
     }
 

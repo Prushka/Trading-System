@@ -78,7 +78,7 @@ public class MarketListController extends AbstractListController<Item> implement
         vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.getChildren().addAll(lend, sell);
 
-        JFXComboBox<String> categoryCombo = getNodeFactory().getComboBoxByType(NodeFactory.ComboBoxType.Category);
+        JFXComboBox<String> categoryCombo = getNodeFactory().getComboBoxByType(NodeFactory.ComboBoxType.Category, "ALL");
 
         JFXToggleButton includeMine = new JFXToggleButton();
         includeMine.setText("includeMine");

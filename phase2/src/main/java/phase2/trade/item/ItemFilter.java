@@ -17,7 +17,7 @@ public class ItemFilter {
     public Collection<Item> getTradableItems() {
         Collection<Item> items = user.getItemList(ItemListType.INVENTORY).getSetOfItems().stream().
                 filter(p ->
-                        p.getOwnership() == Ownership.TO_BE_REVIEWED
+                        p.getOwnership() == Ownership.OWNER
                 ).collect(Collectors.toList());
         return items;
     }

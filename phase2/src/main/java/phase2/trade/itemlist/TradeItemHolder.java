@@ -34,4 +34,12 @@ public class TradeItemHolder extends ItemList {
     public int getSellCount() {
         return Math.toIntExact(setOfItems.stream().filter(item -> item.getWillingness().equals(Willingness.SELL)).count());
     }
+
+    public boolean containsOnlyLend() {
+        return getSellCount() == 0 && getLendCount() > 0;
+    }
+
+    public boolean containsOnlySell() {
+        return getSellCount() > 0 && getLendCount() == 0;
+    }
 }

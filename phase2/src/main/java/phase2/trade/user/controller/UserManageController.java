@@ -1,7 +1,6 @@
 package phase2.trade.user.controller;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -17,10 +16,8 @@ import phase2.trade.user.command.CreateUserOperation;
 import phase2.trade.user.command.GetUsers;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
 
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class UserManageController extends UserTableController implements Initializable {
@@ -78,7 +75,8 @@ public class UserManageController extends UserTableController implements Initial
         TextField email = getNodeFactory().getDefaultTextField("Email");
         TextField password = getNodeFactory().getDefaultTextField("Password");
 
-        ComboBox<String> permissionGroup = new JFXComboBox<>(FXCollections.observableArrayList(Arrays.asList(Stream.of(PermissionGroup.values()).map(PermissionGroup::name).toArray(String[]::new))));
+        ComboBox<String> permissionGroup = getNodeFactory().getDefaultComboBox(PermissionGroup.class);
+        permissionGroup.setPromptText("Permission Group");
 
         VBoxAlert createUserAlert = getNotificationFactory().vBoxAlert("Create New User", "");
         createUserAlert.addNodes(userName, email, password, permissionGroup);

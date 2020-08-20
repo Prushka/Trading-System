@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import phase2.trade.config.GeoConfig;
 import phase2.trade.database.TriConsumer;
 import phase2.trade.item.Category;
+import phase2.trade.permission.PermissionGroup;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,6 +18,13 @@ public class NodeFactory {
 
     public TextField getDefaultTextField(String promptText) {
         JFXTextField jfxTextField = new JFXTextField();
+        jfxTextField.setPromptText(promptText);
+        jfxTextField.setLabelFloat(true);
+        return jfxTextField;
+    }
+
+    public TextField getDefaultPasswordTextField(String promptText) {
+        JFXPasswordField jfxTextField = new JFXPasswordField();
         jfxTextField.setPromptText(promptText);
         jfxTextField.setLabelFloat(true);
         return jfxTextField;
@@ -65,13 +73,15 @@ public class NodeFactory {
         Category
     }
 
-    public JFXComboBox<String> getComboBoxByType(ComboBoxType type) {
+    public JFXComboBox<String> getComboBoxByType(ComboBoxType type, String allText) {
         switch (type) {
             case Category:
                 JFXComboBox<String> comboBox = getComboBox(Category.class);
                 comboBox.setPromptText("Category");
                 comboBox.setLabelFloat(true);
-                comboBox.getItems().add("ALL");
+                if (allText != null && !allText.isEmpty()) {
+                    comboBox.getItems().add(allText);
+                }
                 return comboBox;
         }
         return null;
@@ -122,9 +132,18 @@ public class NodeFactory {
         return new JFXComboBox<>();
     }
 
-    public JFXComboBox<String> getDefaultComboBox() {
-        JFXComboBox<String> comboBox = getComboBox();
+    public ComboBox<String> getDefaultComboBox() {
+        return processDefaultComboBox(getComboBox());
+    }
+
+    public ComboBox<String> getDefaultComboBox(Class<PermissionGroup> permissionGroupClass) {
+        JFXComboBox<String> comboBox = getComboBox(permissionGroupClass);
+        return processDefaultComboBox(comboBox);
+    }
+
+    private <T> ComboBox<T> processDefaultComboBox(JFXComboBox<T> comboBox) {
         comboBox.getStyleClass().addAll("default-combo-box");
+        comboBox.setLabelFloat(true);
         return comboBox;
     }
 

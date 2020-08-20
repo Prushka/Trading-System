@@ -39,7 +39,6 @@ public class TradeDetailController extends TradeInfoController {
 
     }
 
-    //dashboard-table-view
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

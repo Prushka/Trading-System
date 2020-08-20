@@ -14,13 +14,15 @@ public class TradeConfirmWidget extends TradeDetailWidget<TradeConfirmWidget.Con
 
     private final CheckBox doIConfirm;
     private final CheckBox doIConfirmTransaction;
+    private final CheckBox doIConfirmTransactionBack;
 
     public static class ConfirmationPair {
-        public boolean tradeConfirm, transactionConfirm;
+        public boolean tradeConfirm, transactionConfirm, transactionBackConfirm;
 
-        public ConfirmationPair(boolean tradeConfirm, boolean transactionConfirm) {
+        public ConfirmationPair(boolean tradeConfirm, boolean transactionConfirm, boolean transactionBackConfirm) {
             this.tradeConfirm = tradeConfirm;
             this.transactionConfirm = transactionConfirm;
+            this.transactionBackConfirm = transactionBackConfirm;
         }
     }
 
@@ -29,24 +31,31 @@ public class TradeConfirmWidget extends TradeDetailWidget<TradeConfirmWidget.Con
         super(controllerResources, tradeOrder);
         doIConfirm = new JFXCheckBox("Confirm the trade");
         doIConfirmTransaction = new JFXCheckBox("Completed");
+        doIConfirmTransactionBack = new JFXCheckBox("TradeBack Completed");
         doIConfirm.setSelected(previousValue.tradeConfirm);
         doIConfirmTransaction.setSelected(previousValue.transactionConfirm);
+        doIConfirmTransactionBack.setSelected(previousValue.transactionBackConfirm);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         setGradient("gradient-a");
-        addTitle(doIConfirm, doIConfirmTransaction);
-        if (tradeOrder.getOrderState().equals(OrderState.PENDING_TRADE)) {
+        addContent(doIConfirm, doIConfirmTransaction, doIConfirmTransactionBack);
+        if (!tradeOrder.getOrderState().equals(OrderState.PENDING_CONFIRMATION)) {
             doIConfirm.setDisable(true);
-        } else {
+        }
+        if (!tradeOrder.getOrderState().equals(OrderState.PENDING_TRADE)) {
             doIConfirmTransaction.setDisable(true);
         }
+        if (!tradeOrder.getOrderState().equals(OrderState.PENDING_TRADE_BACK)) {
+            doIConfirmTransactionBack.setDisable(true);
+        }
+
         addContent(new Label("As user: " + getAccountManager().getLoggedInUser().getName()), new Label(tradeOrder.getOrderState().name()));
         refresh();
     }
 
     public ConfirmationPair getValue() {
-        return new ConfirmationPair(doIConfirm.isSelected(), doIConfirmTransaction.isSelected());
+        return new ConfirmationPair(doIConfirm.isSelected(), doIConfirmTransaction.isSelected(), doIConfirmTransactionBack.isSelected());
     }
 }

@@ -49,11 +49,11 @@ public class MarketItemCell extends JFXListCell<Item> {
         Label descriptionLabel = new Label(item.getDescription());
         descriptionLabel.setMaxWidth(350);
 
-        JFXComboBox<String> comboBox = new JFXComboBox<>();
-        comboBox.getStyleClass().add("combo");
-        comboBox.setItems(FXCollections.observableArrayList(populate(item.getQuantity())));
+        JFXComboBox<String> quantityComboBox = new JFXComboBox<>();
+        quantityComboBox.getStyleClass().add("combo");
+        quantityComboBox.setItems(FXCollections.observableArrayList(populate(item.getQuantity())));
 
-        comboBox.getSelectionModel().select(0);
+        quantityComboBox.getSelectionModel().select(0);
         String price = "Lend";
 
         if (item.getPrice() != -1) {
@@ -79,11 +79,11 @@ public class MarketItemCell extends JFXListCell<Item> {
 
         JFXButton addToCart = new JFXButton("Add To Cart");
         addToCart.setOnAction(event -> {
-            addToCartCommand.setItems(item);
+            addToCartCommand.setToUpdate(item);
             addToCartCommand.execute((result, status) -> {
                 status.setSucceeded(() -> getNotificationFactory().toast(3, "Successfully added to cart"));
                 status.handle(getNotificationFactory());
-            });
+            }, quantityComboBox.getValue());
         });
 
         leftVBox.getChildren().addAll(categoryLabel, nameLabel, descriptionLabel, ownerLabel);
@@ -95,7 +95,7 @@ public class MarketItemCell extends JFXListCell<Item> {
             HBox.setMargin(svg, new Insets(0, 20, 0, 0));
             hBox.getChildren().addAll(svg);
         }
-        hBox.getChildren().addAll(leftVBox, region, comboBox, rightVBox, addToCart);
+        hBox.getChildren().addAll(leftVBox, region, quantityComboBox, rightVBox, addToCart);
         return hBox;
     }
 

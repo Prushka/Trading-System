@@ -20,7 +20,6 @@ public class SideListCell extends JFXListCell<SideOption> {
         if (empty) {
             setGraphic(null);
         } else {
-            System.out.println(item.language);
             Node graphic = new ImageFactory().generateGraphic(item.iconPath);
             if (graphic != null) {
                 setGraphic(graphic);

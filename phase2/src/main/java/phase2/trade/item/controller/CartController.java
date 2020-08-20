@@ -14,9 +14,7 @@ import phase2.trade.trade.controller.TradeDragDropController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-;
-
-public class CartController extends ItemController implements Initializable {
+public class CartController extends AbstractCartController implements Initializable {
 
     private final ItemListType itemListType = ItemListType.CART;
 
@@ -49,7 +47,7 @@ public class CartController extends ItemController implements Initializable {
         Button remove = getNodeFactory().getDefaultFlatButton("Remove");
 
         hookUpRemoveCommand(getCommandFactory().getCommand(RemoveItem::new, command -> {
-            command.setItemListType(itemListType);
+            command.setItemListType(ItemListType.CART);
             command.setItemIds(idsRemoved);
         }), Item::getUid);
 

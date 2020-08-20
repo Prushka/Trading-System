@@ -4,7 +4,8 @@ import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PermissionConfig {
 
@@ -24,7 +25,11 @@ public class PermissionConfig {
                 Permission.BrowseMarket,
                 Permission.ManagePersonalSupportTickets);
 
-        addPermissions(PermissionGroup.ADMIN, Permission.ChangeThreshold, Permission.ReviewItem);
+        addPermissions(PermissionGroup.ADMIN,
+                Permission.ChangeThreshold,
+                Permission.ReviewItem,
+                Permission.BrowseMarket);
+
         addPermissions(PermissionGroup.HEAD_ADMIN,
                 Permission.CreateUser,
                 Permission.ChangeThreshold,
@@ -32,7 +37,8 @@ public class PermissionConfig {
                 Permission.ManageUserOperations,
                 Permission.ManageUsers,
                 Permission.ManageAllItems,
-                Permission.ManageAllSupportTickets);
+                Permission.ManageAllSupportTickets,
+                Permission.BrowseMarket);
 
         addPermissions(PermissionGroup.SYSTEM, Permission.ChangeThreshold, Permission.CreateUser);
     }

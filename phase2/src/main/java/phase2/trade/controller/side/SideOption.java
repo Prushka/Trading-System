@@ -1,5 +1,6 @@
 package phase2.trade.controller.side;
 
+import phase2.trade.config.controller.AdministrativeConfigController;
 import phase2.trade.controller.ControllerSupplier;
 import phase2.trade.controller.market.MarketListController;
 import phase2.trade.item.controller.CartController;
@@ -68,6 +69,11 @@ public enum SideOption {
     MANAGE_SUPPORT("side.m.support",
             "/svg/support.svg",
             SupportTicketAdminController::new,
+            PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
+
+    CONFIG_SETTING("side.config",
+            "/svg/settings.svg",
+            AdministrativeConfigController::new,
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
 

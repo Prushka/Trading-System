@@ -415,3 +415,7 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
 .market-item-cell .combo {
     -fx-text-fill: #293841;
 }
+
+.settings .label {
+    -fx-font-weight: BOLD;
+}

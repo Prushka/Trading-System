@@ -128,6 +128,15 @@ public class NodeFactory {
         return comboBox;
     }
 
+    public Slider getSlider(int min, int max, int defaultValue) {
+        JFXSlider jfxSlider = new JFXSlider();
+        jfxSlider.setMin(min);
+        jfxSlider.setMax(max);
+        jfxSlider.setValue(defaultValue);
+        jfxSlider.setIndicatorPosition(JFXSlider.IndicatorPosition.RIGHT);
+        return jfxSlider;
+    }
+
     public ObservableList<String> getEnumAsObservableString(Class<? extends Enum<?>> clazz) {
         return FXCollections.observableArrayList(Arrays.asList(Stream.of(clazz.getEnumConstants()).map(Enum::name).toArray(String[]::new)));
     }

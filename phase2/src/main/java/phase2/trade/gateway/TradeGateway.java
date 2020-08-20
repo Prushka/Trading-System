@@ -10,4 +10,6 @@ public interface TradeGateway extends EntityGateway<Trade, TradeGateway> {
     Collection<Trade> findByUser(User currUser);
 
     Collection<Trade> findByUser(User currUser, LocalDateTime after, LocalDateTime before);
+
+    int findUserLendCount(User currUser);
 }

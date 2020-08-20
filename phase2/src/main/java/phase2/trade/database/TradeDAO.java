@@ -3,7 +3,10 @@ package phase2.trade.database;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import phase2.trade.gateway.TradeGateway;
-import phase2.trade.trade.*;
+import phase2.trade.trade.Trade;
+import phase2.trade.trade.TradeIdComparator;
+import phase2.trade.trade.TradeOrder;
+import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
 import javax.persistence.criteria.Join;
@@ -55,44 +58,32 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
         return newResult;
     }
 
-    public int findNumOfTransactions(User currUser) {
-        final List<Trade> result = new ArrayList<>();
-        criteria((builder, query, root) -> {
-            Predicate restrictions = builder.or(
-                    builder.and(
-                            builder.equal(root.get("tradeState"), OrderState.CLOSED))
-            );
-            query.select(root).where(restrictions);
+    public int findUserLendCount(User currUser) {
+        final Set<UserOrderBundle> result = new HashSet<>();
+
+        criteria(UserOrderBundle.class, (builder, query, root) -> {
+            Join<Trade, TradeOrder> orders = root.join("orders");
+            Join<TradeOrder, UserOrderBundle> leftBundles = orders.join("leftBundle");
+            Join<TradeOrder, UserOrderBundle> rightBundles = orders.join("rightBundle");
+
+            Predicate restrictionRight = builder.equal(rightBundles.get("user"), currUser);
+            Predicate restrictionLeft = builder.equal(leftBundles.get("user"), currUser);
+
+            query.select(leftBundles).where(restrictionLeft);
+            query.select(rightBundles).where(restrictionRight);
             executeCriteriaQuery(result, query);
         });
-        return result.size();
+        logger.debug(result.size() + " bundles find for user");
+
+        final int[] borrowCount = {0};
+        int sellCount = 0;
+
+        result.forEach(userOrderBundle -> {
+            borrowCount[0] += userOrderBundle.getTradeItemHolder().getLendCount();
+        });
+        return borrowCount[0];
     }
 
-    public int findNumOfBorrowing(User currUser) {
-        final List<Trade> result = new ArrayList<>();
-        criteria((builder, query, root) -> {
-            Predicate restrictions = builder.or(
-                    builder.and(
-                            builder.equal(root.get("tradeState"), OrderState.CLOSED))
-            );
-            query.select(root).where(restrictions);
-            executeCriteriaQuery(result, query);
-        });
-        return result.size();
-    }
-
-    public int findNumOfLending(User currUser) {
-        final List<Trade> result = new ArrayList<>();
-        criteria((builder, query, root) -> {
-            Predicate restrictions = builder.or(
-                    builder.and(
-                            builder.equal(root.get("tradeState"), OrderState.CLOSED))
-            );
-            query.select(root).where(restrictions);
-            executeCriteriaQuery(result, query);
-        });
-        return result.size();
-    }
 
     @Override
     protected TradeGateway getThis() {

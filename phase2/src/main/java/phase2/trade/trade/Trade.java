@@ -65,4 +65,13 @@ public class Trade {
         return new TradeUserOrderBundleIterator(this);
     }
 
+    public Collection<User> findInvolvedUsers() {
+        Set<User> users = new HashSet<>();
+        getOrders().forEach(tradeOrder -> {
+            users.add(tradeOrder.getLeftUser());
+            users.add(tradeOrder.getRightUser());
+        });
+        return users;
+    }
+
 }

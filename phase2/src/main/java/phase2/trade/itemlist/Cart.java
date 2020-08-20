@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,5 +41,18 @@ public class Cart extends ItemList {
 
     public void addItemWithQuantity(Item item, int quantity) {
         setOfItems.add(new CartItemWrapper(item, quantity));
+    }
+
+
+    public void removeItemByUid(Collection<Long> ids) {
+        Set<CartItemWrapper> toRemove = new HashSet<>();
+        for (Long uid : ids) {
+            for (CartItemWrapper cartItemWrapper : setOfItems) {
+                if (cartItemWrapper.getUid().equals(uid)) {
+                    toRemove.add(cartItemWrapper);
+                }
+            }
+        }
+        setOfItems.removeAll(toRemove);
     }
 }

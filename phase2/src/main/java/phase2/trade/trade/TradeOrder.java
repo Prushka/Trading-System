@@ -114,6 +114,16 @@ public class TradeOrder {
         return null;
     }
 
+    public UserOrderBundle findCounterBundleByUser(User user) {
+        if (user.getUid().equals(getLeftUser().getUid())) {
+            return getRightBundle();
+        }
+        if (user.getUid().equals(getRightUser().getUid())) {
+            return getLeftBundle();
+        }
+        return null;
+    }
+
     public boolean ifUserInOrder(User user) {
         return findBundleByUser(user) != null;
     }

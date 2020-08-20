@@ -18,10 +18,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-/**
- * @param <T> The entity this command handles (supposed to return), this will be used to define the callback type
- * @author Dan Lyu
- */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @CommandProperty(crudType = CRUDType.READ, undoable = true, persistent = true)
@@ -48,7 +44,7 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
     // the reason why this is not persisted in its native form is because doing so would potentially pollute the db structure
     // the String part has to be a class's name and the set has to contain all effected ids
     // maybe it would be possible to benefit from sql statements to figure out the overlapping records, but I don't know how to query all mapped columns of such a nested set inside a map
-    protected transient Map<String, Set<Long>> effectedEntities = new HashMap<>();
+    protected transient Map<String, Set<Long>> affectedEntities = new HashMap<>();
 
     protected transient GatewayBundle gatewayBundle;
 
@@ -92,7 +88,7 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
             List<Command> futureCommands = gateway.getFutureCommands(timestamp);
             List<Command> blockingCommands = new ArrayList<>();
             for (Command command : futureCommands) {
-                if (command.commandPropertyAnnotation.crudType().hasEffect && ifOverlaps(command.effectedEntities)) {
+                if (command.commandPropertyAnnotation.crudType().hasEffect && ifOverlaps(command.affectedEntities)) {
                     blockingCommands.add(command);
                 }
             }
@@ -109,7 +105,7 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
     protected void save() {
         if (!commandPropertyAnnotation.persistent()) return;
         timestamp = System.currentTimeMillis();
-        // effectedEntitiesToPersist = translateEffectedEntitiesToPersist(effectedEntities);
+        // effectedEntitiesToPersist = translateAffectedEntitiesToPersist(effectedEntities);
         getEntityBundle().getCommandGateway().submitTransaction((gateway) -> {
             gateway.add(getThis());
         });
@@ -147,8 +143,8 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
 
     private boolean ifOverlaps(Map<String, Set<Long>> otherEffectedEntities) {
         for (Map.Entry<String, Set<Long>> entry : otherEffectedEntities.entrySet()) {
-            if (effectedEntities.containsKey(entry.getKey())) {
-                if (!Collections.disjoint(effectedEntities.get(entry.getKey()), entry.getValue())) return true;
+            if (affectedEntities.containsKey(entry.getKey())) {
+                if (!Collections.disjoint(affectedEntities.get(entry.getKey()), entry.getValue())) return true;
             }
         }
         return false;
@@ -164,7 +160,7 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
         }
     }
 
-    private String translateEffectedEntitiesToPersist(Map<String, Set<Long>> map) {
+    private String translateAffectedEntitiesToPersist(Map<String, Set<Long>> map) {
         StringBuilder temp = new StringBuilder();
         for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
             temp.append(entry.getKey()).append("!").append(String.join(",", String.valueOf(entry.getValue()))).append(";");
@@ -195,12 +191,12 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
 
     protected void addEffectedEntity(Class<?> clazz, Long... ids) {
         for (Long id : ids) {
-            putOrAdd(effectedEntities, clazz.getName(), id);
+            putOrAdd(affectedEntities, clazz.getName(), id);
         }
     }
 
     public Set<Long> getEffectedEntities(Class<?> clazz) {
-        return effectedEntities.get(clazz.getName());
+        return affectedEntities.get(clazz.getName());
     }
 
     protected Long getOneEntity(Class<?> clazz) {
@@ -268,12 +264,12 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
         this.dType = dType;
     }
 
-    public void setEffectedEntitiesToPersist(String toPersist) {
-        this.effectedEntities = retrieveEffectedEntities(toPersist);
+    public void setAffectedEntitiesToPersist(String toPersist) {
+        this.affectedEntities = retrieveEffectedEntities(toPersist);
     }
 
-    public String getEffectedEntitiesToPersist() {
-        return translateEffectedEntitiesToPersist(effectedEntities);
+    public String getAffectedEntitiesToPersist() {
+        return translateAffectedEntitiesToPersist(affectedEntities);
     }
 
     public boolean isUndone() {
@@ -295,6 +291,7 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
     public void setToUpdate(T toUpdate) {
         this.toUpdate = toUpdate;
     }
+
 
     // https://stackoverflow.com/questions/13874528/what-is-the-purpose-of-accesstype-field-accesstype-property-and-access/13874900#13874900
     // The default is not FIELD. The access type is FIELD if you place mapping annotations on fields, and it's PROPERTY if you place mapping annotations on getters. And all the entity hierarchy must be coherent in the mapping annotation placement: always on fields, or always on getters, but not mixed.

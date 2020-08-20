@@ -27,11 +27,11 @@ public class TradeItemHolder extends ItemList {
         this.setOfItems = items;
     }
 
-    public long getLendCount() {
-        return setOfItems.stream().filter(item -> item.getWillingness().equals(Willingness.LEND)).count();
+    public int getLendCount() {
+        return Math.toIntExact(setOfItems.stream().filter(item -> item.getWillingness().equals(Willingness.LEND)).count());
     }
 
-    public long getSellCount() {
-        return setOfItems.stream().filter(item -> item.getWillingness().equals(Willingness.SELL)).count();
+    public int getSellCount() {
+        return Math.toIntExact(setOfItems.stream().filter(item -> item.getWillingness().equals(Willingness.SELL)).count());
     }
 }

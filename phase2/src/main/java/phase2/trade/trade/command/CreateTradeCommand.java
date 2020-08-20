@@ -5,15 +5,14 @@ import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.trade.OrderState;
-import phase2.trade.trade.Trade;
-import phase2.trade.trade.TradeOrder;
-import phase2.trade.trade.UserOrderBundle;
+import phase2.trade.trade.*;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @CommandProperty(crudType = CRUDType.CREATE, undoable = false, persistent = true)
@@ -27,6 +26,8 @@ public class CreateTradeCommand extends TradeCommand<Trade> {
         getEntityBundle().getTradeGateway().submitTransaction((tradeGateway) -> {
             toUpdate.setLocalDateTime(LocalDateTime.now());
             Set<TradeOrder> ordersToRemove = new HashSet<>();
+
+            TradeQuery tradeQuery = new TradeQuery(toUpdate);
 
 
             for (TradeOrder order : toUpdate.getOrders()) {
@@ -42,7 +43,6 @@ public class CreateTradeCommand extends TradeCommand<Trade> {
                     callback.call(null, new StatusFailed("not.all.addresses.are.filled"));
                     return;
                 }
-
             }
 
             Collection<Trade> tradesPlacedByUserInAWeek = tradeGateway.findByUser(operator, LocalDateTime.now(), LocalDateTime.now().minusDays(7));
@@ -52,14 +52,19 @@ public class CreateTradeCommand extends TradeCommand<Trade> {
                 return;
             }
 
-            Map<User, Integer> userToItemsToLend = new HashMap<>();
-
-
             toUpdate.getOrders().removeAll(ordersToRemove);
 
             if (toUpdate.getOrders().size() == 0) {
                 callback.call(null, new StatusFailed("no.order.detected"));
                 return;
+            }
+
+            for (User user : toUpdate.findInvolvedUsers()) {
+                if (tradeQuery.findUserBorrowCount(user) > 0 && tradeQuery.findUserLendCount(user) == 0
+                        && tradeQuery.findUserSellCount(user) == 0 && tradeGateway.findByUser(user).size() == 0) {
+                    callback.call(null, new StatusFailed("exist.user.who.do.not.lend.and.is.first.trade"));
+                    return;
+                }
             }
 
             tradeGateway.add(toUpdate);

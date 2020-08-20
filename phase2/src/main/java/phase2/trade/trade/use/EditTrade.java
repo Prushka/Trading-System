@@ -1,14 +1,16 @@
 package phase2.trade.trade.use;
 
 import phase2.trade.address.Address;
-import phase2.trade.callback.StatusCallback;
+import phase2.trade.callback.status.ResultStatusWrapper;
 import phase2.trade.callback.status.StatusFailed;
+import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.config.TradeConfig;
 import phase2.trade.trade.OrderState;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.TradeOrder;
 import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
+import phase2.trade.widget.TradeConfirmWidget;
 
 import java.time.LocalDateTime;
 
@@ -27,37 +29,41 @@ public class EditTrade {
     }
 
 
-    public void editAddress(TradeOrder tradeOrder, Address newAddress, StatusCallback statusCallback) {
+    public ResultStatusWrapper<Trade> editAddress(TradeOrder tradeOrder, Address newAddress) {
         UserOrderBundle operatorBundle = tradeOrder.findBundleByUser(operator);
-        if (operatorBundle == null || newAddress == null || newAddress.equals(tradeOrder.getAddressTrade())) return;
-        tradeOrder.findBundleByUser(operator).edit();
-        if (ifExceedLimit(operatorBundle.getEdits(), operatorBundle.hasConfirmed())) {
+        if (operatorBundle == null || newAddress == null || newAddress.equals(tradeOrder.getAddressTrade()))
+            return new ResultStatusWrapper<>(trade, new StatusSucceeded());
+        if (ifExceedLimit(operatorBundle.getEdits(), operatorBundle.isTradeConfirmed())) {
             tradeOrder.setOrderState(OrderState.CANCELLED);
-            statusCallback.call(new StatusFailed("your.order.has.been.cancelled"));
+            return new ResultStatusWrapper<>(trade, new StatusFailed("your.order.has.been.cancelled"));
         }
+        tradeOrder.findBundleByUser(operator).edit();
         tradeOrder.setAddressTrade(newAddress);
+        return new ResultStatusWrapper<>(trade, new StatusSucceeded());
     }
 
-    public void editTime(TradeOrder tradeOrder, LocalDateTime newDate, StatusCallback statusCallback) {
+    public ResultStatusWrapper<Trade> editTime(TradeOrder tradeOrder, LocalDateTime newDate) {
         UserOrderBundle operatorBundle = tradeOrder.findBundleByUser(operator);
-        if (operatorBundle == null || newDate == null || newDate.equals(tradeOrder.getDateAndTime())) return;
-        tradeOrder.findBundleByUser(operator).edit();
-        if (ifExceedLimit(operatorBundle.getEdits(), operatorBundle.hasConfirmed())) {
+        if (operatorBundle == null || newDate == null || newDate.equals(tradeOrder.getDateAndTime()))
+            return new ResultStatusWrapper<>(trade, new StatusSucceeded());
+        if (ifExceedLimit(operatorBundle.getEdits(), operatorBundle.isTradeConfirmed())) {
             tradeOrder.setOrderState(OrderState.CANCELLED);
-            statusCallback.call(new StatusFailed("your.order.has.been.cancelled-" + operatorBundle.getEdits() + "-" + tradeConfig.getEditLimit()));
+            return new ResultStatusWrapper<>(trade, new StatusFailed("your.order.has.been.cancelled-" + operatorBundle.getEdits() + "-" + tradeConfig.getEditLimit()));
         }
         tradeOrder.findBundleByUser(operator).edit();
         tradeOrder.setDateAndTime(newDate);
+        return new ResultStatusWrapper<>(trade, new StatusSucceeded());
     }
 
-    public void editConfirm(TradeOrder tradeOrder, Boolean hasConfirmed, StatusCallback statusCallback) {
-        tradeOrder.findBundleByUser(operator).setConfirm(hasConfirmed);
-        if (tradeOrder.getRightBundle().hasConfirmed() && tradeOrder.getLeftBundle().hasConfirmed()) {
+    public void editConfirm(TradeOrder tradeOrder, TradeConfirmWidget.ConfirmationPair hasConfirmed) {
+        tradeOrder.findBundleByUser(operator).setTradeConfirmed(hasConfirmed.tradeConfirm);
+        tradeOrder.findBundleByUser(operator).setTransactionConfirmed(hasConfirmed.transactionConfirm);
+        if (tradeOrder.getRightBundle().isTradeConfirmed() && tradeOrder.getLeftBundle().isTradeConfirmed()) {
             tradeOrder.setOrderState(OrderState.PENDING_TRADE);
         }
     }
 
     private boolean ifExceedLimit(int edits, boolean hasConfirmed) {
-        return edits >= tradeConfig.getEditLimit() && !hasConfirmed;
+        return edits > tradeConfig.getEditLimit() && !hasConfirmed;
     }
 }

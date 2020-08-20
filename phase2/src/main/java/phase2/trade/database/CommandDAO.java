@@ -1,6 +1,5 @@
 package phase2.trade.database;
 
-import org.hibernate.query.Query;
 import phase2.trade.command.Command;
 import phase2.trade.gateway.CommandGateway;
 
@@ -39,10 +38,14 @@ public class CommandDAO extends DAO<Command, CommandGateway> implements CommandG
     }
 
     @Override
-    public <Q> List<Command<Q>> findByDType(Class<Q> clazz) {
-        Query<Command<Q>> query = getCurrentSession().createQuery("FROM Command WHERE dType = :dType");
-        query.setParameter("dType", clazz.getSimpleName());
-        List<Command<Q>> result = query.getResultList();
+    public <Q> List<Q> findByDType(Class<Q> clazz) {
+        final List<Q> result = new ArrayList<>();
+
+        criteria(clazz, (builder, criteria, root) -> {
+            Predicate restriction = builder.greaterThan(root.get("dType"), clazz.getSimpleName());
+            criteria.select(root).where(restriction);
+            result.addAll(getCurrentSession().createQuery(criteria).getResultList());
+        });
         return result;
     }
 

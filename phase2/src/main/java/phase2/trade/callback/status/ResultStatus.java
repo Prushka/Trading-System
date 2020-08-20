@@ -3,9 +3,12 @@ package phase2.trade.callback.status;
 import javafx.application.Platform;
 import phase2.trade.view.NotificationFactory;
 
-public abstract class ResultStatus { // unsatisfied with the current implementation
+public abstract class ResultStatus {
 
-    Runnable succeeded, failed, exist, after;
+    Runnable succeeded,
+            failed,
+            exist,
+            after;
 
     protected String message = "";
 
@@ -15,10 +18,14 @@ public abstract class ResultStatus { // unsatisfied with the current implementat
     }
 
     public ResultStatus() {
-        succeeded = () -> {};
-        failed = () -> {};
-        after = () -> {};
-        exist = () -> {};
+        succeeded = () -> {
+        };
+        failed = () -> {
+        };
+        after = () -> {
+        };
+        exist = () -> {
+        };
     }
 
     protected void toastMessage(NotificationFactory notificationFactory) {
@@ -31,11 +38,16 @@ public abstract class ResultStatus { // unsatisfied with the current implementat
         this.exist = exist;
     }
 
-    void run(Runnable runnable){
+    void run(Runnable runnable) {
         Platform.runLater(runnable);
     }
 
     public abstract void handle(NotificationFactory notificationFactory);
+
+    public Boolean handle(NotificationFactory notificationFactory, Boolean ifPassed) {
+        handle(notificationFactory);
+        return ifPassed && ifPass();
+    }
 
     public void setSucceeded(Runnable succeeded) {
         this.succeeded = succeeded;

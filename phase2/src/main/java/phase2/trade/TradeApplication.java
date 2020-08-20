@@ -6,7 +6,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import phase2.trade.controller.DashboardController;
 import phase2.trade.user.controller.LoginController;
 
 public class TradeApplication extends Application {
@@ -43,10 +42,10 @@ public class TradeApplication extends Application {
         // configurer.mockLogin("admin", "admin???");
 
         //configurer.testTrade();
-        configurer.loginRestaurant();
+        //configurer.loginRestaurant();
         //primaryStage.setScene(new Scene(new VBox()));
-        configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
-        //login(primaryStage);
+        //configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
+        login(primaryStage);
         primaryStage.show();
     }
 

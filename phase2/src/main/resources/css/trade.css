@@ -381,10 +381,6 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
     -fx-text-fill: BLACK;
 }
 
-.bottom-list-view .jfx-list-cell:filled:selected:focused, .bottom-list-view .jfx-list-cell:filled:selected {
-    -fx-text-fill: BLACK;
-}
-
 .default-combo-box .jfx-list-cell:filled:hover, .default-combo-box .jfx-list-cell:hover {
     -fx-background-color: rgb(46, 80, 90);
     -fx-text-fill: white;
@@ -399,4 +395,23 @@ https://uxplanet.org/top-50-dashboard-ui-kits-and-templates-in-2019-8583e41b775d
     -jfx-focus-color: WHITE;
     -jfx-unfocus-color: WHITE;
     -fx-text-fill: WHITE;
+}
+
+.market-item-cell .sell {
+    -fx-text-fill: rgb(227, 98, 9);
+    -fx-font-weight: BOLD;
+}
+
+.market-item-cell .lend {
+    -fx-text-fill: rgb(223, 121, 145);
+    -fx-font-weight: BOLD;
+}
+
+.market-item-cell .name {
+    -fx-font-weight: bold;
+    -fx-font-size: 20
+}
+
+.market-item-cell .combo {
+    -fx-text-fill: #293841;
 }

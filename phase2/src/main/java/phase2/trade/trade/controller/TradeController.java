@@ -43,9 +43,10 @@ public abstract class TradeController extends AbstractController implements Init
 
 
     ComboBox<User> getUserComboBox(Collection<User> users) {
-        ComboBox<User> comboBox = getNodeFactory().getComboBox(users);
-        comboBox.setConverter(new UserStringConverter(comboBox));
-        comboBox.setCellFactory(e -> new UserCell());
+
+        ComboBox<User> comboBox = getNodeFactory().getDefaultComboBox(users);
+        comboBox.setConverter(new UserStringConverter(comboBox, getAccountManager().getLoggedInUser().getUid()));
+        comboBox.setCellFactory(e -> new UserCell(getAccountManager().getLoggedInUser().getUid()));
         return comboBox;
     }
 

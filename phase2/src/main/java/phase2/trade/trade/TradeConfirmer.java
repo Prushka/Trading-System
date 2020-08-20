@@ -16,10 +16,10 @@ public class TradeConfirmer {
         }
 
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
-            if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.hasConfirmed()){
-                user.setConfirm(true);
+            if (user.getUser().getEmail().equals(editingUser.getEmail()) && !user.isTradeConfirmed()){
+                user.setTradeConfirmed(true);
             }
-            if (!user.hasConfirmed()){
+            if (!user.isTradeConfirmed()){
                 canStart = false;
             }
         }
@@ -43,7 +43,7 @@ public class TradeConfirmer {
 
     private void resetConfirms(Trade currTrade){
         for (UserOrderBundle user: currTrade.getOrder().getTraders()){
-            user.setConfirm(false);
+            user.setTradeConfirmed(false);
         }
     }
 

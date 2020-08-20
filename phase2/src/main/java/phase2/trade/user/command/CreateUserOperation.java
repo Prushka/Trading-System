@@ -20,7 +20,7 @@ import java.util.List;
 @Entity
 @CommandProperty(crudType = CRUDType.CREATE, undoable = false,
         persistent = true, permissionSet = {Permission.CreateUser})
-public class CreateUser extends UserCommand<User> {
+public class CreateUserOperation extends UserCommand<User> {
 
     @Override
     public void execute(ResultStatusCallback<User> callback, String... args) { // username, email, password, permission_group, country, province, city,

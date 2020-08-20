@@ -5,13 +5,23 @@ import phase2.trade.user.User;
 
 public class UserCell extends JFXListCell<User> {
 
+    private final Long loggedInUserId;
+
+    public UserCell(Long loggedInUserId) {
+        this.loggedInUserId = loggedInUserId;
+    }
+
     @Override
-    protected void updateItem(User item, boolean empty) {
-        super.updateItem(item, empty);
+    protected void updateItem(User user, boolean empty) {
+        super.updateItem(user, empty);
         if (empty) {
             setGraphic(null);
         } else {
-            setText(item.getName());
+            if (loggedInUserId.equals(user.getUid())) {
+                setText(user.getName() + " (You)");
+                return;
+            }
+            setText(user.getName());
         }
     }
 }

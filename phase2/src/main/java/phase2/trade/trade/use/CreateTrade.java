@@ -1,5 +1,7 @@
 package phase2.trade.trade.use;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import phase2.trade.item.Item;
 import phase2.trade.itemlist.TradeItemHolder;
 import phase2.trade.trade.Trade;
@@ -14,13 +16,15 @@ import java.util.Set;
 
 public class CreateTrade {
 
+    private static final Logger logger = LogManager.getLogger(CreateTrade.class);
+
     private final Map<User, Collection<Item>> usersToItemsToGet;
 
     private final Trade trade = new Trade();
 
     private final Collection<Item> allItems = new HashSet<>();
 
-    private Set<User> usersInvolved = new HashSet<>();
+    private final Set<User> usersInvolved = new HashSet<>();
 
     public CreateTrade(Map<User, Collection<Item>> usersToItemsToGet) {
         this.usersToItemsToGet = usersToItemsToGet;
@@ -58,7 +62,6 @@ public class CreateTrade {
     // this cleanup doesn't remove order because even if two users do not have transaction, there is a chance user select both of them in the controller since
     // the number of users involved in arbitrary
     public void cleanup() {
-        System.out.println(trade.getOrders().size());
         for (TradeOrder order : trade.getOrders()) {
             if (order.getRightBundle().getTradeItemHolder().size() == 0 && order.getLeftBundle().getTradeItemHolder().size() == 0) {
             } else {
@@ -68,7 +71,7 @@ public class CreateTrade {
         }
         // trade.getOrders().removeAll(ordersToRemove);
 
-        System.out.println("Final Order Size: " + trade.getOrders().size());
+        logger.debug("Order Size: " + trade.getOrders().size());
     }
 
     public void createOrder() {

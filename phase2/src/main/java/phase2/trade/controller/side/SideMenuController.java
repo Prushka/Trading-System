@@ -70,8 +70,8 @@ public class SideMenuController extends AbstractController implements Initializa
     public void initialize(URL location, ResourceBundle resources) {
         userInfoBox.getChildren().add(getSceneManager().loadPane(UserSideInfoController::new));
 
-        sideList.setCellFactory(param -> new SideListCell());
-        bottomSideList.setCellFactory(param -> new SideListCell());
+        sideList.setCellFactory(param -> new SideListCell(resources));
+        bottomSideList.setCellFactory(param -> new SideListCell(resources));
         for (SideOption sideOption : SideOption.values()) {
             if (sideOption.ifDisplay(getAccountManager().getPermissionGroup())) {
                 if (sideOption.sidePosition == SideOption.SidePosition.TOP) {

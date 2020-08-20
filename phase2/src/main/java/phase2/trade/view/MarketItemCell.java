@@ -32,6 +32,8 @@ public class MarketItemCell extends JFXListCell<Item> {
         VBox leftVBox = new VBox(5);
         VBox rightVBox = new VBox(5);
 
+        hBox.getStyleClass().add("market-item-cell");
+
         hBox.setAlignment(Pos.CENTER_LEFT);
         leftVBox.setAlignment(Pos.CENTER_LEFT);
         rightVBox.setAlignment(Pos.CENTER_RIGHT);
@@ -42,13 +44,13 @@ public class MarketItemCell extends JFXListCell<Item> {
 
 
         Label nameLabel = new Label(item.getName());
-        nameLabel.setStyle("-fx-font-weight: bold;-fx-font-size: 20");
+        nameLabel.getStyleClass().add("name");
 
         Label descriptionLabel = new Label(item.getDescription());
         descriptionLabel.setMaxWidth(350);
 
         JFXComboBox<String> comboBox = new JFXComboBox<>();
-        comboBox.setStyle("-fx-text-fill: #293841;");
+        comboBox.getStyleClass().add("combo");
         comboBox.setItems(FXCollections.observableArrayList(populate(item.getQuantity())));
 
         comboBox.getSelectionModel().select(0);
@@ -62,11 +64,11 @@ public class MarketItemCell extends JFXListCell<Item> {
         switch (item.getWillingness()) {
             case LEND:
                 sellOrLendLabel.setText("For LEND");
-                sellOrLendLabel.setStyle("-fx-text-fill: rgb(223,121,145);-fx-font-weight: BOLD");
+                sellOrLendLabel.getStyleClass().add("lend");
                 break;
             case SELL:
-                sellOrLendLabel.setText("Sell: " + price + "$"); // TODO: currency system?
-                sellOrLendLabel.setStyle("-fx-text-fill: rgb(227,98,9);-fx-font-weight: BOLD");
+                sellOrLendLabel.setText("Sell: " + price + "$"); // TODO: currency system
+                sellOrLendLabel.getStyleClass().add("sell");
                 break;
         }
 
@@ -94,12 +96,12 @@ public class MarketItemCell extends JFXListCell<Item> {
             hBox.getChildren().addAll(svg);
         }
         hBox.getChildren().addAll(leftVBox, region, comboBox, rightVBox, addToCart);
-        hBox.getStyleClass().add("market-item-cell");
         return hBox;
     }
 
 
     private List<String> populate(int count) {
+        count = Math.min(count, 10);
         List<String> temp = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
             temp.add(String.valueOf(i));
@@ -114,6 +116,7 @@ public class MarketItemCell extends JFXListCell<Item> {
             setGraphic(null);
         } else {
             setGraphic(generateItemPreview(item));
+
             setText("");
         }
     }

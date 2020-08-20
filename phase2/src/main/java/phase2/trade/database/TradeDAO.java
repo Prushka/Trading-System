@@ -8,6 +8,7 @@ import phase2.trade.user.User;
 
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
@@ -18,8 +19,14 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
         super(Trade.class, resource);
     }
 
+
     @Override
     public Collection<Trade> findByUser(User currUser) {
+        return findByUser(currUser, null, null);
+    }
+
+    @Override
+    public Collection<Trade> findByUser(User currUser, LocalDateTime after, LocalDateTime before) {
         final Set<Trade> result = new HashSet<>();
 
         criteria((builder, query, root) -> {
@@ -32,6 +39,13 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
                     builder.equal(rightBundles.get("user"), currUser)
             );
 
+            if (after != null && before != null) {
+                restriction = builder.and(restriction,
+                        builder.lessThan(root.get("localDateTime"), after),
+                        builder.greaterThan(root.get("localDateTime"), before)
+                );
+            }
+
             query.select(root).where(restriction);
             executeCriteriaQuery(result, query);
         });
@@ -39,26 +53,8 @@ public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
         List<Trade> newResult = new ArrayList<>(result);
         newResult.sort(new TradeIdComparator());
         return newResult;
-
-        /*
-        // Citation needed? -- https://stackoverflow.com/questions/40461519/search-by-nested-property-of-collection-field-with-criteria-api
-        CriteriaBuilder criteriaBuilder = getCurrentSession().getCriteriaBuilder();
-        CriteriaQuery<Trade> criteriaQuery = criteriaBuilder.createQuery(Trade.class);
-        Root<Trade> root = criteriaQuery.from(Trade.class);
-
-        Subquery<UserOrderBundle> userSubquery = criteriaQuery.subquery(UserOrderBundle.class);
-        Root<Trade> tradeSubroot = userSubquery.correlate(root);
-        Join<Trade, TradeOrder> tradeOrderJoin = tradeSubroot.join("myOrder");
-        Join<TradeOrder, UserOrderBundle> bundleJoin = tradeOrderJoin.join("traders");
-        userSubquery.select(bundleJoin);
-        userSubquery.where(criteriaBuilder.equal(bundleJoin.get("user"), currUser));
-        criteriaQuery.where(criteriaBuilder.exists(userSubquery));
-
-        TypedQuery<Trade> tradeTypedQuery = getCurrentSession().createQuery(criteriaQuery);
-        return tradeTypedQuery.getResultList();*/
     }
 
-    // I'm not sure if these will work or if you can use function calls in query strings
     public int findNumOfTransactions(User currUser) {
         final List<Trade> result = new ArrayList<>();
         criteria((builder, query, root) -> {

@@ -42,8 +42,8 @@ public class TradeEditController extends TradeInfoController {
             super(tradeOrder);
         }
 
-        void setTradeConfirm(Boolean previousValue) {
-            tradeConfirmWidget = new TradeConfirmWidget(getControllerResources(), tradeOrder, previousValue);
+        void setTradeConfirm(Boolean previousTradeValue, Boolean previousTransactionValue) {
+            tradeConfirmWidget = new TradeConfirmWidget(getControllerResources(), tradeOrder, new TradeConfirmWidget.ConfirmationPair(previousTradeValue, previousTransactionValue));
         }
 
         void setTradeAddress(Address previousValue) {
@@ -98,28 +98,22 @@ public class TradeEditController extends TradeInfoController {
             EditTradeCommand editTradeCommand = getCommandFactory().getCommand(
                     EditTradeCommand::new, c -> c.setToUpdate(trade));
 
+            Boolean success = true;
+
             for (Map.Entry<TradeOrder, WidgetBundle> entry : widgetBundleMap.entrySet()) {
-
                 UserOrderBundle loggedIn = entry.getKey().findBundleByUser(getAccountManager().getLoggedInUser());
-
                 if (loggedIn != null) {
-                    editTrade.editConfirm(entry.getKey(), entry.getValue().tradeConfirmWidget.getValue(), resultStatus -> {
-                        resultStatus.handle(getNotificationFactory());
-                    });
+                    editTrade.editConfirm(entry.getKey(), entry.getValue().tradeConfirmWidget.getValue());
                 }
-
-                editTrade.editAddress(entry.getKey(), entry.getValue().tradeAddressWidget.getValue(), resultStatus -> {
-                    resultStatus.handle(getNotificationFactory());
-                });
-
-                editTrade.editTime(entry.getKey(), entry.getValue().tradeTimeWidget.getValue(), resultStatus -> {
-                    resultStatus.handle(getNotificationFactory());
-                });
-
+                success = editTrade.editAddress(entry.getKey(), entry.getValue().tradeAddressWidget.getValue()).getResultState().handle(getNotificationFactory(), success);
+                success = editTrade.editTime(entry.getKey(), entry.getValue().tradeTimeWidget.getValue()).getResultState().handle(getNotificationFactory(), success);
             }
+            Boolean finalSuccess = success;
             editTradeCommand.execute((result, status) -> {
                 status.setSucceeded(() -> {
-                    getNotificationFactory().toast(2, "Order successfully updated!");
+                    if (finalSuccess) {
+                        getNotificationFactory().toast(2, "Order successfully updated!");
+                    }
                     publish(ReType.REFRESH, TradeListController.class);
                 });
                 status.handle(getNotificationFactory());
@@ -135,7 +129,8 @@ public class TradeEditController extends TradeInfoController {
             if (order.ifUserInOrder(getAccountManager().getLoggedInUser())) {
                 editWidgetBundle.setTradeAddress(order.getAddressTrade());
                 editWidgetBundle.setTradeTime(order.getDateAndTime());
-                editWidgetBundle.setTradeConfirm(order.findBundleByUser(getAccountManager().getLoggedInUser()).hasConfirmed());
+                editWidgetBundle.setTradeConfirm(order.findBundleByUser(getAccountManager().getLoggedInUser()).isTradeConfirmed(),
+                        order.findBundleByUser(getAccountManager().getLoggedInUser()).isTransactionConfirmed());
             }
             widgetBundleMap.put(order, editWidgetBundle);
         }
@@ -157,7 +152,7 @@ public class TradeEditController extends TradeInfoController {
     }
 
     @Override
-    Trade getTrade() {
+    Trade getPresentingTrade() {
         return trade;
     }
 }

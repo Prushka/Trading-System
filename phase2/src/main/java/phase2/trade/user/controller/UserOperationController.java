@@ -19,7 +19,7 @@ import phase2.trade.controller.EditableTableController;
 import phase2.trade.editor.CommandEditor;
 import phase2.trade.item.Item;
 import phase2.trade.user.User;
-import phase2.trade.user.command.CreateUser;
+import phase2.trade.user.command.CreateUserOperation;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
@@ -114,7 +114,7 @@ public class UserOperationController extends EditableTableController<Command, Co
         addToTableViewGenerator(result, tableViewGenerator);
 
         ComboBox<Class<?>> comboBox = new ComboBox<>();
-        comboBox.setItems(FXCollections.observableArrayList(CreateUser.class));
+        comboBox.setItems(FXCollections.observableArrayList(CreateUserOperation.class));
         comboBox.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

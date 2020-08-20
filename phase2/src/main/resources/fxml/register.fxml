@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
 <?import com.jfoenix.controls.*?>
-<?import java.lang.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.Font?>
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <HBox alignment="CENTER">
@@ -29,8 +25,6 @@
                 <JFXTextField text="username" fx:id="username" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0" promptText="%input.username.prompt" />
                 <JFXTextField text="a@b.ccc" fx:id="email" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Email" />
                 <JFXPasswordField text="12345678" fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Password" />
-                <!--<JFXTextField text="Country" fx:id="country" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Country" />
-                <JFXTextField text="City" fx:id="city" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="City" />-->
             </children>
         </VBox>
         <VBox alignment="CENTER" spacing="10.0">

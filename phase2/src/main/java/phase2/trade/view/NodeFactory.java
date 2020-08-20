@@ -109,13 +109,21 @@ public class NodeFactory {
     }
 
     public <T> JFXComboBox<T> getComboBox(Collection<T> list) {
-        JFXComboBox<T> comboBox = new JFXComboBox<>(FXCollections.observableArrayList(list));
+        return new JFXComboBox<>(FXCollections.observableArrayList(list));
+    }
+
+    public <T> JFXComboBox<T> getDefaultComboBox(Collection<T> list) {
+        JFXComboBox<T> comboBox = getComboBox(list);
         comboBox.getStyleClass().addAll("default-combo-box");
         return comboBox;
     }
 
     public JFXComboBox<String> getComboBox() {
-        JFXComboBox<String> comboBox = new JFXComboBox<>();
+        return new JFXComboBox<>();
+    }
+
+    public JFXComboBox<String> getDefaultComboBox() {
+        JFXComboBox<String> comboBox = getComboBox();
         comboBox.getStyleClass().addAll("default-combo-box");
         return comboBox;
     }

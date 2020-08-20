@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 
 public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGateway<T, S> {
 
+
     private Session currentSession;
 
     private Transaction currentTransaction;
@@ -170,7 +171,7 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         }
     }
 
-    private final boolean async = false;
+    private final boolean async = true;
 
     @Override
     public void submitTransaction(Consumer<S> consumer) {

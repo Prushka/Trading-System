@@ -14,6 +14,7 @@ import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AddItemToItemList;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.itemlist.ItemListType;
+import phase2.trade.user.command.ReloadUser;
 import phase2.trade.view.NodeFactory;
 
 import java.net.URL;
@@ -30,15 +31,24 @@ public class InventoryController extends ItemController implements Initializable
     }
 
     @Override
+    public void refresh() {
+        reloadNewDisplayData(getAccountManager().getLoggedInUser().getItemList(itemListType).getSetOfItems());
+        super.refresh();
+    }
+
+    // Why reload here:
+    // If administrative edits an Item in this person's inventory from ANOTHER application
+    // The inventory will be reloaded
+    @Override
     public void reload() {
-        // use RefreshUser here
+        ReloadUser reloadUser = getCommandFactory().getCommand(ReloadUser::new);
+        reloadUser.execute((result, status) -> {
+            status.setSucceeded(this::refresh);
+            status.handle(getNotificationFactory());
+        });
         super.reload();
     }
 
-    // TODO: if view is updated first, then even if the execution fails, the item would disappear. It would reappear if user refreshes this tableview
-    //  Also it's not possible to bind the entity to the view since the entity is in database and I don't think it's a good idea to replace all fields in entities to be Properties and Observable
-    //  1. We can update entity first without taking benefit from Observable List. So that the ResultStatus can be checked in first place
-    //  2. Maybe we can also retrieve necessary elements from the database and store it as a cache. But I don't have time for this. It can take time to implement the caching system
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);

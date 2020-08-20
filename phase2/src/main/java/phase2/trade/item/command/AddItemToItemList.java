@@ -43,7 +43,6 @@ public class AddItemToItemList extends ItemCommand<Item> {
             item.setOwner(operator);
 
             item.setOwnership(Ownership.TO_BE_REVIEWED);
-            System.out.println("1");
             operator.getItemList(itemListType).addItem(item);
             gateway.update(operator);
             addEffectedEntity(Item.class, item.getUid());

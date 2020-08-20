@@ -155,7 +155,7 @@ public class MarketListController extends AbstractListController<Item> implement
         Pane left = getPane(DashboardPane.LEFT);
 
         left.getStyleClass().addAll("dashboard-top-tool-bar", "dashboard-left-tool-bar");
-
+        Label quantityTip = new Label("Max Quantity 10");
         Button clear = getNodeFactory().getDefaultFlatButton("Clear", "");
         clear.setOnAction(e -> {
             name.setText("");
@@ -171,7 +171,7 @@ public class MarketListController extends AbstractListController<Item> implement
         VBox.setMargin(priceMinInclusive, new Insets(20, 0, 0, 0));
         VBox.setMargin(countryCombo, new Insets(0, 20, 0, 20));
         left.getChildren().setAll(priceMinInclusive, label, priceMaxInclusive,
-                countryCombo, provinceCombo, cityCombo, clear);
+                countryCombo, provinceCombo, cityCombo, quantityTip, clear);
 
     }
 }

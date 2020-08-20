@@ -1,6 +1,7 @@
 package phase2.trade.itemlist;
 
 import phase2.trade.item.Item;
+import phase2.trade.item.Willingness;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
 
+// This is held by the Item owner in a TradeOrder's UserOrderBundle
 @Entity
 public class TradeItemHolder extends ItemList {
 
@@ -23,5 +25,13 @@ public class TradeItemHolder extends ItemList {
     @Override
     public void setSetOfItems(Set<Item> items) {
         this.setOfItems = items;
+    }
+
+    public long getLendCount() {
+        return setOfItems.stream().filter(item -> item.getWillingness().equals(Willingness.LEND)).count();
+    }
+
+    public long getSellCount() {
+        return setOfItems.stream().filter(item -> item.getWillingness().equals(Willingness.SELL)).count();
     }
 }

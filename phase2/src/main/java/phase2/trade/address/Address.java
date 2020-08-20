@@ -96,4 +96,25 @@ public class Address {
     public void setTerritory(String territory) {
         this.territory = territory;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        final Address another = (Address) obj;
+        return notNullEquals(another.country, country) &&
+                notNullEquals(another.territory, territory) &&
+                notNullEquals(another.city, city) &&
+                notNullEquals(another.firstAddressLine, firstAddressLine) &&
+                notNullEquals(another.secondAddressLine, secondAddressLine) &&
+                notNullEquals(another.postalCode, postalCode);
+    }
+
+    private boolean notNullEquals(String s1, String s2) {
+        if (s1 != null && s2 != null) {
+            return s1.equals(s2);
+        }
+        return true;
+    }
 }

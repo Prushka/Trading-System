@@ -71,7 +71,7 @@ public class MarketController extends AbstractListController<Trade> implements I
         confirmColumn = new TableColumn<>("Confirmation: ");
         confirmColumn.setMinWidth(200);
         confirmColumn.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getOrder()
-                .getTraders().get(0).hasConfirmed()));
+                .getTraders().get(0).isTradeConfirmed()));
         typeColumn = new TableColumn<>("Permanency: ");
         typeColumn.setMinWidth(200);
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("isPermanent"));

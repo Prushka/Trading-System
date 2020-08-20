@@ -8,29 +8,22 @@ import phase2.trade.permission.PermissionGroup;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
 @Entity
 public class RegularUser extends User {
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Inventory inventory;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Cart cart;
 
     private int accountBalance;
 
     //private int incompleteTrades;
 
-    /**
-     * Creates a PersonalUser with the given userName, email, telephone, password
-     * and initializes all other instance variables.
-     *
-     * @param userName username of this user
-     * @param email    email of this user
-     * @param password password of this user
-     */
     public RegularUser(String userName, String email, String password) {
         super(userName, email, password);
         //incompleteTrades = 0;
@@ -48,6 +41,11 @@ public class RegularUser extends User {
 
     public RegularUser() {
 
+    }
+
+    @Override
+    public void lazyLoad() {
+        super.lazyLoad();
     }
 
     public Inventory getInventory() {

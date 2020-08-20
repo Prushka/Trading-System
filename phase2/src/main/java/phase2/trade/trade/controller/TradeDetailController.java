@@ -105,7 +105,7 @@ public class TradeDetailController extends TradeInfoController {
     }
 
     @Override
-    Trade getTrade() {
+    Trade getPresentingTrade() {
         return createTrade.getTrade();
     }
 

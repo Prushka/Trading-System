@@ -53,13 +53,6 @@ public abstract class User {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Avatar avatar;
 
-    /**
-     * Creates a new User with userName, email, telephone and given password.
-     *
-     * @param name     the username of this Person.
-     * @param email    the email this Person.
-     * @param password the password this user set to
-     */
     public User(String userName, String email, String password) {
         this.name = userName;
         this.email = email;
@@ -89,6 +82,10 @@ public abstract class User {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -105,24 +102,20 @@ public abstract class User {
         this.password = password;
     }
 
-    public void setUid(Long uid) {
-        this.uid = uid;
-    }
-
     public Long getUid() {
         return uid;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setName(String userName) {
-        this.name = userName;
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String userName) {
+        this.name = userName;
     }
 
     public Integer getReputation() {
@@ -195,6 +188,22 @@ public abstract class User {
 
     public void setSupportTickets(Set<SupportTicket> supportSupportTickets) {
         this.supportTickets = supportSupportTickets;
+    }
+
+    public void lazyLoad() {
+        // A better approach is to be discovered
+        // This method is used to optimize database query and load necessary fields from database when used
+        // For example, the Item's owner is a User, thus, fetching an Item will cause the corresponding User (and all its non-lazy fields) to be selected
+        // (Since the Item's owner's address is useful in marketplace)
+        // this slows the load speed of Market Items and may potentially be an expensive operation
+        // (To get 4 items without lazy loading: 0.0552422 seconds compared to 0.0407408 seconds with lazy loading)
+        // By making most fields lazy and define a lazyLoad method in all Users, necessary fields will be selected automatically by hibernate when
+        // this User is used at that point (when a Command that gets this entity calls lazyLoad() in an opened session, these fields will then be selected)
+        int size = getSupportTickets().size();
+        if (getAvatar() != null) {
+            getAvatar().getImageData(); // lazy load
+        }
+
     }
 }
 

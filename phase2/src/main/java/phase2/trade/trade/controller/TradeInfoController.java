@@ -80,12 +80,12 @@ public abstract class TradeInfoController extends TradeController {
 
     abstract void refreshTableArea(User leftSelected, User rightSelected);
 
-    abstract Trade getTrade();
+    abstract Trade getPresentingTrade();
 
     // well these loops need optimization
     Map<User, UserTable> getUserTables(User matchesWhom) {
         Map<User, UserTable> table = new HashMap<>();
-        for (TradeOrder order : getTrade().getOrders()) {
+        for (TradeOrder order : getPresentingTrade().getOrders()) {
             if (order.getLeftUser().getUid().equals(matchesWhom.getUid())) {
                 UserTable userTable = new UserTable(order.getRightBundle().getUser(),
                         FXCollections.observableArrayList(

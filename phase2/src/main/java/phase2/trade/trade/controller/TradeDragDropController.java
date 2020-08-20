@@ -72,7 +72,7 @@ public class TradeDragDropController extends TradeController {
 
         Button tradeButton = new JFXButton("Trade");
 
-        ComboBox<User> leftComboBox = getNodeFactory().getComboBox(new ArrayList<>());
+        ComboBox<User> leftComboBox = getNodeFactory().getDefaultComboBox(new ArrayList<>());
         leftComboBox.setVisible(false);
         topLeftHBox.getChildren().addAll(leftComboBox);
 

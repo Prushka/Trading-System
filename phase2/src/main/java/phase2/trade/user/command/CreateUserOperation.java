@@ -17,6 +17,11 @@ import phase2.trade.validator.ValidatorType;
 import javax.persistence.Entity;
 import java.util.List;
 
+/**
+ * The Create user operation.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.CREATE, undoable = false,
         persistent = true, permissionSet = {Permission.CreateUser})

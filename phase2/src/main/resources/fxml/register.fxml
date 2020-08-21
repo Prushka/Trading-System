@@ -22,9 +22,12 @@
         <Label fx:id="submissionResult" text="Label" />
         <VBox alignment="CENTER" fx:id="inputArea" spacing="40.0">
             <children>
-                <JFXTextField text="username" fx:id="username" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0" promptText="%input.username.prompt" />
-                <JFXTextField text="a@b.ccc" fx:id="email" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Email" />
-                <JFXPasswordField text="12345678" fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="Password" />
+                <JFXTextField fx:id="username" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="300.0"
+                              promptText="%input.username.prompt"/>
+                <JFXTextField fx:id="email" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0"
+                              promptText="Email"/>
+                <JFXPasswordField fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0"
+                                  prefWidth="209.0" promptText="Password"/>
             </children>
         </VBox>
         <VBox alignment="CENTER" spacing="10.0">

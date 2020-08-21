@@ -9,6 +9,12 @@ import javafx.scene.control.ToggleButton;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Filter group used to bind a bunch of {@link FilterPredicate} and view nodes that work towards one FilteredList.
+ *
+ * @param <T> the type parameter
+ * @author Dan Lyu
+ */
 public class FilterGroup<T> {
 
     // well java doesn't allow declaring generic type in the field, so the current implementation only allows ComboBox<String>
@@ -25,31 +31,69 @@ public class FilterGroup<T> {
     private final Map<ToggleButton, FilterPredicate<T, Boolean>> toggleGroup = new HashMap<>();
 
 
+    /**
+     * Constructs a new Filter group.
+     *
+     * @param filteredList the filtered list
+     */
     public FilterGroup(FilteredList<T> filteredList) {
         this.filteredList = filteredList;
     }
 
+    /**
+     * Add search filter group.
+     *
+     * @param textField       the text field
+     * @param filterPredicate the filter predicate
+     * @return the filter group
+     */
     public FilterGroup<T> addSearch(TextField textField, FilterPredicate<T, String> filterPredicate) {
         textFieldGroup.put(textField, filterPredicate);
         return this;
     }
 
+    /**
+     * Add combo box filter group.
+     *
+     * @param comboBox        the combo box
+     * @param filterPredicate the filter predicate
+     * @return the filter group
+     */
     public FilterGroup<T> addComboBox(ComboBox<String> comboBox, FilterPredicate<T, String> filterPredicate) {
         comboBoxGroup.put(comboBox, filterPredicate);
         return this;
     }
 
+    /**
+     * Add check box filter group.
+     *
+     * @param checkBox        the check box
+     * @param filterPredicate the filter predicate
+     * @return the filter group
+     */
     public FilterGroup<T> addCheckBox(CheckBox checkBox, FilterPredicate<T, Boolean> filterPredicate) {
         checkBoxGroup.put(checkBox, filterPredicate);
         return this;
     }
 
+    /**
+     * Add toggle button filter group.
+     *
+     * @param toggleButton    the toggle button
+     * @param filterPredicate the filter predicate
+     * @return the filter group
+     */
     public FilterGroup<T> addToggleButton(ToggleButton toggleButton, FilterPredicate<T, Boolean> filterPredicate) {
         toggleGroup.put(toggleButton, filterPredicate);
         return this;
     }
 
 
+    /**
+     * Group filter group.
+     *
+     * @return the filter group
+     */
     public FilterGroup<T> group() {
         for (Map.Entry<CheckBox, FilterPredicate<T, Boolean>> entry : checkBoxGroup.entrySet()) {
             entry.getKey().selectedProperty().addListener((observable, oldValue, newValue) -> {

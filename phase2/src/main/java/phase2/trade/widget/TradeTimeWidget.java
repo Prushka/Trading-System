@@ -13,6 +13,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
+/**
+ * The Trade time widget.
+ *
+ * @author Dan Lyu
+ */
 public class TradeTimeWidget extends TradeDetailWidget<LocalDateTime> {
 
     private final DatePicker datePicker = new JFXDatePicker();
@@ -22,10 +27,23 @@ public class TradeTimeWidget extends TradeDetailWidget<LocalDateTime> {
 
     private final LocalDateTime previousValue;
 
+    /**
+     * Constructs a new Trade time widget.
+     *
+     * @param controllerResources the controller resources
+     * @param tradeOrder          the trade order
+     */
     public TradeTimeWidget(ControllerResources controllerResources, TradeOrder tradeOrder) {
         this(controllerResources, tradeOrder, null);
     }
 
+    /**
+     * Constructs a new Trade time widget.
+     *
+     * @param controllerResources the controller resources
+     * @param tradeOrder          the trade order
+     * @param previousValue       the previous value
+     */
     public TradeTimeWidget(ControllerResources controllerResources, TradeOrder tradeOrder,
                            LocalDateTime previousValue) {
         super(controllerResources, tradeOrder);

@@ -17,6 +17,11 @@ import phase2.trade.validator.ValidatorType;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The type Login controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "login.fxml")
 public class LoginController extends AbstractController implements Initializable {
 
@@ -28,10 +33,20 @@ public class LoginController extends AbstractController implements Initializable
 
     private StringProperty submissionResultProperty;
 
+    /**
+     * Constructs a new Login controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public LoginController(ControllerResources controllerResources) {
         super(controllerResources);
     }
 
+    /**
+     * Login button clicked.
+     *
+     * @param actionEvent the action event
+     */
     public void loginButtonClicked(ActionEvent actionEvent) {
         ValidatorBind validatorBind = new ValidatorBind(submissionResultProperty).validate(ValidatorType.USER_NAME, "Invalid UserName", usernameOrEmail.getText())
                 .validate(ValidatorType.PASSWORD, "Invalid Password", password.getText());
@@ -44,11 +59,21 @@ public class LoginController extends AbstractController implements Initializable
         }, usernameOrEmail.getText(), password.getText());
     }
 
+    /**
+     * Go to sign up.
+     *
+     * @param actionEvent the action event
+     */
     public void goToSignUp(ActionEvent actionEvent) {
         getSceneManager().switchScene(RegisterController::new);
     }
 
 
+    /**
+     * Go to guest.
+     *
+     * @param actionEvent the action event
+     */
     public void goToGuest(ActionEvent actionEvent) {
         getAccountManager().loginAsGuest();
         getSceneManager().switchScene(DashboardController::new);

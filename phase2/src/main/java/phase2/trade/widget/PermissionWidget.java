@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 /**
- * The type Permission widget.
+ * The Permission widget.
  *
  * @author Dan Lyu
  */

@@ -30,10 +30,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The User operation controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class UserOperationController extends EditableTableController<Command, CommandEditor> implements Initializable {
 
 
+    /**
+     * Constructs a new User operation controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public UserOperationController(ControllerResources controllerResources) {
         super(controllerResources, false, false, CommandEditor::new);
     }
@@ -109,6 +119,11 @@ public class UserOperationController extends EditableTableController<Command, Co
         return tableViewGenerator.build();
     }
 
+    /**
+     * After fetch.
+     *
+     * @param result the result
+     */
     public void afterFetch(List<Command> result) {
         setDisplayData(FXCollections.observableArrayList(result));
         addToTableViewGenerator(result, tableViewGenerator);
@@ -160,6 +175,11 @@ public class UserOperationController extends EditableTableController<Command, Co
     // Since the "Representative" data should also have generics in it. Otherwise it will become a String the same as a representing method. Or maybe we can have a CommandData. Implement its subclasses in all Commands.
     // So let's just display the effected ids for now
 
+    /**
+     * Gets commands.
+     *
+     * @return the commands
+     */
     public List<Command> getCommands() {
         // GetCommandsByType getCommandsByType = getCommandFactory().getCommand(GetCommandsByType::new, c -> {
         //     c.setCommandClass(clazz);

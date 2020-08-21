@@ -11,9 +11,9 @@ import javax.persistence.Entity;
 import java.util.List;
 
 /**
- * The Command used to update the values of an Item.<p>
+ * The Command used to update the fields of an Item. To be used with {@link phase2.trade.editor.ItemEditor}<p>
  * This Command can be used to update {@link Item}s the operator owns or {@link Item}s of other people.<p>
- * The permission depends on the Item owner.
+ * The permission required depends on the Item owner.
  *
  * @author Dan Lyu
  */

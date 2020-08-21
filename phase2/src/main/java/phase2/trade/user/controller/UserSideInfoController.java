@@ -14,18 +14,46 @@ import java.io.ByteArrayInputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The User side info controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "user_info_side.fxml")
 public class UserSideInfoController extends AbstractController implements Initializable {
 
+    /**
+     * The User id.
+     */
     public Label userId = new Label();
+    /**
+     * The User name.
+     */
     public Label userName = new Label();
+    /**
+     * The Email.
+     */
     public Label email = new Label();
+    /**
+     * The Home.
+     */
     public Label home = new Label();
+    /**
+     * The Permission group.
+     */
     public Label permissionGroup = new Label();
+    /**
+     * The Image view.
+     */
     public ImageView imageView;
 
     private final User user;
 
+    /**
+     * Constructs a new User side info controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public UserSideInfoController(ControllerResources controllerResources) {
         super(controllerResources);
         this.user = getAccountManager().getLoggedInUser();

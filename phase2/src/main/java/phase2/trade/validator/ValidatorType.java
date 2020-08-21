@@ -1,6 +1,30 @@
 package phase2.trade.validator;
 
+/**
+ * The enum Validator type.
+ *
+ * @author Dan Lyu
+ */
 public enum ValidatorType {
 
-    TELEPHONE, PASSWORD, USER_NAME, EMAIL, NOT_EMPTY
+    /**
+     * Telephone validator type.
+     */
+    TELEPHONE,
+    /**
+     * Password validator type.
+     */
+    PASSWORD,
+    /**
+     * User name validator type.
+     */
+    USER_NAME,
+    /**
+     * Email validator type.
+     */
+    EMAIL,
+    /**
+     * Not empty validator type.
+     */
+    NOT_EMPTY
 }

@@ -10,6 +10,11 @@ import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.command.CreateUserOperation;
 import phase2.trade.user.command.Login;
 
+/**
+ * The Account manager.
+ *
+ * @author Dan Lyu
+ */
 public class AccountManager {
 
     private static final Logger logger = LogManager.getLogger(AccountManager.class);
@@ -22,6 +27,11 @@ public class AccountManager {
 
     private final UserFactory userFactory;
 
+    /**
+     * Constructs a new Account manager.
+     *
+     * @param gatewayBundle the gateway bundle
+     */
     public AccountManager(GatewayBundle gatewayBundle) {
         userFactory = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
         CommandFactory commandFactory = new CommandFactory(gatewayBundle, this);
@@ -29,10 +39,20 @@ public class AccountManager {
         this.registerCommand = commandFactory.getCommand(CreateUserOperation::new, true);
     }
 
+    /**
+     * Login as guest.
+     */
     public void loginAsGuest() {
         loggedInUser = userFactory.configureGuest();
     }
 
+    /**
+     * Login.
+     *
+     * @param callback        the callback
+     * @param usernameOrEmail the username or email
+     * @param password        the password
+     */
     public void login(ResultStatusCallback<User> callback, String usernameOrEmail, String password) {
         loginCommand.execute((result, status) -> {
             loggedInUser = result;
@@ -41,14 +61,27 @@ public class AccountManager {
     }
 
 
+    /**
+     * Log out.
+     */
     public void logOut() {
         loggedInUser = null;
     }
 
+    /**
+     * Is user logged in boolean.
+     *
+     * @return the boolean
+     */
     public boolean isUserLoggedIn() {
         return loggedInUser != null;
     }
 
+    /**
+     * Gets logged in user.
+     *
+     * @return the logged in user
+     */
     public User getLoggedInUser() {
         if (loggedInUser == null) {
             logger.warn("The logged in user is missing but someone is trying to pull an existing logged in user!");
@@ -60,10 +93,26 @@ public class AccountManager {
         return loggedInUser;
     }
 
+    /**
+     * Gets permission group.
+     *
+     * @return the permission group
+     */
     public PermissionGroup getPermissionGroup() {
         return loggedInUser.getPermissionGroup();
     }
 
+    /**
+     * Register.
+     *
+     * @param callback the callback
+     * @param userName the user name
+     * @param email    the email
+     * @param password the password
+     * @param country  the country
+     * @param province the province
+     * @param city     the city
+     */
     public void register(ResultStatusCallback<User> callback, String userName, String email, String password, String country, String province, String city) {
         registerCommand.execute((result, status) -> {
             loggedInUser = result;
@@ -71,6 +120,11 @@ public class AccountManager {
         }, userName, email, password, PermissionGroup.REGULAR.name(), country, province, city);
     }
 
+    /**
+     * Sets avatar.
+     *
+     * @param avatar the avatar
+     */
     public void setAvatar(Avatar avatar) {
         if (getLoggedInUser() == null) return;
         getLoggedInUser().setAvatar(avatar);

@@ -11,6 +11,11 @@ import phase2.trade.trade.TradeOrder;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The Trade address widget.
+ *
+ * @author Dan Lyu
+ */
 public class TradeAddressWidget extends TradeDetailWidget<Address> {
 
     private final Label countryLabel = new Label();
@@ -19,12 +24,25 @@ public class TradeAddressWidget extends TradeDetailWidget<Address> {
     private final AddressAlert addressAlert;
 
 
+    /**
+     * Constructs a new Trade address widget.
+     *
+     * @param controllerResources the controller resources
+     * @param tradeOrder          the trade order
+     * @param previousAddress     the previous address
+     */
     public TradeAddressWidget(ControllerResources controllerResources, TradeOrder tradeOrder, Address previousAddress) {
         super(controllerResources, tradeOrder);
         addressAlert = getControllerFactory().getController(AddressAlert::new);
         addressAlert.setAddress(previousAddress);
     }
 
+    /**
+     * Constructs a new Trade address widget.
+     *
+     * @param controllerResources the controller resources
+     * @param tradeOrder          the trade order
+     */
     public TradeAddressWidget(ControllerResources controllerResources, TradeOrder tradeOrder) {
         this(controllerResources, tradeOrder,
                 controllerResources.getAccountManager().getLoggedInUser().getAddressBook().cloneSelectedAddressWithoutDetail());

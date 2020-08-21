@@ -12,8 +12,20 @@ import phase2.trade.user.command.UpdateUsers;
 
 import java.util.List;
 
+/**
+ * The User table controller.
+ *
+ * @author Dan Lyu
+ */
 public class UserTableController extends EditableTableController<User, UserEditor> implements Initializable {
 
+    /**
+     * Constructs a new User table controller.
+     *
+     * @param controllerResources the controller resources
+     * @param ifMultipleSelection the if multiple selection
+     * @param ifEditable          the if editable
+     */
     public UserTableController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
         super(controllerResources, ifMultipleSelection, ifEditable, UserEditor::new);
     }
@@ -47,6 +59,11 @@ public class UserTableController extends EditableTableController<User, UserEdito
         super.reload();
     }
 
+    /**
+     * Add name column.
+     *
+     * @param editable the editable
+     */
     protected void addNameColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Name", "name", event ->
@@ -57,6 +74,11 @@ public class UserTableController extends EditableTableController<User, UserEdito
         }
     }
 
+    /**
+     * Add email column.
+     *
+     * @param editable the editable
+     */
     protected void addEmailColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Email", "email", event ->
@@ -67,6 +89,11 @@ public class UserTableController extends EditableTableController<User, UserEdito
         }
     }
 
+    /**
+     * Add permission group column.
+     *
+     * @param editable the editable
+     */
     protected void addPermissionGroupColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Permission Group", "permissionGroup",
@@ -78,11 +105,17 @@ public class UserTableController extends EditableTableController<User, UserEdito
         }
     }
 
+    /**
+     * Add permissions column.
+     */
     protected void addPermissionsColumn() {
         tableViewGenerator.addColumn("Permissions", "permissionSet", getConfigBundle().getUiConfig().getPermissionPrefWidth());
     }
 
 
+    /**
+     * Add search name.
+     */
     protected void addSearchName() {
         addSearchField("Search User Name", (entity, toMatch) -> {
             String lowerCaseFilter = toMatch.toLowerCase();
@@ -90,6 +123,9 @@ public class UserTableController extends EditableTableController<User, UserEdito
         });
     }
 
+    /**
+     * Add search email.
+     */
     protected void addSearchEmail() {
         addSearchField("Search Email", (entity, toMatch) -> {
             String lowerCaseFilter = toMatch.toLowerCase();
@@ -97,6 +133,9 @@ public class UserTableController extends EditableTableController<User, UserEdito
         });
     }
 
+    /**
+     * Add permission group combo box.
+     */
     protected void addPermissionGroupComboBox() {
         addComboBox(getNodeFactory().getEnumAsObservableString(PermissionGroup.class)
                 , "Permission Group", "ALL", (entity, toMatch) -> entity.getPermissionGroup().name().equalsIgnoreCase(toMatch));

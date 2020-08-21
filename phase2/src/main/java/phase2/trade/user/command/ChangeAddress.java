@@ -2,15 +2,18 @@ package phase2.trade.user.command;
 
 import phase2.trade.address.Address;
 import phase2.trade.callback.ResultStatusCallback;
-import phase2.trade.callback.status.StatusExist;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
-import java.util.List;
 
+/**
+ * The Change address.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {})

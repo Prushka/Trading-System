@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * The type Account state widget.
+ * The Account state widget.
  *
  * @author Dan Lyu
  */
@@ -40,13 +40,13 @@ public class AccountStateWidget extends WidgetControllerBase {
         setGradient("gradient-l");
         ToggleGroup group = new ToggleGroup();
         RadioButton normalRadio = getNodeFactory().getDefaultRadioButton(AccountState.NORMAL.language, group);
-        RadioButton onvacationRadio = getNodeFactory().getDefaultRadioButton(AccountState.ON_vacation.language, group);
+        RadioButton onvacationRadio = getNodeFactory().getDefaultRadioButton(AccountState.ON_VACATION.language, group);
 
         switch (getAccountManager().getLoggedInUser().getAccountState()) {
             case NORMAL:
                 normalRadio.setSelected(true);
                 break;
-            case ON_vacation:
+            case ON_VACATION:
                 onvacationRadio.setSelected(true);
                 break;
         }
@@ -54,7 +54,7 @@ public class AccountStateWidget extends WidgetControllerBase {
             ChangeAccountState changeAccountState = getCommandFactory().getCommand(ChangeAccountState::new);
             changeAccountState.execute((result, status) -> {
                 status.setSucceeded(() -> {
-                    String message = result.equals(AccountState.ON_vacation) ? "Your items won't be on shelf!" : "Updated!";
+                    String message = result.equals(AccountState.ON_VACATION) ? "Your items won't be on shelf!" : "Updated!";
                     getNotificationFactory().toast(2, message);
                 });
                 status.handle(getNotificationFactory());

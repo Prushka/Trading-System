@@ -10,15 +10,41 @@ import phase2.trade.trade.TradeOrder;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The Trade confirm widget.
+ *
+ * @author Dan Lyu
+ */
 public class TradeConfirmWidget extends TradeDetailWidget<TradeConfirmWidget.ConfirmationPair> {
 
     private final CheckBox doIConfirm;
     private final CheckBox doIConfirmTransaction;
     private final CheckBox doIConfirmTransactionBack;
 
+    /**
+     * The type Confirmation pair.
+     *
+     * @author Dan Lyu
+     */
     public static class ConfirmationPair {
-        public boolean tradeConfirm, transactionConfirm, transactionBackConfirm;
+        /**
+         * The Trade confirm.
+         */
+        public boolean tradeConfirm, /**
+         * The Transaction confirm.
+         */
+        transactionConfirm, /**
+         * The Transaction back confirm.
+         */
+        transactionBackConfirm;
 
+        /**
+         * Constructs a new Confirmation pair.
+         *
+         * @param tradeConfirm           the trade confirm
+         * @param transactionConfirm     the transaction confirm
+         * @param transactionBackConfirm the transaction back confirm
+         */
         public ConfirmationPair(boolean tradeConfirm, boolean transactionConfirm, boolean transactionBackConfirm) {
             this.tradeConfirm = tradeConfirm;
             this.transactionConfirm = transactionConfirm;
@@ -27,6 +53,13 @@ public class TradeConfirmWidget extends TradeDetailWidget<TradeConfirmWidget.Con
     }
 
 
+    /**
+     * Constructs a new Trade confirm widget.
+     *
+     * @param controllerResources the controller resources
+     * @param tradeOrder          the trade order
+     * @param previousValue       the previous value
+     */
     public TradeConfirmWidget(ControllerResources controllerResources, TradeOrder tradeOrder, ConfirmationPair previousValue) {
         super(controllerResources, tradeOrder);
         doIConfirm = new JFXCheckBox("Confirm the trade");

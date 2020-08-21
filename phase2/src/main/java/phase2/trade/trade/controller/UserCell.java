@@ -1,12 +1,22 @@
-package phase2.trade.item.controller;
+package phase2.trade.trade.controller;
 
 import com.jfoenix.controls.JFXListCell;
 import phase2.trade.user.User;
 
+/**
+ * The User cell used to present User in a ComboBox.
+ *
+ * @author Dan Lyu
+ */
 public class UserCell extends JFXListCell<User> {
 
     private final Long loggedInUserId;
 
+    /**
+     * Constructs a new User cell.
+     *
+     * @param loggedInUserId the logged in user id
+     */
     public UserCell(Long loggedInUserId) {
         this.loggedInUserId = loggedInUserId;
     }

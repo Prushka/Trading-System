@@ -1,7 +1,8 @@
-package phase2.trade.trade;
+package phase2.trade.trade.rest.in.peace;
 
 import phase2.trade.item.Item;
 import phase2.trade.itemlist.TradeItemHolder;
+import phase2.trade.trade.UserOrderBundle;
 import phase2.trade.user.User;
 
 import java.util.Set;

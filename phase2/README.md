@@ -1,11 +1,13 @@
 Before Running:
 -------------
-1. The project uses maven. Please import pom.xml.
-2. The project requires two types of databases:
+1. This project uses maven. Please install it (or add it to path) and import pom.xml.
+2. This project requires two types of databases:
     - one of MySQL / MariaDB
     - Redis
 3. The required databases have been set up on my server, and the default configuration will access those databases. So in short, the program will run without any local databases if you have internet connection.
 4. You can configure to use local database in redis.yaml and database.yaml
+5. The default administrative has username: admin and password: admin???
+6. Validation: although most of the validation is covered. I do not have extra time to go over all Commands. So unless something has an optional in it, it is recommended to fill in all blanks (when there are TextFields / ComboBoxes).
 
 Features:
 -------------
@@ -13,10 +15,11 @@ Features:
 2. Monetize the system. In other words, give users the option to sell or trade items.
 3. Administrative users can manage, edit Items, Users, assign Permissions, manage SupportTickets.
 4. Multi-Way trade (unlimited participants).
-5. Permissions and PermissionGroup. Enforced Permission for every operation a User operates. PermissionGroups include Banned / Guest etc.
+5. Permissions and PermissionGroup. Enforced Permission for every operation a User operates. PermissionGroups include Banned / Guest / System etc.
 6. JavaFX GUI and the following:
-    - Filter Market / Inventory / Cart / Users / using a combination of TextFields, ComboBoxes, CheckBoxes etc. 
-    - Edit values directly in TableView. This includes editing a column with a TextField or a ComboBox. Experiment this with editing Users using administrative account or edit Items in Inventory etc.
+    - Filter Market / Inventory / Cart / Users using a combination of TextFields, ComboBoxes, CheckBoxes, Toggle etc. (They will work together to process a single list)
+    - Edit values directly in TableView. This includes editing a column with a TextField or a ComboBox. 
+    - Experiment this with editing Users using administrative account or edit Items in Inventory etc. (by double clicking it)
 7. Concurrency, auto-reload and asynchronous database executions
 8. Support Tickets
 9. Mandatory Extensions
@@ -26,6 +29,11 @@ Features:
 2. UNDO is incomplete. I really don't have the time to implement all undo operations. The rest can be implemented easily by overriding the undoUnchecked() method in Command's subclasses.
 3. The suggestion extension is replaced by the Market. However, the suggestion can be implemented using the exiting Market classes. 
 4. Bugs: <del>Due to the fact this became a personal (or mostly two-people) project</del> we weren't able to fully test the project. We did our best to fix most bugs.
+5. Permissions: 
+    - Few commands are still missing permissions. Adding a single field in their @CommandProperty will resolve this. 
+    - However, if any PermissionGroup is missing permissions and there are existing users with that PermissionGroup in the database.
+    - Editing the config won't automatically update those existing users. We can update the permission group using administrative accounts in the GUI.
+6. Javadoc: 
 
 Database:
 -------------
@@ -61,9 +69,11 @@ Design Patterns:
 -------------
 Observer / PubSub: 
 * ReReReRe
-* Reload
-* Refresh
+* Reloadable
+* Refreshable
 * Redis
+* Shutdownable
+* ShutdownHook
 
 Strategy: 
 * ConfigStrategy
@@ -111,3 +121,13 @@ Iterator:
 
 Command:
 * Command and its subclasses
+
+Javadoc:
+-------------
+The phase 2 instruction didn't mention javadoc. 
+
+And there are so many classes that may require a javadoc, I couldn't add detailed javadoc for every class on my own in such short period of time and <del>I shouldn't expect my group member to finish the javadoc.</del>
+
+Javadoc can be found in packages from address to item's command (alphabetic order). The rest javadocs are auto-generated and are missing details.
+
+If anything is unclear in the code, feel free to ask me if you'd like to.

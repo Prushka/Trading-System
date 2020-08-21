@@ -9,6 +9,11 @@ import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
+/**
+ * The Change password.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {})

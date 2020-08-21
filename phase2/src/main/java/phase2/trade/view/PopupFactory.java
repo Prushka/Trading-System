@@ -11,10 +11,23 @@ import phase2.trade.alert.*;
 import phase2.trade.permission.Permission;
 import phase2.trade.permission.PermissionSet;
 
+/**
+ * The Popup factory.
+ *
+ * @author Dan Lyu
+ */
 public class PopupFactory implements NotificationFactory {
 
+    /**
+     * The Window.
+     */
     protected Stage window;
 
+    /**
+     * Constructs a new Popup factory.
+     *
+     * @param root the root
+     */
     public PopupFactory(Stage root) {
         this.window = root;
     }
@@ -94,10 +107,20 @@ public class PopupFactory implements NotificationFactory {
         return new SplitAlert(window, title, header, "Ok", "Cancel");
     }
 
+    /**
+     * Gets root scene.
+     *
+     * @return the root scene
+     */
     protected Scene getRootScene() {
         return window.getScene();
     }
 
+    /**
+     * Gets root pane.
+     *
+     * @return the root pane
+     */
     protected Pane getRootPane() {
         return (Pane) getRootScene().getRoot();
     }

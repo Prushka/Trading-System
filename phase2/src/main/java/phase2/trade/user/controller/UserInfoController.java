@@ -14,8 +14,11 @@ import phase2.trade.widget.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-// TODO: ALL Controllers that don't extend AbstractTable... is a mess
-//  Refactor everything in the future
+/**
+ * The User info controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "abstract_masonry.fxml")
 public class UserInfoController extends AbstractController implements Initializable {
 
@@ -27,6 +30,11 @@ public class UserInfoController extends AbstractController implements Initializa
     private Parent userWidget, permissionWidget, addressWidget, accountStateWidget, userOptionWidget;
 
 
+    /**
+     * Constructs a new User info controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public UserInfoController(ControllerResources controllerResources) {
         super(controllerResources);
         userToPresent = getAccountManager().getLoggedInUser();

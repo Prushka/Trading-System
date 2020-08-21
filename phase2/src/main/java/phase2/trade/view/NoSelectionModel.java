@@ -6,6 +6,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.MultipleSelectionModel;
 
 // https://stackoverflow.com/questions/20621752/javafx-make-listview-not-selectable-via-mouse
+
+/**
+ * @author Mordechai
+ */
 public class NoSelectionModel<T> extends MultipleSelectionModel<T> {
 
     @Override

@@ -1,21 +1,40 @@
 package phase2.trade.user;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import phase2.trade.config.PermissionConfig;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.permission.PermissionSet;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
+/**
+ * The User factory.
+ *
+ * @author Dan Lyu
+ */
 public class UserFactory {
 
     private static final Logger logger = LogManager.getLogger(UserFactory.class);
 
-    private PermissionConfig permissionConfig;
+    private final PermissionConfig permissionConfig;
 
+    /**
+     * Constructs a new User factory.
+     *
+     * @param permissionConfig the permission config
+     */
     public UserFactory(PermissionConfig permissionConfig) {
         this.permissionConfig = permissionConfig;
     }
 
+    /**
+     * Create by permission group user.
+     *
+     * @param userName              the user name
+     * @param email                 the email
+     * @param password              the password
+     * @param permissionGroupString the permission group string
+     * @return the user
+     */
     public User createByPermissionGroup(String userName, String email, String password, String permissionGroupString) { // country and city are not necessary for all users
         PermissionGroup permissionGroup = PermissionGroup.valueOf(permissionGroupString);
         User user;
@@ -47,10 +66,20 @@ public class UserFactory {
         return user;
     }
 
+    /**
+     * Configure system user user.
+     *
+     * @return the user
+     */
     public User configureSystemUser() { // system user will not be persistent
         return createByPermissionGroup("SYSTEM", "SYSTEM", "", PermissionGroup.SYSTEM.name());
     }
 
+    /**
+     * Configure guest user.
+     *
+     * @return the user
+     */
     public User configureGuest() { // system user will not be persistent
         return createByPermissionGroup("Guest", "guest@example.com", "", PermissionGroup.GUEST.name());
     }

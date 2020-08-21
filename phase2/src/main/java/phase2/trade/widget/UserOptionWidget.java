@@ -14,12 +14,22 @@ import phase2.trade.user.controller.UserSideInfoController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The User option widget.
+ *
+ * @author Dan Lyu
+ */
 public class UserOptionWidget extends WidgetControllerBase {
 
     private final Button changePassword = getNodeFactory().getDefaultFlatButton("Change Password", "widget-button");
     private final Button changeUserName = getNodeFactory().getDefaultFlatButton("Change User Name", "widget-button");
     private final Button changeAvatar = getNodeFactory().getDefaultFlatButton("Change Avatar", "widget-button");
 
+    /**
+     * Constructs a new User option widget.
+     *
+     * @param controllerResources the controller resources
+     */
     public UserOptionWidget(ControllerResources controllerResources) {
         super(controllerResources);
     }

@@ -20,6 +20,11 @@ import phase2.trade.validator.ValidatorType;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The type Register controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "register.fxml")
 public class RegisterController extends AbstractController implements Initializable {
 
@@ -41,10 +46,20 @@ public class RegisterController extends AbstractController implements Initializa
     private ComboBox<String> provinceCombo;
     private ComboBox<String> cityCombo;
 
+    /**
+     * Constructs a new Register controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public RegisterController(ControllerResources controllerResources) {
         super(controllerResources);
     }
 
+    /**
+     * Register button clicked.
+     *
+     * @param actionEvent the action event
+     */
     public void registerButtonClicked(ActionEvent actionEvent) {
         registerButton.setDisable(true);
         ValidatorBind validatorBind = new ValidatorBind(submissionResultProperty).validate(ValidatorType.USER_NAME, "Invalid UserName", username.getText())
@@ -71,10 +86,20 @@ public class RegisterController extends AbstractController implements Initializa
                 provinceCombo.getSelectionModel().getSelectedItem(), cityCombo.getSelectionModel().getSelectedItem());
     }
 
+    /**
+     * Go to sign in.
+     *
+     * @param actionEvent the action event
+     */
     public void goToSignIn(ActionEvent actionEvent) {
         getSceneManager().switchScene(LoginController::new);
     }
 
+    /**
+     * Go to guest.
+     *
+     * @param actionEvent the action event
+     */
     public void goToGuest(ActionEvent actionEvent) {
         getAccountManager().loginAsGuest();
         getSceneManager().switchScene(DashboardController::new);

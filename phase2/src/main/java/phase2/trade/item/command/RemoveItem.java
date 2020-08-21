@@ -14,7 +14,7 @@ import javax.persistence.FetchType;
 import java.util.Set;
 
 /**
- * The Remove item command used to remove an Item from a {@link phase2.trade.itemlist.Cart} or an {@link phase2.trade.itemlist.Inventory}.
+ * The remove item command used to remove an Item from a {@link phase2.trade.itemlist.Cart} or an {@link phase2.trade.itemlist.Inventory}.
  *
  * @author Dan Lyu
  */

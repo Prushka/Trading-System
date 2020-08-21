@@ -11,6 +11,11 @@ import phase2.trade.user.User;
 import javax.persistence.Entity;
 import java.util.List;
 
+/**
+ * The Get users.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false, persistent = false,
         permissionSet = {Permission.ManageUserOperations})

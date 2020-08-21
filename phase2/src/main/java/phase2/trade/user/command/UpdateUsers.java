@@ -8,9 +8,13 @@ import phase2.trade.permission.Permission;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Update users.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true)

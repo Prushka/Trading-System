@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * The type Little text widget controller.
+ * The Little text widget controller.
  *
  * @author Dan Lyu
  */

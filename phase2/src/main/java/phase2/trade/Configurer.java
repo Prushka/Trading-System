@@ -14,6 +14,11 @@ import phase2.trade.item.command.AddItemToInventory;
 import phase2.trade.itemlist.ItemListType;
 import phase2.trade.user.AccountManager;
 
+/**
+ * The Configurer.
+ *
+ * @author Dan Lyu
+ */
 // Use this in TradeApplication or Test
 // Make sure the asynchronous variable in DAO is set to false if you are mocking anything here
 public class Configurer {
@@ -28,6 +33,9 @@ public class Configurer {
 
     private final AccountManager accountManager;
 
+    /**
+     * Constructs a new Configurer.
+     */
     public Configurer() {
         shutdownHook = new ShutdownHook();
 
@@ -41,20 +49,40 @@ public class Configurer {
         commandFactory = new CommandFactory(gatewayBundle, accountManager);
     }
 
+    /**
+     * Configure.
+     *
+     * @param primaryStage the primary stage
+     */
     public void configure(Stage primaryStage) {
         controllerResources = new ControllerResources(gatewayBundle, shutdownHook, primaryStage, accountManager);
 
         new CreatePrerequisiteIfNotExist(getControllerResources().getCommandFactory());
     }
 
+    /**
+     * Gets command factory.
+     *
+     * @return the command factory
+     */
     public CommandFactory getCommandFactory() {
         return commandFactory;
     }
 
+    /**
+     * Gets controller resources.
+     *
+     * @return the controller resources
+     */
     public ControllerResources getControllerResources() {
         return controllerResources;
     }
 
+    /**
+     * Gets shutdown hook.
+     *
+     * @return the shutdown hook
+     */
     public ShutdownHook getShutdownHook() {
         return shutdownHook;
     }
@@ -76,6 +104,13 @@ public class Configurer {
         }, name, description, category.name(), String.valueOf(quantity), willingness.name(), String.valueOf(price));
     }
 
+    /**
+     * Mock register.
+     *
+     * @param username the username
+     * @param email    the email
+     * @param password the password
+     */
     public void mockRegister(String username, String email, String password) {
         accountManager.register((result, status) -> {
 
@@ -85,12 +120,23 @@ public class Configurer {
 
     }
 
+    /**
+     * Mock login.
+     *
+     * @param userName the user name
+     * @param password the password
+     */
     public void mockLogin(String userName, String password) {
         accountManager.login((result, status) -> {
 
         }, userName, password);
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         Configurer configurer = new Configurer();
         configurer.mockRegister("admin2", "admin???", "12345678");
@@ -98,6 +144,9 @@ public class Configurer {
 
     }
 
+    /**
+     * Test trade.
+     */
     public void testTrade() {
         mockRegister("HumanTrafficker", "sell@humans.we", "12345678");
         addExampleItems("A Boy", "This is a Boy", Category.EQUIPMENT, Willingness.SELL, 1, 20);
@@ -117,6 +166,9 @@ public class Configurer {
 
     }
 
+    /**
+     * Login restaurant.
+     */
     public void loginRestaurant() {
         mockLogin("Restaurant", "12345678");
     }

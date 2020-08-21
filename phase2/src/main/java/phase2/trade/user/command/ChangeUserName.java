@@ -6,12 +6,16 @@ import phase2.trade.callback.status.StatusFailed;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
-import phase2.trade.permission.Permission;
 import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 import java.util.List;
 
+/**
+ * The Change user name.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {})

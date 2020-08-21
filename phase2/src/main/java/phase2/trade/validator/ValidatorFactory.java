@@ -1,11 +1,25 @@
 package phase2.trade.validator;
 
+/**
+ * The Validator factory.
+ *
+ * @author Dan Lyu
+ */
 public class ValidatorFactory {
 
+    /**
+     * Constructs a new Validator factory.
+     */
     public ValidatorFactory() {
 
     }
 
+    /**
+     * Gets string validator.
+     *
+     * @param type the type
+     * @return the string validator
+     */
     public Validator<String> getStringValidator(ValidatorType type) {
         switch (type) {
             case TELEPHONE:

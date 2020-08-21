@@ -8,6 +8,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import phase2.trade.user.controller.LoginController;
 
+/**
+ * The Trade application.
+ *
+ * @author Dan Lyu
+ */
 public class TradeApplication extends Application {
 
     private static final Logger logger = LogManager.getLogger(TradeApplication.class);
@@ -21,11 +26,6 @@ public class TradeApplication extends Application {
         );
         logger.info("Loaded Font: " + font.getFamily());
     }
-
-    // TODO:
-    //  VALIDATION
-    //  Avoid SQL injection
-    //  Avoid spaces
 
     @Override
     public void start(Stage primaryStage) {

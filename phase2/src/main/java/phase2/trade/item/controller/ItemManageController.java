@@ -17,9 +17,19 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The Item manage controller used by administrative users.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class ItemManageController extends ItemController implements Initializable {
 
+    /**
+     * Constructs a new Item manage controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public ItemManageController(ControllerResources controllerResources) {
         super(controllerResources, true, true);
     }

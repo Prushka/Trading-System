@@ -11,6 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
+/**
+ * The Regular user.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 public class RegularUser extends User {
 
@@ -24,6 +29,13 @@ public class RegularUser extends User {
 
     //private int incompleteTrades;
 
+    /**
+     * Constructs a new Regular user.
+     *
+     * @param userName the user name
+     * @param email    the email
+     * @param password the password
+     */
     public RegularUser(String userName, String email, String password) {
         super(userName, email, password);
         //incompleteTrades = 0;
@@ -39,6 +51,9 @@ public class RegularUser extends User {
         setPermissionGroup(PermissionGroup.REGULAR);
     }
 
+    /**
+     * Constructs a new Regular user.
+     */
     public RegularUser() {
 
     }
@@ -52,6 +67,11 @@ public class RegularUser extends User {
         return inventory;
     }
 
+    /**
+     * Sets inventory.
+     *
+     * @param inventory the inventory
+     */
     public void setInventory(Inventory inventory) {
         this.inventory = inventory;
     }
@@ -60,6 +80,11 @@ public class RegularUser extends User {
         return cart;
     }
 
+    /**
+     * Sets cart.
+     *
+     * @param cart the cart
+     */
     public void setCart(Cart cart) {
         this.cart = cart;
     }
@@ -74,10 +99,20 @@ public class RegularUser extends User {
         return null;
     }
 
+    /**
+     * Gets account balance.
+     *
+     * @return the account balance
+     */
     public int getAccountBalance() {
         return accountBalance;
     }
 
+    /**
+     * Sets account balance.
+     *
+     * @param accountBalance the account balance
+     */
     public void setAccountBalance(int accountBalance) {
         this.accountBalance = accountBalance;
     }

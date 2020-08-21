@@ -19,9 +19,19 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The User manage controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class UserManageController extends UserTableController implements Initializable {
 
+    /**
+     * Constructs a new User manage controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public UserManageController(ControllerResources controllerResources) {
         super(controllerResources, true, true);
     }
@@ -52,6 +62,11 @@ public class UserManageController extends UserTableController implements Initial
         });
     }
 
+    /**
+     * After fetch.
+     *
+     * @param users the users
+     */
     public void afterFetch(List<User> users) {
         setDisplayData(FXCollections.observableArrayList(users));
 

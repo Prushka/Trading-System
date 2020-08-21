@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * The type Address widget.
+ * The Address widget.
  *
  * @author Dan Lyu
  */

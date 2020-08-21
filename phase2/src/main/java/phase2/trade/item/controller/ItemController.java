@@ -18,8 +18,25 @@ import phase2.trade.item.command.UpdateItems;
 
 import java.util.List;
 
-public class ItemController extends EditableTableController<Item, ItemEditor> implements Initializable {
+/**
+ * The base Item controller.<p>
+ * It is responsible for adding columns and adding a combination of view nodes (TextFields, ComboBoxes, CheckBoxes, Toggle) fot the {@link phase2.trade.view.FilterGroup}
+ *
+ * @author Dan Lyu
+ * @see AbstractCartController
+ * @see InventoryController
+ * @see ItemManageController
+ * @see CartController
+ */
+public abstract class ItemController extends EditableTableController<Item, ItemEditor> implements Initializable {
 
+    /**
+     * Constructs a new Item controller.
+     *
+     * @param controllerResources the controller resources
+     * @param ifMultipleSelection the if multiple selection
+     * @param ifEditable          the if editable
+     */
     public ItemController(ControllerResources controllerResources, boolean ifMultipleSelection, boolean ifEditable) {
         super(controllerResources, ifMultipleSelection, ifEditable, ItemEditor::new);
     }
@@ -40,6 +57,11 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         });
     }
 
+    /**
+     * Add name column.
+     *
+     * @param editable the editable
+     */
     protected void addNameColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Name", "name", event ->
@@ -50,6 +72,11 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         }
     }
 
+    /**
+     * Add description column.
+     *
+     * @param editable the editable
+     */
     protected void addDescriptionColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Description", "description", getConfigBundle().getUiConfig().getItemDescriptionPrefWidth(),
@@ -60,6 +87,11 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         }
     }
 
+    /**
+     * Add ownership column.
+     *
+     * @param editable the editable
+     */
     protected void addOwnershipColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Ownership", "ownership",
@@ -71,6 +103,11 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         }
     }
 
+    /**
+     * Add category column.
+     *
+     * @param editable the editable
+     */
     protected void addCategoryColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Category", "category",
@@ -82,6 +119,11 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         }
     }
 
+    /**
+     * Add willingness column.
+     *
+     * @param editable the editable
+     */
     protected void addWillingnessColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Willingness", "willingness",
@@ -93,6 +135,11 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         }
     }
 
+    /**
+     * Add quantity column.
+     *
+     * @param editable the editable
+     */
     protected void addQuantityColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Quantity", param -> new SimpleStringProperty(String.valueOf(param.getValue().getQuantity())),
@@ -103,6 +150,11 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         }
     }
 
+    /**
+     * Add price column.
+     *
+     * @param editable the editable
+     */
     protected void addPriceColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("Price", param -> new SimpleStringProperty(String.valueOf(param.getValue().getPrice())),
@@ -113,14 +165,23 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         }
     }
 
+    /**
+     * Add owner column.
+     */
     protected void addOwnerColumn() {
         tableViewGenerator.addColumn("Owner", param -> new SimpleStringProperty(param.getValue().getOwner().getName()));
     }
 
+    /**
+     * Add uid column.
+     */
     protected void addUIDColumn() {
         tableViewGenerator.addColumn("UID", "uid");
     }
 
+    /**
+     * Add search name.
+     */
     protected void addSearchName() {
         addSearchField("Search Name", (entity, toMatch) -> {
             String lowerCaseFilter = toMatch.toLowerCase();
@@ -128,6 +189,9 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         });
     }
 
+    /**
+     * Add search description.
+     */
     protected void addSearchDescription() {
         addSearchField("Search Description", (entity, textField) -> {
             String lowerCaseFilter = textField.toLowerCase();
@@ -135,6 +199,9 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
         });
     }
 
+    /**
+     * Add category combo box.
+     */
     protected void addCategoryComboBox() {
         addComboBox(
                 getNodeFactory().getEnumAsObservableString(Category.class),
@@ -142,6 +209,9 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
                 (entity, toMatch) -> entity.getCategory().name().equalsIgnoreCase(toMatch));
     }
 
+    /**
+     * Add ownership combo box.
+     */
     protected void addOwnershipComboBox() {
         addComboBox(
                 getNodeFactory().getEnumAsObservableString(Ownership.class),
@@ -149,6 +219,11 @@ public class ItemController extends EditableTableController<Item, ItemEditor> im
                 (entity, toMatch) -> entity.getOwnership().name().equalsIgnoreCase(toMatch));
     }
 
+    /**
+     * Add willingness check boxes.
+     *
+     * @param includePrivate the include private
+     */
     protected void addWillingnessCheckBoxes(boolean includePrivate) {
         CheckBox lend = new JFXCheckBox("Wish To Lend");
         CheckBox sell = new JFXCheckBox("Wish To Sell");

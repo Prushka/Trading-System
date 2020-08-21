@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * @author Theodora Fragkouli
  */
 
-// Partially based on the work: https://examples.javacodegeeks.com/enterprise-java/hibernate/hibernate-jpa-dao-example/
+// Partially based on: https://examples.javacodegeeks.com/enterprise-java/hibernate/hibernate-jpa-dao-example/
 public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGateway<T, S> {
 
     private Session currentSession;
@@ -202,7 +202,7 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         }
     }
 
-    private final boolean async = false;
+    private final boolean async = true;
 
     @Override
     public void submitTransaction(Consumer<S> consumer) {

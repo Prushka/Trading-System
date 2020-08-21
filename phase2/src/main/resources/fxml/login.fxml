@@ -22,17 +22,23 @@
         <Label fx:id="submissionResult" />
         <VBox alignment="CENTER" spacing="40.0">
            <children>
-               <JFXTextField text="restaurant" fx:id="usernameOrEmail" labelFloat="true" maxWidth="300.0"
+               <JFXTextField fx:id="usernameOrEmail" labelFloat="true" maxWidth="300.0"
                              prefHeight="38.0" prefWidth="300.0" promptText="%input.username.email.prompt"/>
-                   <JFXPasswordField text="12345678" fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0" promptText="%input.password.prompt" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
-               <children>
-                         <JFXButton buttonType="RAISED" onAction="#goToGuest" prefHeight="40" prefWidth="100" style="-fx-text-fill:WHITE;-fx-background-color:#dc5696;-fx-font-size:14px;" text="Guest" />
-                  <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" defaultButton="true" onAction="#loginButtonClicked" prefHeight="40" prefWidth="100" style="-fx-text-fill:WHITE;-fx-background-color:#ba8baf;-fx-font-size:14px;" text="%button.login.text" />
-               </children>
-            </HBox>
-                   <JFXButton onAction="#goToSignUp" text="%button.signup.text">
-                   </JFXButton>
+               <JFXPasswordField fx:id="password" labelFloat="true" maxWidth="300.0" prefHeight="38.0" prefWidth="209.0"
+                                 promptText="%input.password.prompt"/>
+               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                   <children>
+                       <JFXButton buttonType="RAISED" onAction="#goToGuest" prefHeight="40" prefWidth="100"
+                                  style="-fx-text-fill:WHITE;-fx-background-color:#dc5696;-fx-font-size:14px;"
+                                  text="Guest"/>
+                       <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" defaultButton="true"
+                                  onAction="#loginButtonClicked" prefHeight="40" prefWidth="100"
+                                  style="-fx-text-fill:WHITE;-fx-background-color:#ba8baf;-fx-font-size:14px;"
+                                  text="%button.login.text"/>
+                   </children>
+               </HBox>
+               <JFXButton onAction="#goToSignUp" text="%button.signup.text">
+               </JFXButton>
            </children>
         </VBox>
     </children>

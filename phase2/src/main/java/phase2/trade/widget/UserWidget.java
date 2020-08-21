@@ -6,12 +6,22 @@ import phase2.trade.controller.ControllerResources;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The User widget.
+ *
+ * @author Dan Lyu
+ */
 public class UserWidget extends WidgetControllerBase {
 
     private final Label title = new Label();
     private final Label name = new Label();
     private final Label email = new Label();
 
+    /**
+     * Constructs a new User widget.
+     *
+     * @param controllerResources the controller resources
+     */
     public UserWidget(ControllerResources controllerResources) {
         super(controllerResources);
     }

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * The Trade user order bundle iterator.
+ *
+ * @author Dan Lyu
+ */
 public class TradeUserOrderBundleIterator implements Iterator<UserOrderBundle> {
 
     private final Trade trade;
@@ -15,6 +20,11 @@ public class TradeUserOrderBundleIterator implements Iterator<UserOrderBundle> {
 
     private final List<UserOrderBundle> tradeOrderBundles = new ArrayList<>();
 
+    /**
+     * Constructs a new Trade user order bundle iterator.
+     *
+     * @param trade the trade
+     */
     public TradeUserOrderBundleIterator(Trade trade) {
         this.trade = trade;
         trade.getOrders().forEach(tradeOrder -> {

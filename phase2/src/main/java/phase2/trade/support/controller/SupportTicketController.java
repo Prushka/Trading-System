@@ -16,10 +16,21 @@ import phase2.trade.support.command.UpdateSupportTickets;
 
 import java.util.List;
 
+/**
+ * The Support ticket controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class SupportTicketController extends EditableTableController<SupportTicket, SupportTicketEditor> implements Initializable {
 
 
+    /**
+     * Constructs a new Support ticket controller.
+     *
+     * @param controllerResources the controller resources
+     * @param ifMultipleSelection the if multiple selection
+     */
     public SupportTicketController(ControllerResources controllerResources, boolean ifMultipleSelection) {
         super(controllerResources, ifMultipleSelection, true, SupportTicketEditor::new);
     }
@@ -42,23 +53,38 @@ public class SupportTicketController extends EditableTableController<SupportTick
         });
     }
 
+    /**
+     * Add content column.
+     */
     protected void addContentColumn() {
         tableViewGenerator.addColumn("Content", "content");
     }
 
+    /**
+     * Add priority column.
+     */
     protected void addPriorityColumn() {
         tableViewGenerator.addColumn("Priority", "ticketPriority");
     }
 
+    /**
+     * Add type column.
+     */
     protected void addTypeColumn() {
         tableViewGenerator.addColumn("Type", "type");
     }
 
+    /**
+     * Add submitter column.
+     */
     protected void addSubmitterColumn() {
         tableViewGenerator.addColumn("Submitter",
                 param -> new SimpleStringProperty(param.getValue().getSubmitter().getName()));
     }
 
+    /**
+     * Add handler column.
+     */
     protected void addHandlerColumn() {
         tableViewGenerator.addColumn("Handler",
                 param -> {
@@ -69,6 +95,11 @@ public class SupportTicketController extends EditableTableController<SupportTick
                 });
     }
 
+    /**
+     * Add state column.
+     *
+     * @param editable the editable
+     */
     protected void addStateColumn(boolean editable) {
         if (editable) {
             tableViewGenerator.addColumnEditable("State", "ticketState",
@@ -80,6 +111,9 @@ public class SupportTicketController extends EditableTableController<SupportTick
         }
     }
 
+    /**
+     * Add search content.
+     */
     protected void addSearchContent() {
         addSearchField("Search Content", (entity, toMatch) -> {
             String lowerCaseFilter = toMatch.toLowerCase();
@@ -87,6 +121,9 @@ public class SupportTicketController extends EditableTableController<SupportTick
         });
     }
 
+    /**
+     * Add state combo box.
+     */
     protected void addStateComboBox() {
         addComboBox(
                 getNodeFactory().getEnumAsObservableString(TicketState.class),
@@ -94,6 +131,9 @@ public class SupportTicketController extends EditableTableController<SupportTick
                 (entity, toMatch) -> entity.getTicketState().name().equalsIgnoreCase(toMatch));
     }
 
+    /**
+     * Add priority combo box.
+     */
     protected void addPriorityComboBox() {
         addComboBox(
                 getNodeFactory().getEnumAsObservableString(TicketPriority.class),
@@ -101,6 +141,9 @@ public class SupportTicketController extends EditableTableController<SupportTick
                 (entity, toMatch) -> entity.getTicketPriority().name().equalsIgnoreCase(toMatch));
     }
 
+    /**
+     * Add type combo box.
+     */
     protected void addTypeComboBox() {
         addComboBox(
                 getNodeFactory().getEnumAsObservableString(TicketType.class),

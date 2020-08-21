@@ -1,0 +1,1327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>phase2.trade</OriginalElement>
+  <nodes>
+    <node x="4724.274107142856" y="924.0">phase2.trade.database.TradeDAO</node>
+    <node x="3028.583333333334" y="585.0">phase2.trade.trade.controller.TradeEditController.EditWidgetBundle</node>
+    <node x="0.0" y="1570.0">phase2.trade.callback.ResultStatusCallback</node>
+    <node x="3707.4684318217437" y="423.0">phase2.trade.widget.AccountStateWidget</node>
+    <node x="4483.0" y="1413.0">phase2.trade.controller.side.SideOption.SidePosition</node>
+    <node x="2962.0" y="1646.0">phase2.trade.database.TriConsumer</node>
+    <node x="1810.0" y="1646.0">phase2.trade.user.AccountState</node>
+    <node x="1016.0" y="1570.0">phase2.trade.item.controller.UserStringConverter</node>
+    <node x="4082.0" y="1332.0">phase2.trade.config.strategy.ConfigStrategy</node>
+    <node x="5023.405931821744" y="423.0">phase2.trade.widget.LittleTextWidgetController</node>
+    <node x="0.0" y="1256.0">phase2.trade.item.command.RemoveItem</node>
+    <node x="1438.0" y="1494.0">phase2.trade.callback.status.StatusNoPermission</node>
+    <node x="4011.4246048062882" y="322.0">phase2.trade.config.controller.AdministrativeConfigController</node>
+    <node x="3457.0625" y="1256.0">phase2.trade.user.command.CreateUserOperation</node>
+    <node x="3682.0625" y="1256.0">phase2.trade.user.command.ChangePassword</node>
+    <node x="1651.8125000000002" y="1044.0">phase2.trade.user.command.ChangeAccountState</node>
+    <node x="1354.2708333333335" y="742.0">phase2.trade.command.ArgsInvolved</node>
+    <node x="3924.4684318217437" y="423.0">phase2.trade.widget.TradeOptionWidget</node>
+    <node x="1618.0" y="1646.0">phase2.trade.ShutdownHook</node>
+    <node x="4978.0" y="1646.0">phase2.trade.trade.TradeOrder</node>
+    <node x="2000.0" y="1570.0">phase2.trade.trade.TradeIdComparator</node>
+    <node x="2002.0" y="1646.0">phase2.trade.view.SceneManager</node>
+    <node x="1759.1871818217437" y="666.0">phase2.trade.item.controller.CartController</node>
+    <node x="418.0" y="1646.0">phase2.trade.controller.DashboardPane</node>
+    <node x="1638.166666666667" y="322.0">phase2.trade.controller.ListController</node>
+    <node x="1516.0" y="1570.0">phase2.trade.view.TableViewGenerator</node>
+    <node x="258.0" y="1570.0">phase2.trade.modified.JFXComboBoxTableCell</node>
+    <node x="1246.0" y="1413.0">phase2.trade.config.ConfigBundle</node>
+    <node x="2233.0" y="1570.0">phase2.trade.controller.ControllerFactory</node>
+    <node x="2194.0" y="1646.0">phase2.trade.itemlist.ItemListType</node>
+    <node x="2828.0" y="1413.0">phase2.trade.user.RegularUser</node>
+    <node x="4295.0" y="1332.0">phase2.trade.view.NodeFactory</node>
+    <node x="5154.0" y="1646.0">phase2.trade.item.ItemFilter</node>
+    <node x="3473.0" y="1413.0">phase2.trade.config.strategy.YamlStrategy</node>
+    <node x="1035.2500000000002" y="322.0">phase2.trade.editor.SupportTicketEditor</node>
+    <node x="3157.0" y="1570.0">phase2.trade.view.NoSelectionModel</node>
+    <node x="653.0" y="1494.0">phase2.trade.alert.VBoxAlert</node>
+    <node x="3507.4684318217437" y="423.0">phase2.trade.widget.PermissionWidget</node>
+    <node x="3127.4246048062882" y="322.0">phase2.trade.user.controller.UserSideInfoController</node>
+    <node x="3146.0" y="1646.0">phase2.trade.view.FilterGroup</node>
+    <node x="2677.0" y="1413.0">phase2.trade.user.SystemUser</node>
+    <node x="4511.0625" y="833.0">phase2.trade.gateway.UserGateway</node>
+    <node x="2160.019629966845" y="504.0">phase2.trade.user.controller.UserTableController</node>
+    <node x="2371.0625" y="1256.0">phase2.trade.item.command.AddItemToInventory</node>
+    <node x="818.0" y="1646.0">phase2.trade.validator.ValidatorType</node>
+    <node x="167.0" y="1494.0">phase2.trade.alert.TableViewAlert</node>
+    <node x="4999.0" y="1332.0">phase2.trade.trade.TradeUserOrderBundleIterator</node>
+    <node x="1941.0" y="1413.0">phase2.trade.validator.GeneralValidator</node>
+    <node x="5330.0" y="1646.0">phase2.trade.trade.OrderState</node>
+    <node x="3548.0" y="1332.0">phase2.trade.config.strategy.FormatStrategy</node>
+    <node x="4848.405931821744" y="423.0">phase2.trade.widget.AddressWidget</node>
+    <node x="3832.0" y="1570.0">phase2.trade.trade.UserOrderBundle</node>
+    <node x="2004.0000000000005" y="322.0">phase2.trade.controller.EditableController</node>
+    <node x="3208.5" y="1332.0">phase2.trade.itemlist.ItemList</node>
+    <node x="209.0" y="1646.0">phase2.trade.controller.market.MarketItemCell</node>
+    <node x="3298.0625" y="1256.0">phase2.trade.user.command.UpdateUsers</node>
+    <node x="4290.851688139622" y="585.0">phase2.trade.widget.TradeConfirmWidget.ConfirmationPair</node>
+    <node x="5506.0" y="1646.0">phase2.trade.permission.Permission</node>
+    <node x="2902.019629966845" y="423.0">phase2.trade.trade.controller.TradeInfoController</node>
+    <node x="3330.0" y="1646.0">phase2.trade.config.TradeConfig</node>
+    <node x="1510.0" y="1722.0">phase2.trade.refresh.ReReReRe</node>
+    <node x="1037.5" y="1332.0">phase2.trade.Shutdownable</node>
+    <node x="1260.2500000000002" y="322.0">phase2.trade.editor.EditorSupplier</node>
+    <node x="2386.0" y="1646.0">phase2.trade.view.ImageFactory</node>
+    <node x="4326.424604806289" y="322.0">phase2.trade.widget.WidgetControllerBase</node>
+    <node x="5245.5625" y="924.0">phase2.trade.database.SupportTicketDAO</node>
+    <node x="2718.0" y="1722.0">phase2.trade.Main</node>
+    <node x="347.0" y="1413.0">phase2.trade.alert.AlertWindow</node>
+    <node x="4291.0" y="1413.0">phase2.trade.view.NodeFactory.ComboBoxType</node>
+    <node x="516.0" y="1570.0">phase2.trade.gateway.EntityGatewayBundle</node>
+    <node x="0.0" y="585.0">phase2.trade.support.controller.SupportTicketUserController</node>
+    <node x="2297.0" y="1722.0">phase2.trade.avatar.Avatar</node>
+    <node x="3012.0" y="1413.0">phase2.trade.itemlist.TradeItemHolder</node>
+    <node x="4050.0625" y="1256.0">phase2.trade.user.command.ChangeAddress</node>
+    <node x="4104.591446063075" y="0.0">phase2.trade.refresh.Reloadable</node>
+    <node x="2466.0" y="1570.0">phase2.trade.view.ListViewGenerator</node>
+    <node x="4931.0625" y="833.0">phase2.trade.gateway.ItemGateway</node>
+    <node x="1218.0" y="1646.0">phase2.trade.gateway.GatewayBundle</node>
+    <node x="164.0" y="504.0">phase2.trade.support.controller.SupportTicketController</node>
+    <node x="3640.0" y="1413.0">phase2.trade.config.strategy.JsonStrategy</node>
+    <node x="2970.0" y="1722.0">phase2.trade.item.Tag</node>
+    <node x="734.8125000000002" y="1044.0">phase2.trade.support.command.OpenSupportTicket</node>
+    <node x="688.0" y="1722.0">phase2.trade.config.GeoConfig</node>
+    <node x="1444.2500000000002" y="322.0">phase2.trade.editor.ItemEditor</node>
+    <node x="343.0" y="1332.0">phase2.trade.alert.CustomWindow</node>
+    <node x="4049.0" y="1570.0">phase2.trade.permission.PermissionGroup</node>
+    <node x="4519.562181821744" y="423.0">phase2.trade.widget.UserWidget</node>
+    <node x="4086.5" y="1413.0">phase2.trade.config.strategy.LocalStrategy</node>
+    <node x="4943.424604806289" y="322.0">phase2.trade.controller.side.SideMenuController</node>
+    <node x="2578.0" y="1646.0">phase2.trade.view.ParentLoader</node>
+    <node x="1868.8125000000002" y="1044.0">phase2.trade.command.GetCommands</node>
+    <node x="1828.0" y="1722.0">phase2.trade.command.CRUDType</node>
+    <node x="4768.405931821744" y="504.0">phase2.trade.widget.TradeConfirmWidget</node>
+    <node x="4491.0" y="1332.0">phase2.trade.controller.side.SideOption</node>
+    <node x="3866.0625" y="1256.0">phase2.trade.user.command.ChangeUserName</node>
+    <node x="5274.0625" y="833.0">phase2.trade.gateway.SupportTicketGateway</node>
+    <node x="5674.395833333334" y="423.0">phase2.trade.trade.controller.UserTable</node>
+    <node x="434.5000000000002" y="1256.0">phase2.trade.trade.command.ConfirmTrade</node>
+    <node x="0.0" y="1646.0">phase2.trade.callback.StatusCallback</node>
+    <node x="43.25" y="1125.0">phase2.trade.support.command.UpdateSupportTickets</node>
+    <node x="860.25" y="322.0">phase2.trade.editor.CommandEditor</node>
+    <node x="5160.424604806289" y="322.0">phase2.trade.avatar.UploadAvatarController</node>
+    <node x="1969.5" y="1494.0">phase2.trade.validator.GeneralValidator.InputType</node>
+    <node x="2069.0625" y="1256.0">phase2.trade.item.command.UpdateItems</node>
+    <node x="217.5" y="1256.0">phase2.trade.trade.command.CreateTradeCommand</node>
+    <node x="1246.6871818217437" y="161.0">phase2.trade.editor.Editor</node>
+    <node x="4776.424604806289" y="322.0">phase2.trade.alert.AddressAlert</node>
+    <node x="766.0" y="1570.0">phase2.trade.controller.ControllerResources</node>
+    <node x="2839.5183548062882" y="322.0">phase2.trade.trade.controller.TradeController</node>
+    <node x="1758.0" y="1570.0">phase2.trade.controller.ControllerSupplier</node>
+    <node x="1646.75" y="1332.0">phase2.trade.callback.status.ResultStatus</node>
+    <node x="2743.352963300178" y="504.0">phase2.trade.trade.controller.TradeDetailController</node>
+    <node x="2844.0" y="1722.0">phase2.trade.item.Item</node>
+    <node x="996.0" y="1413.0">phase2.trade.database.DatabaseResourceBundle</node>
+    <node x="0.0" y="1494.0">phase2.trade.alert.ConfirmAlert</node>
+    <node x="2942.3121818217437" y="0.0">phase2.trade.controller.ControllerProperty</node>
+    <node x="3819.4246048062882" y="322.0">phase2.trade.user.controller.LoginController</node>
+    <node x="856.0" y="1722.0">phase2.trade.trade.use.EditTrade</node>
+    <node x="351.0" y="1494.0">phase2.trade.alert.SplitAlert</node>
+    <node x="3838.5625" y="1125.0">phase2.trade.user.command.UserCommand</node>
+    <node x="5073.8125" y="924.0">phase2.trade.database.CommandDAO</node>
+    <node x="4115.776467536029" y="161.0">phase2.trade.controller.AbstractController</node>
+    <node x="4874.858333333333" y="924.0">phase2.trade.database.ItemDAO</node>
+    <node x="4700.0" y="1570.0">phase2.trade.config.DatabaseConfig</node>
+    <node x="2588.0625" y="1256.0">phase2.trade.item.command.GetAllItems</node>
+    <node x="3832.0" y="1332.0">phase2.trade.view.NotificationFactory</node>
+    <node x="3442.9604936821224" y="504.0">phase2.trade.trade.controller.TradeInfoController.WidgetBundle</node>
+    <node x="4434.0" y="1646.0">phase2.trade.trade.use.CreateTrade</node>
+    <node x="1926.0625000000002" y="1256.0">phase2.trade.trade.command.GetTrades</node>
+    <node x="1192.0" y="1722.0">phase2.trade.item.Category</node>
+    <node x="4225.0625" y="1256.0">phase2.trade.user.command.Login</node>
+    <node x="2770.0" y="1646.0">phase2.trade.controller.side.SideListCell</node>
+    <node x="3204.0" y="1413.0">phase2.trade.itemlist.Inventory</node>
+    <node x="4319.562181821744" y="504.0">phase2.trade.widget.TradeTimeWidget</node>
+    <node x="4559.424604806289" y="322.0">phase2.trade.user.controller.UserInfoController</node>
+    <node x="4675.0" y="1332.0">phase2.trade.CreatePrerequisiteIfNotExist</node>
+    <node x="4670.0625" y="833.0">phase2.trade.gateway.TradeGateway</node>
+    <node x="5410.424604806289" y="322.0">phase2.trade.trade.controller.AllTable</node>
+    <node x="352.0" y="1722.0">phase2.trade.item.Ownership</node>
+    <node x="1284.8125000000002" y="1044.0">phase2.trade.command.UpdateCommand</node>
+    <node x="1943.1871818217437" y="666.0">phase2.trade.trade.controller.TradeUserTableController</node>
+    <node x="1987.0" y="1722.0">phase2.trade.trade.controller.UserCell</node>
+    <node x="5090.0625" y="833.0">phase2.trade.gateway.CommandGateway</node>
+    <node x="618.0" y="1646.0">phase2.trade.validator.ValidatorBind</node>
+    <node x="1351.0" y="1722.0">phase2.trade.callback.Callback</node>
+    <node x="3347.0" y="1413.0">phase2.trade.itemlist.Cart</node>
+    <node x="1459.8125000000002" y="1044.0">phase2.trade.command.CommandSupplier</node>
+    <node x="2460.0" y="1413.0">phase2.trade.user.AdministrativeUser</node>
+    <node x="520.0" y="1722.0">phase2.trade.modified.CellUtils</node>
+    <node x="1018.0" y="1646.0">phase2.trade.support.SupportTicket</node>
+    <node x="2095.3125" y="742.0">phase2.trade.command.CommandProperty</node>
+    <node x="3594.4246048062882" y="322.0">phase2.trade.controller.DashboardController</node>
+    <node x="3065.0625" y="1256.0">phase2.trade.support.command.GetAllSupportTickets</node>
+    <node x="709.25" y="322.0">phase2.trade.editor.UserEditor</node>
+    <node x="4909.0" y="1570.0">phase2.trade.command.CommandFactory</node>
+    <node x="5064.405931821744" y="504.0">phase2.trade.widget.TradeEmptyWidget</node>
+    <node x="3861.0" y="1413.0">phase2.trade.view.PopupFactory</node>
+    <node x="942.8125000000002" y="1044.0">phase2.trade.user.command.GetUsers</node>
+    <node x="3382.0" y="1570.0">phase2.trade.config.PermissionConfig</node>
+    <node x="2501.3125" y="1125.0">phase2.trade.item.command.ItemCommand</node>
+    <node x="1525.5000000000002" y="423.0">phase2.trade.controller.market.MarketListController</node>
+    <node x="2932.0" y="1570.0">phase2.trade.TradeApplication</node>
+    <node x="1983.5000000000005" y="423.0">phase2.trade.controller.EditableTableController</node>
+    <node x="5323.0" y="1332.0">phase2.trade.permission.UserPermissionChecker</node>
+    <node x="3514.0" y="1646.0">phase2.trade.user.UserFactory</node>
+    <node x="2984.352963300178" y="504.0">phase2.trade.trade.controller.TradeEditController</node>
+    <node x="1758.5000000000005" y="423.0">phase2.trade.trade.controller.TradeListController</node>
+    <node x="3698.0" y="1646.0">phase2.trade.config.RedisConfig</node>
+    <node x="3607.0" y="1570.0">phase2.trade.validator.ValidatorFactory</node>
+    <node x="2146.0" y="1722.0">phase2.trade.address.Address</node>
+    <node x="4838.0625" y="833.0">phase2.trade.database.DAO</node>
+    <node x="2644.019629966845" y="423.0">phase2.trade.trade.controller.TradeDragDropController</node>
+    <node x="5118.0" y="1570.0">phase2.trade.editor.EntityIdLookUp</node>
+    <node x="1655.0" y="1494.0">phase2.trade.callback.status.StatusExist</node>
+    <node x="0.0" y="1722.0">phase2.trade.trade.TradeQuery</node>
+    <node x="2388.4350214729548" y="585.0">phase2.trade.item.controller.InventoryController</node>
+    <node x="176.0" y="1722.0">phase2.trade.support.TicketType</node>
+    <node x="601.5000000000002" y="1256.0">phase2.trade.trade.command.EditTradeCommand</node>
+    <node x="4335.0625" y="1256.0">phase2.trade.user.command.ReloadUser</node>
+    <node x="502.0" y="1494.0">phase2.trade.alert.PopupAlert</node>
+    <node x="1024.0" y="1722.0">phase2.trade.trade.controller.TradeCell</node>
+    <node x="1669.0" y="1722.0">phase2.trade.config.UIConfig</node>
+    <node x="1418.0" y="1646.0">phase2.trade.permission.PermissionSet</node>
+    <node x="590.0" y="585.0">phase2.trade.item.controller.ItemManageController</node>
+    <node x="4618.0" y="1646.0">phase2.trade.trade.rest.in.peace</node>
+    <node x="5375.174604806289" y="585.0">phase2.trade.user.controller.UserManageController</node>
+    <node x="5327.0" y="1570.0">phase2.trade.support.TicketPriority</node>
+    <node x="4802.0" y="1646.0">phase2.trade.Configurer</node>
+    <node x="1266.0" y="1570.0">phase2.trade.callback.status.ResultStatusWrapper</node>
+    <node x="3882.0" y="1646.0">phase2.trade.support.TicketState</node>
+    <node x="4266.0" y="1570.0">phase2.trade.item.CartItemWrapper</node>
+    <node x="4066.0" y="1646.0">phase2.trade.address.AddressBook</node>
+    <node x="1302.6875000000002" y="943.0">phase2.trade.command.Command</node>
+    <node x="5536.0" y="1570.0">phase2.trade.user.AccountManager</node>
+    <node x="2699.0" y="1570.0">phase2.trade.command.CommandComparator</node>
+    <node x="1557.0" y="1413.0">phase2.trade.callback.status.StatusFailed</node>
+    <node x="4554.0625" y="924.0">phase2.trade.database.UserDAO</node>
+    <node x="1724.0" y="1413.0">phase2.trade.callback.status.StatusSucceeded</node>
+    <node x="853.5" y="1494.0">phase2.trade.database.nosql.Redis</node>
+    <node x="821.0" y="1413.0">phase2.trade.gateway.GatewayPubSub</node>
+    <node x="1884.685021472955" y="504.0">phase2.trade.item.controller.ItemController</node>
+    <node x="2385.019629966845" y="504.0">phase2.trade.user.controller.UserOperationController</node>
+    <node x="4815.3125" y="742.0">phase2.trade.gateway.EntityGateway</node>
+    <node x="291.0" y="585.0">phase2.trade.support.controller.SupportTicketAdminController</node>
+    <node x="653.75" y="423.0">phase2.trade.controller.market.MarketController</node>
+    <node x="522.1250000000002" y="1125.0">phase2.trade.trade.command.TradeCommand</node>
+    <node x="2228.0625" y="1256.0">phase2.trade.item.command.AddToCart</node>
+    <node x="2141.0" y="1413.0">phase2.trade.validator.EmailValidator</node>
+    <node x="2583.0" y="1722.0">phase2.trade.trade.Trade</node>
+    <node x="1162.2708333333335" y="742.0">phase2.trade.permission.PermissionBased</node>
+    <node x="2610.0" y="1332.0">phase2.trade.user.User</node>
+    <node x="2065.5" y="1332.0">phase2.trade.validator.Validator</node>
+    <node x="3377.4246048062882" y="322.0">phase2.trade.user.controller.RegisterController</node>
+    <node x="1851.685021472955" y="585.0">phase2.trade.item.controller.AbstractCartController</node>
+    <node x="4483.0" y="1570.0">phase2.trade.view.FilterPredicate</node>
+    <node x="2440.0" y="1722.0">phase2.trade.refresh.ReType</node>
+    <node x="4255.591446063075" y="0.0">phase2.trade.refresh.Refreshable</node>
+    <node x="1076.8125000000002" y="1044.0">phase2.trade.command.GetCommandsByType</node>
+    <node x="2747.0625" y="1256.0">phase2.trade.item.command.GetItems</node>
+    <node x="3798.9684318217437" y="504.0">phase2.trade.widget.TradeAddressWidget</node>
+    <node x="2881.0625" y="1256.0">phase2.trade.item.command.GetMarketItems</node>
+    <node x="4250.0" y="1646.0">phase2.trade.item.Willingness</node>
+    <node x="4311.562181821744" y="423.0">phase2.trade.widget.TradeDetailWidget</node>
+    <node x="5305.405931821744" y="423.0">phase2.trade.widget.UserOptionWidget</node>
+    <node x="2350.0" y="1413.0">phase2.trade.user.Guest</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="phase2.trade.support.command.OpenSupportTicket" target="phase2.trade.command.Command">
+      <point x="47.0" y="-15.5" />
+      <point x="875.8125000000002" y="994.0" />
+      <point x="1309.3125000000002" y="994.0" />
+      <point x="-46.375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserInfoController" target="phase2.trade.controller.AbstractController">
+      <point x="-49.25" y="-15.5" />
+      <point x="4608.674604806289" y="292.0" />
+      <point x="4249.455038964601" y="292.0" />
+      <point x="35.17857142857156" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.RemoveItem" target="phase2.trade.command.CommandProperty">
+      <point x="-32.75" y="-15.5" />
+      <point x="32.75" y="803.0" />
+      <point x="2098.6201923076924" y="803.0" />
+      <point x="-82.69230769230762" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.UpdateUsers" target="phase2.trade.user.command.UserCommand">
+      <point x="34.75" y="-15.5" />
+      <point x="3402.3125" y="1216.0" />
+      <point x="3848.4910714285716" y="1216.0" />
+      <point x="-59.57142857142844" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.TradeDAO" target="phase2.trade.database.DAO">
+      <point x="28.5" y="-15.5" />
+      <point x="4809.774107142856" y="904.0" />
+      <point x="4859.9625" y="904.0" />
+      <point x="-14.600000000000364" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.AddToCart" target="phase2.trade.command.CommandProperty">
+      <point x="-30.75" y="-15.5" />
+      <point x="2258.8125" y="923.0" />
+      <point x="2184.6201923076924" y="923.0" />
+      <point x="3.3076923076923777" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.UpdateItems" target="phase2.trade.item.command.ItemCommand">
+      <point x="34.75" y="-15.5" />
+      <point x="2173.3125" y="1216.0" />
+      <point x="2527.375" y="1216.0" />
+      <point x="-43.4375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeUserTableController" target="phase2.trade.item.controller.AbstractCartController">
+      <point x="0.0" y="-15.5" />
+      <point x="2066.1871818217437" y="641.0" />
+      <point x="2024.185021472955" y="641.0" />
+      <point x="57.5" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.DatabaseResourceBundle" target="phase2.trade.Shutdownable">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeListController" target="phase2.trade.controller.ControllerProperty">
+      <point x="51.25" y="-15.5" />
+      <point x="1912.2500000000005" y="403.0" />
+      <point x="1885.416666666667" y="403.0" />
+      <point x="1885.416666666667" y="101.0" />
+      <point x="2999.3384976112175" y="101.0" />
+      <point x="-41.473684210526244" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.alert.AlertWindow" target="phase2.trade.alert.CustomWindow">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.GetAllItems" target="phase2.trade.command.CommandProperty">
+      <point x="34.75" y="-15.5" />
+      <point x="2693.21875" y="903.0" />
+      <point x="2197.850961538462" y="903.0" />
+      <point x="16.538461538461434" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.UserDAO" target="phase2.trade.gateway.UserGateway">
+      <point x="-26.5" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.avatar.UploadAvatarController" target="phase2.trade.controller.AbstractController">
+      <point x="0.0" y="-15.5" />
+      <point x="5275.424604806289" y="262.0" />
+      <point x="4291.6693246788855" y="262.0" />
+      <point x="77.39285714285688" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.GetItems" target="phase2.trade.item.command.ItemCommand">
+      <point x="-28.5" y="-15.5" />
+      <point x="2775.5625" y="1226.0" />
+      <point x="2596.875" y="1226.0" />
+      <point x="26.0625" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.Guest" target="phase2.trade.user.User">
+      <point x="0.0" y="-15.5" />
+      <point x="2395.0" y="1383.0" />
+      <point x="2620.125" y="1383.0" />
+      <point x="-30.375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.view.PopupFactory" target="phase2.trade.view.NotificationFactory">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.SupportTicketDAO" target="phase2.trade.gateway.SupportTicketGateway">
+      <point x="45.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.command.UpdateSupportTickets" target="phase2.trade.command.CommandProperty">
+      <point x="-53.25" y="-15.5" />
+      <point x="96.5" y="813.0" />
+      <point x="2105.235576923077" y="813.0" />
+      <point x="-76.07692307692287" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeEditController" target="phase2.trade.trade.controller.TradeInfoController">
+      <point x="0.0" y="-15.5" />
+      <point x="3086.852963300178" y="484.0" />
+      <point x="3004.519629966845" y="484.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ReloadUser" target="phase2.trade.user.command.UserCommand">
+      <point x="-32.75" y="-15.5" />
+      <point x="4367.8125" y="1206.0" />
+      <point x="3967.6339285714284" y="1206.0" />
+      <point x="59.57142857142844" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.gateway.UserGateway" target="phase2.trade.gateway.EntityGateway">
+      <point x="0.0" y="-15.5" />
+      <point x="4580.5625" y="803.0" />
+      <point x="4826.383928571428" y="803.0" />
+      <point x="-66.42857142857156" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ChangeAccountState" target="phase2.trade.command.Command">
+      <point x="-49.25" y="-15.5" />
+      <point x="1701.0625000000002" y="1014.0" />
+      <point x="1388.8125000000002" y="1014.0" />
+      <point x="33.125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.gateway.ItemGateway" target="phase2.trade.gateway.EntityGateway">
+      <point x="0.0" y="-15.5" />
+      <point x="5000.5625" y="813.0" />
+      <point x="4914.955357142857" y="813.0" />
+      <point x="22.142857142856883" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserTableController" target="phase2.trade.controller.EditableTableController">
+      <point x="0.0" y="-15.5" />
+      <point x="2262.519629966845" y="484.0" />
+      <point x="2132.2500000000005" y="484.0" />
+      <point x="29.75" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.TradeConfirmWidget.ConfirmationPair" target="phase2.trade.widget.TradeConfirmWidget">
+      <point x="0.0" y="-15.5" />
+      <point x="4380.851688139622" y="565.0" />
+      <point x="4866.905931821744" y="565.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ChangeAddress" target="phase2.trade.user.command.UserCommand">
+      <point x="-38.75" y="-15.5" />
+      <point x="4088.8125" y="1226.0" />
+      <point x="3927.919642857143" y="1226.0" />
+      <point x="19.857142857142662" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.AddressWidget" target="phase2.trade.widget.WidgetControllerBase">
+      <point x="0.0" y="-15.5" />
+      <point x="4925.905931821744" y="393.0" />
+      <point x="4472.862104806289" y="393.0" />
+      <point x="39.9375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserManageController" target="phase2.trade.user.controller.UserTableController">
+      <point x="-53.25" y="-15.5" />
+      <point x="5428.424604806289" y="555.0" />
+      <point x="2262.519629966845" y="555.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.SupportTicketDAO" target="phase2.trade.database.DAO">
+      <point x="-45.0" y="-15.5" />
+      <point x="5290.5625" y="884.0" />
+      <point x="4903.7625" y="884.0" />
+      <point x="29.199999999999818" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.AddItemToInventory" target="phase2.trade.item.command.ItemCommand">
+      <point x="49.25" y="-15.5" />
+      <point x="2518.8125" y="1236.0" />
+      <point x="2562.125" y="1236.0" />
+      <point x="-8.6875" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.side.SideMenuController" target="phase2.trade.controller.AbstractController">
+      <point x="-49.25" y="-15.5" />
+      <point x="4992.674604806289" y="272.0" />
+      <point x="4277.597896107458" y="272.0" />
+      <point x="63.32142857142844" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserOperationController" target="phase2.trade.controller.EditableTableController">
+      <point x="-59.5" y="-15.5" />
+      <point x="2444.519629966845" y="474.0" />
+      <point x="2191.7500000000005" y="474.0" />
+      <point x="89.25" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.SystemUser" target="phase2.trade.user.User">
+      <point x="0.0" y="-15.5" />
+      <point x="2742.5" y="1393.0" />
+      <point x="2660.625" y="1393.0" />
+      <point x="10.125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.AccountStateWidget" target="phase2.trade.widget.WidgetControllerBase">
+      <point x="0.0" y="-15.5" />
+      <point x="3805.9684318217437" y="393.0" />
+      <point x="4366.362104806289" y="393.0" />
+      <point x="-66.5625" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.TradeAddressWidget" target="phase2.trade.widget.TradeDetailWidget">
+      <point x="0.0" y="-15.5" />
+      <point x="3897.4684318217437" y="484.0" />
+      <point x="4342.895515155076" y="484.0" />
+      <point x="-62.66666666666697" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.CommandDAO" target="phase2.trade.database.DAO">
+      <point x="-32.75" y="-15.5" />
+      <point x="5106.5625" y="894.0" />
+      <point x="4889.1625" y="894.0" />
+      <point x="14.600000000000364" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserManageController" target="phase2.trade.controller.ControllerProperty">
+      <point x="53.25" y="-15.5" />
+      <point x="5534.924604806289" y="565.0" />
+      <point x="5663.895833333334" y="565.0" />
+      <point x="5663.895833333334" y="61.0" />
+      <point x="3134.127971295428" y="61.0" />
+      <point x="93.31578947368416" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.controller.SupportTicketUserController" target="phase2.trade.support.controller.SupportTicketController">
+      <point x="0.0" y="-15.5" />
+      <point x="135.5" y="565.0" />
+      <point x="223.5" y="565.0" />
+      <point x="-59.5" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.callback.status.StatusSucceeded" target="phase2.trade.callback.status.ResultStatus">
+      <point x="0.0" y="-15.5" />
+      <point x="1810.0" y="1388.0" />
+      <point x="1757.0" y="1388.0" />
+      <point x="36.75" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.RegisterController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-49.25" y="-15.5" />
+      <point x="3426.6746048062882" y="131.0" />
+      <point x="3061.549023927007" y="131.0" />
+      <point x="20.73684210526335" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.DAO" target="phase2.trade.gateway.EntityGateway">
+      <point x="18.25" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.CreateUserOperation" target="phase2.trade.command.CommandProperty">
+      <point x="-51.25" y="-15.5" />
+      <point x="3508.3125" y="853.0" />
+      <point x="2230.9278846153848" y="853.0" />
+      <point x="49.615384615384755" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.DashboardController" target="phase2.trade.controller.AbstractController">
+      <point x="51.25" y="-15.5" />
+      <point x="3748.1746048062882" y="282.0" />
+      <point x="4193.1693246788855" y="282.0" />
+      <point x="-21.107142857143117" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.GetUsers" target="phase2.trade.command.Command">
+      <point x="28.5" y="-15.5" />
+      <point x="1028.3125000000002" y="1004.0" />
+      <point x="1322.5625000000002" y="1004.0" />
+      <point x="-33.125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.config.strategy.YamlStrategy" target="phase2.trade.config.strategy.FormatStrategy">
+      <point x="0.0" y="-15.5" />
+      <point x="3546.5" y="1388.0" />
+      <point x="3589.0" y="1388.0" />
+      <point x="-41.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ChangePassword" target="phase2.trade.user.command.UserCommand">
+      <point x="41.0" y="-15.5" />
+      <point x="3805.0625" y="1236.0" />
+      <point x="3888.205357142858" y="1236.0" />
+      <point x="-19.857142857142662" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.gateway.GatewayPubSub" target="phase2.trade.Shutdownable">
+      <point x="0.0" y="-15.5" />
+      <point x="898.5" y="1388.0" />
+      <point x="1062.0" y="1388.0" />
+      <point x="-49.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.controller.SupportTicketController" target="phase2.trade.controller.EditableTableController">
+      <point x="59.5" y="-15.5" />
+      <point x="342.5" y="474.0" />
+      <point x="2013.2500000000005" y="474.0" />
+      <point x="-89.25" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.TradeEmptyWidget" target="phase2.trade.widget.LittleTextWidgetController">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-43.0" y="-15.5" />
+      <point x="2882.5183548062882" y="141.0" />
+      <point x="3040.8121818217437" y="141.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.validator.EmailValidator" target="phase2.trade.validator.Validator">
+      <point x="0.0" y="-15.5" />
+      <point x="2223.0" y="1388.0" />
+      <point x="2157.75" y="1388.0" />
+      <point x="30.75" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.CreateUserOperation" target="phase2.trade.user.command.UserCommand">
+      <point x="51.25" y="-15.5" />
+      <point x="3610.8125" y="1226.0" />
+      <point x="3868.3482142857147" y="1226.0" />
+      <point x="-39.71428571428578" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.RegisterController" target="phase2.trade.controller.AbstractController">
+      <point x="49.25" y="-15.5" />
+      <point x="3525.1746048062882" y="272.0" />
+      <point x="4179.097896107458" y="272.0" />
+      <point x="-35.17857142857156" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.UserTable" target="phase2.trade.trade.controller.AllTable">
+      <point x="0.0" y="-15.5" />
+      <point x="5735.895833333334" y="403.0" />
+      <point x="5467.424604806289" y="403.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.Login" target="phase2.trade.command.CommandProperty">
+      <point x="22.5" y="-15.5" />
+      <point x="4292.5625" y="813.0" />
+      <point x="2257.389423076923" y="813.0" />
+      <point x="76.07692307692287" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.market.MarketListController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-53.25" y="-15.5" />
+      <point x="1578.7500000000002" y="393.0" />
+      <point x="1585.7500000000002" y="393.0" />
+      <point x="1585.7500000000002" y="81.0" />
+      <point x="2978.601655505954" y="81.0" />
+      <point x="-62.21052631578959" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.CreateTradeCommand" target="phase2.trade.trade.command.TradeCommand">
+      <point x="49.25" y="-15.5" />
+      <point x="365.25" y="1186.0" />
+      <point x="540.5000000000002" y="1186.0" />
+      <point x="-55.125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.AddItemToInventory" target="phase2.trade.command.CommandProperty">
+      <point x="-49.25" y="-15.5" />
+      <point x="2420.3125" y="1196.0" />
+      <point x="2435.5439443634586" y="1196.0" />
+      <point x="2435.5439443634586" y="913.0" />
+      <point x="2191.235576923077" y="913.0" />
+      <point x="9.923076923076678" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.GetTrades" target="phase2.trade.trade.command.TradeCommand">
+      <point x="-30.75" y="-15.5" />
+      <point x="1956.8125000000002" y="1186.0" />
+      <point x="650.7500000000002" y="1186.0" />
+      <point x="55.125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.alert.SplitAlert" target="phase2.trade.alert.AlertWindow">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.TradeCommand" target="phase2.trade.command.UpdateCommand">
+      <point x="0.0" y="-15.5" />
+      <point x="595.6250000000002" y="1105.0" />
+      <point x="1342.9375000000002" y="1105.0" />
+      <point x="-19.375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.alert.PopupAlert" target="phase2.trade.alert.AlertWindow">
+      <point x="0.0" y="-15.5" />
+      <point x="567.5" y="1474.0" />
+      <point x="444.3" y="1474.0" />
+      <point x="27.80000000000001" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.CreateTradeCommand" target="phase2.trade.command.CommandProperty">
+      <point x="-49.25" y="-15.5" />
+      <point x="266.75" y="823.0" />
+      <point x="2111.850961538462" y="823.0" />
+      <point x="-69.46153846153857" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.EditableController" target="phase2.trade.controller.AbstractController">
+      <point x="49.25" y="-15.5" />
+      <point x="2151.7500000000005" y="242.0" />
+      <point x="4136.883610393172" y="242.0" />
+      <point x="-77.39285714285688" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.GetMarketItems" target="phase2.trade.item.command.ItemCommand">
+      <point x="-41.0" y="-15.5" />
+      <point x="2922.0625" y="1216.0" />
+      <point x="2614.25" y="1216.0" />
+      <point x="43.4375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.GetUsers" target="phase2.trade.command.CommandProperty">
+      <point x="-28.5" y="-15.5" />
+      <point x="971.3125000000002" y="863.0" />
+      <point x="2138.3125" y="863.0" />
+      <point x="-43.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.alert.ConfirmAlert" target="phase2.trade.alert.AlertWindow">
+      <point x="0.0" y="-15.5" />
+      <point x="73.5" y="1464.0" />
+      <point x="360.9" y="1464.0" />
+      <point x="-55.60000000000002" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.validator.GeneralValidator.InputType" target="phase2.trade.validator.GeneralValidator">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.EditableTableController" target="phase2.trade.controller.EditableController">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.ItemDAO" target="phase2.trade.database.DAO">
+      <point x="-26.5" y="-15.5" />
+      <point x="4901.358333333333" y="904.0" />
+      <point x="4874.5625" y="904.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.DashboardController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-51.25" y="-15.5" />
+      <point x="3645.6746048062882" y="121.0" />
+      <point x="3071.9174449796383" y="121.0" />
+      <point x="31.10526315789457" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ReloadUser" target="phase2.trade.command.CommandProperty">
+      <point x="32.75" y="-15.5" />
+      <point x="4433.3125" y="803.0" />
+      <point x="2264.0048076923076" y="803.0" />
+      <point x="82.69230769230762" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.TradeDAO" target="phase2.trade.gateway.TradeGateway">
+      <point x="-28.5" y="-15.5" />
+      <point x="4752.774107142856" y="884.0" />
+      <point x="4743.5625" y="884.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeController" target="phase2.trade.controller.AbstractController">
+      <point x="43.0" y="-15.5" />
+      <point x="2968.5183548062882" y="252.0" />
+      <point x="4150.955038964601" y="252.0" />
+      <point x="-63.32142857142844" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.TradeDetailWidget" target="phase2.trade.widget.WidgetControllerBase">
+      <point x="0.0" y="-15.5" />
+      <point x="4405.562181821744" y="403.0" />
+      <point x="4419.612104806289" y="403.0" />
+      <point x="-13.3125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ChangePassword" target="phase2.trade.command.CommandProperty">
+      <point x="-41.0" y="-15.5" />
+      <point x="3723.0625" y="843.0" />
+      <point x="2237.5432692307695" y="843.0" />
+      <point x="56.230769230769056" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.controller.CartController" target="phase2.trade.item.controller.AbstractCartController">
+      <point x="0.0" y="-15.5" />
+      <point x="1841.1871818217437" y="641.0" />
+      <point x="1909.185021472955" y="641.0" />
+      <point x="-57.5" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.UpdateCommand" target="phase2.trade.command.Command">
+      <point x="0.0" y="-15.5" />
+      <point x="6.625" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.LittleTextWidgetController" target="phase2.trade.widget.WidgetControllerBase">
+      <point x="0.0" y="-15.5" />
+      <point x="5154.405931821744" y="383.0" />
+      <point x="4499.487104806289" y="383.0" />
+      <point x="66.5625" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.alert.VBoxAlert" target="phase2.trade.alert.AlertWindow">
+      <point x="0.0" y="-15.5" />
+      <point x="714.5" y="1464.0" />
+      <point x="472.1" y="1464.0" />
+      <point x="55.60000000000002" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.UserCommand" target="phase2.trade.command.UpdateCommand">
+      <point x="0.0" y="-15.5" />
+      <point x="3908.0625" y="1095.0" />
+      <point x="1420.4375000000002" y="1095.0" />
+      <point x="58.125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.GetCommandsByType" target="phase2.trade.command.Command">
+      <point x="0.0" y="-15.5" />
+      <point x="1170.8125000000002" y="1014.0" />
+      <point x="1335.8125000000002" y="1014.0" />
+      <point x="-19.875" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.WidgetControllerBase" target="phase2.trade.controller.ControllerProperty">
+      <point x="53.25" y="-15.5" />
+      <point x="4486.174604806289" y="302.0" />
+      <point x="4548.562181821744" y="302.0" />
+      <point x="4548.562181821744" y="91.0" />
+      <point x="3103.0227081375333" y="91.0" />
+      <point x="62.21052631578959" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.AdministrativeUser" target="phase2.trade.user.User">
+      <point x="0.0" y="-15.5" />
+      <point x="2558.5" y="1393.0" />
+      <point x="2640.375" y="1393.0" />
+      <point x="-10.125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.market.MarketListController" target="phase2.trade.controller.ListController">
+      <point x="53.25" y="-15.5" />
+      <point x="1685.2500000000002" y="403.0" />
+      <point x="1720.166666666667" y="403.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.EditTradeCommand" target="phase2.trade.command.CommandProperty">
+      <point x="45.0" y="-15.5" />
+      <point x="736.5000000000002" y="1196.0" />
+      <point x="724.3125000000002" y="1196.0" />
+      <point x="724.3125000000002" y="843.0" />
+      <point x="2125.0817307692314" y="843.0" />
+      <point x="-56.230769230769056" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.gateway.CommandGateway" target="phase2.trade.gateway.EntityGateway">
+      <point x="0.0" y="-15.5" />
+      <point x="5172.0625" y="803.0" />
+      <point x="4937.098214285715" y="803.0" />
+      <point x="44.285714285714675" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeInfoController" target="phase2.trade.trade.controller.TradeController">
+      <point x="0.0" y="-15.5" />
+      <point x="3004.519629966845" y="403.0" />
+      <point x="2968.5183548062882" y="403.0" />
+      <point x="43.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.controller.InventoryController" target="phase2.trade.controller.ControllerProperty">
+      <point x="51.25" y="-15.5" />
+      <point x="2542.1850214729548" y="565.0" />
+      <point x="2633.519629966845" y="565.0" />
+      <point x="2633.519629966845" y="131.0" />
+      <point x="3030.443760769112" y="131.0" />
+      <point x="-10.368421052631675" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.EditTradeCommand" target="phase2.trade.trade.command.TradeCommand">
+      <point x="-45.0" y="-15.5" />
+      <point x="646.5000000000002" y="1196.0" />
+      <point x="614.0000000000002" y="1196.0" />
+      <point x="18.375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserOperationController" target="phase2.trade.controller.ControllerProperty">
+      <point x="59.5" y="-15.5" />
+      <point x="2563.519629966845" y="121.0" />
+      <point x="3020.0753397164804" y="121.0" />
+      <point x="-20.73684210526335" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.command.OpenSupportTicket" target="phase2.trade.command.CommandProperty">
+      <point x="-47.0" y="-15.5" />
+      <point x="781.8125000000002" y="853.0" />
+      <point x="2131.6971153846152" y="853.0" />
+      <point x="-49.615384615384755" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.ItemCommand" target="phase2.trade.command.UpdateCommand">
+      <point x="0.0" y="-15.5" />
+      <point x="2570.8125" y="1105.0" />
+      <point x="1381.6875000000002" y="1105.0" />
+      <point x="19.375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.GetCommands" target="phase2.trade.command.Command">
+      <point x="-34.75" y="-15.5" />
+      <point x="1903.5625000000002" y="1004.0" />
+      <point x="1402.0625000000002" y="1004.0" />
+      <point x="46.375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.ListController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-41.0" y="-15.5" />
+      <point x="1679.166666666667" y="91.0" />
+      <point x="2988.970076558586" y="91.0" />
+      <point x="-51.84210526315792" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.gateway.TradeGateway" target="phase2.trade.gateway.EntityGateway">
+      <point x="0.0" y="-15.5" />
+      <point x="4743.5625" y="813.0" />
+      <point x="4848.526785714285" y="813.0" />
+      <point x="-44.285714285714675" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.controller.ItemController" target="phase2.trade.controller.EditableTableController">
+      <point x="-2.2737367544323206E-13" y="-15.5" />
+      <point x="1966.6850214729548" y="484.0" />
+      <point x="2072.7500000000005" y="484.0" />
+      <point x="-29.75" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.callback.status.StatusExist" target="phase2.trade.callback.status.StatusFailed">
+      <point x="0.0" y="-15.5" />
+      <point x="1724.5" y="1469.0" />
+      <point x="1667.25" y="1469.0" />
+      <point x="36.75" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.itemlist.Inventory" target="phase2.trade.itemlist.ItemList">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ChangeUserName" target="phase2.trade.user.command.UserCommand">
+      <point x="-41.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.market.MarketController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-45.0" y="-15.5" />
+      <point x="698.75" y="71.0" />
+      <point x="2968.2332344533224" y="71.0" />
+      <point x="-72.57894736842127" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.Command" target="phase2.trade.command.CommandProperty">
+      <point x="35.33333333333326" y="-15.5" />
+      <point x="1391.0208333333335" y="883.0" />
+      <point x="2151.5432692307695" y="883.0" />
+      <point x="-29.769230769230944" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.WidgetControllerBase" target="phase2.trade.controller.AbstractController">
+      <point x="-53.25" y="-15.5" />
+      <point x="4379.674604806289" y="302.0" />
+      <point x="4235.383610393172" y="302.0" />
+      <point x="21.107142857143117" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.ConfirmTrade" target="phase2.trade.trade.command.TradeCommand">
+      <point x="36.75" y="-15.5" />
+      <point x="544.7500000000002" y="1196.0" />
+      <point x="577.2500000000002" y="1196.0" />
+      <point x="-18.375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.controller.AbstractCartController" target="phase2.trade.item.controller.ItemController">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.itemlist.TradeItemHolder" target="phase2.trade.itemlist.ItemList">
+      <point x="0.0" y="-15.5" />
+      <point x="3098.0" y="1388.0" />
+      <point x="3227.5" y="1388.0" />
+      <point x="-38.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.AddToCart" target="phase2.trade.item.command.ItemCommand">
+      <point x="30.75" y="-15.5" />
+      <point x="2320.3125" y="1226.0" />
+      <point x="2544.75" y="1226.0" />
+      <point x="-26.0625" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.alert.AddressAlert" target="phase2.trade.controller.AbstractController">
+      <point x="0.0" y="-15.5" />
+      <point x="4849.924604806289" y="282.0" />
+      <point x="4263.526467536029" y="282.0" />
+      <point x="49.25" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeInfoController.WidgetBundle" target="phase2.trade.trade.controller.TradeInfoController">
+      <point x="0.0" y="-15.5" />
+      <point x="3516.4604936821224" y="474.0" />
+      <point x="3072.852963300178" y="474.0" />
+      <point x="68.33333333333348" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.Login" target="phase2.trade.user.command.UserCommand">
+      <point x="-22.5" y="-15.5" />
+      <point x="4247.5625" y="1216.0" />
+      <point x="3947.7767857142862" y="1216.0" />
+      <point x="39.71428571428578" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.UserDAO" target="phase2.trade.database.DAO">
+      <point x="26.5" y="-15.5" />
+      <point x="4633.5625" y="894.0" />
+      <point x="4845.3625" y="894.0" />
+      <point x="-29.199999999999818" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.LoginController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-43.0" y="-15.5" />
+      <point x="3862.4246048062882" y="111.0" />
+      <point x="3082.28586603227" y="111.0" />
+      <point x="41.473684210526244" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.UserOptionWidget" target="phase2.trade.widget.WidgetControllerBase">
+      <point x="0.0" y="-15.5" />
+      <point x="5395.405931821744" y="373.0" />
+      <point x="4526.112104806289" y="373.0" />
+      <point x="93.1875" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.gateway.SupportTicketGateway" target="phase2.trade.gateway.EntityGateway">
+      <point x="0.0" y="-15.5" />
+      <point x="5380.5625" y="793.0" />
+      <point x="4959.241071428572" y="793.0" />
+      <point x="66.42857142857156" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.TradeOptionWidget" target="phase2.trade.widget.WidgetControllerBase">
+      <point x="4.547473508864641E-13" y="-15.5" />
+      <point x="4018.468431821744" y="403.0" />
+      <point x="4392.987104806289" y="403.0" />
+      <point x="-39.9375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.view.NodeFactory.ComboBoxType" target="phase2.trade.view.NodeFactory">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.config.controller.AdministrativeConfigController" target="phase2.trade.controller.AbstractController">
+      <point x="0.0" y="-15.5" />
+      <point x="4158.924604806289" y="302.0" />
+      <point x="4221.312181821744" y="302.0" />
+      <point x="7.0357142857146755" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.config.ConfigBundle" target="phase2.trade.Shutdownable">
+      <point x="0.0" y="-15.5" />
+      <point x="1319.5" y="1388.0" />
+      <point x="1160.0" y="1388.0" />
+      <point x="49.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.TradeConfirmWidget" target="phase2.trade.widget.TradeDetailWidget">
+      <point x="0.0" y="-15.5" />
+      <point x="4866.905931821744" y="484.0" />
+      <point x="4468.22884848841" y="484.0" />
+      <point x="62.66666666666697" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.editor.ItemEditor" target="phase2.trade.editor.Editor">
+      <point x="0.0" y="-15.5" />
+      <point x="1509.7500000000002" y="292.0" />
+      <point x="1309.6871818217437" y="292.0" />
+      <point x="14.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.UpdateUsers" target="phase2.trade.command.CommandProperty">
+      <point x="-34.75" y="-15.5" />
+      <point x="3332.8125" y="863.0" />
+      <point x="2224.3125" y="863.0" />
+      <point x="43.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.command.GetAllSupportTickets" target="phase2.trade.command.CommandProperty">
+      <point x="53.25" y="-15.5" />
+      <point x="3224.8125" y="873.0" />
+      <point x="2217.6971153846152" y="873.0" />
+      <point x="36.384615384615245" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.GetItems" target="phase2.trade.command.CommandProperty">
+      <point x="28.5" y="-15.5" />
+      <point x="2832.5625" y="893.0" />
+      <point x="2204.4663461538466" y="893.0" />
+      <point x="23.15384615384619" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.config.strategy.JsonStrategy" target="phase2.trade.config.strategy.FormatStrategy">
+      <point x="0.0" y="-15.5" />
+      <point x="3713.5" y="1388.0" />
+      <point x="3671.0" y="1388.0" />
+      <point x="41.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.TradeTimeWidget" target="phase2.trade.widget.TradeDetailWidget">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.editor.CommandEditor" target="phase2.trade.editor.Editor">
+      <point x="0.0" y="-15.5" />
+      <point x="937.75" y="292.0" />
+      <point x="1267.6871818217437" y="292.0" />
+      <point x="-28.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserSideInfoController" target="phase2.trade.controller.AbstractController">
+      <point x="57.5" y="-15.5" />
+      <point x="3299.9246048062882" y="262.0" />
+      <point x="4165.026467536029" y="262.0" />
+      <point x="-49.25" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.GetMarketItems" target="phase2.trade.command.CommandProperty">
+      <point x="41.0" y="-15.5" />
+      <point x="3004.0625" y="883.0" />
+      <point x="2211.0817307692314" y="883.0" />
+      <point x="29.769230769230944" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.AllTable" target="phase2.trade.controller.AbstractController">
+      <point x="0.0" y="-15.5" />
+      <point x="5467.424604806289" y="252.0" />
+      <point x="4305.740753250315" y="252.0" />
+      <point x="91.46428571428623" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeListController" target="phase2.trade.controller.ListController">
+      <point x="-51.25" y="-15.5" />
+      <point x="1809.7500000000005" y="403.0" />
+      <point x="1774.8333333333337" y="403.0" />
+      <point x="54.66666666666674" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.controller.SupportTicketAdminController" target="phase2.trade.support.controller.SupportTicketController">
+      <point x="0.0" y="-15.5" />
+      <point x="430.5" y="565.0" />
+      <point x="342.5" y="565.0" />
+      <point x="59.5" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.CommandSupplier" target="phase2.trade.command.Command">
+      <point x="0.0" y="-15.5" />
+      <point x="1545.8125000000002" y="1024.0" />
+      <point x="1375.5625000000002" y="1024.0" />
+      <point x="19.875" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.EditableTableController" target="phase2.trade.editor.Editor">
+      <point x="-79.33333333333326" y="-15.5" />
+      <point x="2023.1666666666672" y="393.0" />
+      <point x="1874.416666666667" y="393.0" />
+      <point x="1874.416666666667" y="222.0" />
+      <point x="1323.6871818217437" y="222.0" />
+      <point x="28.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeDragDropController" target="phase2.trade.trade.controller.TradeController">
+      <point x="0.0" y="-15.5" />
+      <point x="2763.019629966845" y="403.0" />
+      <point x="2882.5183548062882" y="403.0" />
+      <point x="-43.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.nosql.Redis" target="phase2.trade.gateway.GatewayPubSub">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.command.UpdateSupportTickets" target="phase2.trade.command.UpdateCommand">
+      <point x="53.25" y="-15.5" />
+      <point x="203.0" y="1095.0" />
+      <point x="1304.1875000000002" y="1095.0" />
+      <point x="-58.125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.controller.SupportTicketController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-59.5" y="-15.5" />
+      <point x="223.5" y="51.0" />
+      <point x="2947.4963923480595" y="51.0" />
+      <point x="-93.31578947368416" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.editor.UserEditor" target="phase2.trade.editor.Editor">
+      <point x="0.0" y="-15.5" />
+      <point x="774.75" y="282.0" />
+      <point x="1253.6871818217437" y="282.0" />
+      <point x="-42.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.ItemDAO" target="phase2.trade.gateway.ItemGateway">
+      <point x="26.5" y="-15.5" />
+      <point x="4954.358333333333" y="904.0" />
+      <point x="5000.5625" y="904.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.AbstractController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-65.66666666666697" y="-15.5" />
+      <point x="4148.6098008693625" y="101.0" />
+      <point x="3092.6542870849016" y="101.0" />
+      <point x="51.84210526315792" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeEditController.EditWidgetBundle" target="phase2.trade.trade.controller.TradeEditController">
+      <point x="-45.0" y="-15.5" />
+      <point x="3073.583333333334" y="565.0" />
+      <point x="3086.852963300178" y="565.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.itemlist.Cart" target="phase2.trade.itemlist.ItemList">
+      <point x="0.0" y="-15.5" />
+      <point x="3387.5" y="1388.0" />
+      <point x="3303.5" y="1388.0" />
+      <point x="38.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.support.command.GetAllSupportTickets" target="phase2.trade.item.command.ItemCommand">
+      <point x="-53.25" y="-15.5" />
+      <point x="3118.3125" y="1206.0" />
+      <point x="2631.625" y="1206.0" />
+      <point x="60.8125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.Command" target="phase2.trade.command.ArgsInvolved">
+      <point x="0.0" y="-15.5" />
+      <point x="1355.6875000000002" y="793.0" />
+      <point x="1427.7708333333335" y="793.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.database.CommandDAO" target="phase2.trade.gateway.CommandGateway">
+      <point x="32.75" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.AbstractController" target="phase2.trade.refresh.Reloadable">
+      <point x="0.0" y="-15.5" />
+      <point x="4214.276467536029" y="141.0" />
+      <point x="4170.091446063075" y="141.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.PermissionWidget" target="phase2.trade.widget.WidgetControllerBase">
+      <point x="0.0" y="-15.5" />
+      <point x="3597.4684318217437" y="383.0" />
+      <point x="4339.737104806289" y="383.0" />
+      <point x="-93.1875" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.RegularUser" target="phase2.trade.user.User">
+      <point x="0.0" y="-15.5" />
+      <point x="2897.5" y="1383.0" />
+      <point x="2680.875" y="1383.0" />
+      <point x="30.375" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.AbstractController" target="phase2.trade.refresh.Refreshable">
+      <point x="65.66666666666697" y="-15.5" />
+      <point x="4279.9431342026965" y="141.0" />
+      <point x="4325.091446063075" y="141.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.side.SideOption.SidePosition" target="phase2.trade.controller.side.SideOption">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.editor.EditorSupplier" target="phase2.trade.editor.Editor">
+      <point x="0.0" y="-15.5" />
+      <point x="1342.2500000000002" y="302.0" />
+      <point x="1295.6871818217437" y="302.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.market.MarketController" target="phase2.trade.controller.ListController">
+      <point x="45.0" y="-15.5" />
+      <point x="788.75" y="403.0" />
+      <point x="1665.5000000000002" y="403.0" />
+      <point x="-54.66666666666674" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.controller.ItemManageController" target="phase2.trade.item.controller.ItemController">
+      <point x="53.25" y="-15.5" />
+      <point x="749.75" y="565.0" />
+      <point x="1912.0183548062882" y="565.0" />
+      <point x="-54.66666666666674" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.GetCommandsByType" target="phase2.trade.command.CommandProperty">
+      <point x="-62.66666666666674" y="-15.5" />
+      <point x="1108.1458333333335" y="873.0" />
+      <point x="2144.9278846153848" y="873.0" />
+      <point x="-36.384615384615245" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.config.strategy.LocalStrategy" target="phase2.trade.config.strategy.ConfigStrategy">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserSideInfoController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-57.5" y="-15.5" />
+      <point x="3184.9246048062882" y="141.0" />
+      <point x="3051.1806028743754" y="141.0" />
+      <point x="10.368421052631675" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.side.SideMenuController" target="phase2.trade.controller.ControllerProperty">
+      <point x="49.25" y="-15.5" />
+      <point x="5091.174604806289" y="302.0" />
+      <point x="5153.562181821744" y="302.0" />
+      <point x="5153.562181821744" y="71.0" />
+      <point x="3123.759550242796" y="71.0" />
+      <point x="82.94736842105249" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.controller.InventoryController" target="phase2.trade.item.controller.ItemController">
+      <point x="-51.25" y="-15.5" />
+      <point x="2439.6850214729548" y="565.0" />
+      <point x="2021.3516881396217" y="565.0" />
+      <point x="54.66666666666674" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.widget.UserWidget" target="phase2.trade.widget.WidgetControllerBase">
+      <point x="0.0" y="-15.5" />
+      <point x="4585.062181821744" y="403.0" />
+      <point x="4446.237104806289" y="403.0" />
+      <point x="13.3125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.callback.status.StatusNoPermission" target="phase2.trade.callback.status.StatusFailed">
+      <point x="0.0" y="-15.5" />
+      <point x="1536.5" y="1469.0" />
+      <point x="1593.75" y="1469.0" />
+      <point x="-36.75" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.ConfirmTrade" target="phase2.trade.command.CommandProperty">
+      <point x="-36.75" y="-15.5" />
+      <point x="471.2500000000002" y="1176.0" />
+      <point x="475.1875000000002" y="1176.0" />
+      <point x="475.1875000000002" y="833.0" />
+      <point x="2118.4663461538466" y="833.0" />
+      <point x="-62.84615384615381" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.callback.status.StatusFailed" target="phase2.trade.callback.status.ResultStatus">
+      <point x="0.0" y="-15.5" />
+      <point x="1630.5" y="1388.0" />
+      <point x="1683.5" y="1388.0" />
+      <point x="-36.75" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.GetAllItems" target="phase2.trade.item.command.ItemCommand">
+      <point x="-34.75" y="-15.5" />
+      <point x="2622.8125" y="1236.0" />
+      <point x="2579.5" y="1236.0" />
+      <point x="8.6875" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.UpdateItems" target="phase2.trade.command.CommandProperty">
+      <point x="-34.75" y="-15.5" />
+      <point x="2103.8125" y="923.0" />
+      <point x="2178.0048076923076" y="923.0" />
+      <point x="-3.3076923076923777" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ChangeUserName" target="phase2.trade.command.CommandProperty">
+      <point x="41.0" y="-15.5" />
+      <point x="3988.0625" y="833.0" />
+      <point x="2244.1586538461543" y="833.0" />
+      <point x="62.84615384615381" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.ListController" target="phase2.trade.controller.AbstractController">
+      <point x="41.0" y="-15.5" />
+      <point x="1761.166666666667" y="232.0" />
+      <point x="4122.812181821744" y="232.0" />
+      <point x="-91.46428571428532" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.command.RemoveItem" target="phase2.trade.item.command.ItemCommand">
+      <point x="32.75" y="-15.5" />
+      <point x="98.25" y="1206.0" />
+      <point x="2510.0" y="1206.0" />
+      <point x="-60.8125" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.GetCommands" target="phase2.trade.command.CommandProperty">
+      <point x="34.75" y="-15.5" />
+      <point x="1973.0625000000002" y="903.0" />
+      <point x="2164.774038461539" y="903.0" />
+      <point x="-16.538461538461434" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.LoginController" target="phase2.trade.controller.AbstractController">
+      <point x="43.0" y="-15.5" />
+      <point x="3948.4246048062882" y="292.0" />
+      <point x="4207.240753250315" y="292.0" />
+      <point x="-7.0357142857146755" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ChangeAddress" target="phase2.trade.command.CommandProperty">
+      <point x="38.75" y="-15.5" />
+      <point x="4166.3125" y="823.0" />
+      <point x="2250.774038461539" y="823.0" />
+      <point x="69.46153846153857" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeEditController.EditWidgetBundle" target="phase2.trade.trade.controller.TradeInfoController.WidgetBundle">
+      <point x="45.0" y="-15.5" />
+      <point x="3163.583333333334" y="565.0" />
+      <point x="3516.4604936821224" y="565.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.EditableController" target="phase2.trade.editor.Editor">
+      <point x="-49.25" y="-15.5" />
+      <point x="2053.2500000000005" y="212.0" />
+      <point x="1337.6871818217437" y="212.0" />
+      <point x="42.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.command.Command" target="phase2.trade.permission.PermissionBased">
+      <point x="-35.33333333333326" y="-15.5" />
+      <point x="1320.354166666667" y="793.0" />
+      <point x="1248.2708333333335" y="793.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.editor.SupportTicketEditor" target="phase2.trade.editor.Editor">
+      <point x="0.0" y="-15.5" />
+      <point x="1137.7500000000002" y="302.0" />
+      <point x="1281.6871818217437" y="302.0" />
+      <point x="-14.0" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.command.GetTrades" target="phase2.trade.command.CommandProperty">
+      <point x="30.75" y="-15.5" />
+      <point x="2018.3125000000002" y="913.0" />
+      <point x="2171.389423076923" y="913.0" />
+      <point x="-9.923076923077133" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.trade.controller.TradeDetailController" target="phase2.trade.trade.controller.TradeInfoController">
+      <point x="0.0" y="-15.5" />
+      <point x="2853.852963300178" y="484.0" />
+      <point x="2936.186296633511" y="484.0" />
+      <point x="-68.33333333333348" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.item.controller.ItemManageController" target="phase2.trade.controller.ControllerProperty">
+      <point x="-53.25" y="-15.5" />
+      <point x="643.25" y="61.0" />
+      <point x="2957.864813400691" y="61.0" />
+      <point x="-82.94736842105249" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.alert.TableViewAlert" target="phase2.trade.alert.AlertWindow">
+      <point x="0.0" y="-15.5" />
+      <point x="249.0" y="1474.0" />
+      <point x="388.7" y="1474.0" />
+      <point x="-27.80000000000001" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.controller.EditableTableController" target="phase2.trade.controller.ControllerProperty">
+      <point x="79.33333333333348" y="-15.5" />
+      <point x="2181.833333333334" y="403.0" />
+      <point x="2254.4362966335116" y="403.0" />
+      <point x="2254.4362966335116" y="111.0" />
+      <point x="3009.706918663849" y="111.0" />
+      <point x="-31.10526315789457" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.validator.GeneralValidator" target="phase2.trade.validator.Validator">
+      <point x="0.0" y="-15.5" />
+      <point x="2031.0" y="1388.0" />
+      <point x="2096.25" y="1388.0" />
+      <point x="-30.75" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.command.ChangeAccountState" target="phase2.trade.command.CommandProperty">
+      <point x="49.25" y="-15.5" />
+      <point x="1799.5625000000002" y="893.0" />
+      <point x="2158.1586538461543" y="893.0" />
+      <point x="-23.15384615384619" y="15.5" />
+    </edge>
+    <edge source="phase2.trade.user.controller.UserInfoController" target="phase2.trade.controller.ControllerProperty">
+      <point x="49.25" y="-15.5" />
+      <point x="4707.174604806289" y="302.0" />
+      <point x="4769.562181821744" y="302.0" />
+      <point x="4769.562181821744" y="81.0" />
+      <point x="3113.391129190165" y="81.0" />
+      <point x="72.57894736842127" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.3375730491577862" x="2899.0" y="876.5" />
+  <SelectedNodes>
+    <node>phase2.trade.database.TradeDAO</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

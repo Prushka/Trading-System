@@ -26,6 +26,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * The Trade edit controller.
+ *
+ * @author Dan Lyu
+ */
 public class TradeEditController extends TradeInfoController {
 
     private final Map<User, Map<User, UserTable>> userTablesCombination = new HashMap<>();
@@ -36,21 +41,48 @@ public class TradeEditController extends TradeInfoController {
 
     private final AlertWindow alertWindow;
 
+    /**
+     * The Edit widget bundle.
+     *
+     * @author Dan Lyu
+     */
     class EditWidgetBundle extends WidgetBundle {
 
+        /**
+         * Constructs a new Edit widget bundle.
+         *
+         * @param tradeOrder the trade order
+         */
         EditWidgetBundle(TradeOrder tradeOrder) {
             super(tradeOrder);
         }
 
+        /**
+         * Sets trade confirm.
+         *
+         * @param previousTradeValue           the previous trade value
+         * @param previousTransactionValue     the previous transaction value
+         * @param previousTransactionBackValue the previous transaction back value
+         */
         void setTradeConfirm(Boolean previousTradeValue, Boolean previousTransactionValue, boolean previousTransactionBackValue) {
             tradeConfirmWidget = new TradeConfirmWidget(getControllerResources(), tradeOrder, new TradeConfirmWidget.ConfirmationPair(
                     previousTradeValue, previousTransactionValue, previousTransactionBackValue));
         }
 
+        /**
+         * Sets trade address.
+         *
+         * @param previousValue the previous value
+         */
         void setTradeAddress(Address previousValue) {
             tradeAddressWidget = new TradeAddressWidget(getControllerResources(), tradeOrder, previousValue);
         }
 
+        /**
+         * Sets trade time.
+         *
+         * @param previousValue the previous value
+         */
         void setTradeTime(LocalDateTime previousValue) {
             tradeTimeWidget = new TradeTimeWidget(getControllerResources(), tradeOrder, previousValue);
         }
@@ -70,6 +102,13 @@ public class TradeEditController extends TradeInfoController {
         }
     }
 
+    /**
+     * Constructs a new Trade edit controller.
+     *
+     * @param controllerResources the controller resources
+     * @param trade               the trade
+     * @param alertWindow         the alert window
+     */
     public TradeEditController(ControllerResources controllerResources, Trade trade, AlertWindow alertWindow) {
         super(controllerResources);
         this.trade = trade;

@@ -14,6 +14,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The Create trade.
+ *
+ * @author Dan Lyu
+ */
 public class CreateTrade {
 
     private static final Logger logger = LogManager.getLogger(CreateTrade.class);
@@ -26,12 +31,25 @@ public class CreateTrade {
 
     private final Set<User> usersInvolved = new HashSet<>();
 
+    /**
+     * Constructs a new Create trade.
+     *
+     * @param usersToItemsToGet the users to items to get
+     */
     public CreateTrade(Map<User, Collection<Item>> usersToItemsToGet) {
         this.usersToItemsToGet = usersToItemsToGet;
         usersToItemsToGet.values().forEach(allItems::addAll);
     }
 
 
+    /**
+     * Create two way user order bundle.
+     *
+     * @param initiator          the initiator
+     * @param target             the target
+     * @param itemsInitiatorWant the items initiator want
+     * @param itemsTargetWant    the items target want
+     */
     public void createTwoWayUserOrderBundle(User initiator, User target, Collection<Item> itemsInitiatorWant, Collection<Item> itemsTargetWant) {
         // find out what initiator will provide to target and vice versa
         if (initiator == target) return;
@@ -59,7 +77,10 @@ public class CreateTrade {
         trade.getOrders().add(order);
     }
 
-    // this cleanup doesn't remove order because even if two users do not have transaction, there is a chance user select both of them in the controller since
+    /**
+     * Cleanup.
+     */
+// this cleanup doesn't remove order because even if two users do not have transaction, there is a chance user select both of them in the controller since
     // the number of users involved in arbitrary
     public void cleanup() {
         for (TradeOrder order : trade.getOrders()) {
@@ -74,6 +95,9 @@ public class CreateTrade {
         logger.debug("Order Size: " + trade.getOrders().size());
     }
 
+    /**
+     * Create order.
+     */
     public void createOrder() {
         for (Map.Entry<User, Collection<Item>> entry : usersToItemsToGet.entrySet()) {
             for (Map.Entry<User, Collection<Item>> entry2 : usersToItemsToGet.entrySet()) {
@@ -84,10 +108,20 @@ public class CreateTrade {
         cleanup();
     }
 
+    /**
+     * Gets trade.
+     *
+     * @return the trade
+     */
     public Trade getTrade() {
         return trade;
     }
 
+    /**
+     * Gets users involved.
+     *
+     * @return the users involved
+     */
     public Set<User> getUsersInvolved() {
         return usersInvolved;
     }

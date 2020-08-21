@@ -4,12 +4,23 @@ import javafx.scene.control.ComboBox;
 import javafx.util.StringConverter;
 import phase2.trade.user.User;
 
+/**
+ * The User string converter.
+ *
+ * @author Dan Lyu
+ */
 public class UserStringConverter extends StringConverter<User> {
 
     private final Long loggedInUserId;
 
-    private ComboBox<User> comboBox;
+    private final ComboBox<User> comboBox;
 
+    /**
+     * Constructs a new User string converter.
+     *
+     * @param comboBox       the combo box
+     * @param loggedInUserId the logged in user id
+     */
     public UserStringConverter(ComboBox<User> comboBox, Long loggedInUserId) {
         this.comboBox = comboBox;
         this.loggedInUserId = loggedInUserId;

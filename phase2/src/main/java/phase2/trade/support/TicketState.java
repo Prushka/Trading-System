@@ -1,6 +1,30 @@
 package phase2.trade.support;
 
-public enum  TicketState {
+/**
+ * The enum Ticket state.
+ *
+ * @author Dan Lyu
+ */
+public enum TicketState {
 
-    SOLVED, COMBINED, ABANDONED, PENDING_ALLOCATION, SOLVING
+    /**
+     * Solved ticket state.
+     */
+    SOLVED,
+    /**
+     * Combined ticket state.
+     */
+    COMBINED,
+    /**
+     * Abandoned ticket state.
+     */
+    ABANDONED,
+    /**
+     * Pending allocation ticket state.
+     */
+    PENDING_ALLOCATION,
+    /**
+     * Solving ticket state.
+     */
+    SOLVING
 }

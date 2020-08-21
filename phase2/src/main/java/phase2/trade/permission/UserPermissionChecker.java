@@ -2,14 +2,13 @@ package phase2.trade.permission;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import phase2.trade.command.Command;
-import phase2.trade.permission.Permission;
-import phase2.trade.permission.PermissionGroup;
-import phase2.trade.permission.PermissionSet;
 import phase2.trade.user.User;
 
-import java.util.Arrays;
-
+/**
+ * The User permission checker.
+ *
+ * @author Dan Lyu
+ */
 public class UserPermissionChecker {
 
     private static final Logger logger = LogManager.getLogger(UserPermissionChecker.class);
@@ -20,19 +19,37 @@ public class UserPermissionChecker {
 
     private final PermissionGroup permissionGroup;
 
+    /**
+     * Constructs a new User permission checker.
+     *
+     * @param operator      the operator
+     * @param permissionSet the permission set
+     */
     public UserPermissionChecker(User operator, PermissionSet permissionSet) {
         this.operator = operator;
         this.permissionSet = permissionSet;
         this.permissionGroup = PermissionGroup.UNDEFINED;
     }
 
+    /**
+     * Constructs a new User permission checker.
+     *
+     * @param operator        the operator
+     * @param permissionSet   the permission set
+     * @param permissionGroup the permission group
+     */
     public UserPermissionChecker(User operator, Permission[] permissionSet, PermissionGroup permissionGroup) {
         this.operator = operator;
         this.permissionSet = new PermissionSet(permissionSet);
         this.permissionGroup = permissionGroup;
     }
 
-    // 1. If PermissionGroup exists, then only check PermissionGroup
+    /**
+     * Check permission boolean.
+     *
+     * @return the boolean
+     */
+// 1. If PermissionGroup exists, then only check PermissionGroup
     // 2. If not, check all permissions in PermissionSet
     public boolean checkPermission() {
         if (!permissionGroup.equals(PermissionGroup.UNDEFINED)) {

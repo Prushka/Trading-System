@@ -20,12 +20,22 @@ import phase2.trade.view.NodeFactory;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The Inventory controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class InventoryController extends ItemController implements Initializable {
 
     private final ItemListType itemListType = ItemListType.INVENTORY;
 
 
+    /**
+     * Constructs a new Inventory controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public InventoryController(ControllerResources controllerResources) {
         super(controllerResources, true, true);
     }

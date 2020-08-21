@@ -14,6 +14,11 @@ import phase2.trade.widget.TradeConfirmWidget;
 
 import java.time.LocalDateTime;
 
+/**
+ * The Edit trade.
+ *
+ * @author Dan Lyu
+ */
 public class EditTrade {
 
     private final Trade trade;
@@ -22,6 +27,13 @@ public class EditTrade {
 
     private final TradeConfig tradeConfig;
 
+    /**
+     * Constructs a new Edit trade.
+     *
+     * @param trade       the trade
+     * @param operator    the operator
+     * @param tradeConfig the trade config
+     */
     public EditTrade(Trade trade, User operator, TradeConfig tradeConfig) {
         this.trade = trade;
         this.operator = operator;
@@ -29,6 +41,13 @@ public class EditTrade {
     }
 
 
+    /**
+     * Edit address result status wrapper.
+     *
+     * @param tradeOrder the trade order
+     * @param newAddress the new address
+     * @return the result status wrapper
+     */
     public ResultStatusWrapper<Trade> editAddress(TradeOrder tradeOrder, Address newAddress) {
         UserOrderBundle operatorBundle = tradeOrder.findBundleByUser(operator);
         if (operatorBundle == null || newAddress == null || newAddress.equals(tradeOrder.getAddressTrade()))
@@ -42,6 +61,13 @@ public class EditTrade {
         return new ResultStatusWrapper<>(trade, new StatusSucceeded());
     }
 
+    /**
+     * Edit time result status wrapper.
+     *
+     * @param tradeOrder the trade order
+     * @param newDate    the new date
+     * @return the result status wrapper
+     */
     public ResultStatusWrapper<Trade> editTime(TradeOrder tradeOrder, LocalDateTime newDate) {
         UserOrderBundle operatorBundle = tradeOrder.findBundleByUser(operator);
         if (operatorBundle == null || newDate == null || newDate.equals(tradeOrder.getDateAndTime()))
@@ -55,6 +81,12 @@ public class EditTrade {
         return new ResultStatusWrapper<>(trade, new StatusSucceeded());
     }
 
+    /**
+     * Edit confirm.
+     *
+     * @param tradeOrder   the trade order
+     * @param hasConfirmed the has confirmed
+     */
     public void editConfirm(TradeOrder tradeOrder, TradeConfirmWidget.ConfirmationPair hasConfirmed) {
         tradeOrder.findBundleByUser(operator).setTradeConfirmed(hasConfirmed.tradeConfirm);
         tradeOrder.findBundleByUser(operator).setTransactionConfirmed(hasConfirmed.transactionConfirm);

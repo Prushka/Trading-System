@@ -11,6 +11,11 @@ import phase2.trade.support.SupportTicket;
 import javax.persistence.Entity;
 import java.util.List;
 
+/**
+ * The Update support tickets.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true)

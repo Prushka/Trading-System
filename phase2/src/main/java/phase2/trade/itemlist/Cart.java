@@ -12,10 +12,18 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The Cart.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 
 public class Cart extends ItemList {
 
+    /**
+     * The Set of items.
+     */
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     protected Set<CartItemWrapper> setOfItems = new HashSet<>();
 
@@ -29,6 +37,12 @@ public class Cart extends ItemList {
         items.forEach(item -> setOfItems.add(new CartItemWrapper(item, item.getQuantity())));
     }
 
+    /**
+     * Find quantity int.
+     *
+     * @param item the item
+     * @return the int
+     */
     public int findQuantity(Item item) {
 
         Set<CartItemWrapper> toFind = setOfItems.stream().filter(cartItemWrapper -> cartItemWrapper.getItem().getUid().equals(item.getUid())).collect(Collectors.toSet());
@@ -39,6 +53,12 @@ public class Cart extends ItemList {
         }
     }
 
+    /**
+     * Add item with quantity.
+     *
+     * @param item     the item
+     * @param quantity the quantity
+     */
     public void addItemWithQuantity(Item item, int quantity) {
         setOfItems.add(new CartItemWrapper(item, quantity));
     }

@@ -22,6 +22,11 @@ import java.net.URL;
 import java.util.*;
 
 
+/**
+ * The Trade drag drop controller.
+ *
+ * @author Dan Lyu
+ */
 public class TradeDragDropController extends TradeController {
 
     private final ObservableList<Item> selectedItems;
@@ -32,6 +37,12 @@ public class TradeDragDropController extends TradeController {
 
     private AllTable allTable;
 
+    /**
+     * Constructs a new Trade drag drop controller.
+     *
+     * @param controllerResources the controller resources
+     * @param selectedItems       the selected items
+     */
     public TradeDragDropController(ControllerResources controllerResources, ObservableList<Item> selectedItems) {
         super(controllerResources);
         this.selectedItems = FXCollections.observableArrayList(selectedItems);

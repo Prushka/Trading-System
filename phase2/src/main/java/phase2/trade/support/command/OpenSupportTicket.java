@@ -14,6 +14,11 @@ import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
+/**
+ * The Open support ticket.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.CREATE, undoable = false,
         persistent = true, permissionSet = {Permission.ManagePersonalSupportTickets})

@@ -13,6 +13,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The Trade cell.
+ *
+ * @author Dan Lyu
+ */
 public class TradeCell extends JFXListCell<Trade> {
 
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");

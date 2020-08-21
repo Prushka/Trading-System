@@ -9,9 +9,17 @@ import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * The Inventory.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 public class Inventory extends ItemList {
 
+    /**
+     * The Set of items.
+     */
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, cascade = CascadeType.ALL)
     protected Set<Item> setOfItems = new HashSet<>();
 

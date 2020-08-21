@@ -21,6 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * The Trade detail controller.
+ *
+ * @author Dan Lyu
+ */
 public class TradeDetailController extends TradeInfoController {
 
     private final Map<User, Collection<Item>> usersToItemsToGet;
@@ -31,6 +36,12 @@ public class TradeDetailController extends TradeInfoController {
 
     private TradeOptionWidget tradeOptionWidget;
 
+    /**
+     * Constructs a new Trade detail controller.
+     *
+     * @param controllerResources the controller resources
+     * @param usersToItemsToGet   the users to items to get
+     */
     public TradeDetailController(ControllerResources controllerResources, Map<User, Collection<Item>> usersToItemsToGet) {
         super(controllerResources);
         this.usersToItemsToGet = usersToItemsToGet;

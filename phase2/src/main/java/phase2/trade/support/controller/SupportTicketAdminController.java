@@ -11,8 +11,18 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The Support ticket admin controller.
+ *
+ * @author Dan Lyu
+ */
 public class SupportTicketAdminController extends SupportTicketController implements Initializable {
 
+    /**
+     * Constructs a new Support ticket admin controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public SupportTicketAdminController(ControllerResources controllerResources) {
         super(controllerResources, true);
     }

@@ -1,4 +1,4 @@
-package phase2.trade.trade;
+package phase2.trade.trade.rest.in.peace;
 
 public class TradeConfirmer {
     /*

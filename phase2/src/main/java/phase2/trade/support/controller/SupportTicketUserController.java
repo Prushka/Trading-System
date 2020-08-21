@@ -16,8 +16,18 @@ import phase2.trade.support.command.OpenSupportTicket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The Support ticket user controller.
+ *
+ * @author Dan Lyu
+ */
 public class SupportTicketUserController extends SupportTicketController implements Initializable {
 
+    /**
+     * Constructs a new Support ticket user controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public SupportTicketUserController(ControllerResources controllerResources) {
         super(controllerResources, true);
     }

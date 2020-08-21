@@ -11,11 +11,24 @@ import phase2.trade.trade.command.GetTrades;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The Trade list controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "general_list_view.fxml")
 public class TradeListController extends ListController<Trade> implements Initializable {
 
+    /**
+     * The Get trades.
+     */
     GetTrades getTrades = getCommandFactory().getCommand(GetTrades::new);
 
+    /**
+     * Constructs a new Trade list controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public TradeListController(ControllerResources controllerResources) {
         super(controllerResources, false);
     }

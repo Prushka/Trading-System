@@ -1,7 +1,8 @@
-package phase2.trade.trade;
+package phase2.trade.trade.rest.in.peace;
 
 /**
  * Where trade dates and locations are edited
+ *
  * @author Grace Leung
  */
 public class TradeEditor {

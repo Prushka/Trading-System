@@ -46,6 +46,7 @@ public class ConfigBundle implements Shutdownable {
         uiConfig = configStrategy.read(UIConfig.class, "config/ui", UIConfig::new);
         redisConfig = configStrategy.read(RedisConfig.class, "config/redis", RedisConfig::new);
         geoConfig = new GeoConfig(getGeoJson());
+        save();
     }
 
     private JSONObject getGeoJson() {
@@ -72,6 +73,10 @@ public class ConfigBundle implements Shutdownable {
 
     @Override
     public void stop() {
+        save();
+    }
+
+    private void save() {
         configStrategy.save(permissionConfig, "config/permission_group");
         configStrategy.save(tradeConfig, "config/trade");
         configStrategy.save(databaseConfig, "config/database");

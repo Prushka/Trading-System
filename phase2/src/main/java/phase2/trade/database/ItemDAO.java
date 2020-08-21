@@ -39,7 +39,7 @@ public class ItemDAO extends DAO<Item, ItemGateway> implements ItemGateway {
 
             Predicate restriction = builder.and(
                     builder.notEqual(root.get("willingness"), Willingness.Private),
-                    builder.notEqual(user.get("accountState"), AccountState.ON_VOCATION),
+                    builder.notEqual(user.get("accountState"), AccountState.ON_vacation),
                     builder.equal(root.get("ownership"), Ownership.OWNER)
             );
             query.select(root).where(restriction);

@@ -40,21 +40,21 @@ public class AccountStateWidget extends WidgetControllerBase {
         setGradient("gradient-l");
         ToggleGroup group = new ToggleGroup();
         RadioButton normalRadio = getNodeFactory().getDefaultRadioButton(AccountState.NORMAL.language, group);
-        RadioButton onVocationRadio = getNodeFactory().getDefaultRadioButton(AccountState.ON_VOCATION.language, group);
+        RadioButton onvacationRadio = getNodeFactory().getDefaultRadioButton(AccountState.ON_vacation.language, group);
 
         switch (getAccountManager().getLoggedInUser().getAccountState()) {
             case NORMAL:
                 normalRadio.setSelected(true);
                 break;
-            case ON_VOCATION:
-                onVocationRadio.setSelected(true);
+            case ON_vacation:
+                onvacationRadio.setSelected(true);
                 break;
         }
         EventHandler<ActionEvent> accountStateHandler = event -> {
             ChangeAccountState changeAccountState = getCommandFactory().getCommand(ChangeAccountState::new);
             changeAccountState.execute((result, status) -> {
                 status.setSucceeded(() -> {
-                    String message = result.equals(AccountState.ON_VOCATION) ? "Your items won't be on shelf!" : "Updated!";
+                    String message = result.equals(AccountState.ON_vacation) ? "Your items won't be on shelf!" : "Updated!";
                     getNotificationFactory().toast(2, message);
                 });
                 status.handle(getNotificationFactory());
@@ -62,11 +62,11 @@ public class AccountStateWidget extends WidgetControllerBase {
         };
 
         normalRadio.setFocusTraversable(false);
-        onVocationRadio.setFocusTraversable(false);
+        onvacationRadio.setFocusTraversable(false);
         normalRadio.setOnAction(accountStateHandler);
-        onVocationRadio.setOnAction(accountStateHandler);
+        onvacationRadio.setOnAction(accountStateHandler);
         addTitle(title);
-        addContent(normalRadio, onVocationRadio);
+        addContent(normalRadio, onvacationRadio);
         refresh();
     }
 }

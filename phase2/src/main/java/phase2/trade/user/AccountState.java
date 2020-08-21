@@ -3,7 +3,7 @@ package phase2.trade.user;
 public enum AccountState {
 
     NORMAL("normal.state"),
-    ON_VOCATION("on.vocation.state");
+    ON_vacation("on.vacation.state");
 
     public String language;
 

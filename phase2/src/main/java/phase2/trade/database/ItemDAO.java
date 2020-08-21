@@ -12,9 +12,20 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@link Item} data access object.
+ *
+ * @author Dan Lyu
+ * @see Item
+ */
 public class ItemDAO extends DAO<Item, ItemGateway> implements ItemGateway {
 
 
+    /**
+     * Constructs a new Item dao.
+     *
+     * @param resource the resource
+     */
     public ItemDAO(DatabaseResourceBundle resource) {
         super(Item.class, resource);
     }
@@ -34,29 +45,6 @@ public class ItemDAO extends DAO<Item, ItemGateway> implements ItemGateway {
             query.select(root).where(restriction);
             executeCriteriaQuery(result, query);
         });
-        return result;
-    }
-
-    @Override
-    public List<Item> findPublicItemsFromOwner(Long ownerUID) {
-        final List<Item> result = new ArrayList<>();
-        // criteria((builder, criteria, root) -> {
-        //     // Predicate restriction = builder.and(
-        //     //         builder..get("willingness"),Willingness.NOPE);
-        //     criteria.select(root).where(restriction);
-        //     executeCriteriaQuery(result, criteria);
-        // });
-
-        //  Join<MyObject, JoinObject> joinObject = root.join("joinObject");
-
-        // Query query = getCurrentSession().createQuery("FROM Item WHERE owner = :owner " +
-        //         "AND ownership = :owned AND willingness IN :publicWillingness");
-        // query.setParameter("owner", ownerUID);
-        // query.setParameter("owned", Ownership.OWNER);
-        // query.setParameter("publicWillingness", new HashSet<Willingness>() {{
-        //     add(Willingness.LEND);
-        //     add(Willingness.SELL);
-        // }});
         return result;
     }
 

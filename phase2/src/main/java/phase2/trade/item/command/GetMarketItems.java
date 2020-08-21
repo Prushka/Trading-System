@@ -10,22 +10,19 @@ import phase2.trade.permission.Permission;
 import javax.persistence.Entity;
 import java.util.List;
 
+/**
+ * The Command used to get all items that can be displayed in the Market.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false,
         persistent = false, permissionSet = {Permission.BrowseMarket})
 public class GetMarketItems extends ItemCommand<List<Item>> {
 
-    // TODO: Optimize the query here
-    //  The owner and all its fields will be fetched together with its item
-    //  This is unnecessary since we only need owner's name and address
     @Override
     public void execute(ResultStatusCallback<List<Item>> callback, String... args) {
         if (!checkPermission(callback)) return;
         getEntityBundle().getItemGateway().submitSession((gateway) -> callback.call(gateway.findMarketItems(), new StatusSucceeded()));
-    }
-
-    @Override
-    protected void undoUnchecked() {
-
     }
 }

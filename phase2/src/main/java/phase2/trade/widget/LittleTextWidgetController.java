@@ -8,11 +8,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The type Little text widget controller.
+ *
+ * @author Dan Lyu
+ */
 public abstract class LittleTextWidgetController extends WidgetControllerBase {
 
+    /**
+     * The Title.
+     */
     protected final String title;
+    /**
+     * The Contents.
+     */
     protected final List<String> contents;
 
+    /**
+     * Constructs a new Little text widget controller.
+     *
+     * @param controllerResources the controller resources
+     * @param title               the title
+     * @param contents            the contents
+     */
     public LittleTextWidgetController(ControllerResources controllerResources, String title, String... contents) {
         super(controllerResources);
         this.title = title;

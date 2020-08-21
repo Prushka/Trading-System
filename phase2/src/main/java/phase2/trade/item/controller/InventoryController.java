@@ -11,7 +11,7 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.editor.ItemEditor;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
-import phase2.trade.item.command.AddItemToItemList;
+import phase2.trade.item.command.AddItemToInventory;
 import phase2.trade.item.command.RemoveItem;
 import phase2.trade.itemlist.ItemListType;
 import phase2.trade.user.command.ReloadUser;
@@ -105,13 +105,10 @@ public class InventoryController extends ItemController implements Initializable
 
 
             ToggleGroup group = new ToggleGroup();
-            putLanguageValue(Willingness.SELL.name(), "sell.willingness");
-            putLanguageValue(Willingness.LEND.name(), "lend.willingness");
-            putLanguageValue(Willingness.Private.name(), "private.willingness");
 
-            RadioButton sellRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.SELL.name()), group);
-            RadioButton lendRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.LEND.name()), group);
-            RadioButton privateRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(Willingness.Private.name()), group);
+            RadioButton sellRadio = getNodeFactory().getDefaultRadioButton(Willingness.SELL.language, group);
+            RadioButton lendRadio = getNodeFactory().getDefaultRadioButton(Willingness.LEND.language, group);
+            RadioButton privateRadio = getNodeFactory().getDefaultRadioButton(Willingness.Private.language, group);
             EventHandler<ActionEvent> willingnessRadioHandler = event1 -> price.setDisable(!sellRadio.isSelected());
             sellRadio.setOnAction(willingnessRadioHandler);
             lendRadio.setOnAction(willingnessRadioHandler);
@@ -121,14 +118,15 @@ public class InventoryController extends ItemController implements Initializable
             addItemAlert.addLeft(enterItemName, enterItemDescription, enterQuantity, comboBox);
             addItemAlert.addRight(lendRadio, sellRadio, privateRadio, price);
             addItemAlert.setConfirmHandler(event12 -> {
-                AddItemToItemList itemCommand = getCommandFactory().getCommand(AddItemToItemList::new,
+                AddItemToInventory itemCommand = getCommandFactory().getCommand(AddItemToInventory::new,
                         command -> command.setItemListType(itemListType));
 
                 itemCommand.execute((result, resultStatus) -> {
                             resultStatus.setSucceeded(() -> displayData.add(result));
                             resultStatus.handle(getNotificationFactory());
-                        }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(), getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()),
-                        price.getText()); // this casting cannot be avoided. another approach would be to loop through all radio buttons
+                        }, enterItemName.getText(), enterItemDescription.getText(), comboBox.getSelectionModel().getSelectedItem(), enterQuantity.getText(),
+                        Willingness.getByLanguage(((RadioButton) group.getSelectedToggle()).getText()).name(), // this casting cannot be avoided. another approach would be to iterate over all radio buttons
+                        price.getText());
             });
             addItemAlert.display();
         });

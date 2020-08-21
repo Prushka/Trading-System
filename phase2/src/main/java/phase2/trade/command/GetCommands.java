@@ -7,6 +7,11 @@ import phase2.trade.permission.Permission;
 import javax.persistence.Entity;
 import java.util.List;
 
+/**
+ * The GetCommands command, used to fetch a list of all Commands from gateway.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false, persistent = false, permissionSet = {Permission.ManageUserOperations})
 public class GetCommands extends Command<List<Command>> {

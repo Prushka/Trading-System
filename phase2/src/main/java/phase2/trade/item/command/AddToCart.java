@@ -10,6 +10,13 @@ import phase2.trade.permission.Permission;
 
 import javax.persistence.Entity;
 
+/**
+ * The Command used to add an item from a marketplace to a {@link phase2.trade.user.RegularUser}'s {@link phase2.trade.itemlist.Cart} as a {@link phase2.trade.item.CartItemWrapper} with a custom quantity.
+ *
+ * @author Dan Lyu
+ * @see phase2.trade.item.CartItemWrapper
+ * @see phase2.trade.itemlist.Cart
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true, permissionSet = {Permission.ManageWishList})

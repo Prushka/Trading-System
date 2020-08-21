@@ -13,15 +13,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import phase2.trade.command.Command;
-import phase2.trade.controller.AbstractListController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
+import phase2.trade.controller.ListController;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
 import phase2.trade.item.command.AddToCart;
 import phase2.trade.item.command.GetMarketItems;
-import phase2.trade.view.MarketItemCell;
 import phase2.trade.view.NoSelectionModel;
 import phase2.trade.view.NodeFactory;
 
@@ -30,8 +29,13 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+/**
+ * The market list controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "general_list_view.fxml")
-public class MarketListController extends AbstractListController<Item> implements Initializable {
+public class MarketListController extends ListController<Item> implements Initializable {
 
     private ComboBox<String> countryCombo;
     private ComboBox<String> provinceCombo;
@@ -39,6 +43,11 @@ public class MarketListController extends AbstractListController<Item> implement
 
     private final Command<List<Item>> getMarket;
 
+    /**
+     * Constructs a new market list controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public MarketListController(ControllerResources controllerResources) {
         super(controllerResources, false);
         getMarket = getCommandFactory().getCommand(GetMarketItems::new);

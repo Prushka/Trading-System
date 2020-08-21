@@ -14,10 +14,22 @@ import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * The {@link Trade} data access object.
+ *
+ * @author Dan Lyu
+ * @author Grace Leung
+ * @see Trade
+ */
 public class TradeDAO extends DAO<Trade, TradeGateway> implements TradeGateway {
 
     private static final Logger logger = LogManager.getLogger(TradeDAO.class);
 
+    /**
+     * Constructs a new Trade dao.
+     *
+     * @param resource the resource
+     */
     public TradeDAO(DatabaseResourceBundle resource) {
         super(Trade.class, resource);
     }

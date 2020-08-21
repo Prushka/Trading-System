@@ -14,6 +14,14 @@ import phase2.trade.view.SceneManager;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Controller resources, a Facade class that contains multiple fields.<p>
+ * The object of this class is required in every controller since they need to access Gateways (as {@link GatewayBundle} for {@link CommandFactory})<p>
+ * with configured thread pool and connection pool, <p>
+ * which they won't be able to configure on their own. Similarly, they have to access the {@link AccountManager}, {@link SceneManager} etc.
+ *
+ * @author Dan Lyu
+ */
 public class ControllerResources {
 
     private final Stage window;
@@ -36,6 +44,14 @@ public class ControllerResources {
 
     private final ReReReRe reReReRe;
 
+    /**
+     * Constructs a new Controller resources.
+     *
+     * @param gatewayBundle  the gateway bundle
+     * @param shutdownHook   the shutdown hook
+     * @param window         the window
+     * @param accountManager the account manager
+     */
     public ControllerResources(GatewayBundle gatewayBundle, ShutdownHook shutdownHook, Stage window, AccountManager accountManager) {
         this.gatewayBundle = gatewayBundle;
         this.window = window;
@@ -46,34 +62,74 @@ public class ControllerResources {
         reReReRe = new ReReReRe(gatewayBundle.getConfigBundle(), shutdownHook);
     }
 
+    /**
+     * Gets window.
+     *
+     * @return the window
+     */
     public Stage getWindow() {
         return window;
     }
 
+    /**
+     * Gets account manager.
+     *
+     * @return the account manager
+     */
     public AccountManager getAccountManager() {
         return accountManager;
     }
 
+    /**
+     * Gets gateway bundle.
+     *
+     * @return the gateway bundle
+     */
     protected GatewayBundle getGatewayBundle() {
         return gatewayBundle;
     }
 
+    /**
+     * Gets notification factory.
+     *
+     * @return the notification factory
+     */
     protected NotificationFactory getNotificationFactory() {
         return notificationFactory;
     }
 
+    /**
+     * Gets command factory.
+     *
+     * @return the command factory
+     */
     public CommandFactory getCommandFactory() {
         return commandFactory;
     }
 
+    /**
+     * Gets scene manager.
+     *
+     * @return the scene manager
+     */
     public SceneManager getSceneManager() {
         return sceneManager;
     }
 
+    /**
+     * Gets pane.
+     *
+     * @return the pane
+     */
     protected Map<DashboardPane, Pane> getPane() {
         return panes;
     }
 
+    /**
+     * Gets re re re re.
+     *
+     * @return the re re re re
+     */
     public ReReReRe getReReReRe() {
         return reReReRe;
     }

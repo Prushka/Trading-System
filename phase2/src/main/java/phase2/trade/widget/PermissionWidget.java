@@ -10,6 +10,11 @@ import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.TreeSet;
 
+/**
+ * The type Permission widget.
+ *
+ * @author Dan Lyu
+ */
 public class PermissionWidget extends WidgetControllerBase {
 
     private final Label title = new Label();
@@ -17,6 +22,11 @@ public class PermissionWidget extends WidgetControllerBase {
     private final Label permissionCounts = new Label();
     private final Label permissions = new Label();
 
+    /**
+     * Constructs a new Permission widget.
+     *
+     * @param controllerResources the controller resources
+     */
     public PermissionWidget(ControllerResources controllerResources) {
         super(controllerResources);
     }

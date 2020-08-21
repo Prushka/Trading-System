@@ -10,6 +10,13 @@ import phase2.trade.permission.Permission;
 import javax.persistence.Entity;
 import java.util.List;
 
+/**
+ * The Command used to update the values of an Item.<p>
+ * This Command can be used to update {@link Item}s the operator owns or {@link Item}s of other people.<p>
+ * The permission depends on the Item owner.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
         persistent = true)
@@ -45,6 +52,11 @@ public class UpdateItems extends ItemCommand<Void> {
     protected void undoUnchecked() {
     }
 
+    /**
+     * Sets items to update.
+     *
+     * @param itemsToUpdate the items to update
+     */
     public void setItemsToUpdate(List<Item> itemsToUpdate) {
         this.itemsToUpdate = itemsToUpdate;
     }

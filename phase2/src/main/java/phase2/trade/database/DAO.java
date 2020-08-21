@@ -13,8 +13,17 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
-public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGateway<T, S> {
+/**
+ * The data access object base class.
+ *
+ * @param <T> the entity this DAO handles
+ * @param <S> the self-referencing type
+ * @author Dan Lyu
+ * @author Theodora Fragkouli
+ */
 
+// Partially based on the work: https://examples.javacodegeeks.com/enterprise-java/hibernate/hibernate-jpa-dao-example/
+public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGateway<T, S> {
 
     private Session currentSession;
 
@@ -24,37 +33,58 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
 
     private final DatabaseResourceBundle databaseResourceBundle;
 
+    /**
+     * Constructs a new data access object.
+     *
+     * @param clazz                  the clazz
+     * @param databaseResourceBundle the database resource bundle to be injected
+     */
     public DAO(Class<T> clazz, DatabaseResourceBundle databaseResourceBundle) {
         this.clazz = clazz;
         this.databaseResourceBundle = databaseResourceBundle;
     }
 
-    public void openCurrentSession() {
+    private void openCurrentSession() {
         currentSession = getSessionFactory().openSession();
     }
 
-    public void openCurrentSessionWithTransaction() {
+    private void openCurrentSessionWithTransaction() {
         currentSession = getSessionFactory().openSession();
         currentTransaction = currentSession.beginTransaction();
     }
 
-    public void closeCurrentSession() {
+    private void closeCurrentSession() {
         currentSession.close();
     }
 
-    public void closeCurrentSessionWithTransaction() {
+    private void closeCurrentSessionWithTransaction() {
         currentTransaction.commit();
         currentSession.close();
     }
 
-    public SessionFactory getSessionFactory() {
+    /**
+     * Gets session factory.
+     *
+     * @return the session factory
+     */
+    private SessionFactory getSessionFactory() {
         return databaseResourceBundle.getSessionFactory();
     }
 
+    /**
+     * Gets thread pool.
+     *
+     * @return the thread pool
+     */
     public ExecutorService getThreadPool() {
         return databaseResourceBundle.getThreadPool();
     }
 
+    /**
+     * Gets current session.
+     *
+     * @return the current session
+     */
     public Session getCurrentSession() {
         return currentSession;
     }
@@ -72,11 +102,6 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
     @Override
     public void merge(T entity) {
         getCurrentSession().merge(entity);
-    }
-
-    @Override
-    public void persist(T entity) {
-        getCurrentSession().persist(entity);
     }
 
     @Override
@@ -110,10 +135,22 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         return (List<T>) getCurrentSession().createQuery("from " + clazz.getSimpleName()).list();
     }
 
+    /**
+     * Call the overloaded method to consume the {@link TriConsumer} using pre-constructed CriteriaBuilder, CriteriaQuery and Root.
+     *
+     * @param triConsumer the tri consumer
+     */
     protected void criteria(TriConsumer<CriteriaBuilder, CriteriaQuery<T>, Root<T>> triConsumer) {
         this.criteria(clazz, triConsumer);
     }
 
+    /**
+     * Criteria.
+     *
+     * @param <W>         the type parameter of this entity
+     * @param clazz       the class of the entity
+     * @param triConsumer the tri consumer that consumes pre-constructed CriteriaBuilder, CriteriaQuery and Root.
+     */
     protected <W> void criteria(Class<W> clazz, TriConsumer<CriteriaBuilder, CriteriaQuery<W>, Root<W>> triConsumer) {
         CriteriaBuilder criteriaBuilder = getCurrentSession().getCriteriaBuilder();
         CriteriaQuery<W> criteriaQuery = criteriaBuilder.createQuery(clazz);
@@ -122,25 +159,19 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         triConsumer.consume(criteriaBuilder, criteriaQuery, root);
     }
 
+    /**
+     * Execute criteria query by creating a query and get a result list from it.
+     *
+     * @param <W>      the type parameter
+     * @param result   the result
+     * @param criteria the criteria
+     */
     protected <W> void executeCriteriaQuery(Collection<W> result, CriteriaQuery<W> criteria) {
         result.addAll(getCurrentSession().createQuery(criteria).getResultList());
     }
 
     public void refresh(T entity) {
         getCurrentSession().refresh(entity);
-    }
-
-
-    @Override
-    public void deleteAll() {
-        List<T> entityList = findAll();
-        for (T entity : entityList) {
-            delete(entity);
-        }
-    }
-
-    public void submit(Consumer<S> consumer) {
-        getThreadPool().submit(() -> consumer.accept(getThis()));
     }
 
     private void submitSessionSync(Consumer<S> consumer) {
@@ -183,5 +214,10 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         submitSession(consumer, async);
     }
 
+    /**
+     * Gets this, returns the most child type of this object, to be used with the self-referencing generic type and {@link Consumer} to consume the DAO itself.
+     *
+     * @return the this
+     */
     protected abstract S getThis();
 }

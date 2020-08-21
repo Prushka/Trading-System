@@ -10,9 +10,14 @@ import phase2.trade.permission.Permission;
 
 import javax.persistence.Entity;
 
+/**
+ * The Command used to find all items whose owner is the operator.
+ *
+ * @author Dan Lyu
+ */
 @Entity
-@CommandProperty(crudType = CRUDType.READ, undoable = true,
-        persistent = true, permissionSet = {Permission.ManagePersonalItems})
+@CommandProperty(crudType = CRUDType.READ, undoable = false,
+        persistent = false, permissionSet = {Permission.ManagePersonalItems})
 public class GetItems extends ItemCommand<ItemList> {
 
     private ItemListType itemListType;

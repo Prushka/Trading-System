@@ -10,6 +10,11 @@ import phase2.trade.permission.Permission;
 import javax.persistence.Entity;
 import java.util.List;
 
+/**
+ * The Command used to find all items from all users.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false,
         persistent = false, permissionSet = {Permission.ManageAllItems})

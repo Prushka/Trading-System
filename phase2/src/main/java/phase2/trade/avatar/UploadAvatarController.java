@@ -19,14 +19,28 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * A Controller used to upload Avatar using a FileChooser.
+ * This Controller uses {@link phase2.trade.user.AccountManager} to setAvatar and {@link UpdateUsers} to update User using a Gateway interface.
+ *
+ * @author Dan Lyu
+ */
 public class UploadAvatarController extends AbstractController {
 
+    /**
+     * Constructs a new Upload avatar controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public UploadAvatarController(ControllerResources controllerResources) {
         super(controllerResources);
     }
 
 
-    // https://stackoverflow.com/questions/24038524/how-to-get-byte-from-javafx-imageview
+    /**
+     * Upload avatar.
+     */
+// https://stackoverflow.com/questions/24038524/how-to-get-byte-from-javafx-imageview
     public void uploadAvatar() {
         final FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(getSceneManager().getWindow());
@@ -49,7 +63,7 @@ public class UploadAvatarController extends AbstractController {
 
                 Avatar avatar = new Avatar();
                 avatar.setImageData(res);
-                getAccountManager().getLoggedInUser().setAvatar(avatar);
+                getAccountManager().setAvatar(avatar);
                 UpdateUsers update = getCommandFactory().getCommand(UpdateUsers::new, c -> c.setToUpdate(
                         new ArrayList<User>() {{
                             add(getAccountManager().getLoggedInUser());

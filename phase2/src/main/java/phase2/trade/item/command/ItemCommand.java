@@ -1,27 +1,23 @@
 package phase2.trade.item.command;
 
-import phase2.trade.command.Command;
-import phase2.trade.gateway.GatewayBundle;
+import phase2.trade.command.UpdateCommand;
 import phase2.trade.item.Item;
-import phase2.trade.permission.PermissionSet;
-import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
+/**
+ * The base class for {@link Item} related commands.
+ *
+ * @param <T> the entity type (can be a collection of {@link Item}s or a single Item)
+ * @author Dan Lyu
+ */
 @Entity
-public abstract class ItemCommand<T> extends Command<T>  {
+public abstract class ItemCommand<T> extends UpdateCommand<T> {
 
-    public ItemCommand() {}
-
-    Item findItemByIdSyncInsideItemGateway(Long itemId) {
-        return getEntityBundle().getItemGateway().findById(itemId);
-    }
-
-    Item findItemByIdSyncOutsideItemGateway(Long itemId) {
-        getEntityBundle().getItemGateway().openCurrentSession();
-        Item item = getEntityBundle().getItemGateway().findById(itemId);
-        getEntityBundle().getItemGateway().closeCurrentSession();
-        return item;
+    /**
+     * Constructs a new Item command.
+     */
+    public ItemCommand() {
     }
 
 }

@@ -15,12 +15,19 @@ import phase2.trade.permission.Permission;
 
 import javax.persistence.Entity;
 
+/**
+ * The Command used to create a new item and add it to a {@link phase2.trade.user.RegularUser}'s {@link phase2.trade.itemlist.Inventory}.
+ *
+ * @author Dan Lyu
+ * @see Item
+ * @see phase2.trade.itemlist.Inventory
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.CREATE, undoable = true,
         persistent = true, permissionSet = {Permission.ManagePersonalItems})
-public class AddItemToItemList extends ItemCommand<Item> {
+public class AddItemToInventory extends ItemCommand<Item> {
 
-    private static final Logger logger = LogManager.getLogger(AddItemToItemList.class);
+    private static final Logger logger = LogManager.getLogger(AddItemToInventory.class);
 
     private ItemListType itemListType;
 
@@ -60,6 +67,11 @@ public class AddItemToItemList extends ItemCommand<Item> {
         });
     }
 
+    /**
+     * Sets item list type.
+     *
+     * @param itemListType the item list type
+     */
     public void setItemListType(ItemListType itemListType) {
         this.itemListType = itemListType;
     }

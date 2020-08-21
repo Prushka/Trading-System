@@ -7,6 +7,12 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@link Command} data access object.
+ *
+ * @author Dan Lyu
+ * @see Command
+ */
 /*
  public class CommandDAO<C extends Command<Q>, Q> extends DAO<C, CommandGateway<C, Q>> implements CommandGateway<C, Q> {
  public class CommandDAO<T extends Command<?>> extends DAO<T, CommandGateway<T>> implements CommandGateway<T> {
@@ -21,6 +27,11 @@ import java.util.List;
  */
 public class CommandDAO extends DAO<Command, CommandGateway> implements CommandGateway {
 
+    /**
+     * Constructs a new Command dao.
+     *
+     * @param databaseResourceBundle the database resource bundle
+     */
     public CommandDAO(DatabaseResourceBundle databaseResourceBundle) {
         super(Command.class, databaseResourceBundle);
     }

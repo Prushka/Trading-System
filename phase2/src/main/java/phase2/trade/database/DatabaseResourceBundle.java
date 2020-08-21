@@ -11,6 +11,11 @@ import phase2.trade.gateway.EntityGatewayBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * The Database resource bundle that contains one ExecutorService, one SessionFactory and one EntityGatewayBundle.
+ *
+ * @author Dan Lyu
+ */
 public class DatabaseResourceBundle implements Shutdownable {
 
     private static final Logger logger = LogManager.getLogger(DatabaseResourceBundle.class);
@@ -21,6 +26,11 @@ public class DatabaseResourceBundle implements Shutdownable {
 
     private final EntityGatewayBundle entityGatewayBundle;
 
+    /**
+     * Constructs a new Database resource bundle.
+     *
+     * @param databaseConfig the database config
+     */
     public DatabaseResourceBundle(DatabaseConfig databaseConfig) {
         Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 
@@ -50,10 +60,20 @@ public class DatabaseResourceBundle implements Shutdownable {
         entityGatewayBundle = new EntityGatewayBundle(this);
     }
 
+    /**
+     * Gets session factory.
+     *
+     * @return the session factory
+     */
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
+    /**
+     * Gets thread pool.
+     *
+     * @return the thread pool
+     */
     public ExecutorService getThreadPool() {
         return threadPool;
     }
@@ -63,6 +83,11 @@ public class DatabaseResourceBundle implements Shutdownable {
         threadPool.shutdown();
     }
 
+    /**
+     * Gets entity gateway bundle.
+     *
+     * @return the entity gateway bundle
+     */
     public EntityGatewayBundle getEntityGatewayBundle() {
         return entityGatewayBundle;
     }

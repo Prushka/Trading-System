@@ -18,10 +18,9 @@
         <mapping class="phase2.trade.item.command.ItemCommand"/>
         <mapping class="phase2.trade.item.command.GetItems"/>
         <mapping class="phase2.trade.item.command.GetMarketItems"/>
-        <mapping class="phase2.trade.item.command.AddItemToItemList"/>
+        <mapping class="phase2.trade.item.command.AddItemToInventory"/>
         <mapping class="phase2.trade.item.command.UpdateItems"/>
         <mapping class="phase2.trade.item.command.RemoveItem"/>
-        <mapping class="phase2.trade.item.command.ReviewItem"/>
 
         <mapping class="phase2.trade.user.command.UserCommand"/>
         <mapping class="phase2.trade.user.command.ChangeAddress"/>

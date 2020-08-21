@@ -1,27 +1,17 @@
 package phase2.trade.user.controller;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.FileChooser;
-import phase2.trade.avatar.Avatar;
 import phase2.trade.avatar.UploadAvatarController;
 import phase2.trade.controller.AbstractController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
 import phase2.trade.user.User;
-import phase2.trade.user.command.UpdateUsers;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "user_info_side.fxml")

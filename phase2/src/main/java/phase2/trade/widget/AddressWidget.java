@@ -9,6 +9,11 @@ import phase2.trade.user.command.ChangeAddress;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The type Address widget.
+ *
+ * @author Dan Lyu
+ */
 public class AddressWidget extends WidgetControllerBase {
 
     private Address address;
@@ -18,6 +23,11 @@ public class AddressWidget extends WidgetControllerBase {
     private final Label cityLabel = new Label();
 
 
+    /**
+     * Constructs a new Address widget.
+     *
+     * @param controllerResources the controller resources
+     */
     public AddressWidget(ControllerResources controllerResources) {
         super(controllerResources);
         address = getAccountManager().getLoggedInUser().getAddressBook().getSelectedAddress();

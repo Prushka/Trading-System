@@ -12,11 +12,21 @@ import phase2.trade.controller.ControllerResources;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The Administrative config controller, the controller for the setting / threshold view.
+ *
+ * @author Dan Lyu
+ */
 public class AdministrativeConfigController extends AbstractController implements Initializable {
 
     @FXML
     private VBox root;
 
+    /**
+     * Constructs a new Administrative config controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public AdministrativeConfigController(ControllerResources controllerResources) {
         super(controllerResources);
     }

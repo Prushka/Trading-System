@@ -7,10 +7,19 @@ import phase2.trade.permission.PermissionSet;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The Permission config.
+ *
+ * @author Dan Lyu
+ * @author Grace Leung
+ */
 public class PermissionConfig {
 
     private Map<PermissionGroup, PermissionSet> defaultPermissions = new HashMap<>();
 
+    /**
+     * Constructs a new Permission config with the default parameters.
+     */
     public PermissionConfig() {
 
         addPermissions(PermissionGroup.GUEST, Permission.BrowseMarket);
@@ -47,10 +56,20 @@ public class PermissionConfig {
         defaultPermissions.put(permissionGroup, new PermissionSet(permissions));
     }
 
+    /**
+     * Gets default permissions.
+     *
+     * @return the default permissions
+     */
     public Map<PermissionGroup, PermissionSet> getDefaultPermissions() {
         return defaultPermissions;
     }
 
+    /**
+     * Sets default permissions.
+     *
+     * @param defaultPermissions the default permissions
+     */
     public void setDefaultPermissions(Map<PermissionGroup, PermissionSet> defaultPermissions) {
         this.defaultPermissions = defaultPermissions;
     }

@@ -3,8 +3,8 @@ package phase2.trade.database.nosql;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import phase2.trade.config.RedisConfig;
-import phase2.trade.refresh.Reloadable;
 import phase2.trade.gateway.GatewayPubSub;
+import phase2.trade.refresh.Reloadable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -14,6 +14,11 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * The Redis implementation of {@link GatewayPubSub}.
+ *
+ * @author Dan Lyu
+ */
 public class Redis implements GatewayPubSub {
 
     private static final Logger logger = LogManager.getLogger(Redis.class);
@@ -28,6 +33,12 @@ public class Redis implements GatewayPubSub {
 
     private JedisPubSub subscriber;
 
+    /**
+     * Constructs a new Redis from the configuration and an injected map of registered controllers (used to reload controllers when other subscribers publish them).
+     *
+     * @param redisConfig           the redis config
+     * @param registeredControllers the registered controllers
+     */
     public Redis(RedisConfig redisConfig, Map<String, Reloadable> registeredControllers) {
 
         this.redisConfig = redisConfig;

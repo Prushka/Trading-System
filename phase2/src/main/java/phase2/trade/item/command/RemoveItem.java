@@ -13,6 +13,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import java.util.Set;
 
+/**
+ * The Remove item command used to remove an Item from a {@link phase2.trade.itemlist.Cart} or an {@link phase2.trade.itemlist.Inventory}.
+ *
+ * @author Dan Lyu
+ */
 @Entity
 @CommandProperty(crudType = CRUDType.DELETE, undoable = true,
         persistent = true)
@@ -46,10 +51,20 @@ public class RemoveItem extends ItemCommand<Long[]> {
         });
     }
 
+    /**
+     * Sets item list type.
+     *
+     * @param itemListType the item list type
+     */
     public void setItemListType(ItemListType itemListType) {
         this.itemListType = itemListType;
     }
 
+    /**
+     * Sets item ids.
+     *
+     * @param itemIds the item ids
+     */
     public void setItemIds(Set<Long> itemIds) {
         this.itemIds = itemIds;
     }

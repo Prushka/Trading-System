@@ -14,9 +14,13 @@ import phase2.trade.view.NodeFactory;
 import phase2.trade.view.NotificationFactory;
 import phase2.trade.view.SceneManager;
 
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * The base Controller class for all other Controllers.
+ *
+ * @author Dan Lyu
+ * @see ControllerProperty
+ * @see ControllerResources
+ */
 @ControllerProperty(viewFile = "abstract_v.fxml")
 public abstract class AbstractController implements Reloadable, Refreshable {
 
@@ -28,8 +32,11 @@ public abstract class AbstractController implements Reloadable, Refreshable {
 
     private final ControllerFactory controllerFactory;
 
-    private final Map<String, String> valueLanguage = new HashMap<>();
-
+    /**
+     * Constructs a new Abstract controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public AbstractController(ControllerResources controllerResources) {
         this.controllerResources = controllerResources;
         controllerResources.getReReReRe().subscribeRefreshable(this.getClass().getSimpleName(), this);
@@ -44,89 +51,149 @@ public abstract class AbstractController implements Reloadable, Refreshable {
         if (getPane(DashboardPane.RIGHT) != null) getPane(DashboardPane.RIGHT).getChildren().clear();
     }
 
-    protected String getLanguageByValue(String key) {
-        return valueLanguage.get(key);
+    /**
+     * Publish a change using gateway remotely.<p>
+     * This is used to ensure one change in one application will cause reloads in multiple concurrently running applications.<p>
+     * The current implementation uses a {@link phase2.trade.gateway.GatewayPubSub} interface and is based on redis's existing pub-sub pattern.<p>
+     * If those applications do not have objects that are of such classes registered as observers, those applications won't get affected or reload.
+     *
+     * @param affectedControllers the affected controllers
+     */
+    protected void publishGateway(Class<?>... affectedControllers) {
+        controllerResources.getReReReRe().publishGateway(affectedControllers);
     }
 
-    protected void putLanguageValue(String key, String value) {
-        valueLanguage.put(key, value);
-    }
-
-    protected String getValueByLanguage(String value) {
-        for (Map.Entry<String, String> entry : valueLanguage.entrySet()) {
-            if (entry.getValue().equals(value)) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
-
+    /**
+     * Publish a change remotely to ask the reload of the current class.
+     */
     protected void publishGateway() {
         controllerResources.getReReReRe().publishGateway(this.getClass().getSimpleName());
     }
 
-    protected void publishGateway(Class<?>... effectedControllers) {
-        controllerResources.getReReReRe().publishGateway(effectedControllers);
-    }
-
+    /**
+     * Publish locally. The publisher itself will be refreshed.
+     *
+     * @param reType the re type
+     */
     protected void publish(ReType reType) {
         controllerResources.getReReReRe().publish(reType, this.getClass().getSimpleName());
     }
 
+    /**
+     * Publish locally. The publisher determines the controllers to reload / refresh depending on the {@link ReType} (if they already subscribed) in {@link phase2.trade.refresh.ReReReRe}.
+     *
+     * @param reType              the re type
+     * @param effectedControllers the effected controllers
+     */
     protected void publish(ReType reType, Class<?>... effectedControllers) {
         controllerResources.getReReReRe().publish(reType, effectedControllers);
     }
 
-    // Reload: Reload data from gateway if applicable
     public void reload() {
         logger.info("Reloading: " + this.getClass().getSimpleName());
     }
 
-    // Refresh: If the view has to be refreshed (Observable doesn't apply). No gateway involved
     public void refresh() {
         logger.info("Refreshing: " + this.getClass().getSimpleName());
     }
 
+    /**
+     * Gets scene manager.
+     *
+     * @return the scene manager
+     */
     protected SceneManager getSceneManager() {
         return controllerResources.getSceneManager();
     }
 
+    /**
+     * Gets controller resources.
+     *
+     * @return the controller resources
+     */
     protected ControllerResources getControllerResources() {
         return controllerResources;
     }
 
+    /**
+     * Gets account manager.
+     *
+     * @return the account manager
+     */
     protected AccountManager getAccountManager() {
         return controllerResources.getAccountManager();
     }
 
+    /**
+     * Gets notification factory.
+     *
+     * @return the notification factory
+     */
     protected NotificationFactory getNotificationFactory() {
         return controllerResources.getNotificationFactory();
     }
 
+    /**
+     * Gets command factory.
+     *
+     * @return the command factory
+     */
     protected CommandFactory getCommandFactory() {
         return controllerResources.getCommandFactory();
     }
 
+    /**
+     * Gets gateway bundle.
+     *
+     * @return the gateway bundle
+     */
     protected GatewayBundle getGatewayBundle() {
         return controllerResources.getGatewayBundle();
     }
 
+    /**
+     * Gets pane.
+     *
+     * @param name the name
+     * @return the pane
+     */
     protected Pane getPane(DashboardPane name) {
         return controllerResources.getPane().get(name);
     }
 
+    /**
+     * Put pane.
+     *
+     * @param name the name
+     * @param pane the pane
+     */
     protected void putPane(DashboardPane name, Pane pane) {
         controllerResources.getPane().put(name, pane);
     }
 
+    /**
+     * Gets node factory.
+     *
+     * @return the node factory
+     */
     protected NodeFactory getNodeFactory() {
         return nodeFactory;
     }
 
+    /**
+     * Gets config bundle.
+     *
+     * @return the config bundle
+     */
     protected ConfigBundle getConfigBundle() {
         return controllerResources.getGatewayBundle().getConfigBundle();
     }
 
+    /**
+     * Gets controller factory.
+     *
+     * @return the controller factory
+     */
     public ControllerFactory getControllerFactory() {
         return controllerFactory;
     }

@@ -1,13 +1,13 @@
 package phase2.trade.controller.market;
 
 import javafx.fxml.Initializable;
-import phase2.trade.controller.AbstractListController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.ListController;
 import phase2.trade.trade.Trade;
 
 @ControllerProperty(viewFile = "market.fxml")
-public class MarketController extends AbstractListController<Trade> implements Initializable {
+public class MarketController extends ListController<Trade> implements Initializable {
     public MarketController(ControllerResources controllerResources, boolean ifMultipleSelection) {
         super(controllerResources, ifMultipleSelection);
     }

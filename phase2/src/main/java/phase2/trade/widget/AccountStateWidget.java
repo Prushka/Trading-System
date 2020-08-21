@@ -12,10 +12,20 @@ import phase2.trade.user.command.ChangeAccountState;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The type Account state widget.
+ *
+ * @author Dan Lyu
+ */
 public class AccountStateWidget extends WidgetControllerBase {
 
     private final Label title = new Label();
 
+    /**
+     * Constructs a new Account state widget.
+     *
+     * @param controllerResources the controller resources
+     */
     public AccountStateWidget(ControllerResources controllerResources) {
         super(controllerResources);
     }
@@ -29,10 +39,8 @@ public class AccountStateWidget extends WidgetControllerBase {
     public void initialize(URL location, ResourceBundle resources) {
         setGradient("gradient-l");
         ToggleGroup group = new ToggleGroup();
-        putLanguageValue(AccountState.NORMAL.name(), resources.getString("state.normal"));
-        putLanguageValue(AccountState.ON_VOCATION.name(), resources.getString("state.on.vocation"));
-        RadioButton normalRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(AccountState.NORMAL.name()), group);
-        RadioButton onVocationRadio = getNodeFactory().getDefaultRadioButton(getLanguageByValue(AccountState.ON_VOCATION.name()), group);
+        RadioButton normalRadio = getNodeFactory().getDefaultRadioButton(AccountState.NORMAL.language, group);
+        RadioButton onVocationRadio = getNodeFactory().getDefaultRadioButton(AccountState.ON_VOCATION.language, group);
 
         switch (getAccountManager().getLoggedInUser().getAccountState()) {
             case NORMAL:
@@ -50,7 +58,7 @@ public class AccountStateWidget extends WidgetControllerBase {
                     getNotificationFactory().toast(2, message);
                 });
                 status.handle(getNotificationFactory());
-            }, getValueByLanguage(((RadioButton) group.getSelectedToggle()).getText()));
+            }, AccountState.getByLanguage(((RadioButton) group.getSelectedToggle()).getText()).name());
         };
 
         normalRadio.setFocusTraversable(false);

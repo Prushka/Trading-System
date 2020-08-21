@@ -2,9 +2,9 @@ package phase2.trade.trade.controller;
 
 import javafx.fxml.Initializable;
 import phase2.trade.alert.VBoxAlert;
-import phase2.trade.controller.AbstractListController;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
+import phase2.trade.controller.ListController;
 import phase2.trade.trade.Trade;
 import phase2.trade.trade.command.GetTrades;
 
@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @ControllerProperty(viewFile = "general_list_view.fxml")
-public class TradeListController extends AbstractListController<Trade> implements Initializable {
+public class TradeListController extends ListController<Trade> implements Initializable {
 
     GetTrades getTrades = getCommandFactory().getCommand(GetTrades::new);
 

@@ -1,4 +1,4 @@
-package phase2.trade.view;
+package phase2.trade.controller.market;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -11,16 +11,29 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import phase2.trade.item.Item;
 import phase2.trade.item.command.AddToCart;
+import phase2.trade.view.ImageFactory;
+import phase2.trade.view.NotificationFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The market item cell used to generate the layout for every Item.
+ *
+ * @author Dan Lyu
+ */
 public class MarketItemCell extends JFXListCell<Item> {
 
     private final AddToCart addToCartCommand;
 
     private final NotificationFactory notificationFactory;
 
+    /**
+     * Constructs a new Market item cell.
+     *
+     * @param addToCartCommand    the add to cart command
+     * @param notificationFactory the notification factory
+     */
     public MarketItemCell(AddToCart addToCartCommand, NotificationFactory notificationFactory) {
         this.addToCartCommand = addToCartCommand;
         this.notificationFactory = notificationFactory;

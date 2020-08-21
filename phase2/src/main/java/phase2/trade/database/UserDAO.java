@@ -1,18 +1,25 @@
 package phase2.trade.database;
 
-import org.hibernate.query.Query;
 import phase2.trade.gateway.UserGateway;
 import phase2.trade.user.User;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@link User} data access object.
+ *
+ * @author Dan Lyu
+ * @see User
+ */
 public class UserDAO extends DAO<User, UserGateway> implements UserGateway {
 
+    /**
+     * Constructs a new User dao.
+     *
+     * @param databaseResourceBundle the database resource bundle
+     */
     public UserDAO(DatabaseResourceBundle databaseResourceBundle) {
         super(User.class, databaseResourceBundle);
     }
@@ -50,16 +57,6 @@ public class UserDAO extends DAO<User, UserGateway> implements UserGateway {
         final List<User> result = new ArrayList<>();
         criteria((builder, query, root) -> {
             query.select(root).where(builder.like(root.get("name"), userName));
-            executeCriteriaQuery(result, query);
-        });
-        return result;
-    }
-
-    @Override
-    public List<User> findByCity(String city) {
-        final List<User> result = new ArrayList<>();
-        criteria((builder, query, root) -> {
-            query.select(root).where(builder.equal(root.get("city"), city));
             executeCriteriaQuery(result, query);
         });
         return result;

@@ -2,6 +2,7 @@ package phase2.trade.user;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import phase2.trade.avatar.Avatar;
 import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
@@ -68,5 +69,10 @@ public class AccountManager {
             loggedInUser = result;
             callback.call(result, status);
         }, userName, email, password, PermissionGroup.REGULAR.name(), country, province, city);
+    }
+
+    public void setAvatar(Avatar avatar) {
+        if (getLoggedInUser() == null) return;
+        getLoggedInUser().setAvatar(avatar);
     }
 }

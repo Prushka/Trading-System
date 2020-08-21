@@ -1,11 +1,35 @@
 package phase2.trade.command;
 
+/**
+ * The enum Crud type.
+ *
+ * @author Dan Lyu
+ */
 public enum CRUDType {
-    CREATE(true), READ(false), UPDATE(true), DELETE(true);
 
-    public boolean hasEffect;
+    /**
+     * Create.
+     */
+    CREATE(true),
+    /**
+     * Read.
+     */
+    READ(false),
+    /**
+     * Update.
+     */
+    UPDATE(true),
+    /**
+     * Delete.
+     */
+    DELETE(true);
 
-    CRUDType(boolean hasEffect) {
-        this.hasEffect = hasEffect;
+    /**
+     * If this type will affect any undo operations
+     */
+    public boolean willAffect;
+
+    CRUDType(boolean willAffect) {
+        this.willAffect = willAffect;
     }
 }

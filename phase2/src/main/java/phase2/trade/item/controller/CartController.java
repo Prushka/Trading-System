@@ -14,10 +14,20 @@ import phase2.trade.trade.controller.TradeDragDropController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The Cart controller used to serve a regular user.
+ *
+ * @author Dan Lyu
+ */
 public class CartController extends AbstractCartController implements Initializable {
 
     private final ItemListType itemListType = ItemListType.CART;
 
+    /**
+     * Constructs a new Cart controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public CartController(ControllerResources controllerResources) {
         super(controllerResources, true, false);
     }

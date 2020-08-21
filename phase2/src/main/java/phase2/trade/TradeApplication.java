@@ -43,7 +43,6 @@ public class TradeApplication extends Application {
 
         //configurer.testTrade();
         //configurer.loginRestaurant();
-        //primaryStage.setScene(new Scene(new VBox()));
         //configurer.getControllerResources().getSceneManager().switchScene(DashboardController::new);
         login(primaryStage);
         primaryStage.show();

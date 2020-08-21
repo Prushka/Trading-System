@@ -10,7 +10,7 @@ import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.item.Category;
 import phase2.trade.item.Item;
 import phase2.trade.item.Willingness;
-import phase2.trade.item.command.AddItemToItemList;
+import phase2.trade.item.command.AddItemToInventory;
 import phase2.trade.itemlist.ItemListType;
 import phase2.trade.user.AccountManager;
 
@@ -68,7 +68,7 @@ public class Configurer {
     }
 
     private void addExampleItems(String name, String description, Category category, Willingness willingness, int quantity, double price) {
-        Command<Item> itemCommand = getCommandFactory().getCommand(AddItemToItemList::new, c -> {
+        Command<Item> itemCommand = getCommandFactory().getCommand(AddItemToInventory::new, c -> {
             c.setItemListType(ItemListType.INVENTORY);
             c.setAsynchronous(false);
         });
@@ -94,7 +94,7 @@ public class Configurer {
     public static void main(String[] args) {
         Configurer configurer = new Configurer();
         configurer.mockRegister("admin2", "admin???", "12345678");
-        configurer.getCommandFactory().getCommand(AddItemToItemList::new);
+        configurer.getCommandFactory().getCommand(AddItemToInventory::new);
 
     }
 

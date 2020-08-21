@@ -18,82 +18,155 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+/**
+ * The enum Side option.
+ *
+ * @author Dan Lyu
+ */
 public enum SideOption {
 
+    /**
+     * User side option.
+     */
     USER("side.user",
             "/svg/user.svg",
             UserInfoController::new,
             PermissionGroup.REGULAR, PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
+    /**
+     * Market side option.
+     */
     MARKET("side.market",
             "/svg/marketplace.svg",
             MarketListController::new,
             PermissionGroup.REGULAR, PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN, PermissionGroup.GUEST),
 
+    /**
+     * Inventory side option.
+     */
     INVENTORY("side.inventory",
             "/svg/stock.svg",
             InventoryController::new,
             PermissionGroup.REGULAR),
 
+    /**
+     * Cart side option.
+     */
     CART("side.cart",
             "/svg/supermarket.svg",
             CartController::new,
             PermissionGroup.REGULAR),
 
+    /**
+     * Order side option.
+     */
     ORDER("side.trades",
             "/svg/team.svg",
             TradeListController::new,
             PermissionGroup.REGULAR),
 
+    /**
+     * Manage users side option.
+     */
     MANAGE_USERS("side.m.users",
             "/svg/process.svg",
             UserManageController::new,
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
+    /**
+     * Manage users operations side option.
+     */
     MANAGE_USERS_OPERATIONS(
             "side.m.user.ops",
             "/svg/users.svg",
             UserOperationController::new,
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
+    /**
+     * Manage items side option.
+     */
     MANAGE_ITEMS("side.m.items",
             "/svg/stock.svg",
             ItemManageController::new,
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
+    /**
+     * Support side option.
+     */
     SUPPORT("side.support",
             "/svg/support.svg",
             SupportTicketUserController::new,
             PermissionGroup.REGULAR, PermissionGroup.FROZEN),
 
+    /**
+     * Manage support side option.
+     */
     MANAGE_SUPPORT("side.m.support",
             "/svg/support.svg",
             SupportTicketAdminController::new,
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
+    /**
+     * Config setting side option.
+     */
     CONFIG_SETTING("side.config",
             "/svg/settings.svg",
             AdministrativeConfigController::new,
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
 
+    /**
+     * Exit side option.
+     */
     EXIT(SidePosition.BOTTOM,
             "side.exit",
             "/svg/turnoff.svg"),
 
+    /**
+     * Sign out side option.
+     */
     SIGN_OUT(SidePosition.BOTTOM,
             "side.sign.out",
             "/svg/logout.svg");
 
 
+    /**
+     * The enum Side position.
+     *
+     * @author Dan Lyu
+     */
     enum SidePosition {
-        TOP, BOTTOM
+        /**
+         * Top side position.
+         */
+        TOP,
+
+        /**
+         * Bottom side position.
+         */
+        BOTTOM
     }
 
+    /**
+     * The Icon path.
+     */
     public String iconPath;
+
+    /**
+     * The Language.
+     */
     public String language;
+
     private final Collection<PermissionGroup> permissionGroups = new HashSet<>();
+
+    /**
+     * The Side position.
+     */
     public SidePosition sidePosition;
+
+    /**
+     * The Controller supplier.
+     */
     public ControllerSupplier<?> controllerSupplier;
 
 
@@ -114,6 +187,12 @@ public enum SideOption {
         this(sidePosition, language, iconPath, null, permissionGroups);
     }
 
+    /**
+     * If display this {@link SideOption} to the specific {@link PermissionGroup}.
+     *
+     * @param permissionGroup the permission group
+     * @return the boolean
+     */
     public boolean ifDisplay(PermissionGroup permissionGroup) {
         return permissionGroups.contains(permissionGroup) || permissionGroups.size() == 0;
     }

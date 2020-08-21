@@ -1,15 +1,12 @@
 package phase2.trade.user.command;
 
-import phase2.trade.command.Command;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.GatewayBundle;
-import phase2.trade.gateway.UserGateway;
-import phase2.trade.user.User;
+import phase2.trade.command.UpdateCommand;
 
 import javax.persistence.Entity;
 
 @Entity
-public abstract class UserCommand<T> extends Command<T> {
+public abstract class UserCommand<T> extends UpdateCommand<T> {
 
-    public UserCommand() {}
+    public UserCommand() {
+    }
 }

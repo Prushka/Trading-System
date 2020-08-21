@@ -14,6 +14,11 @@ import phase2.trade.user.controller.UserSideInfoController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * The Side menu controller.
+ *
+ * @author Dan Lyu
+ */
 @ControllerProperty(viewFile = "side_menu.fxml")
 public class SideMenuController extends AbstractController implements Initializable {
 
@@ -29,25 +34,22 @@ public class SideMenuController extends AbstractController implements Initializa
     @FXML
     private VBox userInfoBox;
 
+    /**
+     * Constructs a new Side menu controller.
+     *
+     * @param controllerResources the controller resources
+     */
     public SideMenuController(ControllerResources controllerResources) {
         super(controllerResources);
-    }
-
-    // TODO: drop down sub menu
-
-    private <T> void loadCenter(String fileName, ControllerSupplier<T> supplier) {
-        getPane(DashboardPane.CENTER).getChildren().clear();
-        getPane(DashboardPane.CENTER).getChildren().add(getSceneManager().loadPane(fileName, supplier));
     }
 
     private <T> void loadCenter(ControllerSupplier<T> supplier) {
         getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(supplier));
     }
 
-    private void loadCenter(Object controller) {
-        getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(controller));
-    }
-
+    /**
+     * Sign out.
+     */
     public void signOut() {
         AlertWindow alertWindow = getNotificationFactory().confirmWindow("Sign out", "Do you really want to sign out?", "Ok", "Cancel");
         alertWindow.setConfirmHandler(e -> {
@@ -57,6 +59,9 @@ public class SideMenuController extends AbstractController implements Initializa
         alertWindow.display();
     }
 
+    /**
+     * Exit.
+     */
     public void exit() {
         AlertWindow alertWindow = getNotificationFactory().confirmWindow("Exit", "Do you really want to exit?", "Ok", "Cancel");
         alertWindow.setConfirmHandler(e -> {
@@ -65,7 +70,11 @@ public class SideMenuController extends AbstractController implements Initializa
         alertWindow.display();
     }
 
-
+    /**
+     * {@inheritDoc}
+     * The SideOption will have all the information of language, icon path and {@link ControllerSupplier}.<p>
+     * This side menu will set its options depending on the User's {@link phase2.trade.permission.PermissionGroup}.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         userInfoBox.getChildren().add(getSceneManager().loadPane(UserSideInfoController::new));
@@ -90,14 +99,14 @@ public class SideMenuController extends AbstractController implements Initializa
 
         sideList.getSelectionModel().select(3);
         bottomSideList.setOnMouseClicked(event -> {
-            switch (bottomSideList.getSelectionModel().getSelectedItem()) {
-                case SIGN_OUT:
-                    signOut();
-                    break;
-                case EXIT:
-                    exit();
-                    break;
-            }
+                    switch (bottomSideList.getSelectionModel().getSelectedItem()) {
+                        case SIGN_OUT:
+                            signOut();
+                            break;
+                        case EXIT:
+                            exit();
+                            break;
+                    }
                 }
         );
 

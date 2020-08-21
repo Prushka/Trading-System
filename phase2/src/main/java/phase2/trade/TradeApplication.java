@@ -19,18 +19,19 @@ public class TradeApplication extends Application {
 
     private final Configurer configurer = new Configurer();
 
+    /*
     private void loadFont(String name) {
         Font font = Font.loadFont(
                 this.getClass().getResource("/font/" + name + ".ttf").toExternalForm(),
                 10
         );
         logger.info("Loaded Font: " + font.getFamily());
-    }
+    }*/
 
     @Override
     public void start(Stage primaryStage) {
-        loadFont("OpenSans");
-        loadFont("OpenSansM");
+        //loadFont("OpenSans");
+        //loadFont("OpenSansM");
 
         configurer.configure(primaryStage);
 

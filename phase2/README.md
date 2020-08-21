@@ -17,12 +17,14 @@ Features:
 4. Multi-Way trade (unlimited participants).
 5. Permissions and PermissionGroup. Enforced Permission for every operation a User operates. PermissionGroups include Banned / Guest / System etc.
 6. JavaFX GUI and the following:
-    - Filter Market / Inventory / Cart / Users using a combination of TextFields, ComboBoxes, CheckBoxes, Toggle etc. (They will work together to process a single list)
-    - Edit values directly in TableView. This includes editing a column with a TextField or a ComboBox. 
-    - Experiment this with editing Users using administrative account or edit Items in Inventory etc. (by double clicking it)
+    1. Widgets and Alerts
+    1. Filter Market / Inventory / Cart / Users using a combination of TextFields, ComboBoxes, CheckBoxes, Toggle etc. (They will work together to process a single list)
+    1. Edit values directly in TableView. This includes editing a column with a TextField or a ComboBox. 
+    1. Experiment this with editing Users using administrative account or edit Items in Inventory etc. (by double clicking every cell)
 7. Concurrency, auto-reload and asynchronous database executions
 8. Support Tickets
-9. Mandatory Extensions
+9. Item Category & User Avatar
+10. Mandatory Extensions
 
 **Important: thanks to the contribution problem:**
 1. Monetization is half implemented. (The account balance is not implemented)

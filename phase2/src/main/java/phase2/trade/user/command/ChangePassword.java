@@ -16,7 +16,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @CommandProperty(crudType = CRUDType.UPDATE, undoable = true,
-        persistent = true, permissionSet = {})
+        persistent = true)
 public class ChangePassword extends UserCommand<User> {
 
     private String oldPassword;
@@ -40,7 +40,9 @@ public class ChangePassword extends UserCommand<User> {
     @Override
     protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
-            // gateway.delete(userId);
+            gateway.findById(getOneEntity(User.class)).setPassword(oldPassword);
+            gateway.merge(operator);
+            updateUndo();
         });
     }
 }

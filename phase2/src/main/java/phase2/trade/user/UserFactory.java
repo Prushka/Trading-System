@@ -45,6 +45,8 @@ public class UserFactory {
                 break;
 
             case REGULAR:
+            case FROZEN:
+            case BANNED:
                 user = new RegularUser(userName, email, password);
                 break;
 

@@ -26,9 +26,4 @@ public class GetAllSupportTickets extends ItemCommand<List<SupportTicket>> {
         if (!checkPermission(callback)) return;
         getEntityBundle().getSupportTicketGateway().submitSession((gateway) -> callback.call(gateway.findAll(), new StatusSucceeded()));
     }
-
-    @Override
-    protected void undoUnchecked() {
-
-    }
 }

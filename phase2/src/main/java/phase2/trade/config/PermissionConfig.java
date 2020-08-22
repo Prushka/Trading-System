@@ -23,6 +23,8 @@ public class PermissionConfig {
     public PermissionConfig() {
 
         addPermissions(PermissionGroup.GUEST, Permission.BrowseMarket);
+        addPermissions(PermissionGroup.FROZEN, Permission.BrowseMarket, Permission.ManagePersonalSupportTickets);
+        addPermissions(PermissionGroup.BANNED, Permission.BrowseMarket);
 
         addPermissions(PermissionGroup.REGULAR,
                 Permission.ManagePersonalAccount,
@@ -35,8 +37,13 @@ public class PermissionConfig {
                 Permission.ManagePersonalSupportTickets);
 
         addPermissions(PermissionGroup.ADMIN,
+                Permission.CreateUser,
                 Permission.ChangeThreshold,
                 Permission.ReviewItem,
+                Permission.ManageUserOperations,
+                Permission.ManageUsers,
+                Permission.ManageAllItems,
+                Permission.ManageAllSupportTickets,
                 Permission.BrowseMarket);
 
         addPermissions(PermissionGroup.HEAD_ADMIN,

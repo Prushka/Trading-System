@@ -5,8 +5,10 @@ import phase2.trade.callback.status.StatusExist;
 import phase2.trade.callback.status.StatusSucceeded;
 import phase2.trade.command.CRUDType;
 import phase2.trade.command.CommandProperty;
+import phase2.trade.item.CartItemWrapper;
 import phase2.trade.item.Item;
 import phase2.trade.permission.Permission;
+import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
@@ -37,8 +39,11 @@ public class AddToCart extends ItemCommand<Item> {
                 return;
             }
             // }
-            operator.getCart().addItemWithQuantity(toUpdate, Integer.parseInt(argRequired(0, "1", args)));
+            CartItemWrapper cartItemWrapper =
+                    operator.getCart().addItemWithQuantity(toUpdate, Integer.parseInt(argRequired(0, "1", args)));
             gateway.update(operator);
+            addEffectedEntity(CartItemWrapper.class, cartItemWrapper.getUid());
+            save();
             callback.call(null, new StatusSucceeded());
         });
     }
@@ -52,5 +57,10 @@ public class AddToCart extends ItemCommand<Item> {
 
     @Override
     protected void undoUnchecked() {
+        getEntityBundle().getUserGateway().submitTransaction((userGateway) -> {
+            User user = userGateway.findById(getOperator().getUid());
+            user.getCart().removeCartItemWrapperById(getOneEntity(CartItemWrapper.class));
+            updateUndo();
+        });
     }
 }

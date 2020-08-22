@@ -59,11 +59,14 @@ public class Cart extends ItemList {
      * @param item     the item
      * @param quantity the quantity
      */
-    public void addItemWithQuantity(Item item, int quantity) {
-        setOfItems.add(new CartItemWrapper(item, quantity));
+    public CartItemWrapper addItemWithQuantity(Item item, int quantity) {
+        CartItemWrapper cartItemWrapper = new CartItemWrapper(item, quantity);
+        setOfItems.add(cartItemWrapper);
+        return cartItemWrapper;
     }
 
 
+    @Override
     public void removeItemByUid(Collection<Long> ids) {
         Set<CartItemWrapper> toRemove = new HashSet<>();
         for (Long uid : ids) {
@@ -74,5 +77,17 @@ public class Cart extends ItemList {
             }
         }
         setOfItems.removeAll(toRemove);
+    }
+
+    public void removeCartItemWrapperById(Long id) {
+        CartItemWrapper cartItemWrapperToRemove = null;
+        for (CartItemWrapper cartItemWrapper : setOfItems) {
+            if (cartItemWrapper.getUid().equals(id)) {
+                cartItemWrapperToRemove = cartItemWrapper;
+            }
+        }
+        if (cartItemWrapperToRemove != null) {
+            setOfItems.remove(cartItemWrapperToRemove);
+        }
     }
 }

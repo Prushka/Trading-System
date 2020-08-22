@@ -10,7 +10,6 @@ import phase2.trade.support.SupportTicket;
 import phase2.trade.support.TicketPriority;
 import phase2.trade.support.TicketState;
 import phase2.trade.support.TicketType;
-import phase2.trade.user.User;
 
 import javax.persistence.Entity;
 
@@ -45,7 +44,7 @@ public class OpenSupportTicket extends Command<SupportTicket> {
     @Override
     protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
-            gateway.delete(getOneEntity(User.class));
+            gateway.delete(getOneEntity(SupportTicket.class));
             updateUndo();
         });
     }

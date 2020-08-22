@@ -48,7 +48,9 @@ public class ChangeUserName extends UserCommand<User> {
     @Override
     protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
-            // gateway.delete(userId);
+            gateway.findById(getOneEntity(User.class)).setName(oldName);
+            gateway.merge(operator);
+            updateUndo();
         });
     }
 }

@@ -28,9 +28,4 @@ public class GetItems extends ItemCommand<ItemList> {
         ItemList itemList = operator.getItemList(itemListType);
         callback.call(itemList, new StatusSucceeded());
     }
-
-
-    @Override
-    protected void undoUnchecked() {
-    }
 }

@@ -1,5 +1,6 @@
 package phase2.trade.user.controller;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.Initializable;
 import phase2.trade.command.Command;
 import phase2.trade.controller.ControllerResources;
@@ -87,6 +88,16 @@ public class UserTableController extends EditableTableController<User, UserEdito
         } else {
             tableViewGenerator.addColumn("Email", "Email");
         }
+    }
+
+    protected void addAddressColumn() {
+        tableViewGenerator.addColumn("Address", param -> {
+            if (param.getValue().getAddressBook() == null || param.getValue().getAddressBook().getSelectedAddress() == null) {
+                return new SimpleStringProperty("null");
+            }
+            return new SimpleStringProperty(String.format("%s,%s,%s", param.getValue().getAddressBook().getSelectedAddress().getCountry(), param.getValue().getAddressBook().getSelectedAddress().getTerritory(),
+                    param.getValue().getAddressBook().getSelectedAddress().getCity()));
+        });
     }
 
     /**

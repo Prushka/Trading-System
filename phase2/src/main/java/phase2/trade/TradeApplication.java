@@ -2,7 +2,6 @@ package phase2.trade;
 
 import javafx.application.Application;
 import javafx.scene.image.Image;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

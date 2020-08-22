@@ -25,9 +25,4 @@ public class GetAllItems extends ItemCommand<List<Item>> {
         if (!checkPermission(callback)) return;
         getEntityBundle().getItemGateway().submitSession((gateway) -> callback.call(gateway.findAll(), new StatusSucceeded()));
     }
-
-    @Override
-    protected void undoUnchecked() {
-
-    }
 }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Entity
 @CommandProperty(crudType = CRUDType.READ, undoable = false, persistent = false,
-        permissionSet = {Permission.ManageUserOperations})
+        permissionSet = {Permission.ManageUsers})
 public class GetUsers extends Command<List<User>> {
 
     @Override

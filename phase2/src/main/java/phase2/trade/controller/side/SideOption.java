@@ -74,6 +74,14 @@ public enum SideOption {
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
     /**
+     * Manage items side option.
+     */
+    MANAGE_ITEMS("side.m.items",
+            "/svg/stock.svg",
+            ItemManageController::new,
+            PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
+
+    /**
      * Manage users operations side option.
      */
     MANAGE_USERS_OPERATIONS(
@@ -82,13 +90,6 @@ public enum SideOption {
             UserOperationController::new,
             PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
-    /**
-     * Manage items side option.
-     */
-    MANAGE_ITEMS("side.m.items",
-            "/svg/stock.svg",
-            ItemManageController::new,
-            PermissionGroup.ADMIN, PermissionGroup.HEAD_ADMIN),
 
     /**
      * Support side option.

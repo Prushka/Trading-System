@@ -74,6 +74,7 @@ public class UserManageController extends UserTableController implements Initial
         addEmailColumn(true);
         addPermissionGroupColumn(true);
         addPermissionsColumn();
+        addAddressColumn();
 
         addSearchName();
         addSearchEmail();

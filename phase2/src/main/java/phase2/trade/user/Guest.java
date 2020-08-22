@@ -18,6 +18,7 @@ public class Guest extends User {
      */
     public Guest(String userName, String email, String password) {
         super(userName, email, password);
+        setUid(-1L);
     }
 
     /**
@@ -25,6 +26,7 @@ public class Guest extends User {
      */
     public Guest() {
         setPermissionGroup(PermissionGroup.GUEST);
+        setUid(-1L);
     }
 
     public PermissionGroup getPermissionGroup() {

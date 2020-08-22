@@ -1,4 +1,4 @@
-Before Running:
+Before Running & Instructions:
 -------------
 1. This project uses maven. Please install it (or add it to path) and import pom.xml.
 2. This project requires two types of databases:
@@ -8,6 +8,8 @@ Before Running:
 4. You can configure to use local database in redis.yaml and database.yaml
 5. The default administrative has username: admin and password: admin???
 6. Validation: although most of the validation is covered. I do not have extra time to go over all Commands. So unless something has an optional in it, it is recommended to fill in all blanks (when there are TextFields / ComboBoxes).
+7. Try to edit item and user by doubling clicking table cells.
+8. After clicking the checkout button in Cart, a trade pane will show up. Please Drag and Drop Items from the table on the left to the table on the right.
 
 Features:
 -------------

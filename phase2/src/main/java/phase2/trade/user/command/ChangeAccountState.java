@@ -39,9 +39,18 @@ public class ChangeAccountState extends UpdateCommand<AccountState> {
     @Override
     protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
-            gateway.findById(getOneEntity(User.class)).setAccountState(oldAccountState);
-            gateway.merge(operator);
+            User user = gateway.findById(getOneEntity(User.class));
+            user.setAccountState(oldAccountState);
+            gateway.update(user);
             updateUndo();
         });
+    }
+
+    private AccountState getOldAccountState() {
+        return oldAccountState;
+    }
+
+    private void setOldAccountState(AccountState oldAccountState) {
+        this.oldAccountState = oldAccountState;
     }
 }

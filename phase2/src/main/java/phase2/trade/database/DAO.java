@@ -202,7 +202,7 @@ public abstract class DAO<T, S extends EntityGateway<T, S>> implements EntityGat
         }
     }
 
-    private final boolean async = false;
+    private final boolean async = true;
 
     @Override
     public void submitTransaction(Consumer<S> consumer) {

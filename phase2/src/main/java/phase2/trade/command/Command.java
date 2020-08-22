@@ -132,7 +132,7 @@ public abstract class Command<T> implements PermissionBased, ArgsInvolved {
             List<Command> futureCommands = gateway.getFutureCommands(timestamp);
             List<Command> blockingCommands = new ArrayList<>();
             for (Command command : futureCommands) {
-                if (command.commandPropertyAnnotation.crudType().willAffect && ifOverlaps(command.affectedEntities)) {
+                if (!command.undone && command.commandPropertyAnnotation.crudType().willAffect && ifOverlaps(command.affectedEntities)) {
                     blockingCommands.add(command);
                 }
             }

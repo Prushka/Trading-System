@@ -3,8 +3,6 @@ package phase2.trade.user.controller;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
@@ -14,12 +12,12 @@ import phase2.trade.command.Command;
 import phase2.trade.command.GetCommands;
 import phase2.trade.controller.ControllerProperty;
 import phase2.trade.controller.ControllerResources;
-import phase2.trade.controller.DashboardPane;
 import phase2.trade.controller.EditableTableController;
 import phase2.trade.editor.CommandEditor;
 import phase2.trade.item.Item;
+import phase2.trade.refresh.ReType;
 import phase2.trade.user.User;
-import phase2.trade.user.command.CreateUserOperation;
+import phase2.trade.user.command.CreateUser;
 import phase2.trade.view.TableViewGenerator;
 
 import java.net.URL;
@@ -38,6 +36,7 @@ import java.util.ResourceBundle;
 @ControllerProperty(viewFile = "general_table_view.fxml")
 public class UserOperationController extends EditableTableController<Command, CommandEditor> implements Initializable {
 
+    private final Command<List<Command>> getCommands = getCommandFactory().getCommand(GetCommands::new);
 
     /**
      * Constructs a new User operation controller.
@@ -55,10 +54,17 @@ public class UserOperationController extends EditableTableController<Command, Co
     }
 
     @Override
+    public void reload() {
+        getCommands.execute((result, resultStatus) -> {
+            resultStatus.setSucceeded(() -> reloadNewDisplayData(result));
+            resultStatus.handle(getNotificationFactory());
+        });
+        super.reload();
+    }
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         super.initialize(location, resources);
-
-        Command<List<Command>> getCommands = getCommandFactory().getCommand(GetCommands::new);
 
         getCommands.execute((result, resultStatus) -> {
             resultStatus.setSucceeded(() -> afterFetch(result));
@@ -67,7 +73,7 @@ public class UserOperationController extends EditableTableController<Command, Co
 
     }
 
-    private TableView<Command> addToTableViewGenerator(List<Command> result, TableViewGenerator<Command> tableViewGenerator){
+    private TableView<Command> addToTableViewGenerator(List<Command> result, TableViewGenerator<Command> tableViewGenerator) {
         tableViewGenerator
                 .addColumn("Type", "dType")
                 .addColumn("Time", param -> {
@@ -129,39 +135,30 @@ public class UserOperationController extends EditableTableController<Command, Co
         addToTableViewGenerator(result, tableViewGenerator);
 
         ComboBox<Class<?>> comboBox = new ComboBox<>();
-        comboBox.setItems(FXCollections.observableArrayList(CreateUserOperation.class));
-        comboBox.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                // getCommands(comboBox.getSelectionModel().getSelectedItem());
-            }
+        comboBox.setItems(FXCollections.observableArrayList(CreateUser.class));
+        comboBox.setOnAction(event -> {
+            // getCommands(comboBox.getSelectionModel().getSelectedItem());
         });
-        getPane(DashboardPane.TOP).getChildren().addAll(comboBox);
+        // getPane(DashboardPane.TOP).getChildren().addAll(comboBox);
 
         JFXButton undo = new JFXButton("Undo Selected Operations");
-        undo.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                tableView.getSelectionModel().getSelectedItem().undoIfUndoable((ResultStatusCallback<List<Command>>) (result, status) -> {
-                    status.setSucceeded(() -> {
-                        getNotificationFactory().toast("TADA~ Your command was successfully undone!");
-                        tableView.refresh();
-                    });
-                    status.setFailed(() -> {
-                        if (result == null) {
-                            getNotificationFactory().toast("The command you selected is not an undoable command! (It's configured to be undoable)");
-                        } else {
-                            getNotificationFactory().toast("The command you selected is effected by other commands!");
-                            TableViewAlert<Command> tableViewAlert = getNotificationFactory().tableViewAlert(Command.class, "Blocking Commands", "");
-                            tableViewAlert.addTableView(addToTableViewGenerator(result, new TableViewGenerator<>(FXCollections.observableArrayList(result))));
-                            tableViewAlert.display();
-                        }
-                    });
-                    status.handle(getNotificationFactory());
-                }, getGatewayBundle());
-
-            }
-        });
+        undo.setOnAction(event -> tableView.getSelectionModel().getSelectedItem().undoIfUndoable((ResultStatusCallback<List<Command>>) (result1, status) -> {
+            status.setSucceeded(() -> {
+                getNotificationFactory().toast("TADA~ Your command was successfully undone!");
+                publish(ReType.RELOAD);
+            });
+            status.setFailed(() -> {
+                if (result1 == null) {
+                    getNotificationFactory().toast("The command you selected is not an undoable command! (It's configured to be undoable)");
+                } else {
+                    getNotificationFactory().toast("The command you selected is effected by other commands!");
+                    TableViewAlert<Command> tableViewAlert = getNotificationFactory().tableViewAlert(Command.class, "Blocking Commands", "");
+                    tableViewAlert.addTableView(addToTableViewGenerator(result1, new TableViewGenerator<>(FXCollections.observableArrayList(result1))));
+                    tableViewAlert.display();
+                }
+            });
+            status.handle(getNotificationFactory());
+        }, getGatewayBundle()));
         buttonPane.getChildren().addAll(undo);
     }
 

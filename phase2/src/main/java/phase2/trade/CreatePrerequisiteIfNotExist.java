@@ -1,7 +1,7 @@
 package phase2.trade;
 
 import phase2.trade.command.CommandFactory;
-import phase2.trade.user.command.CreateUserOperation;
+import phase2.trade.user.command.CreateUser;
 
 /**
  * Creates prerequisite if not exist.
@@ -26,8 +26,8 @@ public class CreatePrerequisiteIfNotExist {
      * Create head if not exist.
      */
     public void createHeadIfNotExist() {
-        CreateUserOperation createUserOperation = commandFactory.getCommand(CreateUserOperation::new, true);
-        createUserOperation.execute((result, resultStatus) -> {
+        CreateUser createUser = commandFactory.getCommand(CreateUser::new, true);
+        createUser.execute((result, resultStatus) -> {
                 },
                 "admin", "admin@example.com", "admin???", "HEAD_ADMIN", "Canada", "Ontario", "Toronto");
     }

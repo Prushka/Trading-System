@@ -8,6 +8,7 @@ import phase2.trade.controller.EditableTableController;
 import phase2.trade.editor.UserEditor;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.refresh.ReType;
+import phase2.trade.user.AccountState;
 import phase2.trade.user.User;
 import phase2.trade.user.command.UpdateUsers;
 
@@ -76,6 +77,21 @@ public class UserTableController extends EditableTableController<User, UserEdito
     }
 
     /**
+     * Add account state column.
+     *
+     * @param editable the editable
+     */
+    protected void addAccountStateColumn(boolean editable) {
+        if (editable) {
+            tableViewGenerator.addColumnEditable("AccountState", "accountState", event ->
+                    shortenAlter(event.getRowValue(), event.getNewValue(), resultStatus -> {
+                    }, UserEditor::alterAccountState), getNodeFactory().getEnumAsObservableString(AccountState.class));
+        } else {
+            tableViewGenerator.addColumn("AccountState", "accountState");
+        }
+    }
+
+    /**
      * Add email column.
      *
      * @param editable the editable
@@ -90,6 +106,9 @@ public class UserTableController extends EditableTableController<User, UserEdito
         }
     }
 
+    /**
+     * Add address column.
+     */
     protected void addAddressColumn() {
         tableViewGenerator.addColumn("Address", param -> {
             if (param.getValue().getAddressBook() == null || param.getValue().getAddressBook().getSelectedAddress() == null) {

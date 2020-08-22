@@ -239,7 +239,7 @@ public class NodeFactory {
      *
      * @return the default combo box
      */
-    public ComboBox<String> getDefaultComboBox() {
+    public JFXComboBox<String> getDefaultComboBox() {
         return processDefaultComboBox(getComboBox());
     }
 
@@ -254,8 +254,8 @@ public class NodeFactory {
         return processDefaultComboBox(comboBox);
     }
 
-    private <T> ComboBox<T> processDefaultComboBox(JFXComboBox<T> comboBox) {
-        comboBox.getStyleClass().addAll("default-combo-box");
+    private <T> JFXComboBox<T> processDefaultComboBox(JFXComboBox<T> comboBox) {
+        comboBox.getStyleClass().setAll("default-combo-box");
         comboBox.setLabelFloat(true);
         return comboBox;
     }

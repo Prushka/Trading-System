@@ -46,7 +46,16 @@ public class ChangeAddress extends UserCommand<User> {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
             User user = gateway.findById(operator.getUid());
             user.getAddressBook().setSelectedAddress(oldAddress);
+            gateway.update(user);
             updateUndo();
         });
+    }
+
+    private Address getOldAddress() {
+        return oldAddress;
+    }
+
+    private void setOldAddress(Address oldAddress) {
+        this.oldAddress = oldAddress;
     }
 }

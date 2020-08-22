@@ -12,7 +12,7 @@ import phase2.trade.controller.ControllerResources;
 import phase2.trade.controller.DashboardPane;
 import phase2.trade.permission.PermissionGroup;
 import phase2.trade.user.User;
-import phase2.trade.user.command.CreateUserOperation;
+import phase2.trade.user.command.CreateUser;
 import phase2.trade.user.command.GetUsers;
 
 import java.net.URL;
@@ -75,6 +75,7 @@ public class UserManageController extends UserTableController implements Initial
         addPermissionGroupColumn(true);
         addPermissionsColumn();
         addAddressColumn();
+        addAccountStateColumn(true);
 
         addSearchName();
         addSearchEmail();
@@ -97,7 +98,7 @@ public class UserManageController extends UserTableController implements Initial
         VBoxAlert createUserAlert = getNotificationFactory().vBoxAlert("Create New User", "");
         createUserAlert.addNodes(userName, email, password, permissionGroup);
         createUserAlert.setConfirmHandler(event -> {
-            CreateUserOperation command = getCommandFactory().getCommand(CreateUserOperation::new);
+            CreateUser command = getCommandFactory().getCommand(CreateUser::new);
             command.execute(((result, status) -> {
                         status.setExist(() -> getNotificationFactory().toast(5, "Such User Name Already Exists"));
                         status.setSucceeded(() -> getPane(DashboardPane.CENTER).getChildren().setAll(getSceneManager().loadPane(UserManageController::new)));

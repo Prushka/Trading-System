@@ -40,9 +40,18 @@ public class ChangePassword extends UserCommand<User> {
     @Override
     protected void undoUnchecked() {
         getEntityBundle().getUserGateway().submitTransaction(gateway -> {
-            gateway.findById(getOneEntity(User.class)).setPassword(oldPassword);
-            gateway.merge(operator);
+            User user = gateway.findById(getOneEntity(User.class));
+            user.setPassword(oldPassword);
+            gateway.merge(user);
             updateUndo();
         });
+    }
+
+    private String getOldPassword() {
+        return oldPassword;
+    }
+
+    private void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 }

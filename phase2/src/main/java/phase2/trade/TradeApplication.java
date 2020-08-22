@@ -3,8 +3,6 @@ package phase2.trade;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import phase2.trade.user.controller.LoginController;
 
 /**
@@ -13,8 +11,6 @@ import phase2.trade.user.controller.LoginController;
  * @author Dan Lyu
  */
 public class TradeApplication extends Application {
-
-    private static final Logger logger = LogManager.getLogger(TradeApplication.class);
 
     private final Configurer configurer = new Configurer();
 

@@ -7,7 +7,7 @@ import phase2.trade.callback.ResultStatusCallback;
 import phase2.trade.command.CommandFactory;
 import phase2.trade.gateway.GatewayBundle;
 import phase2.trade.permission.PermissionGroup;
-import phase2.trade.user.command.CreateUserOperation;
+import phase2.trade.user.command.CreateUser;
 import phase2.trade.user.command.Login;
 
 /**
@@ -23,7 +23,7 @@ public class AccountManager {
 
     private final Login loginCommand;
 
-    private final CreateUserOperation registerCommand;
+    private final CreateUser registerCommand;
 
     private final UserFactory userFactory;
 
@@ -36,7 +36,7 @@ public class AccountManager {
         userFactory = new UserFactory(gatewayBundle.getConfigBundle().getPermissionConfig());
         CommandFactory commandFactory = new CommandFactory(gatewayBundle, this);
         this.loginCommand = commandFactory.getCommand(Login::new, true);
-        this.registerCommand = commandFactory.getCommand(CreateUserOperation::new, true);
+        this.registerCommand = commandFactory.getCommand(CreateUser::new, true);
     }
 
     /**
